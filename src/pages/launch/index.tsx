@@ -1,51 +1,48 @@
-import Button from "@/components/Button";
 import FullscreenContainer from "@/components/FullscreenContainer";
-import ModalV2 from "@/components/ModalV2";
-import Statement, { AUTHORIZED_STORAGE_KEY } from "@/components/Statement";
+// import ModalV2 from "@/components/ModalV2";
+// import Statement, { AUTHORIZED_STORAGE_KEY } from "@/components/Statement";
 import { StepActionTypeEn, useStepDispatchContext, CreateStepEn, RecoverStepEn } from "@/context/StepContext";
 import useBrowser from "@/hooks/useBrowser";
 import { Box, Center, Flex, Text, Image } from "@chakra-ui/react";
 import CreateWalletIcon from "@/components/Icons/CreateWallet";
 import RecoverWalletIcon from "@/components/Icons/RecoverWallet";
-import React, { useEffect, useState, Fragment } from "react";
-import TextButton from "@/components/web/TextButton";
 import TextBody from "@/components/web/TextBody";
 
 export default function Launch() {
-  const [authorized, setAuthorized] = useState(false);
+  // const [authorized, setAuthorized] = useState(false);
   const dispatch = useStepDispatchContext();
   const { navigate } = useBrowser();
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
-  const getAuthorized = async () => {
-    const authorizedStatus = (localStorage.getItem(AUTHORIZED_STORAGE_KEY)) ?? false;
-    setAuthorized(authorizedStatus);
-    setShowModal(!authorizedStatus);
-  };
+  // const getAuthorized = async () => {
+  //   const authorizedStatus = (localStorage.getItem(AUTHORIZED_STORAGE_KEY)) ?? false;
+  //   // setAuthorized(authorizedStatus);
+  //   setShowModal(!authorizedStatus);
+  // };
 
-  useEffect(() => {
-    getAuthorized();
-  }, []);
+  // useEffect(() => {
+  //   getAuthorized();
+  // }, []);
 
-  const handleOpenModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  // const handleOpenModal = () => setShowModal(true);
+  // const handleCloseModal = () => setShowModal(false);
 
-  const handleAuthorize = () => {
-    localStorage.setItem(AUTHORIZED_STORAGE_KEY, true);
-    setAuthorized(true);
-    handleCloseModal();
-  };
+  // const handleAuthorize = () => {
+  //   localStorage.setItem(AUTHORIZED_STORAGE_KEY, true);
+  //   setAuthorized(true);
+  //   handleCloseModal();
+  // };
 
   const handleJumpToTargetStep = (targetStep: number, to: string) => {
-    if (authorized) {
+    // if (authorized) {
       dispatch({
         type: StepActionTypeEn.JumpToTargetStep,
         payload: targetStep,
       });
       navigate(to)
-    } else {
-      setShowModal(true)
-    }
+    // } else {
+    //   setShowModal(true)
+    // }
   };
 
   const goToTerms = () => {
@@ -153,7 +150,7 @@ export default function Launch() {
           </TextBody>
         </Box>
       </Flex>
-      <ModalV2
+      {/* <ModalV2
         visible={showModal}
         onClose={handleCloseModal}
         footerComponent={
@@ -194,7 +191,7 @@ export default function Launch() {
         >
           <Statement />
         </Box>
-      </ModalV2>
+      </ModalV2> */}
     </FullscreenContainer>
   );
 }
