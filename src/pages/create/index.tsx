@@ -11,8 +11,10 @@ import PassKeyList from "@/components/web/PassKeyList"
 export default function Create() {
   const [passKeys, setPassKeys] = useState([{}])
 
-  const onStepChange = () => {
-
+  const onStepChange = (i) => {
+    if (i == 0) {
+      setPassKeys([{}])
+    }
   }
 
   const addPassKey = () => {
