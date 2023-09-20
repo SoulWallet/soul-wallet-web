@@ -437,7 +437,7 @@ export default function SetGuardians({ onStepChange, getPassword }: any) {
           Watch this intro video and set up your guardians now!
         </TextBody>
       </Box>
-      <Box as="video" width="800px" height="428px" borderRadius="24px" marginBottom="16px" marginTop="16px" controls>
+      <Box as="video" width="600px" height="321px" borderRadius="24px" marginBottom="16px" marginTop="16px" controls>
         <source src="https://static-assets.soulwallet.io/videos/guardians-and-recovery-intro.webm" type="video/webm" />
       </Box>
       <Box display="flex" flexDirection="column" alignItems="center" marginTop="0.75em">
