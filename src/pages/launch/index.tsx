@@ -13,14 +13,6 @@ export default function Launch() {
   const dispatch = useStepDispatchContext();
   const { navigate } = useBrowser();
 
-  const handleJumpToTargetStep = (targetStep: number, to: string) => {
-    dispatch({
-      type: StepActionTypeEn.JumpToTargetStep,
-      payload: targetStep,
-    });
-    navigate(to)
-  };
-
   return (
     <Box
       width="100vw"
@@ -40,7 +32,7 @@ export default function Launch() {
             Login
           </Button>
           <Button
-            onClick={() => {}}
+            onClick={() => navigate('create')}
             _styles={{ width: '282px', borderRadius: '40px' }}
           >
             Create new wallet

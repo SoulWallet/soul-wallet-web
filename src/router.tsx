@@ -4,7 +4,7 @@ import Wallet from "@/pages/wallet";
 import Send from "@/pages/send";
 import SignPage from "@/pages/sign-page";
 import ActivateWallet from "@/pages/activate";
-// import CreatePage from "@/pages/create";
+import Create from "@/pages/create";
 import Setting from "@/pages/setting";
 import Accounts from "@/pages/accounts";
 import AddFund from "@/pages/add-fund";
@@ -26,6 +26,7 @@ export const router = createBrowserRouter([
       { path: "sign", element: <SignPage /> },
       { path: "activate", element: <ActivateWallet /> },
       { path: "launch", element: <Launch /> },
+      { path: "create", element: <Create /> },
       { path: "test", element: <Test /> },
       { path: "*", element: <Wallet /> },
       {

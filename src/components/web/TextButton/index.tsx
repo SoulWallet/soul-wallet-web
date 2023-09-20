@@ -47,10 +47,9 @@ export default function TextButton({
       {...moreProps}
       {...restProps}
       onClick={onClick}
-      borderRadius="1em"
-      height="3rem"
+      height="48px"
       fontWeight="bold"
-      fontSize="1em"
+      fontSize="20px"
       _hover={_hover || { color: '#1e1e1e' }}
       _active={{ bg: 'transparent' }}
       _disabled={{ opacity: '0.7', cursor: 'not-allowed', color: color || '#898989' }}
