@@ -2,11 +2,11 @@ import { CreateStepEn, StepContextProvider, useStepContext, useStepDispatchConte
 import { ReactNode, useMemo, useState, useRef } from "react";
 import {EnHandleMode} from '@/lib/type'
 import FullscreenContainer from "@/components/FullscreenContainer";
-import SetPassword from "@/pages/Create/SetPassword";
-import SetGuardians from "@/pages/Create/SetGuardians";
-import SaveGuardians from "@/pages/Create/SaveGuardians";
-import SetDefaultWallet from "@/pages/Create/SetDefaultWallet";
-import SetWalletSuccess from "@/pages/Create/SetWalletSuccess";
+import SetPassword from "./SetPassword";
+import SetGuardians from "./SetGuardians";
+import SaveGuardians from "./SaveGuardians";
+import SetDefaultWallet from "./SetDefaultWallet";
+import SetWalletSuccess from "./SetWalletSuccess";
 
 type StepNodeInfo = {
   title: string;

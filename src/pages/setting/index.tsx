@@ -1,21 +1,11 @@
-import { useEffect, useState } from "react";
 import {Image} from "@chakra-ui/react";
-
-import IconSecurity from "@/assets/icons/security.svg";
-import IconDefault from "@/assets/icons/default.svg";
 import IconSupport from "@/assets/icons/support.svg";
 import IconChevronRight from "@/assets/icons/chevron-right.svg";
-import IconLockWallet from "@/assets/icons/lock-wallet.svg";
 import { Navbar } from "@/components/Navbar";
 import config from "@/config";
 import { Box, Text, Flex, Link } from "@chakra-ui/react";
-import useKeyring from "@/hooks/useKeyring";
 import PageTitle from "@/components/PageTitle";
-import Switch from "@/components/Switch";
-import ResetPassword from "./comp/ResetPassword";
-import useWalletContext from "@/context/hooks/useWalletContext";
 import SettingFooter from "./comp/SettingFooter";
-import { useSettingStore } from "@/store/setting";
 
 const SettingBox = ({ children, ...restProps }: any) => (
     <Flex
@@ -42,42 +32,15 @@ const SettingLeft = ({ icon, title }: any) => (
     </Flex>
 );
 
-const SettingMainpage = ({ onChange }: any) => {
-    const keyring = useKeyring();
-    const { showLocked } = useWalletContext();
-    const { globalShouldInject, setGlobalShouldInject } = useSettingStore();
-
-    const doLockWallet = async () => {
-        await keyring.lock();
-        showLocked();
-    };
-
+const SettingMainpage = () => {
     return (
         <Box px="5" pt="6">
             <Navbar backUrl="wallet" />
             <PageTitle mb="6">Plugin settings</PageTitle>
             <Flex gap="2" flexDir={"column"}>
-                <SettingBox onClick={() => onChange(1)}>
-                    <SettingLeft icon={IconSecurity} title={"Login Password"} />
-                    <Image src={IconChevronRight} w="6" h="6" />
-                </SettingBox>
-                {/* <SettingBox>
-                    <SettingLeft icon={IconDefault} title={"Set As Default"} />
-                    <Switch checked={globalShouldInject} onChange={(val) => setGlobalShouldInject(val)} />
-                </SettingBox> */}
                 <SettingBox>
                     <SettingLeft icon={IconSupport} title={"Support"} />
                     <Image src={IconChevronRight} w="6" h="6" />
-                </SettingBox>
-                <SettingBox
-                    mt="4"
-                    onClick={doLockWallet}
-                    color="#fff"
-                    bg="#1e1e1e"
-                    justify="center"
-                    _hover={{ bg: "#343434" }}
-                >
-                    <SettingLeft icon={IconLockWallet} title={"Lock wallet"} />
                 </SettingBox>
             </Flex>
             <Flex justify={"center"} align="center" gap="15px" mt="6" mb="3">
@@ -102,11 +65,9 @@ const SettingMainpage = ({ onChange }: any) => {
 };
 
 export default function Setting() {
-    const [settingIndex, setSettingIndex] = useState(0);
     return (
         <>
-            {!settingIndex && <SettingMainpage onChange={setSettingIndex} />}
-            {settingIndex === 1 && <ResetPassword onCancel={() => setSettingIndex(0)} />}
+            <SettingMainpage />
             <SettingFooter />
         </>
     );

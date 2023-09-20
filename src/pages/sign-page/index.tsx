@@ -14,7 +14,7 @@ import { useChainStore } from "@/store/chain";
 
 export default function SignPage() {
   const params = useParams();
-  const param = params.query;
+  const param: any = params.query;
   // const params = useSearchParams();
   const [searchParams, setSearchParams] = useState<any>({});
   const { selectedAddress, toggleAllowedOrigin } = useAddressStore();
@@ -112,7 +112,7 @@ export default function SignPage() {
                     msgToSign,
                 });
 
-                const signature = await keyring.signMessage(msgToSign);
+                // const signature = await keyring.signMessage(msgToSign);
 
                 // await browser.tabs.sendMessage(Number(tabId), {
                 //     id,
