@@ -2,11 +2,12 @@ import React from "react";
 import { Box, Text, Flex } from "@chakra-ui/react";
 import Button from "@/components/Button";
 import useBrowser from "@/hooks/useBrowser";
+import storage from "@/lib/storage";
 
 export default function SetGuardianHint({ onSkip }: any) {
     const { navigate } = useBrowser();
     const doSkip = () => {
-        localStorage.setItem("skipSet", "true");
+        storage.setItem("skipSet", "true");
         onSkip();
     };
     return (

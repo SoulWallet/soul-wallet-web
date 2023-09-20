@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import storage from "@/lib/storage";
 
 export default class KeyStore {
     private static instance: KeyStore;
@@ -21,7 +22,7 @@ export default class KeyStore {
      * @returns EOA address, null is failed or no keystore
      */
     public async getAddress(): Promise<string> {
-        const val = JSON.parse(localStorage.getItem(this.keyStoreKey) || '{}');
+        const val = storage.getJson(this.keyStoreKey);
         if (val && val.address) {
             return ethers.getAddress(val.address);
         }
@@ -32,7 +33,7 @@ export default class KeyStore {
      * Get signer
      */
     public async getSigner(): Promise<ethers.Signer> {
-        return new ethers.Wallet(localStorage.getItem('pk') || '')
+        return new ethers.Wallet(storage.getItem('pk') || '')
     }
 
     /**
@@ -45,15 +46,15 @@ export default class KeyStore {
             const account = ethers.Wallet.createRandom();
             // const Keystore = await account.encrypt(password);
             // IMPORTANT TODO, save to passkey later
-            localStorage.setItem('pk', account.privateKey)
+            storage.setItem('pk', account.privateKey)
 
             // if (saveKey) {
-            //     localStorage.setItem(this.keyStoreKey, Keystore);
-            //     localStorage.setItem('password', password)
+            //     storage.setItem(this.keyStoreKey, Keystore);
+            //     storage.setItem('password', password)
             // } else {
-            //     localStorage.setItem("stagingAccount", account.address);
-            //     localStorage.setItem("stagingKeystore", Keystore);
-            //     localStorage.setItem("stagingPw", password);
+            //     storage.setItem("stagingAccount", account.address);
+            //     storage.setItem("stagingKeystore", Keystore);
+            //     storage.setItem("stagingPw", password);
             // }
             return account.address;
         } catch (error) {
@@ -63,15 +64,15 @@ export default class KeyStore {
     }
 
     public async replaceAddress(): Promise<void> {
-        const stagingKeystore = localStorage.getItem("stagingKeystore");
-        const stagingPw = localStorage.getItem("stagingPw");
-        localStorage.removeItem("stagingAccount");
-        localStorage.removeItem("recoverOpHash");
-        localStorage.setItem(this.keyStoreKey, stagingKeystore || '');
+        const stagingKeystore = storage.getItem("stagingKeystore");
+        const stagingPw = storage.getItem("stagingPw");
+        storage.removeItem("stagingAccount");
+        storage.removeItem("recoverOpHash");
+        storage.setItem(this.keyStoreKey, stagingKeystore || '');
     }
 
     public async delete(): Promise<void> {
-        localStorage.clear();
+        storage.clear();
     }
 
     /**

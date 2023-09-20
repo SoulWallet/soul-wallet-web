@@ -4,6 +4,7 @@ import { IAddressItem } from "@/store/address";
 import BN from "bignumber.js";
 import { chainIdMapping, chainMapping } from "@/config";
 import IconDefault from "@/assets/tokens/default.svg";
+import storage from "@/lib/storage";
 
 export function notify(title: string, message: string) {
     const randomId = nanoid();
@@ -78,7 +79,7 @@ export const addPaymasterAndData = (payToken: string, paymaster: string) => {
 };
 
 export const checkAllowed = (origin: string) => {
-    const addressStorage = JSON.parse(localStorage.getItem("address-storage") || "{}");
+    const addressStorage = storage.getJson("address-storage");
     const selectedAddress = addressStorage.state.selectedAddress;
     const selectedAddressItem = addressStorage.state.addressList.filter(
         (item: IAddressItem) => item.address === selectedAddress,
@@ -91,7 +92,7 @@ export const checkAllowed = (origin: string) => {
 };
 
 export const checkShouldInject = (origin: string) => {
-    const settingStorage = JSON.parse(localStorage.getItem("setting-storage") || "{}");
+    const settingStorage = storage.getJson("setting-storage");
     const globalShouldInject = settingStorage.state.globalShouldInject;
     const shouldInjectList = settingStorage.state.shouldInjectList;
     const shouldNotInjectList = settingStorage.state.shouldNotInjectList;
@@ -113,7 +114,7 @@ export const checkShouldInject = (origin: string) => {
 };
 
 export const getSelectedChainItem = () => {
-    const chainStorage = JSON.parse(localStorage.getItem("chain-storage") || "{}");
+    const chainStorage = storage.getJson("chain-storage");
     const selectedChainId = chainStorage.state.selectedChainId;
     const selectedChainItem = chainStorage.state.chainList.filter(
         (item: any) => item.chainIdHex === selectedChainId,
