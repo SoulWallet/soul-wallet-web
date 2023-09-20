@@ -3,12 +3,12 @@ import Wallet from "@/pages/wallet";
 import Send from "@/pages/send";
 import SignPage from "@/pages/sign-page";
 import ActivateWallet from "@/pages/activate";
-import CreatePage from "@/pages/create";
+// import CreatePage from "@/pages/create";
 import Setting from "@/pages/setting";
 import Accounts from "@/pages/accounts";
 import AddFund from "@/pages/add-fund";
-import RecoverPage from "@/pages/recover";
-import EditGuardians from "@/pages/guardians";
+// import RecoverPage from "@/pages/recover";
+// import EditGuardians from "@/pages/guardians";
 import Launch from "@/pages/launch";
 
 export default (
@@ -22,9 +22,9 @@ export default (
     <Route path="sign" element={<SignPage />} />
     <Route path="activate" element={<ActivateWallet />} />
     <Route path="launch" element={<Launch />} />
-    <Route path="create" element={<CreatePage />} />
-    <Route path="recover" element={<RecoverPage />} />
-    <Route path="edit-guardians" element={<EditGuardians />} />
+    {/* <Route path="create" element={<CreatePage />} />
+        <Route path="recover" element={<RecoverPage />} />
+        <Route path="edit-guardians" element={<EditGuardians />} /> */}
     <Route path="*" element={<Wallet />} />
   </Routes>
 );
