@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import useBrowser from "../hooks/useBrowser";
 import { Box } from "@chakra-ui/react";
 import { useAddressStore } from "@/store/address";
+import storage from "@/lib/storage";
 
 // Find the correct route to go
 
@@ -12,7 +13,7 @@ export default function FindRoute({ children }: any) {
   const isLaunch =false;
 
   const findRoute = async () => {
-    const recovering = localStorage.getItem("recovering");
+    const recovering = storage.getItem("recovering");
     if (isLaunch) {
       navigate("launch");
     } else if (recovering) {

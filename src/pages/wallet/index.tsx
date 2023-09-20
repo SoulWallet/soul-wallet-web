@@ -11,6 +11,7 @@ import Actions from "./comp/Actions";
 import { useAddressStore } from "@/store/address";
 import { useChainStore } from "@/store/chain";
 import { useGuardianStore } from "@/store/guardian";
+import storage from "@/lib/storage";
 
 export default function Wallet() {
   const { selectedAddress, getIsActivated } = useAddressStore();
@@ -22,8 +23,8 @@ export default function Wallet() {
   const showSetGuardian =
     isActivated &&
     guardians.length === 0 &&
-    (!localStorage.getItem("skipSet") ||
-      localStorage.getItem("skipSet") !== "true") &&
+    (!storage.getItem("skipSet") ||
+      storage.getItem("skipSet") !== "true") &&
     !skipSet;
 
   return (

@@ -7,6 +7,7 @@ import { Box, Center, Flex, Text, Image } from "@chakra-ui/react";
 import CreateWalletIcon from "@/components/Icons/CreateWallet";
 import RecoverWalletIcon from "@/components/Icons/RecoverWallet";
 import TextBody from "@/components/web/TextBody";
+import storage from "@/lib/storage";
 
 export default function Launch() {
   // const [authorized, setAuthorized] = useState(false);
@@ -15,7 +16,7 @@ export default function Launch() {
   // const [showModal, setShowModal] = useState(false);
 
   // const getAuthorized = async () => {
-  //   const authorizedStatus = (localStorage.getItem(AUTHORIZED_STORAGE_KEY)) ?? false;
+  //   const authorizedStatus = (storage.getItem(AUTHORIZED_STORAGE_KEY)) ?? false;
   //   // setAuthorized(authorizedStatus);
   //   setShowModal(!authorizedStatus);
   // };
@@ -28,7 +29,7 @@ export default function Launch() {
   // const handleCloseModal = () => setShowModal(false);
 
   // const handleAuthorize = () => {
-  //   localStorage.setItem(AUTHORIZED_STORAGE_KEY, true);
+  //   storage.setItem(AUTHORIZED_STORAGE_KEY, true);
   //   setAuthorized(true);
   //   handleCloseModal();
   // };

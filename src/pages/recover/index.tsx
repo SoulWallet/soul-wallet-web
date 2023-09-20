@@ -15,6 +15,7 @@ import SignatureRequest from "@/pages/Recover/SignatureRequest";
 import UploadGuardians from "@/pages/Recover/UploadGuardians";
 import { useGuardianStore } from "@/store/guardian";
 import useBrowser from "@/hooks/useBrowser";
+import storage from "@/lib/storage";
 
 type StepNodeInfo = {
   title: string;
@@ -43,7 +44,7 @@ const StepComponent = () => {
 
   const onRecoverSubmit = async (wAddress: string, pToken: string) => {
     setWalletAddress(wAddress);
-    localStorage.setItem("walletAddress", wAddress);
+    storage.setItem("walletAddress", wAddress);
     setPayToken(pToken);
   };
 
