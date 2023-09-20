@@ -24,6 +24,7 @@ export default {
     addressPrefix: "op:",
     // fileName: "arb-goerli",
     support1559: true,
+    recovering: false,
     paymasterTokens: [
         // test u
         "0xe05606174bac4A6364B31bd0eCA4bf4dD368f8C6",

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import AccountCard from "@/components/AccountCard";
 import { Box } from "@chakra-ui/react";
@@ -6,7 +6,6 @@ import Operations from "./comp/Operations";
 import ActivateHint from "./comp/ActivateHint";
 import SetGuardianHint from "./comp/SetGuardianHint";
 import MobileContainer from "@/components/MobileContainer";
-import Footer from "@/components/Footer";
 import Actions from "./comp/Actions";
 import { useAddressStore } from "@/store/address";
 import { useChainStore } from "@/store/chain";
@@ -36,7 +35,6 @@ export default function Wallet() {
                 {showSetGuardian && !skipSet && <SetGuardianHint onSkip={()=> setSkipSet(true)} />}
         <Operations />
       </Box>
-      <Footer />
     </MobileContainer>
   );
 }

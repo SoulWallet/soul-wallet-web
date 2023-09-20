@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function checkPasswordStrength(password) {
+function checkPasswordStrength(password: string) {
   let strength = 1;
 
   // Check length of the password

@@ -2,8 +2,8 @@ import { GuardiansStepEn, StepContextProvider, useStepContext } from "@/context/
 import { ReactNode, useMemo } from "react";
 import { EnHandleMode } from '@/lib/type'
 import FullscreenContainer from "@/components/FullscreenContainer";
-import EditGuardians from "@/pages/Guardians/EditGuardians";
-import SaveGuardians from "@/pages/Guardians/SaveGuardians";
+import EditGuardians from "./EditGuardians";
+import SaveGuardians from "./SaveGuardians";
 
 type StepNodeInfo = {
   title: string;

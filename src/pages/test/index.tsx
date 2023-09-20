@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import usePasskey from "@/hooks/usePasskey";
-import { Box } from "@chakra-ui/react";
+import { Box, Input } from "@chakra-ui/react";
 import { useCredentialStore } from "@/store/credential";
 
 export default function Test() {
@@ -21,14 +21,11 @@ export default function Test() {
       </Button>
       <Box>
         <input
-          aria-invalid="true"
-          autoComplete="webauthn"
-          id="username-register"
+          autoComplete="username webauthn"
           name="username"
           type="text"
-          autoCapitalize="none"
-          autoCorrect="off"
         />
+        <Input autoComplete="username webauthn" placeholder="1231" />
       </Box>
       {credentials.map((item: any) => (
         <Box bg="#fff" rounded={"4px"} my="4" p="4" key={item.id}>

@@ -1,4 +1,5 @@
-import { Route, Routes, } from "react-router-dom";
+import { Route, Routes, createBrowserRouter } from "react-router-dom";
+import Layout from "./Layout";
 import Wallet from "@/pages/wallet";
 import Send from "@/pages/send";
 import SignPage from "@/pages/sign-page";
@@ -12,21 +13,27 @@ import AddFund from "@/pages/add-fund";
 import Launch from "@/pages/launch";
 import Test from "./pages/test";
 
-export default (
-  <Routes>
-    <Route path="/" element={<Wallet />} />
-    <Route path="wallet" element={<Wallet />} />
-    <Route path="accounts" element={<Accounts />} />
-    <Route path="send/:tokenAddress" element={<Send />} />
-    <Route path="setting" element={<Setting />} />
-    <Route path="add-fund" element={<AddFund />} />
-    <Route path="sign" element={<SignPage />} />
-    <Route path="activate" element={<ActivateWallet />} />
-    <Route path="launch" element={<Launch />} />
-    <Route path="test" element={<Test />} />
-    {/* <Route path="create" element={<CreatePage />} />
-        <Route path="recover" element={<RecoverPage />} />
-        <Route path="edit-guardians" element={<EditGuardians />} /> */}
-    <Route path="*" element={<Wallet />} />
-  </Routes>
-);
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { path: "wallet", element: <Wallet /> },
+      { path: "accounts", element: <Accounts /> },
+      { path: "send/:tokenAddress", element: <Send /> },
+      { path: "setting", element: <Setting /> },
+      { path: "add-fund", element: <AddFund /> },
+      { path: "sign", element: <SignPage /> },
+      { path: "activate", element: <ActivateWallet /> },
+      { path: "launch", element: <Launch /> },
+      { path: "test", element: <Test /> },
+      { path: "*", element: <Wallet /> },
+      {
+        /* <Route path="create" element={<CreatePage />} />
+          <Route path="recover" element={<RecoverPage />} />
+          <Route path="edit-guardians" element={<EditGuardians />} /> */
+      },
+    ]
+  },
+ 
+]);

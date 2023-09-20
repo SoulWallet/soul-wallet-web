@@ -1,20 +1,20 @@
-const setJson = (key, value) => {
+const setJson = (key: string, value: any) => {
   localStorage.setItem(key, JSON.stringify(value))
 }
 
-const getJson = (key) => {
+const getJson = (key: string) => {
   return JSON.parse(localStorage.getItem(key) || '{}')
 }
 
-const getItem = (key) => {
+const getItem = (key: string) => {
   return localStorage.getItem(key)
 }
 
-const setItem = (key, value) => {
+const setItem = (key: string, value: any) => {
   localStorage.setItem(key, value)
 }
 
-const removeItem = (key) => {
+const removeItem = (key: string) => {
   localStorage.removeItem(key)
 }
 

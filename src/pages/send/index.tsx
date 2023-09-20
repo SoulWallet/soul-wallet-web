@@ -1,11 +1,12 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import SendAssets from "@/components/SendAssets";
-import config from "@/config";
 import {ethers} from 'ethers'
 
 export default function Send() {
+    const params = useParams();
     const tokenAddress = params.tokenAddress || ethers.ZeroAddress;
     return (
         <Box p="5">

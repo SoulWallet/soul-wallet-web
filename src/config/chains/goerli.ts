@@ -24,6 +24,7 @@ export default {
     addressPrefix: "gor:",
     // fileName: "goerli",
     support1559: true,
+    recovering: false,
     paymasterTokens: [
         // test u
         "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
