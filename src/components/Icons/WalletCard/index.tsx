@@ -1,5 +1,3 @@
-import React from 'react'
-
 const WalletCard = () => {
   return (
     <svg width="35" height="63" viewBox="0 0 35 63" fill="none" xmlns="http://www.w3.org/2000/svg">

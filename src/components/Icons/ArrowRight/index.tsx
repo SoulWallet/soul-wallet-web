@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ArrowRight = ({ color }: any) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 320 512">
