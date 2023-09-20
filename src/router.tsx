@@ -10,6 +10,7 @@ import AddFund from "@/pages/add-fund";
 // import RecoverPage from "@/pages/recover";
 // import EditGuardians from "@/pages/guardians";
 import Launch from "@/pages/launch";
+import Test from "./pages/test";
 
 export default (
   <Routes>
@@ -22,6 +23,7 @@ export default (
     <Route path="sign" element={<SignPage />} />
     <Route path="activate" element={<ActivateWallet />} />
     <Route path="launch" element={<Launch />} />
+    <Route path="test" element={<Test />} />
     {/* <Route path="create" element={<CreatePage />} />
         <Route path="recover" element={<RecoverPage />} />
         <Route path="edit-guardians" element={<EditGuardians />} /> */}

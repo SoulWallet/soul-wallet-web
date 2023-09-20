@@ -3,25 +3,28 @@ import useBrowser from "../hooks/useBrowser";
 import { Box } from "@chakra-ui/react";
 import { useAddressStore } from "@/store/address";
 import storage from "@/lib/storage";
+import { useLocation } from "react-router-dom";
 
 // Find the correct route to go
 
 export default function FindRoute({ children }: any) {
   const { navigate } = useBrowser();
+  const location = useLocation();
   const { addressList } = useAddressStore();
 
-  const isLaunch =false;
+  const isLaunch = location.pathname.includes('launch');
+  const isTest = location.pathname.includes('test');
 
   const findRoute = async () => {
     const recovering = storage.getItem("recovering");
     if (isLaunch) {
       navigate("launch");
+    } else if(isTest){
+      navigate('test');
     } else if (recovering) {
       navigate("recover");
     } else if (!addressList.length) {
       navigate("launch");
-    } else {
-      navigate("");
     }
   };
 
