@@ -1,5 +1,4 @@
-import React from "react";
-import { Flex, Box, Text, Image } from "@chakra-ui/react";
+import { Flex, Box, Text } from "@chakra-ui/react";
 import GasSelect from "../../SendAssets/comp/GasSelect";
 import { AddressInput, AddressInputReadonly } from "../../SendAssets/comp/AddressInput";
 import { useAddressStore } from "@/store/address";

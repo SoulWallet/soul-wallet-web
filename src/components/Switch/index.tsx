@@ -1,4 +1,3 @@
-import React from "react";
 import { Switch as CSwitch } from "@chakra-ui/react";
 import { ISwitchProps } from "@/types/ISwitch";
 

@@ -8,11 +8,10 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import FullscreenContainer from "@/components/FullscreenContainer";
 import { RecoveryContextProvider } from "@/context/RecoveryContext";
-import {EnHandleMode} from '@/lib/type'
-import EnterWalletAddress from "@/pages/Recover/EnterWalletAddress";
-import SetWalletPassword from "@/pages/Recover/SetWalletPassword";
-import SignatureRequest from "@/pages/Recover/SignatureRequest";
-import UploadGuardians from "@/pages/Recover/UploadGuardians";
+import EnterWalletAddress from "./EnterWalletAddress";
+import SetWalletPassword from "./SetWalletPassword";
+import SignatureRequest from "./SignatureRequest";
+import UploadGuardians from "./UploadGuardians";
 import { useGuardianStore } from "@/store/guardian";
 import useBrowser from "@/hooks/useBrowser";
 import storage from "@/lib/storage";

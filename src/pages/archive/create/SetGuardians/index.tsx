@@ -192,7 +192,7 @@ export default function SetGuardians({ onStepChange, getPassword }: any) {
   }
 
   const createInitialWallet = async () => {
-    const account = await keystore.createNewAddress(getPassword(), true);
+    const account = await keystore.createNewAddress(true);
     const initialKey = ethers.zeroPadValue(account, 32)
     const guardianHash = calcGuardianHash([], 0)
     const initialGuardianHash = guardianHash

@@ -1,7 +1,5 @@
-import React from "react";
 import { Box } from "@chakra-ui/react"
 import WalletCardIcon from "@/components/Icons/WalletCard";
-import Steps from "@/components/web/Steps";
 
 export default function WalletCard({ statusText, steps }: any) {
   return (

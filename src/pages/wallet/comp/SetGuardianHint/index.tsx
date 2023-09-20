@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Text, Flex } from "@chakra-ui/react";
 import Button from "@/components/Button";
 import useBrowser from "@/hooks/useBrowser";

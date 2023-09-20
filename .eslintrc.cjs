@@ -15,5 +15,6 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'TS6133': 'off',
   },
 }

@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import {Image} from "@chakra-ui/react";
 import IconLogo from "@/assets/logo-v3.svg";

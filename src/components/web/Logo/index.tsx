@@ -1,4 +1,3 @@
-import React from "react";
 import LogoIcon from "@/assets/logo-v3.svg";
 import LogoText from "@/assets/logo-text-v3.svg";
 import { Box} from "@chakra-ui/react";

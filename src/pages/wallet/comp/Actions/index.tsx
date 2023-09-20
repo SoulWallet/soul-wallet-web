@@ -1,5 +1,4 @@
-import React from "react";
-import { Text, Grid, GridItem, Tooltip, useToast } from "@chakra-ui/react";
+import { Text, Grid, GridItem, useToast } from "@chakra-ui/react";
 import {Image} from "@chakra-ui/react";
 import useBrowser from "@/hooks/useBrowser";
 import IconAddFunds from "@/assets/actions/add-funds.svg";
