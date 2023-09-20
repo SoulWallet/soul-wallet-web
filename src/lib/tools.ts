@@ -126,6 +126,15 @@ const to10 = (n: any) => {
     return BN(n).toString();
 };
 
+export const base64toBigInt = (base64String: string) => {
+    const binaryString = atob(base64String);
+    let result = BigInt(0);
+    for (let i=0;i<binaryString.length; i++){
+        result = (result << BigInt(8)) | BigInt(binaryString.charCodeAt(i));
+    }
+    return result;
+}
+
 export const printUserOp = (userOp: any) => {
     console.log(
         JSON.stringify([
