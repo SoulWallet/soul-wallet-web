@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ActivityItem from "./comp/ActivityItem";
 import { Box } from "@chakra-ui/react";
 import IconLoading from "@/assets/activity-loading.gif";

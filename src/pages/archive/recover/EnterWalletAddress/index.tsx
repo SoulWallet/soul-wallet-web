@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { RecoverStepEn, StepActionTypeEn, useStepDispatchContext } from "@/context/StepContext";
 import { ethers } from "ethers";
 import Button from "@/components/web/Button";

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Box, Text, Image, Input } from "@chakra-ui/react"
 
 interface IProps {

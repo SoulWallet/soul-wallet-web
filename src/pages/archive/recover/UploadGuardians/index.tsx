@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RecoverStepEn, StepActionTypeEn, useStepDispatchContext } from "@/context/StepContext";
 import useTools from "@/hooks/useTools";
 import { useGlobalStore } from "@/store/global";

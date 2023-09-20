@@ -1,5 +1,5 @@
 import { CreateStepEn, StepContextProvider, useStepContext, useStepDispatchContext, StepActionTypeEn } from "@/context/StepContext";
-import React, { ReactNode, useMemo, useState, useRef } from "react";
+import { ReactNode, useMemo, useState, useRef } from "react";
 import {EnHandleMode} from '@/lib/type'
 import FullscreenContainer from "@/components/FullscreenContainer";
 import SetPassword from "@/pages/Create/SetPassword";

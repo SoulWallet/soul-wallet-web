@@ -1,5 +1,5 @@
 import { RecoverStepEn, StepActionTypeEn, useStepDispatchContext } from "@/context/StepContext";
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import attentionIcon from "@/assets/icons/attention.svg";
 import useWallet from "@/hooks/useWallet";
 import { useRecoveryContext } from "@/context/RecoveryContext";

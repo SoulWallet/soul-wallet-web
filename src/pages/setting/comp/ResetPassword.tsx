@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import useKeyring from "@/hooks/useKeyring";
 import Button from "@/components/Button";
 import PageTitle from "@/components/PageTitle";

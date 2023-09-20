@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, Fragment } from 'react';
+import { useState, useRef, useEffect, Fragment } from 'react';
 import Button from "@/components/web/Button";
 import TextButton from "@/components/web/TextButton";
 import { useGlobalStore } from "@/store/global";

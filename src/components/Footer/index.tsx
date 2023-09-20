@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Switch from "../Switch";
 import { Box, Text, Flex, Tooltip, Image, } from "@chakra-ui/react";
 import IconConnected from "@/assets/icons/connected.svg";

@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef, useRef, useEffect } from "react";
+import { useState, useImperativeHandle, forwardRef, useRef, useEffect } from "react";
 import { Flex, Box, Text, useToast, Image, } from "@chakra-ui/react";
 import { useAnimationControls, motion } from "framer-motion";
 import FormInput from "../FormInput";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useWalletContext from "@/context/hooks/useWalletContext";
 import { Navbar } from "@/components/Navbar";
 import BN from "bignumber.js";

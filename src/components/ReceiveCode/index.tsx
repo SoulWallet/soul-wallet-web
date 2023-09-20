@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import IconCopy from "@/assets/copy.svg";
 import useTools from "@/hooks/useTools";
 import { copyText } from "@/lib/tools";

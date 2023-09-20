@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import { useState, forwardRef } from "react";
 import { Box, Text, Input, InputRightElement,Image, InputGroup } from "@chakra-ui/react";
 import IconEyeOpen from "@/assets/icons/eye-open.svg";
 import IconEyeClose from "@/assets/icons/eye-close.svg";

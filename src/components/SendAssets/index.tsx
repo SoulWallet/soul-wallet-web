@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../Button";
 import { Flex, Box, Text, useToast } from "@chakra-ui/react";
 import BN from "bignumber.js";

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 // import * as abi from "@soulwallet/abi";
 import Tokens from "./comp/Tokens";

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import EyeOpen from "@/assets/icons/eye-open.svg";
 import EyeClose from "@/assets/icons/eye-close.svg";
 import { Box, Text, Input } from "@chakra-ui/react"

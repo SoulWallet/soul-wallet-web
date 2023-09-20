@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { createPortal } from 'react-dom'
 import useBrowser from "@/hooks/useBrowser";
 import {EnHandleMode} from '@/lib/type'

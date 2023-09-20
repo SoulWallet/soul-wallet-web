@@ -1,4 +1,3 @@
-import React, { useEffect, useState, Fragment } from "react";
 import useKeyring from "@/hooks/useKeyring";
 import { CreateStepEn, StepActionTypeEn, useStepDispatchContext } from "@/context/StepContext";
 import WalletCard from "@/components/web/WalletCard";

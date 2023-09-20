@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Modal, ModalOverlay, Image, ModalContent, Text, Flex, Box } from "@chakra-ui/react";
 import IconError from "@/assets/icons/error.svg";
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useLocation } from 'react-router-dom'
 import { Flex, Text, Image, } from "@chakra-ui/react";
 import IconCheveronDown from "@/assets/icons/chevron-down.svg";

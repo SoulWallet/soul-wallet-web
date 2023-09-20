@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Box, Text, Flex, Menu, Image, MenuButton, MenuList, MenuItem, Input } from "@chakra-ui/react";
 
 import TokenLine from "./TokenLine";

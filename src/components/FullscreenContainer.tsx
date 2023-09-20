@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import Logo from "@/components/web/Logo";
-import { Box, Text, Image } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 
 export default function FullscreenContainer({ children }: { children: ReactNode }) {
   return (

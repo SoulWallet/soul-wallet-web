@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import LogoIcon from "@/assets/logo-v3.svg";
 import { GuardiansStepEn, StepActionTypeEn, useStepDispatchContext } from "@/context/StepContext";
 import { validateEmail } from "@/lib/tools";

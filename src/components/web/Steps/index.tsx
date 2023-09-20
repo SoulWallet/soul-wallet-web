@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { Box } from "@chakra-ui/react"
 import ArrowLeftIcon from "@/components/Icons/ArrowLeft";
 

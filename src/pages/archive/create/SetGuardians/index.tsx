@@ -1,4 +1,4 @@
-import React, { useState, useRef, useImperativeHandle, useCallback, useEffect } from 'react';
+import { useState, useRef, useImperativeHandle, useCallback, useEffect } from 'react';
 import { ethers } from "ethers";
 import Button from "@/components/web/Button";
 import TextButton from "@/components/web/TextButton";

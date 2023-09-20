@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import EmptyHint from "../EmptyHint";
 import { useBalanceStore } from "@/store/balance";
 import { Grid, GridItem } from "@chakra-ui/react";

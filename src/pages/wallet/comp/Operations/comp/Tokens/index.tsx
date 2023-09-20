@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 import { ITokenBalanceItem, useBalanceStore } from "@/store/balance";
 import ListItem from "../ListItem";

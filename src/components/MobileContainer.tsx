@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { Box } from "@chakra-ui/react";
 
 export default function MobileContainer({ children, ...restProps }: { children: ReactNode }) {

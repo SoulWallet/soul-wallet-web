@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ListItem from "../../ListItem";
 import useTools from "@/hooks/useTools";
 import { numToFixed } from "@/lib/tools";

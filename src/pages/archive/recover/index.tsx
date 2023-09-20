@@ -5,7 +5,7 @@ import {
   StepActionTypeEn,
   useStepDispatchContext,
 } from "@/context/StepContext";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FullscreenContainer from "@/components/FullscreenContainer";
 import { RecoveryContextProvider } from "@/context/RecoveryContext";
 import {EnHandleMode} from '@/lib/type'

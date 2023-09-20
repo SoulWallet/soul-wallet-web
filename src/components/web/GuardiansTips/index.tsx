@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react"
+import { Fragment, useState } from "react"
 import { Box, Text } from "@chakra-ui/react"
 import Heading3 from "@/components/web/Heading3"
 import TextBody from "@/components/web/TextBody"

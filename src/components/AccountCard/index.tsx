@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Box, Flex, Text, useToast, Image, } from "@chakra-ui/react";
 import { copyText } from "@/lib/tools";
 import IconCopy from "@/assets/copy.svg";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import IconLoading from "@/assets/loading.gif";
 import MobileContainer from "@/components/MobileContainer";
 import { Navbar } from "@/components/Navbar";
