@@ -14,6 +14,15 @@ dependencies:
   '@emotion/styled':
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.21)(react@18.2.0)
+  '@passwordless-id/webauthn':
+    specifier: ^1.2.6
+    version: 1.2.6
+  '@peculiar/asn1-ecc':
+    specifier: ^2.3.6
+    version: 2.3.6
+  '@peculiar/asn1-schema':
+    specifier: ^2.3.6
+    version: 2.3.6
   '@soulwallet/abi':
     specifier: ^0.1.1
     version: 0.1.1
@@ -1749,6 +1758,37 @@ packages:
       fastq: 1.15.0
     dev: true
 
+  /@passwordless-id/webauthn@1.2.6:
+    resolution: {integrity: sha512-KkP9CTAo3+0E99/otSkzPmhvhfXvdvITzXdhGy8wtNb45fC1QT9ljnuAlkp8Db+brFHgb97m8+42U+2oonrosA==}
+    dev: false
+
+  /@peculiar/asn1-ecc@2.3.6:
+    resolution: {integrity: sha512-Hu1xzMJQWv8/GvzOiinaE6XiD1/kEhq2C/V89UEoWeZ2fLUcGNIvMxOr/pMyL0OmpRWj/mhCTXOZp4PP+a0aTg==}
+    dependencies:
+      '@peculiar/asn1-schema': 2.3.6
+      '@peculiar/asn1-x509': 2.3.6
+      asn1js: 3.0.5
+      tslib: 2.6.2
+    dev: false
+
+  /@peculiar/asn1-schema@2.3.6:
+    resolution: {integrity: sha512-izNRxPoaeJeg/AyH8hER6s+H7p4itk+03QCa4sbxI3lNdseQYCuxzgsuNK8bTXChtLTjpJz6NmXKA73qLa3rCA==}
+    dependencies:
+      asn1js: 3.0.5
+      pvtsutils: 1.3.5
+      tslib: 2.6.2
+    dev: false
+
+  /@peculiar/asn1-x509@2.3.6:
+    resolution: {integrity: sha512-dRwX31R1lcbIdzbztiMvLNTDoGptxdV7HocNx87LfKU0fEWh7fTWJjx4oV+glETSy6heF/hJHB2J4RGB3vVSYg==}
+    dependencies:
+      '@peculiar/asn1-schema': 2.3.6
+      asn1js: 3.0.5
+      ipaddr.js: 2.1.0
+      pvtsutils: 1.3.5
+      tslib: 2.6.2
+    dev: false
+
   /@popperjs/core@2.11.8:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
     dev: false
@@ -2185,6 +2225,15 @@ packages:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
     dev: true
+
+  /asn1js@3.0.5:
+    resolution: {integrity: sha512-FVnvrKJwpt9LP2lAMl8qZswRNm3T4q9CON+bxldk2iwk3FFpuwhx2FfinyitizWHsVYyaY+y5JzDR0rCMV5yTQ==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      pvtsutils: 1.3.5
+      pvutils: 1.1.3
+      tslib: 2.6.2
+    dev: false
 
   /asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
@@ -2863,6 +2912,11 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
+  /ipaddr.js@2.1.0:
+    resolution: {integrity: sha512-LlbxQ7xKzfBusov6UMi4MFpEg0m+mAm9xyNGEduwXMEDuf4WfzB/RZwMVYEd7IKGvh4IUkEXYxtAVu9T3OelJQ==}
+    engines: {node: '>= 10'}
+    dev: false
+
   /is-arrayish@0.2.1:
     resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
     dev: false
@@ -3223,6 +3277,17 @@ packages:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
     dev: true
+
+  /pvtsutils@1.3.5:
+    resolution: {integrity: sha512-ARvb14YB9Nm2Xi6nBq1ZX6dAM0FsJnuk+31aUp4TrcZEdKUlSqOqsxJHUPJDNE3qiIp+iUPEIeR6Je/tgV7zsA==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
+  /pvutils@1.1.3:
+    resolution: {integrity: sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /qrcode@1.5.3:
     resolution: {integrity: sha512-puyri6ApkEHYiVl4CFzo1tDkAZ+ATcnbJrJ6RiBM1Fhctdn/ix9MTE3hRph33omisEbC/2fcfemsseiKgBPKZg==}
