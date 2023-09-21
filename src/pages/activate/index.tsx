@@ -1,31 +1,31 @@
-import { useEffect, useState } from "react";
-import useWalletContext from "@/context/hooks/useWalletContext";
-import { Navbar } from "@/components/Navbar";
-import BN from "bignumber.js";
-import { ethers } from "ethers";
-import MobileContainer from "@/components/MobileContainer";
-import useWallet from "@/hooks/useWallet";
-import { Box, Text, Flex, Divider, useToast } from "@chakra-ui/react";
-import { useBalanceStore } from "@/store/balance";
-import { InfoWrap, InfoItem } from "@/components/SignModal";
-import GasSelect from "@/components/SendAssets/comp/GasSelect";
-import useBrowser from "@/hooks/useBrowser";
-import PageTitle from "@/components/PageTitle";
-import ReceiveCode from "@/components/ReceiveCode";
-import Button from "@/components/Button";
-import { useAddressStore, getIndexByAddress } from "@/store/address";
-import useConfig from "@/hooks/useConfig";
-import { useChainStore } from "@/store/chain";
+import { useEffect, useState } from 'react';
+import useWalletContext from '@/context/hooks/useWalletContext';
+import { Navbar } from '@/components/Navbar';
+import BN from 'bignumber.js';
+import { ethers } from 'ethers';
+import MobileContainer from '@/components/MobileContainer';
+import useWallet from '@/hooks/useWallet';
+import { Box, Text, Flex, Divider, useToast } from '@chakra-ui/react';
+import { useBalanceStore } from '@/store/balance';
+import { InfoWrap, InfoItem } from '@/components/SignModal';
+import GasSelect from '@/components/SendAssets/comp/GasSelect';
+import useBrowser from '@/hooks/useBrowser';
+import PageTitle from '@/components/PageTitle';
+import ReceiveCode from '@/components/ReceiveCode';
+import Button from '@/components/Button';
+import { useAddressStore, getIndexByAddress } from '@/store/address';
+import useConfig from '@/hooks/useConfig';
+import { useChainStore } from '@/store/chain';
 
 export default function ActivateWallet() {
   const toast = useToast();
   const { account } = useWalletContext();
   const { selectedAddress, addressList } = useAddressStore();
-  const [needCost, setNeedCost] = useState("");
+  const [needCost, setNeedCost] = useState('');
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
   const { selectedChainItem } = useConfig();
-  const [payTokenSymbol, setPayTokenSymbol] = useState("");
-  const [userBalance, setUserBalance] = useState("");
+  const [payTokenSymbol, setPayTokenSymbol] = useState('');
+  const [userBalance, setUserBalance] = useState('');
   const [balanceEnough, setBalanceEnough] = useState(true);
   const [loading, setLoading] = useState(false);
   const { activateWallet } = useWallet();
@@ -36,25 +36,25 @@ export default function ActivateWallet() {
     // TODO，add back
     if (new BN(userBalance).isLessThan(needCost)) {
       toast({
-        title: "Balance not enough",
-        status: "error",
+        title: 'Balance not enough',
+        status: 'error',
       });
       return;
     }
     setLoading(true);
     try {
       const activateIndex = getIndexByAddress(addressList, selectedAddress);
-      console.log("activateIndex", activateIndex);
+      console.log('activateIndex', activateIndex);
       await activateWallet(activateIndex, payToken, false);
-      navigate("wallet");
+      navigate('wallet');
       toast({
-        title: "Wallet activated",
-        status: "success",
+        title: 'Wallet activated',
+        status: 'success',
       });
     } catch (err) {
       toast({
-        title: "Activate wallet failed",
-        status: "error",
+        title: 'Activate wallet failed',
+        status: 'error',
       });
     } finally {
       setLoading(false);
@@ -69,11 +69,11 @@ export default function ActivateWallet() {
   const onPayTokenChange = async () => {
     // important TODO, clear previous request
     const activateIndex = getIndexByAddress(addressList, selectedAddress);
-    setNeedCost("");
+    setNeedCost('');
     const token = getTokenBalance(payToken);
     setPayTokenSymbol(token.symbol);
     const requiredAmount = await activateWallet(activateIndex, payToken, true);
-    setNeedCost(requiredAmount || "0");
+    setNeedCost(requiredAmount || '0');
   };
 
   useEffect(() => {
@@ -108,13 +108,12 @@ export default function ActivateWallet() {
       <Box px="5" pt="6">
         <Navbar backUrl="wallet" />
         <PageTitle mb="0">Activate your Soul Wallet</PageTitle>
-        <Text fontWeight={"600"} my="12px">
-          Setting up your wallet requires a fee to cover deployment gas costs.
-          This is not a Soul Wallet service charge.
+        <Text fontWeight={'600'} my="12px">
+          Setting up your wallet requires a fee to cover deployment gas costs. This is not a Soul Wallet service charge.
           <br />
           <br />
-          Add any of the following tokens to your wallet, and then you can
-          continue the activation process: ETH, USDC, DAI, USDT.
+          Add any of the following tokens to your wallet, and then you can continue the activation process: ETH, USDC,
+          DAI, USDT.
         </Text>
         <Box bg="#fff" rounded="20px" p="3">
           <ReceiveCode address={selectedAddress} />
@@ -128,14 +127,8 @@ export default function ActivateWallet() {
               <Text>Network fee</Text>
               {needCost ? (
                 <Flex gap="2">
-                  <Text data-testid="network-fee">
-                    {BN(needCost).toFixed(6)}
-                  </Text>
-                  <GasSelect
-                    data-testid="paytoken-select"
-                    gasToken={payToken}
-                    onChange={setPayToken}
-                  />
+                  <Text data-testid="network-fee">{BN(needCost).toFixed(6)}</Text>
+                  <GasSelect data-testid="paytoken-select" gasToken={payToken} onChange={setPayToken} />
                 </Flex>
               ) : (
                 <Text>Loading...</Text>
@@ -151,21 +144,14 @@ export default function ActivateWallet() {
           onClick={doActivate}
           fontSize="20px"
           py="4"
-          fontWeight={"800"}
+          fontWeight={'800'}
           mt="14px"
         >
           Activate
         </Button>
 
         {!balanceEnough && needCost && (
-          <Text
-            color="#FF2096"
-            textAlign={"center"}
-            fontSize={"12px"}
-            fontWeight={"500"}
-            fontFamily={"Martian"}
-            mt="1"
-          >
+          <Text color="#FF2096" textAlign={'center'} fontSize={'12px'} fontWeight={'500'} fontFamily={'Martian'} mt="1">
             Not enough {payTokenSymbol} for activation
           </Text>
         )}

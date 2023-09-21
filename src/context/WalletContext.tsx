@@ -1,18 +1,12 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  createRef,
-  useMemo,
-} from "react";
-import { ethers } from "ethers";
-import SignModal from "@/components/SignModal";
-import useKeyring from "@/hooks/useKeyring";
-import useConfig from "@/hooks/useConfig";
-import api from "@/lib/api";
-import { useGuardianStore } from "@/store/guardian";
-import { useChainStore } from "@/store/chain";
-import { useAddressStore } from "@/store/address";
+import { createContext, useState, useEffect, createRef, useMemo } from 'react';
+import { ethers } from 'ethers';
+import SignModal from '@/components/SignModal';
+import useKeyring from '@/hooks/useKeyring';
+import useConfig from '@/hooks/useConfig';
+import api from '@/lib/api';
+import { useGuardianStore } from '@/store/guardian';
+import { useChainStore } from '@/store/chain';
+import { useAddressStore } from '@/store/address';
 
 interface IWalletContext {
   ethersProvider: ethers.JsonRpcProvider;
@@ -23,14 +17,14 @@ interface IWalletContext {
 
 export const WalletContext = createContext<IWalletContext>({
   ethersProvider: new ethers.JsonRpcProvider(),
-  account: "",
+  account: '',
   getAccount: async () => {},
   replaceAddress: async () => {},
 });
 
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
-  const [account, setAccount] = useState<string>("");
+  const [account, setAccount] = useState<string>('');
   const {
     recoverRecordId,
     setRecoverRecordId,
@@ -41,17 +35,10 @@ export const WalletContextProvider = ({ children }: any) => {
     setThreshold,
     recoveringThreshold,
   } = useGuardianStore();
-  const { setSelectedChainId, selectedChainId, updateChainItem } =
-    useChainStore();
+  const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
-  const {
-    addressList,
-    addAddressItem,
-    selectedAddress,
-    getIsActivated,
-    setSelectedAddress,
-    toggleActivatedChain,
-  } = useAddressStore();
+  const { addressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
+    useAddressStore();
 
   const signModal = createRef<any>();
   const keystore = useKeyring();
@@ -74,11 +61,9 @@ export const WalletContextProvider = ({ children }: any) => {
   };
 
   const checkRecoverStatus = async () => {
-    const res = (
-      await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId })
-    ).data;
+    const res = (await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId })).data;
     const { addressList } = useAddressStore.getState();
-    console.log("addresslist is:", addressList);
+    console.log('addresslist is:', addressList);
     if (addressList.length === 0) {
       // IMPORTANT TODO, the order??
       for (let [index, item] of Object.entries(res.addresses)) {
@@ -114,14 +99,10 @@ export const WalletContextProvider = ({ children }: any) => {
 
     // IMPORTANT TODO, Judge first available chain and set as default
     if (
-      chainRecoverStatus.filter(
-        (item: any) =>
-          item.chainId === selectedChainItem.chainIdHex && item.status === 1
-      ).length === 0
+      chainRecoverStatus.filter((item: any) => item.chainId === selectedChainItem.chainIdHex && item.status === 1)
+        .length === 0
     ) {
-      setSelectedChainId(
-        chainRecoverStatus.filter((item: any) => item.status)[0].chainId
-      );
+      setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
     }
   };
 
@@ -149,9 +130,9 @@ export const WalletContextProvider = ({ children }: any) => {
     const res = getIsActivated(selectedAddress, selectedChainId);
     if (!res) {
       const contractCode = await ethersProvider.getCode(selectedAddress);
-      console.log("check code result", res);
+      console.log('check code result', res);
       // is already activated
-      if (contractCode !== "0x") {
+      if (contractCode !== '0x') {
         toggleActivatedChain(selectedAddress, selectedChainId, true);
       }
     }

@@ -1,13 +1,13 @@
 export interface IModalProps {
-    modalId: string;
+  modalId: string;
 }
 
 export interface IAccountSettingModal {
-    onCancel: () => void;
+  onCancel: () => void;
 }
 
 export interface ITokenSelectModal {
-    ethOnly?: boolean;
-    onChange: (val: string) => void;
-    onCancel: () => void;
+  ethOnly?: boolean;
+  onChange: (val: string) => void;
+  onCancel: () => void;
 }

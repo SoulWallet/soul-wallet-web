@@ -1,9 +1,9 @@
-import { WalletContextProvider } from "@/context/WalletContext";
-import { ChakraProvider } from "@chakra-ui/react";
-import { Outlet } from "react-router-dom";
-import Fonts from "@/styles/Fonts";
-import FindRoute from "@/components/FindRoute";
-import Theme from "@/styles/Theme";
+import { WalletContextProvider } from '@/context/WalletContext';
+import { ChakraProvider } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';
+import Fonts from '@/styles/Fonts';
+import FindRoute from '@/components/FindRoute';
+import Theme from '@/styles/Theme';
 
 export default function Layout({ children }: any) {
   return (

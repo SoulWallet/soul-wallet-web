@@ -1,5 +1,5 @@
-import { ChangeEvent, useState } from "react";
-import { Box, Text, Image, Input } from "@chakra-ui/react"
+import { ChangeEvent, useState } from 'react';
+import { Box, Text, Image, Input } from '@chakra-ui/react';
 
 interface IProps {
   label?: string;
@@ -24,7 +24,7 @@ export default function FormInput({
   _styles,
   RightComponent,
   readOnly,
-  onEnter
+  onEnter,
 }: IProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -34,17 +34,21 @@ export default function FormInput({
     if (event.keyCode === 13 && onEnter) {
       onEnter();
     }
-  }
+  };
 
   return (
     <Box display="flex" flexDirection="column" position="relative" {..._styles}>
-      {label && (<Box as="label" htmlFor={label}>{label}</Box>)}
+      {label && (
+        <Box as="label" htmlFor={label}>
+          {label}
+        </Box>
+      )}
       <Box position="relative">
         <Box>
           <Input
             type="text"
             placeholder={placeholder}
-            value={value ?? ""}
+            value={value ?? ''}
             onChange={handleChange}
             onBlur={onBlur}
             borderRadius="1em"
@@ -55,11 +59,21 @@ export default function FormInput({
             onKeyDown={onKeyDown}
           />
         </Box>
-        <Box position="absolute" top="0" right="10px" height="100%" display="flex" alignItems="center" justifyContent="center">
+        <Box
+          position="absolute"
+          top="0"
+          right="10px"
+          height="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
           {RightComponent}
         </Box>
       </Box>
-      <Text color="#FF4343" padding="0 10px" fontSize="14px">{errorMsg}</Text>
+      <Text color="#FF4343" padding="0 10px" fontSize="14px">
+        {errorMsg}
+      </Text>
     </Box>
   );
 }

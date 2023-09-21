@@ -1,8 +1,8 @@
-import { ChangeEvent, useState } from "react";
-import EyeOpen from "@/assets/icons/eye-open.svg";
-import EyeClose from "@/assets/icons/eye-close.svg";
-import { Box, Text, Input } from "@chakra-ui/react"
-import {Image} from "@chakra-ui/react";
+import { ChangeEvent, useState } from 'react';
+import EyeOpen from '@/assets/icons/eye-open.svg';
+import EyeClose from '@/assets/icons/eye-close.svg';
+import { Box, Text, Input } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 
 interface IProps {
   label?: string;
@@ -35,7 +35,7 @@ export default function FormInput({
   readOnly,
   autoFocus,
   onEnter,
-  leftComponent
+  leftComponent,
 }: IProps) {
   const [visible, setVisible] = useState(false);
 
@@ -47,11 +47,15 @@ export default function FormInput({
     if (event.keyCode === 13 && onEnter) {
       onEnter();
     }
-  }
+  };
 
   return (
     <Box display="flex" flexDirection="column" {..._styles}>
-      {label && (<Box as="label" htmlFor={label}>{label}</Box>)}
+      {label && (
+        <Box as="label" htmlFor={label}>
+          {label}
+        </Box>
+      )}
       <Box position="relative">
         {leftComponent && (
           <Box
@@ -70,9 +74,9 @@ export default function FormInput({
         )}
         <Box>
           <Input
-            type={(isPassword && !visible) ? "password" : "text"}
+            type={isPassword && !visible ? 'password' : 'text'}
             placeholder={placeholder}
-            value={value ?? ""}
+            value={value ?? ''}
             onChange={handleChange}
             onKeyDown={onKeyDown}
             onBlur={onBlur}
@@ -86,21 +90,42 @@ export default function FormInput({
             {..._inputStyles}
           />
           {visible !== undefined && isPassword && (
-            <Box position="absolute" top="0" right="4px" height="100%" width="40px" display="flex" alignItems="center" justifyContent="center" cursor="pointer" zIndex="1">
-              <Image
-                src={visible ? EyeOpen : EyeClose}
-                onClick={() => setVisible((prev: boolean) => !prev)}
-              />
+            <Box
+              position="absolute"
+              top="0"
+              right="4px"
+              height="100%"
+              width="40px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              cursor="pointer"
+              zIndex="1"
+            >
+              <Image src={visible ? EyeOpen : EyeClose} onClick={() => setVisible((prev: boolean) => !prev)} />
             </Box>
           )}
           {RightIcon && (
-            <Box position="absolute" top="0" right="4px" height="100%" width="40px" display="flex" alignItems="center" justifyContent="center" cursor="pointer" zIndex="1">
+            <Box
+              position="absolute"
+              top="0"
+              right="4px"
+              height="100%"
+              width="40px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              cursor="pointer"
+              zIndex="1"
+            >
               {RightIcon}
             </Box>
           )}
         </Box>
       </Box>
-      <Text color="#FF4343" padding="0 10px" fontSize="14px">{errorMsg}</Text>
+      <Text color="#FF4343" padding="0 10px" fontSize="14px">
+        {errorMsg}
+      </Text>
     </Box>
   );
 }

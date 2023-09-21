@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, useContext, useReducer } from "react";
+import { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react';
 
 export enum CreateStepEn {
   // CreatePWD,
@@ -29,7 +29,7 @@ export enum GuardiansStepEn {
 type StepEn = CreateStepEn | RecoverStepEn | GuardiansStepEn;
 
 export enum StepActionTypeEn {
-  JumpToTargetStep = "JumpToTargetStep",
+  JumpToTargetStep = 'JumpToTargetStep',
 }
 
 interface IStepAction {
@@ -66,7 +66,7 @@ const stepReducer: (prevStepState: StepState, action: IStepAction) => StepState 
       };
     }
     default: {
-      throw Error("StepReducer: Unknown action - " + action.type);
+      throw Error('StepReducer: Unknown action - ' + action.type);
     }
   }
 };

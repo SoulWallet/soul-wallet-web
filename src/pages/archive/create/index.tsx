@@ -1,12 +1,18 @@
-import { CreateStepEn, StepContextProvider, useStepContext, useStepDispatchContext, StepActionTypeEn } from "@/context/StepContext";
-import { ReactNode, useMemo, useState, useRef } from "react";
-import {EnHandleMode} from '@/lib/type'
-import FullscreenContainer from "@/components/FullscreenContainer";
-import SetPassword from "./SetPassword";
-import SetGuardians from "./SetGuardians";
-import SaveGuardians from "./SaveGuardians";
-import SetDefaultWallet from "./SetDefaultWallet";
-import SetWalletSuccess from "./SetWalletSuccess";
+import {
+  CreateStepEn,
+  StepContextProvider,
+  useStepContext,
+  useStepDispatchContext,
+  StepActionTypeEn,
+} from '@/context/StepContext';
+import { ReactNode, useMemo, useState, useRef } from 'react';
+import { EnHandleMode } from '@/lib/type';
+import FullscreenContainer from '@/components/FullscreenContainer';
+import SetPassword from './SetPassword';
+import SetGuardians from './SetGuardians';
+import SaveGuardians from './SaveGuardians';
+import SetDefaultWallet from './SetDefaultWallet';
+import SetWalletSuccess from './SetWalletSuccess';
 
 type StepNodeInfo = {
   title: string;
@@ -16,23 +22,23 @@ type StepNodeInfo = {
 
 const StepComponent = () => {
   const dispatch = useStepDispatchContext();
-  const passwordRef = useRef('')
+  const passwordRef = useRef('');
 
   const onStepChange = (i: any) => {
     dispatch({
       type: StepActionTypeEn.JumpToTargetStep,
       payload: i,
     });
-  }
+  };
 
   const setPassword = (password: any) => {
-    passwordRef.current = password
-  }
+    passwordRef.current = password;
+  };
 
   const getPassword = () => {
-    return passwordRef.current
-  }
-  console.log('password 222', passwordRef)
+    return passwordRef.current;
+  };
+  console.log('password 222', passwordRef);
 
   const stepNodeMap: Record<number, StepNodeInfo> = useMemo(() => {
     return {
@@ -41,11 +47,11 @@ const StepComponent = () => {
       //   element: <SetPassword onStepChange={onStepChange} setPassword={setPassword} />,
       // },
       [CreateStepEn.SetGuardians]: {
-        title: "Set up Guardians",
-        element: <SetGuardians onStepChange={onStepChange} getPassword={getPassword} />
+        title: 'Set up Guardians',
+        element: <SetGuardians onStepChange={onStepChange} getPassword={getPassword} />,
       },
       [CreateStepEn.SaveGuardian]: {
-        title: "Save Guardian List",
+        title: 'Save Guardian List',
         element: <SaveGuardians onStepChange={onStepChange} getPassword={getPassword} />,
       },
       // [CreateStepEn.SetSoulWalletAsDefault]: {
@@ -53,7 +59,7 @@ const StepComponent = () => {
       //   element: <SetDefaultWallet />,
       // },
       [CreateStepEn.Completed]: {
-        title: "Congratulation, your Soul Wallet is created!",
+        title: 'Congratulation, your Soul Wallet is created!',
         element: (<SetWalletSuccess mode={EnHandleMode.Create} />) as any,
       },
     };
@@ -63,11 +69,7 @@ const StepComponent = () => {
     step: { current },
   } = useStepContext();
 
-  return (
-    <div>
-      {stepNodeMap[current].element}
-    </div>
-  );
+  return <div>{stepNodeMap[current].element}</div>;
 };
 
 export default function CreatePage() {

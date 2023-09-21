@@ -1,117 +1,115 @@
-import { ethers } from "ethers";
-import storage from "@/lib/storage";
+import { ethers } from 'ethers';
+import storage from '@/lib/storage';
 
 export default class KeyStore {
-    private static instance: KeyStore;
+  private static instance: KeyStore;
 
-    private constructor() {}
+  private constructor() {}
 
-    public static getInstance() {
-        if (!KeyStore.instance) {
-            KeyStore.instance = new KeyStore();
-        }
-        return KeyStore.instance;
+  public static getInstance() {
+    if (!KeyStore.instance) {
+      KeyStore.instance = new KeyStore();
     }
+    return KeyStore.instance;
+  }
 
-    private get keyStoreKey(): string {
-        return "soul-wallet-keystore-key";
+  private get keyStoreKey(): string {
+    return 'soul-wallet-keystore-key';
+  }
+
+  /**
+   * get the EOA address
+   * @returns EOA address, null is failed or no keystore
+   */
+  public async getAddress(): Promise<string> {
+    const val = storage.getJson(this.keyStoreKey);
+    if (val && val.address) {
+      return ethers.getAddress(val.address);
     }
+    return '';
+  }
 
-    /**
-     * get the EOA address
-     * @returns EOA address, null is failed or no keystore
-     */
-    public async getAddress(): Promise<string> {
-        const val = storage.getJson(this.keyStoreKey);
-        if (val && val.address) {
-            return ethers.getAddress(val.address);
-        }
-        return "";
+  /**
+   * Get signer
+   */
+  public async getSigner(): Promise<ethers.Signer> {
+    return new ethers.Wallet(storage.getItem('pk') || '');
+  }
+
+  /**
+   * create a new keystore and delete the old
+   * @param password
+   * @returns EOA address, null is failed
+   */
+  public async createNewAddress(saveKey: boolean): Promise<string> {
+    try {
+      const account = ethers.Wallet.createRandom();
+      // const Keystore = await account.encrypt(password);
+      // IMPORTANT TODO, save to passkey later
+      storage.setItem('pk', account.privateKey);
+
+      // if (saveKey) {
+      //     storage.setItem(this.keyStoreKey, Keystore);
+      //     storage.setItem('password', password)
+      // } else {
+      //     storage.setItem("stagingAccount", account.address);
+      //     storage.setItem("stagingKeystore", Keystore);
+      //     storage.setItem("stagingPw", password);
+      // }
+      return account.address;
+    } catch (error) {
+      console.log('error', error);
+      return '';
     }
+  }
 
-    /**
-     * Get signer
-     */
-    public async getSigner(): Promise<ethers.Signer> {
-        return new ethers.Wallet(storage.getItem('pk') || '')
-    }
+  public async replaceAddress(): Promise<void> {
+    const stagingKeystore = storage.getItem('stagingKeystore');
+    const stagingPw = storage.getItem('stagingPw');
+    storage.removeItem('stagingAccount');
+    storage.removeItem('recoverOpHash');
+    storage.setItem(this.keyStoreKey, stagingKeystore || '');
+  }
 
-    /**
-     * create a new keystore and delete the old
-     * @param password
-     * @returns EOA address, null is failed
-     */
-    public async createNewAddress(saveKey: boolean): Promise<string> {
-        try {
-            const account = ethers.Wallet.createRandom();
-            // const Keystore = await account.encrypt(password);
-            // IMPORTANT TODO, save to passkey later
-            storage.setItem('pk', account.privateKey)
+  public async delete(): Promise<void> {
+    storage.clear();
+  }
 
-            // if (saveKey) {
-            //     storage.setItem(this.keyStoreKey, Keystore);
-            //     storage.setItem('password', password)
-            // } else {
-            //     storage.setItem("stagingAccount", account.address);
-            //     storage.setItem("stagingKeystore", Keystore);
-            //     storage.setItem("stagingPw", password);
-            // }
-            return account.address;
-        } catch (error) {
-            console.log("error", error);
-            return "";
-        }
-    }
+  /**
+   * sign a hash
+   * @param message
+   * @returns signature, null is failed or keystore not unlocked
+   */
+  public async sign(hash: string): Promise<string | null> {
+    // const messageHex = Buffer.from(ethers.utils.arrayify(message)).toString('hex');
+    // const personalMessage = ethUtil.hashPersonalMessage(ethUtil.toBuffer(ethUtil.addHexPrefix(messageHex)));
+    // var privateKey = Buffer.from(this._privateKey.substring(2), "hex");
+    // const signature1 = ethUtil.ecsign(personalMessage, privateKey);
+    // const sigHex = ethUtil.toRpcSig(signature1.v, signature1.r, signature1.s);
+    const signer = await this.getSigner();
 
-    public async replaceAddress(): Promise<void> {
-        const stagingKeystore = storage.getItem("stagingKeystore");
-        const stagingPw = storage.getItem("stagingPw");
-        storage.removeItem("stagingAccount");
-        storage.removeItem("recoverOpHash");
-        storage.setItem(this.keyStoreKey, stagingKeystore || '');
-    }
+    return await signer.signMessage(ethers.getBytes(hash));
+  }
 
-    public async delete(): Promise<void> {
-        storage.clear();
-    }
+  /**
+   * sign a typed data
+   * @param typedData
+   * @returns signature, null is failed or keystore not unlocked
+   */
+  public async signMessageV4(typedData: any): Promise<string | null | undefined> {
+    // IMPORTANT TODO, get from rpc provider
+    const signer = await this.getSigner();
 
-    /**
-     * sign a hash
-     * @param message
-     * @returns signature, null is failed or keystore not unlocked
-     */
-    public async sign(hash: string): Promise<string | null> {
-        // const messageHex = Buffer.from(ethers.utils.arrayify(message)).toString('hex');
-        // const personalMessage = ethUtil.hashPersonalMessage(ethUtil.toBuffer(ethUtil.addHexPrefix(messageHex)));
-        // var privateKey = Buffer.from(this._privateKey.substring(2), "hex");
-        // const signature1 = ethUtil.ecsign(personalMessage, privateKey);
-        // const sigHex = ethUtil.toRpcSig(signature1.v, signature1.r, signature1.s);
-        const signer = await this.getSigner();
+    const { domain, types, message } = typedData;
 
-        return await signer.signMessage(ethers.getBytes(hash));
-    }
+    return await signer.signTypedData(domain, types, message);
 
-    /**
-     * sign a typed data
-     * @param typedData
-     * @returns signature, null is failed or keystore not unlocked
-     */
-    public async signMessageV4(typedData: any): Promise<string | null | undefined> {
-    
+    // const typedMessageHash = ethers.TypedDataEncoder.hash(domain, types, message);
 
-        // IMPORTANT TODO, get from rpc provider
-        const signer = await this.getSigner();
+    // const signBuffer = TypedDataUtils.eip712Hash(typedData as any, "V4" as any);
 
-        const { domain, types, message } = typedData;
+    // console.log("sign buf", signBuffer);
 
-        return await signer.signTypedData(domain, types, message);
-
-        // const typedMessageHash = ethers.TypedDataEncoder.hash(domain, types, message);
-
-        // const signBuffer = TypedDataUtils.eip712Hash(typedData as any, "V4" as any);
-
-        // console.log("sign buf", signBuffer);
-
-        // return `0x${Buffer.from(signBuffer).toString("hex")}`;
-    }
+    // return `0x${Buffer.from(signBuffer).toString("hex")}`;
+  }
 }

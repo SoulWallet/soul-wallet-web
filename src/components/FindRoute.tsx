@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import useBrowser from "../hooks/useBrowser";
-import { Box } from "@chakra-ui/react";
-import { useAddressStore } from "@/store/address";
-import storage from "@/lib/storage";
-import { useLocation } from "react-router-dom";
+import { useEffect } from 'react';
+import useBrowser from '../hooks/useBrowser';
+import { Box } from '@chakra-ui/react';
+import { useAddressStore } from '@/store/address';
+import storage from '@/lib/storage';
+import { useLocation } from 'react-router-dom';
 
 // Find the correct route to go
 
@@ -16,15 +16,15 @@ export default function FindRoute({ children }: any) {
   const isTest = location.pathname.includes('test');
 
   const findRoute = async () => {
-    const recovering = storage.getItem("recovering");
+    const recovering = storage.getItem('recovering');
     if (isLaunch) {
-      navigate("launch");
-    } else if(isTest){
+      navigate('launch');
+    } else if (isTest) {
       navigate('test');
     } else if (recovering) {
-      navigate("recover");
+      navigate('recover');
     } else if (!addressList.length) {
-      navigate("launch");
+      navigate('launch');
     }
   };
 
@@ -33,7 +33,7 @@ export default function FindRoute({ children }: any) {
   }, []);
 
   return (
-    <Box bg="appBg" fontSize={"16px"} overflow={"auto"}>
+    <Box bg="appBg" fontSize={'16px'} overflow={'auto'}>
       {children}
     </Box>
   );

@@ -1,17 +1,17 @@
-import { GuardianItem } from "@/lib/type";
-import { createContext, Dispatch, ReactNode, useContext, useReducer } from "react";
+import { GuardianItem } from '@/lib/type';
+import { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react';
 
 export enum RecoveryActionTypeEn {
-    UpdateCachedGuardians = "updateCacheGuardians",
+  UpdateCachedGuardians = 'updateCacheGuardians',
 }
 
 interface IRecoveryAction {
-    type: RecoveryActionTypeEn;
-    payload: GuardianItem[];
+  type: RecoveryActionTypeEn;
+  payload: GuardianItem[];
 }
 
 interface IRecoveryContext {
-    cachedGuardians?: GuardianItem[];
+  cachedGuardians?: GuardianItem[];
 }
 
 const RecoveryContext = createContext<IRecoveryContext>({});
@@ -19,31 +19,31 @@ const RecoveryContext = createContext<IRecoveryContext>({});
 const RecoveryDispatchContext = createContext<Dispatch<IRecoveryAction>>(() => void 0);
 
 const recoveryReducer: (prevState: IRecoveryContext, action: IRecoveryAction) => IRecoveryContext = (
-    _,
-    action: IRecoveryAction,
+  _,
+  action: IRecoveryAction,
 ) => {
-    const { type, payload } = action;
+  const { type, payload } = action;
 
-    switch (type) {
-        case RecoveryActionTypeEn.UpdateCachedGuardians: {
-            return {
-                cachedGuardians: payload,
-            };
-        }
-        default: {
-            throw Error("recoveryReducer: Unknown action - " + action.type);
-        }
+  switch (type) {
+    case RecoveryActionTypeEn.UpdateCachedGuardians: {
+      return {
+        cachedGuardians: payload,
+      };
     }
+    default: {
+      throw Error('recoveryReducer: Unknown action - ' + action.type);
+    }
+  }
 };
 
 export const RecoveryContextProvider = ({ children }: { children: ReactNode }) => {
-    const [value, dispatch] = useReducer(recoveryReducer, {});
+  const [value, dispatch] = useReducer(recoveryReducer, {});
 
-    return (
-        <RecoveryContext.Provider value={{ ...value }}>
-            <RecoveryDispatchContext.Provider value={dispatch}>{children}</RecoveryDispatchContext.Provider>
-        </RecoveryContext.Provider>
-    );
+  return (
+    <RecoveryContext.Provider value={{ ...value }}>
+      <RecoveryDispatchContext.Provider value={dispatch}>{children}</RecoveryDispatchContext.Provider>
+    </RecoveryContext.Provider>
+  );
 };
 
 export const useRecoveryContext = () => useContext(RecoveryContext);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 function checkPasswordStrength(password: string) {
   let strength = 1;
@@ -27,16 +27,16 @@ function checkPasswordStrength(password: string) {
 }
 
 export const usePasswordStrength = (password: string) => {
-    const [score, setScore] = useState(0);
+  const [score, setScore] = useState(0);
 
-    useEffect(() => {
-        if (password.length > 8) {
-            setScore(checkPasswordStrength(password));
-            // zxcvbnAsync(password).then((response) => setScore(response?.score));
-        } else {
-            setScore(1);
-        }
-    }, [password]);
+  useEffect(() => {
+    if (password.length > 8) {
+      setScore(checkPasswordStrength(password));
+      // zxcvbnAsync(password).then((response) => setScore(response?.score));
+    } else {
+      setScore(1);
+    }
+  }, [password]);
 
-    return score;
+  return score;
 };

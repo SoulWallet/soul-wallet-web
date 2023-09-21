@@ -1,13 +1,13 @@
-import FullscreenContainer from "@/components/FullscreenContainer";
+import FullscreenContainer from '@/components/FullscreenContainer';
 // import ModalV2 from "@/components/ModalV2";
 // import Statement, { AUTHORIZED_STORAGE_KEY } from "@/components/Statement";
-import { StepActionTypeEn, useStepDispatchContext, CreateStepEn, RecoverStepEn } from "@/context/StepContext";
-import useBrowser from "@/hooks/useBrowser";
-import { Box, Center, Flex, Text, Image } from "@chakra-ui/react";
-import CreateWalletIcon from "@/components/Icons/CreateWallet";
-import RecoverWalletIcon from "@/components/Icons/RecoverWallet";
-import TextBody from "@/components/web/TextBody";
-import storage from "@/lib/storage";
+import { StepActionTypeEn, useStepDispatchContext, CreateStepEn, RecoverStepEn } from '@/context/StepContext';
+import useBrowser from '@/hooks/useBrowser';
+import { Box, Center, Flex, Text, Image } from '@chakra-ui/react';
+import CreateWalletIcon from '@/components/Icons/CreateWallet';
+import RecoverWalletIcon from '@/components/Icons/RecoverWallet';
+import TextBody from '@/components/web/TextBody';
+import storage from '@/lib/storage';
 
 export default function Launch() {
   // const [authorized, setAuthorized] = useState(false);
@@ -36,11 +36,11 @@ export default function Launch() {
 
   const handleJumpToTargetStep = (targetStep: number, to: string) => {
     // if (authorized) {
-      dispatch({
-        type: StepActionTypeEn.JumpToTargetStep,
-        payload: targetStep,
-      });
-      navigate(to)
+    dispatch({
+      type: StepActionTypeEn.JumpToTargetStep,
+      payload: targetStep,
+    });
+    navigate(to);
     // } else {
     //   setShowModal(true)
     // }
@@ -48,11 +48,9 @@ export default function Launch() {
 
   const goToTerms = () => {
     // window.open('', '_blank')
-  }
+  };
 
-  const goToPrivacyPolicy = () => {
-
-  }
+  const goToPrivacyPolicy = () => {};
 
   return (
     <FullscreenContainer>
@@ -71,31 +69,13 @@ export default function Launch() {
           _hover={{ border: '2px solid black' }}
           onClick={() => handleJumpToTargetStep(CreateStepEn.SetGuardians, 'create')}
         >
-          <Box
-            width="44px"
-            height="44px"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Box width="44px" height="44px" display="flex" alignItems="center" justifyContent="center">
             <CreateWalletIcon />
           </Box>
-          <Box
-            width="100%"
-            fontSize="24px"
-            fontWeight="800"
-            marginTop="15px"
-            lineHeight="33px"
-            marginBottom="4px"
-          >
+          <Box width="100%" fontSize="24px" fontWeight="800" marginTop="15px" lineHeight="33px" marginBottom="4px">
             Create New Wallet
           </Box>
-          <Box
-            width="100%"
-            fontSize="14px"
-            fontWeight="700"
-            lineHeight="normal"
-          >
+          <Box width="100%" fontSize="14px" fontWeight="700" lineHeight="normal">
             Begin your Ethereum journey by creating a smart contract wallet with us.
           </Box>
         </Box>
@@ -112,42 +92,26 @@ export default function Launch() {
           _hover={{ border: '2px solid black' }}
           onClick={() => handleJumpToTargetStep(RecoverStepEn.Start, 'recover')}
         >
-          <Box
-            width="44px"
-            height="44px"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Box width="44px" height="44px" display="flex" alignItems="center" justifyContent="center">
             <RecoverWalletIcon />
           </Box>
-          <Box
-            width="100%"
-            fontSize="24px"
-            fontWeight="800"
-            marginTop="15px"
-            lineHeight="33px"
-            marginBottom="4px"
-          >
+          <Box width="100%" fontSize="24px" fontWeight="800" marginTop="15px" lineHeight="33px" marginBottom="4px">
             Wallet recovery
           </Box>
-          <Box
-            width="100%"
-            fontSize="14px"
-            fontWeight="700"
-            lineHeight="normal"
-          >
+          <Box width="100%" fontSize="14px" fontWeight="700" lineHeight="normal">
             If your wallet is lost, recover easily with guardian signatures.
           </Box>
         </Box>
         <Box marginTop="60px">
-          <TextBody
-            fontWeight="700"
-            fontSize="14px"
-            color="#898989"
-            textAlign="center"
-          >
-            By continuing, you agree with Soul Wallet’s <Box as="span" color="#EE3F99" onClick={goToTerms} cursor="pointer">Terms of Services</Box> & <Box as="span" color="#EE3F99" onClick={goToPrivacyPolicy} cursor="pointer">Privacy Policy</Box>
+          <TextBody fontWeight="700" fontSize="14px" color="#898989" textAlign="center">
+            By continuing, you agree with Soul Wallet’s{' '}
+            <Box as="span" color="#EE3F99" onClick={goToTerms} cursor="pointer">
+              Terms of Services
+            </Box>{' '}
+            &{' '}
+            <Box as="span" color="#EE3F99" onClick={goToPrivacyPolicy} cursor="pointer">
+              Privacy Policy
+            </Box>
           </TextBody>
         </Box>
       </Flex>

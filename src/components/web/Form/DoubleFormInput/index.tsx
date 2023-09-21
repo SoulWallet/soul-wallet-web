@@ -1,5 +1,5 @@
-import { ChangeEvent, useState } from "react";
-import { Box, Text, Input } from "@chakra-ui/react"
+import { ChangeEvent, useState } from 'react';
+import { Box, Text, Input } from '@chakra-ui/react';
 
 interface IProps {
   leftValue?: string;
@@ -46,7 +46,7 @@ export default function DoubleFormInput({
   leftComponent,
   rightComponent,
   leftAutoFocus,
-  onEnter
+  onEnter,
 }: IProps) {
   const handleLeftChange = (e: ChangeEvent<HTMLInputElement>) => {
     leftOnChange(e.target.value);
@@ -68,18 +68,22 @@ export default function DoubleFormInput({
     if (event.keyCode === 13 && onEnter) {
       onEnter();
     }
-  }
+  };
 
   return (
     <Box display="flex" flexDirection="row" {..._styles}>
       <Box display="flex" flexDirection="column" width="50%" {..._leftContainerStyles}>
-        {leftLabel && (<Box as="label" htmlFor="leftLabel">{leftLabel}</Box>)}
+        {leftLabel && (
+          <Box as="label" htmlFor="leftLabel">
+            {leftLabel}
+          </Box>
+        )}
         <Box position="relative">
           <Box>
             <Input
               type="text"
               placeholder={leftPlaceholder}
-              value={leftValue ?? ""}
+              value={leftValue ?? ''}
               onChange={handleLeftChange}
               onBlur={handleLeftBlur}
               borderRadius="16px"
@@ -96,10 +100,16 @@ export default function DoubleFormInput({
             />
           </Box>
         </Box>
-        <Text color="#FF4343" padding="0 10px" fontSize="14px">{leftErrorMsg}</Text>
+        <Text color="#FF4343" padding="0 10px" fontSize="14px">
+          {leftErrorMsg}
+        </Text>
       </Box>
       <Box display="flex" flexDirection="column" width="50%" {..._rightContainerStyles}>
-        {rightLabel && (<Box as="label" htmlFor="rightLabel">{rightLabel}</Box>)}
+        {rightLabel && (
+          <Box as="label" htmlFor="rightLabel">
+            {rightLabel}
+          </Box>
+        )}
         <Box position="relative">
           {leftComponent && (
             <Box
@@ -120,7 +130,7 @@ export default function DoubleFormInput({
             <Input
               type="text"
               placeholder={rightPlaceholder}
-              value={rightValue ?? ""}
+              value={rightValue ?? ''}
               onChange={handleRightChange}
               onBlur={handleRightBlur}
               borderRadius="16px"
@@ -135,7 +145,9 @@ export default function DoubleFormInput({
             />
           </Box>
         </Box>
-        <Text color="#FF4343" padding="0 10px" fontSize="14px">{rightErrorMsg}</Text>
+        <Text color="#FF4343" padding="0 10px" fontSize="14px">
+          {rightErrorMsg}
+        </Text>
       </Box>
     </Box>
   );

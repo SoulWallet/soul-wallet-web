@@ -1,4 +1,4 @@
 export interface ISwitchProps {
-    checked: boolean;
-    onChange: (val: boolean) => void;
+  checked: boolean;
+  onChange: (val: boolean) => void;
 }

@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 import {
   Box,
   Text,
@@ -10,38 +10,29 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button
-} from "@chakra-ui/react";
+  Button,
+} from '@chakra-ui/react';
 
 interface IProps {
   visible: boolean;
   children: React.ReactNode;
   id?: string;
   onClose?: any;
-  footerComponent: any
+  footerComponent: any;
 }
 
 const ModalV2 = ({ visible, children, onClose, footerComponent, id = nanoid() }: IProps) => {
   return (
-    <Modal
-      isOpen={visible}
-      onClose={onClose}
-      closeOnOverlayClick={false}
-      isCentered
-    >
+    <Modal isOpen={visible} onClose={onClose} closeOnOverlayClick={false} isCentered>
       <ModalOverlay />
       <ModalContent maxWidth="1000px" padding="16px">
         <ModalHeader>Risk Disclosure Statement</ModalHeader>
         {/* <ModalCloseButton autoFocus={false} /> */}
-        <ModalBody fontSize="16px">
-          {children}
-        </ModalBody>
-        <ModalFooter paddingBottom="0">
-          {footerComponent}
-        </ModalFooter>
+        <ModalBody fontSize="16px">{children}</ModalBody>
+        <ModalFooter paddingBottom="0">{footerComponent}</ModalFooter>
       </ModalContent>
     </Modal>
-  )
+  );
   // return (
   //   <Box
   //     id={id}

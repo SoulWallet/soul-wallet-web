@@ -1,11 +1,11 @@
-import React from "react";
-import { Button, ButtonProps } from "@chakra-ui/react";
-import {Image} from "@chakra-ui/react";
-import IconLoading from "@/assets/loading.gif";
-import { Box } from "@chakra-ui/react"
+import React from 'react';
+import { Button, ButtonProps } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
+import IconLoading from '@/assets/loading.gif';
+import { Box } from '@chakra-ui/react';
 
 // TODO: error & retry
-type ButtonType = "default" | "primary" | "disabled" | "error" | "reject" | "link"; // may add 'dash', 'text', 'link', etc. later
+type ButtonType = 'default' | 'primary' | 'disabled' | 'error' | 'reject' | 'link'; // may add 'dash', 'text', 'link', etc. later
 
 interface IProps extends Omit<ButtonProps, 'type'> {
   children: React.ReactNode;
@@ -18,13 +18,12 @@ interface IProps extends Omit<ButtonProps, 'type'> {
   LeftIcon?: any;
 }
 
-
 export default function RoundButton({
   onClick,
   children,
   loading,
   disabled,
-  type = "default",
+  type = 'default',
   href,
   _styles,
   LeftIcon,
@@ -42,8 +41,8 @@ export default function RoundButton({
   if (!disabled) {
     moreProps.href = href;
   }
-  console.log('disabled', disabled)
-  console.log('loading', loading)
+  console.log('disabled', disabled);
+  console.log('loading', loading);
 
   return (
     <Button

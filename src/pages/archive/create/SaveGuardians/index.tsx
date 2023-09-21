@@ -1,58 +1,58 @@
-import { useEffect, useState, useRef } from "react";
-import LogoIcon from "@/assets/logo-v3.svg";
-import { CreateStepEn, StepActionTypeEn, useStepDispatchContext } from "@/context/StepContext";
-import { validateEmail } from "@/lib/tools";
-import { useGlobalStore } from "@/store/global";
-import { Box, Text, Image, useToast } from "@chakra-ui/react"
-import useTools from "@/hooks/useTools";
+import { useEffect, useState, useRef } from 'react';
+import LogoIcon from '@/assets/logo-v3.svg';
+import { CreateStepEn, StepActionTypeEn, useStepDispatchContext } from '@/context/StepContext';
+import { validateEmail } from '@/lib/tools';
+import { useGlobalStore } from '@/store/global';
+import { Box, Text, Image, useToast } from '@chakra-ui/react';
+import useTools from '@/hooks/useTools';
 import useSdk from '@/hooks/useSdk';
-import FormInput from "@/components/web/Form/FormInput";
-import Heading1 from "@/components/web/Heading1";
-import Heading2 from "@/components/web/Heading2";
-import Heading3 from "@/components/web/Heading3";
-import TextBody from "@/components/web/TextBody";
-import Steps from "@/components/web/Steps";
-import Button from "@/components/web/Button";
-import TextButton from "@/components/web/TextButton";
-import IconButton from "@/components/web/IconButton";
-import WarningIcon from "@/components/Icons/Warning";
-import DownloadIcon from '@/components/Icons/Download'
-import SendIcon from '@/components/Icons/Send'
-import useForm from "@/hooks/useForm";
+import FormInput from '@/components/web/Form/FormInput';
+import Heading1 from '@/components/web/Heading1';
+import Heading2 from '@/components/web/Heading2';
+import Heading3 from '@/components/web/Heading3';
+import TextBody from '@/components/web/TextBody';
+import Steps from '@/components/web/Steps';
+import Button from '@/components/web/Button';
+import TextButton from '@/components/web/TextButton';
+import IconButton from '@/components/web/IconButton';
+import WarningIcon from '@/components/Icons/Warning';
+import DownloadIcon from '@/components/Icons/Download';
+import SendIcon from '@/components/Icons/Send';
+import useForm from '@/hooks/useForm';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import { useAddressStore } from "@/store/address";
-import { useGuardianStore } from "@/store/guardian";
-import useKeystore from "@/hooks/useKeystore";
-import useKeyring from "@/hooks/useKeyring";
-import { L1KeyStore } from "@soulwallet/sdk";
-import config from "@/config";
-import api from "@/lib/api";
-import { ethers } from "ethers";
-import useConfig from "@/hooks/useConfig";
-import BlockBoxIcon from "@/components/Icons/BlockBox";
+import { useAddressStore } from '@/store/address';
+import { useGuardianStore } from '@/store/guardian';
+import useKeystore from '@/hooks/useKeystore';
+import useKeyring from '@/hooks/useKeyring';
+import { L1KeyStore } from '@soulwallet/sdk';
+import config from '@/config';
+import api from '@/lib/api';
+import { ethers } from 'ethers';
+import useConfig from '@/hooks/useConfig';
+import BlockBoxIcon from '@/components/Icons/BlockBox';
 
 const toHex = (num: any) => {
-  let hexStr = num.toString(16)
+  let hexStr = num.toString(16);
 
   if (hexStr.length % 2 === 1) {
-    hexStr = '0' + hexStr
+    hexStr = '0' + hexStr;
   }
 
-  hexStr = '0x' + hexStr
+  hexStr = '0x' + hexStr;
 
-  return hexStr
-}
+  return hexStr;
+};
 
 const validate = (values: any) => {
-  const errors: any = {}
-  const { email } = values
+  const errors: any = {};
+  const { email } = values;
 
   if (!validateEmail(email)) {
-    errors.email = 'Please enter a valid email address.'
+    errors.email = 'Please enter a valid email address.';
   }
 
-  return errors
-}
+  return errors;
+};
 
 const SaveGuardians = ({ getPassword, onStepChange }: any) => {
   const [hasSaved, setHasSaved] = useState(false);
@@ -67,20 +67,21 @@ const SaveGuardians = ({ getPassword, onStepChange }: any) => {
   const [sended, setSended] = useState(false);
   const [loaded, setLoaded] = useState(false);
   // const { account } = useWalletContext();
-  const accountRef = useRef('')
-  const newAddressRef = useRef('')
-  const { guardians, guardianNames, threshold, setSlotInitInfo, setSlot, setEditingGuardiansInfo, setRecoverRecordId } = useGuardianStore();
+  const accountRef = useRef('');
+  const newAddressRef = useRef('');
+  const { guardians, guardianNames, threshold, setSlotInitInfo, setSlot, setEditingGuardiansInfo, setRecoverRecordId } =
+    useGuardianStore();
   const { setSelectedAddress, setAddressList } = useAddressStore();
-  const { calcGuardianHash, getSlot } = useKeystore()
+  const { calcGuardianHash, getSlot } = useKeystore();
   const keystore = useKeyring();
-  const {chainConfig} = useConfig();
+  const { chainConfig } = useConfig();
   const { calcWalletAddress } = useSdk();
-  const toast = useToast()
+  const toast = useToast();
 
   const emailForm = useForm({
     fields: ['email'],
-    validate
-  })
+    validate,
+  });
 
   const dispatch = useStepDispatchContext();
 
@@ -96,38 +97,38 @@ const SaveGuardians = ({ getPassword, onStepChange }: any) => {
   };
 
   const createInitialKeystore = async () => {
-    return await keystore.createNewAddress( true);
-  }
+    return await keystore.createNewAddress(true);
+  };
 
   const createInitialWallet = async () => {
     const newAddress = await calcWalletAddress(0);
-    const walletName = `Account 1`
-    setAddressList([{ title: walletName, address: newAddress, activatedChains: [], allowedOrigins: [] }])
-    console.log('createInitialWallet', newAddress)
-    setSelectedAddress(newAddress)
-    setEditingGuardiansInfo(null)
-    setRecoverRecordId(null)
-    return newAddress
-  }
+    const walletName = `Account 1`;
+    setAddressList([{ title: walletName, address: newAddress, activatedChains: [], allowedOrigins: [] }]);
+    console.log('createInitialWallet', newAddress);
+    setSelectedAddress(newAddress);
+    setEditingGuardiansInfo(null);
+    setRecoverRecordId(null);
+    return newAddress;
+  };
 
   const getGuardiansInfo = async () => {
     if (!accountRef.current) {
-      accountRef.current = await createInitialKeystore()
+      accountRef.current = await createInitialKeystore();
     }
 
-    const keystore = chainConfig.contracts.l1Keystore
-    const initialKey = ethers.zeroPadValue(accountRef.current, 32)
-    const guardianHash = calcGuardianHash(guardians, threshold)
-    const initialGuardianHash = guardianHash
-    const salt = ethers.ZeroHash
-    let initialGuardianSafePeriod = L1KeyStore.days * 2
-    initialGuardianSafePeriod = toHex(initialGuardianSafePeriod as any)
-    const slot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod)
+    const keystore = chainConfig.contracts.l1Keystore;
+    const initialKey = ethers.zeroPadValue(accountRef.current, 32);
+    const guardianHash = calcGuardianHash(guardians, threshold);
+    const initialGuardianHash = guardianHash;
+    const salt = ethers.ZeroHash;
+    let initialGuardianSafePeriod = L1KeyStore.days * 2;
+    initialGuardianSafePeriod = toHex(initialGuardianSafePeriod as any);
+    const slot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
     const slotInitInfo = {
       initialKey,
       initialGuardianHash,
-      initialGuardianSafePeriod
-    }
+      initialGuardianSafePeriod,
+    };
 
     return {
       keystore,
@@ -135,120 +136,126 @@ const SaveGuardians = ({ getPassword, onStepChange }: any) => {
       guardianDetails: {
         guardians,
         threshold: Number(threshold),
-        salt
+        salt,
       },
       slot,
-      slotInitInfo
-    }
-  }
+      slotInitInfo,
+    };
+  };
 
   const handleBackupGuardians = async () => {
     try {
-      setLoading(true)
-      const info = await getGuardiansInfo()
-      const result = await api.guardian.backup(info)
-      setSlot(info.slot)
-      setSlotInitInfo(info.slotInitInfo)
+      setLoading(true);
+      const info = await getGuardiansInfo();
+      const result = await api.guardian.backup(info);
+      setSlot(info.slot);
+      setSlotInitInfo(info.slotInitInfo);
 
       if (!newAddressRef.current) {
-        newAddressRef.current = await createInitialWallet()
+        newAddressRef.current = await createInitialWallet();
       }
 
-      setLoading(false)
-      setLoaded(true)
+      setLoading(false);
+      setLoaded(true);
       toast({
-        title: "OnChain Backup Success!",
-        status: "success",
-      })
-      console.log('handleBackupGuardians', result)
+        title: 'OnChain Backup Success!',
+        status: 'success',
+      });
+      console.log('handleBackupGuardians', result);
     } catch (e: any) {
-      setLoading(false)
+      setLoading(false);
       toast({
         title: e.message,
-        status: "error",
-      })
+        status: 'error',
+      });
     }
   };
 
   const handleEmailBackupGuardians = async () => {
     try {
-      setSending(true)
-      const email = emailForm.values.email
-      const date = new Date()
-      const filename = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-guardian.json`
-      const info = await getGuardiansInfo()
-      const result = await api.guardian.emailBackup({ email, filename, ...info })
-      setSlot(info.slot)
-      setSlotInitInfo(info.slotInitInfo)
+      setSending(true);
+      const email = emailForm.values.email;
+      const date = new Date();
+      const filename = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-guardian.json`;
+      const info = await getGuardiansInfo();
+      const result = await api.guardian.emailBackup({ email, filename, ...info });
+      setSlot(info.slot);
+      setSlotInitInfo(info.slotInitInfo);
 
       if (!newAddressRef.current) {
-        newAddressRef.current = await createInitialWallet()
+        newAddressRef.current = await createInitialWallet();
       }
 
-      setSending(false)
-      setSended(true)
+      setSending(false);
+      setSended(true);
       toast({
-        title: "Email Backup Success!",
-        status: "success",
-      })
-      console.log('handleEmailBackupGuardians', info, result)
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+      console.log('handleEmailBackupGuardians', info, result);
     } catch (e: any) {
-      setSending(false)
+      setSending(false);
       toast({
         title: e.message,
-        status: "error",
-      })
+        status: 'error',
+      });
     }
   };
 
   const handleDownloadGuardians = async () => {
     try {
-      setDownloading(true)
-      const date = new Date()
-      const filename = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-guardian.json`
-      const info = await getGuardiansInfo()
-      const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify({ filename, ...info }))}`
-      const link = document.createElement("a")
-      link.setAttribute("href", dataStr)
-      link.setAttribute("target", "_blank")
-      link.setAttribute("download", filename)
-      link.click()
+      setDownloading(true);
+      const date = new Date();
+      const filename = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-guardian.json`;
+      const info = await getGuardiansInfo();
+      const dataStr = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify({ filename, ...info }))}`;
+      const link = document.createElement('a');
+      link.setAttribute('href', dataStr);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('download', filename);
+      link.click();
 
-      setSlot(info.slot)
-      setSlotInitInfo(info.slotInitInfo)
+      setSlot(info.slot);
+      setSlotInitInfo(info.slotInitInfo);
 
       if (!newAddressRef.current) {
-        newAddressRef.current = await createInitialWallet()
+        newAddressRef.current = await createInitialWallet();
       }
 
-      setDownloading(false)
-      setDownloaded(true)
+      setDownloading(false);
+      setDownloaded(true);
     } catch (e: any) {
-      setDownloading(false)
+      setDownloading(false);
       toast({
         title: e.message,
-        status: "error",
-      })
+        status: 'error',
+      });
     }
   };
 
-  console.log('password111', getPassword(), accountRef, newAddressRef)
+  console.log('password111', getPassword(), accountRef, newAddressRef);
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingBottom="20px">
       <Box marginBottom="24px" paddingRight="24px">
-        <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={3} activeIndex={1} marginTop="24px" onStepChange={onStepChange} showBackButton />
+        <Steps
+          backgroundColor="#1E1E1E"
+          foregroundColor="white"
+          count={3}
+          activeIndex={1}
+          marginTop="24px"
+          onStepChange={onStepChange}
+          showBackButton
+        />
       </Box>
       <Heading1>Backup guardians</Heading1>
       <Box marginBottom="0.75em">
         <TextBody fontSize="16px" textAlign="center" maxWidth="500px">
-          Make sure to save your list of guardians for social recovery. Choose at least one method below to keep this list safe.
+          Make sure to save your list of guardians for social recovery. Choose at least one method below to keep this
+          list safe.
         </TextBody>
       </Box>
-      <Box
-        display="flex"
-        flexDirection={{ base: 'column', md: 'row' }}
-      >
+      <Box display="flex" flexDirection={{ base: 'column', md: 'row' }}>
         <Box
           width="400px"
           borderRight={{ base: 'none', md: '1px solid #D7D7D7' }}
@@ -261,10 +268,17 @@ const SaveGuardians = ({ getPassword, onStepChange }: any) => {
           <Heading3>Save by yourself</Heading3>
           <Box marginBottom="0.75em">
             <TextBody textAlign="center">
-              If you choose to store your own guardian list, make you save the file and remember it's location as it will be needed for future wallet recovery.
+              If you choose to store your own guardian list, make you save the file and remember it's location as it
+              will be needed for future wallet recovery.
             </TextBody>
           </Box>
-          <Button onClick={handleDownloadGuardians} disabled={downloading} loading={downloading} _styles={{ width: '100%', marginTop: '0.75em' }} LeftIcon={<DownloadIcon />}>
+          <Button
+            onClick={handleDownloadGuardians}
+            disabled={downloading}
+            loading={downloading}
+            _styles={{ width: '100%', marginTop: '0.75em' }}
+            LeftIcon={<DownloadIcon />}
+          >
             Download to Local
           </Button>
           <TextBody marginTop="0.75em">Or</TextBody>
@@ -277,36 +291,51 @@ const SaveGuardians = ({ getPassword, onStepChange }: any) => {
             onBlur={emailForm.onBlur('email')}
             onEnter={handleEmailBackupGuardians}
             _styles={{ width: '100%', marginTop: '0.75em' }}
-            RightIcon={(
+            RightIcon={
               <IconButton
                 onClick={handleEmailBackupGuardians}
-                disabled={sending || !(emailForm.values.email)}
+                disabled={sending || !emailForm.values.email}
                 loading={sending}
               >
-                {!(emailForm.values.email) && <SendIcon opacity="0.4" />}
-                {!!(emailForm.values.email) && <SendIcon color={'#EE3F99'} />}
+                {!emailForm.values.email && <SendIcon opacity="0.4" />}
+                {!!emailForm.values.email && <SendIcon color={'#EE3F99'} />}
               </IconButton>
-            )}
+            }
           />
         </Box>
-        <Box width="400px" padding="20px" display="flex" flexDirection="column" alignItems="center" justifyContent="flex-start">
+        <Box
+          width="400px"
+          padding="20px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="flex-start"
+        >
           <Heading3>Save with Soul Wallet</Heading3>
           <Box marginBottom="0.75em">
             <TextBody textAlign="center">
-              Soul Wallet can store your list encrypted on-chain, but you still need to remember your wallet address for recovery.
+              Soul Wallet can store your list encrypted on-chain, but you still need to remember your wallet address for
+              recovery.
             </TextBody>
           </Box>
           <Button disabled={loading} loading={loading} _styles={{ width: '100%' }} onClick={handleBackupGuardians}>
-            <Box marginRight="8px"><BlockBoxIcon /></Box>
+            <Box marginRight="8px">
+              <BlockBoxIcon />
+            </Box>
             Store onchain
           </Button>
         </Box>
       </Box>
-      <Button disabled={!(loaded || downloaded || sended) || creating} onClick={handleNext} loading={creating} _styles={{ width: '359px', marginTop: '0.75em' }}>
+      <Button
+        disabled={!(loaded || downloaded || sended) || creating}
+        onClick={handleNext}
+        loading={creating}
+        _styles={{ width: '359px', marginTop: '0.75em' }}
+      >
         Continue
       </Button>
     </Box>
-  )
-}
+  );
+};
 
 export default SaveGuardians;

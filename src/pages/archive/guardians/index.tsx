@@ -1,9 +1,9 @@
-import { GuardiansStepEn, StepContextProvider, useStepContext } from "@/context/StepContext";
-import { ReactNode, useMemo } from "react";
-import { EnHandleMode } from '@/lib/type'
-import FullscreenContainer from "@/components/FullscreenContainer";
-import EditGuardians from "./EditGuardians";
-import SaveGuardians from "./SaveGuardians";
+import { GuardiansStepEn, StepContextProvider, useStepContext } from '@/context/StepContext';
+import { ReactNode, useMemo } from 'react';
+import { EnHandleMode } from '@/lib/type';
+import FullscreenContainer from '@/components/FullscreenContainer';
+import EditGuardians from './EditGuardians';
+import SaveGuardians from './SaveGuardians';
 
 type StepNodeInfo = {
   title: string;
@@ -15,13 +15,13 @@ const StepComponent = () => {
   const stepNodeMap: Record<number, StepNodeInfo> = useMemo(() => {
     return {
       [GuardiansStepEn.Edit]: {
-        title: "Get Started",
+        title: 'Get Started',
         element: <EditGuardians />,
       },
       [GuardiansStepEn.Save]: {
-        title: "Get Started",
+        title: 'Get Started',
         element: <SaveGuardians />,
-      }
+      },
     };
   }, []);
 
@@ -29,11 +29,7 @@ const StepComponent = () => {
     step: { current },
   } = useStepContext();
 
-  return (
-    <div>
-      {stepNodeMap[current].element}
-    </div>
-  );
+  return <div>{stepNodeMap[current].element}</div>;
 };
 
 export default function EditGuardiansPage() {

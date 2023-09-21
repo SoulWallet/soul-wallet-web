@@ -1,127 +1,124 @@
-import useWalletContext from "../context/hooks/useWalletContext";
-import useKeyring from "./useKeyring";
-import { ethers } from "ethers";
-import useSdk from "./useSdk";
-import { useAddressStore } from "@/store/address";
-import useQuery from "./useQuery";
-import { ABI_SoulWallet } from "@soulwallet/abi";
-import { useGuardianStore } from "@/store/guardian";
-import { addPaymasterAndData } from "@/lib/tools";
-import useKeystore from "./useKeystore";
-import Erc20ABI from "../contract/abi/ERC20.json";
-import { UserOpUtils, UserOperation } from "@soulwallet/sdk";
-import useConfig from "./useConfig";
-import { useChainStore } from "@/store/chain";
+import useWalletContext from '../context/hooks/useWalletContext';
+import useKeyring from './useKeyring';
+import { ethers } from 'ethers';
+import useSdk from './useSdk';
+import { useAddressStore } from '@/store/address';
+import useQuery from './useQuery';
+import { ABI_SoulWallet } from '@soulwallet/abi';
+import { useGuardianStore } from '@/store/guardian';
+import { addPaymasterAndData } from '@/lib/tools';
+import useKeystore from './useKeystore';
+import Erc20ABI from '../contract/abi/ERC20.json';
+import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
+import useConfig from './useConfig';
+import { useChainStore } from '@/store/chain';
 import bg from '@/background';
 
 export default function useWallet() {
-    const { account } = useWalletContext();
-    const { toggleActivatedChain } = useAddressStore();
-    const { calcGuardianHash } = useKeystore();
-    const { selectedChainId } = useChainStore();
-    const { getFeeCost, getPrefund } = useQuery();
-    const { chainConfig } = useConfig();
-    const { guardians, threshold, slotInitInfo } = useGuardianStore();
-    const keystore = useKeyring();
-    const { soulWallet } = useSdk();
+  const { account } = useWalletContext();
+  const { toggleActivatedChain } = useAddressStore();
+  const { calcGuardianHash } = useKeystore();
+  const { selectedChainId } = useChainStore();
+  const { getFeeCost, getPrefund } = useQuery();
+  const { chainConfig } = useConfig();
+  const { guardians, threshold, slotInitInfo } = useGuardianStore();
+  const keystore = useKeyring();
+  const { soulWallet } = useSdk();
 
-    const getIsOwner = (signerKey: string) => {};
+  const getIsOwner = (signerKey: string) => {};
 
-    /**
-     * Get activate initial params by wallet address
-     * @param address 
-     */
-    const getInitialParams = async (address: string) => {
+  /**
+   * Get activate initial params by wallet address
+   * @param address
+   */
+  const getInitialParams = async (address: string) => {};
 
+  const activateWallet = async (index: number, payToken: string, estimateCost: boolean = false) => {
+    const { initialKey, initialGuardianHash } = slotInitInfo;
+    const initialKeyAddress = `0x${initialKey.slice(-40)}`;
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeyAddress, initialGuardianHash);
+
+    if (userOpRet.isErr()) {
+      throw new Error(userOpRet.ERR.message);
     }
 
-    const activateWallet = async (index: number, payToken: string, estimateCost: boolean = false) => {
-        const { initialKey, initialGuardianHash } = slotInitInfo;
-        const initialKeyAddress = `0x${initialKey.slice(-40)}`;
-        const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeyAddress, initialGuardianHash);
+    let userOp = userOpRet.OK;
 
-        if (userOpRet.isErr()) {
-            throw new Error(userOpRet.ERR.message);
-        }
+    // approve paymaster to spend ERC-20
+    const soulAbi = new ethers.Interface(ABI_SoulWallet);
+    const erc20Abi = new ethers.Interface(Erc20ABI);
+    const to = chainConfig.paymasterTokens;
+    const approveCalldata = erc20Abi.encodeFunctionData('approve', [
+      chainConfig.contracts.paymaster,
+      ethers.parseEther('1000'),
+    ]);
 
-        let userOp = userOpRet.OK;
+    const approveCalldatas = [...new Array(to.length)].map(() => approveCalldata);
 
-        // approve paymaster to spend ERC-20
-        const soulAbi = new ethers.Interface(ABI_SoulWallet);
-        const erc20Abi = new ethers.Interface(Erc20ABI);
-        const to = chainConfig.paymasterTokens;
-        const approveCalldata = erc20Abi.encodeFunctionData("approve", [
-            chainConfig.contracts.paymaster,
-            ethers.parseEther("1000"),
-        ]);
+    const callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [to, approveCalldatas]);
 
-        const approveCalldatas = [...new Array(to.length)].map(() => approveCalldata);
+    userOp.callData = callData;
 
-        const callData = soulAbi.encodeFunctionData("executeBatch(address[],bytes[])", [to, approveCalldatas]);
+    userOp.callGasLimit = `0x${(50000 * to.length + 1).toString(16)}`;
 
-        userOp.callData = callData;
+    const feeCost = await getFeeCost(userOp, payToken);
 
-        userOp.callGasLimit = `0x${(50000 * to.length + 1).toString(16)}`;
+    userOp = feeCost.userOp;
 
-        const feeCost = await getFeeCost(userOp, payToken);
+    if (estimateCost) {
+      const { requiredAmount } = await getPrefund(userOp, payToken);
+      return requiredAmount;
+    } else {
+      // TODO, estimate fee could be avoided
+      await signAndSend(userOp, payToken, null, true);
+      // IMPORTANT TODO, what if user don't wait?
+      toggleActivatedChain(userOp.sender, selectedChainId);
+    }
+  };
 
-        userOp = feeCost.userOp;
+  const getSetGuardianCalldata = async (slot: string, guardianHash: string, keySignature: string) => {
+    const soulAbi = new ethers.Interface(ABI_SoulWallet);
+    return soulAbi.encodeFunctionData('setGuardian(bytes32,bytes32,bytes32)', [slot, guardianHash, keySignature]);
+  };
 
-        if (estimateCost) {
-            const { requiredAmount } = await getPrefund(userOp, payToken);
-            return requiredAmount;
-        } else {
-            // TODO, estimate fee could be avoided
-            await signAndSend(userOp, payToken, null, true);
-            // IMPORTANT TODO, what if user don't wait?
-            toggleActivatedChain(userOp.sender, selectedChainId);
-        }
-    };
+  const signAndSend = async (userOp: UserOperation, payToken?: string, tabId?: any, waitFinish?: boolean) => {
+    // checkpaymaster
+    if (payToken && payToken !== ethers.ZeroAddress && userOp.paymasterAndData === '0x') {
+      const paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
+      userOp.paymasterAndData = paymasterAndData;
+    }
 
-    const getSetGuardianCalldata = async (slot: string, guardianHash: string, keySignature: string) => {
-        const soulAbi = new ethers.Interface(ABI_SoulWallet);
-        return soulAbi.encodeFunctionData("setGuardian(bytes32,bytes32,bytes32)", [slot, guardianHash, keySignature]);
-    };
+    const validAfter = Math.floor(Date.now() / 1000);
+    const validUntil = validAfter + 3600;
 
-    const signAndSend = async (userOp: UserOperation, payToken?: string,tabId?: any, waitFinish?: boolean,) => {
-        // checkpaymaster
-        if (payToken && payToken !== ethers.ZeroAddress && userOp.paymasterAndData === "0x") {
-            const paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
-            userOp.paymasterAndData = paymasterAndData;
-        }
+    const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
 
-        const validAfter = Math.floor(Date.now() / 1000);
-        const validUntil = validAfter + 3600;
+    if (packedUserOpHashRet.isErr()) {
+      throw new Error(packedUserOpHashRet.ERR.message);
+    }
+    const packedUserOpHash = packedUserOpHashRet.OK;
 
-        const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
+    const signature = await keystore.sign(packedUserOpHash.packedUserOpHash);
 
-        if (packedUserOpHashRet.isErr()) {
-            throw new Error(packedUserOpHashRet.ERR.message);
-        }
-        const packedUserOpHash = packedUserOpHashRet.OK;
+    if (!signature) {
+      throw new Error('Failed to sign');
+    }
 
-        const signature = await keystore.sign(packedUserOpHash.packedUserOpHash);
+    const packedSignatureRet = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
 
-        if (!signature) {
-            throw new Error("Failed to sign");
-        }
+    if (packedSignatureRet.isErr()) {
+      throw new Error(packedSignatureRet.ERR.message);
+    }
 
-        const packedSignatureRet = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
+    userOp.signature = packedSignatureRet.OK;
 
-        if (packedSignatureRet.isErr()) {
-            throw new Error(packedSignatureRet.ERR.message);
-        }
+    const resultPromise = await bg.execute(userOp, chainConfig);
+  };
 
-        userOp.signature = packedSignatureRet.OK;
-
-        const resultPromise = await bg.execute(userOp, chainConfig)
-       
-    };
-
-    return {
-        addPaymasterAndData,
-        activateWallet,
-        getSetGuardianCalldata,
-        signAndSend,
-    };
+  return {
+    addPaymasterAndData,
+    activateWallet,
+    getSetGuardianCalldata,
+    signAndSend,
+  };
 }

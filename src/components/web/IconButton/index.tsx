@@ -1,8 +1,8 @@
-import React from "react";
-import { Button, ButtonProps } from "@chakra-ui/react";
+import React from 'react';
+import { Button, ButtonProps } from '@chakra-ui/react';
 
 // TODO: error & retry
-type ButtonType = "default" | "primary" | "disabled" | "error" | "reject" | "link"; // may add 'dash', 'text', 'link', etc. later
+type ButtonType = 'default' | 'primary' | 'disabled' | 'error' | 'reject' | 'link'; // may add 'dash', 'text', 'link', etc. later
 
 interface IProps extends Omit<ButtonProps, 'type'> {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ export default function TextButton({
   children,
   loading,
   disabled,
-  type = "default",
+  type = 'default',
   href,
   color,
   _styles,

@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { Navbar } from "@/components/Navbar";
-import AccountCard from "@/components/AccountCard";
-import { Box } from "@chakra-ui/react";
-import Operations from "./comp/Operations";
-import ActivateHint from "./comp/ActivateHint";
-import SetGuardianHint from "./comp/SetGuardianHint";
-import MobileContainer from "@/components/MobileContainer";
-import Actions from "./comp/Actions";
-import { useAddressStore } from "@/store/address";
-import { useChainStore } from "@/store/chain";
-import { useGuardianStore } from "@/store/guardian";
-import storage from "@/lib/storage";
+import { useState } from 'react';
+import { Navbar } from '@/components/Navbar';
+import AccountCard from '@/components/AccountCard';
+import { Box } from '@chakra-ui/react';
+import Operations from './comp/Operations';
+import ActivateHint from './comp/ActivateHint';
+import SetGuardianHint from './comp/SetGuardianHint';
+import MobileContainer from '@/components/MobileContainer';
+import Actions from './comp/Actions';
+import { useAddressStore } from '@/store/address';
+import { useChainStore } from '@/store/chain';
+import { useGuardianStore } from '@/store/guardian';
+import storage from '@/lib/storage';
 
 export default function Wallet() {
   const { selectedAddress, getIsActivated } = useAddressStore();
@@ -22,8 +22,7 @@ export default function Wallet() {
   const showSetGuardian =
     isActivated &&
     guardians.length === 0 &&
-    (!storage.getItem("skipSet") ||
-      storage.getItem("skipSet") !== "true") &&
+    (!storage.getItem('skipSet') || storage.getItem('skipSet') !== 'true') &&
     !skipSet;
 
   return (
@@ -32,10 +31,9 @@ export default function Wallet() {
         <Navbar />
         <AccountCard />
         {!isActivated ? <ActivateHint /> : <Actions showSetGuardian={showSetGuardian && !skipSet} />}
-                {showSetGuardian && !skipSet && <SetGuardianHint onSkip={()=> setSkipSet(true)} />}
+        {showSetGuardian && !skipSet && <SetGuardianHint onSkip={() => setSkipSet(true)} />}
         <Operations />
       </Box>
     </MobileContainer>
   );
 }
-

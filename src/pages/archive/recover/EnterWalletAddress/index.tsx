@@ -1,89 +1,88 @@
-import { useEffect, useState } from "react";
-import { RecoverStepEn, StepActionTypeEn, useStepDispatchContext } from "@/context/StepContext";
-import { ethers } from "ethers";
-import Button from "@/components/web/Button";
-import { Box, Text, Image, useToast } from "@chakra-ui/react"
-import FormInput from "@/components/web/Form/FormInput";
-import Heading1 from "@/components/web/Heading1";
-import TextBody from "@/components/web/TextBody";
-import useForm from "@/hooks/useForm";
-import api from "@/lib/api";
-import Steps from "@/components/web/Steps";
-import { useGuardianStore } from "@/store/guardian";
+import { useEffect, useState } from 'react';
+import { RecoverStepEn, StepActionTypeEn, useStepDispatchContext } from '@/context/StepContext';
+import { ethers } from 'ethers';
+import Button from '@/components/web/Button';
+import { Box, Text, Image, useToast } from '@chakra-ui/react';
+import FormInput from '@/components/web/Form/FormInput';
+import Heading1 from '@/components/web/Heading1';
+import TextBody from '@/components/web/TextBody';
+import useForm from '@/hooks/useForm';
+import api from '@/lib/api';
+import Steps from '@/components/web/Steps';
+import { useGuardianStore } from '@/store/guardian';
 
 interface IRecoverStarter {
   onSubmit: (wAddress: string, pToken: string) => void;
 }
 
 const validate = (values: any) => {
-  const errors: any = {}
-  const { address } = values
+  const errors: any = {};
+  const { address } = values;
 
   if (!ethers.isAddress(address)) {
-    errors.address = 'Invalid Address'
+    errors.address = 'Invalid Address';
   }
 
-  return errors
-}
+  return errors;
+};
 
 const EnterWalletAddress = ({ onSubmit, onStepChange }: any) => {
-  const [loading, setLoading] = useState(false)
-  const { setRecoveringGuardians, setRecoveringThreshold, setRecoveringSlot, setRecoveringSlotInitInfo, setRecoverRecordId } = useGuardianStore();
-  const dispatch = useStepDispatchContext();
-  const toast = useToast()
-
+  const [loading, setLoading] = useState(false);
   const {
-    values,
-    errors,
-    invalid,
-    onChange,
-    onBlur,
-    showErrors
-  } = useForm({
-    fields: ['address'],
-    validate
-  })
+    setRecoveringGuardians,
+    setRecoveringThreshold,
+    setRecoveringSlot,
+    setRecoveringSlotInitInfo,
+    setRecoverRecordId,
+  } = useGuardianStore();
+  const dispatch = useStepDispatchContext();
+  const toast = useToast();
 
-  const disabled = loading || invalid
+  const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
+    fields: ['address'],
+    validate,
+  });
+
+  const disabled = loading || invalid;
 
   const handleNext = async () => {
-    if (disabled) return
+    if (disabled) return;
 
     try {
-      setLoading(true)
-      const result = await api.guardian.getSlotInfo({ walletAddress: values.address })
-      const data = result.data
-      const slot = data.slot
-      const slotInitInfo = data.slotInitInfo
-      setRecoverRecordId(null)
-      setRecoveringSlot(slot)
-      setRecoveringSlotInitInfo(slotInitInfo)
-      const guardianDetails = data.guardianDetails
+      setLoading(true);
+      const result = await api.guardian.getSlotInfo({ walletAddress: values.address });
+      const data = result.data;
+      const slot = data.slot;
+      const slotInitInfo = data.slotInitInfo;
+      setRecoverRecordId(null);
+      setRecoveringSlot(slot);
+      setRecoveringSlotInitInfo(slotInitInfo);
+      const guardianDetails = data.guardianDetails;
 
       if (guardianDetails && guardianDetails.guardians) {
-        const guardians = guardianDetails.guardians
-        const threshold = guardianDetails.threshold
-        setRecoveringGuardians(guardians)
-        setRecoveringThreshold(threshold)
-        setLoading(false)
+        const guardians = guardianDetails.guardians;
+        const threshold = guardianDetails.threshold;
+        setRecoveringGuardians(guardians);
+        setRecoveringThreshold(threshold);
+        setLoading(false);
 
         dispatch({
           type: StepActionTypeEn.JumpToTargetStep,
           payload: RecoverStepEn.ResetPassword,
         });
       } else {
-        setLoading(false)
+        setLoading(false);
         dispatch({
           type: StepActionTypeEn.JumpToTargetStep,
           payload: RecoverStepEn.UploadGuardians,
         });
       }
     } catch (e: any) {
-      setLoading(false)
+      setLoading(false);
       toast({
         title: e.message,
-        status: "error",
-      })
+        status: 'error',
+      });
 
       /* dispatch({
        *   type: StepActionTypeEn.JumpToTargetStep,
@@ -93,13 +92,26 @@ const EnterWalletAddress = ({ onSubmit, onStepChange }: any) => {
   };
 
   return (
-    <Box width="432px" display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingBottom="20px">
+    <Box
+      width="432px"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      paddingBottom="20px"
+    >
       <Box marginBottom="12px" paddingRight="24px">
-        <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={4} activeIndex={0} marginTop="24px" onStepChange={onStepChange} showBackButton />
+        <Steps
+          backgroundColor="#1E1E1E"
+          foregroundColor="white"
+          count={4}
+          activeIndex={0}
+          marginTop="24px"
+          onStepChange={onStepChange}
+          showBackButton
+        />
       </Box>
-      <Heading1>
-        Wallet recovery
-      </Heading1>
+      <Heading1>Wallet recovery</Heading1>
       <Box marginBottom="0.75em">
         <TextBody textAlign="center" maxWidth="350px">
           Enter the address you want to recover.
@@ -116,7 +128,7 @@ const EnterWalletAddress = ({ onSubmit, onStepChange }: any) => {
         onBlur={onBlur('address')}
         errorMsg={showErrors.address && errors.address}
         _styles={{ marginTop: '0.75em', width: '100%' }}
-      // _inputStyles={{ width: "480px"}}
+        // _inputStyles={{ width: "480px"}}
         autoFocus={true}
         onEnter={handleNext}
       />
@@ -129,7 +141,7 @@ const EnterWalletAddress = ({ onSubmit, onStepChange }: any) => {
         Next
       </Button>
     </Box>
-  )
+  );
 };
 
 export default EnterWalletAddress;

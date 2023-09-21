@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import Logo from "@/components/web/Logo";
-import { Box } from "@chakra-ui/react"
+import { ReactNode } from 'react';
+import Logo from '@/components/web/Logo';
+import { Box } from '@chakra-ui/react';
 
 export default function FullscreenContainer({ children }: { children: ReactNode }) {
   return (
@@ -16,11 +16,7 @@ export default function FullscreenContainer({ children }: { children: ReactNode 
       width="100%"
     >
       <Logo />
-      <Box
-        background="rgba(255, 255, 255, 0.02)"
-        padding="1em"
-        marginTop="1em"
-      >
+      <Box background="rgba(255, 255, 255, 0.02)" padding="1em" marginTop="1em">
         {children}
       </Box>
     </Box>
