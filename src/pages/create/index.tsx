@@ -11,7 +11,7 @@ import PassKeyList from '@/components/web/PassKeyList';
 export default function Create() {
   const [passKeys, setPassKeys] = useState([{}]);
 
-  const onStepChange = (i) => {
+  const onStepChange = (i: number) => {
     if (i == 0) {
       setPassKeys([{}]);
     }
@@ -71,7 +71,7 @@ export default function Create() {
           <Heading1 textAlign="center">you have successfully created a passkey!</Heading1>
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <TextBody colort="#1E1E1E">
+          <TextBody color="#1E1E1E">
             Next, try signing in with your passkey on a different device! One passkey won’t be backed up. If you lose
             it, you may be locked out of your account.
           </TextBody>
