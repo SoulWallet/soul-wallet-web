@@ -5,7 +5,12 @@ import { persist } from "zustand/middleware";
 export interface ICredentialStore {
   credentials: any;
   addCredential: (credential: any) => void;
+  changeCredentialName: (credentialId: string, name: string) => void;
 }
+
+export const getIndexByCredentialId = (credentials: any, id: string) => {
+  return credentials.findIndex((item: any) => item.id === id);
+};
 
 const createCredentialSlice = immer<ICredentialStore>((set) => ({
   credentials: [],
@@ -14,15 +19,14 @@ const createCredentialSlice = immer<ICredentialStore>((set) => ({
       state.credentials.push(credential);
     });
   },
-  // removeCredential: (credentialId: string) => {
-  //     set((state) => {
-  //         state.shouldNotInjectList.push(origin);
-  //         const removeIndex = state.shouldInjectList.indexOf(origin);
-  //         if (removeIndex > -1) {
-  //             state.shouldInjectList.splice(removeIndex, 1);
-  //         }
-  //     });
-  // },
+  changeCredentialName: (credentialId: string, name: string) => {
+    set((state) => {
+      const index = getIndexByCredentialId(state.credentials, credentialId);
+      if (index > -1) {
+        state.credentials[index].name = name;
+      }
+    });
+  },
 }));
 
 export const useCredentialStore = create<ICredentialStore>()(

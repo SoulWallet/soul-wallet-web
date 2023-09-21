@@ -5,7 +5,7 @@ import { AsnParser } from "@peculiar/asn1-schema";
 import { useCredentialStore } from "@/store/credential";
 
 export default function usePasskey() {
-  const { addCredential } = useCredentialStore();
+  const { addCredential, credentials } = useCredentialStore();
   const decodeDER = (signature: string) => {
     const derSignature = Buffer.from(signature, "base64");
     const parsedSignature = AsnParser.parse(derSignature, ECDSASigValue);
@@ -55,13 +55,15 @@ export default function usePasskey() {
   const register = async () => {
     // get total registered nums and generate name
     const randomChallenge = btoa("1234567890");
-    const registration = await client.register("Passkey", randomChallenge);
+    const credentialName = `Passkey ${credentials.length + 1}`
+    const registration = await client.register(credentialName, randomChallenge);
     console.log("Registered: ", JSON.stringify(registration, null, 2));
 
     const credentialKey = {
       id: registration.credential.id,
       publicKey: registration.credential.publicKey,
       algorithm: "ES256",
+      name: credentialName,
     };
 
     addCredential(credentialKey);
