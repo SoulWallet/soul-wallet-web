@@ -23,15 +23,6 @@ dependencies:
   '@peculiar/asn1-schema':
     specifier: ^2.3.6
     version: 2.3.6
-  '@soulwallet/abi':
-    specifier: ^0.1.1
-    version: 0.1.1
-  '@soulwallet/decoder':
-    specifier: ^0.1.1
-    version: 0.1.1
-  '@soulwallet/sdk':
-    specifier: ^0.1.1
-    version: 0.1.1
   '@soulwallet_test/abi':
     specifier: ^0.1.0
     version: 0.1.0
@@ -45,8 +36,8 @@ dependencies:
     specifier: ^0.1.0
     version: 0.1.0
   '@soulwallet_test/sdk':
-    specifier: ^0.1.0
-    version: 0.1.0
+    specifier: ^0.1.1
+    version: 0.1.1
   '@types/node':
     specifier: 20.6.2
     version: 20.6.2
@@ -1734,43 +1725,6 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@soulwallet/abi@0.1.1:
-    resolution: {integrity: sha512-UXf7LbEX9YJvYjs0seIac5Aw+hbUO9W6BWR3mqXnggvqrXbb0+3jN96bCvWNYMivkifr1JrdaAreW8SU4yPGDQ==}
-    dev: false
-
-  /@soulwallet/assets@0.1.1:
-    resolution: {integrity: sha512-l8oFl5Zq9sgZWeGRyD+jTwJ8tkJwWxubfiIWd0u11De2f8bg3ndiRz/LBV0oel/eYMFa0NyMDXrEpyngEu2Zxg==}
-    dependencies:
-      '@soulwallet/result': 0.1.1
-    dev: false
-
-  /@soulwallet/decoder@0.1.1:
-    resolution: {integrity: sha512-K0I+jsrPjYIU0rpJfm17vVfnUYCqrxvgTanqntD1tcr0QTaCVGtXem8Q5HPQYOzQ/eACV9TYrsZO5B9cUhajmw==}
-    dependencies:
-      '@soulwallet/abi': 0.1.1
-      '@soulwallet/assets': 0.1.1
-      '@soulwallet/result': 0.1.1
-      ethers: 6.7.1
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    dev: false
-
-  /@soulwallet/result@0.1.1:
-    resolution: {integrity: sha512-ykeVUXL5nnFNrXLvhCTPfImXwneTlitcRQbigfnh3TfsQ7j+8B64ieMrYgTLGd+b8eRxcg+K/4kHOn5rR5uqqA==}
-    dev: false
-
-  /@soulwallet/sdk@0.1.1:
-    resolution: {integrity: sha512-3XbVbwNzS75UEcdafU5qTGwU6jYvDYSnHVCfdChnWC6a16uBNP2KdamV/5MYS5cq0dx0YbiO7Y1BTbftFSUwQQ==}
-    dependencies:
-      '@soulwallet/abi': 0.1.1
-      '@soulwallet/result': 0.1.1
-      ethers: 6.7.1
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    dev: false
-
   /@soulwallet_test/abi@0.1.0:
     resolution: {integrity: sha512-bpHjYmCJlucQMGCTmNI0CP4Uxtc8EjCmipeJgpI/9CIk/iHLtBAIzMHGNuwS82q/tPr5XJuy55zy00v0J7arGQ==}
     dev: false
@@ -1797,8 +1751,8 @@ packages:
     resolution: {integrity: sha512-9nD2Yhy1Vv8yedNkuaDcsqKSGOQIlCDdpCrD3kpwZ7mWYHmth70G6ZUqYo+I07v4xelb59yWPL6ZLBewmz+ZmA==}
     dev: false
 
-  /@soulwallet_test/sdk@0.1.0:
-    resolution: {integrity: sha512-WA2C6SfJ9xdXij9F1C52KaFHD09SrW5kH57tArVqrS+dn1nkoTFPUkmgTn8vAdKj7GEWUKtm0yJBDnfQIhVzTw==}
+  /@soulwallet_test/sdk@0.1.1:
+    resolution: {integrity: sha512-AMI/kdV9Rp9scQRZcsmNdtxz3+LumbiM1hCuMitqeQl7xRJEAJDRze1uUnffnnmTTs0y2fXO6nwO13ZR0TAmuA==}
     dependencies:
       '@soulwallet_test/abi': 0.1.0
       '@soulwallet_test/result': 0.1.0

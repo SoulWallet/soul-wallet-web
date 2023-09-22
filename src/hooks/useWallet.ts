@@ -94,7 +94,7 @@ export default function useWallet() {
     const packedUserOpHash = packedUserOpHashRet.OK;
 
     // IMPORT TODO, use the first credential for now
-    const signatureData = await sign(credentials[0],packedUserOpHash.packedUserOpHash);
+    const signatureData = await sign(credentials[0], packedUserOpHash.packedUserOpHash);
 
     const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, packedUserOpHash.validationData);
 

@@ -147,6 +147,10 @@ export const uint8ArrayToHexString = (byteArray: Uint8Array) => {
   return Array.from(byteArray).map(byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
+// export const uint8ArrayToString = (byteArray: Uint8Array) => {
+//   return Array.from(byteArray).map(byte => byte.toString(2).padStart(2, '0')).join('');
+// }
+
 export const printUserOp = (userOp: any) => {
   console.log(
     JSON.stringify([

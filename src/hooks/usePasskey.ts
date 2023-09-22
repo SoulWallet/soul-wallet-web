@@ -5,7 +5,12 @@ import { AsnParser } from '@peculiar/asn1-schema';
 import { useCredentialStore } from '@/store/credential';
 
 const base64urlTobase64 = (base64url: string) => {
-  return base64url.replace(/\-/g, '+').replace(/_/g, '/');
+  const paddedUrl = base64url.padEnd(base64url.length + ((4 - (base64url.length % 4)) % 4), '=');
+  return paddedUrl.replace(/\-/g, '+').replace(/_/g, '/');
+};
+
+const base64Tobase64url = (base64: string) => {
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
 export default function usePasskey() {
@@ -31,9 +36,7 @@ export default function usePasskey() {
   };
 
   const getCoordinates = async (credentialPublicKey: string) => {
-    const publicKeyBinary = Uint8Array.from(atob(credentialPublicKey.replace(/\-/g, '+').replace(/_/g, '/')), (c) =>
-      c.charCodeAt(0),
-    );
+    const publicKeyBinary = Uint8Array.from(atob(base64urlTobase64(credentialPublicKey)), (c) => c.charCodeAt(0));
     const publicKey = await crypto.subtle.importKey(
       'spki',
       publicKeyBinary,
@@ -46,8 +49,8 @@ export default function usePasskey() {
     );
 
     const jwk: any = await crypto.subtle.exportKey('jwk', publicKey);
-    const Qx = base64ToBigInt(jwk.x.replace(/\-/g, '+').replace(/_/g, '/'));
-    const Qy = base64ToBigInt(jwk.y.replace(/\-/g, '+').replace(/_/g, '/'));
+    const Qx = base64ToBigInt(base64urlTobase64(jwk.x));
+    const Qy = base64ToBigInt(base64urlTobase64(jwk.y));
     return {
       x: `0x${Qx.toString(16).padStart(64, '0')}`,
       y: `0x${Qy.toString(16).padStart(64, '0')}`,
@@ -81,20 +84,27 @@ export default function usePasskey() {
     addCredential(credentialKey);
   };
 
-  const sign = async (credential: any, challenge: string) => {
+  const sign = async (credential: any, userOpHash: string) => {
+    if (userOpHash.startsWith('0x')) {
+      userOpHash = userOpHash.substr(2);
+    }
+    var byteArray = new Uint8Array(32);
+    for (var i = 0; i < 64; i += 2) {
+      byteArray[i / 2] = parseInt(userOpHash.substr(i, 2), 16);
+    }
+    let challenge = base64Tobase64url(btoa(String.fromCharCode(...byteArray)));
+
     console.log('Authenticating...');
     let authentication = await client.authenticate([credential.id], challenge, {
       userVerification: 'required',
     });
-    const authenticatorData = `0x${base64ToBigInt(
-      authentication.authenticatorData.replace(/\-/g, '+').replace(/_/g, '/'),
-    ).toString(16)}`;
-    const clientData = atob(authentication.clientData.replace(/\-/g, '+').replace(/_/g, '/'));
+    const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
+    const clientData = atob(base64urlTobase64(authentication.clientData));
 
     const sliceIndex = clientData.indexOf(`","origin"`);
-    const clientDataSuffix = clientData.slice(sliceIndex)
-    console.log('decoded clientData',  clientData, clientDataSuffix);
-    const signature = authentication.signature.replace(/\-/g, '+').replace(/_/g, '/');
+    const clientDataSuffix = clientData.slice(sliceIndex);
+    console.log('decoded clientData', clientData, clientDataSuffix);
+    const signature = base64urlTobase64(authentication.signature);
     console.log(`signature: ${signature}`);
     const { r, s } = decodeDER(signature);
     const { x, y } = credential.coords;

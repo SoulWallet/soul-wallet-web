@@ -74,7 +74,6 @@ export default function useQuery() {
       };
     }
   };
-
   const getFeeCost = async (userOp: any, payToken: string) => {
     // set 1559 fee
     const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
@@ -91,6 +90,8 @@ export default function useQuery() {
     if (gasLimit.isErr()) {
       throw new Error(gasLimit.ERR.message);
     }
+
+    // userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit).plus(100000).toString(16)}`;
 
     return {
       userOp,
