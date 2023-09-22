@@ -9,16 +9,21 @@ import Steps from '@/components/web/Steps';
 import PassKeyList from '@/components/web/PassKeyList';
 import usePassKey from '@/hooks/usePasskey';
 import { useCredentialStore } from '@/store/credential';
+import useBrowser from '@/hooks/useBrowser';
 
 export default function Create() {
+  const { navigate } = useBrowser();
   const { register } = usePassKey();
   const { credentials, changeCredentialName } = useCredentialStore();
   const [isCreating, setIsCreating] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const toast = useToast();
 
   const onStepChange = (i: number) => {
     if (i == 0) {
-      // setPassKeys([{}]);
+      // navigate('launch')
+    } else if (i == 1) {
+      setIsReady(false)
     }
   };
 
@@ -43,7 +48,11 @@ export default function Create() {
     }
   }
 
-  if (credentials.length > 1) {
+  const onSkip = () => {
+    setIsReady(true)
+  }
+
+  if (isReady) {
     return (
       <FullscreenContainer>
         <Box width="480px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -59,7 +68,8 @@ export default function Create() {
             />
           </Box>
           <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-            <Heading1>Great, you have multiple passkeys!</Heading1>
+            {credentials.length > 1 && <Heading1>Great, you have multiple passkeys!</Heading1>}
+            {credentials.length == 1 && <Heading1>You have only one passkey!</Heading1>}
           </Box>
         </Box>
         <Box margin="48px 0">
@@ -85,7 +95,6 @@ export default function Create() {
             count={3}
             activeIndex={1}
             marginTop="24px"
-            onStepChange={onStepChange}
           />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
@@ -103,10 +112,10 @@ export default function Create() {
         <PassKeyList passKeys={credentials} setPassKeyName={setPassKeyName} />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-        <Button onClick={createWallet} _styles={{ width: '282px', borderRadius: '40px' }} disabled={isCreating} loading={isCreating}>
-          {isCreating ? 'Adding another passkey' : 'Add another passkey'}
+        <Button onClick={createWallet} _styles={{ width: '300px', borderRadius: '40px' }} disabled={isCreating} loading={isCreating}>
+          Add another passkey
         </Button>
-        <TextButton onClick={() => {}}>Skip for now</TextButton>
+        <TextButton onClick={onSkip}>Skip for now</TextButton>
       </Box>
     </FullscreenContainer>
   );

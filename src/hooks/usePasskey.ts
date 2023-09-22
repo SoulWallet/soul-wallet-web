@@ -117,9 +117,15 @@ export default function usePasskey() {
     };
   };
 
+  const login = async (credentialIds: string[], challenge: string) => {
+    const authentication = await client.authenticate(credentialIds, challenge);
+    console.log('authentication: ', authentication);
+  };
+
   return {
     decodeDER,
     register,
     sign,
+    login,
   };
 }
