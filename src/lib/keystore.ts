@@ -76,22 +76,6 @@ export default class KeyStore {
   }
 
   /**
-   * sign a hash
-   * @param message
-   * @returns signature, null is failed or keystore not unlocked
-   */
-  public async sign(hash: string): Promise<string | null> {
-    // const messageHex = Buffer.from(ethers.utils.arrayify(message)).toString('hex');
-    // const personalMessage = ethUtil.hashPersonalMessage(ethUtil.toBuffer(ethUtil.addHexPrefix(messageHex)));
-    // var privateKey = Buffer.from(this._privateKey.substring(2), "hex");
-    // const signature1 = ethUtil.ecsign(personalMessage, privateKey);
-    // const sigHex = ethUtil.toRpcSig(signature1.v, signature1.r, signature1.s);
-    const signer = await this.getSigner();
-
-    return await signer.signMessage(ethers.getBytes(hash));
-  }
-
-  /**
    * sign a typed data
    * @param typedData
    * @returns signature, null is failed or keystore not unlocked

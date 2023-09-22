@@ -4,12 +4,8 @@ import { useAnimationControls, motion } from 'framer-motion';
 import FormInput from '../FormInput';
 import IconLogo from '@/assets/logo-v3.svg';
 import IconLogoText from '@/assets/logo-text.svg';
-import KeyStore from '@/lib/keystore';
 import Button from '@/components/Button';
 import useBrowser from '@/hooks/useBrowser';
-const keyStore = KeyStore.getInstance();
-
-const MotionButton = motion(Button);
 
 export default forwardRef<any>((props, ref) => {
   const { navigate } = useBrowser();
@@ -64,8 +60,6 @@ export default forwardRef<any>((props, ref) => {
         });
         return;
       }
-      // setUnlocking(true);
-      // await keyStore.unlock(password);
       setVisible(false);
       setPassword('');
     } catch (err) {
