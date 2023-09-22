@@ -55,6 +55,7 @@ export default function Launch() {
         title: `${credential.name} logged in`,
         status: 'success',
       });
+      navigate('wallet')
     } catch (error: any) {
       console.log('error', error.message);
       setIsAuthing(false);
