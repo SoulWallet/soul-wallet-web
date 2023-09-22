@@ -4,17 +4,20 @@ import { Box } from '@chakra-ui/react';
 import { getMessageType } from '@/lib/tools';
 import useKeyring from '@/hooks/useKeyring';
 import { useToast } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 // import { useSearchParams } from "react-router-dom";
 import SignModal from '@/components/SignModal';
 import useWallet from '@/hooks/useWallet';
 import useBrowser from '@/hooks/useBrowser';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
+import MobileContainer from '@/components/MobileContainer';
 
 export default function SignPage() {
-  const params = useParams();
-  const param: any = params.query;
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
+
   // const params = useSearchParams();
   const [searchParams, setSearchParams] = useState<any>({});
   const { selectedAddress, toggleAllowedOrigin } = useAddressStore();
@@ -25,20 +28,18 @@ export default function SignPage() {
   const signModal = createRef<any>();
   const keyring = useKeyring();
 
-  console.log('sign page triggered', searchParams);
-
   useEffect(() => {
     setSearchParams({
-      actionType: param.action,
-      tabId: param.tabId,
-      origin: param.origin,
-      txns: param.txns,
-      data: param.data,
-      sendTo: param.sendTo,
-      id: param.id,
-      targetChainId: param.targetChainId,
+      actionType: params.get('action'),
+      tabId: params.get('tabId'),
+      origin: params.get('origin'),
+      txns: params.get('txns'),
+      data: params.get('data'),
+      sendTo: params.get('sendTo'),
+      id: params.get('id'),
+      targetChainId: params.get('targetChainId'),
     });
-  }, [param]);
+  }, [params]);
 
   /**
    * Determine what data user want
@@ -170,9 +171,9 @@ export default function SignPage() {
   }, [searchParams.actionType, signModal.current, selectedAddress]);
 
   return (
-    <Box>
+    <MobileContainer>
       {/* <img src={LogoLoading} /> */}
       <SignModal ref={signModal} />
-    </Box>
+    </MobileContainer>
   );
 }

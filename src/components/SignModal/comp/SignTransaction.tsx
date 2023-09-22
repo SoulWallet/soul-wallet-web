@@ -24,8 +24,6 @@ export default function SignTransaction({
   const { selectedAddress } = useAddressStore();
   const { selectedAddressItem } = useConfig();
 
-  console.log('D', decodedData);
-
   return (
     <>
       <Text fontSize="20px" fontWeight="800" color="#1e1e1e">

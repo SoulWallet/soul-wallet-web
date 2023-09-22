@@ -42,10 +42,7 @@ export default function useTransaction() {
     });
   };
 
-  const setGuardian = () => {};
-
   return {
-    signTransaction,
     sendErc20,
     sendEth,
   };

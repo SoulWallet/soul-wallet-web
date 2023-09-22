@@ -31,7 +31,7 @@ export default function Activities() {
   return (
     <Box color="#1e1e1e" fontSize={'14px'} lineHeight={'1'}>
       {!loading && (!historyList || historyList.length === 0) && <EmptyHint title="No activities" />}
-      {loading && <Image src={IconLoading} />}
+      {loading && <Image src={IconLoading} w="100%" />}
       {historyList.map((item: any, idx: number) => (
         <ActivityItem key={idx} idx={idx} item={item} scanUrl={chainConfig.scanUrl} />
       ))}
