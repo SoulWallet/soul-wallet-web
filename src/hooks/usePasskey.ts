@@ -127,5 +127,6 @@ export default function usePasskey() {
     register,
     sign,
     login,
+    getCoordinates,
   };
 }

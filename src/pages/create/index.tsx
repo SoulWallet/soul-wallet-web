@@ -10,20 +10,29 @@ import PassKeyList from '@/components/web/PassKeyList';
 import usePassKey from '@/hooks/usePasskey';
 import { useCredentialStore } from '@/store/credential';
 import useBrowser from '@/hooks/useBrowser';
+import useConfig from '@/hooks/useConfig';
+import useKeystore from '@/hooks/useKeystore';
+import { useGuardianStore } from '@/store/guardian';
+import { ethers } from 'ethers';
+import { L1KeyStore } from '@soulwallet_test/sdk';
+import { toHex } from '@/lib/tools';
 
 export default function Create() {
   const { navigate } = useBrowser();
-  const { register } = usePassKey();
+  const { register, getCoordinates } = usePassKey();
+  const { chainConfig } = useConfig();
   const { credentials, changeCredentialName } = useCredentialStore();
   const [isCreating, setIsCreating] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const { calcGuardianHash, getSlot } = useKeystore();
+  const { setSlotInitInfo } = useGuardianStore();
   const toast = useToast();
 
   const onStepChange = (i: number) => {
     if (i == 0) {
       // navigate('launch')
     } else if (i == 1) {
-      setIsReady(false)
+      setIsReady(false);
     }
   };
 
@@ -52,6 +61,24 @@ export default function Create() {
     setIsReady(true)
   }
 
+  const createInitialSlotInfo = async () => {
+    const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+    const initialGuardianHash = calcGuardianHash([], 0);
+    const salt = ethers.ZeroHash;
+    let initialGuardianSafePeriod = toHex(L1KeyStore.days * 2);
+    const slotInitInfo = {
+      initialKeys,
+      initialGuardianHash,
+      initialGuardianSafePeriod,
+    };
+    setSlotInitInfo(slotInitInfo)
+    console.log('createSlotInfo', initialKeys, slotInitInfo)
+  };
+
+  const onConfirm = async () => {
+    createInitialSlotInfo()
+  }
+
   if (isReady) {
     return (
       <FullscreenContainer>
@@ -76,7 +103,7 @@ export default function Create() {
           <PassKeyList passKeys={credentials} setPassKeyName={setPassKeyName} />
         </Box>
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-          <Button onClick={() => {}} _styles={{ width: '282px', borderRadius: '40px' }}>
+          <Button onClick={onConfirm} _styles={{ width: '282px', borderRadius: '40px' }}>
             Confirm
           </Button>
           <TextButton onClick={createWallet}  disabled={isCreating} loading={isCreating}>Add another passkey</TextButton>

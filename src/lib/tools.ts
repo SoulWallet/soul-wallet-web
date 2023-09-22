@@ -205,3 +205,15 @@ export const getKeystoreStatus = (statusId: number) => {
 
   return 'Pending';
 };
+
+export const toHex = (num: any) => {
+  let hexStr = num.toString(16);
+
+  if (hexStr.length % 2 === 1) {
+    hexStr = '0' + hexStr;
+  }
+
+  hexStr = '0x' + hexStr;
+
+  return hexStr;
+};
