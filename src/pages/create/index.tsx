@@ -22,7 +22,7 @@ export default function Create() {
     }
   };
 
-  const setPassKeyName = ({ id, name }) => {
+  const setPassKeyName = ({ id, name }: any) => {
     changeCredentialName(id, name);
   };
   console.log('credentials', credentials)

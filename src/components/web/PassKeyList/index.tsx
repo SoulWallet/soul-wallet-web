@@ -59,7 +59,7 @@ export default function PassKeyList({ passKeys, setPassKeyName }: any) {
       <Text fontSize="16px" color="#1E1E1E" fontWeight="700" marginBottom="4px">
         MY PASSKEYS
       </Text>
-      {passKeys.map((passKey: string) => (
+      {passKeys.map((passKey: any) => (
         <PassKeyItem key={passKey.id} passKey={passKey} setPassKeyName={setPassKeyName} />
       ))}
     </Box>
