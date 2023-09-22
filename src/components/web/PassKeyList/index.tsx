@@ -53,7 +53,7 @@ function PassKeyItem({ passKey, setPassKeyName }: any) {
 
 export function PassKeySelect({ passKeys, onSelect }: any) {
   return (
-    <Box display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%">
+    <Box display="flex" alignItems="flex-start" pb="8" justifyContent="center" flexDirection="column" width="100%">
       {passKeys.map((passKey: any) => (
         <Box key={passKey.id} cursor="pointer" width="100%" padding="4px" borderRadius="4px" _hover={{ background: '#EDF2F7' }} onClick={() => onSelect(passKey)}>{passKey.name}</Box>
       ))}

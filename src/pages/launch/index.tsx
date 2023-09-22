@@ -14,21 +14,20 @@ import {
   ModalContent,
   ModalHeader
 } from '@chakra-ui/react';
-import CreateWalletIcon from '@/components/Icons/CreateWallet';
-import RecoverWalletIcon from '@/components/Icons/RecoverWallet';
 import TextBody from '@/components/web/TextBody';
-import storage from '@/lib/storage';
 import Button from '@/components/web/Button';
 import Logo from '@/components/web/Logo';
 import usePassKey from '@/hooks/usePasskey';
 import { PassKeySelect } from '@/components/web/PassKeyList';
 import { useCredentialStore } from '@/store/credential';
+import { useAddressStore } from '@/store/address';
 
 export default function Launch() {
   const { register, authenticate } = usePassKey();
   const { navigate } = useBrowser();
   const toast = useToast();
   const { credentials } = useCredentialStore();
+  const { addressList } = useAddressStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,12 +96,11 @@ export default function Launch() {
       <Logo direction="column" />
       <Box display="flex" flexDirection="column" alignItems="center" margin="50px 0" paddingBottom="50px">
         <Box display="flex" justifyContent="center" alignItems="center">
-          <Button disabled={isAuthing} loading={isAuthing} onClick={login} _styles={{ width: '282px', borderRadius: '40px', marginRight: '20px' }}>
+          {credentials.length && addressList.length  ? <Button disabled={isAuthing} loading={isAuthing} onClick={login} _styles={{ width: '282px', borderRadius: '40px', marginRight: '20px' }}>
             Login
-          </Button>
-          <Button disabled={isCreating} loading={isCreating} onClick={createWallet} _styles={{ width: '282px', borderRadius: '40px' }}>
+          </Button>:  <Button disabled={isCreating} loading={isCreating} onClick={createWallet} _styles={{ width: '282px', borderRadius: '40px' }}>
             Create new wallet
-          </Button>
+          </Button>}
         </Box>
         <TextBody color="#898989" marginTop="24px">
           Soul Wallet will create a smart contract wallet for you using passkeys.

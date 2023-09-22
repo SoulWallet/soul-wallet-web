@@ -16,6 +16,7 @@ export default function FindRoute({ children }: any) {
   const isTest = location.pathname.includes('test');
 
   const findRoute = async () => {
+    console.log('ready to find')
     const recovering = storage.getItem('recovering');
     if (isLaunch) {
       navigate('launch');
@@ -25,6 +26,8 @@ export default function FindRoute({ children }: any) {
       navigate('recover');
     } else if (!addressList.length) {
       navigate('launch');
+    }else{
+      navigate('wallet')
     }
   };
 
