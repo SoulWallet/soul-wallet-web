@@ -87,18 +87,12 @@ export default function SignPage() {
           sendTo,
         });
 
-        // if from dapp, return trsanction result
-        if (tabId) {
-          await signAndSend(userOp, payToken, tabId, false);
-          window.close();
-        } else {
-          await signAndSend(userOp, payToken, tabId, false);
-          toast({
-            title: 'Transaction sent.',
-            status: 'info',
-          });
-          navigate('wallet');
-        }
+        await signAndSend(userOp, payToken);
+        toast({
+          title: 'Transaction sent.',
+          status: 'info',
+        });
+        navigate('wallet');
       } else if (actionType === 'signMessage') {
         const msgToSign = getMessageType(data) === 'hash' ? data : ethers.toUtf8String(data);
 

@@ -65,7 +65,7 @@ export default function useWallet() {
       return requiredAmount;
     } else {
       // TODO, estimate fee could be avoided
-      await signAndSend(userOp, payToken, null, true);
+      await signAndSend(userOp, payToken);
       // IMPORTANT TODO, what if user don't wait?
       toggleActivatedChain(userOp.sender, selectedChainId);
     }
