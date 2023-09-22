@@ -89,8 +89,8 @@ export default function SignPage() {
 
         await signAndSend(userOp, payToken);
         toast({
-          title: 'Transaction sent.',
-          status: 'info',
+          title: 'Transaction success.',
+          status: 'success',
         });
         navigate('wallet');
       } else if (actionType === 'signMessage') {
