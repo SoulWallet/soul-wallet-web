@@ -16,6 +16,8 @@ import { useGuardianStore } from '@/store/guardian';
 import { ethers } from 'ethers';
 import { L1KeyStore } from '@soulwallet_test/sdk';
 import { toHex } from '@/lib/tools';
+import useSdk from '@/hooks/useSdk';
+import { useAddressStore } from '@/store/address';
 
 export default function Create() {
   const { navigate } = useBrowser();
@@ -23,9 +25,12 @@ export default function Create() {
   const { chainConfig } = useConfig();
   const { credentials, changeCredentialName } = useCredentialStore();
   const [isCreating, setIsCreating] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const { calcGuardianHash, getSlot } = useKeystore();
-  const { setSlotInitInfo } = useGuardianStore();
+  const { setSlotInitInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { setSelectedAddress, setAddressList } = useAddressStore();
+  const { calcWalletAddress } = useSdk();
   const toast = useToast();
 
   const onStepChange = (i: number) => {
@@ -61,6 +66,15 @@ export default function Create() {
     setIsReady(true)
   }
 
+  const createInitialWallet = async () => {
+    const newAddress = await calcWalletAddress(0);
+    const walletName = `Account 1`;
+    setAddressList([{ title: walletName, address: newAddress, activatedChains: [], allowedOrigins: [] }]);
+    console.log('createInitialWallet', newAddress);
+    setSelectedAddress(newAddress);
+    setEditingGuardiansInfo(null);
+  };
+
   const createInitialSlotInfo = async () => {
     const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
     const initialGuardianHash = calcGuardianHash([], 0);
@@ -76,7 +90,20 @@ export default function Create() {
   };
 
   const onConfirm = async () => {
-    createInitialSlotInfo()
+    try {
+      setIsConfirming(true)
+      await createInitialSlotInfo()
+      await createInitialWallet()
+      setIsConfirming(false)
+      navigate('wallet')
+    } catch (error: any) {
+      setIsConfirming(false)
+      console.log('error', error.message)
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
   }
 
   if (isReady) {
@@ -103,7 +130,7 @@ export default function Create() {
           <PassKeyList passKeys={credentials} setPassKeyName={setPassKeyName} />
         </Box>
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-          <Button onClick={onConfirm} _styles={{ width: '282px', borderRadius: '40px' }}>
+          <Button loading={isConfirming} disabled={isConfirming} onClick={onConfirm} _styles={{ width: '282px', borderRadius: '40px' }}>
             Confirm
           </Button>
           <TextButton onClick={createWallet}  disabled={isCreating} loading={isCreating}>Add another passkey</TextButton>
