@@ -29,7 +29,7 @@ import GuardiansTips from '@/components/web/GuardiansTips';
 import { useAddressStore } from '@/store/address';
 import { useGuardianStore } from '@/store/guardian';
 import useConfig from '@/hooks/useConfig';
-import { L1KeyStore } from '@soulwallet/sdk';
+import { L1KeyStore } from '@soulwallet_test/sdk';
 import { nanoid } from 'nanoid';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];

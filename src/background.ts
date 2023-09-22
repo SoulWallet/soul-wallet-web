@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { openWindow, checkAllowed, checkShouldInject, getSelectedChainItem } from '@/lib/tools';
 import { executeTransaction } from '@/lib/tx';
-import { UserOpUtils } from '@soulwallet/sdk';
+import { UserOpUtils } from '@soulwallet_test/sdk';
 import { notify } from '@/lib/tools';
 
 export default {

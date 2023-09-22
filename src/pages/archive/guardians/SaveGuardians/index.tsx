@@ -22,7 +22,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useAddressStore } from '@/store/address';
 import { useGuardianStore } from '@/store/guardian';
 import useKeystore from '@/hooks/useKeystore';
-import { L1KeyStore } from '@soulwallet/sdk';
+import { L1KeyStore } from '@soulwallet_test/sdk';
 import config from '@/config';
 import api from '@/lib/api';
 import { ethers } from 'ethers';

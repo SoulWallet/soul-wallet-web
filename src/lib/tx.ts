@@ -1,4 +1,4 @@
-import { SoulWallet, Bundler } from '@soulwallet/sdk';
+import { SoulWallet, Bundler } from '@soulwallet_test/sdk';
 import { notify } from '@/lib/tools';
 import { printUserOp } from '@/lib/tools';
 

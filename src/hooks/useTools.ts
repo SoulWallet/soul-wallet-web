@@ -4,9 +4,9 @@ import QRCode from 'qrcode';
 import { GuardianItem } from '@/lib/type';
 import IconSend from '@/assets/activities/send.svg';
 import IconContract from '@/assets/activities/contract.svg';
-import { DecodeUserOp, DecodeResult } from '@soulwallet/decoder';
+import { DecodeUserOp, DecodeResult } from '@soulwallet_test/decoder';
 import { useToast } from '@chakra-ui/react';
-import { UserOperation } from '@soulwallet/sdk';
+import { UserOperation } from '@soulwallet_test/sdk';
 
 interface IDecodedData extends Partial<DecodeResult> {
   functionName?: string;

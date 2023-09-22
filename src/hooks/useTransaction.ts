@@ -7,7 +7,7 @@ import BN from 'bignumber.js';
 import useKeyring from './useKeyring';
 import Erc20ABI from '../contract/abi/ERC20.json';
 import { useAddressStore } from '@/store/address';
-import { Transaction } from '@soulwallet/sdk';
+import { Transaction } from '@soulwallet_test/sdk';
 import useBrowser from './useBrowser';
 
 export default function useTransaction() {
