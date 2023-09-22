@@ -117,8 +117,8 @@ export default function usePasskey() {
     };
   };
 
-  const login = async (credentialIds: string[], challenge: string) => {
-    const authentication = await client.authenticate(credentialIds, challenge);
+  const authenticate = async (credentialId: string, challenge: string) => {
+    const authentication = await client.authenticate([credentialId], challenge);
     console.log('authentication: ', authentication);
   };
 
@@ -126,7 +126,7 @@ export default function usePasskey() {
     decodeDER,
     register,
     sign,
-    login,
+    authenticate,
     getCoordinates,
   };
 }
