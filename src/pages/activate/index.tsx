@@ -77,11 +77,11 @@ export default function ActivateWallet() {
   };
 
   useEffect(() => {
-    if (!account || !payToken || !selectedAddress) {
+    if (!payToken || !selectedAddress) {
       return;
     }
     onPayTokenChange();
-  }, [payToken, account, selectedAddress]);
+  }, [payToken, selectedAddress]);
 
   const checkBalance = async () => {
     const { chainIdHex, paymasterTokens } = selectedChainItem;

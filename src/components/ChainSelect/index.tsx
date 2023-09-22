@@ -10,7 +10,6 @@ export default function ChainSelect() {
   const { chainList, setSelectedChainId, selectedChainId } = useChainStore();
   const { navigate } = useBrowser();
   const { selectedChainItem } = useConfig();
-  console.log('sele', selectedChainItem);
   return (
     <Menu>
       <MenuButton data-testid="btn-chain-select">

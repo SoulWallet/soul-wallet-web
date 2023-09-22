@@ -18,18 +18,6 @@ export default class KeyStore {
   }
 
   /**
-   * get the EOA address
-   * @returns EOA address, null is failed or no keystore
-   */
-  public async getAddress(): Promise<string> {
-    const val = storage.getJson(this.keyStoreKey);
-    if (val && val.address) {
-      return ethers.getAddress(val.address);
-    }
-    return '';
-  }
-
-  /**
    * Get signer
    */
   public async getSigner(): Promise<ethers.Signer> {
@@ -74,6 +62,11 @@ export default class KeyStore {
   public async delete(): Promise<void> {
     storage.clear();
   }
+
+  public async getAddress(): Promise<void> {
+   
+  }
+
 
   /**
    * sign a typed data

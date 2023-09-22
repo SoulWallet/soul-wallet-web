@@ -69,5 +69,8 @@ export default {
   soulScanURL: 'https://api-dev.soulwallet.io/opapi',
   officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
   /* @vite-ignore */
-  chainList: [ArbConfig, OpConfig, GoerliConfig],
+  chainList: [
+    // ArbConfig,
+    //  OpConfig, 
+     GoerliConfig],
 };

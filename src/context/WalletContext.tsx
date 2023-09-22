@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, createRef, useMemo } from 'react';
+import React, { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
 import SignModal from '@/components/SignModal';
 import useKeyring from '@/hooks/useKeyring';

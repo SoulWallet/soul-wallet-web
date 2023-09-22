@@ -1,13 +1,17 @@
-import { base64ToBigInt } from '@/lib/tools';
+import { base64ToBigInt, base64ToBuffer, uint8ArrayToHexString } from '@/lib/tools';
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
 import { AsnParser } from '@peculiar/asn1-schema';
 import { useCredentialStore } from '@/store/credential';
 
+const base64urlTobase64 = (base64url: string) => {
+  return base64url.replace(/\-/g, '+').replace(/_/g, '/');
+}
+
 export default function usePasskey() {
   const { addCredential, credentials } = useCredentialStore();
   const decodeDER = (signature: string) => {
-    const derSignature = Buffer.from(signature, 'base64');
+    const derSignature = base64ToBuffer(signature);
     const parsedSignature = AsnParser.parse(derSignature, ECDSASigValue);
     let rBytes = new Uint8Array(parsedSignature.r);
     let sBytes = new Uint8Array(parsedSignature.s);
@@ -17,8 +21,8 @@ export default function usePasskey() {
     if (sBytes.length === 33 && sBytes[0] === 0) {
       sBytes = sBytes.slice(1);
     }
-    const r = BigInt('0x' + Buffer.from(rBytes).toString('hex')).toString(16);
-    const s = BigInt('0x' + Buffer.from(sBytes).toString('hex')).toString(16);
+    const r = `0x${uint8ArrayToHexString(rBytes).padStart(64, '0')}`;
+    const s = `0x${uint8ArrayToHexString(sBytes).padStart(64, '0')}`;
 
     return {
       r,
@@ -45,8 +49,8 @@ export default function usePasskey() {
     const Qx = base64ToBigInt(jwk.x.replace(/\-/g, '+').replace(/_/g, '/'));
     const Qy = base64ToBigInt(jwk.y.replace(/\-/g, '+').replace(/_/g, '/'));
     return {
-      x: `0x${Qx.toString(16)}`,
-      y: `0x${Qy.toString(16)}`,
+      x: `0x${Qx.toString(16).padStart(64, '0')}`,
+      y: `0x${Qy.toString(16).padStart(64, '0')}`,
     };
   };
 
@@ -85,12 +89,11 @@ export default function usePasskey() {
     const authenticatorData = `0x${base64ToBigInt(
       authentication.authenticatorData.replace(/\-/g, '+').replace(/_/g, '/'),
     ).toString(16)}`;
-    const clientData = JSON.parse(atob(authentication.clientData.replace(/\-/g, '+').replace(/_/g, '/')));
-      console.log('decoded clientData',  clientData);
-      const clientDataSuffix = JSON.stringify({
-        origin: clientData.origin,
-        crossOrigin: false,
-      })
+    const clientData = atob(authentication.clientData.replace(/\-/g, '+').replace(/_/g, '/'));
+
+    const sliceIndex = clientData.indexOf(`","origin"`);
+    const clientDataSuffix = clientData.slice(sliceIndex)
+    console.log('decoded clientData',  clientData, clientDataSuffix);
     const signature = authentication.signature.replace(/\-/g, '+').replace(/_/g, '/');
     console.log(`signature: ${signature}`);
     const { r, s } = decodeDER(signature);

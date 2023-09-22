@@ -132,6 +132,21 @@ export const base64ToBigInt = (base64String: string) => {
   return result;
 };
 
+export const base64ToBuffer = (base64String: string) => {
+  let binaryString = atob(base64String);
+  let len = binaryString.length;
+  let bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+
+export const uint8ArrayToHexString = (byteArray: Uint8Array) => {
+  return Array.from(byteArray).map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
 export const printUserOp = (userOp: any) => {
   console.log(
     JSON.stringify([

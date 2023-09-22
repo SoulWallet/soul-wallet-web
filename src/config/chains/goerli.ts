@@ -32,9 +32,9 @@ export default {
   contracts: {
     l1Keystore: '0x76a43ef7cc3b49736951759494d2aee8cae1cdec',
     keyStoreModuleProxy: '0x59b84bfaaa906a84152ded63d964cff913308921',
-    soulWalletFactory: '0x576c13ccb03c21df9eeca0832719f0f6ffdc934b',
-    defaultCallbackHandler: '0xb8466fa7777fbc8046fe92adab58736def8b4c8f',
-    securityControlModule: '0x7a711e826b6383d6791cb43bfc0a4b72a2940183',
+    soulWalletFactory: '0xace0d45d3c2a2cb1b6a799bb7442141add3f3914',
+    defaultCallbackHandler: '0xd76ad4681b243633b564cd4d0928bc98affd5e08',
+    securityControlModule: '0x09a7151602cc0b466fd00f3a16ddcaec5534bfb0',
     entryPoint: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789',
     paymaster: '0xee4d0d07318dd076d588bccdf2383275b499f29f',
   },
