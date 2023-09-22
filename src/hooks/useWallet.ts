@@ -76,7 +76,7 @@ export default function useWallet() {
     return soulAbi.encodeFunctionData('setGuardian(bytes32,bytes32,bytes32)', [slot, guardianHash, keySignature]);
   };
 
-  const signAndSend = async (userOp: UserOperation, payToken?: string, tabId?: any, waitFinish?: boolean) => {
+  const signAndSend = async (userOp: UserOperation, payToken?: string, credentialIndex: number = 0) => {
     // checkpaymaster
     if (payToken && payToken !== ethers.ZeroAddress && userOp.paymasterAndData === '0x') {
       const paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
@@ -94,7 +94,7 @@ export default function useWallet() {
     const packedUserOpHash = packedUserOpHashRet.OK;
 
     // IMPORT TODO, use the first credential for now
-    const signatureData = await sign(credentials[0], packedUserOpHash.packedUserOpHash);
+    const signatureData = await sign(credentials[credentialIndex], packedUserOpHash.packedUserOpHash);
 
     const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, packedUserOpHash.validationData);
 

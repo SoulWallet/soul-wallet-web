@@ -61,9 +61,10 @@ export default function usePasskey() {
     // get total registered nums and generate name
     const randomChallenge = btoa('1234567890');
     const credentialName = `Passkey ${credentials.length + 1}`;
-    const registration = await client.register(credentialName, randomChallenge);
+    const registration = await client.register(credentialName, randomChallenge,{
+      authenticatorType: "both",
+    });
     console.log('Registered: ', JSON.stringify(registration, null, 2));
-
     // verify locally
     // const registrationParsed = await server.verifyRegistration(registration, {
     //     challenge: randomChallenge,
