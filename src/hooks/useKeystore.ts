@@ -31,7 +31,8 @@ export default function useKeystore() {
     initialGuardianHash: string,
     initialGuardianSafePeriod: number = L1KeyStore.days * 2,
   ) => {
-    return L1KeyStore.getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod);
+    return ''
+    // return L1KeyStore.getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod);
   };
 
   const getKeyStoreInfo = (slot: string) => {

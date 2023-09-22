@@ -51,8 +51,7 @@ export const WalletContextProvider = ({ children }: any) => {
   }, [selectedChainItem]);
 
   const getAccount = async () => {
-    const res = await keystore.getAddress();
-    setAccount(res);
+   
   };
 
   const replaceAddress = async () => {

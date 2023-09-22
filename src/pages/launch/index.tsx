@@ -33,7 +33,7 @@ export default function Launch() {
   const [isCreating, setIsCreating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const login = async (credential) => {
+  const login = async () => {
     if (credentials.length) {
       toggleModal()
     } else {
@@ -44,7 +44,7 @@ export default function Launch() {
     }
   }
 
-  const auth = async (credential) => {
+  const auth = async (credential:any) => {
     try {
       setIsAuthing(true);
       const credentialId = credential.id;
@@ -82,7 +82,7 @@ export default function Launch() {
     }
   }
 
-  const onSelectPassKey = async (passKey) => {
+  const onSelectPassKey = async (passKey:any) => {
     toggleModal()
     auth(passKey)
     console.log('onSelectPassKey', passKey)

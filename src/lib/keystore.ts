@@ -53,7 +53,6 @@ export default class KeyStore {
 
   public async replaceAddress(): Promise<void> {
     const stagingKeystore = storage.getItem('stagingKeystore');
-    const stagingPw = storage.getItem('stagingPw');
     storage.removeItem('stagingAccount');
     storage.removeItem('recoverOpHash');
     storage.setItem(this.keyStoreKey, stagingKeystore || '');
@@ -62,11 +61,6 @@ export default class KeyStore {
   public async delete(): Promise<void> {
     storage.clear();
   }
-
-  public async getAddress(): Promise<void> {
-   
-  }
-
 
   /**
    * sign a typed data
