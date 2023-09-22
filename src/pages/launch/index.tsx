@@ -13,20 +13,20 @@ import usePassKey from '@/hooks/usePasskey';
 import { useCredentialStore } from '@/store/credential';
 
 export default function Launch() {
-  const { register, authenticate } = usePassKey();
+  const { register, authenticate, login } = usePassKey();
   const { navigate } = useBrowser();
   const toast = useToast();
   const { credentials } = useCredentialStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
-  const login = async () => {
+  const auth = async () => {
     if (credentials.length) {
       try {
         setIsAuthing(true);
-        const credentialId = credentials[0].id;
+        const credentialIds = credentials.map((credential: any) => credentials.id);
         const challenge = btoa('1234567890');
-        await authenticate(credentialId, challenge);
+        await login(credentialIds, challenge);
         setIsAuthing(false);
       } catch (error: any) {
         console.log('error', error.message);
@@ -66,7 +66,7 @@ export default function Launch() {
       <Logo direction="column" />
       <Box display="flex" flexDirection="column" alignItems="center" margin="50px 0" paddingBottom="50px">
         <Box display="flex" justifyContent="center" alignItems="center">
-          <Button disabled={isAuthing} loading={isAuthing} onClick={login} _styles={{ width: '282px', borderRadius: '40px', marginRight: '20px' }}>
+          <Button disabled={isAuthing} loading={isAuthing} onClick={auth} _styles={{ width: '282px', borderRadius: '40px', marginRight: '20px' }}>
             Login
           </Button>
           <Button disabled={isCreating} loading={isCreating} onClick={createWallet} _styles={{ width: '282px', borderRadius: '40px' }}>
