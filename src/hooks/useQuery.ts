@@ -6,6 +6,7 @@ import useWalletContext from '../context/hooks/useWalletContext';
 import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
+import {SignkeyType} from '@soulwallet_test/sdk'
 import { addPaymasterAndData } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useBalanceStore } from '@/store/balance';
@@ -85,7 +86,7 @@ export default function useQuery() {
     }
 
     // get gas limit
-    const gasLimit = await soulWallet.estimateUserOperationGas(userOp);
+    const gasLimit = await soulWallet.estimateUserOperationGas(userOp, SignkeyType.P256);
 
     if (gasLimit.isErr()) {
       throw new Error(gasLimit.ERR.message);

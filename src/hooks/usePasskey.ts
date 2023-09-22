@@ -44,11 +44,9 @@ export default function usePasskey() {
     const jwk: any = await crypto.subtle.exportKey('jwk', publicKey);
     const Qx = base64ToBigInt(jwk.x.replace(/\-/g, '+').replace(/_/g, '/'));
     const Qy = base64ToBigInt(jwk.y.replace(/\-/g, '+').replace(/_/g, '/'));
-    console.log(`Qx: 0x${Qx.toString(16)}`);
-    console.log(`Qy: 0x${Qy.toString(16)}`);
     return {
-      Qx,
-      Qy,
+      x: `0x${Qx.toString(16)}`,
+      y: `0x${Qy.toString(16)}`,
     };
   };
 
@@ -59,14 +57,6 @@ export default function usePasskey() {
     const registration = await client.register(credentialName, randomChallenge);
     console.log('Registered: ', JSON.stringify(registration, null, 2));
 
-    const credentialKey = {
-      id: registration.credential.id,
-      publicKey: registration.credential.publicKey,
-      algorithm: 'ES256',
-      name: credentialName,
-    };
-
-    addCredential(credentialKey);
     // verify locally
     // const registrationParsed = await server.verifyRegistration(registration, {
     //     challenge: randomChallenge,
@@ -74,19 +64,62 @@ export default function usePasskey() {
     // });
     // console.log('Parsed Registration: ', JSON.stringify(registrationParsed, null, 2));
 
-    const coords = await getCoordinates(credentialKey.publicKey);
+    const coords = await getCoordinates(registration.credential.publicKey);
 
-    console.log('coords', coords);
+    const credentialKey = {
+      id: registration.credential.id,
+      publicKey: registration.credential.publicKey,
+      algorithm: 'ES256',
+      name: credentialName,
+      coords,
+    };
+
+    addCredential(credentialKey);
   };
 
-  const authenticate = async (credentialId: string, challenge: string) => {
-    const authentication = await client.authenticate([credentialId], challenge);
-    console.log('authentication: ', authentication);
+  const sign = async (credential: any, challenge: string) => {
+    console.log('Authenticating...');
+    let authentication = await client.authenticate([credential.id], challenge, {
+      userVerification: 'required',
+    });
+    const authenticatorData = `0x${base64ToBigInt(
+      authentication.authenticatorData.replace(/\-/g, '+').replace(/_/g, '/'),
+    ).toString(16)}`;
+    const clientData = JSON.parse(atob(authentication.clientData.replace(/\-/g, '+').replace(/_/g, '/')));
+      console.log('decoded clientData',  clientData);
+      const clientDataSuffix = JSON.stringify({
+        origin: clientData.origin,
+        crossOrigin: false,
+      })
+    const signature = authentication.signature.replace(/\-/g, '+').replace(/_/g, '/');
+    console.log(`signature: ${signature}`);
+    const { r, s } = decodeDER(signature);
+    const { x, y } = credential.coords;
+
+    /*
+        authenticatorData
+        clientData
+        credentialId
+        signature
+    */
+    // const authenticationParsed = await server.verifyAuthentication(authentication, credentialKey, expected);
+    // console.log(JSON.stringify(authenticationParsed, null, 2));
+
+    return {
+      publicKey: {
+        x,
+        y,
+      },
+      r,
+      s,
+      authenticatorData,
+      clientDataSuffix,
+    };
   };
 
   return {
     decodeDER,
     register,
-    authenticate,
+    sign,
   };
 }

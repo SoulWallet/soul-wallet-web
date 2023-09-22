@@ -13,30 +13,25 @@ import { UserOpUtils, UserOperation } from '@soulwallet_test/sdk';
 import useConfig from './useConfig';
 import { useChainStore } from '@/store/chain';
 import bg from '@/background';
+import usePasskey from './usePasskey';
+import { useCredentialStore } from '@/store/credential';
 
 export default function useWallet() {
   const { account } = useWalletContext();
   const { toggleActivatedChain } = useAddressStore();
   const { calcGuardianHash } = useKeystore();
   const { selectedChainId } = useChainStore();
+  const {sign} = usePasskey();
   const { getFeeCost, getPrefund } = useQuery();
   const { chainConfig } = useConfig();
   const { guardians, threshold, slotInitInfo } = useGuardianStore();
+  const {credentials} = useCredentialStore();
   const keystore = useKeyring();
   const { soulWallet } = useSdk();
 
-  const getIsOwner = (signerKey: string) => {};
-
-  /**
-   * Get activate initial params by wallet address
-   * @param address
-   */
-  const getInitialParams = async (address: string) => {};
-
   const activateWallet = async (index: number, payToken: string, estimateCost: boolean = false) => {
-    const { initialKey, initialGuardianHash } = slotInitInfo;
-    const initialKeyAddress = `0x${initialKey.slice(-40)}`;
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeyAddress, initialGuardianHash);
+    const { initialKeys, initialGuardianHash } = slotInitInfo;
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash);
 
     if (userOpRet.isErr()) {
       throw new Error(userOpRet.ERR.message);
@@ -98,13 +93,10 @@ export default function useWallet() {
     }
     const packedUserOpHash = packedUserOpHashRet.OK;
 
-    const signature = await keystore.sign(packedUserOpHash.packedUserOpHash);
+    // IMPORT TODO, use the first credential for now
+    const signatureData = await sign(credentials[0],packedUserOpHash.packedUserOpHash);
 
-    if (!signature) {
-      throw new Error('Failed to sign');
-    }
-
-    const packedSignatureRet = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
+    const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, packedUserOpHash.validationData);
 
     if (packedSignatureRet.isErr()) {
       throw new Error(packedSignatureRet.ERR.message);
@@ -112,7 +104,7 @@ export default function useWallet() {
 
     userOp.signature = packedSignatureRet.OK;
 
-    const resultPromise = await bg.execute(userOp, chainConfig);
+    await bg.execute(userOp, chainConfig);
   };
 
   return {

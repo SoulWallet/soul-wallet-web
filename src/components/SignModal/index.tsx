@@ -2,6 +2,7 @@ import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react
 import useQuery from '@/hooks/useQuery';
 import useTools from '@/hooks/useTools';
 import { useChainStore } from '@/store/chain';
+import {SignkeyType} from '@soulwallet_test/sdk'
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import { ethers } from 'ethers';
@@ -78,7 +79,7 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
       let userOp = userOpRet.OK;
 
       // set preVerificationGas
-      const gasLimit = await soulWallet.estimateUserOperationGas(userOp);
+      const gasLimit = await soulWallet.estimateUserOperationGas(userOp, SignkeyType.P256);
 
       if (gasLimit.isErr()) {
         throw new Error(gasLimit.ERR.message);

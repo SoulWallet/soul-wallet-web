@@ -27,11 +27,11 @@ export default function useKeystore() {
    *
    */
   const getSlot = (
-    initialKey: string,
+    initialKeys: string[],
     initialGuardianHash: string,
     initialGuardianSafePeriod: number = L1KeyStore.days * 2,
   ) => {
-    return L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
+    return L1KeyStore.getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod);
   };
 
   const getKeyStoreInfo = (slot: string) => {
@@ -39,8 +39,8 @@ export default function useKeystore() {
   };
 
   const getActiveGuardianHash = async () => {
-    const { initialKey, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
-    const slot = getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
+    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
+    const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod);
     const now = Math.floor(Date.now() / 1000);
     const res = await getKeyStoreInfo(slot);
     if (res.isErr()) {
@@ -63,12 +63,7 @@ export default function useKeystore() {
   };
 
   const getReplaceGuardianInfo = async (newGuardianHash: string) => {
-    const { initialKey, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
-    // const initialKeyAddress = `0x${initialKey.slice(-40)}`;
-    // console.log('getReplaceGuardianInfo', initialKeyAddress, account)
-    // if (initialKeyAddress.toLowerCase() !== account.toLowerCase()) {
-    //     return;
-    // }
+    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
     const ret = await keystore.getTypedData(KeyStoreTypedDataType.TYPE_HASH_SET_GUARDIAN, slot, newGuardianHash);
     if (ret.isErr()) {
       throw new Error(ret.ERR.message);
@@ -81,18 +76,13 @@ export default function useKeystore() {
     return {
       newGuardianHash,
       keySignature,
-      initialKey,
+      initialKeys,
       initialGuardianHash,
       initialGuardianSafePeriod,
     };
   };
 
   const getCancelSetGuardianInfo = async () => {
-    // const { initialKey } = slotInitInfo;
-    // const initialKeyAddress = `0x${initialKey.slice(-40)}`;
-    // if (initialKeyAddress.toLowerCase() !== account.toLowerCase()) {
-    //     return;
-    // }
     const ret = await keystore.getTypedData(KeyStoreTypedDataType.TYPE_HASH_CANCEL_SET_GUARDIAN, slot);
     console.log('getCancelSetGuardianInfo', ret);
     if (ret.isErr()) {

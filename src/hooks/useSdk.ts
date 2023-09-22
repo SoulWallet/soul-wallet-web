@@ -29,12 +29,11 @@ export default function useSdk() {
    */
   const calcWalletAddress = async (index: number) => {
     console.log('calcWalletAddress', getSlotInitInfo());
-    const { initialKey, initialGuardianHash, initialGuardianSafePeriod } = getSlotInitInfo();
-    const initialKeyAddress = `0x${initialKey.slice(-40)}`;
+    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = getSlotInitInfo();
     // TODO, talk with cejey
     const wAddress = await soulWallet.calcWalletAddress(
       index,
-      initialKeyAddress,
+      initialKeys,
       initialGuardianHash,
       Number(initialGuardianSafePeriod),
     );

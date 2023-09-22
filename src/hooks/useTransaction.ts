@@ -11,13 +11,7 @@ import { Transaction } from '@soulwallet_test/sdk';
 import useBrowser from './useBrowser';
 
 export default function useTransaction() {
-  const { selectedAddress } = useAddressStore();
-  const keyStore = useKeyring();
   const { navigateToSign } = useBrowser();
-
-  const signTransaction = async (txData: any) => {
-    return await keyStore.sign(txData);
-  };
 
   const sendEth = async (to: string, amount: string) => {
     const amountInWei = new BN(amount).shiftedBy(18).toString();

@@ -4,7 +4,7 @@ import { Box, Input } from '@chakra-ui/react';
 import { useCredentialStore } from '@/store/credential';
 
 export default function Test() {
-  const { register, authenticate } = usePasskey();
+  const { register, sign } = usePasskey();
   const { credentials } = useCredentialStore();
 
   const getCredentials = () => {
@@ -25,7 +25,7 @@ export default function Test() {
       </Box>
       {credentials.map((item: any) => (
         <Box bg="#fff" rounded={'4px'} my="4" p="4" key={item.id}>
-          {JSON.stringify(item)} <Button onClick={() => authenticate(item.id, '111')}>Login</Button>
+          {JSON.stringify(item)} <Button onClick={() => sign(item.id, '111')}>Login</Button>
         </Box>
       ))}
     </Box>
