@@ -1,27 +1,49 @@
-import React, { ReactNode, useMemo, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import FullscreenContainer from '@/components/FullscreenContainer';
-import { Box } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
 import Heading1 from '@/components/web/Heading1';
 import TextBody from '@/components/web/TextBody';
 import Button from '@/components/web/Button';
 import TextButton from '@/components/web/TextButton';
 import Steps from '@/components/web/Steps';
 import PassKeyList from '@/components/web/PassKeyList';
+import usePassKey from '@/hooks/usePasskey';
+import { useCredentialStore } from '@/store/credential';
 
 export default function Create() {
-  const [passKeys, setPassKeys] = useState([{}]);
+  const { register } = usePassKey();
+  const { credentials, changeCredentialName } = useCredentialStore();
+  const [isCreating, setIsCreating] = useState(false);
+  const toast = useToast();
 
   const onStepChange = (i: number) => {
     if (i == 0) {
-      setPassKeys([{}]);
+      // setPassKeys([{}]);
     }
   };
 
-  const addPassKey = () => {
-    setPassKeys([{}, {}]);
+  const setPassKeyName = ({ id, name }) => {
+    changeCredentialName(id, name);
   };
+  console.log('credentials', credentials)
 
-  if (passKeys.length > 1) {
+  const createWallet = async () => {
+    try {
+      setIsCreating(true);
+      await register();
+      setIsCreating(false);
+      // navigate('create');
+    } catch (error: any) {
+      console.log('error', error.message);
+      setIsCreating(false);
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }
+
+  if (credentials.length > 1) {
     return (
       <FullscreenContainer>
         <Box width="480px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -30,7 +52,7 @@ export default function Create() {
               backgroundColor="#1E1E1E"
               foregroundColor="white"
               count={3}
-              activeIndex={1}
+              activeIndex={2}
               marginTop="24px"
               onStepChange={onStepChange}
               showBackButton
@@ -41,13 +63,13 @@ export default function Create() {
           </Box>
         </Box>
         <Box margin="48px 0">
-          <PassKeyList passKeys={passKeys} />
+          <PassKeyList passKeys={credentials} setPassKeyName={setPassKeyName} />
         </Box>
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
           <Button onClick={() => {}} _styles={{ width: '282px', borderRadius: '40px' }}>
             Confirm
           </Button>
-          <TextButton onClick={() => {}}>Add another passkey</TextButton>
+          <TextButton onClick={createWallet}  disabled={isCreating} loading={isCreating}>Add another passkey</TextButton>
         </Box>
       </FullscreenContainer>
     );
@@ -78,11 +100,11 @@ export default function Create() {
         </Box>
       </Box>
       <Box margin="48px 0">
-        <PassKeyList passKeys={passKeys} />
+        <PassKeyList passKeys={credentials} setPassKeyName={setPassKeyName} />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-        <Button onClick={addPassKey} _styles={{ width: '282px', borderRadius: '40px' }}>
-          Add another passkey
+        <Button onClick={createWallet} _styles={{ width: '282px', borderRadius: '40px' }} disabled={isCreating} loading={isCreating}>
+          {isCreating ? 'Adding another passkey' : 'Add another passkey'}
         </Button>
         <TextButton onClick={() => {}}>Skip for now</TextButton>
       </Box>
