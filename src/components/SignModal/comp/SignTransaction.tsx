@@ -27,7 +27,6 @@ export default function SignTransaction({
   return (
     <>
       <Text fontSize="20px" fontWeight="800" color="#1e1e1e">
-        {/* Sign Transaction */}
         Review
       </Text>
 

@@ -6,6 +6,7 @@ import config from '@/config';
 import { Box, Text, Flex, Link } from '@chakra-ui/react';
 import PageTitle from '@/components/PageTitle';
 import SettingFooter from './comp/SettingFooter';
+import MobileContainer from '@/components/MobileContainer';
 
 const SettingBox = ({ children, ...restProps }: any) => (
   <Flex
@@ -66,9 +67,9 @@ const SettingMainpage = () => {
 
 export default function Setting() {
   return (
-    <>
+    <MobileContainer>
       <SettingMainpage />
       <SettingFooter />
-    </>
+    </MobileContainer>
   );
 }

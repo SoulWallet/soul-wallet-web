@@ -19,7 +19,16 @@ export default function SignPage() {
   const params = new URLSearchParams(location.search);
 
   // const params = useSearchParams();
-  const [searchParams, setSearchParams] = useState<any>({});
+  const [searchParams, setSearchParams] = useState<any>({
+    actionType: params.get('action'),
+    tabId: params.get('tabId'),
+    origin: params.get('origin'),
+    txns: params.get('txns'),
+    data: params.get('data'),
+    sendTo: params.get('sendTo'),
+    id: params.get('id'),
+    targetChainId: params.get('targetChainId'),
+  });
   const { selectedAddress, toggleAllowedOrigin } = useAddressStore();
   const { setSelectedChainId } = useChainStore();
   const toast = useToast();
@@ -27,19 +36,6 @@ export default function SignPage() {
   const { navigate } = useBrowser();
   const signModal = createRef<any>();
   const keyring = useKeyring();
-
-  useEffect(() => {
-    setSearchParams({
-      actionType: params.get('action'),
-      tabId: params.get('tabId'),
-      origin: params.get('origin'),
-      txns: params.get('txns'),
-      data: params.get('data'),
-      sendTo: params.get('sendTo'),
-      id: params.get('id'),
-      targetChainId: params.get('targetChainId'),
-    });
-  }, [params]);
 
   /**
    * Determine what data user want
@@ -172,7 +168,6 @@ export default function SignPage() {
 
   return (
     <MobileContainer>
-      {/* <img src={LogoLoading} /> */}
       <SignModal ref={signModal} />
     </MobileContainer>
   );

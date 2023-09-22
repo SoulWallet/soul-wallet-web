@@ -247,7 +247,7 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
             h="full"
             zIndex={'20'}
             position={'absolute'}
-            w="360px"
+            w="100%"
             top="0"
             bottom={'0'}
             left={'0'}
