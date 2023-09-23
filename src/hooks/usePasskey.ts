@@ -36,7 +36,10 @@ export default function usePasskey() {
   };
 
   const getCoordinates = async (credentialPublicKey: string) => {
+    console.log('step 1')
     const publicKeyBinary = Uint8Array.from(atob(base64urlTobase64(credentialPublicKey)), (c) => c.charCodeAt(0));
+    console.log('step 2')
+
     const publicKey = await crypto.subtle.importKey(
       'spki',
       publicKeyBinary,
@@ -47,10 +50,17 @@ export default function usePasskey() {
       true,
       ['verify'],
     );
+    console.log('step 3')
 
     const jwk: any = await crypto.subtle.exportKey('jwk', publicKey);
+    console.log('step 4')
+
     const Qx = base64ToBigInt(base64urlTobase64(jwk.x));
+    console.log('step 5')
+
     const Qy = base64ToBigInt(base64urlTobase64(jwk.y));
+    console.log('step 6')
+
     return {
       x: `0x${Qx.toString(16).padStart(64, '0')}`,
       y: `0x${Qy.toString(16).padStart(64, '0')}`,
@@ -73,6 +83,8 @@ export default function usePasskey() {
     // console.log('Parsed Registration: ', JSON.stringify(registrationParsed, null, 2));
 
     const coords = await getCoordinates(registration.credential.publicKey);
+
+    console.log('coords', coords)
 
     const credentialKey = {
       id: registration.credential.id,

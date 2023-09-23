@@ -53,6 +53,7 @@ export default function Create() {
       setIsCreating(false);
       // navigate('create');
     } catch (error: any) {
+      console.log('ERR', error)
       console.log('error', error.message);
       setIsCreating(false);
       toast({
