@@ -54,7 +54,7 @@ export default function Create() {
       // navigate('create');
     } catch (error: any) {
       console.log('ERR', error)
-      console.log('error', error.message);
+      console.log('error', error);
       setIsCreating(false);
       toast({
         title: error.message,
@@ -99,7 +99,7 @@ export default function Create() {
       navigate('wallet')
     } catch (error: any) {
       setIsConfirming(false)
-      console.log('error', error.message)
+      console.log('error', error)
       toast({
         title: error.message,
         status: 'error',

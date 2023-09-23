@@ -119,7 +119,7 @@ const GuardiansChecking = () => {
       setLoaded(true);
       console.log('recoveryRecordID', result, guardianSignatures);
     } catch (error: any) {
-      console.log('error', error.message);
+      console.log('error', error);
     }
   };
 

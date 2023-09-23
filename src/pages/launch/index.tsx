@@ -56,7 +56,7 @@ export default function Launch() {
       });
       navigate('wallet')
     } catch (error: any) {
-      console.log('error', error.message);
+      console.log('error', error);
       setIsAuthing(false);
       toast({
         title: error.message,
@@ -72,7 +72,7 @@ export default function Launch() {
       setIsCreating(false);
       navigate('create');
     } catch (error: any) {
-      console.log('error', error.message);
+      console.log('error', error);
       setIsCreating(false);
       toast({
         title: error.message,

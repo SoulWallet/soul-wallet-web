@@ -38,7 +38,7 @@ export default function usePasskey() {
   const getCoordinates = async (credentialPublicKey: string) => {
     console.log('step 1')
     const publicKeyBinary = Uint8Array.from(atob(base64urlTobase64(credentialPublicKey)), (c) => c.charCodeAt(0));
-    console.log('step 2')
+    console.log('step 2', publicKeyBinary)
 
     const publicKey = await crypto.subtle.importKey(
       'spki',
