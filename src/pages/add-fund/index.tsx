@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import { Navbar } from '@/components/Navbar';
+import Header from '@/components/Header';
 import { Box, Text, Flex, useToast, Tooltip } from '@chakra-ui/react';
 import { InfoWrap, InfoItem } from '@/components/SignModal';
 import { Image } from '@chakra-ui/react';
@@ -26,7 +26,7 @@ export default function AddFund() {
 
   return (
     <Box px="5" pt="6">
-      <Navbar backUrl="wallet" title="Account 1" />
+      <Header />
       <Box bg="#fff" rounded="20px" p="4" mb="14px">
         <ReceiveCode address={selectedAddress} imgWidth="170px" showFullAddress={true} />
       </Box>

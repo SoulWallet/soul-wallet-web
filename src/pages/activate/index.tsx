@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import { Navbar } from '@/components/Navbar';
+import Header from '@/components/Header';
 import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import MobileContainer from '@/components/MobileContainer';
@@ -106,7 +106,7 @@ export default function ActivateWallet() {
   return (
     <MobileContainer>
       <Box px="5" pt="6">
-        <Navbar backUrl="wallet" />
+        <Header />
         <PageTitle mb="0">Activate your Soul Wallet</PageTitle>
         <Text fontWeight={'600'} my="12px">
           Setting up your wallet requires a fee to cover deployment gas costs. This is not a Soul Wallet service charge.

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Navbar } from '@/components/Navbar';
+import Header from '@/components/Header';
 import AccountCard from '@/components/AccountCard';
 import { Box } from '@chakra-ui/react';
 import Operations from './comp/Operations';
 import ActivateHint from './comp/ActivateHint';
 import SetGuardianHint from './comp/SetGuardianHint';
-import MobileContainer from '@/components/MobileContainer';
+import AppContainer from '@/components/AppContainer';
 import Actions from './comp/Actions';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
@@ -26,14 +26,14 @@ export default function Wallet() {
     !skipSet;
 
   return (
-    <MobileContainer>
-      <Box p="5">
-        <Navbar />
+    <Box>
+      <Header />
+      <AppContainer>
         <AccountCard />
         {!isActivated ? <ActivateHint /> : <Actions showSetGuardian={showSetGuardian && !skipSet} />}
         {showSetGuardian && !skipSet && <SetGuardianHint onSkip={() => setSkipSet(true)} />}
         <Operations />
-      </Box>
-    </MobileContainer>
+      </AppContainer>
+    </Box>
   );
 }

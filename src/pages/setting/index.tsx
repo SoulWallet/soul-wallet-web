@@ -1,8 +1,6 @@
 import { Image } from '@chakra-ui/react';
 import IconSupport from '@/assets/icons/support.svg';
 import IconChevronRight from '@/assets/icons/chevron-right.svg';
-import { Navbar } from '@/components/Navbar';
-import { useNavigate } from 'react-router-dom';
 import config from '@/config';
 import { Box, Text, Flex, Link } from '@chakra-ui/react';
 import PageTitle from '@/components/PageTitle';
@@ -47,7 +45,6 @@ const SettingMainpage = () => {
   }
   return (
     <Box px="5" pt="6">
-      <Navbar backUrl="wallet" />
       <PageTitle mb="6">Plugin settings</PageTitle>
       <Flex gap="2" flexDir={'column'}>
         <SettingBox>

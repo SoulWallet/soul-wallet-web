@@ -1,6 +1,5 @@
 import { Box, Flex, Text, useToast, Image } from '@chakra-ui/react';
-import { copyText } from '@/lib/tools';
-import IconCopy from '@/assets/copy.svg';
+
 import IconScan from '@/assets/icons/scan.svg';
 import IconScanFaded from '@/assets/icons/scan-faded.svg';
 import IconTrendUp from '@/assets/icons/trend-up.svg';
@@ -15,15 +14,6 @@ export default function AccountCard() {
   const { selectedChainItem } = useConfig();
   const isActivated = getIsActivated(selectedAddress, selectedChainId);
 
-  const toast = useToast();
-
-  const doCopy = () => {
-    copyText(selectedAddress);
-    toast({
-      title: 'Copied',
-      status: 'success',
-    });
-  };
 
   return (
     <Flex
@@ -37,12 +27,6 @@ export default function AccountCard() {
       boxShadow={'0px 4px 8px 0px rgba(0, 0, 0, 0.12)'}
     >
       <Flex align={'center'} justify={'space-between'}>
-        <Flex gap="1">
-          <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
-            {selectedAddress.slice(0, 5)}...{selectedAddress.slice(-4)}
-          </Text>
-          <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy()} />
-        </Flex>
         <Image src={isActivated ? IconScan : IconScanFaded} w="28px" h="28px" />
       </Flex>
       <Flex justify={'space-between'} align="center">
