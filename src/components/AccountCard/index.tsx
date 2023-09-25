@@ -25,7 +25,7 @@ export default function AccountCard() {
       mb="18px"
       bg="#ededed"
       // bg={isActivated ? selectedChainItem.cardBg : selectedChainItem.cardBgUnactivated}
-      boxShadow={'0px 4px 8px 0px rgba(0, 0, 0, 0.12)'}
+      // boxShadow={'0px 4px 8px 0px rgba(0, 0, 0, 0.12)'}
     >
       <Text fontWeight={'800px'} fontSize={'18px'}>
         My Account

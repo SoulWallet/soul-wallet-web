@@ -43,7 +43,7 @@ function PassKeyItem({ passKey, setPassKeyName }: any) {
             backup: none
           </Text>
         </Box>
-        <Box marginLeft="auto" marginRight="20px" borderRadius="48px" width="48px" height="48px" display="flex" alignItems="center" justifyContent="center" cursor="pointer" _hover={{ background: 'rgba(0, 0, 0, 0.04)' }} onClick={() => setIsEditing(true)}>
+        <Box marginLeft="auto" borderRadius="48px" width="48px" height="48px" display="flex" alignItems="center" justifyContent="center" cursor="pointer" _hover={{ background: 'rgba(0, 0, 0, 0.04)' }} onClick={() => setIsEditing(true)}>
           <EditIcon />
         </Box>
       </Box>
@@ -61,12 +61,10 @@ export function PassKeySelect({ passKeys, onSelect }: any) {
   );
 }
 
-export default function PassKeyList({ passKeys, setPassKeyName }: any) {
-  const [isEditing, setIsEditing] = useState(false);
-
+export default function PassKeyList({ passKeys, setPassKeyName, titleStyle }: any) {
   return (
-    <Box display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%">
-      <Text fontSize="16px" color="#1E1E1E" fontWeight="700" marginBottom="4px">
+    <Box display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" mb="4">
+      <Text fontSize="16px" color="#1E1E1E" fontWeight="700" marginBottom="4px" {...titleStyle}>
         MY PASSKEYS
       </Text>
       {passKeys.map((passKey: any) => (

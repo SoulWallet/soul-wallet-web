@@ -5,6 +5,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import Operations from './comp/Operations';
 import ActivateHint from './comp/ActivateHint';
 import SetGuardianHint from './comp/SetGuardianHint';
+import PassKeyList from '@/components/web/PassKeyList';
 import Tokens from '@/components/Tokens';
 import AppContainer from '@/components/AppContainer';
 import Actions from './comp/Actions';
@@ -15,19 +16,25 @@ import storage from '@/lib/storage';
 import Receive from '@/components/Receive';
 import Transactions from '@/components/Transactions';
 import TransferAssets from '@/components/TransferAssets';
+import { useCredentialStore } from '@/store/credential';
 
 export default function Wallet() {
   const { selectedAddress, getIsActivated } = useAddressStore();
   const { selectedChainId } = useChainStore();
+  const { credentials, changeCredentialName } = useCredentialStore();
   const { guardians } = useGuardianStore();
   const isActivated = getIsActivated(selectedAddress, selectedChainId);
   const [skipSet, setSkipSet] = useState(false);
 
-  const showSetGuardian =
-    isActivated &&
-    guardians.length === 0 &&
-    (!storage.getItem('skipSet') || storage.getItem('skipSet') !== 'true') &&
-    !skipSet;
+  const setPassKeyName = ({ id, name }: any) => {
+    changeCredentialName(id, name);
+  };
+
+  // const showSetGuardian =
+  //   isActivated &&
+  //   guardians.length === 0 &&
+  //   (!storage.getItem('skipSet') || storage.getItem('skipSet') !== 'true') &&
+  //   !skipSet;
 
   return (
     <Box color="#1e1e1e">
@@ -39,6 +46,7 @@ export default function Wallet() {
             <Tokens />
           </Box>
           <Box flex="1">
+            <PassKeyList titleStyle={{fontWeight: "800", fontSize: "18px"}} passKeys={credentials} setPassKeyName={changeCredentialName} />
             <Transactions />
           </Box>
           <Box w="368px">
