@@ -21,6 +21,7 @@ export interface IAddressStore {
   toggleActivatedChain: (address: string, chainId: string, isAdd?: boolean) => void;
   getIsActivated: (address: string, chainId: string) => boolean;
   getSelectedAddressItem: () => IAddressItem;
+  clearAddressList: () => void;
 }
 
 export const getIndexByAddress = (addressList: IAddressItem[], address: string) => {
@@ -89,6 +90,11 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
       } else {
         state.addressList[index].activatedChains.splice(index, 1);
       }
+    });
+  },
+  clearAddressList: () => {
+    set((state: IAddressStore) => {
+      state.addressList = [];
     });
   },
 }));

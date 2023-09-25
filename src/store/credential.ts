@@ -6,6 +6,7 @@ export interface ICredentialStore {
   credentials: any;
   addCredential: (credential: any) => void;
   changeCredentialName: (credentialId: string, name: string) => void;
+  clearCredentials: () => void;
 }
 
 export const getIndexByCredentialId = (credentials: any, id: string) => {
@@ -25,6 +26,11 @@ const createCredentialSlice = immer<ICredentialStore>((set) => ({
       if (index > -1) {
         state.credentials[index].name = name;
       }
+    });
+  },
+  clearCredentials: () => {
+    set((state) => {
+      state.credentials = [];
     });
   },
 }));

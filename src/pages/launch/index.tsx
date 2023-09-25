@@ -18,6 +18,7 @@ import TextBody from '@/components/web/TextBody';
 import Button from '@/components/web/Button';
 import Logo from '@/components/web/Logo';
 import usePassKey from '@/hooks/usePasskey';
+import storage from '@/lib/storage';
 import { PassKeySelect } from '@/components/web/PassKeyList';
 import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
@@ -26,8 +27,8 @@ export default function Launch() {
   const { register, authenticate } = usePassKey();
   const { navigate } = useBrowser();
   const toast = useToast();
-  const { credentials } = useCredentialStore();
-  const { addressList } = useAddressStore();
+  const { credentials, clearCredentials } = useCredentialStore();
+  const { addressList, clearAddressList } = useAddressStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,10 +66,17 @@ export default function Launch() {
     }
   }
 
+  const resetWallet = () => {
+    clearCredentials();
+    clearAddressList();
+    storage.clear();
+  }
+
   const createWallet = async () => {
     try {
+      resetWallet();
       setIsCreating(true);
-      await register();
+      await register(true);
       setIsCreating(false);
       navigate('create');
     } catch (error: any) {
