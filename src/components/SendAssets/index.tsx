@@ -61,9 +61,6 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
 
   return (
     <Box>
-      <Text fontSize="20px" fontWeight="800" mb="6">
-        Send
-      </Text>
       <Flex flexDir={'column'} gap="5">
         <AmountInput sendToken={sendToken} amount={amount} onChange={setAmount} onTokenChange={setSendToken} />
         <AddressInputReadonly

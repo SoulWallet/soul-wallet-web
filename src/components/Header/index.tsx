@@ -20,7 +20,7 @@ export default function Header() {
   };
 
   return (
-    <Flex as="header" py="6" px="8" borderBottom={'1px solid #D7D7D7'} align="center" justify={'space-between'} mb="4">
+    <Flex as="header" h="100px" px="8" borderBottom={'1px solid #D7D7D7'} align="center" justify={'space-between'}>
       <Image src={IconLogo} w="180px" />
       <Flex align={'center'} px="3" py="10px" gap="8" rounded="full" bg="#fff">
         <Flex align={'center'} gap="4">

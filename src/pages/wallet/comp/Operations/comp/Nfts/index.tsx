@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import EmptyHint from '../EmptyHint';
+import EmptyHint from '@/components/EmptyHint';
 import { useBalanceStore } from '@/store/balance';
 import { Grid, GridItem } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
-import { INftBalanceItem } from '@/store/balance';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ListItem from '../../ListItem';
+import ListItem from '@/components/ListItem';
 import useTools from '@/hooks/useTools';
 import { numToFixed } from '@/lib/tools';
 import BN from 'bignumber.js';
