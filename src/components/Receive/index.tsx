@@ -21,9 +21,12 @@ export default function Receive() {
   };
 
   return (
-    <Box px="5" pt="6">
+    <Box>
+      <Text mb="3" fontWeight={'800'} textAlign={"center"}>
+        Add fund to start using Soul Wallet
+      </Text>
       <Box bg="#fff" rounded="20px" p="4" mb="14px">
-        <ReceiveCode address={selectedAddress} imgWidth="170px" showFullAddress={true} />
+        <ReceiveCode address={selectedAddress} imgWidth="160px" showFullAddress={true} />
       </Box>
       <InfoWrap gap="3">
         <InfoItem>
