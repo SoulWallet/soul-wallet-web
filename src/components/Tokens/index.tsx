@@ -41,7 +41,7 @@ export default function Tokens() {
         </Flex>
       </Flex>
       <Box bg="rgba(217, 217, 217, 0.32)" rounded="20px" p="6" fontSize={'14px'}  lineHeight={'1'}>
-        <Table>
+        {/* <Table>
           <Thead>
             <Th>
               <Td></Td>
@@ -50,7 +50,7 @@ export default function Tokens() {
             </Th>
           </Thead>
           <Tbody></Tbody>
-        </Table>
+        </Table> */}
         {tokenBalance.map((item: ITokenBalanceItem, idx: number) => (
           <ListItem
             key={idx}
