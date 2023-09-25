@@ -28,7 +28,7 @@ export default function Button({ onClick, children, loading, disabled, href, ...
       color="#fff"
       // bg={'brand.red'}
       bg="#1c1c1e"
-      _hover={{ bg: 'brand.redDarken' }}
+      _hover={ !disabled && { bg: '#4e4e54' }}
       h="unset"
       transition={'all 0.2s ease-in-out'}
       _disabled={{ bg: '#898989', cursor: 'not-allowed' }}

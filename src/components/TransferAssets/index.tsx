@@ -24,13 +24,13 @@ export default function TransferAssets() {
       <Flex>
         {tabs.map((item, index) => (
           <Flex
+            key={index}
             py="3"
             flex="1"
             gap="2"
             justify={'center'}
             align="center"
             cursor={'pointer'}
-            {...{}}
             roundedTopLeft={index === 0 || activeTab === 1 ? '20px' : 'none'}
             roundedTopRight={index === 1 || activeTab === 0 ? '20px' : 'none'}
             bg={activeTab === index ? '#ededed' : 'none'}

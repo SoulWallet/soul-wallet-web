@@ -13,6 +13,7 @@ interface IWalletContext {
   account: string;
   getAccount: () => Promise<void>;
   replaceAddress: () => Promise<void>;
+  showSign: () => Promise<void>;
 }
 
 export const WalletContext = createContext<IWalletContext>({
@@ -20,6 +21,7 @@ export const WalletContext = createContext<IWalletContext>({
   account: '',
   getAccount: async () => {},
   replaceAddress: async () => {},
+  showSign: async () => {},
 });
 
 export const WalletContextProvider = ({ children }: any) => {
@@ -137,6 +139,10 @@ export const WalletContextProvider = ({ children }: any) => {
     }
   };
 
+  const showSign = async () => {
+    await signModal.current.show();
+  }
+
   // if address on chain is not activated, check again
   useEffect(() => {
     if (!selectedAddress || !selectedChainId) {
@@ -152,6 +158,7 @@ export const WalletContextProvider = ({ children }: any) => {
         account,
         getAccount,
         replaceAddress,
+        showSign,
       }}
     >
       {children}

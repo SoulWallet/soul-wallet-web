@@ -104,58 +104,68 @@ export default function ActivateWallet() {
   }, []);
 
   return (
-    <MobileContainer>
-      <Box px="5" pt="6">
-        <Header />
-        <PageTitle mb="0">Activate your Soul Wallet</PageTitle>
-        <Text fontWeight={'600'} my="12px">
-          Setting up your wallet requires a fee to cover deployment gas costs. This is not a Soul Wallet service charge.
-          <br />
-          <br />
-          Add any of the following tokens to your wallet, and then you can continue the activation process: ETH, USDC,
-          DAI, USDT.
-        </Text>
-        <Box bg="#fff" rounded="20px" p="3">
-          <ReceiveCode address={selectedAddress} />
-          <Divider h="1px" bg="#d7d7d7" my="2" />
-          <InfoWrap gap="3">
-            <InfoItem>
-              <Text>Network</Text>
-              <Text>{selectedChainItem.chainName}</Text>
-            </InfoItem>
-            <InfoItem>
-              <Text>Network fee</Text>
-              {needCost ? (
-                <Flex gap="2">
-                  <Text data-testid="network-fee">{BN(needCost).toFixed(6)}</Text>
-                  <GasSelect data-testid="paytoken-select" gasToken={payToken} onChange={setPayToken} />
-                </Flex>
-              ) : (
-                <Text>Loading...</Text>
-              )}
-            </InfoItem>
-          </InfoWrap>
-        </Box>
-
-        <Button
-          disabled={!needCost || !balanceEnough}
-          w="full"
-          loading={loading}
-          onClick={doActivate}
-          fontSize="20px"
-          py="4"
-          fontWeight={'800'}
-          mt="14px"
-        >
-          Activate
-        </Button>
-
-        {!balanceEnough && needCost && (
-          <Text color="#FF2096" textAlign={'center'} fontSize={'12px'} fontWeight={'500'} fontFamily={'Martian'} mt="1">
-            Not enough {payTokenSymbol} for activation
+    <>
+      <Header />
+      <MobileContainer>
+        <Box px="5" pt="6">
+          <PageTitle mb="0">Activate your Soul Wallet</PageTitle>
+          <Text fontWeight={'600'} my="12px">
+            Setting up your wallet requires a fee to cover deployment gas costs. This is not a Soul Wallet service
+            charge.
+            <br />
+            <br />
+            Add any of the following tokens to your wallet, and then you can continue the activation process: ETH, USDC,
+            DAI, USDT.
           </Text>
-        )}
-      </Box>
-    </MobileContainer>
+          <Box bg="#fff" rounded="20px" p="3">
+            <ReceiveCode address={selectedAddress} />
+            <Divider h="1px" bg="#d7d7d7" my="2" />
+            <InfoWrap gap="3">
+              <InfoItem>
+                <Text>Network</Text>
+                <Text>{selectedChainItem.chainName}</Text>
+              </InfoItem>
+              <InfoItem>
+                <Text>Network fee</Text>
+                {needCost ? (
+                  <Flex gap="2">
+                    <Text data-testid="network-fee">{BN(needCost).toFixed(6)}</Text>
+                    <GasSelect data-testid="paytoken-select" gasToken={payToken} onChange={setPayToken} />
+                  </Flex>
+                ) : (
+                  <Text>Loading...</Text>
+                )}
+              </InfoItem>
+            </InfoWrap>
+          </Box>
+
+          <Button
+            disabled={!needCost || !balanceEnough}
+            w="full"
+            loading={loading}
+            onClick={doActivate}
+            fontSize="20px"
+            py="4"
+            fontWeight={'800'}
+            mt="14px"
+          >
+            Activate
+          </Button>
+
+          {!balanceEnough && needCost && (
+            <Text
+              color="#FF2096"
+              textAlign={'center'}
+              fontSize={'12px'}
+              fontWeight={'500'}
+              fontFamily={'Martian'}
+              mt="1"
+            >
+              Not enough {payTokenSymbol} for activation
+            </Text>
+          )}
+        </Box>
+      </MobileContainer>
+    </>
   );
 }

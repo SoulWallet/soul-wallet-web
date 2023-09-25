@@ -33,7 +33,7 @@ export default function Receive() {
           <Text>Supported Networks:</Text>
           <Flex align="center" gap="2px">
             {chainList.map((item, index) => (
-              <Tooltip label={item.chainName}>
+              <Tooltip label={item.chainName} key={index}>
                 <Image key={index} src={item.icon} w="20px" />
               </Tooltip>
             ))}
