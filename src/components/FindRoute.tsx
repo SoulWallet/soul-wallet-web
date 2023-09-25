@@ -13,6 +13,7 @@ export default function FindRoute({ children }: any) {
   const { addressList } = useAddressStore();
 
   const isLaunch = location.pathname.includes('launch');
+  const isApps = location.pathname.includes('apps');
   const isTest = location.pathname.includes('test');
 
   const findRoute = async () => {
@@ -20,6 +21,8 @@ export default function FindRoute({ children }: any) {
     const recovering = storage.getItem('recovering');
     if (isLaunch) {
       navigate('launch');
+    } if (isApps) {
+      navigate('apps');
     } else if (isTest) {
       navigate('test');
     } else if (recovering) {

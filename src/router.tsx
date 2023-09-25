@@ -8,6 +8,7 @@ import Create from '@/pages/create';
 import Setting from '@/pages/setting';
 import Accounts from '@/pages/accounts';
 import AddFund from '@/pages/add-fund';
+import Apps from '@/pages/apps';
 // import RecoverPage from "@/pages/recover";
 // import EditGuardians from "@/pages/guardians";
 import Launch from '@/pages/launch';
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
       { path: 'add-fund', element: <AddFund /> },
       { path: 'sign', element: <SignPage /> },
       { path: 'activate', element: <ActivateWallet /> },
+      { path: 'apps', element: <Apps /> },
       { path: 'launch', element: <Launch /> },
       { path: 'create', element: <Create /> },
       { path: 'test', element: <Test /> },
