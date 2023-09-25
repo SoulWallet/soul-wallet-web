@@ -1,5 +1,7 @@
 import { Box, Flex, Grid, GridItem, Image, Text } from '@chakra-ui/react';
 import { dappList } from '@/data';
+import IconLink from '@/assets/icons/link.svg';
+import IconBookmark from '@/assets/icons/bookmark.svg';
 import IconPlus from '@/assets/icons/dapp-plus.svg';
 const tabs = ['My Dapps', 'Explore more', 'Wallet connect'];
 
@@ -13,7 +15,12 @@ const DappItem = ({ item }: any) => {
       transition={'all .3s'}
       rounded="20px"
       cursor={'pointer'}
+      pos={'relative'}
     >
+      <Flex gap="10px" pos="absolute" right="4" top="4">
+        <Image src={IconLink} />
+        <Image src={IconBookmark} />
+      </Flex>
       <Image src={item.icon} w="56px" mb="1" />
       <Flex gap="5" align={'center'} mb="1">
         <Text fontWeight={'700'} fontSize={'16px'}>

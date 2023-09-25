@@ -7,40 +7,4 @@ export const dappList = [
     category: 'DeFi',
     desc: 'Swap or provide liquidity on the Uniswap protocol',
   },
-  {
-    icon: IconUniswap,
-    title: 'Uniswap',
-    category: 'DeFi',
-    desc: 'Swap or provide liquidity on the Uniswap protocol',
-  },
-  {
-    icon: IconUniswap,
-    title: 'Uniswap',
-    category: 'DeFi',
-    desc: 'Swap or provide liquidity on the Uniswap protocol',
-  },
-  {
-    icon: IconUniswap,
-    title: 'Uniswap',
-    category: 'DeFi',
-    desc: 'Swap or provide liquidity on the Uniswap protocol',
-  },
-  {
-    icon: IconUniswap,
-    title: 'Uniswap',
-    category: 'DeFi',
-    desc: 'Swap or provide liquidity on the Uniswap protocol',
-  },
-  {
-    icon: IconUniswap,
-    title: 'Uniswap',
-    category: 'DeFi',
-    desc: 'Swap or provide liquidity on the Uniswap protocol',
-  },
-  {
-    icon: IconUniswap,
-    title: 'Uniswap',
-    category: 'DeFi',
-    desc: 'Swap or provide liquidity on the Uniswap protocol',
-  },
 ];
