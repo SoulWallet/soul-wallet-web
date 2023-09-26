@@ -53,7 +53,7 @@ const AddDappItem = () => (
 
 export default function DappList() {
   return (
-    <Box mt="8" mb="12">
+    <Box my="12">
       <Flex mb="6px" gap="4">
         {tabs.map((item, index) => (
           <Text key={index} fontSize={'18px'} fontWeight={'800'} color={index ? '#898989' : 'none'}>

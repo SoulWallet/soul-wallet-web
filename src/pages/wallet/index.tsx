@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import AccountCard from '@/components/AccountCard';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 // import Operations from './comp/Operations';
 // import ActivateHint from './comp/ActivateHint';
 // import SetGuardianHint from './comp/SetGuardianHint';
@@ -36,23 +36,32 @@ export default function Wallet() {
   //   (!storage.getItem('skipSet') || storage.getItem('skipSet') !== 'true') &&
   //   !skipSet;
 
+  const blockHeight = '256px';
+
   return (
     <Box color="#1e1e1e">
       <Header />
       <AppContainer minH="calc(100vh - 100px)">
-        <Flex gap="30px">
+        <Grid templateColumns={'repeat(3, 1fr)'} gap="30px">
           <Box flex="1">
-            <AccountCard />
-            <Tokens />
+            <AccountCard h={blockHeight} />
+            <Tokens h={blockHeight} />
           </Box>
           <Box flex="1">
-            <PassKeyList titleStyle={{fontWeight: "800", fontSize: "18px"}} passKeys={credentials} setPassKeyName={changeCredentialName} />
-            <Transactions />
+            <PassKeyList
+              h={blockHeight}
+              overflowY="auto"
+              justifyContent="unset"
+              titleStyle={{ fontWeight: '800', fontSize: '18px' }}
+              passKeys={credentials}
+              setPassKeyName={changeCredentialName}
+            />
+            <Transactions h={blockHeight} />
           </Box>
-          <Box w="368px">
+          <Box w="368px" h="497px">
             <TransferAssets />
           </Box>
-        </Flex>
+        </Grid>
         <DappList />
         <Footer />
         {/* {!isActivated ? <ActivateHint /> : <Actions showSetGuardian={showSetGuardian && !skipSet} />}

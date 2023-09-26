@@ -8,10 +8,11 @@ import useConfig from '@/hooks/useConfig';
 import ImgNotActived from '@/assets/not-activated.svg';
 import { useChainStore } from '@/store/chain';
 import Button from '../Button';
-import { useNavigate } from 'react-router-dom';
 import useBrowser from '@/hooks/useBrowser';
 
-export default function AccountCard() {
+export default function AccountCard({
+  ...restProps
+}) {
   const { navigate } = useBrowser();
   const { selectedAddress, getIsActivated } = useAddressStore();
   const { selectedChainId } = useChainStore();
@@ -19,14 +20,14 @@ export default function AccountCard() {
 
   return (
     <Flex
-      gap="50px"
       flexDir={'column'}
+      justify={'space-between'}
       rounded="24px"
-      py="16px"
-      // color={isActivated ? '#29510A' : '#1e1e1e'}
-      px="24px"
+      p="10"
       mb="18px"
       bg="#ededed"
+      {...restProps}
+      // color={isActivated ? '#29510A' : '#1e1e1e'}
       // bg={isActivated ? selectedChainItem.cardBg : selectedChainItem.cardBgUnactivated}
       // boxShadow={'0px 4px 8px 0px rgba(0, 0, 0, 0.12)'}
     >
@@ -39,7 +40,11 @@ export default function AccountCard() {
             $0
           </Text>
           {/* {!isActivated && <Image src={ImgNotActived} mt="1" />} */}
-          {!isActivated && <Button py="2" onClick={() => navigate('activate')}>Activate wallet</Button>}
+          {!isActivated && (
+            <Button py="2" onClick={() => navigate('activate')}>
+              Activate wallet
+            </Button>
+          )}
         </Box>
         {/* <Image src={selectedChainItem.iconFaded} /> */}
       </Flex>

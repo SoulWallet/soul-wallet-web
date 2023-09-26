@@ -41,7 +41,7 @@ export default function Receive() {
         </InfoItem>
       </InfoWrap>
 
-      <Button w="full" onClick={doCopy} fontSize="20px" py="4" fontWeight={'800'} mt="14px">
+      <Button w="full" onClick={doCopy} fontSize="20px" py="4" fontWeight={'800'} mt="32px">
         Copy address
       </Button>
     </Box>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Text, Input } from '@chakra-ui/react';
+import { Box, Text, Input, BoxProps } from '@chakra-ui/react';
 import EditIcon from '@/components/Icons/Edit';
 import ComputerIcon from '@/components/Icons/Computer';
 
@@ -63,9 +63,9 @@ export function PassKeySelect({ passKeys, onSelect }: any) {
   );
 }
 
-export default function PassKeyList({ passKeys, setPassKeyName, titleStyle }: any) {
+export default function PassKeyList({ passKeys, setPassKeyName, titleStyle, ...restProps }: any) {
   return (
-    <Box display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" mb="4">
+    <Box display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" mb="4" {...restProps}>
       <Text fontSize="16px" color="#1E1E1E" fontWeight="700" marginBottom="4px" {...titleStyle}>
         MY PASSKEYS
       </Text>

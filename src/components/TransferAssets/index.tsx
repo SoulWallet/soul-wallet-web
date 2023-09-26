@@ -20,7 +20,7 @@ const tabs = [
 export default function TransferAssets() {
   const [activeTab, setActiveTab] = useState(0);
   return (
-    <Box>
+    <>
       <Flex>
         {tabs.map((item, index) => (
           <Flex
@@ -43,6 +43,7 @@ export default function TransferAssets() {
       </Flex>
       <Box
         bg="#ededed"
+        h="100%"
         roundedBottom="20px"
         roundedTopLeft={activeTab === 0 ? '0' : '20px'}
         roundedTopRight={activeTab === 1 ? '0' : '20px'}
@@ -51,6 +52,6 @@ export default function TransferAssets() {
         {activeTab === 0 && <Receive />}
         {activeTab === 1 && <SendAssets tokenAddress={ethers.ZeroAddress} />}
       </Box>
-    </Box>
+    </>
   );
 }

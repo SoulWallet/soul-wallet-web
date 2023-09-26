@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Box, Flex, Table, Tbody, Td, Text, Th, Thead, Image } from '@chakra-ui/react';
+import { Box, Flex, Table, Tbody, Td, Text, Th, Thead, Image, BoxProps } from '@chakra-ui/react';
 import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
 import ListItem from '@/components/ListItem';
 import useConfig from '@/hooks/useConfig';
@@ -12,7 +12,7 @@ const BalanceItem = () => {
   return <Box></Box>;
 };
 
-export default function Tokens() {
+export default function Tokens({ ...restProps }: BoxProps) {
   const { selectedAddress } = useAddressStore();
   const { tokenBalance, fetchTokenBalance } = useBalanceStore();
   const { selectedChainItem } = useConfig();
@@ -28,7 +28,7 @@ export default function Tokens() {
   }, [selectedAddress, selectedChainItem]);
 
   return (
-    <Box>
+    <Box {...restProps}>
       <Flex align={'center'} px="2" justify={'space-between'} mb="6px">
         <Text fontSize={'18px'} fontWeight={'800'}>
           Tokens
@@ -40,7 +40,15 @@ export default function Tokens() {
           <Image src={IconChevronRight} />
         </Flex>
       </Flex>
-      <Box bg="rgba(217, 217, 217, 0.32)" rounded="20px" p="6" fontSize={'14px'}  lineHeight={'1'}>
+      <Box
+        h="100%"
+        overflowY={'auto'}
+        bg="rgba(217, 217, 217, 0.32)"
+        rounded="20px"
+        p="6"
+        fontSize={'14px'}
+        lineHeight={'1'}
+      >
         {/* <Table>
           <Thead>
             <Th>
