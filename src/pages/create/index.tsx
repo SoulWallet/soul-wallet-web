@@ -41,11 +41,6 @@ export default function Create() {
     }
   };
 
-  const setPassKeyName = ({ id, name }: any) => {
-    changeCredentialName(id, name);
-  };
-  console.log('credentials', credentials)
-
   const createWallet = async () => {
     try {
       setIsCreating(true);
@@ -128,7 +123,7 @@ export default function Create() {
           </Box>
         </Box>
         <Box margin="48px 0">
-          <PassKeyList passKeys={credentials} setPassKeyName={setPassKeyName} />
+          <PassKeyList passKeys={credentials} setPassKeyName={changeCredentialName} />
         </Box>
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
           <Button loading={isConfirming} disabled={isConfirming} onClick={onConfirm} _styles={{ width: '282px', borderRadius: '40px' }}>
@@ -164,7 +159,7 @@ export default function Create() {
         </Box>
       </Box>
       <Box margin="48px 0">
-        <PassKeyList passKeys={credentials} setPassKeyName={setPassKeyName} />
+        <PassKeyList passKeys={credentials} setPassKeyName={changeCredentialName} />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
         <Button onClick={createWallet} _styles={{ width: '300px', borderRadius: '40px' }} disabled={isCreating} loading={isCreating}>

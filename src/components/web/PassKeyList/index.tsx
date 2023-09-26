@@ -13,13 +13,13 @@ function PassKeyItem({ passKey, setPassKeyName }: any) {
 
   const onKeyDown = (event: any) => {
     if (event.keyCode === 13) {
-      setPassKeyName({ id: passKey.id, name });
+      setPassKeyName(passKey.id, name);
       setIsEditing(false);
     }
   }
 
   const onBlur = () => {
-    setPassKeyName({ id: passKey.id, name });
+    setPassKeyName(passKey.id, name);
     setIsEditing(false);
   }
 
