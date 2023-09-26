@@ -1,10 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { Box } from '@chakra-ui/react';
 import Header from '@/components/Header';
+import handleRequests from '@/provider/handleRequests';
 import { useLocation } from 'react-router-dom';
+import useDapp from '@/hooks/useDapp';
+import useConfig from '@/hooks/useConfig';
 
 export default function Apps() {
   const iframeRef = useRef<any>()
+
+  const { chainConfig } = useConfig();
+  const { getAccounts,  } = useDapp();
 
   const onLoad = () => {
 
@@ -13,10 +19,12 @@ export default function Apps() {
   useEffect(() => {
     console.log('location', location)
     window.addEventListener('message', async (msg) => {
+      const account = getAccounts();
+      console.log('account ', account)
       const safeInfo = {
-        safeAddress: '0x2D0FF241EE15c1f454CC21A0Dfa8e3444DAef563',
-        chainId: parseInt('0x01', 10),
-        owners: ['0x2D0FF241EE15c1f454CC21A0Dfa8e3444DAef563'],
+        safeAddress: account,
+        chainId: parseInt(chainConfig.chainIdHex, 10),
+        owners: [account],
         threshold: 1,
         isReadOnly: false,
         network: 'ETHEREUM',
