@@ -25,16 +25,21 @@ export default function Apps() {
       const data = msg.data
 
       if (data && data.method && data.method === 'getSafeInfo') {
-        iframeRef.current.contentWindow.postMessage(safeInfo, msg.origin)
+        const response = {
+          id: data.id,
+          success: true,
+          version: '1.18.0',
+          data: safeInfo
+        }
+        iframeRef.current.contentWindow.postMessage(response, msg.origin)
+        console.log('message1111', msg.origin, data, response)
       }
-
-      console.log('message1111', msg.origin, data, safeInfo, iframeRef.current.contentWindow.postMessage)
     })
   }, [])
 
   const IFRAME_SANDBOX_ALLOWED_FEATURES = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock'
   let appUrl = `https://app.aave.com`
-  appUrl = `https://app.aelin.xyz`
+  appUrl = `http://localhost:3000`
 
   return (
     <Box width="100%" height="100vh">
