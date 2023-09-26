@@ -6,6 +6,7 @@ import IconLogo from '@/assets/logo-all-v3.svg';
 import AccountSelect from '../AccountSelect';
 import { toShortAddress } from '@/lib/tools';
 import { useAddressStore } from '@/store/address';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
   const { selectedAddress, getIsActivated } = useAddressStore();
@@ -20,8 +21,10 @@ export default function Header() {
   };
 
   return (
-    <Flex as="header" py="6" px="8" borderBottom={'1px solid #D7D7D7'} align="center" justify={'space-between'} mb="4">
-      <Image src={IconLogo} w="180px" />
+    <Flex as="header" h="100px" px="8" borderBottom={'1px solid #D7D7D7'} align="center" justify={'space-between'}>
+      <Link to="/wallet">
+        <Image src={IconLogo} w="180px" />
+      </Link>
       <Flex align={'center'} px="3" py="10px" gap="8" rounded="full" bg="#fff">
         <Flex align={'center'} gap="4">
           <Flex gap="1" align={'center'}>

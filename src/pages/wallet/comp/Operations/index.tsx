@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
 // import * as abi from "@soulwallet_test/abi";
-import Tokens from './comp/Tokens';
 import Nfts from './comp/Nfts';
-import Activity from './comp/Activity';
 
 const tabs = ['Tokens', 'NFTs', 'Transactions'];
 
@@ -28,9 +26,7 @@ export default function Operations() {
         ))}
       </Flex>
       <Box>
-        {activeTabIndex === 0 && <Tokens />}
         {activeTabIndex === 1 && <Nfts />}
-        {activeTabIndex === 2 && <Activity />}
       </Box>
     </>
   );

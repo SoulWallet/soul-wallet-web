@@ -26,8 +26,9 @@ export default function Button({ onClick, children, loading, disabled, href, ...
   return (
     <CButton
       color="#fff"
-      bg={'brand.red'}
-      _hover={{ bg: 'brand.redDarken' }}
+      // bg={'brand.red'}
+      bg="#1c1c1e"
+      _hover={ !disabled && { bg: '#4e4e54' }}
       h="unset"
       transition={'all 0.2s ease-in-out'}
       _disabled={{ bg: '#898989', cursor: 'not-allowed' }}

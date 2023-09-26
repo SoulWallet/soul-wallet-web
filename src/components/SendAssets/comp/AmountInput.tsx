@@ -90,12 +90,6 @@ export default function AmountInput({ sendToken, onTokenChange, amount, onChange
           variant={'unstyled'}
         />
         <Flex align="center" justify={'space-between'}>
-          <Flex gap="2" align="center">
-            <Text fontSize="16px" fontWeight={'800'} color="#898989">
-              $1734
-            </Text>
-            {/* <Image src={IconSwap} /> */}
-          </Flex>
           <Button
             color="#fff"
             py="1"

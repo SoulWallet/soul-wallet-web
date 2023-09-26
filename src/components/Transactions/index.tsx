@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import ActivityItem from './comp/ActivityItem';
-import { Box } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import IconLoading from '@/assets/activity-loading.gif';
 import { Image } from '@chakra-ui/react';
 import scanApi from '@/lib/scanApi';
 import { useAddressStore } from '@/store/address';
-import EmptyHint from '../EmptyHint';
+import EmptyHint from '@/components/EmptyHint';
 import useConfig from '@/hooks/useConfig';
 import { useChainStore } from '@/store/chain';
 
-export default function Activities() {
+export default function Transactions() {
   const { selectedAddress } = useAddressStore();
   const { selectedChainId } = useChainStore();
   const [loading, setLoading] = useState(false);
@@ -29,12 +29,19 @@ export default function Activities() {
   }, [selectedAddress, selectedChainId]);
 
   return (
-    <Box color="#1e1e1e" fontSize={'14px'} lineHeight={'1'}>
-      {!loading && (!historyList || historyList.length === 0) && <EmptyHint title="No activities" />}
-      {loading && <Image src={IconLoading} w="100%" />}
-      {historyList.map((item: any, idx: number) => (
-        <ActivityItem key={idx} idx={idx} item={item} scanUrl={chainConfig.scanUrl} />
-      ))}
+    <Box>
+      <Flex mb="6px">
+        <Text fontSize={'18px'} fontWeight={'800'}>
+          Tokens
+        </Text>
+      </Flex>
+      <Box bg="rgba(217, 217, 217, 0.32)" rounded="20px" p="6" fontSize={'14px'} lineHeight={'1'}>
+        {!loading && (!historyList || historyList.length === 0) && <EmptyHint title="No activities" />}
+        {loading && <Image src={IconLoading} w="100%" />}
+        {historyList.map((item: any, idx: number) => (
+          <ActivityItem key={idx} idx={idx} item={item} scanUrl={chainConfig.scanUrl} />
+        ))}
+      </Box>
     </Box>
   );
 }
