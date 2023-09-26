@@ -17,6 +17,7 @@
     "@passwordless-id/webauthn": "^1.2.6",
     "@peculiar/asn1-ecc": "^2.3.6",
     "@peculiar/asn1-schema": "^2.3.6",
+    "@safe-global/safe-apps-sdk": "^8.1.0",
     "@soulwallet_test/abi": "^0.1.0",
     "@soulwallet_test/assets": "^0.1.0",
     "@soulwallet_test/decoder": "^0.1.0",

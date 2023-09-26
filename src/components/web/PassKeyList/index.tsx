@@ -19,8 +19,10 @@ function PassKeyItem({ passKey, setPassKeyName }: any) {
   }
 
   const onBlur = () => {
-    setPassKeyName(passKey.id, name);
-    setIsEditing(false);
+    if (isEditing) {
+      setPassKeyName(passKey.id, name);
+      setIsEditing(false);
+    }
   }
 
   return (
