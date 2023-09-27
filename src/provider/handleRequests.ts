@@ -1,8 +1,6 @@
 import { ethers } from 'ethers';
+import { ABI_SoulWallet } from '@soulwallet_test/abi';
 import { getMessageType } from './tools';
-// IMPORTANT TODO, still available on newer structure?
-import WalletABI from '@/abi/Wallet.json';
-import config from '@/config';
 
 let ethersProvider: any = null;
 let currentChainId: any = undefined;
@@ -92,7 +90,7 @@ const personalRecover = async (params: string[]) => {
   }
 
   // const walletAddress = await windowBus.send("getAccounts");
-  // const walletContract = new ethers.Contract(walletAddress as string, WalletABI, ethersProvider);
+  // const walletContract = new ethers.Contract(walletAddress as string, ABI_SoulWallet, ethersProvider);
   // const isValid = await walletContract.isValidSignature(msgHash, signature);
 
   // if (isValid === config.magicValue) {
