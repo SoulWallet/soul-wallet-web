@@ -13,25 +13,26 @@ export default function Apps() {
   const query = useQuery()
   const appUrl = query.get('appUrl')
 
-  console.log('app url', appUrl)
-
   const onLoad = () => {
 
   }
 
+  const listner =  async (msg:any) => {
+    const request = msg.data
+    try {
+      let result = await handleRequest(request)
+      const response = makeResponse(request.id, result)
+      console.log('safe message', request, response)
+      iframeRef.current.contentWindow.postMessage(response, msg.origin)
+    } catch (error: any) {
+    }
+  }
+
   useEffect(() => {
-    window.addEventListener('message', async (msg) => {
-      const request = msg.data
-
-      try {
-        let result = await handleRequest(request)
-        const response = makeResponse(request.id, result)
-        console.log('safe message', request, response)
-        iframeRef.current.contentWindow.postMessage(response, msg.origin)
-      } catch (error: any) {
-
-      }
-    })
+    window.addEventListener('message', listner);
+    return () => {
+      window.removeEventListener('message', listner)
+    }
   }, [])
 
   const IFRAME_SANDBOX_ALLOWED_FEATURES = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock'

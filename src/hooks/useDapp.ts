@@ -218,9 +218,7 @@ export default function useDapp() {
         console.log('safeTxHash', safeTxHash);
         return;
       case Methods.sendTransactions:
-        console.log('sendTransactions', request.params.txs)
-        const receipt = await sendTransaction(request.params.txs);
-        return;
+        return await sendTransaction(request.params.txs);
       case Methods.getChainInfo:
         console.log('getChainInfo', chainConfig);
         return {
