@@ -193,20 +193,8 @@ export default function useDapp() {
 
   const handleRequest = async (request: any) => {
     switch (request.method) {
-      case Methods.getChainInfo:
-        return;
-      case Methods.getEnvironmentInfo:
-        return;
-      case Methods.getOffChainSignature:
-        return;
-      case Methods.getSafeBalances:
-        return;
       case Methods.getSafeInfo:
         return getSafeInfo();
-      case Methods.getTxBySafeTxHash:
-        return;
-      case Methods.requestAddressBook:
-        return;
       case Methods.rpcCall:
         if (request.params) {
           const { call, params } = request.params
@@ -214,11 +202,41 @@ export default function useDapp() {
         } else {
           return;
         }
-      case Methods.sendTransactions:
-        return;
       case Methods.signMessage:
+        console.log('signMessage', request)
         return;
       case Methods.signTypedMessage:
+        return;
+      case Methods.getTxBySafeTxHash:
+        return;
+      case Methods.sendTransactions:
+        return;
+      case Methods.getChainInfo:
+        return {
+          chainName: 'Ethereum',
+          chainId: '1',
+          shortName: 'eth',
+          nativeCurrency: {
+            name: 'Ether',
+            symbol: 'ETH',
+            decimals: 18,
+            logoUri: 'https://safe-transaction-assets.gnosis-safe.io/chains/1/currency_logo.png',
+          },
+          blockExplorerUriTemplate: {
+            address: 'https://blockscout.com/xdai/mainnet/address/{{address}}/transactions',
+          txHash: 'https://blockscout.com/xdai/mainnet/tx/{{txHash}}/',
+          api: 'https://blockscout.com/poa/xdai/api?module={{module}}&action={{action}}&address={{address}}&apiKey={{apiKey}}',
+          },
+        };
+      case Methods.getEnvironmentInfo:
+        return {
+          origin: document.location.origin,
+        };
+      case Methods.requestAddressBook:
+        return;
+      case Methods.getOffChainSignature:
+        return;
+      case Methods.getSafeBalances:
         return;
       case Methods.wallet_getPermissions:
         return;
