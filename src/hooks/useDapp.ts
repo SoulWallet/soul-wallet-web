@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { getMessageType } from '@/lib/tools';
 // IMPORTANT TODO, still available on newer structure?
 import useWalletContext from '@/context/hooks/useWalletContext';
+import useKeyring from '@/hooks/useKeyring';
 import useConfig from './useConfig';
 import { useAddressStore } from '@/store/address';
 import bg from '@/background';
@@ -11,6 +12,7 @@ export default function useDapp() {
   const { ethersProvider } = useWalletContext();
   const { chainConfig } = useConfig();
   const { selectedAddress } = useAddressStore();
+  const keyring = useKeyring();
 
   const getAccounts = () => {
     return selectedAddress;
@@ -130,8 +132,7 @@ export default function useDapp() {
       chainId: chainConfig.chainId,
       owners: [account],
       threshold: 1,
-      isReadOnly: false,
-      network: 'ETHEREUM',
+      isReadOnly: false
     }
 
     return safeInfo
@@ -197,28 +198,35 @@ export default function useDapp() {
         return getSafeInfo();
       case Methods.rpcCall:
         if (request.params) {
-          const { call, params } = request.params
-          return await handleRpcCall(call, params)
+          const { call, params } = request.params;
+          return await handleRpcCall(call, params);
         } else {
           return;
         }
       case Methods.signMessage:
-        console.log('signMessage', request)
+        console.log('signMessage', request);
         return;
       case Methods.signTypedMessage:
+        // {"types":{"type":"object","properties":{"EIP712Domain":{"type":"array"}},"additionalProperties":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"type":{"type":"string"}},"required":["name","type"]}},"required":["EIP712Domain"]},"primaryType":{"type":"string"},"domain":{"type":"object"},"message":{"type":"object"}}
+        const params = request.params;
+        const typedData = params.typedData;
+        const signature = await keyring.signMessageV4(typedData);
+        console.log('signTypedMessage data', signature);
         return;
       case Methods.getTxBySafeTxHash:
+        const { safeTxHash } = request.params
+        console.log('safeTxHash', safeTxHash)
         return;
       case Methods.sendTransactions:
         return;
       case Methods.getChainInfo:
         return {
-          chainName: 'Ethereum',
-          chainId: '1',
-          shortName: 'eth',
+          chainName: chainConfig.chainName,
+          chainId: chainConfig.chainId,
+          shortName: chainConfig.chainToken,
           nativeCurrency: {
-            name: 'Ether',
-            symbol: 'ETH',
+            name: chainConfig.chainName,
+            symbol: chainConfig.chainToken,
             decimals: 18,
             logoUri: 'https://safe-transaction-assets.gnosis-safe.io/chains/1/currency_logo.png',
           },
