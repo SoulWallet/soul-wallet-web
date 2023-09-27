@@ -2,12 +2,43 @@ import React, { useState } from 'react';
 import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, Box } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
-
+import IconLoading from '@/assets/loading.gif';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import { useAddressStore } from '@/store/address';
 import { toShortAddress } from '@/lib/tools';
 import AddressIcon from '../AddressIcon';
+import useSdk from '@/hooks/useSdk';
+import IconPlus from '@/assets/icons/plus.svg';
+import { PlusSquareIcon } from '@chakra-ui/icons';
+
+const CreateAccount = () => {
+  const [creating, setCreating] = useState(false);
+  const { calcWalletAddress } = useSdk();
+  const { addressList, addAddressItem } = useAddressStore();
+
+  const doCreate = async () => {
+    setCreating(true);
+    const newIndex = addressList.length;
+    const newAddress = await calcWalletAddress(newIndex);
+    addAddressItem({
+      title: `Account ${newIndex + 1}`,
+      address: newAddress,
+      activatedChains: [],
+      allowedOrigins: [],
+    });
+    setCreating(false);
+  };
+
+  return (
+    <MenuItem onClick={doCreate} as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
+      {creating ? <Image src={IconLoading} w="24px" /> : <PlusSquareIcon boxSize="6" />}
+      <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
+        Create account
+      </Text>
+    </MenuItem>
+  );
+};
 
 export default function AccountSelect() {
   const { navigate } = useBrowser();
@@ -40,7 +71,7 @@ export default function AccountSelect() {
                   <MenuItem key={item.address} onClick={() => setSelectedAddress(item.address)}>
                     <Flex w="100%" align={'center'} justify={'space-between'}>
                       <Flex align={'center'} gap="2">
-                        <AddressIcon address={item.address} width={28} />
+                        <AddressIcon address={item.address} width={24} />
                         <Box>
                           <Text mb="1" fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
                             {item.title}
@@ -56,6 +87,8 @@ export default function AccountSelect() {
                 </React.Fragment>
               );
             })}
+            <MenuDivider />
+            <CreateAccount />
           </MenuList>
         </>
       )}

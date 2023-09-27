@@ -21,7 +21,6 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
-
 import IconAccountMore from '@/assets/icons/account-more.svg';
 import IconAccountMoreGreen from '@/assets/icons/account-more-green.svg';
 import ImgNotActived from '@/assets/not-activated.svg';
