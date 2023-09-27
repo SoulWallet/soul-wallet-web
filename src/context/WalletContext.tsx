@@ -15,7 +15,7 @@ interface IWalletContext {
   getAccount: () => Promise<void>;
   replaceAddress: () => Promise<void>;
   showSign: () => Promise<void>;
-  showSignTransaction: (txns: any, origin: string, sendTo: string) => Promise<void>;
+  showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
 }
 
 export const WalletContext = createContext<IWalletContext>({
@@ -145,7 +145,7 @@ export const WalletContextProvider = ({ children }: any) => {
     await signModal.current.show();
   };
 
-  const showSignTransaction = async (txns: any, origin: string, sendTo: string) => {
+  const showSignTransaction = async (txns: any, origin?: string, sendTo?: string) => {
     await signTransactionModal.current.show(txns, origin, sendTo);
   };
 

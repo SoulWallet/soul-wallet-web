@@ -6,16 +6,6 @@ import { chainIdMapping, chainMapping } from '@/config';
 import IconDefault from '@/assets/tokens/default.svg';
 import storage from '@/lib/storage';
 
-export function notify(title: string, message: string) {
-  const randomId = nanoid();
-  // browser.notifications.create(randomId, {
-  //     type: "basic",
-  //     iconUrl: "../icon-48.png",
-  //     title,
-  //     message,
-  // });
-}
-
 // open browser window especially for background
 export function openWindow(url: string) {
   // browser.windows.create({

@@ -120,7 +120,7 @@ export default function useWallet() {
 
     userOp.signature = packedSignatureRet.OK;
 
-    await bg.execute(userOp, chainConfig);
+    return await bg.execute(userOp, chainConfig);
   };
 
   return {

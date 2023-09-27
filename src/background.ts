@@ -5,8 +5,7 @@ import { notify } from '@/lib/tools';
 
 export default {
   async execute(userOp: any, chainConfig: any) {
-    const receipt = await executeTransaction(userOp, chainConfig);
-    notify('Transaction success', 'Your transaction was confirmed on chain');
+    return await executeTransaction(userOp, chainConfig);
   },
 
   async getAccounts() {

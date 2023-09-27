@@ -9,9 +9,10 @@ import bg from '@/background';
 import { Methods } from '@safe-global/safe-apps-sdk';
 
 export default function useDapp() {
-  const { ethersProvider } = useWalletContext();
+  const { ethersProvider, showSignTransaction } = useWalletContext();
   const { chainConfig } = useConfig();
   const { selectedAddress } = useAddressStore();
+
   const keyring = useKeyring();
 
   const getAccounts = () => {
@@ -31,15 +32,8 @@ export default function useDapp() {
       }
     });
 
-    // bg.execute()
-
-    // const opData: any = await windowBus.send("approve", { txns: params });
-
-    // try {
-    //     return await windowBus.send("execute", opData);
-    // } catch (err) {
-    //     throw new Error("Failed to execute");
-    // }
+    const receipt = await showSignTransaction(params);
+    console.log('receipt is', receipt);
   };
 
   const estimateGas = async (params: any) => {
@@ -72,7 +66,7 @@ export default function useDapp() {
   const signTypedDataV4 = async (params: any) => {
     // const res = await windowBus.send("signMessageV4", {
     //     data: params[1],
-  // });
+    // });
     // console.log("signTypeV4 sig: ", res);
     // return res;
   };
@@ -132,28 +126,28 @@ export default function useDapp() {
       chainId: chainConfig.chainId,
       owners: [account],
       threshold: 1,
-      isReadOnly: false
-    }
+      isReadOnly: false,
+    };
 
-    return safeInfo
-  }
+    return safeInfo;
+  };
 
   const makeResponse = (id: string, data: any) => {
     return {
       id,
       success: true,
       version: '1.18.0',
-      data
-    }
-  }
+      data,
+    };
+  };
 
   const makeError = (id: string, data: any) => {
     return {
       id,
       success: false,
-      version: '1.18.0'
-    }
-  }
+      version: '1.18.0',
+    };
+  };
 
   const handleRpcCall = async (call: string, params: any) => {
     switch (call) {
@@ -190,7 +184,7 @@ export default function useDapp() {
       case 'wallet_switchEthereumChain':
         return await switchChain(params);
     }
-  }
+  };
 
   const handleRequest = async (request: any) => {
     switch (request.method) {
@@ -214,8 +208,8 @@ export default function useDapp() {
         console.log('signTypedMessage data', signature);
         return;
       case Methods.getTxBySafeTxHash:
-        const { safeTxHash } = request.params
-        console.log('safeTxHash', safeTxHash)
+        const { safeTxHash } = request.params;
+        console.log('safeTxHash', safeTxHash);
         return;
       case Methods.sendTransactions:
         return;
@@ -232,8 +226,8 @@ export default function useDapp() {
           },
           blockExplorerUriTemplate: {
             address: 'https://blockscout.com/xdai/mainnet/address/{{address}}/transactions',
-          txHash: 'https://blockscout.com/xdai/mainnet/tx/{{txHash}}/',
-          api: 'https://blockscout.com/poa/xdai/api?module={{module}}&action={{action}}&address={{address}}&apiKey={{apiKey}}',
+            txHash: 'https://blockscout.com/xdai/mainnet/tx/{{txHash}}/',
+            api: 'https://blockscout.com/poa/xdai/api?module={{module}}&action={{action}}&address={{address}}&apiKey={{apiKey}}',
           },
         };
       case Methods.getEnvironmentInfo:
@@ -251,7 +245,7 @@ export default function useDapp() {
       case Methods.wallet_requestPermissions:
         return;
     }
-  }
+  };
 
   return {
     getAccounts,
@@ -272,6 +266,6 @@ export default function useDapp() {
     getSafeInfo,
     makeResponse,
     makeError,
-    handleRequest
+    handleRequest,
   };
 }
