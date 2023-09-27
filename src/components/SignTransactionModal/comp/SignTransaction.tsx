@@ -77,10 +77,10 @@ export default function SignTransaction({
                 <Text>Loading...</Text>
               )}
             </InfoItem>
-            <InfoItem>
+            {/* <InfoItem>
               <Text>Total</Text>
               <Text>$1736.78</Text>
-            </InfoItem>
+            </InfoItem> */}
           </InfoWrap>
         </>
       </Flex>
