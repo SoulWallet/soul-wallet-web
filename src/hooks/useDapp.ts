@@ -127,7 +127,7 @@ export default function useDapp() {
 
     const safeInfo = {
       safeAddress: account,
-      chainId: parseInt(chainConfig.chainIdHex, 10),
+      chainId: chainConfig.chainId,
       owners: [account],
       threshold: 1,
       isReadOnly: false,
@@ -154,10 +154,10 @@ export default function useDapp() {
     }
   }
 
-  const handleRpcCall = async (call, params) => {
+  const handleRpcCall = async (call: string, params: any) => {
     switch (call) {
       case 'eth_chainId':
-        return await chainId(chainConfig);
+        return chainConfig.chainId;
       case 'eth_blockNumber':
         return await blockNumber();
       case 'eth_accounts':
