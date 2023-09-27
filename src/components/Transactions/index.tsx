@@ -33,7 +33,7 @@ export default function Transactions({ ...restProps }: BoxProps) {
     <Box {...restProps}>
       <Flex mb="6px">
         <Text fontSize={'18px'} fontWeight={'800'}>
-          Tokens
+          Transactions
         </Text>
       </Flex>
       <Box
@@ -50,7 +50,17 @@ export default function Transactions({ ...restProps }: BoxProps) {
           (historyList.length === 0 && (
             <>
               {loading ? (
-                <Image src={IconLoading} m="auto" w="12" h="12" pos="absolute" top={'0'} bottom={'0'} left="0" right="0" />
+                <Image
+                  src={IconLoading}
+                  m="auto"
+                  w="12"
+                  h="12"
+                  pos="absolute"
+                  top={'0'}
+                  bottom={'0'}
+                  left="0"
+                  right="0"
+                />
               ) : (
                 <EmptyHint title="No activities" />
               )}

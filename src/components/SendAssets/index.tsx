@@ -27,7 +27,7 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
 
   const { sendErc20, sendEth } = useTransaction();
 
-  const confirmAddress = () => {
+  const confirmAddress = async () => {
     const trimedAddress = receiverAddress ? receiverAddress.trim() : '';
     if (!trimedAddress || !ethers.isAddress(trimedAddress)) {
       toast({
@@ -51,12 +51,17 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
       });
       return;
     }
-
     if (sendToken === ethers.ZeroAddress) {
-      sendEth(trimedAddress, amount);
+      await sendEth(trimedAddress, amount);
     } else {
-      sendErc20(sendToken, trimedAddress, amount, selectedToken.decimals);
+      await sendErc20(sendToken, trimedAddress, amount, selectedToken.decimals);
     }
+    resetState();
+  };
+
+  const resetState = () => {
+    setAmount('');
+    setReceiverAddress('');
   };
 
   return (

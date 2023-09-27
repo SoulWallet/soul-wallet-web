@@ -5,17 +5,29 @@ import { useChainStore } from '@/store/chain';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import { ethers } from 'ethers';
-import { Flex, Box, Text, Modal } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalHeader,
+  ModalCloseButton,
+  useToast,
+} from '@chakra-ui/react';
 import { useBalanceStore } from '@/store/balance';
 import { UserOpUtils, UserOperation } from '@soulwallet_test/sdk';
 import useSdk from '@/hooks/useSdk';
-import BN from 'bignumber.js';
 import useConfig from '@/hooks/useConfig';
 import ConnectDapp from './comp/ConnectDapp';
 import SignTransaction from './comp/SignTransaction';
 import SignMessage from './comp/SignMessage';
 import SwitchChain from './comp/SwitchChain';
 import useTransaction from '@/hooks/useTransaction';
+import useWalletContext from '@/context/hooks/useWalletContext';
+import useWallet from '@/hooks/useWallet';
 
 enum SignTypeEn {
   Transaction,
@@ -37,8 +49,7 @@ export const InfoItem = ({ children, ...restProps }: any) => (
 );
 
 const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
-  const { selectedAddress } = useAddressStore();
-  const [keepModalVisible, setKeepModalVisible] = useState(false);
+  const toast = useToast();
   const [visible, setVisible] = useState<boolean>(false);
   const [loadingFee, setLoadingFee] = useState(true);
   const [origin, setOrigin] = useState<string>('');
@@ -63,7 +74,8 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const [sendToAddress, setSendToAddress] = useState('');
   const { chainConfig, selectedAddressItem } = useConfig();
   const { soulWallet } = useSdk();
-  const {getUserOp} = useTransaction();
+  const { signAndSend } = useWallet();
+  const { getUserOp } = useTransaction();
 
   useImperativeHandle(ref, () => ({
     async show(txns: any, origin: string, sendTo: string) {
@@ -92,32 +104,30 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   }));
 
   const onReject = async () => {
+    setVisible(false);
+    setSigning(false);
     promiseInfo.reject('User reject');
-    if (keepModalVisible) {
-      setVisible(false);
-      setSigning(false);
-    } else {
-      window.close();
-    }
   };
 
   const onConfirm = async () => {
     setSigning(true);
+
+    let userOp: any;
     if (sponsor && sponsor.paymasterAndData) {
-      promiseInfo.resolve({
-        userOp: { ...activeOperation, paymasterAndData: sponsor.paymasterAndData },
-        payToken,
-      });
-    } else if (payToken === ethers.ZeroAddress) {
-      promiseInfo.resolve({ userOp: activeOperation, payToken });
+      userOp = { ...activeOperation, paymasterAndData: sponsor.paymasterAndData };
     } else {
-      promiseInfo.resolve({ userOp: activeOperation, payToken });
+      userOp = activeOperation;
     }
 
-    if (!keepModalVisible) {
-      setVisible(false);
-      setSigning(false);
-    }
+    await signAndSend(userOp, payToken);
+
+    toast({
+      title: 'Transaction success.',
+      status: 'success',
+    });
+
+    setVisible(false);
+    setSigning(false);
   };
 
   const checkSponser = async (userOp: UserOperation) => {
@@ -177,33 +187,42 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
 
   return (
     <div ref={ref}>
-      <Modal isOpen={true} onClose={onReject}>
-        <SignTransaction
-          decodedData={decodedData}
-          sendToAddress={sendToAddress}
-          sponsor={sponsor}
-          origin={origin}
-          feeCost={feeCost}
-          payToken={payToken}
-          setPayToken={setPayToken}
-          payTokenSymbol={payTokenSymbol}
-          loadingFee={loadingFee}
-          signing={signing}
-          onConfirm={onConfirm}
-        />
+      <Modal isOpen={visible} onClose={onReject}>
+        <ModalOverlay />
+        <ModalContent bg="#ededed" maxW={'520px'}>
+          <ModalHeader fontWeight={'800'} textAlign={'center'} borderBottom={'1px solid #d7d7d7'}>
+            Confirm Transaction
+          </ModalHeader>
+          <ModalCloseButton top="14px" />
+          <ModalBody pb="12" px="12">
+            <SignTransaction
+              decodedData={decodedData}
+              sendToAddress={sendToAddress}
+              sponsor={sponsor}
+              origin={origin}
+              feeCost={feeCost}
+              payToken={payToken}
+              setPayToken={setPayToken}
+              payTokenSymbol={payTokenSymbol}
+              loadingFee={loadingFee}
+              signing={signing}
+              onConfirm={onConfirm}
+            />
 
-        <Text
-          color="danger"
-          fontSize="20px"
-          fontWeight={'800'}
-          textAlign={'center'}
-          cursor={'pointer'}
-          onClick={onReject}
-          mt="5"
-          lineHeight={'1'}
-        >
-          Cancel
-        </Text>
+            <Text
+              color="danger"
+              fontSize="20px"
+              fontWeight={'800'}
+              textAlign={'center'}
+              cursor={'pointer'}
+              onClick={onReject}
+              mt="5"
+              lineHeight={'1'}
+            >
+              Cancel
+            </Text>
+          </ModalBody>
+        </ModalContent>
       </Modal>
     </div>
   );

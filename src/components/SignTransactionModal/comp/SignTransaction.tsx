@@ -26,16 +26,11 @@ export default function SignTransaction({
 
   return (
     <>
-      <Text fontSize="20px" fontWeight="800" color="#1e1e1e">
-        Review
-      </Text>
-
-      {origin && (
+      {/* {origin && (
         <Text fontWeight={'600'} mt="1">
           {origin}
         </Text>
-      )}
-
+      )} */}
       <Flex flexDir={'column'} gap="5" mt="6">
         {decodedData && decodedData.length > 0 && (
           <Box bg="#fff" py="3" px="4" rounded="20px" fontWeight={'800'}>
@@ -99,7 +94,7 @@ export default function SignTransaction({
         loading={signing}
         disabled={loadingFee && !sponsor}
       >
-        Sign
+        Confirm
       </Button>
     </>
   );
