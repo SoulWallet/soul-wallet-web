@@ -5,6 +5,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import useConfig from './useConfig';
 import { useAddressStore } from '@/store/address';
 import bg from '@/background';
+import { Methods } from '@safe-global/safe-apps-sdk';
 
 export default function useDapp() {
   const { ethersProvider } = useWalletContext();
@@ -69,7 +70,7 @@ export default function useDapp() {
   const signTypedDataV4 = async (params: any) => {
     // const res = await windowBus.send("signMessageV4", {
     //     data: params[1],
-    // });
+  // });
     // console.log("signTypeV4 sig: ", res);
     // return res;
   };
@@ -121,6 +122,111 @@ export default function useDapp() {
     // return await ethersProvider.call(params[0], params[1]);
   };
 
+  const getSafeInfo = () => {
+    const account = getAccounts();
+
+    const safeInfo = {
+      safeAddress: account,
+      chainId: parseInt(chainConfig.chainIdHex, 10),
+      owners: [account],
+      threshold: 1,
+      isReadOnly: false,
+      network: 'ETHEREUM',
+    }
+
+    return safeInfo
+  }
+
+  const makeResponse = (id: string, data: any) => {
+    return {
+      id,
+      success: true,
+      version: '1.18.0',
+      data
+    }
+  }
+
+  const makeError = (id: string, data: any) => {
+    return {
+      id,
+      success: false,
+      version: '1.18.0'
+    }
+  }
+
+  const handleRpcCall = async (call, params) => {
+    switch (call) {
+      case 'eth_chainId':
+        return await chainId(chainConfig);
+      case 'eth_blockNumber':
+        return await blockNumber();
+      case 'eth_accounts':
+        return await getAccounts();
+      case 'eth_requestAccounts':
+        return await getAccounts();
+      case 'eth_sendTransaction':
+        return await sendTransaction(params);
+      case 'eth_estimateGas':
+        return await estimateGas(params);
+      case 'eth_call':
+        return await ethCall(params);
+      case 'eth_getCode':
+        return await getCode(params);
+      case 'eth_getBalance':
+        return await getBalance(params);
+      case 'eth_gasPrice':
+        return await gasPrice();
+      case 'eth_getTransactionReceipt':
+        return await getTransactionReceipt(params);
+      case 'eth_getTransactionByHash':
+        return await getTransactionByHash(params);
+      case 'personal_sign':
+        return await personalSign(params);
+      case 'personal_ecRecover':
+        return await personalRecover(params);
+      case 'eth_signTypedData_v4':
+        return await signTypedDataV4(params);
+      case 'wallet_switchEthereumChain':
+        return await switchChain(params);
+    }
+  }
+
+  const handleRequest = async (request: any) => {
+    switch (request.method) {
+      case Methods.getChainInfo:
+        return;
+      case Methods.getEnvironmentInfo:
+        return;
+      case Methods.getOffChainSignature:
+        return;
+      case Methods.getSafeBalances:
+        return;
+      case Methods.getSafeInfo:
+        return getSafeInfo();
+      case Methods.getTxBySafeTxHash:
+        return;
+      case Methods.requestAddressBook:
+        return;
+      case Methods.rpcCall:
+        if (request.params) {
+          const { call, params } = request.params
+          return await handleRpcCall(call, params)
+        } else {
+          return;
+        }
+      case Methods.sendTransactions:
+        return;
+      case Methods.signMessage:
+        return;
+      case Methods.signTypedMessage:
+        return;
+      case Methods.wallet_getPermissions:
+        return;
+      case Methods.wallet_requestPermissions:
+        return;
+    }
+  }
+
   return {
     getAccounts,
     switchChain,
@@ -137,5 +243,9 @@ export default function useDapp() {
     chainId,
     blockNumber,
     ethCall,
+    getSafeInfo,
+    makeResponse,
+    makeError,
+    handleRequest
   };
 }
