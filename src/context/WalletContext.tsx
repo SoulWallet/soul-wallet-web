@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
 import SignModal from '@/components/SignModal';
 import SignTransactionModal from '@/components/SignTransactionModal';
+import SignMessageModal from '@/components/SignMessageModal';
 import useKeyring from '@/hooks/useKeyring';
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
@@ -16,6 +17,7 @@ interface IWalletContext {
   replaceAddress: () => Promise<void>;
   showSign: () => Promise<void>;
   showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
+  showSignMessage: (messageToSign: string, origin?: string) => Promise<void>;
 }
 
 export const WalletContext = createContext<IWalletContext>({
@@ -25,6 +27,7 @@ export const WalletContext = createContext<IWalletContext>({
   replaceAddress: async () => {},
   showSign: async () => {},
   showSignTransaction: async () => {},
+  showSignMessage: async () => {},
 });
 
 export const WalletContextProvider = ({ children }: any) => {
@@ -47,6 +50,7 @@ export const WalletContextProvider = ({ children }: any) => {
 
   const signModal = createRef<any>();
   const signTransactionModal = createRef<any>();
+  const signMessageModal = createRef<any>();
   const keystore = useKeyring();
 
   const ethersProvider = useMemo(() => {
@@ -149,6 +153,10 @@ export const WalletContextProvider = ({ children }: any) => {
     return await signTransactionModal.current.show(txns, origin, sendTo);
   };
 
+  const showSignMessage = async (messageToSign: string, origin?: string) => {
+    return await signModal.current.show(messageToSign, origin);
+  };
+
   // if address on chain is not activated, check again
   useEffect(() => {
     if (!selectedAddress || !selectedChainId) {
@@ -166,11 +174,13 @@ export const WalletContextProvider = ({ children }: any) => {
         replaceAddress,
         showSign,
         showSignTransaction,
+        showSignMessage,
       }}
     >
       {children}
       <SignModal ref={signModal} />
       <SignTransactionModal ref={signTransactionModal} />
+      <SignMessageModal ref={signMessageModal} />
     </WalletContext.Provider>
   );
 };

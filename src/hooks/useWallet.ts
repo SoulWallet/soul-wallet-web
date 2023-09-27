@@ -53,7 +53,7 @@ export default function useWallet() {
     //   data: '0x',
     // }
 
-    // const approveCalldatas = [...new Array(to.length)].map(() => approveCalldata);
+    const approveCalldatas = [...new Array(to.length)].map(() => approveCalldata);
 
     // const finalCalldata = [
     //   ...approveCalldata,
@@ -66,7 +66,7 @@ export default function useWallet() {
     //   ],
     // ]
 
-    const callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [to, approveCalldata]);
+    const callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [to, approveCalldatas]);
 
     userOp.callData = callData;
 
