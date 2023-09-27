@@ -32,8 +32,8 @@ export default function useDapp() {
       }
     });
 
-    const receipt = await showSignTransaction(txns);
-    console.log('receipt is', receipt);
+    // return receipt
+    return await showSignTransaction(txns);
   };
 
   const estimateGas = async (params: any) => {
@@ -213,7 +213,7 @@ export default function useDapp() {
         return;
       case Methods.sendTransactions:
         console.log('sendTransactions', request.params.txs)
-        await sendTransaction(request.params.txs);
+        const receipt = await sendTransaction(request.params.txs);
         return;
       case Methods.getChainInfo:
         return {

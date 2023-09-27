@@ -1,11 +1,19 @@
 import IconUniswap from '@/assets/dapps/uniswap.png';
+import IconDefault from '@/assets/dapps/default.png';
 
 export const dappList = [
   {
     icon: IconUniswap,
     title: 'Uniswap',
     category: 'DeFi',
-    url: "http://localhost:3000",
+    url: 'https://app.uniswap.org',
     desc: 'Swap or provide liquidity on the Uniswap protocol',
+  },
+  {
+    icon: IconDefault,
+    title: 'Local Dapp',
+    category: 'DeFi',
+    url: 'http://localhost:3000',
+    desc: 'For developers only',
   },
 ];

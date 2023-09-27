@@ -129,8 +129,6 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     setVisible(false);
     setSigning(false);
 
-    console.log('receipt in modal', receipt);
-
     promiseInfo.resolve(receipt);
   };
 
