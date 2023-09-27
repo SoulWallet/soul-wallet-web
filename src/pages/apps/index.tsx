@@ -1,53 +1,38 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Box } from '@chakra-ui/react';
 import Header from '@/components/Header';
 import handleRequests from '@/provider/handleRequests';
 import { useLocation } from 'react-router-dom';
 import useDapp from '@/hooks/useDapp';
 import useConfig from '@/hooks/useConfig';
+import { useQuery } from '@/hooks/useBrowser';
 
 export default function Apps() {
   const iframeRef = useRef<any>()
-
-  const { chainConfig } = useConfig();
-  const { getAccounts,  } = useDapp();
+  const { handleRequest, makeResponse } = useDapp();
+  const query = useQuery()
+  const appUrl = query.get('appUrl')
 
   const onLoad = () => {
 
   }
 
   useEffect(() => {
-    console.log('location', location)
     window.addEventListener('message', async (msg) => {
-      const account = getAccounts();
-      console.log('account ', account)
-      const safeInfo = {
-        safeAddress: account,
-        chainId: parseInt(chainConfig.chainIdHex, 10),
-        owners: [account],
-        threshold: 1,
-        isReadOnly: false,
-        network: 'ETHEREUM',
-      }
+      const request = msg.data
 
-      const data = msg.data
-
-      if (data && data.method && data.method === 'getSafeInfo') {
-        const response = {
-          id: data.id,
-          success: true,
-          version: '1.18.0',
-          data: safeInfo
-        }
+      try {
+        let result = await handleRequest(request)
+        const response = makeResponse(request.id, result)
+        console.log('safe message', request, response)
         iframeRef.current.contentWindow.postMessage(response, msg.origin)
-        console.log('message1111', msg.origin, data, response)
+      } catch (error: any) {
+
       }
     })
   }, [])
 
   const IFRAME_SANDBOX_ALLOWED_FEATURES = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock'
-  let appUrl = `https://app.aave.com`
-  appUrl = `http://localhost:3000`
 
   return (
     <Box width="100%" height="100vh">
@@ -55,16 +40,18 @@ export default function Apps() {
         <Header />
       </Box>
       <Box width="100%" height="calc(100% - 102px)">
-        <iframe
-          id={`iframe-${appUrl}`}
-          ref={iframeRef}
-          src={appUrl}
-          title={'test'}
-          onLoad={onLoad}
-          sandbox={IFRAME_SANDBOX_ALLOWED_FEATURES}
-          allow={''}
-          style={{ width: '100%', height: '100%' }}
-        />
+        {appUrl && (
+          <iframe
+            id={`iframe-${appUrl}`}
+            ref={iframeRef}
+            src={appUrl}
+            title={'test'}
+            onLoad={onLoad}
+            sandbox={IFRAME_SANDBOX_ALLOWED_FEATURES}
+            allow={''}
+            style={{ width: '100%', height: '100%' }}
+          />
+        )}
       </Box>
     </Box>
   )

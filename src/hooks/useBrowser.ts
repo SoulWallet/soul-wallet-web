@@ -1,11 +1,17 @@
+import React from 'react';
 import { openWindow } from '@/lib/tools';
-// import { useNavigate } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+export function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 
 export default function useBrowser() {
   const navigateTo = useNavigate();
 
-  /**
+  /*
    * add version prefix and do some check
    * @param route
    */
