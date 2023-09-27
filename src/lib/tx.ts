@@ -1,6 +1,6 @@
 import { SoulWallet, Bundler } from '@soulwallet_test/sdk';
 import { notify } from '@/lib/tools';
-// import { printUserOp } from '@/lib/tools';
+import { printUserOp } from '@/lib/tools';
 
 let soulWallet: any = null;
 let currentChainId: any = null;
@@ -32,7 +32,7 @@ export const executeTransaction = async (userOp: any, chainConfig: any) => {
     initBundler(chainConfig.bundlerUrl);
   }
 
-  // printUserOp(userOp);
+  printUserOp(userOp);
   return new Promise(async (resolve, reject) => {
     const ret = await soulWallet.sendUserOperation(userOp);
 
