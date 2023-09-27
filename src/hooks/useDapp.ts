@@ -24,6 +24,10 @@ export default function useDapp() {
     // return await windowBus.send("switchChain", params[0]);
   };
 
+  const getBlockByNumber = async (blockHashOrBlockTag: string, prefetchTxs: boolean) => {
+    return await ethersProvider.getBlock(blockHashOrBlockTag, prefetchTxs);
+  }
+
   const sendTransaction = async (txns: any) => {
     txns.forEach((item: any) => {
       if (!item.value) {
@@ -154,6 +158,8 @@ export default function useDapp() {
         return chainConfig.chainId;
       case 'eth_blockNumber':
         return await blockNumber();
+      case 'eth_getBlockByNumber':
+        return await getBlockByNumber(params[0], params[1]);
       case 'eth_accounts':
         return await getAccounts();
       case 'eth_requestAccounts':
