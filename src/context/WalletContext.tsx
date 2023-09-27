@@ -1,6 +1,7 @@
-import React, { createContext, useState, useEffect, createRef, useMemo } from 'react';
+import { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
 import SignModal from '@/components/SignModal';
+import SignTransactionModal from '@/components/SignTransactionModal';
 import useKeyring from '@/hooks/useKeyring';
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
@@ -14,6 +15,7 @@ interface IWalletContext {
   getAccount: () => Promise<void>;
   replaceAddress: () => Promise<void>;
   showSign: () => Promise<void>;
+  showSignTransaction: (txns: any, origin: string, sendTo: string) => Promise<void>;
 }
 
 export const WalletContext = createContext<IWalletContext>({
@@ -22,6 +24,7 @@ export const WalletContext = createContext<IWalletContext>({
   getAccount: async () => {},
   replaceAddress: async () => {},
   showSign: async () => {},
+  showSignTransaction: async () => {},
 });
 
 export const WalletContextProvider = ({ children }: any) => {
@@ -43,6 +46,7 @@ export const WalletContextProvider = ({ children }: any) => {
     useAddressStore();
 
   const signModal = createRef<any>();
+  const signTransactionModal = createRef<any>();
   const keystore = useKeyring();
 
   const ethersProvider = useMemo(() => {
@@ -52,9 +56,7 @@ export const WalletContextProvider = ({ children }: any) => {
     return new ethers.JsonRpcProvider(selectedChainItem.provider);
   }, [selectedChainItem]);
 
-  const getAccount = async () => {
-   
-  };
+  const getAccount = async () => {};
 
   const replaceAddress = async () => {
     await keystore.replaceAddress();
@@ -141,7 +143,11 @@ export const WalletContextProvider = ({ children }: any) => {
 
   const showSign = async () => {
     await signModal.current.show();
-  }
+  };
+
+  const showSignTransaction = async (txns: any, origin: string, sendTo: string) => {
+    await signTransactionModal.current.show(txns, origin, sendTo);
+  };
 
   // if address on chain is not activated, check again
   useEffect(() => {
@@ -159,10 +165,12 @@ export const WalletContextProvider = ({ children }: any) => {
         getAccount,
         replaceAddress,
         showSign,
+        showSignTransaction,
       }}
     >
       {children}
       <SignModal ref={signModal} />
+      <SignTransactionModal ref={signTransactionModal} />
     </WalletContext.Provider>
   );
 };

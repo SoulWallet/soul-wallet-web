@@ -2,7 +2,6 @@ import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react
 import useQuery from '@/hooks/useQuery';
 import useTools from '@/hooks/useTools';
 import { useChainStore } from '@/store/chain';
-import { SignkeyType } from '@soulwallet_test/sdk';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import { ethers } from 'ethers';
@@ -37,7 +36,7 @@ export const InfoItem = ({ children, ...restProps }: any) => (
   </Flex>
 );
 
-const SignModal = (_: unknown, ref: Ref<any>) => {
+const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const { selectedAddress } = useAddressStore();
   const [keepModalVisible, setKeepModalVisible] = useState(false);
   const [visible, setVisible] = useState<boolean>(false);
@@ -63,30 +62,15 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
   const { getFeeCost, getGasPrice, getPrefund } = useQuery();
   const [sendToAddress, setSendToAddress] = useState('');
   const { chainConfig, selectedAddressItem } = useConfig();
+  const { soulWallet } = useSdk();
   const {getUserOp} = useTransaction();
 
-
   useImperativeHandle(ref, () => ({
-    async show(obj: any) {
-      const { txns, actionType, origin, keepVisible, msgToSign, sendTo, targetChainId: tChainId } = obj;
+    async show(txns: any, origin: string, sendTo: string) {
       setVisible(true);
       setOrigin(origin);
 
-      console.log('show sign modal', txns, actionType, origin, keepVisible, msgToSign, sendTo);
-      setKeepModalVisible(keepVisible || false);
-
       setSendToAddress(sendTo);
-
-      if (actionType === 'getAccounts') {
-        setSignType(SignTypeEn.Account);
-      } else if (actionType === 'signMessage' || actionType === 'signMessageV4') {
-        setSignType(SignTypeEn.Message);
-      } else if (actionType === 'switchChain') {
-        setSignType(SignTypeEn.SwitchChain);
-        setTargetChainId(tChainId);
-      } else {
-        setSignType(SignTypeEn.Transaction);
-      }
 
       if (txns) {
         const userOp = await getUserOp(txns, payToken);
@@ -96,10 +80,6 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
         console.log('decoded data', callDataDecodes);
         setDecodedData(callDataDecodes);
         checkSponser(userOp);
-      }
-
-      if (msgToSign) {
-        setMessageToSign(msgToSign);
       }
 
       return new Promise((resolve, reject) => {
@@ -138,18 +118,6 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
       setVisible(false);
       setSigning(false);
     }
-  };
-
-  const onSwitchChain = async () => {
-    promiseInfo.resolve();
-  };
-
-  const onConnect = () => {
-    promiseInfo.resolve();
-  };
-
-  const onSign = async () => {
-    promiseInfo.resolve();
   };
 
   const checkSponser = async (userOp: UserOperation) => {
@@ -209,27 +177,21 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
 
   return (
     <div ref={ref}>
-      <Modal isOpen={visible} onClose={onReject}>
-        {signType === SignTypeEn.Account && <ConnectDapp origin={origin} onConfirm={onConnect} />}
-        {signType === SignTypeEn.Transaction && (
-          <SignTransaction
-            decodedData={decodedData}
-            sendToAddress={sendToAddress}
-            sponsor={sponsor}
-            origin={origin}
-            feeCost={feeCost}
-            payToken={payToken}
-            setPayToken={setPayToken}
-            payTokenSymbol={payTokenSymbol}
-            loadingFee={loadingFee}
-            signing={signing}
-            onConfirm={onConfirm}
-          />
-        )}
-        {signType === SignTypeEn.Message && (
-          <SignMessage messageToSign={messageToSign} onSign={onSign} origin={origin} />
-        )}
-        {signType === SignTypeEn.SwitchChain && <SwitchChain targetChainId={targetChainId} onConfirm={onSwitchChain} />}
+      <Modal isOpen={true} onClose={onReject}>
+        <SignTransaction
+          decodedData={decodedData}
+          sendToAddress={sendToAddress}
+          sponsor={sponsor}
+          origin={origin}
+          feeCost={feeCost}
+          payToken={payToken}
+          setPayToken={setPayToken}
+          payTokenSymbol={payTokenSymbol}
+          loadingFee={loadingFee}
+          signing={signing}
+          onConfirm={onConfirm}
+        />
+
         <Text
           color="danger"
           fontSize="20px"
@@ -247,4 +209,4 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
   );
 };
 
-export default forwardRef(SignModal);
+export default forwardRef(SignTransactionModal);

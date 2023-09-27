@@ -48,9 +48,25 @@ export default function useWallet() {
       ethers.parseEther('1000'),
     ]);
 
-    const approveCalldatas = [...new Array(to.length)].map(() => approveCalldata);
+    // const transferData = {
+    //   to: '',
+    //   data: '0x',
+    // }
 
-    const callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [to, approveCalldatas]);
+    // const approveCalldatas = [...new Array(to.length)].map(() => approveCalldata);
+
+    // const finalCalldata = [
+    //   ...approveCalldata,
+    //   ...[
+    //     {
+    //       to: '',
+    //       data: '',
+    //     },
+    //     transferData.data,
+    //   ],
+    // ]
+
+    const callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [to, approveCalldata]);
 
     userOp.callData = callData;
 
