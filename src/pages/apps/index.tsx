@@ -25,6 +25,7 @@ export default function Apps() {
       console.log('safe message', request, response)
       iframeRef.current.contentWindow.postMessage(response, msg.origin)
     } catch (error: any) {
+      console.log('error', error.message)
     }
   }
 
