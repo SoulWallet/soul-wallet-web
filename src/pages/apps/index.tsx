@@ -25,11 +25,14 @@ export default function Apps() {
 
       try {
         let result = await handleRequest(request)
-        const response = makeResponse(request.id, result)
-        console.log('safe message', request, response)
-        iframeRef.current.contentWindow.postMessage(response, msg.origin)
-      } catch (error: any) {
 
+        if (request.id) {
+          const response = makeResponse(request.id, result)
+          console.log('safe message', request, response)
+          iframeRef.current.contentWindow.postMessage(response, msg.origin)
+        }
+      } catch (error: any) {
+        console.log('error', error.message)
       }
     })
   }, [])
