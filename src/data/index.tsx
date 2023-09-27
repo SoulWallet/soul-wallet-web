@@ -1,5 +1,5 @@
 import IconUniswap from '@/assets/dapps/uniswap.png';
-import IconDefault from '@/assets/dapps/default.png';
+import IconDefault from '@/assets/icons/default.svg';
 
 export const dappList = [
   {

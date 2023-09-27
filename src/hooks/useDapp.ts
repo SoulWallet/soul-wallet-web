@@ -5,7 +5,6 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import useKeyring from '@/hooks/useKeyring';
 import useConfig from './useConfig';
 import { useAddressStore } from '@/store/address';
-import bg from '@/background';
 import { Methods } from '@safe-global/safe-apps-sdk';
 
 export default function useDapp() {
@@ -113,7 +112,7 @@ export default function useDapp() {
   };
 
   const ethCall = async (params: any) => {
-    console.log('params', params);
+    return await ethersProvider.call(params[0]);
     // TODO
     // return await ethersProvider.call(params[0], params[1]);
   };
@@ -187,6 +186,7 @@ export default function useDapp() {
   };
 
   const handleRequest = async (request: any) => {
+    // console.log('handle reqeust', request.params.call, request.method)
     switch (request.method) {
       case Methods.getSafeInfo:
         return getSafeInfo();
@@ -216,6 +216,7 @@ export default function useDapp() {
         const receipt = await sendTransaction(request.params.txs);
         return;
       case Methods.getChainInfo:
+        console.log('getChainInfo', chainConfig);
         return {
           chainName: chainConfig.chainName,
           chainId: chainConfig.chainId,

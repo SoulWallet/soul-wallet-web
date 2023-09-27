@@ -1,6 +1,6 @@
 import { SoulWallet, Bundler } from '@soulwallet_test/sdk';
 import { notify } from '@/lib/tools';
-import { printUserOp } from '@/lib/tools';
+// import { printUserOp } from '@/lib/tools';
 
 let soulWallet: any = null;
 let currentChainId: any = null;
