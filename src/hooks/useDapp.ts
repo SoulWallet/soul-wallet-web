@@ -25,14 +25,14 @@ export default function useDapp() {
     // return await windowBus.send("switchChain", params[0]);
   };
 
-  const sendTransaction = async (params: any) => {
-    params.forEach((item: any) => {
+  const sendTransaction = async (txns: any) => {
+    txns.forEach((item: any) => {
       if (!item.value) {
         item.value = '0x0';
       }
     });
 
-    const receipt = await showSignTransaction(params);
+    const receipt = await showSignTransaction(txns);
     console.log('receipt is', receipt);
   };
 
@@ -212,6 +212,8 @@ export default function useDapp() {
         console.log('safeTxHash', safeTxHash);
         return;
       case Methods.sendTransactions:
+        console.log('sendTransactions', request.params.txs)
+        await sendTransaction(request.params.txs);
         return;
       case Methods.getChainInfo:
         return {

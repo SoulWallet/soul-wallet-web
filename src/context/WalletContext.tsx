@@ -146,7 +146,7 @@ export const WalletContextProvider = ({ children }: any) => {
   };
 
   const showSignTransaction = async (txns: any, origin?: string, sendTo?: string) => {
-    await signTransactionModal.current.show(txns, origin, sendTo);
+    return await signTransactionModal.current.show(txns, origin, sendTo);
   };
 
   // if address on chain is not activated, check again

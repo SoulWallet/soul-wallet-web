@@ -13,6 +13,8 @@ export default function Apps() {
   const query = useQuery()
   const appUrl = query.get('appUrl')
 
+  console.log('app url', appUrl)
+
   const onLoad = () => {
 
   }

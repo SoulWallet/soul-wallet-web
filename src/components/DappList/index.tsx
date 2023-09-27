@@ -1,5 +1,6 @@
 import { Box, Flex, Grid, GridItem, Image, Text } from '@chakra-ui/react';
 import { dappList } from '@/data';
+import { Link } from 'react-router-dom';
 import IconLink from '@/assets/icons/link.svg';
 import IconBookmark from '@/assets/icons/bookmark.svg';
 import IconPlus from '@/assets/icons/dapp-plus.svg';
@@ -8,6 +9,8 @@ const tabs = ['My Dapps', 'Explore more', 'Wallet connect'];
 const DappItem = ({ item }: any) => {
   return (
     <GridItem
+      as={Link}
+      to={`/apps?appUrl=${encodeURIComponent(item.url)}`}
       px="5"
       py="4"
       bg="#fff"

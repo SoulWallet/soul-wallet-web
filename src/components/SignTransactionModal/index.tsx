@@ -119,7 +119,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
       userOp = activeOperation;
     }
 
-    await signAndSend(userOp, payToken);
+    const receipt = await signAndSend(userOp, payToken);
 
     toast({
       title: 'Transaction success.',
@@ -128,6 +128,10 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
 
     setVisible(false);
     setSigning(false);
+
+    console.log('receipt in modal', receipt);
+
+    promiseInfo.resolve(receipt);
   };
 
   const checkSponser = async (userOp: UserOperation) => {

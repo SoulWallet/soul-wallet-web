@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { openWindow, checkAllowed, checkShouldInject, getSelectedChainItem } from '@/lib/tools';
 import { executeTransaction } from '@/lib/tx';
-import { notify } from '@/lib/tools';
 
 export default {
   async execute(userOp: any, chainConfig: any) {
