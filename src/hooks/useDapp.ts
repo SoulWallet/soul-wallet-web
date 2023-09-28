@@ -5,7 +5,26 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import useKeyring from '@/hooks/useKeyring';
 import useConfig from './useConfig';
 import { useAddressStore } from '@/store/address';
-import { Methods } from '@safe-global/safe-apps-sdk';
+import {
+  Methods,
+  SafeInfo,
+  SendTransactionsResponse,
+  BaseTransaction,
+  GetTxBySafeTxHashParams,
+  SendTransactionRequestParams,
+  SendTransactionsParams,
+  SignMessageParams,
+  TypedDataDomain,
+  TypedDataTypes,
+  EIP712TypedData,
+  SignTypedMessageParams,
+  SendTransactionsResponse,
+  OffChainSignMessageResponse,
+  SignMessageResponse,
+  EnvironmentInfo,
+  PostMessageOptions,
+  AddressBookItem
+} from '@safe-global/safe-apps-sdk';
 
 export default function useDapp() {
   const { ethersProvider, showSignTransaction } = useWalletContext();
@@ -69,7 +88,7 @@ export default function useDapp() {
   const signTypedDataV4 = async (params: any) => {
     // const res = await windowBus.send("signMessageV4", {
     //     data: params[1],
-    // });
+  // });
     // console.log("signTypeV4 sig: ", res);
     // return res;
   };
@@ -121,7 +140,7 @@ export default function useDapp() {
     // return await ethersProvider.call(params[0], params[1]);
   };
 
-  const getSafeInfo = () => {
+  const getSafeInfo = (): SafeInfo => {
     const account = getAccounts();
 
     const safeInfo = {
@@ -133,6 +152,11 @@ export default function useDapp() {
     };
 
     return safeInfo;
+  };
+
+  const sendSafeTransaction = async (request: any): Promise<SendTransactionsResponse> => {
+    const receipt: any = await sendTransaction(request.params.txs);
+    return { safeTxHash: receipt.transactionHash }
   };
 
   const makeResponse = (id: string, data: any) => {
@@ -218,8 +242,7 @@ export default function useDapp() {
         console.log('safeTxHash', safeTxHash);
         return;
       case Methods.sendTransactions:
-        const receipt = await sendTransaction(request.params.txs);
-        return { safeTxHash: receipt.transactionHash }
+        return await sendSafeTransaction(request);
       case Methods.getChainInfo:
         console.log('getChainInfo', chainConfig);
         return {
