@@ -18,7 +18,6 @@ import {
   TypedDataTypes,
   EIP712TypedData,
   SignTypedMessageParams,
-  SendTransactionsResponse,
   OffChainSignMessageResponse,
   SignMessageResponse,
   EnvironmentInfo,
