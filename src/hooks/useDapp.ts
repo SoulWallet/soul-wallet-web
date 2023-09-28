@@ -8,7 +8,6 @@ import { useAddressStore } from '@/store/address';
 import {
   Methods,
   SafeInfo,
-  SendTransactionsResponse,
   BaseTransaction,
   GetTxBySafeTxHashParams,
   SendTransactionRequestParams,
