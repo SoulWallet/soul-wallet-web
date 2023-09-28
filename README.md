@@ -9,3 +9,6 @@ pnpm install
 ```
 pnpm dev
 ```
+
+## Version
+1
