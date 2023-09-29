@@ -48,9 +48,9 @@ export default function SignTransaction({
         <AddressInputReadonly label="From" value={selectedAddressItem.title} memo={toShortAddress(selectedAddress)} />
         {sendToAddress ? (
           <AddressInput label="To" value={sendToAddress} disabled={true} />
-        ) : (
+        ) : decodedData[0] && decodedData[0].to ?(
           <AddressInput label="To" value={decodedData[0] && decodedData[0].to} disabled={true} />
-        )}
+        ) : ''}
 
         <>
           <InfoWrap>

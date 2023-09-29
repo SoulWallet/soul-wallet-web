@@ -62,19 +62,32 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const [payTokenSymbol, setPayTokenSymbol] = useState('');
   const [feeCost, setFeeCost] = useState('');
   const [activeOperation, setActiveOperation] = useState<UserOperation>();
-  const [signType, setSignType] = useState<SignTypeEn>();
-  const [messageToSign, setMessageToSign] = useState('');
   const [sponsor, setSponsor] = useState<any>(null);
   const [activeTxns, setActiveTxns] = useState<any>(null); // [
   const { selectedChainId } = useChainStore();
   const { decodeCalldata } = useTools();
-  const [targetChainId, setTargetChainId] = useState('');
-  const { getFeeCost, getGasPrice, getPrefund } = useQuery();
+  // const [targetChainId, setTargetChainId] = useState('');
+  const { getPrefund } = useQuery();
   const [sendToAddress, setSendToAddress] = useState('');
-  const { chainConfig, selectedAddressItem } = useConfig();
-  const { soulWallet } = useSdk();
+  const { chainConfig } = useConfig();
   const { signAndSend } = useWallet();
   const { getUserOp } = useTransaction();
+
+  const clearState = () => {
+    setOrigin('');
+    setPromiseInfo({});
+    setDecodedData({});
+    setLoadingFee(true);
+    setSigning(false);
+    setPrefundCalculated(false);
+    setPayToken(ethers.ZeroAddress);
+    setPayTokenSymbol('');
+    setFeeCost('');
+    setActiveOperation(undefined);
+    setSponsor(null);
+    setActiveTxns(null);
+    setSendToAddress('');
+  }
 
   useImperativeHandle(ref, () => ({
     async show(txns: any, origin: string, sendTo: string) {
@@ -105,6 +118,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const onClose = async () => {
     setVisible(false);
     setSigning(false);
+    clearState();
     promiseInfo.reject('User reject');
   };
 
@@ -127,6 +141,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
 
     setVisible(false);
     setSigning(false);
+    clearState();
 
     promiseInfo.resolve(receipt);
   };
