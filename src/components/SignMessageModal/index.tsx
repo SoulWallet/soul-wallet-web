@@ -1,34 +1,22 @@
 import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
-import { ethers } from 'ethers';
-import { Flex, Box, Text, Modal } from '@chakra-ui/react';
-import { UserOpUtils, UserOperation } from '@soulwallet_test/sdk';
+import { Flex, Text, useToast } from '@chakra-ui/react';
 import SignMessage from './comp/SignMessage';
-
-export const InfoWrap = ({ children, ...restProps }: any) => (
-  <Flex fontSize="12px" fontWeight={'500'} px="4" gap="6" fontFamily={'Martian'} flexDir={'column'} {...restProps}>
-    {children}
-  </Flex>
-);
-
-export const InfoItem = ({ children, ...restProps }: any) => (
-  <Flex align="center" justify={'space-between'} {...restProps}>
-    {children}
-  </Flex>
-);
+import TxModal from '../TxModal';
 
 const SignMessageModal = (_: unknown, ref: Ref<any>) => {
-  const [keepModalVisible, setKeepModalVisible] = useState(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [origin, setOrigin] = useState<string>('');
+  const [signType, setSignType] = useState('')
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const [messageToSign, setMessageToSign] = useState('');
+  const toast = useToast();
 
   useImperativeHandle(ref, () => ({
-    async show(message: string, origin?: string) {
+    async show(message: string, _signType: string) {
       setVisible(true);
       // setOrigin(origin);
       setMessageToSign(message);
-
+      setSignType(_signType)
       return new Promise((resolve, reject) => {
         setPromiseInfo({
           resolve,
@@ -38,36 +26,37 @@ const SignMessageModal = (_: unknown, ref: Ref<any>) => {
     },
   }));
 
-  const onReject = async () => {
+  const onClose = async () => {
     promiseInfo.reject('User reject');
-    if (keepModalVisible) {
-      setVisible(false);
-    } else {
-      window.close();
-    }
+    setVisible(false);
   };
 
-  const onSign = async () => {
-    promiseInfo.resolve();
+  const onSign = async (signature: string) => {
+    promiseInfo.resolve(signature);
+    setVisible(false);
+    toast({
+      title: 'Signed message',
+      status: 'success',
+    });
   };
 
   return (
     <div ref={ref}>
-      <Modal isOpen={visible} onClose={onReject}>
-        <SignMessage messageToSign={messageToSign} onSign={onSign} origin={origin} />
+      <TxModal visible={visible} onClose={onClose} title="Sign Message">
+        <SignMessage messageToSign={messageToSign} signType={signType} onSign={onSign} origin={origin} />
         <Text
           color="danger"
           fontSize="20px"
           fontWeight={'800'}
           textAlign={'center'}
           cursor={'pointer'}
-          onClick={onReject}
+          onClick={onClose}
           mt="5"
           lineHeight={'1'}
         >
           Cancel
         </Text>
-      </Modal>
+      </TxModal>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { getMessageType } from '@/lib/tools';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useKeyring from '@/hooks/useKeyring';
 import useConfig from './useConfig';
+import {TypedDataEncoder} from 'ethers'
 import { useAddressStore } from '@/store/address';
 import {
   Methods,
@@ -22,15 +23,13 @@ import {
   SignMessageResponse,
   EnvironmentInfo,
   PostMessageOptions,
-  AddressBookItem
+  AddressBookItem,
 } from '@safe-global/safe-apps-sdk';
 
 export default function useDapp() {
-  const { ethersProvider, showSignTransaction } = useWalletContext();
+  const { ethersProvider, showSignTransaction, showSignMessage } = useWalletContext();
   const { chainConfig } = useConfig();
   const { selectedAddress } = useAddressStore();
-
-  const keyring = useKeyring();
 
   const getAccounts = () => {
     return selectedAddress;
@@ -44,7 +43,7 @@ export default function useDapp() {
 
   const getBlockByNumber = async (blockHashOrBlockTag: string, prefetchTxs: boolean) => {
     return await ethersProvider.getBlock(blockHashOrBlockTag, prefetchTxs);
-  }
+  };
 
   const sendTransaction = async (txns: any) => {
     txns.forEach((item: any) => {
@@ -85,21 +84,19 @@ export default function useDapp() {
   };
 
   const signTypedDataV4 = async (params: any) => {
+    const msg = params[1]
+    return await showSignMessage(msg, 'typedData');
     // const res = await windowBus.send("signMessageV4", {
     //     data: params[1],
-  // });
+    // });
     // console.log("signTypeV4 sig: ", res);
     // return res;
   };
 
-  const personalSign = async (params: any) => {
+  const signMessage = async (params: any) => {
     const msg = params[0];
-    // const msgToSign = getMessageType(params[0]) === "hash" ? msg : ethers.utils.toUtf8String(msg);
-    // console.log('before send personal sign', msgToSign)
-    // const res = await windowBus.send("signMessage", {
-    //     data: msg,
-    // });
-    // return res;
+    const signature = await showSignMessage(msg, 'message');
+    return signature;
   };
 
   const personalRecover = async (params: string[]) => {
@@ -155,7 +152,7 @@ export default function useDapp() {
 
   const sendSafeTransaction = async (request: any): Promise<SendTransactionsResponse> => {
     const receipt: any = await sendTransaction(request.params.txs);
-    return { safeTxHash: receipt.transactionHash }
+    return { safeTxHash: receipt.transactionHash };
   };
 
   const makeResponse = (id: string, data: any) => {
@@ -204,7 +201,7 @@ export default function useDapp() {
       case 'eth_getTransactionByHash':
         return await getTransactionByHash(params);
       case 'personal_sign':
-        return await personalSign(params);
+        return await signMessage(params);
       case 'personal_ecRecover':
         return await personalRecover(params);
       case 'eth_signTypedData_v4':
@@ -227,15 +224,14 @@ export default function useDapp() {
           return;
         }
       case Methods.signMessage:
-        console.log('signMessage', request);
-        return;
+        return await signMessage([request.params.message]);
       case Methods.signTypedMessage:
         // {"types":{"type":"object","properties":{"EIP712Domain":{"type":"array"}},"additionalProperties":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"type":{"type":"string"}},"required":["name","type"]}},"required":["EIP712Domain"]},"primaryType":{"type":"string"},"domain":{"type":"object"},"message":{"type":"object"}}
         const params = request.params;
         const typedData = params.typedData;
-        const signature = await keyring.signMessageV4(typedData);
+        const signature = await signTypedDataV4([, typedData])
         console.log('signTypedMessage data', signature);
-        return;
+        return signature;
       case Methods.getTxBySafeTxHash:
         const { safeTxHash } = request.params;
         console.log('safeTxHash', safeTxHash);
@@ -288,7 +284,7 @@ export default function useDapp() {
     getTransactionReceipt,
     getTransactionByHash,
     signTypedDataV4,
-    personalSign,
+    signMessage,
     personalRecover,
     chainId,
     blockNumber,

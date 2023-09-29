@@ -3,12 +3,36 @@ import { Flex, Box, Text, Image } from '@chakra-ui/react';
 import Button from '../../Button';
 import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
 import { useAddressStore } from '@/store/address';
+import useWallet from '@/hooks/useWallet';
 import useConfig from '@/hooks/useConfig';
 import { toShortAddress } from '@/lib/tools';
+import { ethers } from 'ethers';
+import { TypedDataEncoder } from 'ethers';
 
-export default function SignMessage({ messageToSign, onSign, origin }: any) {
-  const { selectedAddress } = useAddressStore();
+export default function SignMessage({ messageToSign, onSign, signType, origin }: any) {
   const { selectedAddressItem } = useConfig();
+  const { signRawHash } = useWallet();
+
+  const getHash = (message: string) => {
+    return ethers.hashMessage(message);
+  };
+
+  const getTypedHash = (typedData: any) => {
+    return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.message);
+  };
+
+  const onConfirm = async () => {
+    let signHash;
+    if (signType === 'message') {
+      signHash = getHash(messageToSign);
+    } else if (signType === 'typedData') {
+      signHash = getTypedHash(messageToSign);
+    } else {
+      throw new Error('signType not supported');
+    }
+    const signature = await signRawHash(signHash);
+    onSign(signature);
+  };
 
   return (
     <>
@@ -24,7 +48,7 @@ export default function SignMessage({ messageToSign, onSign, origin }: any) {
 
       <Flex flexDir={'column'} gap="5" mt="6">
         <Box bg="#fff" py="3" px="4" rounded="20px" fontWeight={'800'}>
-          {messageToSign}
+          {signType === 'typedData' ? JSON.stringify(messageToSign) : messageToSign}
         </Box>
         <AddressInputReadonly
           label="From"
@@ -32,8 +56,8 @@ export default function SignMessage({ messageToSign, onSign, origin }: any) {
           memo={toShortAddress(selectedAddressItem.address)}
         />
       </Flex>
-      <Button w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onSign}>
-        Sign
+      <Button w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
+        Confirm
       </Button>
     </>
   );

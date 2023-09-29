@@ -3,7 +3,6 @@ import useQuery from '@/hooks/useQuery';
 import useTools from '@/hooks/useTools';
 import { useChainStore } from '@/store/chain';
 import api from '@/lib/api';
-import { useAddressStore } from '@/store/address';
 import { ethers } from 'ethers';
 import {
   Flex,
@@ -23,11 +22,11 @@ import useSdk from '@/hooks/useSdk';
 import useConfig from '@/hooks/useConfig';
 import ConnectDapp from './comp/ConnectDapp';
 import SignTransaction from './comp/SignTransaction';
-import SignMessage from './comp/SignMessage';
 import SwitchChain from './comp/SwitchChain';
 import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
+import TxModal from '../TxModal';
 
 enum SignTypeEn {
   Transaction,
@@ -103,7 +102,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     },
   }));
 
-  const onReject = async () => {
+  const onClose = async () => {
     setVisible(false);
     setSigning(false);
     promiseInfo.reject('User reject');
@@ -189,7 +188,35 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
 
   return (
     <div ref={ref}>
-      <Modal isOpen={visible} onClose={onReject}>
+      <TxModal title="Confirm Transaction" visible={visible} onClose={onClose}>
+        <SignTransaction
+          decodedData={decodedData}
+          sendToAddress={sendToAddress}
+          sponsor={sponsor}
+          origin={origin}
+          feeCost={feeCost}
+          payToken={payToken}
+          setPayToken={setPayToken}
+          payTokenSymbol={payTokenSymbol}
+          loadingFee={loadingFee}
+          signing={signing}
+          onConfirm={onConfirm}
+        />
+
+        <Text
+          color="danger"
+          fontSize="20px"
+          fontWeight={'800'}
+          textAlign={'center'}
+          cursor={'pointer'}
+          onClick={onClose}
+          mt="5"
+          lineHeight={'1'}
+        >
+          Cancel
+        </Text>
+      </TxModal>
+      {/* <Modal isOpen={visible} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="#ededed" maxW={'520px'}>
           <ModalHeader fontWeight={'800'} textAlign={'center'} borderBottom={'1px solid #d7d7d7'}>
@@ -197,35 +224,10 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
           </ModalHeader>
           <ModalCloseButton top="14px" />
           <ModalBody pb="12" px="12">
-            <SignTransaction
-              decodedData={decodedData}
-              sendToAddress={sendToAddress}
-              sponsor={sponsor}
-              origin={origin}
-              feeCost={feeCost}
-              payToken={payToken}
-              setPayToken={setPayToken}
-              payTokenSymbol={payTokenSymbol}
-              loadingFee={loadingFee}
-              signing={signing}
-              onConfirm={onConfirm}
-            />
-
-            <Text
-              color="danger"
-              fontSize="20px"
-              fontWeight={'800'}
-              textAlign={'center'}
-              cursor={'pointer'}
-              onClick={onReject}
-              mt="5"
-              lineHeight={'1'}
-            >
-              Cancel
-            </Text>
+         
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import useWalletContext from '../context/hooks/useWalletContext';
 import useKeyring from './useKeyring';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
+import { SoulWallet } from '@soulwallet_test/sdk';
 import { useAddressStore } from '@/store/address';
 import useQuery from './useQuery';
 import { ABI_SoulWallet } from '@soulwallet_test/abi';
@@ -21,11 +22,11 @@ export default function useWallet() {
   const { toggleActivatedChain } = useAddressStore();
   const { calcGuardianHash } = useKeystore();
   const { selectedChainId } = useChainStore();
-  const {sign} = usePasskey();
+  const { sign } = usePasskey();
   const { getFeeCost, getPrefund } = useQuery();
   const { chainConfig } = useConfig();
   const { guardians, threshold, slotInitInfo } = useGuardianStore();
-  const {credentials} = useCredentialStore();
+  const { credentials } = useCredentialStore();
   const keystore = useKeyring();
   const { soulWallet } = useSdk();
 
@@ -92,7 +93,21 @@ export default function useWallet() {
     return soulAbi.encodeFunctionData('setGuardian(bytes32,bytes32,bytes32)', [slot, guardianHash, keySignature]);
   };
 
-  const signAndSend = async (userOp: UserOperation, payToken?: string, credentialIndex: number = 0) => {
+  const getSignature = async (packedHash: string, validationData: string) => {
+    // IMPORT TODO, use the first credential for now
+    const credentialIndex = 0;
+    const signatureData = await sign(credentials[credentialIndex], packedHash);
+
+    const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, validationData);
+
+    if (packedSignatureRet.isErr()) {
+      throw new Error(packedSignatureRet.ERR.message);
+    }
+
+    return packedSignatureRet.OK;
+  };
+
+  const signAndSend = async (userOp: UserOperation, payToken?: string) => {
     // checkpaymaster
     if (payToken && payToken !== ethers.ZeroAddress && userOp.paymasterAndData === '0x') {
       const paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
@@ -109,18 +124,23 @@ export default function useWallet() {
     }
     const packedUserOpHash = packedUserOpHashRet.OK;
 
-    // IMPORT TODO, use the first credential for now
-    const signatureData = await sign(credentials[credentialIndex], packedUserOpHash.packedUserOpHash);
-
-    const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, packedUserOpHash.validationData);
-
-    if (packedSignatureRet.isErr()) {
-      throw new Error(packedSignatureRet.ERR.message);
-    }
-
-    userOp.signature = packedSignatureRet.OK;
+    userOp.signature = await getSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
 
     return await bg.execute(userOp, chainConfig);
+  };
+
+  const signRawHash = async (hash: string) => {
+    // default valid time
+    const validAfter = Math.floor(Date.now() / 1000);
+    const validUntil = validAfter + 3600;
+    const packedHashRet = await soulWallet.packRawHash(hash, validAfter, validUntil);
+    if (packedHashRet.isErr()) {
+      throw new Error(packedHashRet.ERR.message);
+    }
+    const packedHash = packedHashRet.OK;
+    const signature = await getSignature(packedHash.packedHash, packedHash.validationData);
+    console.log('hash is', hash, signature);
+    return signature;
   };
 
   return {
@@ -128,5 +148,6 @@ export default function useWallet() {
     activateWallet,
     getSetGuardianCalldata,
     signAndSend,
+    signRawHash,
   };
 }
