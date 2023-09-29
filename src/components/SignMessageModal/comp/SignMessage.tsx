@@ -18,6 +18,9 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
   };
 
   const getTypedHash = (typedData: any) => {
+    delete typedData.types.EIP712Domain;
+    console.log('????', typedData.domain, typedData.types, typedData.message)
+
     return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.message);
   };
 
@@ -27,9 +30,12 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
       signHash = getHash(messageToSign);
     } else if (signType === 'typedData') {
       signHash = getTypedHash(messageToSign);
+    console.log('sign hash', signHash)
+
     } else {
       throw new Error('signType not supported');
     }
+
     const signature = await signRawHash(signHash);
     onSign(signature);
   };
@@ -47,7 +53,7 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
       )}
 
       <Flex flexDir={'column'} gap="5" mt="6">
-        <Box bg="#fff" py="3" px="4" rounded="20px" fontWeight={'800'}>
+        <Box bg="#fff" py="3" px="4" rounded="20px" fontWeight={'800'} maxH="160px" overflowY={"auto"}>
           {signType === 'typedData' ? JSON.stringify(messageToSign) : messageToSign}
         </Box>
         <AddressInputReadonly

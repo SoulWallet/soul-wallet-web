@@ -230,8 +230,7 @@ export default function useDapp() {
         const params = request.params;
         const typedData = params.typedData;
         const signature = await signTypedDataV4([, typedData])
-        console.log('signTypedMessage data', signature);
-        return signature;
+        return {signature};
       case Methods.getTxBySafeTxHash:
         const { safeTxHash } = request.params;
         console.log('safeTxHash', safeTxHash);
