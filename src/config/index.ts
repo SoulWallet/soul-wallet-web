@@ -4,8 +4,8 @@ import IconGithub from '@/assets/socials/github.svg';
 import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
 import IconEth from '@/assets/chains/eth.svg';
-// import ArbConfig from './chains/arb-goerli';
-// import OpConfig from './chains/op-goerli';
+import ArbConfig from './chains/arb-goerli';
+import OpConfig from './chains/op-goerli';
 import GoerliConfig from './chains/goerli';
 
 export const chainIdMapping = {
@@ -72,8 +72,8 @@ export default {
   officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
   /* @vite-ignore */
   chainList: [
-    // ArbConfig,
-    //  OpConfig,
+    ArbConfig,
+     OpConfig,
     GoerliConfig,
   ],
 };

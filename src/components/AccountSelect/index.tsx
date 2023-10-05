@@ -40,6 +40,21 @@ const CreateAccount = () => {
   );
 };
 
+const DestroyAccount = () => {
+  const doDestroy = async () => {
+    localStorage.clear();
+    location.href = '/launch';
+  };
+
+  return (
+    <MenuItem onClick={doDestroy} pl="44px" as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
+      <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
+        Destroy Wallet
+      </Text>
+    </MenuItem>
+  );
+};
+
 export default function AccountSelect() {
   const { navigate } = useBrowser();
   const { selectedAddressItem } = useConfig();
@@ -89,6 +104,7 @@ export default function AccountSelect() {
             })}
             <MenuDivider />
             <CreateAccount />
+            <DestroyAccount />
           </MenuList>
         </>
       )}

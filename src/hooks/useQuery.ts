@@ -10,6 +10,7 @@ import {SignkeyType} from '@soulwallet_test/sdk'
 import { addPaymasterAndData } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useBalanceStore } from '@/store/balance';
+import { printUserOp } from '@/lib/tools';
 
 export default function useQuery() {
   const { ethersProvider } = useWalletContext();
@@ -91,7 +92,6 @@ export default function useQuery() {
       throw new Error(gasLimit.ERR.message);
     }
 
-    // userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit).plus(100000).toString(16)}`;
 
     return {
       userOp,
