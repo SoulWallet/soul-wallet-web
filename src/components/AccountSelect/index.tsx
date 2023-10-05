@@ -48,8 +48,8 @@ const DestroyAccount = () => {
 
   return (
     <MenuItem onClick={doDestroy} pl="44px" as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
-      <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
-        Destroy Wallet
+      <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1} color="red">
+        Destroy Wallet (for test)
       </Text>
     </MenuItem>
   );
