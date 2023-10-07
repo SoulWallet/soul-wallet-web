@@ -9,6 +9,8 @@ import { useAddressStore } from '@/store/address';
 import {
   Methods,
   SafeInfo,
+  ChainInfo,
+  SafeBalances,
   SendTransactionsResponse,
   BaseTransaction,
   GetTxBySafeTxHashParams,
@@ -20,11 +22,29 @@ import {
   EIP712TypedData,
   SignTypedMessageParams,
   OffChainSignMessageResponse,
+  GatewayTransactionDetails,
   SignMessageResponse,
   EnvironmentInfo,
   PostMessageOptions,
   AddressBookItem,
+  MessageFormatter,
+  getSDKVersion,
+  TransactionStatus
 } from '@safe-global/safe-apps-sdk';
+
+export interface MethodToResponse {
+  [Methods.sendTransactions]: SendTransactionsResponse;
+  [Methods.rpcCall]: unknown;
+  [Methods.getSafeInfo]: SafeInfo;
+  [Methods.getChainInfo]: ChainInfo;
+  [Methods.getTxBySafeTxHash]: GatewayTransactionDetails;
+  [Methods.getSafeBalances]: SafeBalances[];
+  [Methods.signMessage]: SignMessageResponse;
+  [Methods.signTypedMessage]: SignMessageResponse;
+  [Methods.getEnvironmentInfo]: EnvironmentInfo;
+  [Methods.getOffChainSignature]: string;
+  [Methods.requestAddressBook]: AddressBookItem[];
+}
 
 export default function useDapp() {
   const { ethersProvider, showSignTransaction, showSignMessage } = useWalletContext();
@@ -88,7 +108,7 @@ export default function useDapp() {
     return await showSignMessage(msg, 'typedData');
     // const res = await windowBus.send("signMessageV4", {
     //     data: params[1],
-    // });
+  // });
     // console.log("signTypeV4 sig: ", res);
     // return res;
   };
@@ -155,21 +175,12 @@ export default function useDapp() {
     return { safeTxHash: receipt.transactionHash };
   };
 
-  const makeResponse = (id: string, data: any) => {
-    return {
-      id,
-      success: true,
-      version: '1.18.0',
-      data,
-    };
+  const makeResponse = (requestId: string, data: any) => {
+    return MessageFormatter.makeResponse(requestId, data, getSDKVersion());
   };
 
-  const makeError = (id: string, data: any) => {
-    return {
-      id,
-      success: false,
-      version: '1.18.0',
-    };
+  const makeError = (requestId: string, data: string) => {
+    return MessageFormatter.makeErrorResponse(requestId, data, getSDKVersion());
   };
 
   const handleRpcCall = async (call: string, params: any) => {
@@ -209,10 +220,9 @@ export default function useDapp() {
       case 'wallet_switchEthereumChain':
         return await switchChain(params);
     }
-  };
+  };// eth_getTransactionReceipt
 
   const handleRequest = async (request: any) => {
-    // console.log('handle reqeust', request.params.call, request.method)
     switch (request.method) {
       case Methods.getSafeInfo:
         return getSafeInfo();
@@ -224,21 +234,34 @@ export default function useDapp() {
           return;
         }
       case Methods.signMessage:
-        return await signMessage([request.params.message]);
+        const signature = await signMessage([request.params.message]);
+        return { messageHash: signature as any };
       case Methods.signTypedMessage:
-        // {"types":{"type":"object","properties":{"EIP712Domain":{"type":"array"}},"additionalProperties":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"},"type":{"type":"string"}},"required":["name","type"]}},"required":["EIP712Domain"]},"primaryType":{"type":"string"},"domain":{"type":"object"},"message":{"type":"object"}}
         const params = request.params;
         const typedData = params.typedData;
-        const signature = await signTypedDataV4([, typedData])
-        return {signature};
+        const signatureV4 = await signTypedDataV4([, typedData])
+        return { messageHash: signatureV4 as any };
       case Methods.getTxBySafeTxHash:
         const { safeTxHash } = request.params;
-        console.log('safeTxHash', safeTxHash);
-        return;
+        const receipt: any = await getTransactionByHash([safeTxHash]);
+        console.log('receipt', receipt);
+        // return receipt;
+
+        return {
+          safeAddress: getAccounts(),
+          txId: receipt.hash,
+          txStatus: receipt.status === 1 ? 'SUCCESS' : 'FAILED',
+          txInfo: {
+            type: 'custom',
+            to: { value: receipt.to },
+            dataSize: receipt.data,
+            value: String(receipt.value),
+            isCancellation: false
+          }
+        };
       case Methods.sendTransactions:
         return await sendSafeTransaction(request);
       case Methods.getChainInfo:
-        console.log('getChainInfo', chainConfig);
         return {
           chainName: chainConfig.chainName,
           chainId: chainConfig.chainId,

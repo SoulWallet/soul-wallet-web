@@ -9,7 +9,7 @@ import { useQuery } from '@/hooks/useBrowser';
 
 export default function Apps() {
   const iframeRef = useRef<any>()
-  const { handleRequest, makeResponse } = useDapp();
+  const { handleRequest, makeResponse, makeError } = useDapp();
   const query = useQuery()
   const appUrl = query.get('appUrl')
 
@@ -17,15 +17,19 @@ export default function Apps() {
 
   }
 
-  const listner =  async (msg:any) => {
-    const request = msg.data
+  const listner =  async (msg: any) => {
+    const request = msg.data;
+    if (!request.id) return;
+
     try {
-      let result = await handleRequest(request)
-      const response = makeResponse(request.id, result)
-      console.log('safe message', request, response)
-      iframeRef.current.contentWindow.postMessage(response, msg.origin)
+      let result = await handleRequest(request);
+      const response = makeResponse(request.id, result);
+      console.log('safe message response', request, response);
+      iframeRef.current.contentWindow.postMessage(response, msg.origin);
     } catch (error: any) {
-      console.log('error', error.message)
+      const errorResponse = makeError(request.id, error.message);
+      console.log('safe message error', errorResponse);
+      iframeRef.current.contentWindow.postMessage(errorResponse, msg.origin);
     }
   }
 
