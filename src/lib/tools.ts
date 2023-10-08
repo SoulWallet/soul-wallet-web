@@ -3,8 +3,10 @@ import { ethers } from 'ethers';
 import { IAddressItem } from '@/store/address';
 import BN from 'bignumber.js';
 import { chainIdMapping, chainMapping } from '@/config';
+import { Tooltip } from '@chakra-ui/react';
 import IconDefault from '@/assets/tokens/default.svg';
 import storage from '@/lib/storage';
+import exp from 'constants';
 
 export function notify(title: string, message: string) {
   const randomId = nanoid();
@@ -137,15 +139,16 @@ export const base64ToBuffer = (base64String: string) => {
   let len = binaryString.length;
   let bytes = new Uint8Array(len);
   for (let i = 0; i < len; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
+    bytes[i] = binaryString.charCodeAt(i);
   }
   return bytes.buffer;
-}
-
+};
 
 export const uint8ArrayToHexString = (byteArray: Uint8Array) => {
-  return Array.from(byteArray).map(byte => byte.toString(16).padStart(2, '0')).join('');
-}
+  return Array.from(byteArray)
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+};
 
 // export const uint8ArrayToString = (byteArray: Uint8Array) => {
 //   return Array.from(byteArray).map(byte => byte.toString(2).padStart(2, '0')).join('');
@@ -170,6 +173,8 @@ export const printUserOp = (userOp: any) => {
     ]),
   );
 };
+
+
 
 export const hasCommonElement = (arr1: [], arr2: []) => {
   return arr1.some((item) => arr2.includes(item));

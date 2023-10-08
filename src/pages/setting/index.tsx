@@ -55,7 +55,7 @@ const SettingMainpage = () => {
           <SettingLeft title={'Logout'} />
         </SettingBox>
         <SettingBox onClick={doDestroy}>
-          <SettingLeft title={'Destroy wallet'} />
+          <SettingLeft title={'Reset wallet'} />
         </SettingBox>
       </Flex>
       <Flex justify={'center'} align="center" gap="15px" mt="6" mb="3">

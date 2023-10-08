@@ -66,8 +66,8 @@ export default function Tokens({ ...restProps }: BoxProps) {
             icon={item.logoURI || IconDefaultToken}
             title={item.name || 'Unknown'}
             titleDesc={'Token'}
-            amount={`${item.tokenBalanceFormatted} ${item.symbol}`}
-            amountDesc={``}
+            amount={item.tokenBalanceFormatted}
+            amountDesc={item.symbol}
             onClick={() => navigate(`send/${item.contractAddress}`)}
           />
         ))}

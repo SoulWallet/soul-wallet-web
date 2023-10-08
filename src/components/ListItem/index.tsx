@@ -1,5 +1,17 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text, Tooltip } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
+
+export const TruncateString = ({ str, num }: any) => {
+  if (str.length > num) {
+    return (
+      <Flex>
+        <Tooltip label={str}>{str.substring(0, num)}</Tooltip>
+        <Text>...</Text>
+      </Flex>
+    );
+  }
+  return <Text>{str}</Text>;
+};
 
 interface IListItem {
   idx: number;
@@ -32,11 +44,13 @@ export default function ListItem({ icon, title, titleDesc, onClick, amount, amou
           <Text fontWeight={'600'}>{titleDesc}</Text>
         </Flex>
       </Flex>
-      <Flex flexDir={'column'} gap="1" align="flex-end">
-        <Text fontWeight={'800'}>{amount}</Text>
-        <Text fontWeight={'600'} color="#898989">
-          {amountDesc}
+      <Flex gap="1" align="center">
+        <Text display="span" fontWeight={'800'}>
+          {amount}
         </Text>
+        <Flex display="span" fontWeight={'600'} color="#898989">
+          <TruncateString str={amountDesc} num={6} />
+        </Flex>
       </Flex>
     </Flex>
   );
