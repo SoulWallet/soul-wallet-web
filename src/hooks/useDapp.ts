@@ -6,6 +6,7 @@ import useKeyring from '@/hooks/useKeyring';
 import useConfig from './useConfig';
 import {TypedDataEncoder} from 'ethers'
 import { useAddressStore } from '@/store/address';
+import { useChainStore } from '@/store/chain'
 import {
   Methods,
   SafeInfo,
@@ -48,11 +49,11 @@ export interface MethodToResponse {
 
 export default function useDapp() {
   const { ethersProvider, showSignTransaction, showSignMessage } = useWalletContext();
-  const { chainConfig } = useConfig();
-  const { selectedAddress } = useAddressStore();
+  const { getSelectedChainItem } = useChainStore();
+  const { selectedAddress, getSelectedAddressItem } = useAddressStore();
 
   const getAccounts = () => {
-    return selectedAddress;
+    return getSelectedAddressItem().address;
     // const account = await windowBus.send("getAccounts")
     // return [account];
   };
@@ -143,7 +144,7 @@ export default function useDapp() {
   };
 
   const chainId = async () => {
-    return chainConfig.chainIdHex;
+    return getSelectedChainItem().chainIdHex;
   };
 
   const blockNumber = async () => {
@@ -161,7 +162,7 @@ export default function useDapp() {
 
     const safeInfo = {
       safeAddress: account,
-      chainId: chainConfig.chainId,
+      chainId: getSelectedChainItem().chainId,
       owners: [account],
       threshold: 1,
       isReadOnly: false,
@@ -186,7 +187,7 @@ export default function useDapp() {
   const handleRpcCall = async (call: string, params: any) => {
     switch (call) {
       case 'eth_chainId':
-        return chainConfig.chainId;
+        return getSelectedChainItem().chainId;
       case 'eth_blockNumber':
         return await blockNumber();
       case 'eth_getBlockByNumber':
@@ -261,12 +262,12 @@ export default function useDapp() {
         return await sendSafeTransaction(request);
       case Methods.getChainInfo:
         return {
-          chainName: chainConfig.chainName,
-          chainId: chainConfig.chainId,
-          shortName: chainConfig.chainToken,
+          chainName: getSelectedChainItem().chainName,
+          chainId: getSelectedChainItem().chainId,
+          shortName: getSelectedChainItem().chainToken,
           nativeCurrency: {
-            name: chainConfig.chainName,
-            symbol: chainConfig.chainToken,
+            name: getSelectedChainItem().chainName,
+            symbol: getSelectedChainItem().chainToken,
             decimals: 18,
             logoUri: 'https://safe-transaction-assets.gnosis-safe.io/chains/1/currency_logo.png',
           },
