@@ -4,12 +4,15 @@ import Header from '@/components/Header';
 import handleRequests from '@/provider/handleRequests';
 import { useLocation } from 'react-router-dom';
 import useDapp from '@/hooks/useDapp';
-import useConfig from '@/hooks/useConfig';
 import { useQuery } from '@/hooks/useBrowser';
+import { useAddressStore } from '@/store/address';
+import useConfig from '@/hooks/useConfig';
 
 export default function Apps() {
   const iframeRef = useRef<any>()
   const { handleRequest, makeResponse, makeError } = useDapp();
+  const { selectedAddress } = useAddressStore();
+  const { chainConfig } = useConfig();
   const query = useQuery()
   const appUrl = query.get('appUrl')
 
@@ -39,6 +42,10 @@ export default function Apps() {
       window.removeEventListener('message', listner)
     }
   }, [])
+
+  useEffect(() => {
+    iframeRef.current.src += '';
+  }, [chainConfig, selectedAddress])
 
   const IFRAME_SANDBOX_ALLOWED_FEATURES = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock'
 

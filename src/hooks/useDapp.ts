@@ -243,22 +243,20 @@ export default function useDapp() {
         return { messageHash: signatureV4 as any };
       case Methods.getTxBySafeTxHash:
         const { safeTxHash } = request.params;
-        const receipt: any = await getTransactionByHash([safeTxHash]);
-        console.log('receipt', receipt);
-        // return receipt;
+        return await getTransactionByHash([safeTxHash]);
 
-        return {
-          safeAddress: getAccounts(),
-          txId: receipt.hash,
-          txStatus: receipt.status === 1 ? 'SUCCESS' : 'FAILED',
-          txInfo: {
-            type: 'custom',
-            to: { value: receipt.to },
-            dataSize: receipt.data,
-            value: String(receipt.value),
-            isCancellation: false
-          }
-        };
+        // return {
+        //   safeAddress: getAccounts(),
+    //   txId: receipt.hash,
+    //   txStatus: receipt.status === 1 ? 'SUCCESS' : 'FAILED',
+    //   txInfo: {
+        //     type: 'custom',
+        //     to: { value: receipt.to },
+    //     dataSize: String((receipt.data.length / 2) - 1),
+    //     value: String(receipt.value),
+    //     isCancellation: false
+        //   }
+        // };
       case Methods.sendTransactions:
         return await sendSafeTransaction(request);
       case Methods.getChainInfo:
