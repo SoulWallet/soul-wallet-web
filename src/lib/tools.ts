@@ -174,7 +174,12 @@ export const printUserOp = (userOp: any) => {
   );
 };
 
-
+export const truncateString = (str: string, num: number) => {
+  if (str.length > num) {
+    return str.substring(0, num) + '...';
+  }
+  return str;
+};
 
 export const hasCommonElement = (arr1: [], arr2: []) => {
   return arr1.some((item) => arr2.includes(item));

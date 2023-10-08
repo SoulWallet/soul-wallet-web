@@ -36,31 +36,31 @@ export default function Wallet() {
   //   (!storage.getItem('skipSet') || storage.getItem('skipSet') !== 'true') &&
   //   !skipSet;
 
-  const blockHeight = '256px';
-
   return (
     <Box color="#1e1e1e">
       <Header />
       <AppContainer minH="calc(100vh - 100px)">
         <Grid templateColumns={'repeat(3, 1fr)'} gap="30px">
           <Box flex="1">
-            <AccountCard h={blockHeight} />
-            <Tokens h={blockHeight} />
+            <AccountCard h="280px" />
           </Box>
           <Box flex="1">
-            <PassKeyList
+            <Tokens h={'246px'} />
+            {/* <PassKeyList
               h={blockHeight}
               overflowY="auto"
               justifyContent="unset"
               titleStyle={{ fontWeight: '800', fontSize: '18px' }}
               passKeys={credentials}
               setPassKeyName={changeCredentialName}
-            />
-            <Transactions h={blockHeight} />
+            /> */}
           </Box>
-          <Box w="368px" h="497px">
+          <Box flex="1">
+            <Transactions h={'246px'} />
+          </Box>
+          {/* <Box w="368px" h="497px">
             <TransferAssets />
-          </Box>
+          </Box> */}
         </Grid>
         <DappList />
         <Footer />

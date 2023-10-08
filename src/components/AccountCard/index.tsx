@@ -24,7 +24,7 @@ export default function AccountCard({
       justify={'space-between'}
       rounded="24px"
       p="10"
-      mb="18px"
+      h=""
       bg="#ededed"
       {...restProps}
       // color={isActivated ? '#29510A' : '#1e1e1e'}
