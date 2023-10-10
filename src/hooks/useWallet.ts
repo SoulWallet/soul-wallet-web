@@ -11,6 +11,7 @@ import { addPaymasterAndData } from '@/lib/tools';
 import useKeystore from './useKeystore';
 import Erc20ABI from '../contract/abi/ERC20.json';
 import { UserOpUtils, UserOperation } from '@soulwallet_test/sdk';
+import BN from 'bignumber.js'
 import useConfig from './useConfig';
 import { useChainStore } from '@/store/chain';
 import bg from '@/background';
@@ -20,15 +21,69 @@ import { useCredentialStore } from '@/store/credential';
 export default function useWallet() {
   const { account } = useWalletContext();
   const { toggleActivatedChain } = useAddressStore();
-  const { calcGuardianHash } = useKeystore();
   const { selectedChainId } = useChainStore();
   const { sign } = usePasskey();
   const { getFeeCost, getPrefund } = useQuery();
   const { chainConfig } = useConfig();
-  const { guardians, threshold, slotInitInfo } = useGuardianStore();
+  const { slotInitInfo } = useGuardianStore();
   const { credentials } = useCredentialStore();
-  const keystore = useKeyring();
   const { soulWallet } = useSdk();
+
+  const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
+
+    console.log('extraTxs', extraTxs);
+    const { initialKeys, initialGuardianHash } = slotInitInfo;
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash);
+
+    if (userOpRet.isErr()) {
+      throw new Error(userOpRet.ERR.message);
+    }
+
+    let userOp = userOpRet.OK;
+
+    // approve paymaster to spend ERC-20
+    const soulAbi = new ethers.Interface(ABI_SoulWallet);
+    const erc20Abi = new ethers.Interface(Erc20ABI);
+    const approveTos = chainConfig.paymasterTokens;
+    const approveCalldata = erc20Abi.encodeFunctionData('approve', [
+      chainConfig.contracts.paymaster,
+      ethers.parseEther('1000'),
+    ]);
+
+    const approveCalldatas = [...new Array(approveTos.length)].map(() => approveCalldata);
+
+    const finalTos = [...approveTos, ...extraTxs.map((tx: any) => tx.to)];
+
+    const finalCalldatas = [...approveCalldatas, ...extraTxs.map((tx: any) => tx.data)];
+
+    const hasValue = extraTxs.some((tx: any) => tx.value && tx.value !== '0x' && tx.value !== '0x0');
+
+    const finalValues = [...new Array(approveTos.length).fill('0x0'), ...extraTxs.map((tx: any) => tx.value || '0x0')];
+
+    if (hasValue) {
+      userOp.callData = soulAbi.encodeFunctionData('executeBatch(address[],uint256[],bytes[])', [
+        finalTos,
+        finalValues,
+        finalCalldatas,
+      ]);
+    } else {
+      userOp.callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [finalTos, finalCalldatas]);
+    }
+
+    userOp.callGasLimit = `0x${(50000 * finalTos.length + 1).toString(16)}`;
+
+    const feeCost = await getFeeCost(userOp, payToken);
+
+    userOp = feeCost.userOp;
+
+    // paymasterAndData length calc 1872 = ((236 - 2) / 2) * 16;
+    // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(1872).toString(16)}`;
+    // for send transaction with activate
+    userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
+    userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
+
+    return userOp;
+  };
 
   const activateWallet = async (index: number, payToken: string, estimateCost: boolean = false) => {
     const { initialKeys, initialGuardianHash } = slotInitInfo;
@@ -49,23 +104,7 @@ export default function useWallet() {
       ethers.parseEther('1000'),
     ]);
 
-    // const transferData = {
-    //   to: '',
-    //   data: '0x',
-    // }
-
     const approveCalldatas = [...new Array(to.length)].map(() => approveCalldata);
-
-    // const finalCalldata = [
-    //   ...approveCalldata,
-    //   ...[
-    //     {
-    //       to: '',
-    //       data: '',
-    //     },
-    //     transferData.data,
-    //   ],
-    // ]
 
     const callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [to, approveCalldatas]);
 
@@ -145,6 +184,7 @@ export default function useWallet() {
 
   return {
     addPaymasterAndData,
+    getActivateOp,
     activateWallet,
     getSetGuardianCalldata,
     signAndSend,

@@ -27,6 +27,7 @@ import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import TxModal from '../TxModal';
+import { useAddressStore, getIndexByAddress } from '@/store/address';
 
 enum SignTypeEn {
   Transaction,
@@ -55,6 +56,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const [decodedData, setDecodedData] = useState<any>({});
   const [signing, setSigning] = useState<boolean>(false);
+  const { showSignTransaction, checkActivated } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prefundCalculated, setPrefundCalculated] = useState(false);
   // TODO, remember user's last select
@@ -65,12 +67,13 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const [sponsor, setSponsor] = useState<any>(null);
   const [activeTxns, setActiveTxns] = useState<any>(null); // [
   const { selectedChainId } = useChainStore();
+  const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
   const { decodeCalldata } = useTools();
   // const [targetChainId, setTargetChainId] = useState('');
   const { getPrefund } = useQuery();
   const [sendToAddress, setSendToAddress] = useState('');
   const { chainConfig } = useConfig();
-  const { signAndSend } = useWallet();
+  const { signAndSend, getActivateOp } = useWallet();
   const { getUserOp } = useTransaction();
 
   const clearState = () => {
@@ -87,7 +90,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     setSponsor(null);
     setActiveTxns(null);
     setSendToAddress('');
-  }
+  };
 
   useImperativeHandle(ref, () => ({
     async show(txns: any, origin: string, sendTo: string) {
@@ -97,7 +100,16 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
       setSendToAddress(sendTo);
 
       if (txns) {
-        const userOp = await getUserOp(txns, payToken);
+        const isActivated = await checkActivated();
+        let userOp;
+        // if activated, get userOp directly
+        if (isActivated) {
+          userOp = await getUserOp(txns, payToken);
+        } else {
+          const activateIndex = getIndexByAddress(addressList, selectedAddress);
+          // if not activated, prepend activate txns
+          userOp = await getActivateOp(activateIndex, payToken, txns);
+        }
         setActiveTxns(txns);
         setActiveOperation(userOp);
         const callDataDecodes = await decodeCalldata(selectedChainId, chainConfig.contracts.entryPoint, userOp);
@@ -133,6 +145,10 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     }
 
     const receipt = await signAndSend(userOp, payToken);
+
+    // IMPORTANT TODO, get these params from receipt
+    // if first tx is completed, then it's activated
+    toggleActivatedChain(userOp.sender, selectedChainId);
 
     toast({
       title: 'Transaction success.',

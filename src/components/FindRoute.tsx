@@ -19,12 +19,13 @@ export default function FindRoute({ children }: any) {
   const query = useQuery();
 
   const findRoute = async () => {
-    console.log('ready to find')
+    console.log('ready to find');
     const recovering = storage.getItem('recovering');
     if (isLaunch) {
       navigate('launch');
-    } if (isApps) {
-      const appUrl = query.get('appUrl')
+    }
+    if (isApps) {
+      const appUrl = query.get('appUrl');
 
       if (appUrl) {
         navigate(`apps?appUrl=${appUrl}`);
@@ -38,7 +39,7 @@ export default function FindRoute({ children }: any) {
     } else if (!addressList.length) {
       navigate('launch');
     } else {
-      navigate('wallet')
+      navigate('wallet');
     }
   };
 

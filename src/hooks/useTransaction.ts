@@ -8,19 +8,19 @@ import useKeyring from './useKeyring';
 import Erc20ABI from '../contract/abi/ERC20.json';
 import { useAddressStore } from '@/store/address';
 import { Transaction } from '@soulwallet_test/sdk';
-import useBrowser from './useBrowser';
 import useQuery from './useQuery';
 import { SignkeyType } from '@soulwallet_test/sdk';
 import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function useTransaction() {
-  const { showSignTransaction } = useWalletContext();
+  const { showSignTransaction, checkActivated, } = useWalletContext();
   const { soulWallet } = useSdk();
   const { getFeeCost, getGasPrice, getPrefund } = useQuery();
   const { selectedAddress } = useAddressStore();
 
   const sendEth = async (to: string, amount: string) => {
+
     const amountInWei = new BN(amount).shiftedBy(18).toString();
     const tx: Transaction = {
       to,
@@ -29,10 +29,7 @@ export default function useTransaction() {
     };
 
     showSignTransaction([tx], '', to);
-    // navigateToSign({
-    //   txns: [tx],
-    //   sendTo: to,
-    // });
+  
   };
 
   const sendErc20 = async (tokenAddress: string, to: string, amount: string, decimals: number) => {
@@ -45,10 +42,7 @@ export default function useTransaction() {
     };
 
     showSignTransaction([tx], '', to);
-    // navigateToSign({
-    //   txns: [tx],
-    //   sendTo: to,
-    // });
+ 
   };
 
   const getUserOp: any = async (txns: any, payToken: string) => {
@@ -74,7 +68,9 @@ export default function useTransaction() {
       userOp = feeCost.userOp;
 
       // paymasterAndData length calc 1872 = ((236 - 2) / 2) * 16;
-      userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(1872).toString(16)}`;
+      // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(1872).toString(16)}`;
+      // for send transaction with activate
+      userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
       userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
 
       return userOp;

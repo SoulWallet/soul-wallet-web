@@ -58,6 +58,7 @@ export default function Wallet() {
           <Box flex="1">
             <Transactions h={'246px'} />
           </Box>
+
           {/* <Box w="368px" h="497px">
             <TransferAssets />
           </Box> */}

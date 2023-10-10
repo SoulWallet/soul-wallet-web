@@ -44,13 +44,13 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
       return;
     }
 
-    if (new BN(amount).isGreaterThan(selectedTokenBalance)) {
-      toast({
-        title: 'Balance not enough',
-        status: 'error',
-      });
-      return;
-    }
+    // if (new BN(amount).isGreaterThan(selectedTokenBalance)) {
+    //   toast({
+    //     title: 'Balance not enough',
+    //     status: 'error',
+    //   });
+    //   return;
+    // }
     if (sendToken === ethers.ZeroAddress) {
       await sendEth(trimedAddress, amount);
     } else {

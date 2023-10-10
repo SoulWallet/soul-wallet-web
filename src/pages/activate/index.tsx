@@ -44,7 +44,6 @@ export default function ActivateWallet() {
     setLoading(true);
     try {
       const activateIndex = getIndexByAddress(addressList, selectedAddress);
-      console.log('activateIndex', activateIndex);
       await activateWallet(activateIndex, payToken, false);
       navigate('wallet');
       toast({

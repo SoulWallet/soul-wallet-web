@@ -40,11 +40,11 @@ export default function AccountCard({
             $0
           </Text>
           {/* {!isActivated && <Image src={ImgNotActived} mt="1" />} */}
-          {!isActivated && (
+          {/* {!isActivated && (
             <Button py="2" onClick={() => navigate('activate')}>
               Activate wallet
             </Button>
-          )}
+          )} */}
         </Box>
         {/* <Image src={selectedChainItem.iconFaded} /> */}
       </Flex>

@@ -75,7 +75,7 @@ export default function Tokens({ ...restProps }: BoxProps) {
           </Thead>
           <Tbody>
             {tokenBalance.map((item: ITokenBalanceItem, idx: number) => (
-              <Tr key={idx}>
+              <Tr key={idx} border={"none"}>
                 <Td py="2" display={'flex'} gap="3" alignItems={'center'}>
                   <Image src={item.logoURI || IconDefaultToken} w="38px" h="38px" />
                   <Text fontWeight={'800'} fontSize={'14px'}>

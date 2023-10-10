@@ -18,6 +18,7 @@ interface IWalletContext {
   showSign: () => Promise<void>;
   showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: string, origin?: string) => Promise<void>;
+  checkActivated: () => Promise<boolean>;
 }
 
 export const WalletContext = createContext<IWalletContext>({
@@ -28,6 +29,7 @@ export const WalletContext = createContext<IWalletContext>({
   showSign: async () => {},
   showSignTransaction: async () => {},
   showSignMessage: async () => {},
+  checkActivated: async () => false,
 });
 
 export const WalletContextProvider = ({ children }: any) => {
@@ -143,6 +145,7 @@ export const WalletContextProvider = ({ children }: any) => {
         toggleActivatedChain(selectedAddress, selectedChainId, true);
       }
     }
+    return res;
   };
 
   const showSign = async () => {
@@ -175,6 +178,7 @@ export const WalletContextProvider = ({ children }: any) => {
         showSign,
         showSignTransaction,
         showSignMessage,
+        checkActivated,
       }}
     >
       {children}
