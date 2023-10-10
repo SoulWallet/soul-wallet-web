@@ -209,7 +209,11 @@ export default function useDapp() {
       case 'eth_gasPrice':
         return await gasPrice();
       case 'eth_getTransactionReceipt':
-        return await getTransactionReceipt(params);
+        const {...receipt} = await getTransactionReceipt(params);
+        receipt.transactionHash = receipt.hash
+        receipt.transactionIndex = receipt.index
+        receipt.logs = receipt.logs || []
+        return receipt
       case 'eth_getTransactionByHash':
         return await getTransactionByHash(params);
       case 'personal_sign':
