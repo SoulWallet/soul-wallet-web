@@ -15,6 +15,7 @@ export default function FindRoute({ children }: any) {
 
   const isLaunch = location.pathname.includes('launch');
   const isApps = location.pathname.includes('apps');
+  const isPasskeyGuardian = location.pathname.includes('passkey-guardian');
   const isTest = location.pathname.includes('test');
   const query = useQuery();
 
@@ -38,6 +39,8 @@ export default function FindRoute({ children }: any) {
       navigate('recover');
     } else if (!addressList.length) {
       navigate('launch');
+    } else if (isPasskeyGuardian) {
+      navigate('passkey-guardian');
     } else {
       navigate('wallet');
     }
