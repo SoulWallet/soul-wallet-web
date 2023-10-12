@@ -63,12 +63,14 @@ export function PassKeySelect({ passKeys, onSelect }: any) {
   );
 }
 
-export default function PassKeyList({ passKeys, setPassKeyName, titleStyle, ...restProps }: any) {
+export default function PassKeyList({ passKeys, setPassKeyName, titleStyle, hideTitle, ...restProps }: any) {
   return (
     <Box display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" mb="4" {...restProps}>
-      <Text fontSize="16px" color="#1E1E1E" fontWeight="700" marginBottom="4px" {...titleStyle}>
-        MY PASSKEYS
-      </Text>
+      {!hideTitle && (
+        <Text fontSize="16px" color="#1E1E1E" fontWeight="700" marginBottom="4px" {...titleStyle}>
+          MY PASSKEYS
+        </Text>
+      )}
       {passKeys.map((passKey: any) => (
         <PassKeyItem key={passKey.id} passKey={passKey} setPassKeyName={setPassKeyName} />
       ))}

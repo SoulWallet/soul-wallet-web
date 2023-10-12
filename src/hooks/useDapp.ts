@@ -228,6 +228,7 @@ export default function useDapp() {
   };// eth_getTransactionReceipt
 
   const handleRequest = async (request: any) => {
+    console.log('safe message request', request)
     switch (request.method) {
       case Methods.getSafeInfo:
         return getSafeInfo();
