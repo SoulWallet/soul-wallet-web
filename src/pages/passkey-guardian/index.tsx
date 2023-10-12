@@ -96,7 +96,7 @@ function ManagePasskeyNetworkFeeModal({ isOpen, onClose }: any) {
                     <RoundButton _styles={{ width: '320px', background: '#EC588D', color: 'white' }} _hover={{ background: '#EC588D', color: 'white' }} onClick={() => setStep(1)}>
                       Preview payment
                     </RoundButton>
-                    <TextButton _styles={{ width: '320px', color: '#E83D26' }}>
+                    <TextButton _styles={{ width: '320px', color: '#E83D26' }} _hover={{ color: '#EC588D' }}>
                       Cancel
                     </TextButton>
                   </Box>
@@ -134,7 +134,7 @@ function ManagePasskeyNetworkFeeModal({ isOpen, onClose }: any) {
                     <RoundButton _styles={{ width: '320px', background: '#EC588D', color: 'white' }} _hover={{ background: '#EC588D', color: 'white' }} onClick={() => setStep(2)}>
                       Pay
                     </RoundButton>
-                    <TextButton _styles={{ width: '320px', color: '#E83D26' }}>
+                    <TextButton _styles={{ width: '320px', color: '#E83D26' }} _hover={{ color: '#EC588D' }}>
                       Cancel
                     </TextButton>
                   </Box>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
 import Header from '@/components/Header';
 import handleRequests from '@/provider/handleRequests';
 import { useLocation } from 'react-router-dom';
@@ -10,6 +10,7 @@ import useConfig from '@/hooks/useConfig';
 
 export default function Apps() {
   const iframeRef = useRef<any>()
+  const toast = useToast();
   const { handleRequest, makeResponse, makeError } = useDapp();
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
@@ -32,6 +33,10 @@ export default function Apps() {
     } catch (error: any) {
       const errorResponse = makeError(request.id, error.message);
       console.log('safe message error', errorResponse);
+      toast({
+        title: error.message,
+        status: 'error',
+      });
       iframeRef.current.contentWindow.postMessage(errorResponse, msg.origin);
     }
   }
