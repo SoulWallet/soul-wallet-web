@@ -11,4 +11,4 @@ pnpm dev
 ```
 
 ## Version
-1
+2
