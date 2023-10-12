@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import ActivityItem from './comp/ActivityItem';
 import { Box, Flex, Text, BoxProps } from '@chakra-ui/react';
-// import IconLoading from '@/assets/activity-loading.gif';
 import { Image } from '@chakra-ui/react';
 import scanApi from '@/lib/scanApi';
 import { useAddressStore } from '@/store/address';

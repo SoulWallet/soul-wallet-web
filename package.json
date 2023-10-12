@@ -15,7 +15,7 @@
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@passwordless-id/webauthn": "^1.2.6",
+    "@passwordless-id/webauthn": "^1.3.0",
     "@peculiar/asn1-ecc": "^2.3.6",
     "@peculiar/asn1-schema": "^2.3.6",
     "@safe-global/safe-apps-sdk": "^8.1.0",

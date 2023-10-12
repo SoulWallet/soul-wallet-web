@@ -156,6 +156,8 @@ export default function useWallet() {
     const validAfter = Math.floor(Date.now() / 1000);
     const validUntil = validAfter + 3600;
 
+    console.log('before pack', userOp)
+
     const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
 
     if (packedUserOpHashRet.isErr()) {

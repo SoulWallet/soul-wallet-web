@@ -18,8 +18,8 @@ dependencies:
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.21)(react@18.2.0)
   '@passwordless-id/webauthn':
-    specifier: ^1.2.6
-    version: 1.2.6
+    specifier: ^1.3.0
+    version: 1.3.0
   '@peculiar/asn1-ecc':
     specifier: ^2.3.6
     version: 2.3.6
@@ -1720,8 +1720,8 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@passwordless-id/webauthn@1.2.6:
-    resolution: {integrity: sha512-KkP9CTAo3+0E99/otSkzPmhvhfXvdvITzXdhGy8wtNb45fC1QT9ljnuAlkp8Db+brFHgb97m8+42U+2oonrosA==}
+  /@passwordless-id/webauthn@1.3.0:
+    resolution: {integrity: sha512-Kpoy4NHCDkKn9WrDPjnqKfohfzQFifAwgmpnPcDCEei1mc3K/0bWznxDi4EH1eVdubY5pOn8cNOWilLPCxkqxA==}
     dev: false
 
   /@peculiar/asn1-ecc@2.3.6:
