@@ -178,7 +178,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     // IMPORTANT TODO, uncomment this to show double loading fee issue
     // setLoadingFee(true);
     // setFeeCost("");
-
+    console.log('get final prefund')
     // TODO, extract this for other functions
     const { requiredAmount } = await getPrefund(activeOperation, payToken);
 
@@ -187,6 +187,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     } else {
       setFeeCost(`${requiredAmount} USDC`);
     }
+    setPrefundCalculated(true);
     setLoadingFee(false);
   };
 
@@ -213,7 +214,6 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     if (prefundCalculated) {
       return;
     }
-    setPrefundCalculated(true);
     getFinalPrefund();
   }, [payToken, activeOperation, prefundCalculated]);
 

@@ -77,15 +77,10 @@ export default function SignTransaction({
                 <Text>Loading...</Text>
               )}
             </InfoItem>
-            {/* <InfoItem>
-              <Text>Total</Text>
-              <Text>$1736.78</Text>
-            </InfoItem> */}
           </InfoWrap>
         </>
       </Flex>
       <Text>{loadingFee && 'Loading fee'}</Text>
-      <Text>{sponsor && 'Has sponsor'}</Text>
       <Button
         w="100%"
         fontSize={'20px'}
