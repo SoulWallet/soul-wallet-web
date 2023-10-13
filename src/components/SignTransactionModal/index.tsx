@@ -115,7 +115,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
         const callDataDecodes = await decodeCalldata(selectedChainId, chainConfig.contracts.entryPoint, userOp);
         console.log('decoded data', callDataDecodes);
         setDecodedData(callDataDecodes);
-        checkSponser(userOp);
+        // checkSponser(userOp);
       }
 
       return new Promise((resolve, reject) => {
@@ -178,6 +178,9 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     // IMPORTANT TODO, uncomment this to show double loading fee issue
     // setLoadingFee(true);
     // setFeeCost("");
+    if (prefundCalculated) {
+      return;
+    }
     console.log('get final prefund')
     // TODO, extract this for other functions
     const { requiredAmount } = await getPrefund(activeOperation, payToken);
@@ -211,11 +214,8 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     if (!activeOperation || !payToken) {
       return;
     }
-    if (prefundCalculated) {
-      return;
-    }
     getFinalPrefund();
-  }, [payToken, activeOperation, prefundCalculated]);
+  }, [payToken, activeOperation]);
 
   return (
     <div ref={ref}>
