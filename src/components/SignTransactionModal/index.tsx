@@ -126,6 +126,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
       return await getUserOp(txns, payToken);
     } else {
       const activateIndex = getIndexByAddress(addressList, selectedAddress);
+      console.log('activate index', activateIndex, addressList, selectedAddress)
       // if not activated, prepend activate txns
       return await getActivateOp(activateIndex, payToken, txns);
     }

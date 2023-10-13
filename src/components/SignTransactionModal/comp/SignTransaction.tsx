@@ -80,7 +80,6 @@ export default function SignTransaction({
           </InfoWrap>
         </>
       </Flex>
-      <Text>{loadingFee && 'Loading fee'}</Text>
       <Button
         w="100%"
         fontSize={'20px'}
