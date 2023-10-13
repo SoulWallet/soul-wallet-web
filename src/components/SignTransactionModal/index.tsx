@@ -100,22 +100,14 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
       setSendToAddress(sendTo);
 
       if (txns) {
-        const isActivated = await checkActivated();
-        let userOp;
-        // if activated, get userOp directly
-        if (isActivated) {
-          userOp = await getUserOp(txns, payToken);
-        } else {
-          const activateIndex = getIndexByAddress(addressList, selectedAddress);
-          // if not activated, prepend activate txns
-          userOp = await getActivateOp(activateIndex, payToken, txns);
-        }
+        let userOp = await getFinalUserOp(txns);
+
         setActiveTxns(txns);
         setActiveOperation(userOp);
         const callDataDecodes = await decodeCalldata(selectedChainId, chainConfig.contracts.entryPoint, userOp);
         console.log('decoded data', callDataDecodes);
         setDecodedData(callDataDecodes);
-        // checkSponser(userOp);
+        checkSponser(userOp);
       }
 
       return new Promise((resolve, reject) => {
@@ -126,6 +118,18 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
       });
     },
   }));
+
+  const getFinalUserOp = async (txns: any) => {
+    const isActivated = await checkActivated();
+    if (isActivated) {
+      // if activated, get userOp directly
+      return await getUserOp(txns, payToken);
+    } else {
+      const activateIndex = getIndexByAddress(addressList, selectedAddress);
+      // if not activated, prepend activate txns
+      return await getActivateOp(activateIndex, payToken, txns);
+    }
+  };
 
   const onClose = async () => {
     setVisible(false);
@@ -181,7 +185,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     if (prefundCalculated) {
       return;
     }
-    console.log('get final prefund')
+    console.log('get final prefund');
     // TODO, extract this for other functions
     const { requiredAmount } = await getPrefund(activeOperation, payToken);
 
@@ -196,7 +200,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
 
   const onPayTokenChange = async () => {
     setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
-    const newUserOp = await getUserOp(activeTxns, payToken);
+    const newUserOp = await getFinalUserOp(activeTxns);
     setActiveOperation(newUserOp);
     setPrefundCalculated(false);
     setLoadingFee(true);
@@ -206,7 +210,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     if (!payToken || !activeTxns || !activeTxns.length) {
       return;
     }
-    console.log('on pay token change', payToken, activeTxns);
+    console.log('on pay token change', payToken, activeTxns, activeTxns.length);
     onPayTokenChange();
   }, [payToken, activeTxns]);
 
@@ -214,6 +218,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
     if (!activeOperation || !payToken) {
       return;
     }
+    console.log('trigger final prefund', activeOperation, payToken)
     getFinalPrefund();
   }, [payToken, activeOperation]);
 
