@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import IconLink from '@/assets/icons/link.svg';
 import IconBookmark from '@/assets/icons/bookmark.svg';
 import IconPlus from '@/assets/icons/dapp-plus.svg';
-const tabs = ['My Dapps', 'Explore more', 'Wallet connect'];
+import HomeCard from '@/pages/wallet/comp/HomeCard';
+// const tabs = ['My Dapps', 'Explore more', 'Wallet connect'];
 
 const DappItem = ({ item }: any) => {
   return (
@@ -13,8 +14,8 @@ const DappItem = ({ item }: any) => {
       to={`/apps?appUrl=${encodeURIComponent(item.url)}`}
       px="5"
       py="4"
-      bg="#fff"
-      _hover={{ bg: '#fafafa' }}
+      bg="#FFE9F7"
+      _hover={{ bg: '#dbdbdb' }}
       transition={'all .3s'}
       rounded="20px"
       cursor={'pointer'}
@@ -46,38 +47,26 @@ const AddDappItem = () => (
     _hover={{ bg: '#fafafa' }}
     cursor={'pointer'}
     display={'flex'}
+    flexDir={"column"}
+    gap="3"
     rounded="20px"
     alignItems={'center'}
     justifyContent={'center'}
   >
     <Image src={IconPlus} />
+    <Text fontWeight={"600"}>Pin more Dapps</Text>
   </GridItem>
 );
 
 export default function DappList() {
   return (
-    <Box my="12">
-      <Flex mb="6px" gap="4">
-        {tabs.map((item, index) => (
-          <Text key={index} fontSize={'18px'} fontWeight={'800'} color={index ? '#898989' : 'none'}>
-            {item}
-          </Text>
-        ))}
-      </Flex>
-      <Grid
-        bg="rgba(217, 217, 217, 0.32)"
-        templateColumns={'repeat(4, 1fr)'}
-        rounded="20px"
-        p="6"
-        gap="6"
-        fontSize={'14px'}
-        lineHeight={'1'}
-      >
+    <HomeCard title="Apps">
+      <Grid templateColumns={'repeat(4, 1fr)'} rounded="20px" gap="6" fontSize={'14px'} lineHeight={'1'}>
         {dappList.map((item, index) => (
           <DappItem key={index} item={item} />
         ))}
         <AddDappItem />
       </Grid>
-    </Box>
+    </HomeCard>
   );
 }
