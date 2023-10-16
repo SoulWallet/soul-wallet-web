@@ -17,6 +17,8 @@ export default function FindRoute({ children }: any) {
   const isApps = location.pathname.includes('apps');
   const isPasskeyGuardian = location.pathname.includes('passkey-guardian');
   const isTest = location.pathname.includes('test');
+  const isPopup = location.pathname.includes('popup');
+
   const query = useQuery();
 
   const findRoute = async () => {
@@ -33,8 +35,8 @@ export default function FindRoute({ children }: any) {
       } else {
         navigate('apps');
       }
-    } else if (isTest) {
-      navigate('test');
+    } else if (isTest || isPopup) {
+      // skip logic
     } else if (recovering) {
       navigate('recover');
     } else if (!addressList.length) {

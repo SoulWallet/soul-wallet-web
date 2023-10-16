@@ -98,12 +98,11 @@ export default function usePasskey() {
   };
 
   const sign = async (credential: any, userOpHash: string) => {
-    if (userOpHash.startsWith('0x')) {
-      userOpHash = userOpHash.substr(2);
-    }
+    const userOpHashForBytes = userOpHash.startsWith('0x') ? userOpHash.substr(2) : userOpHash;
+  
     var byteArray = new Uint8Array(32);
     for (var i = 0; i < 64; i += 2) {
-      byteArray[i / 2] = parseInt(userOpHash.substr(i, 2), 16);
+      byteArray[i / 2] = parseInt(userOpHashForBytes.substr(i, 2), 16);
     }
     let challenge = base64Tobase64url(btoa(String.fromCharCode(...byteArray)));
 
@@ -132,6 +131,7 @@ export default function usePasskey() {
     // console.log(JSON.stringify(authenticationParsed, null, 2));
 
     return {
+      messageHash: userOpHash,
       publicKey: {
         x,
         y,
