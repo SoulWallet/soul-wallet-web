@@ -285,11 +285,8 @@ export default function GuardianForm({ onSubmit, loading, textButton }: any) {
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
           <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => {}}>
-            Confirm guardians
+            Backup current guardians
           </RoundButton>
-          <TextButton _styles={{ width: '320px' }}>
-            Cancel
-          </TextButton>
         </Box>
       </Box>
     </Fragment>

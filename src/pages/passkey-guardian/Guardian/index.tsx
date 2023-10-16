@@ -51,8 +51,19 @@ function GuardianEditor() {
 
 export default function Guardian({ setActiveSection }: any) {
   const [isEditing, setIsEditing] = useState<boolean>();
+  const [isManaging, setIsManaging] = useState<boolean>();
   const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
   const [isSyncing, setIsSyncing] = useState<boolean>();
+
+  const startManage = () => {
+    setIsManaging(true)
+    setIsEditing(false)
+  }
+
+  const startEdit = () => {
+    setIsManaging(false)
+    setIsEditing(true)
+  }
 
   return (
     <Box width="100%" height="100vh">
@@ -69,22 +80,26 @@ export default function Guardian({ setActiveSection }: any) {
             <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
               Guardian
             </Heading2>
-            <Box marginLeft="auto">
-              <Button
-                px="5"
-                onClick={() => {}}
-                bg="#1e1e1e"
-                _hover={{bg: "#4e4e54"}}
-                color="#fff"
-                fontWeight={'700'}
-                rounded="50px"
-                disabled={isEditing}
-              >
-                Edit Guardians
-              </Button>
-            </Box>
+            {(isManaging || isEditing) && (
+              <Box marginLeft="auto">
+                <Button
+                  px="5"
+                  onClick={() => startEdit()}
+                  bg="#1e1e1e"
+                  _hover={{bg: "#4e4e54"}}
+                  color="#fff"
+                  fontWeight={'700'}
+                  rounded="50px"
+                  disabled={isEditing}
+                >
+                  Edit Guardians
+                </Button>
+              </Box>
+            )}
           </Box>
-          <GuardianList />
+          {(!isManaging && !isEditing) && <GuardianIntro startManage={startManage} />}
+          {(isManaging && !isEditing) && <GuardianList />}
+          {(!isManaging && isEditing) && <GuardianForm />}
         </Box>
       </Box>
     </Box>
