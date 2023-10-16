@@ -25,8 +25,8 @@ export default function ActivityItem({ item, scanUrl }: any) {
 
   const formatItem = async () => {
     const callDataDecodes = await decodeCalldata(item.chainId, item.entrypointAddress, item.userOp);
-
-    console.log('activity decoded', callDataDecodes);
+    // TODO, skip decode when exists in store
+    // console.log('activity decoded', callDataDecodes);
 
     const functionNames = callDataDecodes.map((item: any) => item.functionName || item.method.name).join(', ');
 
