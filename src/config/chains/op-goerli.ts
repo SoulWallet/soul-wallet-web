@@ -4,6 +4,7 @@
 
 import IconOp from '@/assets/chains/op.svg';
 import IconOpFaded from '@/assets/chains/op-faded.svg';
+import { keystoreContracts } from './common';
 
 export default {
   icon: IconOp,
@@ -30,11 +31,10 @@ export default {
     '0xe05606174bac4A6364B31bd0eCA4bf4dD368f8C6',
   ],
   contracts: {
-    l1Keystore: '0x20c466bb02603fa5585cd2a669bdaea92ee145a7',
-    keyStoreModuleProxy: '0xed078ad51f9b6efb73ae08892d3e173c46231cd2',
-    soulWalletFactory: '0x2090677ac3a678721463c8b758861a5ec44ea76f',
-    defaultCallbackHandler: '0xa39defc0786f940862359f03e1aeb31a6d998e64',
-    securityControlModule: '0x9848dfe5c26929390f798c2a34871f1232f93781',
+    ...keystoreContracts,
+    soulWalletFactory: '0xcf73a2848c1de2da12e2dd2d3b7a86bd700c68c1',
+    defaultCallbackHandler: '0xe8753f3a52e76203b25822f4d83b1647e09e81cb',
+    securityControlModule: '0x480238a37ada43feaa686416e1309eb1078c8e62',
     entryPoint: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789',
     paymaster: '0xee4d0d07318dd076d588bccdf2383275b499f29f',
   },
