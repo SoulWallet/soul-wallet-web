@@ -5,12 +5,12 @@ interface IProps {
   leftValue?: string;
   leftPlaceholder?: string;
   leftErrorMsg?: string;
-  leftOnChange: (value: string) => void;
+  leftOnChange?: (value: string) => void;
   leftOnBlur?: (value: string) => void;
   rightValue?: string;
   rightPlaceholder?: string;
   rightErrorMsg?: string;
-  rightOnChange: (value: string) => void;
+  rightOnChange?: (value: string) => void;
   rightOnBlur?: (value: string) => void;
   _styles?: any;
   _leftInputStyles?: any;
@@ -49,11 +49,11 @@ export default function DoubleFormInput({
   onEnter,
 }: IProps) {
   const handleLeftChange = (e: ChangeEvent<HTMLInputElement>) => {
-    leftOnChange(e.target.value);
+    if (leftOnChange) leftOnChange(e.target.value);
   };
 
   const handleRightChange = (e: ChangeEvent<HTMLInputElement>) => {
-    rightOnChange(e.target.value);
+    if (rightOnChange) rightOnChange(e.target.value);
   };
 
   const handleLeftBlur = (e: ChangeEvent<HTMLInputElement>) => {
