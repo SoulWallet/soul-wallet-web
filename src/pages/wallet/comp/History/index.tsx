@@ -6,27 +6,32 @@ import { useAddressStore } from '@/store/address';
 import EmptyHint from '@/components/EmptyHint';
 import useConfig from '@/hooks/useConfig';
 import { useChainStore } from '@/store/chain';
+import { useHistoryStore } from '@/store/history';
 import HomeCard from '../HomeCard';
 import IconLoading from '@/assets/loading.gif';
 import { ExternalLink } from '../HomeCard';
 
-export default function Transactions() {
+export default function History() {
   const { selectedAddress } = useAddressStore();
   const { selectedChainId } = useChainStore();
   const [loading, setLoading] = useState(false);
   // IMPORTANT TODO: MOVE history list to store
-  const [historyList, setHistoryList] = useState<any>([]);
+  // const [historyList, setHistoryList] = useState<any>([]);
   const { chainConfig } = useConfig();
-
-  const getHistory = async () => {
-    setLoading(true);
-    const res = await scanApi.op.list(selectedAddress, selectedChainId);
-    setLoading(false);
-    setHistoryList(res.data.ops);
-  };
+  const { historyList, fetchHistory } = useHistoryStore();
 
   useEffect(() => {
-    getHistory();
+    if (!selectedAddress || !selectedChainId) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      fetchHistory(selectedAddress, selectedChainId);
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [selectedAddress, selectedChainId]);
 
   return (

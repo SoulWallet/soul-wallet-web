@@ -8,10 +8,10 @@ import useQuery from './useQuery';
 import { ABI_SoulWallet } from '@soulwallet_test/abi';
 import { useGuardianStore } from '@/store/guardian';
 import { addPaymasterAndData } from '@/lib/tools';
-import useKeystore from './useKeystore';
 import Erc20ABI from '../contract/abi/ERC20.json';
+import { useHistoryStore } from '@/store/history';
 import { UserOpUtils, UserOperation } from '@soulwallet_test/sdk';
-import BN from 'bignumber.js'
+import BN from 'bignumber.js';
 import useConfig from './useConfig';
 import { useChainStore } from '@/store/chain';
 import bg from '@/background';
@@ -28,9 +28,9 @@ export default function useWallet() {
   const { slotInitInfo } = useGuardianStore();
   const { credentials } = useCredentialStore();
   const { soulWallet } = useSdk();
+  const { fetchHistory } = useHistoryStore();
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
-
     console.log('extraTxs', extraTxs);
     const { initialKeys, initialGuardianHash } = slotInitInfo;
     const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash);
@@ -122,6 +122,9 @@ export default function useWallet() {
     } else {
       // TODO, estimate fee could be avoided
       await signAndSend(userOp, payToken);
+      // setTimeout(() => {
+      //   fetchHistory(userOp.sender, selectedChainId);
+      // }, 10000);
       // IMPORTANT TODO, what if user don't wait?
       toggleActivatedChain(userOp.sender, selectedChainId);
     }
@@ -156,7 +159,7 @@ export default function useWallet() {
     const validAfter = Math.floor(Date.now() / 1000);
     const validUntil = validAfter + 3600;
 
-    console.log('before pack', userOp)
+    console.log('before pack', userOp);
 
     const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
 

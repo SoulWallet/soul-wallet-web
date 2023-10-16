@@ -5,9 +5,9 @@ import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 // import Operations from './comp/Operations';
 // import ActivateHint from './comp/ActivateHint';
 // import SetGuardianHint from './comp/SetGuardianHint';
-import PassKeyList from '@/components/web/PassKeyList';
+// import PassKeyList from '@/components/web/PassKeyList';
 import Tokens from './comp/Tokens';
-import Transactions from './comp/Transactions';
+import History from './comp/History';
 import Balance from './comp/Balance';
 import AppContainer from '@/components/AppContainer';
 // import Actions from './comp/Actions';
@@ -49,7 +49,7 @@ export default function Wallet() {
             <Tokens />
           </Box>
           <Box flex="1">
-            <Transactions />
+            <History />
           </Box>
         </Grid>
         <DappList />

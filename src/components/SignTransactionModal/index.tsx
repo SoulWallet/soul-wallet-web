@@ -6,24 +6,15 @@ import api from '@/lib/api';
 import { ethers } from 'ethers';
 import {
   Flex,
-  Box,
   Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalHeader,
-  ModalCloseButton,
   useToast,
 } from '@chakra-ui/react';
 import { useBalanceStore } from '@/store/balance';
 import { UserOpUtils, UserOperation } from '@soulwallet_test/sdk';
-import useSdk from '@/hooks/useSdk';
 import useConfig from '@/hooks/useConfig';
-import ConnectDapp from './comp/ConnectDapp';
 import SignTransaction from './comp/SignTransaction';
-import SwitchChain from './comp/SwitchChain';
 import useTransaction from '@/hooks/useTransaction';
+import { useHistoryStore } from '@/store/history';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import TxModal from '../TxModal';
@@ -75,6 +66,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const { chainConfig } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
   const { getUserOp } = useTransaction();
+  const {fetchHistory} = useHistoryStore();
 
   const clearState = () => {
     setOrigin('');

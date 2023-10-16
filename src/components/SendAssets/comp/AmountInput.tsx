@@ -89,7 +89,6 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
             fontSize="40px"
             fontWeight={'800'}
             lineHeight={'1'}
-            autoFocus
             color="#1e1e1e"
             variant={'unstyled'}
           />
