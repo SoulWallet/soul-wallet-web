@@ -14,8 +14,8 @@ const DappItem = ({ item }: any) => {
       to={`/apps?appUrl=${encodeURIComponent(item.url)}`}
       px="5"
       py="4"
-      bg="#FFE9F7"
-      _hover={{ bg: '#dbdbdb' }}
+      bg="#fafafa"
+      _hover={{ bg: '#ebebeb' }}
       transition={'all .3s'}
       rounded="20px"
       cursor={'pointer'}
@@ -47,14 +47,14 @@ const AddDappItem = () => (
     _hover={{ bg: '#fafafa' }}
     cursor={'pointer'}
     display={'flex'}
-    flexDir={"column"}
+    flexDir={'column'}
     gap="3"
     rounded="20px"
     alignItems={'center'}
     justifyContent={'center'}
   >
     <Image src={IconPlus} />
-    <Text fontWeight={"600"}>Pin more Dapps</Text>
+    <Text fontWeight={'600'}>Pin more Dapps</Text>
   </GridItem>
 );
 

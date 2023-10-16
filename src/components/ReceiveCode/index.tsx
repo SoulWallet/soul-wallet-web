@@ -15,14 +15,6 @@ export default function ReceiveCode({ address, showFullAddress, imgWidth = '90px
   const { generateQrCode } = useTools();
   const toast = useToast();
 
-  const doCopy = () => {
-    copyText(`${address}`);
-    toast({
-      title: 'Copied',
-      status: 'success',
-    });
-  };
-
   const generateQR = async (text: string) => {
     try {
       setImgSrc(await generateQrCode(text));
@@ -38,12 +30,21 @@ export default function ReceiveCode({ address, showFullAddress, imgWidth = '90px
     generateQR(address);
   }, [address]);
 
+  const doCopy = () => {
+    copyText(address);
+    toast({
+      title: 'Copied',
+      status: 'success',
+    });
+  };
+
   return (
     <Box textAlign={'center'}>
       <Image src={imgSrc} mx="auto" display={'block'} w={imgWidth} />
       {showFullAddress ? (
         <Text fontFamily={'Martian'} mt="2" px="10" fontWeight={'600'} fontSize={'14px'}>
-          {address}
+          <Text display="inline-block">{address.slice(0, 21)}</Text>
+          <Text display="inline-block">{address.slice(-21)}</Text>
         </Text>
       ) : (
         <Flex align="center" gap="1" justify={'center'}>

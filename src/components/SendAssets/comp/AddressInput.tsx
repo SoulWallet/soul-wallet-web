@@ -14,7 +14,15 @@ export function AddressInput({ label, placeholder, value, memo, onChange, disabl
       <Text fontFamily={'Martian'} fontSize="12px" fontWeight={'500'} mb="1" px="4">
         {label}
       </Text>
-      <Flex gap="2" align="center" justify={'flex-start'} rounded="20px" bg="#fff" py="3" px="4">
+      <Flex
+        gap="2"
+        align="center"
+        justify={'flex-start'}
+        rounded="20px"
+        bg={'rgba(247, 247, 247, 0.74)'}
+        py="3"
+        // px="4"
+      >
         <Input
           value={value}
           spellCheck={false}
@@ -26,6 +34,7 @@ export function AddressInput({ label, placeholder, value, memo, onChange, disabl
           fontWeight={'800'}
           color="#1e1e1e"
           disabled={disabled}
+          px="4"
           onKeyDown={onKeyDown}
           w={memo ? 'unset' : '100%'}
         />

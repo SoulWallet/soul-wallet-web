@@ -4,7 +4,7 @@ import { Box } from '@chakra-ui/react';
 import { getMessageType } from '@/lib/tools';
 import useKeyring from '@/hooks/useKeyring';
 import { useToast } from '@chakra-ui/react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useSearchParams } from 'react-router-dom';
 // import { useSearchParams } from "react-router-dom";
 import SignModal from '@/components/SignModal';
 import useWallet from '@/hooks/useWallet';
@@ -16,7 +16,8 @@ import MobileContainer from '@/components/MobileContainer';
 export default function SignPage() {
   const location = useLocation();
 
-  const params = new URLSearchParams(location.search);
+  // const params = new URLSearchParams(location.search);
+  const [params] = useSearchParams();
 
   // const params = useSearchParams();
   const [searchParams, setSearchParams] = useState<any>({

@@ -36,6 +36,7 @@ export default function Header() {
           _hover={{bg: "#4e4e54"}}
           color="#fff"
           fontWeight={'700'}
+          lineHeight={"1"}
           rounded="50px"
         >
           Send & Receive

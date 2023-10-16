@@ -67,22 +67,23 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
   return (
     <Box>
       <Flex flexDir={'column'} gap="5">
-        <AmountInput sendToken={sendToken} amount={amount} onChange={setAmount} onTokenChange={setSendToken} />
-        <AddressInputReadonly
-          label="From"
-          value={selectedAddressItem.title}
-          memo={toShortAddress(selectedAddressItem.address, 6, 4)}
-        />
         <AddressInput
-          label="To"
-          placeholder="Enter recipient address"
+          label="To:"
+          placeholder="Enter wallet address"
           value={receiverAddress}
           onChange={(e: any) => setReceiverAddress(e.target.value)}
           onEnter={confirmAddress}
         />
+        <AmountInput
+          label="Send:"
+          sendToken={sendToken}
+          amount={amount}
+          onChange={setAmount}
+          onTokenChange={setSendToken}
+        />
       </Flex>
       <Button onClick={confirmAddress} w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6">
-        Review
+        Preview
       </Button>
     </Box>
   );

@@ -32,9 +32,22 @@ const DappAvatar = ({ avatar }: any) => (
   </Flex>
 );
 
-export default function ConnectDapp({ onConfirm, origin }: any) {
+export default function ConnectDapp({ origin, msgId }: any) {
   const { selectedAddressItem } = useConfig();
   const { title, address } = selectedAddressItem;
+
+  const onConfirm = (address: string) => {
+    window.opener.postMessage(
+      {
+        id: msgId,
+        payload: {
+          address,
+        },
+      },
+      '*',
+    );
+    window.close();
+  };
 
   return (
     <Box pt="5">
@@ -85,7 +98,7 @@ export default function ConnectDapp({ onConfirm, origin }: any) {
           </Text>
         </InfoItem>
       </InfoWrap>
-      <Button w="100%" fontSize={'20px'} py="5" fontWeight={'800'} mt="6" onClick={onConfirm}>
+      <Button w="100%" fontSize={'20px'} py="5" fontWeight={'800'} mt="6" onClick={() => onConfirm(address)}>
         Connect
       </Button>
     </Box>

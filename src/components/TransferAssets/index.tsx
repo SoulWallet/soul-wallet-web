@@ -17,10 +17,10 @@ import { ethers } from 'ethers';
 
 const tabs = [
   {
-    text: 'Receive',
+    text: 'Send',
   },
   {
-    text: 'Send',
+    text: 'Receive',
   },
 ];
 
@@ -29,7 +29,7 @@ export default function TransferAssets({ onClose }: any) {
   return (
     <Modal isOpen={true} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent bg="#ededed" maxW={'520px'}>
+      <ModalContent maxW={'640px'}>
         <ModalHeader
           display={'flex'}
           justifyContent={'center'}
@@ -43,7 +43,6 @@ export default function TransferAssets({ onClose }: any) {
               key={index}
               cursor={'pointer'}
               color={activeTab === index ? '#1c1c1e' : '#898989'}
-              bg={activeTab === index ? '#ededed' : 'none'}
               onClick={() => setActiveTab(index)}
               fontWeight={'800'}
               fontSize={'20px'}
@@ -66,15 +65,13 @@ export default function TransferAssets({ onClose }: any) {
         <ModalCloseButton top="14px" />
         <ModalBody pb="12" px="12">
           <Box
-            bg="#ededed"
-            h="100%"
             roundedBottom="20px"
             roundedTopLeft={activeTab === 0 ? '0' : '20px'}
             roundedTopRight={activeTab === 1 ? '0' : '20px'}
             p="6"
           >
-            {activeTab === 0 && <Receive />}
-            {activeTab === 1 && <SendAssets tokenAddress={ethers.ZeroAddress} />}
+            {activeTab === 0 && <SendAssets tokenAddress={ethers.ZeroAddress} />}
+            {activeTab === 1 && <Receive />}
           </Box>
         </ModalBody>
       </ModalContent>

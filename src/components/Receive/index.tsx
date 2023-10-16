@@ -6,11 +6,13 @@ import ReceiveCode from '@/components/ReceiveCode';
 import Button from '@/components/Button';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
+import useConfig from '@/hooks/useConfig';
 
 export default function Receive() {
   const toast = useToast();
   const { selectedAddress } = useAddressStore();
   const { chainList } = useChainStore();
+  const { selectedAddressItem } = useConfig();
 
   const doCopy = () => {
     copyText(selectedAddress);
@@ -22,10 +24,10 @@ export default function Receive() {
 
   return (
     <Box>
-      <Text mb="3" fontWeight={'800'} textAlign={"center"}>
-        Add fund to start using Soul Wallet
+      <Text mb="3" fontWeight={'800'} fontSize={'20px'} textAlign={'center'}>
+        {selectedAddressItem.title}
       </Text>
-      <Box bg="#fff" rounded="20px" p="4" mb="14px">
+      <Box bg="#ededed" rounded="20px" p="4" mb="14px" w="320px" py="6" textAlign={'center'} mx="auto">
         <ReceiveCode address={selectedAddress} imgWidth="160px" showFullAddress={true} />
       </Box>
       <InfoWrap gap="3">
@@ -41,7 +43,7 @@ export default function Receive() {
         </InfoItem>
       </InfoWrap>
 
-      <Button w="full" onClick={doCopy} fontSize="20px" py="4" fontWeight={'800'} mt="32px">
+      <Button w="full" onClick={doCopy} fontSize="20px" py="4" fontWeight={'800'} mt="4">
         Copy address
       </Button>
     </Box>
