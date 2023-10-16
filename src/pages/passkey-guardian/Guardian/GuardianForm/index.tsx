@@ -199,8 +199,8 @@ export default function GuardianForm({ onSubmit, loading, textButton }: any) {
     <Fragment>
       <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px">
         <Box width="40%" paddingRight="32px">
-          <Heading1>Current guardian</Heading1>
-          <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians. Learn more</TextBody>
+          <Heading1>Friend as guardian</Heading1>
+          <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians.</TextBody>
           <Box>
             <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => {}}>
               Learn more

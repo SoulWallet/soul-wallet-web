@@ -84,7 +84,7 @@ export default function Guardian({ setActiveSection }: any) {
               </Button>
             </Box>
           </Box>
-          <GuardianForm />
+          <GuardianList />
         </Box>
       </Box>
     </Box>

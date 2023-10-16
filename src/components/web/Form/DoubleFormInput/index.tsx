@@ -152,3 +152,101 @@ export default function DoubleFormInput({
     </Box>
   );
 }
+
+export function DoubleFormInfo({
+  leftLabel,
+  leftValue,
+  leftPlaceholder,
+  leftErrorMsg,
+  leftOnChange,
+  leftOnBlur,
+  rightLabel,
+  rightValue,
+  rightPlaceholder,
+  rightErrorMsg,
+  rightOnChange,
+  rightOnBlur,
+  _styles,
+  _leftInputStyles,
+  _rightInputStyles,
+  _leftContainerStyles,
+  _rightContainerStyles,
+  leftComponent,
+  rightComponent,
+  leftAutoFocus,
+  onEnter,
+}: IProps) {
+  return (
+    <Box display="flex" flexDirection="row" {..._styles}>
+      <Box display="flex" flexDirection="column" width="50%" {..._leftContainerStyles}>
+        {leftLabel && (
+          <Box as="label" htmlFor="leftLabel">
+            {leftLabel}
+          </Box>
+        )}
+        <Box position="relative">
+          <Box>
+            <Box
+              type="text"
+              borderRadius="16px"
+              paddingLeft="24px"
+              paddingRight="24px"
+              height="48px"
+              background="white"
+              borderTopRightRadius="0"
+              borderBottomRightRadius="0"
+              borderRightColor="transparent"
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-start"
+              {..._leftInputStyles}
+            >
+              {leftValue ?? ''}
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+      <Box display="flex" flexDirection="column" width="50%" {..._rightContainerStyles}>
+        {rightLabel && (
+          <Box as="label" htmlFor="rightLabel">
+            {rightLabel}
+          </Box>
+        )}
+        <Box position="relative">
+          {leftComponent && (
+            <Box
+              position="absolute"
+              top="0"
+              left="0"
+              height="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              zIndex="2"
+              paddingLeft="10px"
+            >
+              {leftComponent}
+            </Box>
+          )}
+          <Box>
+            <Box
+              borderRadius="16px"
+              paddingLeft={leftComponent ? '44px' : '24px'}
+              paddingRight="24px"
+              height="48px"
+              background="white"
+              borderTopLeftRadius="0"
+              borderBottomLeftRadius="0"
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-start"
+              {..._rightInputStyles}
+            >
+              {rightValue ?? ''}
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
