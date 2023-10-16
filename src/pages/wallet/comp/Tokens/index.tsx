@@ -26,13 +26,7 @@ export default function Tokens({ ...restProps }: BoxProps) {
   }, [selectedAddress, selectedChainItem]);
 
   return (
-    <HomeCard
-      title={'Tokens'}
-      external={
-       <ExternalLink title="View all tokens" to="/tokens" />
-      }
-      contentHeight="290px"
-    >
+    <HomeCard title={'Tokens'} external={<ExternalLink title="View all" to="/tokens" />} contentHeight="290px">
       {tokenBalance.map((item: ITokenBalanceItem, idx: number) => (
         <ListItem
           key={idx}

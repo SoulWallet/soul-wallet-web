@@ -30,11 +30,7 @@ export default function Transactions() {
   }, [selectedAddress, selectedChainId]);
 
   return (
-    <HomeCard
-      title={'Activity'}
-      external={<ExternalLink title="View all activities" to="/activity" />}
-      contentHeight="290px"
-    >
+    <HomeCard title={'Activity'} external={<ExternalLink title="View all" to="/activity" />} contentHeight="290px">
       {!historyList ||
         (historyList.length === 0 && (
           <>
