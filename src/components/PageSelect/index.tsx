@@ -55,7 +55,7 @@ export default function PageSelect() {
                   <Flex w="100%" align={'center'} justify={'center'}>
                     <Flex align={'center'} direction="column" justify="center">
                       <Box>{getPageIcon(item)}</Box>
-                      <Text data-testid={`text-chainname-${idx}`} fontSize="12px" fontWeight={'700'}>
+                      <Text data-testid={`text-pagename-${idx}`} fontSize="12px" fontWeight={'700'}>
                         {item}
                       </Text>
                     </Flex>
