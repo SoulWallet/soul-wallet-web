@@ -9,9 +9,6 @@ export default function Popup() {
   const origin = searchParams.get('origin');
   const id = searchParams.get('id');
 
-
-
-
   return (
     <Box p="6" h="100vh">
       <ConnectDapp origin={origin} msgId={id} />

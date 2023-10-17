@@ -33,7 +33,7 @@ const DappAvatar = ({ avatar }: any) => (
 );
 
 export default function ConnectDapp({ origin, msgId }: any) {
-  const { selectedAddressItem } = useConfig();
+  const { selectedAddressItem, selectedChainItem } = useConfig();
   const { title, address } = selectedAddressItem;
 
   const onConfirm = (address: string) => {
@@ -42,6 +42,7 @@ export default function ConnectDapp({ origin, msgId }: any) {
         id: msgId,
         payload: {
           address,
+          chainConfig: selectedChainItem,
         },
       },
       '*',

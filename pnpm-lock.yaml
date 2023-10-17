@@ -30,20 +30,20 @@ dependencies:
     specifier: ^8.1.0
     version: 8.1.0(typescript@5.2.2)
   '@soulwallet_test/abi':
-    specifier: ^0.1.1
-    version: 0.1.1
+    specifier: ^0.1.2
+    version: 0.1.2
   '@soulwallet_test/assets':
     specifier: ^0.1.0
     version: 0.1.0
   '@soulwallet_test/decoder':
-    specifier: ^0.1.1
-    version: 0.1.1
+    specifier: ^0.1.2
+    version: 0.1.2
   '@soulwallet_test/result':
     specifier: ^0.1.0
     version: 0.1.0
   '@soulwallet_test/sdk':
-    specifier: ^0.1.4
-    version: 0.1.4
+    specifier: ^0.1.5
+    version: 0.1.5
   '@types/node':
     specifier: 20.6.2
     version: 20.6.2
@@ -1796,8 +1796,8 @@ packages:
       '@scure/base': 1.1.3
     dev: false
 
-  /@soulwallet_test/abi@0.1.1:
-    resolution: {integrity: sha512-cHuh2/GaT94AylFj/toqvDNqsFzkk4HcyvMdq0SdE8Ttl8KfJXyPUFyShR6mJ5Y5/D3V90VklFBJ+JLCrBTkTg==}
+  /@soulwallet_test/abi@0.1.2:
+    resolution: {integrity: sha512-hzD8jb7cLuEprhIL6lLg5nD12ITZ40NNBlHvxhaAyPVnXMeL/YcxDj/LcjqoTkrPHJNdk0ek8/DaPDS3J+gvog==}
     dev: false
 
   /@soulwallet_test/assets@0.1.0:
@@ -1806,10 +1806,10 @@ packages:
       '@soulwallet_test/result': 0.1.0
     dev: false
 
-  /@soulwallet_test/decoder@0.1.1:
-    resolution: {integrity: sha512-VkitQfz1JJgInw2uSwEVI+DbzddIt+3g7YX61GAGkYz4Lm8wGnRjF50ljDlHhLo6mb6J79VhyHF2tkJM4G/gJA==}
+  /@soulwallet_test/decoder@0.1.2:
+    resolution: {integrity: sha512-Z2AUC89WBvVs5vesSHt/R/1aagk/6/5tkHT5nk10JPvVndXkY08x+7RE/zrN7U9hr7lJpo2t6FIgAIN3FjMpXw==}
     dependencies:
-      '@soulwallet_test/abi': 0.1.1
+      '@soulwallet_test/abi': 0.1.2
       '@soulwallet_test/assets': 0.1.0
       '@soulwallet_test/result': 0.1.0
       ethers: 6.7.1
@@ -1822,10 +1822,10 @@ packages:
     resolution: {integrity: sha512-9nD2Yhy1Vv8yedNkuaDcsqKSGOQIlCDdpCrD3kpwZ7mWYHmth70G6ZUqYo+I07v4xelb59yWPL6ZLBewmz+ZmA==}
     dev: false
 
-  /@soulwallet_test/sdk@0.1.4:
-    resolution: {integrity: sha512-H2Eaz8oAT2yXfX4XIdzPlKM9WUFeP8Y8Cu6TEk8Hf7TBbIXWdvhbf0KgvoTIOiZGzg1AMtoB/IVnNME1cqDTxw==}
+  /@soulwallet_test/sdk@0.1.5:
+    resolution: {integrity: sha512-n9qiiiJWW1qoKLpM7KtCaNuH4XEqypYmZB4MjpJ/TZHs86QgDaiQJYxqszktvDkobAJTK27s8Pyay+e1dj718w==}
     dependencies:
-      '@soulwallet_test/abi': 0.1.1
+      '@soulwallet_test/abi': 0.1.2
       '@soulwallet_test/result': 0.1.0
       ethers: 6.7.1
     transitivePeerDependencies:
