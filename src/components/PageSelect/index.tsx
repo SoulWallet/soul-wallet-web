@@ -10,6 +10,7 @@ import AssetIcon from '@/components/Icons/Asset';
 import ActivityIcon from '@/components/Icons/Activity';
 import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
+import { toCapitalize } from '@/lib/tools'
 
 const getPageIcon = (type: string) => {
   if (type === 'asset') {
@@ -56,7 +57,7 @@ export default function PageSelect() {
                     <Flex align={'center'} direction="column" justify="center">
                       <Box>{getPageIcon(item)}</Box>
                       <Text data-testid={`text-pagename-${idx}`} fontSize="12px" fontWeight={'700'}>
-                        {item}
+                        {toCapitalize(item)}
                       </Text>
                     </Flex>
                   </Flex>

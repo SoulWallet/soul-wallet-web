@@ -11,7 +11,7 @@ import Apps from '@/pages/apps';
 // import RecoverPage from "@/pages/recover";
 // import EditGuardians from "@/pages/guardians";
 import Launch from '@/pages/launch';
-import PasskeyGuardian from '@/pages/passkey-guardian';
+import Security from '@/pages/security';
 import Test from './pages/test';
 
 export const router = createBrowserRouter([
@@ -28,7 +28,7 @@ export const router = createBrowserRouter([
       { path: 'launch', element: <Launch /> },
       { path: 'create', element: <Create /> },
       { path: 'popup', element: <Popup />},
-      { path: 'passkey-guardian', element: <PasskeyGuardian /> },
+      { path: 'security', element: <Security /> },
       { path: 'test', element: <Test /> },
       { path: '*', element: <Wallet /> },
       {

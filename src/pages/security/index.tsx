@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Passkey from './Passkey';
 import Guardian from './Guardian';
 
-export default function PasskeyGuardian() {
+export default function Security() {
   const [activeSection, setActiveSection] = useState<string>('passkey');
 
   if (activeSection === 'passkey') {

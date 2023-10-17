@@ -105,7 +105,7 @@ const amountValidate = (values: any, props: any) => {
 };
 
 
-export default function GuardianForm({ onSubmit, loading, textButton }: any) {
+export default function GuardianList({ onSubmit, loading, textButton, startBackup }: any) {
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
@@ -284,7 +284,7 @@ export default function GuardianForm({ onSubmit, loading, textButton }: any) {
       </Box>
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => {}}>
+          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => startBackup()}>
             Backup current guardians
           </RoundButton>
         </Box>

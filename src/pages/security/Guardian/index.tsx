@@ -21,6 +21,7 @@ import SuccessIcon from "@/components/Icons/Success";
 import GuardianIntro from './GuardianIntro'
 import GuardianList from './GuardianList'
 import GuardianForm from './GuardianForm'
+import GuardianBackup from './GuardianBackup'
 
 function GuardianEditor() {
   return (
@@ -50,24 +51,27 @@ function GuardianEditor() {
 }
 
 export default function Guardian({ setActiveSection }: any) {
-  const [isEditing, setIsEditing] = useState<boolean>();
-  const [isManaging, setIsManaging] = useState<boolean>();
+  const [status, setStatus] = useState<string>('intro');
   const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
-  const [isSyncing, setIsSyncing] = useState<boolean>();
 
   const startManage = () => {
-    setIsManaging(true)
-    setIsEditing(false)
+    setStatus('managing')
+  }
+
+  const startBackup = () => {
+    setStatus('backuping')
   }
 
   const startEdit = () => {
-    setIsManaging(false)
-    setIsEditing(true)
+    setStatus('editing')
   }
 
   const cancelEdit = () => {
-    setIsManaging(true)
-    setIsEditing(false)
+    setStatus('managing')
+  }
+
+  const cancelBackup = () => {
+    setStatus('managing')
   }
 
   return (
@@ -85,7 +89,7 @@ export default function Guardian({ setActiveSection }: any) {
             <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
               Guardian
             </Heading2>
-            {(isManaging || isEditing) && (
+            {(status === 'managing') && (
               <Box marginLeft="auto">
                 <Button
                   px="5"
@@ -95,16 +99,17 @@ export default function Guardian({ setActiveSection }: any) {
                   color="#fff"
                   fontWeight={'700'}
                   rounded="50px"
-                  disabled={isEditing}
+                  disabled={status === 'editing'}
                 >
                   Edit Guardians
                 </Button>
               </Box>
             )}
           </Box>
-          {(!isManaging && !isEditing) && <GuardianIntro startManage={startManage} />}
-          {(isManaging && !isEditing) && <GuardianList />}
-          {(!isManaging && isEditing) && <GuardianForm cancelEdit={cancelEdit} />}
+          {status === 'intro' && <GuardianIntro startManage={startManage} />}
+          {status === 'managing' && <GuardianList startBackup={startBackup} />}
+          {status === 'editing' && <GuardianForm cancelEdit={cancelEdit} />}
+          {status === 'backuping' && <GuardianBackup cancelBackup={cancelBackup} />}
         </Box>
       </Box>
     </Box>
