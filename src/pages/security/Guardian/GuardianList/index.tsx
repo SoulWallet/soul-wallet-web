@@ -197,7 +197,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
 
   return (
     <Fragment>
-      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px">
+      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px" overflow="scroll">
         <Box width="40%" paddingRight="32px">
           <Heading1>Current guardian</Heading1>
           <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians.</TextBody>
@@ -207,7 +207,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
             </TextButton>
           </Box>
         </Box>
-        <Box width="60%" overflow="scroll">
+        <Box width="60%">
           <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <Box
               display="flex"
@@ -264,10 +264,6 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
               borderWidth="1px"
               padding="12px"
               background="white"
-              _hover={{
-                borderColor: '#3182ce',
-                boxShadow: '0 0 0 1px #3182ce',
-              }}
               _expanded={{
                 borderColor: '#3182ce',
                 boxShadow: '0 0 0 1px #3182ce',

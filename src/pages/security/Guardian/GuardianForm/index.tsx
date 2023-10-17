@@ -197,7 +197,7 @@ export default function GuardianForm({ onSubmit, loading, textButton, cancelEdit
 
   return (
     <Fragment>
-      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px">
+      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px" overflow="scroll">
         <Box width="40%" paddingRight="32px">
           <Heading1>Friend as guardian</Heading1>
           <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians.</TextBody>
@@ -207,18 +207,18 @@ export default function GuardianForm({ onSubmit, loading, textButton, cancelEdit
             </TextButton>
           </Box>
         </Box>
-        <Box width="60%" overflow="scroll">
+        <Box width="60%">
           <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <Box
               display="flex"
               flexDirection="column"
               alignItems="flex-start"
               justifyContent="center"
-              gap="0.75em"
-              width="100%"
+              gap="12px"
+              maxWidth="100%"
             >
               {guardianIds.map((id: any, i: number) => (
-                <Box position="relative" width="100%" key={id}>
+                <Box position="relative" key={id}>
                   <DoubleFormInput
                     rightPlaceholder={`Guardian address ${i + 1}`}
                     rightValue={values[`address_${id}`]}
