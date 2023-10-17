@@ -164,7 +164,8 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     setDecodedData(callDataDecodes);
     checkSponser(userOp);
   };
-
+  
+  // IMPORTANT IMPORTANT TODO, rendered twice
   useEffect(() => {
     console.log('do check', txns);
     if (!txns || !txns.length) {

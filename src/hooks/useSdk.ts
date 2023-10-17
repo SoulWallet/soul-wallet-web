@@ -30,7 +30,6 @@ export default function useSdk() {
   const calcWalletAddress = async (index: number) => {
     console.log('calcWalletAddress', getSlotInitInfo());
     const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = getSlotInitInfo();
-    // TODO, talk with cejey
     const wAddress = await soulWallet.calcWalletAddress(
       index,
       initialKeys,
