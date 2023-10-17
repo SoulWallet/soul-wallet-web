@@ -207,7 +207,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
             </TextButton>
           </Box>
         </Box>
-        <Box width="60%">
+        <Box width="60%" overflow="scroll">
           <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <Box
               display="flex"
