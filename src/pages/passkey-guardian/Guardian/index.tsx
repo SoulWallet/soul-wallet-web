@@ -65,6 +65,11 @@ export default function Guardian({ setActiveSection }: any) {
     setIsEditing(true)
   }
 
+  const cancelEdit = () => {
+    setIsManaging(true)
+    setIsEditing(false)
+  }
+
   return (
     <Box width="100%" height="100vh">
       <Box height="102px">
@@ -99,7 +104,7 @@ export default function Guardian({ setActiveSection }: any) {
           </Box>
           {(!isManaging && !isEditing) && <GuardianIntro startManage={startManage} />}
           {(isManaging && !isEditing) && <GuardianList />}
-          {(!isManaging && isEditing) && <GuardianForm />}
+          {(!isManaging && isEditing) && <GuardianForm cancelEdit={cancelEdit} />}
         </Box>
       </Box>
     </Box>

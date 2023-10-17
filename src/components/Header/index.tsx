@@ -1,8 +1,9 @@
-import { Flex, Text, Image, useToast, Button } from '@chakra-ui/react';
+import { Box, Flex, Text, Image, useToast, Button } from '@chakra-ui/react';
 import { copyText } from '@/lib/tools';
 import { useState } from 'react';
 import IconCopy from '@/assets/copy.svg';
 import ChainSelect from '../ChainSelect';
+import PageSelect from '../PageSelect';
 import IconLogo from '@/assets/logo-all-v3.svg';
 import AccountSelect from '../AccountSelect';
 import { toShortAddress } from '@/lib/tools';
@@ -28,7 +29,7 @@ export default function Header() {
       <Link to="/wallet">
         <Image src={IconLogo} w="180px" />
       </Link>
-      <Flex align={'center'} gap="15px">
+      <Flex align={'center'} gap="15px" marginLeft="auto">
         <Button
           px="5"
           onClick={() => setTransferVisible(true)}
@@ -55,6 +56,19 @@ export default function Header() {
         </Flex>
       </Flex>
       {transferVisible && <TransferAssets onClose={() => setTransferVisible(false)} />}
+      <Box
+        height="40px"
+        width="40px"
+        borderRadius="20px"
+        background="#F2F2F2"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        cursor="pointer"
+        marginLeft="10px"
+      >
+        <PageSelect />
+      </Box>
     </Flex>
   );
 }

@@ -49,7 +49,7 @@ export default function Apps() {
   }, [])
 
   useEffect(() => {
-    iframeRef.current.src += '';
+    if (iframeRef.current) iframeRef.current.src += '';
   }, [chainConfig, selectedAddress])
 
   const IFRAME_SANDBOX_ALLOWED_FEATURES = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock'
