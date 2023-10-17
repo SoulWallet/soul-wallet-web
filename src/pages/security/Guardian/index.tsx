@@ -99,7 +99,7 @@ export default function Guardian({ setActiveSection }: any) {
                   color="#fff"
                   fontWeight={'700'}
                   rounded="50px"
-                  disabled={status === 'editing'}
+                  disabled={(status as any) === 'editing'}
                 >
                   Edit Guardians
                 </Button>

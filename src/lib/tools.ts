@@ -247,6 +247,6 @@ export const toHex = (num: any) => {
   return hexStr;
 };
 
-export const toCapitalize = (str) => {
+export const toCapitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
