@@ -11,7 +11,7 @@ import ActivityIcon from '@/components/Icons/Activity';
 import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
 
-const getPageIcon = (type) => {
+const getPageIcon = (type: string) => {
   if (type === 'asset') {
     return <AssetIcon />
   } else if (type === 'activity') {
