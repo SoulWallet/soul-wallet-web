@@ -1,36 +1,180 @@
-import { Flex, Box, Text } from '@chakra-ui/react';
+import { Flex, Box, Text, useToast } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
 import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
-import { useAddressStore } from '@/store/address';
 import Button from '../../Button';
 import { InfoWrap, InfoItem } from '../index';
 import BN from 'bignumber.js';
 import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
+import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
+import useQuery from '@/hooks/useQuery';
+import useTools from '@/hooks/useTools';
+import { useChainStore } from '@/store/chain';
+import api from '@/lib/api';
+import { ethers } from 'ethers';
+import { useBalanceStore } from '@/store/balance';
+import { UserOpUtils, UserOperation } from '@soulwallet_test/sdk';
+import useTransaction from '@/hooks/useTransaction';
+import { useHistoryStore } from '@/store/history';
+import useWalletContext from '@/context/hooks/useWalletContext';
+import useWallet from '@/hooks/useWallet';
+import { useAddressStore, getIndexByAddress } from '@/store/address';
 
-export default function SignTransaction({
-  decodedData,
-  sendToAddress,
-  sponsor,
-  feeCost,
-  payToken,
-  setPayToken,
-  payTokenSymbol,
-  loadingFee,
-  signing,
-  onConfirm,
-  origin,
-}: any) {
-  const { selectedAddress } = useAddressStore();
-  const { selectedAddressItem } = useConfig();
+export default function SignTransaction({ onSuccess, txns, origin, sendToAddress }: any) {
+  const toast = useToast();
+  const [loadingFee, setLoadingFee] = useState(true);
+  const [promiseInfo, setPromiseInfo] = useState<any>({});
+  const [decodedData, setDecodedData] = useState<any>({});
+  const [signing, setSigning] = useState<boolean>(false);
+  const { checkActivated } = useWalletContext();
+  const { getTokenBalance } = useBalanceStore();
+  const [prefundCalculated, setPrefundCalculated] = useState(false);
+  // TODO, remember user's last select
+  const [payToken, setPayToken] = useState(ethers.ZeroAddress);
+  const [payTokenSymbol, setPayTokenSymbol] = useState('');
+  const [feeCost, setFeeCost] = useState('');
+  const [activeOperation, setActiveOperation] = useState<UserOperation>();
+  const [sponsor, setSponsor] = useState<any>(null);
+  const { selectedChainId } = useChainStore();
+  const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
+  const { decodeCalldata } = useTools();
+  // const [targetChainId, setTargetChainId] = useState('');
+  const { getPrefund } = useQuery();
+  const { chainConfig, selectedAddressItem } = useConfig();
+  const { signAndSend, getActivateOp } = useWallet();
+  const { getUserOp } = useTransaction();
+
+  const checkSponser = async (userOp: UserOperation) => {
+    const res = await api.sponsor.check(
+      selectedChainId,
+      chainConfig.contracts.entryPoint,
+      UserOpUtils.userOperationFromJSON(UserOpUtils.userOperationToJSON(userOp)),
+    );
+    if (res.data.sponsorInfos && res.data.sponsorInfos.length > 0) {
+      // TODO, check >1 sponsor
+      setSponsor(res.data.sponsorInfos[0]);
+    }
+  };
+
+  const clearState = () => {
+    // setOrigin('');
+    setPromiseInfo({});
+    setDecodedData({});
+    setLoadingFee(true);
+    setSigning(false);
+    setPrefundCalculated(false);
+    setPayToken(ethers.ZeroAddress);
+    setPayTokenSymbol('');
+    setFeeCost('');
+    setActiveOperation(undefined);
+    setSponsor(null);
+    // setSendToAddress('');
+  };
+
+  const onConfirm = async () => {
+    setSigning(true);
+
+    let userOp: any;
+    if (sponsor && sponsor.paymasterAndData) {
+      userOp = { ...activeOperation, paymasterAndData: sponsor.paymasterAndData };
+    } else {
+      userOp = activeOperation;
+    }
+
+    const receipt = await signAndSend(userOp, payToken);
+
+    // IMPORTANT TODO, get these params from receipt
+    // if first tx is completed, then it's activated
+    if (!checkActivated()) {
+      toggleActivatedChain(userOp.sender, selectedChainId);
+    }
+
+    toast({
+      title: 'Transaction success.',
+      status: 'success',
+    });
+
+    setSigning(false);
+    clearState();
+    onSuccess(receipt);
+  };
+
+  const getFinalPrefund = async () => {
+    // IMPORTANT TODO, uncomment this to show double loading fee issue
+    // setLoadingFee(true);
+    // setFeeCost("");
+    if (prefundCalculated) {
+      return;
+    }
+    console.log('get final prefund');
+    // TODO, extract this for other functions
+    const { requiredAmount } = await getPrefund(activeOperation, payToken);
+
+    if (ethers.ZeroAddress === payToken) {
+      setFeeCost(`${requiredAmount} ${chainConfig.chainToken}`);
+    } else {
+      setFeeCost(`${requiredAmount} USDC`);
+    }
+    setPrefundCalculated(true);
+    setLoadingFee(false);
+  };
+
+  const getFinalUserOp = async (txns: any) => {
+    const isActivated = await checkActivated();
+    if (isActivated) {
+      // if activated, get userOp directly
+      return await getUserOp(txns, payToken);
+    } else {
+      const activateIndex = getIndexByAddress(addressList, selectedAddress);
+      console.log('activate index', activateIndex, addressList, selectedAddress, txns);
+      // if not activated, prepend activate txns
+      return await getActivateOp(activateIndex, payToken, txns);
+    }
+  };
+
+  useEffect(() => {
+    if (!payToken || !txns || !txns.length) {
+      return;
+    }
+    console.log('on pay token change', payToken, txns, txns.length);
+    onPayTokenChange();
+  }, [payToken, txns]);
+
+  useEffect(() => {
+    if (!activeOperation || !payToken) {
+      return;
+    }
+    console.log('trigger final prefund', activeOperation, payToken);
+    getFinalPrefund();
+  }, [payToken, activeOperation]);
+
+  const onPayTokenChange = async () => {
+    setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
+    const newUserOp = await getFinalUserOp(txns);
+    setActiveOperation(newUserOp);
+    setPrefundCalculated(false);
+    setLoadingFee(true);
+  };
+
+  const doPrecheck = async () => {
+    let userOp = await getFinalUserOp(txns);
+    setActiveOperation(userOp);
+    const callDataDecodes = await decodeCalldata(selectedChainId, chainConfig.contracts.entryPoint, userOp);
+    console.log('decoded data', callDataDecodes);
+    setDecodedData(callDataDecodes);
+    checkSponser(userOp);
+  };
+
+  useEffect(() => {
+    console.log('do check', txns);
+    if (!txns || !txns.length) {
+      return;
+    }
+    doPrecheck();
+  }, [txns]);
 
   return (
     <>
-      {/* {origin && (
-        <Text fontWeight={'600'} mt="1">
-          {origin}
-        </Text>
-      )} */}
       <Flex flexDir={'column'} gap="5" mt="6">
         {decodedData && decodedData.length > 0 && (
           <Box bg="#fff" py="3" px="4" rounded="20px" fontWeight={'800'}>
@@ -48,9 +192,11 @@ export default function SignTransaction({
         <AddressInputReadonly label="From" value={selectedAddressItem.title} memo={toShortAddress(selectedAddress)} />
         {sendToAddress ? (
           <AddressInput label="To" value={sendToAddress} disabled={true} />
-        ) : decodedData[0] && decodedData[0].to ?(
+        ) : decodedData[0] && decodedData[0].to ? (
           <AddressInput label="To" value={decodedData[0] && decodedData[0].to} disabled={true} />
-        ) : ''}
+        ) : (
+          ''
+        )}
 
         <>
           <InfoWrap>
