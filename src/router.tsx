@@ -4,6 +4,7 @@ import Wallet from '@/pages/wallet';
 import SignPage from '@/pages/sign-page';
 import ActivateWallet from '@/pages/activate';
 import Create from '@/pages/create';
+import Recover from '@/pages/recover';
 import Setting from '@/pages/setting';
 import Accounts from '@/pages/accounts';
 import Popup from '@/pages/popup';
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
       { path: 'activity', element: <Asset /> },
       { path: 'asset', element: <Activity /> },
       { path: 'create', element: <Create /> },
+      { path: 'recover', element: <Recover /> },
       { path: 'popup', element: <Popup />},
       { path: 'security', element: <Security /> },
       { path: 'test', element: <Test /> },

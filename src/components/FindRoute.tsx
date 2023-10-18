@@ -18,6 +18,7 @@ export default function FindRoute({ children }: any) {
   const isSecurity = location.pathname.includes('security');
   const isTest = location.pathname.includes('test');
   const isPopup = location.pathname.includes('popup');
+  const isRecover = location.pathname.includes('recover');
 
   const query = useQuery();
 
@@ -37,7 +38,7 @@ export default function FindRoute({ children }: any) {
       }
     } else if (isTest || isPopup) {
       // skip logic
-    } else if (recovering) {
+    } else if (isRecover || recovering) {
       navigate('recover');
     } else if (!addressList.length) {
       navigate('launch');
