@@ -26,7 +26,7 @@ export default function Activity() {
     }
 
     const interval = setInterval(() => {
-      fetchHistory(selectedAddress, selectedChainId);
+      fetchHistory(selectedAddress, [selectedChainId]);
     }, 5000);
 
     return () => {

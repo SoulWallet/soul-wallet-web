@@ -29,7 +29,8 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
   const [signing, setSigning] = useState<boolean>(false);
   const { checkActivated } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
-  const [prefundCalculated, setPrefundCalculated] = useState(false);
+  const [prechecked, setPrechecked] = useState(false);
+  // const [prefundCalculated, setPrefundCalculated] = useState(false);
   // TODO, remember user's last select
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
   const [payTokenSymbol, setPayTokenSymbol] = useState('');
@@ -43,6 +44,8 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
   const { chainConfig, selectedAddressItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
   const { getUserOp } = useTransaction();
+
+  console.log('render SignTransaction!')
 
   const checkSponser = async (userOp: UserOperation) => {
     const res = await api.sponsor.check(
@@ -62,7 +65,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     setDecodedData({});
     setLoadingFee(true);
     setSigning(false);
-    setPrefundCalculated(false);
+    // setPrefundCalculated(false);
     setPayToken(ethers.ZeroAddress);
     setPayTokenSymbol('');
     setFeeCost('');
@@ -99,23 +102,18 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     onSuccess(receipt);
   };
 
-  const getFinalPrefund = async () => {
-    // IMPORTANT TODO, uncomment this to show double loading fee issue
-    // setLoadingFee(true);
-    // setFeeCost("");
-    if (prefundCalculated) {
-      return;
-    }
+  const getFinalPrefund = async (userOp: any) => {
+    setLoadingFee(true);
     console.log('get final prefund');
     // TODO, extract this for other functions
-    const { requiredAmount } = await getPrefund(activeOperation, payToken);
+    const { requiredAmount } = await getPrefund(userOp, payToken);
 
     if (ethers.ZeroAddress === payToken) {
       setFeeCost(`${requiredAmount} ${chainConfig.chainToken}`);
     } else {
       setFeeCost(`${requiredAmount} USDC`);
     }
-    setPrefundCalculated(true);
+    // setPrefundCalculated(true);
     setLoadingFee(false);
   };
 
@@ -132,47 +130,46 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     }
   };
 
-  useEffect(() => {
-    if (!payToken || !txns || !txns.length) {
-      return;
-    }
-    console.log('on pay token change', payToken, txns, txns.length);
-    onPayTokenChange();
-  }, [payToken, txns]);
-
-  useEffect(() => {
-    if (!activeOperation || !payToken) {
-      return;
-    }
-    console.log('trigger final prefund', activeOperation, payToken);
-    getFinalPrefund();
-  }, [payToken, activeOperation]);
-
-  const onPayTokenChange = async () => {
-    setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
-    const newUserOp = await getFinalUserOp(txns);
-    setActiveOperation(newUserOp);
-    setPrefundCalculated(false);
-    setLoadingFee(true);
-  };
+  // const onPayTokenChange = async () => {
+  //   // const newUserOp = await getFinalUserOp(txns);
+  //   // setActiveOperation(newUserOp);
+  //   // setPrefundCalculated(false);
+  //   setLoadingFee(true);
+  //   doPrecheck();
+  // };
 
   const doPrecheck = async () => {
+    if(prechecked){
+      return
+    }
+    console.log('Do it')
+    setPrechecked(true);
+    setLoadingFee(true);
+    setFeeCost('...')
+    setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
     let userOp = await getFinalUserOp(txns);
     setActiveOperation(userOp);
     const callDataDecodes = await decodeCalldata(selectedChainId, chainConfig.contracts.entryPoint, userOp);
     console.log('decoded data', callDataDecodes);
     setDecodedData(callDataDecodes);
     checkSponser(userOp);
+    getFinalPrefund(userOp);
   };
+
+  useEffect(()=>{
+    setPrechecked(false);
+  }, [payToken]);
   
   // IMPORTANT IMPORTANT TODO, rendered twice
   useEffect(() => {
-    console.log('do check', txns);
-    if (!txns || !txns.length) {
+    if (!txns || !txns.length || !payToken) {
       return;
     }
+    console.log('do pre check', txns, payToken);
     doPrecheck();
-  }, [txns]);
+  }, [txns, payToken]);
+
+
 
   return (
     <>

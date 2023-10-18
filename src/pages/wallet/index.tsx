@@ -20,6 +20,7 @@ export default function Wallet() {
   //   guardians.length === 0 &&
   //   (!storage.getItem('skipSet') || storage.getItem('skipSet') !== 'true') &&
   //   !skipSet;
+  console.log('Render wallet page')
 
   return (
     <Box color="#000">

@@ -84,8 +84,12 @@ export const useBalanceStore = create<IBalanceStore>()(
       fetchTokenBalance: async (address: string, chainId: string, paymasterTokens: string[]) => {
         const res = await api.balance.token({
           walletAddress: address,
-          chainId,
-          reservedTokenAddresses: paymasterTokens,
+          chains: [
+            {
+              chainID: chainId,
+              reservedTokenAddresses: paymasterTokens,
+            },
+          ],
         });
 
         const tokenList = res.data.map((item: ITokenBalanceItem) => formatTokenBalance(item));

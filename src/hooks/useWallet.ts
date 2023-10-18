@@ -28,7 +28,6 @@ export default function useWallet() {
   const { slotInitInfo } = useGuardianStore();
   const { credentials } = useCredentialStore();
   const { soulWallet } = useSdk();
-  const { fetchHistory } = useHistoryStore();
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);

@@ -16,6 +16,12 @@ export default function TokensTable() {
   const getTokenBalance = async () => {
     const res = await api.balance.token({
       walletAddress: selectedAddress,
+      chains: [
+        {
+          chainID: '',
+          reservedTokenAddresses: [],
+        }
+      ]
     });
     console.log('ressssss', res);
   };

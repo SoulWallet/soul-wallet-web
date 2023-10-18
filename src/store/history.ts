@@ -7,14 +7,14 @@ import { ActivityStatusEn } from '@/pages/wallet/comp/Activity/comp/ActivityItem
 export interface IHistoryStore {
   historyList: any[];
   //   getHistory: (tokenAddress: string) => any;
-  fetchHistory: (address: string, chainId: string) => void;
+  fetchHistory: (address: string, chainId: string[]) => void;
 }
 
 export const useHistoryStore = create<IHistoryStore>()(
   persist(
     (set, get) => ({
       historyList: [],
-      fetchHistory: async (address: string, chainId: string) => {
+      fetchHistory: async (address: string, chainId: string[]) => {
         const res = await scanApi.op.list(address, chainId);
 
         // IMPORTANT TODO, cache decode result

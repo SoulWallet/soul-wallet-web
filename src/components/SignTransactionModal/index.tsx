@@ -23,13 +23,15 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const [activeTxns, setActiveTxns] = useState<any>(null);
   const [sendToAddress, setSendToAddress] = useState('');
 
+  console.log('render SignTransactionModal')
+
   useImperativeHandle(ref, () => ({
     async show(txns: any, origin: string, sendTo: string) {
       setVisible(true);
       setOrigin(origin);
 
       setSendToAddress(sendTo);
-      setActiveTxns(txns)
+      setActiveTxns(txns);
 
       return new Promise((resolve, reject) => {
         setPromiseInfo({
@@ -55,21 +57,7 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   return (
     <div ref={ref}>
       <TxModal title="Confirm Transaction" visible={visible} onClose={onClose}>
-        <SignTransaction
-          txns={activeTxns}
-          origin={origin}
-          sendToAddress={sendToAddress}
-          // decodedData={decodedData}
-          // sendToAddress={sendToAddress}
-          // sponsor={sponsor}
-          // feeCost={feeCost}
-          // payToken={payToken}
-          // setPayToken={setPayToken}
-          // payTokenSymbol={payTokenSymbol}
-          // loadingFee={loadingFee}
-          // signing={signing}
-          onSuccess={onSuccess}
-        />
+        <SignTransaction txns={activeTxns} origin={origin} sendToAddress={sendToAddress} onSuccess={onSuccess} />
 
         <Text
           color="danger"
