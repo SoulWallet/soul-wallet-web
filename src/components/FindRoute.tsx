@@ -25,28 +25,31 @@ export default function FindRoute({ children }: any) {
   const findRoute = async () => {
     console.log('ready to find');
     const recovering = storage.getItem('recovering');
-    if (isLaunch) {
-      navigate('launch');
-    }
-    if (isApps) {
-      const appUrl = query.get('appUrl');
+    // if (isLaunch) {
+    //   navigate('launch');
+    // }
+    // if (isApps) {
+    //   const appUrl = query.get('appUrl');
 
-      if (appUrl) {
-        navigate(`apps?appUrl=${appUrl}`);
-      } else {
-        navigate('apps');
-      }
-    } else if (isTest || isPopup) {
-      // skip logic
-    } else if (isRecover || recovering) {
+    //   if (appUrl) {
+    //     navigate(`apps?appUrl=${appUrl}`);
+    //   } else {
+    //     navigate('apps');
+    //   }
+    // } else if (isSecurity) {
+    //   navigate('security');
+    // } else if (isTest || isPopup) {
+    //   // skip logic
+    // } else 
+    
+    if (isRecover || recovering) {
       navigate('recover');
     } else if (!addressList.length) {
       navigate('launch');
-    } else if (isSecurity) {
-      navigate('security');
-    } else {
-      navigate('wallet');
     }
+    // else {
+    //   navigate('wallet');
+    // }
   };
 
   useEffect(() => {

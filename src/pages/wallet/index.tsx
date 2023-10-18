@@ -1,21 +1,12 @@
-import { useState } from 'react';
 import Header from '@/components/Header';
-
 import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
-// import Operations from './comp/Operations';
-// import ActivateHint from './comp/ActivateHint';
-// import SetGuardianHint from './comp/SetGuardianHint';
-// import PassKeyList from '@/components/web/PassKeyList';
 import Tokens from './comp/Tokens';
 import History from './comp/History';
 import Balance from './comp/Balance';
 import AppContainer from '@/components/AppContainer';
-// import Actions from './comp/Actions';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
-// import { useGuardianStore } from '@/store/guardian';
 import DappList from '@/components/DappList';
-import TransferAssets from '@/components/TransferAssets';
 import { useCredentialStore } from '@/store/credential';
 import Footer from '@/components/Footer';
 
@@ -54,9 +45,6 @@ export default function Wallet() {
         </Grid>
         <DappList />
         <Footer />
-        {/* {!isActivated ? <ActivateHint /> : <Actions showSetGuardian={showSetGuardian && !skipSet} />}
-        {showSetGuardian && !skipSet && <SetGuardianHint onSkip={() => setSkipSet(true)} />}
-        <Operations /> */}
       </AppContainer>
     </Box>
   );
