@@ -11,7 +11,7 @@ import HomeCard from '../HomeCard';
 import IconLoading from '@/assets/loading.gif';
 import { ExternalLink } from '../HomeCard';
 
-export default function History() {
+export default function Activity() {
   const { selectedAddress } = useAddressStore();
   const { selectedChainId } = useChainStore();
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ export default function History() {
     }
 
     const interval = setInterval(() => {
-      fetchHistory(selectedAddress, selectedChainId);
+      fetchHistory(selectedAddress, [selectedChainId]);
     }, 5000);
 
     return () => {

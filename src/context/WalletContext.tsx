@@ -153,6 +153,7 @@ export const WalletContextProvider = ({ children }: any) => {
   };
 
   const showSignTransaction = async (txns: any, origin?: string, sendTo?: string) => {
+    console.log('show sign transac')
     return await signTransactionModal.current.show(txns, origin, sendTo);
   };
 
@@ -167,6 +168,8 @@ export const WalletContextProvider = ({ children }: any) => {
     }
     checkActivated();
   }, [selectedAddress, selectedChainId]);
+
+  console.log('Render WalletContext')
 
   return (
     <WalletContext.Provider

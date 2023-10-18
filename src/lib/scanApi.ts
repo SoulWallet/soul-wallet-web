@@ -15,10 +15,10 @@ axio.interceptors.response.use((res: any) => {
 });
 
 const op = {
-  list: (walletAddress: string, chainId: string) =>
+  list: (walletAddress: string, chainId: string[]) =>
     axio.post('/op/search', {
       walletAddress,
-      chainId,
+      chainIDs: chainId,
     }),
   detail: (opHash: string) =>
     axio.post('/op', {

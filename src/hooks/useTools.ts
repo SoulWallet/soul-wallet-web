@@ -2,15 +2,8 @@ import api from '@/lib/api';
 import { ethers } from 'ethers';
 import QRCode from 'qrcode';
 import { GuardianItem } from '@/lib/type';
-import IconSend from '@/assets/activities/send.svg';
-import IconContract from '@/assets/activities/contract.svg';
-import { DecodeUserOp, DecodeResult } from '@soulwallet/decoder';
-import { useToast } from '@chakra-ui/react';
-import { UserOperation } from '@soulwallet/sdk';
 
-interface IDecodedData extends Partial<DecodeResult> {
-  functionName?: string;
-}
+import { useToast } from '@chakra-ui/react';
 
 export default function useTools() {
   const toast = useToast();
@@ -78,52 +71,15 @@ export default function useTools() {
     return /^0x[0-9a-fA-F]{40}$/.test(address);
   };
 
-  const decodeCalldata = async (chainId: string, entrypoint: string, userOp: UserOperation) => {
-    const decodeRet = await DecodeUserOp(parseInt(chainId), entrypoint, userOp);
-    if (decodeRet.isErr()) {
-      console.error(decodeRet.ERR);
-      return [];
-    }
-
-    const decoded: IDecodedData[] = decodeRet.OK;
-
-    if (userOp.initCode !== '0x') {
-      decoded.unshift({
-        functionName: 'Create Wallet',
-      });
-    }
-
-    for (let i of decoded) {
-      if (!i.method && i.value) {
-        i.functionName = 'Transfer ETH';
-      }
-    }
-
-    return decoded;
-  };
-
-  const getIconMapping = (name: string) => {
-    switch (name) {
-      case 'Transfer ERC20':
-        return IconSend;
-      case 'Transfer ETH':
-        return IconSend;
-      default:
-        return IconContract;
-    }
-  };
-
   const generateQrCode = async (text: string) => {
     return await QRCode.toDataURL(text, { margin: 2 });
   };
 
   return {
     verifyAddressFormat,
-    decodeCalldata,
     downloadJsonFile,
     emailJsonFile,
     formatGuardianFile,
-    getIconMapping,
     getJsonFromFile,
     generateQrCode,
   };

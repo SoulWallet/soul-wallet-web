@@ -6,7 +6,10 @@ import { chainIdMapping, chainMapping } from '@/config';
 import { Tooltip } from '@chakra-ui/react';
 import IconDefault from '@/assets/tokens/default.svg';
 import storage from '@/lib/storage';
-import exp from 'constants';
+import { DecodeUserOp, DecodeResult } from '@soulwallet/decoder';
+import { UserOperation } from '@soulwallet/sdk';
+import IconSend from '@/assets/activities/send.svg';
+import IconContract from '@/assets/activities/contract.svg';
 
 export function notify(title: string, message: string) {
   const randomId = nanoid();
@@ -250,3 +253,40 @@ export const toHex = (num: any) => {
 export const toCapitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
+
+
+export const decodeCalldata = async (chainId: string, entrypoint: string, userOp: UserOperation) => {
+  const decodeRet = await DecodeUserOp(parseInt(chainId), entrypoint, userOp);
+  if (decodeRet.isErr()) {
+    console.error(decodeRet.ERR);
+    return [];
+  }
+
+  const decoded: any[] = decodeRet.OK;
+
+  if (userOp.initCode !== '0x') {
+    decoded.unshift({
+      functionName: 'Create Wallet',
+    });
+  }
+
+  for (let i of decoded) {
+    if (!i.method && i.value) {
+      i.functionName = 'Transfer ETH';
+    }
+  }
+
+  return decoded;
+};
+
+
+export const getIconMapping = (name: string) => {
+  switch (name) {
+    case 'Transfer ERC20':
+      return IconSend;
+    case 'Transfer ETH':
+      return IconSend;
+    default:
+      return IconContract;
+  }
+};

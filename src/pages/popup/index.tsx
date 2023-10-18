@@ -1,7 +1,7 @@
 import ConnectDapp from '@/components/SignModal/comp/ConnectDapp';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import { Box } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { Box, Image } from '@chakra-ui/react';
+import IconLogo from '@/assets/logo-all-v3.svg';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import SignTransaction from '@/components/SignTransactionModal/comp/SignTransaction';
 export default function Popup() {
@@ -9,17 +9,15 @@ export default function Popup() {
   const action = searchParams.get('action');
   const origin = searchParams.get('origin');
   const id = searchParams.get('id');
-  const txns = searchParams.get('txns');
-  const data = searchParams.get('data');
+  const data = searchParams.get('data') === 'undefined' ? {} : JSON.parse(searchParams.get('data') || '{}');
+  const txns = data.txns;
 
-  console.log('data', data, action)
-
-  const onTxSuccess = (receipt: any, msgId: any) => {
+  const onTxSuccess = (receipt: any) => {
     window.opener.postMessage(
       {
-        id: msgId,
+        id,
         payload: {
-          receipt,
+          transactionHash: receipt.transactionHash,
         },
       },
       '*',
@@ -31,7 +29,10 @@ export default function Popup() {
     <Box p="6" h="100vh">
       {action === 'getAccounts' && <ConnectDapp origin={origin} msgId={id} />}
       {action === 'signTransaction' && (
-        <SignTransaction txns={txns} origin={origin} msgId={id} onSuccess={onTxSuccess} />
+        <>
+          <Image src={IconLogo} mx="auto" w="200px" />
+          <SignTransaction txns={txns} origin={origin} msgId={id} onSuccess={onTxSuccess} />
+        </>
       )}
     </Box>
   );

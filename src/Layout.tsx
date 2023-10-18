@@ -5,7 +5,8 @@ import Fonts from '@/styles/Fonts';
 import FindRoute from '@/components/FindRoute';
 import Theme from '@/styles/Theme';
 
-export default function Layout({ children }: any) {
+export default function Layout() {
+  console.log('Render layout')
   return (
     <ChakraProvider theme={Theme} toastOptions={{ defaultOptions: { duration: 1000 } }}>
       <Fonts />
