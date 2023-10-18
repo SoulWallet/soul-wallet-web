@@ -45,7 +45,7 @@ export interface IBalanceStore {
   fetchNftBalance: (address: string, chainId: number) => void;
 }
 
-const formatTokenBalance = (item: ITokenBalanceItem) => {
+export const formatTokenBalance = (item: ITokenBalanceItem) => {
   if (!item.logoURI) {
     item.logoURI = IconDefaultToken;
   }

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { BoxProps, Flex, Image, Text } from '@chakra-ui/react';
 import { ExternalLink } from '../HomeCard';
 import ListItem from '@/components/ListItem';
 import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
@@ -32,12 +31,12 @@ export default function Tokens() {
   }, [selectedAddress, selectedChainItem]);
 
   return (
-    <HomeCard title={'Tokens'} external={<ExternalLink title="View all" to="/tokens" />} contentHeight="290px">
+    <HomeCard title={'Tokens'} external={<ExternalLink title="View all" to="/asset" />} contentHeight="290px">
       {tokenBalance.map((item: ITokenBalanceItem, idx: number) => (
         <ListItem
           key={idx}
           idx={idx}
-          icon={item.logoURI || IconDefaultToken}
+          icon={item.logoURI}
           title={item.name || 'Unknown'}
           titleDesc={'Token'}
           amount={item.tokenBalanceFormatted}

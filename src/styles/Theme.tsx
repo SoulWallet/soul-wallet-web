@@ -33,6 +33,7 @@ const theme = extendTheme({
       black: '#1E1E1E',
       green: '#29510A',
       greenDarken: '#1b3507',
+      gray: "#898989",
     },
   },
   breakpoints: {
