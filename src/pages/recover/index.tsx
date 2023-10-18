@@ -18,9 +18,36 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import { toHex } from '@/lib/tools';
 import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';
+import FormInput from '@/components/web/Form/FormInput';
+import useForm from '@/hooks/useForm';
+import WalletCard from '@/components/web/WalletCard';
+import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
+import api from '@/lib/api';
+import SetWalletAddress from './SetWalletAddress'
+import SetPasskeys from './SetPasskeys'
+import SetGuardians from './SetGuardians'
+import SignatureRequest from './SignatureRequest'
 
 export default function Recover() {
-  return (
-    <Box>recover</Box>
-  )
+  const [step, setStep] = useState(0)
+
+  const changeStep = (step: number) => {
+    setStep(step)
+  }
+
+  if (step === 0) {
+    return <SetWalletAddress changeStep={changeStep} />
+  } else if (step === 1) {
+    return <SetPasskeys changeStep={changeStep} />
+  } else if (step === 2) {
+    return <SetGuardians changeStep={changeStep} />
+  } else if (step === 3) {
+    return (
+      <FullscreenContainer>
+        <SignatureRequest changeStep={changeStep} />
+      </FullscreenContainer>
+    )
+  }
+
+  return null
 }
