@@ -13,7 +13,7 @@ import { useChainStore } from '@/store/chain';
 import api from '@/lib/api';
 import { ethers } from 'ethers';
 import { useBalanceStore } from '@/store/balance';
-import { UserOpUtils, UserOperation } from '@soulwallet_test/sdk';
+import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import { useHistoryStore } from '@/store/history';
 import useWalletContext from '@/context/hooks/useWalletContext';

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
-// import * as abi from "@soulwallet_test/abi";
+// import * as abi from "@soulwallet/abi";
 import Nfts from './comp/Nfts';
 
 const tabs = ['Tokens', 'NFTs', 'Transactions'];

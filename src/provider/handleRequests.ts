@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { ABI_SoulWallet } from '@soulwallet_test/abi';
+import { ABI_SoulWallet } from '@soulwallet/abi';
 import { getMessageType } from './tools';
 
 let ethersProvider: any = null;

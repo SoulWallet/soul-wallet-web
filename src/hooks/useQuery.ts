@@ -6,7 +6,7 @@ import useWalletContext from '../context/hooks/useWalletContext';
 import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
-import {SignkeyType} from '@soulwallet_test/sdk'
+import {SignkeyType} from '@soulwallet/sdk'
 import { addPaymasterAndData } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useBalanceStore } from '@/store/balance';

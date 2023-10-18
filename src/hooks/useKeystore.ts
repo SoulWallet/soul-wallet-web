@@ -1,4 +1,4 @@
-import { KeyStoreTypedDataType, L1KeyStore } from '@soulwallet_test/sdk';
+import { KeyStoreTypedDataType, L1KeyStore } from '@soulwallet/sdk';
 import { useGuardianStore } from '@/store/guardian';
 import useConfig from './useConfig';
 import { ethers } from 'ethers';

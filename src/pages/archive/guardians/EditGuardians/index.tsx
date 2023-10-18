@@ -9,7 +9,7 @@ import { GuardianItem } from '@/lib/type';
 import { Box, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react';
 import { copyText, nextRandomId } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
-import { L1KeyStore } from '@soulwallet_test/sdk';
+import { L1KeyStore } from '@soulwallet/sdk';
 import { useAddressStore } from '@/store/address';
 import { useGuardianStore } from '@/store/guardian';
 import useSdk from '@/hooks/useSdk';

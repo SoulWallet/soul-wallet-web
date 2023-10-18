@@ -7,9 +7,9 @@ import BN from 'bignumber.js';
 import useKeyring from './useKeyring';
 import Erc20ABI from '../contract/abi/ERC20.json';
 import { useAddressStore } from '@/store/address';
-import { Transaction } from '@soulwallet_test/sdk';
+import { Transaction } from '@soulwallet/sdk';
 import useQuery from './useQuery';
-import { SignkeyType } from '@soulwallet_test/sdk';
+import { SignkeyType } from '@soulwallet/sdk';
 import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
 
