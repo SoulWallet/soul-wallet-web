@@ -32,9 +32,9 @@ export default {
   ],
   contracts: {
     ...keystoreContracts,
-    soulWalletFactory: '0xcf73a2848c1de2da12e2dd2d3b7a86bd700c68c1',
-    defaultCallbackHandler: '0xe8753f3a52e76203b25822f4d83b1647e09e81cb',
-    securityControlModule: '0x480238a37ada43feaa686416e1309eb1078c8e62',
+    soulWalletFactory: '0xc61be1f9ebb4fc58ca4c6c8ef8ebb7d18fbf2633',
+    defaultCallbackHandler: '0x3ffdcb8757ae93775fd076f13d2f185d6eb0d1a3',
+    securityControlModule: '0x60c95b086a1403dec8aeb882c8aeff58853ff639',
     entryPoint: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789',
     paymaster: '0xee4d0d07318dd076d588bccdf2383275b499f29f',
   },

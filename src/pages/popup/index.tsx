@@ -10,6 +10,9 @@ export default function Popup() {
   const origin = searchParams.get('origin');
   const id = searchParams.get('id');
   const txns = searchParams.get('txns');
+  const data = searchParams.get('data');
+
+  console.log('data', data, action)
 
   const onTxSuccess = (receipt: any, msgId: any) => {
     window.opener.postMessage(
