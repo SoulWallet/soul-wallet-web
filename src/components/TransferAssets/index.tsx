@@ -24,7 +24,7 @@ const tabs = [
   },
 ];
 
-export default function TransferAssets({ onClose }: any) {
+export default function TransferAssets({ onClose, tokenAddress = ethers.ZeroAddress }: any) {
   const [activeTab, setActiveTab] = useState(0);
   return (
     <Modal isOpen={true} onClose={onClose}>
@@ -70,7 +70,7 @@ export default function TransferAssets({ onClose }: any) {
             roundedTopRight={activeTab === 1 ? '0' : '20px'}
             p="6"
           >
-            {activeTab === 0 && <SendAssets tokenAddress={ethers.ZeroAddress} />}
+            {activeTab === 0 && <SendAssets tokenAddress={tokenAddress} />}
             {activeTab === 1 && <Receive />}
           </Box>
         </ModalBody>

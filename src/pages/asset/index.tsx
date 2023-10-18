@@ -8,6 +8,7 @@ import ChainSelectMultiple from '@/components/ChainSelectMultiple';
 import { useAddressStore } from '@/store/address';
 import { useBalanceStore } from '@/store/balance';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
+import TransferAssets from '@/components/TransferAssets';
 import Button from '@/components/Button';
 
 const tabList = [
@@ -45,6 +46,8 @@ export const Tabs = ({ activeTab }: any) => {
 const TokensTable = () => {
   const { selectedAddress } = useAddressStore();
   const { tokenBalance } = useBalanceStore();
+  const [transferVisible, setTransferVisible] = useState(false);
+  const [tokenAddress, setTokenAddress] = useState('');
 
   const getTokenBalance = async () => {
     const res = await api.balance.token({
@@ -56,6 +59,12 @@ const TokensTable = () => {
   useEffect(() => {
     getTokenBalance();
   }, []);
+
+  const showTransfer = (tokenAddress: string) => {
+    console.log('t', tokenAddress)
+    setTokenAddress(tokenAddress);
+    setTransferVisible(true);
+  };
 
   return (
     <Box rounded="20px" bg="#fff" p="8">
@@ -90,7 +99,16 @@ const TokensTable = () => {
                       {item.symbol}
                     </Text>
                   </Flex>
-                  <Button transition={"none"} className="send-button" visibility={'hidden'} py="2" px="5" onClick={() => {}}>
+                  <Button
+                    transition={'none'}
+                    className="send-button"
+                    visibility={'hidden'}
+                    py="2"
+                    px="5"
+                    onClick={() => {
+                      showTransfer(item.contractAddress);
+                    }}
+                  >
                     Send
                   </Button>
                 </Td>
@@ -102,6 +120,7 @@ const TokensTable = () => {
           })}
         </Tbody>
       </Table>
+      {transferVisible && <TransferAssets tokenAddress={tokenAddress} onClose={() => setTransferVisible(false)} />}
     </Box>
   );
 };
@@ -118,7 +137,7 @@ export default function Asset() {
           Asset
         </Text>
         <Tabs activeTab={activeTab} />
-        <Flex gap="5" mt="3" alignItems={"flex-start"}>
+        <Flex gap="5" mt="3" alignItems={'flex-start'}>
           <Box w="100%">
             {activeTab === 0 && <TokensTable />}
             {activeTab === 1 && <TokensTable />}
