@@ -9,8 +9,7 @@ import { ethers } from 'ethers';
 import { Flex, Box, Text, Modal } from '@chakra-ui/react';
 import { useBalanceStore } from '@/store/balance';
 import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
-import useSdk from '@/hooks/useSdk';
-import BN from 'bignumber.js';
+import { decodeCalldata } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
 import ConnectDapp from './comp/ConnectDapp';
 import SignTransaction from './comp/SignTransaction';
@@ -38,7 +37,6 @@ export const InfoItem = ({ children, ...restProps }: any) => (
 );
 
 const SignModal = (_: unknown, ref: Ref<any>) => {
-  const { selectedAddress } = useAddressStore();
   const [keepModalVisible, setKeepModalVisible] = useState(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [loadingFee, setLoadingFee] = useState(true);
@@ -58,7 +56,6 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
   const [sponsor, setSponsor] = useState<any>(null);
   const [activeTxns, setActiveTxns] = useState<any>(null); // [
   const { selectedChainId } = useChainStore();
-  const { decodeCalldata } = useTools();
   const [targetChainId, setTargetChainId] = useState('');
   const { getFeeCost, getGasPrice, getPrefund } = useQuery();
   const [sendToAddress, setSendToAddress] = useState('');

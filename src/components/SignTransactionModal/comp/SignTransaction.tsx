@@ -8,7 +8,8 @@ import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
 import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
 import useQuery from '@/hooks/useQuery';
-import useTools from '@/hooks/useTools';
+import { decodeCalldata } from '@/lib/tools';
+
 import { useChainStore } from '@/store/chain';
 import api from '@/lib/api';
 import { ethers } from 'ethers';
@@ -37,7 +38,6 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
   const [sponsor, setSponsor] = useState<any>(null);
   const { selectedChainId } = useChainStore();
   const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
-  const { decodeCalldata } = useTools();
   // const [targetChainId, setTargetChainId] = useState('');
   const { getPrefund } = useQuery();
   const { chainConfig, selectedAddressItem } = useConfig();

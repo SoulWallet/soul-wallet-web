@@ -13,7 +13,7 @@ import Apps from '@/pages/apps';
 // import EditGuardians from "@/pages/guardians";
 import Launch from '@/pages/launch';
 import Asset from '@/pages/asset';
-import Activity from '@/pages/asset';
+import Activity from '@/pages/activity';
 import Security from '@/pages/security';
 import Test from './pages/test';
 
@@ -29,8 +29,8 @@ export const router = createBrowserRouter([
       { path: 'activate', element: <ActivateWallet /> },
       { path: 'apps', element: <Apps /> },
       { path: 'launch', element: <Launch /> },
-      { path: 'activity', element: <Asset /> },
-      { path: 'asset', element: <Activity /> },
+      { path: 'activity', element: <Activity /> },
+      { path: 'asset', element: <Asset /> },
       { path: 'create', element: <Create /> },
       { path: 'recover', element: <Recover /> },
       { path: 'popup', element: <Popup />},

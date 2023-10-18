@@ -1,20 +1,13 @@
 import Header from '@/components/Header';
 import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 import Tokens from './comp/Tokens';
-import History from './comp/History';
+import Activity from './comp/Activity';
 import Balance from './comp/Balance';
 import AppContainer from '@/components/AppContainer';
-import { useAddressStore } from '@/store/address';
-import { useChainStore } from '@/store/chain';
 import DappList from '@/components/DappList';
-import { useCredentialStore } from '@/store/credential';
 import Footer from '@/components/Footer';
 
 export default function Wallet() {
-  const { selectedAddress, getIsActivated } = useAddressStore();
-  const { selectedChainId } = useChainStore();
-  const { credentials, changeCredentialName } = useCredentialStore();
-  // const { guardians } = useGuardianStore();
   // const isActivated = getIsActivated(selectedAddress, selectedChainId);
   // const [skipSet, setSkipSet] = useState(false);
 
@@ -40,7 +33,7 @@ export default function Wallet() {
             <Tokens />
           </Box>
           <Box flex="1">
-            <History />
+            <Activity />
           </Box>
         </Grid>
         <DappList />
