@@ -2,7 +2,6 @@ import { Route, Routes, createBrowserRouter } from 'react-router-dom';
 import Layout from './Layout';
 import Wallet from '@/pages/wallet';
 import SignPage from '@/pages/sign-page';
-import ActivateWallet from '@/pages/activate';
 import Create from '@/pages/create';
 import Recover from '@/pages/recover';
 import Setting from '@/pages/setting';
@@ -28,7 +27,6 @@ export const router = createBrowserRouter([
       { path: 'accounts', element: <Accounts /> },
       { path: 'setting', element: <Setting /> },
       { path: 'sign', element: <SignPage /> },
-      { path: 'activate', element: <ActivateWallet /> },
       { path: 'apps', element: <Apps /> },
       { path: 'launch', element: <Launch /> },
       { path: 'activity', element: <Activity /> },

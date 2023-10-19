@@ -84,51 +84,6 @@ export default function useWallet() {
     return userOp;
   };
 
-  const activateWallet = async (index: number, payToken: string, estimateCost: boolean = false) => {
-    const { initialKeys, initialGuardianHash } = slotInitInfo;
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash);
-
-    if (userOpRet.isErr()) {
-      throw new Error(userOpRet.ERR.message);
-    }
-
-    let userOp = userOpRet.OK;
-
-    // approve paymaster to spend ERC-20
-    const soulAbi = new ethers.Interface(ABI_SoulWallet);
-    const erc20Abi = new ethers.Interface(Erc20ABI);
-    const to = chainConfig.paymasterTokens;
-    const approveCalldata = erc20Abi.encodeFunctionData('approve', [
-      chainConfig.contracts.paymaster,
-      ethers.parseEther('1000'),
-    ]);
-
-    const approveCalldatas = [...new Array(to.length)].map(() => approveCalldata);
-
-    const callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [to, approveCalldatas]);
-
-    userOp.callData = callData;
-
-    userOp.callGasLimit = `0x${(50000 * to.length + 1).toString(16)}`;
-
-    const feeCost = await getFeeCost(userOp, payToken);
-
-    userOp = feeCost.userOp;
-
-    if (estimateCost) {
-      const { requiredAmount } = await getPrefund(userOp, payToken);
-      return requiredAmount;
-    } else {
-      // TODO, estimate fee could be avoided
-      await signAndSend(userOp, payToken);
-      // setTimeout(() => {
-      //   fetchHistory(userOp.sender, selectedChainId);
-      // }, 10000);
-      // IMPORTANT TODO, what if user don't wait?
-      toggleActivatedChain(userOp.sender, selectedChainId);
-    }
-  };
-
   const getSetGuardianCalldata = async (slot: string, guardianHash: string, keySignature: string) => {
     const soulAbi = new ethers.Interface(ABI_SoulWallet);
     return soulAbi.encodeFunctionData('setGuardian(bytes32,bytes32,bytes32)', [slot, guardianHash, keySignature]);
@@ -189,7 +144,6 @@ export default function useWallet() {
   return {
     addPaymasterAndData,
     getActivateOp,
-    activateWallet,
     getSetGuardianCalldata,
     signAndSend,
     signRawHash,
