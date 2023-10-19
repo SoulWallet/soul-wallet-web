@@ -57,7 +57,7 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
   const [activeTxns, setActiveTxns] = useState<any>(null); // [
   const { selectedChainId } = useChainStore();
   const [targetChainId, setTargetChainId] = useState('');
-  const { getFeeCost, getGasPrice, getPrefund } = useQuery();
+  const { getPrefund } = useQuery();
   const [sendToAddress, setSendToAddress] = useState('');
   const { chainConfig, selectedAddressItem } = useConfig();
   const {getUserOp} = useTransaction();

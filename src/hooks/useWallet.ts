@@ -13,17 +13,13 @@ import { useHistoryStore } from '@/store/history';
 import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
 import BN from 'bignumber.js';
 import useConfig from './useConfig';
-import { useChainStore } from '@/store/chain';
 import bg from '@/background';
 import usePasskey from './usePasskey';
 import { useCredentialStore } from '@/store/credential';
 
 export default function useWallet() {
-  const { account } = useWalletContext();
-  const { toggleActivatedChain } = useAddressStore();
-  const { selectedChainId } = useChainStore();
   const { sign } = usePasskey();
-  const { getFeeCost, getPrefund } = useQuery();
+  const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
   const { slotInitInfo } = useGuardianStore();
   const { credentials } = useCredentialStore();
@@ -71,9 +67,7 @@ export default function useWallet() {
 
     userOp.callGasLimit = `0x${(50000 * finalTos.length + 1).toString(16)}`;
 
-    const feeCost = await getFeeCost(userOp, payToken);
-
-    userOp = feeCost.userOp;
+    userOp = await set1559Fee(userOp, payToken);
 
     // paymasterAndData length calc 1872 = ((236 - 2) / 2) * 16;
     // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(1872).toString(16)}`;

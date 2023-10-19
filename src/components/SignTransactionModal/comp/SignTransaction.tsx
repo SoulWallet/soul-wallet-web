@@ -45,8 +45,6 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
   const { signAndSend, getActivateOp } = useWallet();
   const { getUserOp } = useTransaction();
 
-  console.log('render SignTransaction!')
-
   const checkSponser = async (userOp: UserOperation) => {
     const res = await api.sponsor.check(
       selectedChainId,

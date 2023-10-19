@@ -14,9 +14,9 @@ import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function useTransaction() {
-  const { showSignTransaction, checkActivated, } = useWalletContext();
+  const { showSignTransaction } = useWalletContext();
   const { soulWallet } = useSdk();
-  const { getFeeCost, getGasPrice, getPrefund } = useQuery();
+  const { set1559Fee, getGasPrice } = useQuery();
   const { selectedAddress } = useAddressStore();
 
   const sendEth = async (to: string, amount: string) => {
@@ -58,14 +58,13 @@ export default function useTransaction() {
       let userOp = userOpRet.OK;
 
       // set preVerificationGas
-      const gasLimit = await soulWallet.estimateUserOperationGas(userOp, SignkeyType.P256);
+      // const gasLimit = await soulWallet.estimateUserOperationGas(userOp, SignkeyType.P256);
 
-      if (gasLimit.isErr()) {
-        throw new Error(gasLimit.ERR.message);
-      }
+      // if (gasLimit.isErr()) {
+      //   throw new Error(gasLimit.ERR.message);
+      // }
 
-      const feeCost = await getFeeCost(userOp, payToken);
-      userOp = feeCost.userOp;
+      userOp = await set1559Fee(userOp, payToken);
 
       // paymasterAndData length calc 1872 = ((236 - 2) / 2) * 16;
       // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(1872).toString(16)}`;

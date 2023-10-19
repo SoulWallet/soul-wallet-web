@@ -6,7 +6,7 @@ import useWalletContext from '../context/hooks/useWalletContext';
 import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
-import {SignkeyType} from '@soulwallet/sdk'
+import { SignkeyType } from '@soulwallet/sdk';
 import { addPaymasterAndData } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useBalanceStore } from '@/store/balance';
@@ -75,11 +75,13 @@ export default function useQuery() {
       };
     }
   };
-  const getFeeCost = async (userOp: any, payToken: string) => {
+  const set1559Fee = async (userOp: any, payToken: string) => {
     // set 1559 fee
-    const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
-    userOp.maxFeePerGas = maxFeePerGas;
-    userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
+    if (!userOp.maxFeePerGas || !userOp.maxPriorityFeePerGas) {
+      const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
+      userOp.maxFeePerGas = maxFeePerGas;
+      userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
+    }
 
     if (payToken && payToken !== ethers.ZeroAddress) {
       userOp.paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
@@ -92,12 +94,7 @@ export default function useQuery() {
       throw new Error(gasLimit.ERR.message);
     }
 
-
-    return {
-      userOp,
-      maxFeePerGas,
-      maxPriorityFeePerGas,
-    };
+    return userOp
   };
 
   // const getWalletType = async (address: string) => {
@@ -114,7 +111,7 @@ export default function useQuery() {
 
   return {
     getGasPrice,
-    getFeeCost,
     getPrefund,
+    set1559Fee,
   };
 }
