@@ -10,8 +10,6 @@ import SmallFormInput from '@/components/web/Form/SmallFormInput';
 import DoubleFormInput from '@/components/web/Form/DoubleFormInput';
 import useKeystore from '@/hooks/useKeystore';
 import useKeyring from '@/hooks/useKeyring';
-import useWallet from '@/hooks/useWallet';
-import { GuardianItem } from '@/lib/type';
 import useSdk from '@/hooks/useSdk';
 import { Box, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react';
 import Heading1 from '@/components/web/Heading1';

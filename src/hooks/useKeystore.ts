@@ -2,14 +2,12 @@ import { KeyStoreTypedDataType, L1KeyStore } from '@soulwallet/sdk';
 import { useGuardianStore } from '@/store/guardian';
 import useConfig from './useConfig';
 import { ethers } from 'ethers';
-import useKeyring from './useKeyring';
 import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function useKeystore() {
   const { chainConfig } = useConfig();
   const { slotInitInfo, slot } = useGuardianStore();
   const { showSignMessage } = useWalletContext();
-  const keyring = useKeyring();
 
   const keystore = new L1KeyStore(chainConfig.l1Provider, chainConfig.contracts.l1Keystore);
 

@@ -1,10 +1,8 @@
-import { Route, Routes, createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import Layout from './Layout';
 import Wallet from '@/pages/wallet';
-import SignPage from '@/pages/sign-page';
 import Create from '@/pages/create';
 import Recover from '@/pages/recover';
-import Setting from '@/pages/setting';
 import Accounts from '@/pages/accounts';
 import Popup from '@/pages/popup';
 import Apps from '@/pages/apps';
@@ -25,8 +23,6 @@ export const router = createBrowserRouter([
       { path: '/', element: <Wallet /> },
       { path: 'wallet', element: <Wallet /> },
       { path: 'accounts', element: <Accounts /> },
-      { path: 'setting', element: <Setting /> },
-      { path: 'sign', element: <SignPage /> },
       { path: 'apps', element: <Apps /> },
       { path: 'launch', element: <Launch /> },
       { path: 'activity', element: <Activity /> },

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import IconLoading from '@/assets/loading.gif';
-import MobileContainer from '@/components/MobileContainer';
 import {
   Box,
   Text,
@@ -263,7 +262,7 @@ export default function Accounts() {
   };
 
   return (
-    <MobileContainer p="5">
+    <Box>
       <AccountsNavbar onAdd={onAdd} adding={adding} onBack={onBack} />
       <Grid templateColumns={'repeat(2, 1fr)'} gap="3">
         {addressList.map((item: any, index: number) => {
@@ -280,6 +279,6 @@ export default function Accounts() {
           );
         })}
       </Grid>
-    </MobileContainer>
+    </Box>
   );
 }
