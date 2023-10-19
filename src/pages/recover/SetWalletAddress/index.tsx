@@ -123,7 +123,7 @@ export default function Recover({ changeStep }: any) {
             onClick={goBack}
           >
             <ArrowLeftIcon />
-            <Box marginLeft="2px">Back</Box>
+            <Box marginLeft="2px" fontSize="16px">Back</Box>
           </TextButton>
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
