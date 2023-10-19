@@ -16,7 +16,6 @@ import { ethers } from 'ethers';
 import { useBalanceStore } from '@/store/balance';
 import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
-import { useHistoryStore } from '@/store/history';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
@@ -140,7 +139,6 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     if(prechecked){
       return
     }
-    console.log('Do it')
     setPrechecked(true);
     setLoadingFee(true);
     setFeeCost('...')

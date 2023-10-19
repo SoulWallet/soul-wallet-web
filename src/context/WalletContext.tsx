@@ -17,7 +17,7 @@ interface IWalletContext {
   replaceAddress: () => Promise<void>;
   showSign: () => Promise<void>;
   showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
-  showSignMessage: (messageToSign: string, origin?: string) => Promise<void>;
+  showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
   checkActivated: () => Promise<boolean>;
 }
 

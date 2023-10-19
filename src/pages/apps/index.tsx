@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, useToast } from '@chakra-ui/react';
 import Header from '@/components/Header';
-import handleRequests from '@/provider/handleRequests';
-import { useLocation } from 'react-router-dom';
 import useDapp from '@/hooks/useDapp';
 import { useQuery } from '@/hooks/useBrowser';
 import { useAddressStore } from '@/store/address';

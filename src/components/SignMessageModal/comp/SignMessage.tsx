@@ -19,7 +19,7 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
 
   const getTypedHash = (typedData: any) => {
     delete typedData.types.EIP712Domain;
-    console.log('????', typedData.domain, typedData.types, typedData.message)
+    console.log('Sign typed data:', typedData.domain, typedData.types, typedData.message)
 
     return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.message);
   };

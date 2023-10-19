@@ -2,9 +2,6 @@ import { ethers } from 'ethers';
 import { getMessageType } from '@/lib/tools';
 // IMPORTANT TODO, still available on newer structure?
 import useWalletContext from '@/context/hooks/useWalletContext';
-import useKeyring from '@/hooks/useKeyring';
-import useConfig from './useConfig';
-import {TypedDataEncoder} from 'ethers'
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain'
 import {

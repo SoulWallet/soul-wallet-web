@@ -1,4 +1,3 @@
-import useKeyring from '@/hooks/useKeyring';
 import { CreateStepEn, StepActionTypeEn, useStepDispatchContext } from '@/context/StepContext';
 import WalletCard from '@/components/web/WalletCard';
 import { Box, useToast } from '@chakra-ui/react';

@@ -2,13 +2,13 @@ import { KeyStoreTypedDataType, L1KeyStore } from '@soulwallet/sdk';
 import { useGuardianStore } from '@/store/guardian';
 import useConfig from './useConfig';
 import { ethers } from 'ethers';
-import useWalletContext from '@/context/hooks/useWalletContext';
 import useKeyring from './useKeyring';
+import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function useKeystore() {
   const { chainConfig } = useConfig();
   const { slotInitInfo, slot } = useGuardianStore();
-  const { account } = useWalletContext();
+  const { showSignMessage } = useWalletContext();
   const keyring = useKeyring();
 
   const keystore = new L1KeyStore(chainConfig.l1Provider, chainConfig.contracts.l1Keystore);
@@ -71,8 +71,8 @@ export default function useKeystore() {
     }
     const { domain, types, value: message } = ret.OK;
 
-    // IMPORTANT TODO, use wallet to sign
-    const keySignature = await keyring.signMessageV4({ domain, types, message });
+    // TODO, to be tested
+    const keySignature = await showSignMessage({ domain, types, message }, 'typedData');
 
     return {
       newGuardianHash,
@@ -91,8 +91,7 @@ export default function useKeystore() {
     }
     const { domain, types, value: message } = ret.OK;
 
-    // IMPORTANT TODO, use wallet to sign
-    const keySignature = await keyring.signMessageV4({ domain, types, message });
+    const keySignature = await showSignMessage({ domain, types, message }, 'typedData');
 
     return {
       slot,
