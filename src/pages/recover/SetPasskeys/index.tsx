@@ -27,7 +27,7 @@ export default function SetPasskeys({ changeStep }: any) {
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const { calcGuardianHash, getSlot } = useKeystore();
+  const { calcGuardianHash } = useKeystore();
   const { setSlotInitInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();

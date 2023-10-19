@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import LogoIcon from '@/assets/logo-v3.svg';
 import { CreateStepEn, StepActionTypeEn, useStepDispatchContext } from '@/context/StepContext';
 import { validateEmail } from '@/lib/tools';
-import { useGlobalStore } from '@/store/global';
 import { Box, Text, Image, useToast } from '@chakra-ui/react';
 import useTools from '@/hooks/useTools';
 import useSdk from '@/hooks/useSdk';
