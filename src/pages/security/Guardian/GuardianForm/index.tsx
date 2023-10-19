@@ -20,6 +20,8 @@ import { useAddressStore } from '@/store/address';
 import { nanoid } from 'nanoid';
 import { useGuardianStore } from '@/store/guardian';
 import useKeystore from '@/hooks/useKeystore';
+import useConfig from '@/hooks/useConfig';
+import { L1KeyStore } from '@soulwallet/sdk';
 import api from '@/lib/api';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
@@ -109,7 +111,7 @@ const amountValidate = (values: any, props: any) => {
 };
 
 
-export default function GuardianForm({ onSubmit, loading, textButton, cancelEdit }: any) {
+export default function GuardianForm({ cancelEdit }: any) {
   const { selectedAddress } = useAddressStore();
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
@@ -117,7 +119,9 @@ export default function GuardianForm({ onSubmit, loading, textButton, cancelEdit
   const [amountData, setAmountData] = useState<any>({});
   const { slotInitInfo } = useGuardianStore();
   const { account } = useWalletContext();
-  const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
+  const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
+  const { chainConfig } = useConfig();
+  const [loading, setLoading] = useState(false);
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -151,48 +155,83 @@ export default function GuardianForm({ onSubmit, loading, textButton, cancelEdit
   const handleSubmit = async () => {
     if (disabled) return;
 
-    const guardiansList = guardianIds
-      .map((id) => {
-        const addressKey = `address_${id}`;
-        const nameKey = `name_${id}`;
-        let address = values[addressKey];
+    try {
+      setLoading(true);
+      const guardiansList = guardianIds
+        .map((id) => {
+          const addressKey = `address_${id}`;
+          const nameKey = `name_${id}`;
+          let address = values[addressKey];
 
-        if (address && address.length) {
-          return { address, name: values[nameKey] };
-        }
+          if (address && address.length) {
+            return { address, name: values[nameKey] };
+          }
 
-        return null;
+          return null;
+        })
+        .filter((i) => !!i);
+
+      const guardianAddresses = guardiansList.map((item: any) => item.address);
+      const guardianNames = guardiansList.map((item: any) => item.name);
+      const threshold = amountForm.values.amount || 0;
+
+      const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
+      const keystore = chainConfig.contracts.l1Keystore;
+      const salt = ethers.ZeroHash;
+      const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
+      const initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
+      const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);
+      const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod)
+
+      const walletInfo = {
+        keystore,
+        slot,
+        slotInitInfo: {
+          initialKeyHash,
+          initialGuardianHash,
+          initialGuardianSafePeriod
+        },
+        keys: initalkeys
+      };
+
+      const guardiansInfo = {
+        keystore,
+        slot,
+        guardianHash: newGuardianHash,
+        guardianNames,
+        guardianDetails: {
+          guardians: guardianAddresses,
+          threshold: Number(threshold),
+          salt,
+        },
+      };
+
+      // const res1 = await api.guardian.backupWallet(walletInfo)
+      // const res2 = await api.guardian.backupGuardians(guardiansInfo)
+
+      const {
+        keySignature
+      } = await getReplaceGuardianInfo(newGuardianHash)
+
+      const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
+      const parameters = [
+        initialKeyHash,
+        initialGuardianHash,
+        initialGuardianSafePeriod,
+        newGuardianHash,
+        initalkeys[0],
+        keySignature,
+      ]
+      const result = await api.guardian.createTask({
+        keystore,
+        functionName,
+        parameters
       })
-      .filter((i) => !!i);
-
-    const guardianAddresses = guardiansList.map((item: any) => item.address);
-    const guardianNames = guardiansList.map((item: any) => item.name);
-    const threshold = amountForm.values.amount || 0;
-    const newGuardianHash = calcGuardianHash(guardianAddresses, threshold)
-    const {
-      slot,
-      initialKeys,
-      initialGuardianHash,
-      initialGuardianSafePeriod,
-      keySignature
-    } = await getReplaceGuardianInfo(newGuardianHash)
-
-    const keystore = '0xa71be892ca3097665e0ab51be4c90f38370638a1'
-    const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
-    const parameters = [
-      slot,
-      initialGuardianHash,
-      initialGuardianSafePeriod,
-      newGuardianHash,
-      keySignature,
-      `${initialKeys[0].x}${initialKeys[0].y.slice(2)}`
-    ]
-    const result = await api.guardian.createTask({
-      keystore,
-      functionName,
-      parameters
-    })
-    console.log('handleSubmit', parameters, result);
+      console.log('handleSubmit', res1);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   const addGuardian = () => {
@@ -356,7 +395,7 @@ export default function GuardianForm({ onSubmit, loading, textButton, cancelEdit
       </Box>
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={handleSubmit}>
+          <RoundButton disabled={loading} loading={loading} _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={handleSubmit}>
             Confirm guardians
           </RoundButton>
           <TextButton _styles={{ width: '320px' }} onClick={cancelEdit}>

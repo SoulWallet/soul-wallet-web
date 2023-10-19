@@ -128,7 +128,7 @@ const SaveGuardians = () => {
     try {
       setLoading(true);
       const info = getGuardiansInfo();
-      const result = await api.guardian.backup(info);
+      const result = await api.guardian.backupGuardians(info);
       setSlot(info.slot);
       setSlotInitInfo(info.slotInitInfo);
       setLoading(false);

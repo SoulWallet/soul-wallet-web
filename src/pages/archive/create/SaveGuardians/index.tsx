@@ -141,7 +141,7 @@ const SaveGuardians = ({ getPassword, onStepChange }: any) => {
     try {
       setLoading(true);
       const info = await getGuardiansInfo();
-      const result = await api.guardian.backup(info);
+      const result = await api.guardian.backupGuardians(info);
       setSlot(info.slot);
       setSlotInitInfo(info.slotInitInfo);
 
