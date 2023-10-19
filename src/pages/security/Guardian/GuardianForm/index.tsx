@@ -16,7 +16,10 @@ import { nextRandomId } from '@/lib/tools';
 import DropDownIcon from '@/components/Icons/DropDown';
 import PlusIcon from '@/components/Icons/Plus';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { useAddressStore } from '@/store/address';
 import { nanoid } from 'nanoid';
+import { useGuardianStore } from '@/store/guardian';
+import useKeystore from '@/hooks/useKeystore';
 import api from '@/lib/api';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
@@ -107,11 +110,14 @@ const amountValidate = (values: any, props: any) => {
 
 
 export default function GuardianForm({ onSubmit, loading, textButton, cancelEdit }: any) {
+  const { selectedAddress } = useAddressStore();
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
+  const { slotInitInfo } = useGuardianStore();
   const { account } = useWalletContext();
+  const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -162,24 +168,31 @@ export default function GuardianForm({ onSubmit, loading, textButton, cancelEdit
     const guardianAddresses = guardiansList.map((item: any) => item.address);
     const guardianNames = guardiansList.map((item: any) => item.name);
     const threshold = amountForm.values.amount || 0;
+    const newGuardianHash = calcGuardianHash(guardianAddresses, threshold)
+    const {
+      slot,
+      initialKeys,
+      initialGuardianHash,
+      initialGuardianSafePeriod,
+      keySignature
+    } = await getReplaceGuardianInfo(newGuardianHash)
 
     const keystore = '0xa71be892ca3097665e0ab51be4c90f38370638a1'
     const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
     const parameters = [
-      '0xaa1b881c164e5d43131cfb3895759573bc597baf526002f8d1943f1aaa67dbf7',
-      '0xfa99cd30d12a235169eef4f3d5c96fc1619c60bc9d8028dfea0f89c7ec5e3f27',
-      '0x2a300',
-      '0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000001900000000000000000000000598991c9d726cbac7ebØ23ca974fe6e7e7a57ce8',
-      '0x00ee343f0b8787828f525fe12c27a46a73eba52070036638789bce6c511c9e35d869469cfaecb38d34f0fb9a30e68da32a31c36dfebcf977e0466d1611d3f9de8a1c',
+      slot,
+      initialGuardianHash,
+      initialGuardianSafePeriod,
+      newGuardianHash,
+      keySignature,
+      `${initialKeys[0].x}${initialKeys[0].y.slice(2)}`
     ]
     const result = await api.guardian.createTask({
       keystore,
       functionName,
       parameters
     })
-    console.log('handleSubmit', guardianAddresses, guardianNames, threshold, functionName, parameters, result);
-    return
-    if (onSubmit) onSubmit(guardianAddresses, guardianNames, threshold);
+    console.log('handleSubmit', parameters, result);
   };
 
   const addGuardian = () => {
