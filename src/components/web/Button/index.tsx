@@ -51,7 +51,7 @@ export default function RoundButton({
       onClick={onClick}
       borderRadius="16px"
       height="50px"
-      fontSize="24px"
+      fontSize="20px"
       fontWeight="800"
       _hover={_hover || { background: '#000' }}
       _disabled={{ opacity: '0.7', cursor: 'not-allowed' }}

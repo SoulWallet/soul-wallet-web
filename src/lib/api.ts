@@ -42,6 +42,8 @@ const guardian = {
   getSlotInfo: (params: any) => axio.get('/social-recovery/slot-info', { params }),
   createRecoverRecord: (params: any) => axio.post('/social-recovery/create-recovery-record', params),
   getRecoverRecord: (params: any) => axio.get('/social-recovery/recovery-record', { params }),
+  createTask: (params: any) => axio.post('/keystore-execute-helper/create-task', params),
+  getTask: (params: any) => axio.get('/keystore-execute-helper/task', params),
 };
 
 const balance = {
