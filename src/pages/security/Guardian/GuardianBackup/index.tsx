@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Box, Button, Text, useToast } from '@chakra-ui/react';
 import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import Heading1 from '@/components/web/Heading1';
 import Heading3 from '@/components/web/Heading3';
@@ -11,6 +11,7 @@ import BlockBoxIcon from '@/components/Icons/BlockBox';
 import IconButton from '@/components/web/IconButton';
 import FormInput from '@/components/web/Form/FormInput';
 import { validateEmail } from '@/lib/tools';
+import { useGuardianStore } from '@/store/guardian';
 import useForm from '@/hooks/useForm';
 
 const validate = (values: any) => {
@@ -25,16 +26,66 @@ const validate = (values: any) => {
 };
 
 export default function GuardianBackup({ startManage, cancelBackup }: any) {
+  const { setEditingGuardiansInfo } = useGuardianStore();
   const [downloading, setDownloading] = useState(false);
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
+  const toast = useToast()
   const emailForm = useForm({
     fields: ['email'],
     validate,
   });
 
-  const handleBackupGuardians = async () => {
+  const getGuardiansInfo = async () => {
+    /* const keystore = chainConfig.contracts.l1Keystore;
+     * const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
 
+     * const guardianHash = calcGuardianHash(guardians, threshold);
+     * const initialGuardianHash = guardianHash;
+     * const salt = ethers.ZeroHash;
+     * let initialGuardianSafePeriod = L1KeyStore.days * 2;
+     * initialGuardianSafePeriod = toHex(initialGuardianSafePeriod as any);
+     * const slot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
+     * const slotInitInfo = {
+     *   initialKey,
+     *   initialGuardianHash,
+     *   initialGuardianSafePeriod,
+     * };
+
+     * return {
+     *   keystore,
+     *   slot,
+     *   guardianHash: initialGuardianHash,
+     *   guardianNames: [],
+     *   guardianDetails: {
+     *     guardians: [],
+     *     threshold: 0,
+     *     salt,
+     *   },
+     * }; */
+  };
+
+  const handleBackupGuardians = async () => {
+    /* try {
+     *   setLoading(true);
+     *   const info = await getGuardiansInfo();
+     *   const result = await api.guardian.backupGuardians(info);
+     *   setSlot(info.slot);
+     *   setSlotInitInfo(info.slotInitInfo);
+     *   setLoading(false);
+     *   setLoaded(true);
+     *   toast({
+     *     title: 'OnChain Backup Success!',
+     *     status: 'success',
+     *   });
+     *   console.log('handleBackupGuardians', result);
+     * } catch (e: any) {
+     *   setLoading(false);
+     *   toast({
+     *     title: e.message,
+     *     status: 'error',
+     *   });
+     * } */
   }
 
   const handleEmailBackupGuardians = async () => {

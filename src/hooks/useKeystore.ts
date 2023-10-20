@@ -6,8 +6,10 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function useKeystore() {
   const { chainConfig } = useConfig();
-  const { slotInitInfo, slot } = useGuardianStore();
+  const { getSlotInfo } = useGuardianStore();
   const { showSignMessage } = useWalletContext();
+  const slotInfo = getSlotInfo()
+  const slot = slotInfo.slot
 
   const keystore = new L1KeyStore(chainConfig.l1Provider, chainConfig.contracts.l1Keystore);
 
@@ -39,7 +41,7 @@ export default function useKeystore() {
   };
 
   const getActiveGuardianHash = async () => {
-    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
+    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
     const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod);
     const now = Math.floor(Date.now() / 1000);
     const res = await getKeyStoreInfo(slot);
@@ -56,14 +58,14 @@ export default function useKeystore() {
     return {
       guardianHash,
       activeGuardianHash:
-        pendingGuardianHash !== ethers.ZeroHash && guardianActivateAt < now ? pendingGuardianHash : guardianHash,
+      pendingGuardianHash !== ethers.ZeroHash && guardianActivateAt < now ? pendingGuardianHash : guardianHash,
       guardianActivateAt,
       pendingGuardianHash,
     };
   };
 
   const getReplaceGuardianInfo = async (newGuardianHash: string) => {
-    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
+    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
     const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod)
     const ret = await keystore.getTypedData(KeyStoreTypedDataType.TYPE_HASH_SET_GUARDIAN, slot, newGuardianHash);
     if (ret.isErr()) {

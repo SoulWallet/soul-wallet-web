@@ -126,17 +126,11 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [guardiansList, setGuardiansList] = useState([]);
   const { account } = useWalletContext();
   const {
-    recoveringGuardians,
-    recoveringThreshold,
-    recoveringSlot,
-    recoveringSlotInitInfo,
-    setRecoverRecordId,
-    newKey,
-    setRecoveringGuardians,
-    setRecoveringThreshold,
-    setRecoveringSlot,
-    setRecoveringSlotInitInfo,
+    recoveringGuardiansInfo,
+    setRecoveringGuardiansInfo,
+    updateRecoveringGuardiansInfo,
   } = useGuardianStore();
+
   const [amountData, setAmountData] = useState<any>({});
   const [showMannualInput, setShowMannualInput] = useState(false);
   const toast = useToast();
@@ -147,7 +141,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
     validate,
-    initialValues: getInitialValues(defaultGuardianIds, recoveringGuardians),
+    initialValues: getInitialValues(defaultGuardianIds, recoveringGuardiansInfo.guardians),
   });
 
   const amountForm = useForm({
@@ -155,7 +149,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
     validate: amountValidate,
     restProps: amountData,
     initialValues: {
-      amount: recoveringThreshold || getRecommandCount(amountData.guardiansCount),
+      amount: recoveringGuardiansInfo.threshold || getRecommandCount(amountData.guardiansCount),
     },
   });
 
@@ -203,9 +197,11 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       const guardianAddresses = guardiansList.map((item: any) => item.address);
       const threshold = amountForm.values.amount || 0;
 
-      setRecoverRecordId(null);
-      setRecoveringGuardians(guardianAddresses);
-      setRecoveringThreshold(threshold);
+      setRecoveringGuardiansInfo({
+        recoverRecordId: null,
+        guardians: guardianAddresses,
+        threshold
+      });
 
       setLoading(false);
 
@@ -229,19 +225,19 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
 
       const params = {
         guardianDetails: {
-          guardians: recoveringGuardians,
-          threshold: recoveringThreshold,
+          guardians: recoveringGuardiansInfo.guardians,
+          threshold: recoveringGuardiansInfo.threshold,
           salt: ethers.ZeroHash,
         },
-        slot: recoveringSlot,
-        slotInitInfo: recoveringSlotInitInfo,
+        slot: recoveringGuardiansInfo.slot,
+        slotInitInfo: recoveringGuardiansInfo.slotInitInfo,
         keystore,
-        newKey,
+        newKey: recoveringGuardiansInfo.newKey,
       };
 
       const result = await api.guardian.createRecoverRecord(params);
       const recoveryRecordID = result.data.recoveryRecordID;
-      setRecoverRecordId(recoveryRecordID);
+      updateRecoveringGuardiansInfo({ recoverRecordId: recoveryRecordID });
       setLoading(false);
       console.log('handleNext', params, result);
 
@@ -279,11 +275,13 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       // const newKey = ethers.zeroPadValue(account, 32)
       console.log('handleFileParseResult', fileJson);
 
-      setRecoverRecordId(null);
-      setRecoveringGuardians(guardians);
-      setRecoveringThreshold(threshold);
-      setRecoveringSlot(slot);
-      setRecoveringSlotInitInfo(slotInitInfo);
+      updateRecoveringGuardiansInfo({
+        recoverRecordId: null,
+        guardians,
+        threshold,
+        slot,
+        slotInitInfo
+      })
 
       setUploading(false);
       setUploaded(true);

@@ -46,12 +46,12 @@ export default function Recover({ changeStep }: any) {
   const disabled = loading || invalid;
 
   const handleNext = async () => {
-    changeStep(1)
     if (disabled) return;
 
     try {
       setLoading(true);
       const result = await api.guardian.getSlotInfo({ walletAddress: values.address });
+      console.log('getSlotInfo', result)
       const data = result.data;
       const slot = data.slot;
       const slotInitInfo = data.slotInitInfo;

@@ -53,23 +53,15 @@ const SignatureRequest = ({ changeStep }: any) => {
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
   const {
-    recoveringGuardians,
-    recoveringGuardianNames,
-    recoveringThreshold,
-    recoverRecordId,
-    recoveringSlot,
-    recoveringSlotInitInfo,
-    guardianSignatures,
-    setGuardianSignatures,
-    setRecoverRecordId,
-    setGuardians,
-    setGuardianNames,
-    setThreshold,
-    setSlot,
-    setSlotInitInfo,
-    newKey,
+    updateGuardiansInfo,
+    recoveringGuardiansInfo,
+    updateRecoveringGuardiansInfo,
   } = useGuardianStore();
   // const { initRecoverWallet } = useWallet();
+  const recoverRecordId = recoveringGuardiansInfo.recoverRecordId
+  const newKey = recoveringGuardiansInfo.newKey
+  const guardianSignatures = recoveringGuardiansInfo.guardianSignatures
+
   const toast = useToast();
   const { account, getAccount, replaceAddress } = useWalletContext();
   const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
@@ -103,7 +95,9 @@ const SignatureRequest = ({ changeStep }: any) => {
       const result = await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId });
       console.log('guardianSignatures', result);
       const guardianSignatures = result.data.guardianSignatures;
-      setGuardianSignatures(guardianSignatures);
+      updateGuardiansInfo({
+        guardianSignatures
+      });
       const status = result.data.status;
       setRecoverStatus(status);
       const statusList = result.data.statusData.chainRecoveryStatus;
@@ -111,11 +105,15 @@ const SignatureRequest = ({ changeStep }: any) => {
 
       if (status === 3 && newKey && account !== `0x${newKey.slice(-40)}`) {
         replaceAddress();
-        setGuardians(recoveringGuardians);
-        setGuardianNames(recoveringGuardianNames);
-        setThreshold(recoveringThreshold);
+        updateGuardiansInfo({
+          guardians: recoveringGuardiansInfo.guardians,
+          guardianNames: recoveringGuardiansInfo.guardianNames,
+          threshold: recoveringGuardiansInfo.threshold,
+        });
       } else if (status === 4) {
-        setRecoverRecordId(null);
+        updateRecoveringGuardiansInfo({
+          recoverRecordId: null
+        });
       }
 
       setLoaded(true);
@@ -164,12 +162,14 @@ const SignatureRequest = ({ changeStep }: any) => {
 
   const replaceWallet = async () => {
     replaceAddress();
-    setRecoverRecordId(null);
-    setGuardians(recoveringGuardians);
-    setGuardianNames(recoveringGuardianNames);
-    setThreshold(recoveringThreshold);
-    // setSlot(recoveringSlot)
-    // setSlotInitInfo(recoveringSlotInitInfo)
+    updateRecoveringGuardiansInfo({
+      recoverRecordId: null
+    });
+    updateGuardiansInfo({
+      guardians: recoveringGuardiansInfo.guardians,
+      guardianNames: recoveringGuardiansInfo.guardianNames,
+      threshold: recoveringGuardiansInfo.threshold,
+    });
     navigate('wallet');
   };
 
@@ -362,7 +362,7 @@ const SignatureRequest = ({ changeStep }: any) => {
     );
   }
 
-  const signatures = (recoveringGuardians || []).map((item: any) => {
+  const signatures = (recoveringGuardiansInfo.guardians || []).map((item: any) => {
     const isValid = (guardianSignatures || []).filter((sig: any) => sig.guardian === item && sig.valid).length === 1;
     return { guardian: item, isValid };
   });
@@ -415,7 +415,7 @@ const SignatureRequest = ({ changeStep }: any) => {
       </Box>
       <Box marginBottom="0.75em">
         <TextBody textAlign="center">
-          Waiting for signatures ({recoveringThreshold} of {recoveringGuardians.length} complete)
+          Waiting for signatures ({recoveringGuardiansInfo.threshold} of {recoveringGuardiansInfo.guardians.length} complete)
         </TextBody>
       </Box>
       <Box

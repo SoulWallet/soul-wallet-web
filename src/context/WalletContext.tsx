@@ -36,15 +36,11 @@ export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
   const [account, setAccount] = useState<string>('');
   const {
-    recoverRecordId,
-    setRecoverRecordId,
-    setGuardians,
-    recoveringGuardians,
-    setGuardianNames,
-    recoveringGuardianNames,
-    setThreshold,
-    recoveringThreshold,
+    recoveringGuardiansInfo,
+    setGuardiansInfo,
+    setRecoveringGuardiansInfo,
   } = useGuardianStore();
+  const recoverRecordId = recoveringGuardiansInfo.recoverRecordId
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { addressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
@@ -89,14 +85,20 @@ export const WalletContextProvider = ({ children }: any) => {
     // check if should replace key
     if (res.status >= 3 && account !== `0x${res.newKey.slice(-40)}`) {
       replaceAddress();
-      setGuardians(recoveringGuardians);
-      setGuardianNames(recoveringGuardianNames);
-      setThreshold(recoveringThreshold);
+
+      setGuardiansInfo({
+        guardians: recoveringGuardiansInfo.guardians,
+        guardianNames: recoveringGuardiansInfo.guardianNames,
+        threshold: recoveringGuardiansInfo.threshold,
+      })
     }
 
     // recover process finished
     if (res.status === 4) {
-      setRecoverRecordId(null);
+      setRecoveringGuardiansInfo({
+        ...recoveringGuardiansInfo,
+        recoverRecordId: null
+      })
     }
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;
