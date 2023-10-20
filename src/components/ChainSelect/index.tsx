@@ -29,7 +29,7 @@ export default function ChainSelect() {
                   <MenuItem
                     key={item.chainIdHex}
                     filter={item.recovering ? 'grayscale(1)' : ''}
-                    onClick={() => (item.recovering ? navigate('recover') : setSelectedChainId(item.chainIdHex))}
+                    onClick={() => (item.recovering ? navigate('/recover') : setSelectedChainId(item.chainIdHex))}
                   >
                     <Flex w="100%" align={'center'} justify={'space-between'}>
                       <Flex align={'center'} gap="2">

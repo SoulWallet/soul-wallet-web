@@ -35,7 +35,7 @@ export default function SetPasskeys({ changeStep }: any) {
 
   const onStepChange = (i: number) => {
     if (i == 0) {
-      // navigate('launch')
+      // navigate('/launch')
     } else if (i == 1) {
       setIsReady(false);
     }
@@ -46,7 +46,7 @@ export default function SetPasskeys({ changeStep }: any) {
       setIsCreating(true);
       await register();
       setIsCreating(false);
-      // navigate('create');
+      // navigate('/create');
     } catch (error: any) {
       console.log('ERR', error)
       console.log('error', error);
@@ -95,7 +95,7 @@ export default function SetPasskeys({ changeStep }: any) {
       await createInitialSlotInfo()
       await createInitialWallet()
       setIsConfirming(false)
-      navigate('wallet')
+      navigate('/wallet')
     } catch (error: any) {
       setIsConfirming(false)
       console.log('error', error)

@@ -71,7 +71,7 @@ export default function AccountSelect() {
               fontWeight={'800'}
               cursor={'pointer'}
               _hover={{ color: 'brand.red' }}
-              onClick={() => navigate('accounts')}
+              onClick={() => navigate('/accounts')}
             >
               {selectedAddressItem && <Text>{selectedAddressItem.title}</Text>}
               <Image src={IconCheveronRight} w="20px" h="20px" transform={isOpen ? 'rotate(90deg)' : 'none'} />

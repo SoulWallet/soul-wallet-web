@@ -36,7 +36,7 @@ export default function Create() {
 
   const onStepChange = (i: number) => {
     if (i == 0) {
-      // navigate('launch')
+      // navigate('/launch')
     } else if (i == 1) {
       setIsReady(false);
     }
@@ -47,7 +47,7 @@ export default function Create() {
       setIsCreating(true);
       await register();
       setIsCreating(false);
-      // navigate('create');
+      // navigate('/create');
     } catch (error: any) {
       console.log('ERR', error)
       console.log('error', error);
@@ -128,7 +128,11 @@ export default function Create() {
       await createInitialSlotInfo()
       await createInitialWallet()
       setIsConfirming(false)
-      navigate('wallet')
+      if(location.search){
+        navigate({pathname: '/popup', search: location.search})
+      }else{
+        navigate('/wallet')
+      }
     } catch (error: any) {
       setIsConfirming(false)
       console.log('error', error)

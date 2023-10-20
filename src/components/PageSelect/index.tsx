@@ -43,7 +43,7 @@ export default function PageSelect() {
               return (
                 <MenuItem
                   key={item}
-                  onClick={() => navigate(item)}
+                  onClick={() => navigate(`/${item}`)}
                   width="60px"
                   height="60px"
                   borderRadius="16px"

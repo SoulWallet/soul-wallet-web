@@ -258,7 +258,7 @@ export default function Accounts() {
   };
 
   const onBack = () => {
-    navigate('wallet');
+    navigate('/wallet');
   };
 
   return (

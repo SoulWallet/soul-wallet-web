@@ -1,11 +1,14 @@
 import ConnectDapp from '@/components/ConnectDapp';
-import useWalletContext from '@/context/hooks/useWalletContext';
 import { Box, Image } from '@chakra-ui/react';
 import IconLogo from '@/assets/logo-all-v3.svg';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import SignTransaction from '@/components/SignTransactionModal/comp/SignTransaction';
 import SignMessage from '@/components/SignMessageModal/comp/SignMessage';
+import { useAddressStore } from '@/store/address';
+
+// when user has the created wallet
 export default function Popup() {
+  const {addressList} =useAddressStore();
   const [searchParams] = useSearchParams();
   const action = searchParams.get('action');
   const origin = searchParams.get('origin');
@@ -13,8 +16,6 @@ export default function Popup() {
   const data = searchParams.get('data') === 'undefined' ? {} : JSON.parse(searchParams.get('data') || '{}');
   const txns = data.txns;
   const message = data.message;
-
-  console.log('data is', data)
 
   const onTxSuccess = (receipt: any) => {
     window.opener.postMessage(
@@ -42,7 +43,10 @@ export default function Popup() {
     window.close();
   };
 
-  console.log('msg is', message);
+  if(!addressList || !addressList.length){
+    return
+  }
+
 
   return (
     <Box p="6" h="100vh">
@@ -57,7 +61,13 @@ export default function Popup() {
         <SignMessage origin={origin} msgId={id} messageToSign={message} signType="message" onSign={onSign} />
       )}
       {action === 'signTypedDataV4' && (
-        <SignMessage origin={origin} msgId={id} messageToSign={JSON.parse(message)} signType="typedData" onSign={onSign} />
+        <SignMessage
+          origin={origin}
+          msgId={id}
+          messageToSign={JSON.parse(message)}
+          signType="typedData"
+          onSign={onSign}
+        />
       )}
     </Box>
   );

@@ -170,11 +170,11 @@ const SignatureRequest = ({ changeStep }: any) => {
       guardianNames: recoveringGuardiansInfo.guardianNames,
       threshold: recoveringGuardiansInfo.threshold,
     });
-    navigate('wallet');
+    navigate('/wallet');
   };
 
   const openWallet = async () => {
-    navigate('wallet');
+    navigate('/wallet');
   };
 
   console.log('account111', account, recoverStatus, chainStatusList);

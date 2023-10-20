@@ -13,43 +13,25 @@ export default function FindRoute({ children }: any) {
   const location = useLocation();
   const { addressList } = useAddressStore();
 
-  const isLaunch = location.pathname.includes('launch');
-  const isApps = location.pathname.includes('apps');
-  const isSecurity = location.pathname.includes('security');
-  const isTest = location.pathname.includes('test');
+  // const isLaunch = location.pathname.includes('launch');
+  // const isApps = location.pathname.includes('apps');
+  // const isSecurity = location.pathname.includes('security');
+  // const isTest = location.pathname.includes('test');
   const isPopup = location.pathname.includes('popup');
   const isRecover = location.pathname.includes('recover');
-
-  const query = useQuery();
 
   const findRoute = async () => {
     console.log('ready to find');
     const recovering = storage.getItem('recovering');
-    // if (isLaunch) {
-    //   navigate('launch');
-    // }
-    // if (isApps) {
-    //   const appUrl = query.get('appUrl');
 
-    //   if (appUrl) {
-    //     navigate(`apps?appUrl=${appUrl}`);
-    //   } else {
-    //     navigate('apps');
-    //   }
-    // } else if (isSecurity) {
-    //   navigate('security');
-    // } else if (isTest || isPopup) {
-    //   // skip logic
-    // } else 
-    
     if (isRecover || recovering) {
-      navigate('recover');
+      navigate('/recover');
     } else if (!addressList.length) {
-      navigate('launch');
+      navigate({
+        pathname: '/launch',
+        search: location.search,
+      });
     }
-    // else {
-    //   navigate('wallet');
-    // }
   };
 
   useEffect(() => {

@@ -138,7 +138,7 @@ export default function ConnectDapp({ onConfirm, targetChainId }: any) {
           onClose={() => {}}
           okText="Back"
           onOk={() => {
-            navigate('wallet');
+            navigate('/wallet');
           }}
         />
       )}
@@ -156,7 +156,7 @@ export default function ConnectDapp({ onConfirm, targetChainId }: any) {
           okText="Activate"
           onOk={() => {
             setSelectedChainId(targetChainId);
-            navigate('activate');
+            navigate('/activate');
           }}
         />
       )}
@@ -170,7 +170,7 @@ export default function ConnectDapp({ onConfirm, targetChainId }: any) {
           okText="Activate"
           onOk={() => {
             setSelectedChainId(targetChainId);
-            navigate('activate');
+            navigate('/activate');
           }}
         />
       )}

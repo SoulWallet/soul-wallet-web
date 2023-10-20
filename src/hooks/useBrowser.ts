@@ -15,12 +15,12 @@ export default function useBrowser() {
    * add version prefix and do some check
    * @param route
    */
-  const navigate = async (route: string) => {
-    navigateTo(`/${route}`);
+  const navigate = async (route: any, options?: any) => {
+    navigateTo(route, options);
   };
 
   const navigateToSign = async ({ txns, sendTo }: any) => {
-    navigate(`sign?action=approve&txns=${JSON.stringify(txns)}&sendTo=${sendTo}`);
+    navigate(`/sign?action=approve&txns=${JSON.stringify(txns)}&sendTo=${sendTo}`);
   };
 
   const getConnectedDapp = async () => {

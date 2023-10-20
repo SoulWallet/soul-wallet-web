@@ -31,7 +31,6 @@ export default function TokensTable() {
   }, []);
 
   const showTransfer = (tokenAddress: string) => {
-    console.log('t', tokenAddress);
     setTokenAddress(tokenAddress);
     setTransferVisible(true);
   };

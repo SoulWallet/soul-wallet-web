@@ -35,11 +35,11 @@ export default function Actions({ showSetGuardian }: any) {
   return (
     <>
       <Grid templateColumns={'repeat(2, 1fr)'} gap="1" mt="4">
-        <ActionItem title="Add funds" icon={IconAddFunds} onClick={() => navigate(`add-fund`)} />
-        <ActionItem title="Send tokens" icon={IconSend} onClick={() => navigate(`send/${ethers.ZeroAddress}`)} />
+        <ActionItem title="Add funds" icon={IconAddFunds} onClick={() => navigate(`/add-fund`)} />
+        <ActionItem title="Send tokens" icon={IconSend} onClick={() => navigate(`/send/${ethers.ZeroAddress}`)} />
         {!showSetGuardian && (
           <>
-            <ActionItem title="Guardians" icon={IconGuardians} onClick={() => navigate(`edit-guardians`)} />
+            <ActionItem title="Guardians" icon={IconGuardians} onClick={() => navigate(`/edit-guardians`)} />
             <ActionItem
               title="Authenticate"
               icon={Icon2FA}

@@ -129,7 +129,7 @@ export default forwardRef<any>((props, ref) => {
       </motion.div>
 
       <Text
-        onClick={() => navigate('recover')}
+        onClick={() => navigate('/recover')}
         position={'absolute'}
         bottom="8"
         fontSize={'16px'}
