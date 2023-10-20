@@ -72,31 +72,41 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
   };
 
   const onConfirm = async () => {
-    setSigning(true);
+    try {
+      setSigning(true);
 
-    let userOp: any;
-    if (sponsor && sponsor.paymasterAndData) {
-      userOp = { ...activeOperation, paymasterAndData: sponsor.paymasterAndData };
-    } else {
-      userOp = activeOperation;
+      let userOp: any;
+      if (sponsor && sponsor.paymasterAndData) {
+        userOp = { ...activeOperation, paymasterAndData: sponsor.paymasterAndData };
+      } else {
+        userOp = activeOperation;
+      }
+
+      const receipt = await signAndSend(userOp, payToken);
+
+      // IMPORTANT TODO, get these params from receipt
+      // if first tx is completed, then it's activated
+      if (!checkActivated()) {
+        toggleActivatedChain(userOp.sender, selectedChainId);
+      }
+
+      toast({
+        title: 'Transaction success.',
+        status: 'success',
+      });
+
+      onSuccess(receipt);
+
+      clearState();
+    } catch (err) {
+      console.log('sign page failed', err);
+      toast({
+        title: 'Transaction failed.',
+        status: 'error',
+      });
+    } finally {
+      setSigning(false);
     }
-
-    const receipt = await signAndSend(userOp, payToken);
-
-    // IMPORTANT TODO, get these params from receipt
-    // if first tx is completed, then it's activated
-    if (!checkActivated()) {
-      toggleActivatedChain(userOp.sender, selectedChainId);
-    }
-
-    toast({
-      title: 'Transaction success.',
-      status: 'success',
-    });
-
-    setSigning(false);
-    clearState();
-    onSuccess(receipt);
   };
 
   const getFinalPrefund = async (userOp: any) => {
@@ -136,12 +146,12 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
   // };
 
   const doPrecheck = async () => {
-    if(prechecked){
-      return
+    if (prechecked) {
+      return;
     }
     setPrechecked(true);
     setLoadingFee(true);
-    setFeeCost('...')
+    setFeeCost('...');
     setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
     let userOp = await getFinalUserOp(txns);
     setActiveOperation(userOp);
@@ -152,10 +162,10 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     getFinalPrefund(userOp);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setPrechecked(false);
   }, [payToken]);
-  
+
   // IMPORTANT IMPORTANT TODO, rendered twice
   useEffect(() => {
     if (!txns || !txns.length || !payToken) {
@@ -164,8 +174,6 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     console.log('do pre check', txns, payToken);
     doPrecheck();
   }, [txns, payToken]);
-
-
 
   return (
     <>
@@ -201,7 +209,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
                   <Flex mb="1" gap="4" justify={'flex-end'}>
                     {feeCost && (
                       <Text textDecoration={'line-through'}>
-                        {BN(feeCost.split(' ')[0]).toFixed(6)} {payTokenSymbol}
+                        {BN(feeCost.split(' ')[0]).toFixed(6) || '0'} {payTokenSymbol}
                       </Text>
                     )}
                     <Text>0 ETH</Text>

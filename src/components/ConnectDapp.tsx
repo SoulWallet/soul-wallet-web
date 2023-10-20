@@ -2,9 +2,9 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import IconLogo from '@/assets/logo-v3.svg';
 import IconLock from '@/assets/icons/lock.svg';
-import Button from '../../Button';
+import Button from './Button';
 import useConfig from '@/hooks/useConfig';
-import { InfoWrap, InfoItem } from '../index';
+import { InfoWrap, InfoItem } from './SignModal/index';
 import config from '@/config';
 
 enum SecurityLevel {

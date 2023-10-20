@@ -12,9 +12,8 @@ import { useBalanceStore } from '@/store/balance';
 import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
 import { decodeCalldata } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
-import ConnectDapp from './comp/ConnectDapp';
+import ConnectDapp from '../ConnectDapp';
 import SignTransaction from './comp/SignTransaction';
-import SignMessage from './comp/SignMessage';
 import SwitchChain from './comp/SwitchChain';
 import useTransaction from '@/hooks/useTransaction';
 
@@ -223,9 +222,6 @@ const SignModal = (_: unknown, ref: Ref<any>) => {
             signing={signing}
             onConfirm={onConfirm}
           />
-        )}
-        {signType === SignTypeEn.Message && (
-          <SignMessage messageToSign={messageToSign} onSign={onSign} origin={origin} />
         )}
         {signType === SignTypeEn.SwitchChain && <SwitchChain targetChainId={targetChainId} onConfirm={onSwitchChain} />}
         <Text

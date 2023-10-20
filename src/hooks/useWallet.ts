@@ -83,6 +83,7 @@ export default function useWallet() {
     const credentialIndex = 0;
     const signatureData = await sign(credentials[credentialIndex], packedHash);
 
+    console.log('packUserOp256Signature params:', signatureData, validationData)
     const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, validationData);
 
     if (packedSignatureRet.isErr()) {

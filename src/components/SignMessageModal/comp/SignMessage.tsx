@@ -2,7 +2,6 @@ import React from 'react';
 import { Flex, Box, Text, Image } from '@chakra-ui/react';
 import Button from '../../Button';
 import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
-import { useAddressStore } from '@/store/address';
 import useWallet from '@/hooks/useWallet';
 import useConfig from '@/hooks/useConfig';
 import { toShortAddress } from '@/lib/tools';
@@ -18,9 +17,8 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
   };
 
   const getTypedHash = (typedData: any) => {
-    delete typedData.types.EIP712Domain;
+    // delete typedData.types.EIP712Domain;
     console.log('Sign typed data:', typedData.domain, typedData.types, typedData.message)
-
     return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.message);
   };
 
