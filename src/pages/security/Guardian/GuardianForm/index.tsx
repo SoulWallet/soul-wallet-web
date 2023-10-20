@@ -117,7 +117,7 @@ export default function GuardianForm({ cancelEdit }: any) {
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
-  const { slotInitInfo } = useGuardianStore();
+  const { slotInfo } = useGuardianStore();
   const { account } = useWalletContext();
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
@@ -178,7 +178,7 @@ export default function GuardianForm({ cancelEdit }: any) {
       const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
       const keystore = chainConfig.contracts.l1Keystore;
       const salt = ethers.ZeroHash;
-      const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
+      const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
       const initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
       const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);
       const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod)
@@ -186,7 +186,7 @@ export default function GuardianForm({ cancelEdit }: any) {
       const walletInfo = {
         keystore,
         slot,
-        slotInitInfo: {
+        slotInfo: {
           initialKeyHash,
           initialGuardianHash,
           initialGuardianSafePeriod
@@ -227,7 +227,7 @@ export default function GuardianForm({ cancelEdit }: any) {
         functionName,
         parameters
       })
-      console.log('handleSubmit', res1);
+      console.log('handleSubmit', result);
       setLoading(false);
     } catch (error) {
       setLoading(false);

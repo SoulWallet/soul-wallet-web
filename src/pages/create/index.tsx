@@ -18,6 +18,7 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import { toHex } from '@/lib/tools';
 import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';
+import api from '@/lib/api';
 
 export default function Create() {
   const { navigate } = useBrowser();
@@ -27,8 +28,8 @@ export default function Create() {
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const { calcGuardianHash } = useKeystore();
-  const { setSlotInitInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { calcGuardianHash, getSlot } = useKeystore();
+  const { setSlotInfo, setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
   const toast = useToast();
@@ -68,21 +69,57 @@ export default function Create() {
     setAddressList([{ title: walletName, address: newAddress, activatedChains: [], allowedOrigins: [] }]);
     console.log('createInitialWallet', newAddress);
     setSelectedAddress(newAddress);
-    setEditingGuardiansInfo(null);
+    setEditingGuardiansInfo({});
   };
 
   const createInitialSlotInfo = async () => {
+    const keystore = chainConfig.contracts.l1Keystore;
     const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
     const initialGuardianHash = calcGuardianHash([], 0);
     const salt = ethers.ZeroHash;
     let initialGuardianSafePeriod = toHex(L1KeyStore.days * 2);
-    const slotInitInfo = {
+    const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
+    const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
+    const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
+
+    const slotInfo = {
       initialKeys,
       initialGuardianHash,
       initialGuardianSafePeriod,
+      initalkeysAddress,
+      initialKeyHash,
+      slot
     };
-    setSlotInitInfo(slotInitInfo)
-    console.log('createSlotInfo', initialKeys, slotInitInfo)
+
+    const walletInfo = {
+      keystore,
+      slot,
+      slotInitInfo: {
+        initialKeyHash,
+        initialGuardianHash,
+        initialGuardianSafePeriod
+      },
+      keys: initalkeysAddress
+    };
+
+    const guardiansInfo = {
+      keystore,
+      slot,
+      guardianHash: initialGuardianHash,
+      guardianNames: [],
+      guardianDetails: {
+        guardians: [],
+        threshold: 0,
+        salt,
+      },
+    };
+
+    // const res1 = await api.guardian.backupWallet(walletInfo)
+    // const res2 = await api.guardian.backupGuardians(guardiansInfo)
+
+    setGuardiansInfo(guardiansInfo)
+    setSlotInfo(slotInfo)
+    console.log('createSlotInfo', slotInfo, walletInfo, guardiansInfo)
   };
 
   const onConfirm = async () => {

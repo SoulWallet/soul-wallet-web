@@ -9,108 +9,68 @@ import { persist } from 'zustand/middleware';
 import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 
-const DEFAULT_GUARDIAN_NUMBER = 3; // 默认guardian数
-export const MAX_GUARDIAN_NUMBER = 15; // 最大guardian数
-export const MIN_GUARDIAN_NUMBER = 1; // 最大guardian数
-
 export interface GuardianStore {
-  guardians: string[];
-  guardianNames: any;
-  threshold: number;
-  slot: any;
-  slotInitInfo: any;
-
-  newKey: string | null;
-  recoverRecordId: any;
-  guardianSignatures: any;
-  recoveringGuardians: string[];
-  recoveringGuardianNames: any;
-  recoveringThreshold: number;
-  recoveringSlot: any;
-  recoveringSlotInitInfo: any;
-  isRecovering: boolean;
-
-  editingGuardians: string[];
-  editingGuardianNames: any;
-  editingThreshold: number;
+  guardiansInfo: any;
+  recoveringGuardiansInfo: any;
   editingGuardiansInfo: any;
-  cancelEditingGuardiansInfo: any;
-  isEditing: boolean;
+  slotInfo: any;
 
-  setGuardians: (guardian: string[]) => void;
-  setGuardianNames: (guardianNames: string[]) => void;
-  setThreshold: (threshold: number) => void;
-  setSlot: (slot: string) => void;
-  setSlotInitInfo: (slotInitInfo: any) => void;
-  getSlotInitInfo: () => any;
+  setGuardiansInfo: (value: any) => void;
+  setRecoveringGuardiansInfo: (value: any) => void;
+  setEditingGuardiansInfo: (value: any) => void;
+  setSlotInfo: (value: any) => void;
 
-  setNewKey: (newKey: string) => void;
-  setRecoverRecordId: (recoverRecordId: any) => void;
-  setGuardianSignatures: (guardianSignatures: any) => void;
-  setRecoveringGuardians: (recoveringGuardians: string[]) => void;
-  setRecoveringGuardianNames: (recoveringGuardianNames: string[]) => void;
-  setRecoveringThreshold: (recoveringThreshold: number) => void;
-  setRecoveringSlot: (recoveringSlot: string) => void;
-  setRecoveringSlotInitInfo: (recoveringSlotInitInfo: any) => void;
-  setIsRecovering: (isRecovering: boolean) => void;
+  updateGuardiansInfo: (value: any) => void;
+  updateRecoveringGuardiansInfo: (value: any) => void;
+  updateEditingGuardiansInfo: (value: any) => void;
+  updateSlotInfo: (value: any) => void;
 
-  setEditingGuardians: (editingGuardians: string[]) => void;
-  setEditingGuardianNames: (editingGuardianNames: string[]) => void;
-  setEditingThreshold: (editingThreshold: number) => void;
-  setEditingGuardiansInfo: (editingGuardiansInfo: any) => void;
-  setCancelEditingGuardiansInfo: (cancelEditingGuardiansInfo: any) => void;
-  setIsEditing: (isEditing: boolean) => void;
+  getGuardiansInfo: () => any;
+  getRecoveringGuardiansInfo: () => any;
+  getEditingGuardiansInfo: () => any;
+  getSlotInfo: () => any;
 }
 
 const createGuardianSlice = immer<GuardianStore>((set, get) => ({
-  guardians: [],
-  guardianNames: null,
-  threshold: 0,
-  slot: null,
-  slotInitInfo: null,
+  guardiansInfo: {},
+  recoveringGuardiansInfo: {},
+  editingGuardiansInfo: {},
+  slotInfo: {},
 
-  newKey: null,
-  recoverRecordId: null,
-  guardianSignatures: null,
-  recoveringGuardians: [],
-  recoveringGuardianNames: null,
-  recoveringThreshold: 0,
-  recoveringSlot: null,
-  recoveringSlotInitInfo: null,
-  isRecovering: false,
+  setGuardiansInfo: (value: any) => set({ guardiansInfo: value }),
+  setRecoveringGuardiansInfo: (value: any) => set({ recoveringGuardiansInfo: value }),
+  setEditingGuardiansInfo: (value: any) => set({ editingGuardiansInfo: value }),
+  setSlotInfo: (value: any) => set({ slotInfo: value }),
 
-  editingGuardians: [],
-  editingGuardianNames: null,
-  editingThreshold: 0,
-  editingGuardiansInfo: null,
-  cancelEditingGuardiansInfo: null,
-  isEditing: false,
+  updateGuardiansInfo: (value: any) => set({
+    guardiansInfo: {
+      ...get().guardiansInfo,
+      ...value
+    }
+  }),
+  updateRecoveringGuardiansInfo: (value: any) => set({
+    recoveringGuardiansInfo: {
+      ...get().recoveringGuardiansInfo,
+      ...value
+    }
+  }),
+  updateEditingGuardiansInfo: (value: any) => set({
+    editingGuardiansInfo: {
+      ...get().editingGuardiansInfo,
+      ...value
+    }
+  }),
+  updateSlotInfo: (value: any) => set({
+    slotInfo: {
+      ...get().slotInfo,
+      ...value
+    }
+  }),
 
-  setGuardians: (guardians: string[]) => set({ guardians }),
-  setGuardianNames: (guardianNames: string[]) => set({ guardianNames }),
-  setThreshold: (threshold: number) => set({ threshold }),
-  setSlot: (slot: string) => set({ slot }),
-  setSlotInitInfo: (slotInitInfo: any) => set({ slotInitInfo }),
-  getSlotInitInfo: () => {
-    return get().slotInitInfo;
-  },
-
-  setNewKey: (newKey: string) => set({ newKey }),
-  setRecoverRecordId: (recoverRecordId: any) => set({ recoverRecordId }),
-  setGuardianSignatures: (guardianSignatures: any) => set({ guardianSignatures }),
-  setRecoveringGuardians: (recoveringGuardians: string[]) => set({ recoveringGuardians }),
-  setRecoveringGuardianNames: (recoveringGuardianNames: string[]) => set({ recoveringGuardianNames }),
-  setRecoveringThreshold: (recoveringThreshold: number) => set({ recoveringThreshold }),
-  setRecoveringSlot: (recoveringSlot: string) => set({ recoveringSlot }),
-  setRecoveringSlotInitInfo: (recoveringSlotInitInfo: any) => set({ recoveringSlotInitInfo }),
-  setIsRecovering: (isRecovering: boolean) => set({ isRecovering }),
-
-  setEditingGuardians: (editingGuardians: string[]) => set({ editingGuardians }),
-  setEditingGuardianNames: (editingGuardianNames: string[]) => set({ editingGuardianNames }),
-  setEditingThreshold: (editingThreshold: number) => set({ editingThreshold }),
-  setEditingGuardiansInfo: (editingGuardiansInfo: any) => set({ editingGuardiansInfo }),
-  setCancelEditingGuardiansInfo: (cancelEditingGuardiansInfo: any) => set({ cancelEditingGuardiansInfo }),
-  setIsEditing: (isEditing: boolean) => set({ isEditing }),
+  getGuardiansInfo: () => get().guardiansInfo,
+  getRecoveringGuardiansInfo: () => get().recoveringGuardiansInfo,
+  getEditingGuardiansInfo: () => get().editingGuardiansInfo,
+  getSlotInfo: () => get().slotInfo,
 }));
 
 export type GuardianState = ReturnType<typeof createGuardianStore>;

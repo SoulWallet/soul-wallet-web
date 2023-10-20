@@ -11,6 +11,7 @@ import BlockBoxIcon from '@/components/Icons/BlockBox';
 import IconButton from '@/components/web/IconButton';
 import FormInput from '@/components/web/Form/FormInput';
 import { validateEmail } from '@/lib/tools';
+import { useGuardianStore } from '@/store/guardian';
 import useForm from '@/hooks/useForm';
 
 const validate = (values: any) => {
@@ -25,6 +26,7 @@ const validate = (values: any) => {
 };
 
 export default function GuardianBackup({ startManage, cancelBackup }: any) {
+  const { setEditingGuardiansInfo } = useGuardianStore();
   const [downloading, setDownloading] = useState(false);
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,6 +35,35 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
     fields: ['email'],
     validate,
   });
+
+  const getGuardiansInfo = async () => {
+    /* const keystore = chainConfig.contracts.l1Keystore;
+     * const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+
+     * const guardianHash = calcGuardianHash(guardians, threshold);
+     * const initialGuardianHash = guardianHash;
+     * const salt = ethers.ZeroHash;
+     * let initialGuardianSafePeriod = L1KeyStore.days * 2;
+     * initialGuardianSafePeriod = toHex(initialGuardianSafePeriod as any);
+     * const slot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
+     * const slotInitInfo = {
+     *   initialKey,
+     *   initialGuardianHash,
+     *   initialGuardianSafePeriod,
+     * };
+
+     * return {
+     *   keystore,
+     *   slot,
+     *   guardianHash: initialGuardianHash,
+     *   guardianNames: [],
+     *   guardianDetails: {
+     *     guardians: [],
+     *     threshold: 0,
+     *     salt,
+     *   },
+     * }; */
+  };
 
   const handleBackupGuardians = async () => {
     /* try {

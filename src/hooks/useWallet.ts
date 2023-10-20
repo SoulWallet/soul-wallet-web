@@ -16,13 +16,13 @@ export default function useWallet() {
   const { sign } = usePasskey();
   const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
-  const { slotInitInfo } = useGuardianStore();
+  const { slotInfo } = useGuardianStore();
   const { credentials } = useCredentialStore();
   const { soulWallet } = useSdk();
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
-    const { initialKeys, initialGuardianHash } = slotInitInfo;
+    const { initialKeys, initialGuardianHash } = slotInfo;
     const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash);
 
     if (userOpRet.isErr()) {

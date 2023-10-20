@@ -5,7 +5,7 @@ import { useGuardianStore } from '@/store/guardian';
 
 export default function useSdk() {
   const { getSelectedChainItem, selectedChainId } = useChainStore();
-  const { getSlotInitInfo } = useGuardianStore();
+  const { getSlotInfo } = useGuardianStore();
   const selectedChainItem = getSelectedChainItem();
 
   const soulWallet = useMemo(() => {
@@ -28,8 +28,7 @@ export default function useSdk() {
    * @returns
    */
   const calcWalletAddress = async (index: number) => {
-    console.log('calcWalletAddress', getSlotInitInfo());
-    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = getSlotInitInfo();
+    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = getSlotInfo();
     const wAddress = await soulWallet.calcWalletAddress(
       index,
       initialKeys,

@@ -28,7 +28,7 @@ export default function SetPasskeys({ changeStep }: any) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const { calcGuardianHash } = useKeystore();
-  const { setSlotInitInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { updateSlotInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
   const toast = useToast();
@@ -72,7 +72,7 @@ export default function SetPasskeys({ changeStep }: any) {
     setAddressList([{ title: walletName, address: newAddress, activatedChains: [], allowedOrigins: [] }]);
     console.log('createInitialWallet', newAddress);
     setSelectedAddress(newAddress);
-    setEditingGuardiansInfo(null);
+    setEditingGuardiansInfo({});
   };
 
   const createInitialSlotInfo = async () => {
@@ -85,7 +85,7 @@ export default function SetPasskeys({ changeStep }: any) {
       initialGuardianHash,
       initialGuardianSafePeriod,
     };
-    setSlotInitInfo(slotInitInfo)
+    updateSlotInfo(slotInitInfo)
     console.log('createSlotInfo', initialKeys, slotInitInfo)
   };
 
