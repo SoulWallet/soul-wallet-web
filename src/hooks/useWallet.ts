@@ -6,13 +6,12 @@ import { useGuardianStore } from '@/store/guardian';
 import { addPaymasterAndData } from '@/lib/tools';
 import Erc20ABI from '../contract/abi/ERC20.json';
 import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
+import { executeTransaction } from '@/lib/tx';
 import BN from 'bignumber.js';
 import useConfig from './useConfig';
-import bg from '@/background';
 import usePasskey from './usePasskey';
 import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
-import { TypedDataEncoder } from 'ethers';
 
 export default function useWallet() {
   const { sign } = usePasskey();
@@ -117,7 +116,7 @@ export default function useWallet() {
 
     userOp.signature = await getSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
 
-    return await bg.execute(userOp, chainConfig);
+    return await executeTransaction(userOp, chainConfig);
   };
 
   const signRawHash = async (hash: string) => {
