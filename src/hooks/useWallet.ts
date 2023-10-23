@@ -11,6 +11,8 @@ import useConfig from './useConfig';
 import bg from '@/background';
 import usePasskey from './usePasskey';
 import { useCredentialStore } from '@/store/credential';
+import { useAddressStore } from '@/store/address';
+import { TypedDataEncoder } from 'ethers';
 
 export default function useWallet() {
   const { sign } = usePasskey();
@@ -19,6 +21,7 @@ export default function useWallet() {
   const { slotInfo } = useGuardianStore();
   const { credentials } = useCredentialStore();
   const { soulWallet } = useSdk();
+  const {selectedAddress} = useAddressStore();
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
@@ -125,8 +128,19 @@ export default function useWallet() {
     if (packedHashRet.isErr()) {
       throw new Error(packedHashRet.ERR.message);
     }
+    
     const packedHash = packedHashRet.OK;
-    const signature = await getSignature(packedHash.packedHash, packedHash.validationData);
+
+    const packed1271HashRet = await soulWallet.getEIP1271TypedData(selectedAddress, packedHash.packedHash);
+
+    if (packed1271HashRet.isErr()) {
+      throw new Error(packed1271HashRet.ERR.message);
+    }
+
+    const packed1271Hash = packed1271HashRet.OK;
+
+    const signature = await getSignature(packed1271Hash.typedMessage, packedHash.validationData);
+
     console.log('hash is', hash, signature);
     return signature;
   };
