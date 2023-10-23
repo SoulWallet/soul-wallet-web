@@ -7,6 +7,8 @@ import useConfig from '@/hooks/useConfig';
 import { InfoWrap, InfoItem } from './SignModal/index';
 import config from '@/config';
 import { AccountSelect } from './AccountSelect';
+import { useCredentialStore } from '@/store/credential';
+import usePasskey from '@/hooks/usePasskey';
 
 enum SecurityLevel {
   High = 'High',
@@ -35,20 +37,30 @@ const DappAvatar = ({ avatar }: any) => (
 
 export default function ConnectDapp({ origin, msgId }: any) {
   const { selectedAddressItem, selectedChainItem } = useConfig();
+  const { credentials } = useCredentialStore();
+  const { authenticate } = usePasskey();
   const { title, address } = selectedAddressItem;
 
-  const onConfirm = (address: string) => {
-    window.opener.postMessage(
-      {
-        id: msgId,
-        payload: {
-          address,
-          chainConfig: selectedChainItem,
+  const onConfirm = async (address: string) => {
+    // do auth first
+    const credentialId = credentials[0].id;
+    const challenge = btoa('1234567890');
+    const auth = await authenticate(credentialId, challenge);
+    console.log('auth', auth);
+
+    if (auth) {
+      window.opener.postMessage(
+        {
+          id: msgId,
+          payload: {
+            address,
+            chainConfig: selectedChainItem,
+          },
         },
-      },
-      '*',
-    );
-    window.close();
+        '*',
+      );
+      window.close();
+    }
   };
 
   return (
@@ -94,10 +106,7 @@ export default function ConnectDapp({ origin, msgId }: any) {
         </InfoItem>
         <InfoItem>
           <Text>{title}:</Text>
-          <AccountSelect />
-          {/* <Text>
-            {address.slice(0, 5)}...{address.slice(-4)}
-          </Text> */}
+          <AccountSelect labelType="address" rounded="full" />
         </InfoItem>
       </InfoWrap>
       <Button w="100%" fontSize={'20px'} py="5" fontWeight={'800'} mt="6" onClick={() => onConfirm(address)}>

@@ -79,7 +79,7 @@ export function AccountSelectFull() {
   );
 }
 
-export function AccountSelect() {
+export function AccountSelect({ labelType = 'title', ...restProps }: any) {
   const { navigate } = useBrowser();
   const { selectedAddressItem } = useConfig();
   const { addressList, setSelectedAddress } = useAddressStore();
@@ -101,8 +101,12 @@ export function AccountSelect() {
               cursor={'pointer'}
               _hover={{ color: 'brand.red' }}
               onClick={() => navigate('/accounts')}
+              {...restProps}
             >
-              {selectedAddressItem && <Text>{selectedAddressItem.title}</Text>}
+              {labelType === 'title' && selectedAddressItem && <Text>{selectedAddressItem.title}</Text>}
+              {labelType === 'address' && selectedAddressItem && (
+                <Text>{toShortAddress(selectedAddressItem.address, 4, 6)}</Text>
+              )}
               <Image src={IconCheveronRight} w="20px" h="20px" transform={isOpen ? 'rotate(90deg)' : 'none'} />
             </Flex>
           </MenuButton>

@@ -11,7 +11,7 @@ const base64urlTobase64 = (base64url: string) => {
 
 const base64Tobase64url = (base64: string) => {
   return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
+};
 
 export default function usePasskey() {
   const { addCredential, credentials } = useCredentialStore();
@@ -36,9 +36,9 @@ export default function usePasskey() {
   };
 
   const getCoordinates = async (credentialPublicKey: string) => {
-    console.log('step 1')
+    console.log('step 1');
     const publicKeyBinary = Uint8Array.from(atob(base64urlTobase64(credentialPublicKey)), (c) => c.charCodeAt(0));
-    console.log('step 2', publicKeyBinary)
+    console.log('step 2', publicKeyBinary);
 
     const publicKey = await crypto.subtle.importKey(
       'spki',
@@ -50,16 +50,16 @@ export default function usePasskey() {
       true,
       ['verify'],
     );
-    console.log('step 3')
+    console.log('step 3');
 
     const jwk: any = await crypto.subtle.exportKey('jwk', publicKey);
-    console.log('step 4')
+    console.log('step 4');
 
     const Qx = base64ToBigInt(base64urlTobase64(jwk.x));
-    console.log('step 5')
+    console.log('step 5');
 
     const Qy = base64ToBigInt(base64urlTobase64(jwk.y));
-    console.log('step 6')
+    console.log('step 6');
 
     return {
       x: `0x${Qx.toString(16).padStart(64, '0')}`,
@@ -71,8 +71,8 @@ export default function usePasskey() {
     // get total registered nums and generate name
     const randomChallenge = btoa('1234567890');
     const credentialName = `Passkey ${initialRegister ? 1 : credentials.length + 1}`;
-    const registration = await client.register(credentialName, randomChallenge,{
-      authenticatorType: "both",
+    const registration = await client.register(credentialName, randomChallenge, {
+      authenticatorType: 'both',
     });
     console.log('Registered: ', JSON.stringify(registration, null, 2));
     // verify locally
@@ -84,7 +84,7 @@ export default function usePasskey() {
 
     const coords = await getCoordinates(registration.credential.publicKey);
 
-    console.log('coords', coords)
+    console.log('coords', coords);
 
     const credentialKey = {
       id: registration.credential.id,
@@ -99,7 +99,7 @@ export default function usePasskey() {
 
   const sign = async (credential: any, userOpHash: string) => {
     const userOpHashForBytes = userOpHash.startsWith('0x') ? userOpHash.substr(2) : userOpHash;
-  
+
     var byteArray = new Uint8Array(32);
     for (var i = 0; i < 64; i += 2) {
       byteArray[i / 2] = parseInt(userOpHashForBytes.substr(i, 2), 16);
@@ -144,8 +144,9 @@ export default function usePasskey() {
   };
 
   const authenticate = async (credentialId: string, challenge: string) => {
-    const authentication = await client.authenticate([credentialId], challenge);
-    console.log('authentication: ', authentication);
+    try {
+      return await client.authenticate([credentialId], challenge);
+    } catch (err) {}
   };
 
   return {
