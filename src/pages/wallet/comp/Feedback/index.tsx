@@ -18,6 +18,7 @@ Share your contact for follow-up`}
         bg="#f5f5f5"
         h="140px"
         rounded="16px"
+        py="3"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         mb="3"
