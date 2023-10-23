@@ -1,5 +1,4 @@
 import React from 'react';
-import { openWindow } from '@/lib/tools';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export function useQuery() {
@@ -31,16 +30,10 @@ export default function useBrowser() {
     // return tabs[0].url;
   };
 
-  const closeCurrentTab = async () => {
-    // browser.tabs.getCurrent().then((tab) => {
-    //     tab.id && browser.tabs.remove(tab.id);
-    // });
-  };
 
   return {
     navigate,
     navigateToSign,
-    closeCurrentTab,
     getConnectedDapp,
   };
 }

@@ -4,8 +4,6 @@ import { useRef, useState, useEffect } from 'react';
 import attentionIcon from '@/assets/icons/attention.svg';
 import useWallet from '@/hooks/useWallet';
 import { useRecoveryContext } from '@/context/RecoveryContext';
-import { GuardianItem } from '@/lib/type';
-import { notify } from '@/lib/tools';
 import { Box, Text, useToast } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import Button from '@/components/web/Button';

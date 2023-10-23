@@ -1,11 +1,11 @@
 import React from 'react';
-import { Flex, Box, Image, Text, Divider } from '@chakra-ui/react';
+import { Flex, Box, Image, Text, Divider, Menu, MenuButton, MenuList, } from '@chakra-ui/react';
 import IconChecked from '@/assets/icons/checked.svg';
 import IconUnchecked from '@/assets/icons/unchecked.svg';
 import IconAllNetwork from '@/assets/icons/all-network.svg';
 import { useChainStore } from '@/store/chain';
 
-const MenuItem = ({ icon, title, checked, ...restProps }: any) => {
+const MenuLine = ({ icon, title, checked, ...restProps }: any) => {
   return (
     <Flex w="100%" align={'center'} justify={'space-between'} py="2" cursor={'pointer'} {...restProps}>
       <Flex align={'center'} gap="2">
@@ -41,6 +41,12 @@ export default function ChainSelectMultiple({ activeChains, onChange }: any) {
     onChange(chains);
   };
 
+  // return <Menu>
+  //   <MenuButton>
+
+  //   </MenuButton>
+  // </Menu>
+
   return (
     <Flex
       w="262px"
@@ -53,7 +59,7 @@ export default function ChainSelectMultiple({ activeChains, onChange }: any) {
       py="1"
       px="10px"
     >
-      <MenuItem
+      <MenuLine
         onClick={toggleCheckAll}
         icon={IconAllNetwork}
         title={'All networks'}
@@ -64,7 +70,7 @@ export default function ChainSelectMultiple({ activeChains, onChange }: any) {
           <React.Fragment key={idx}>
             <Divider />
             <Box key={item.chainIdHex} onClick={() => toggleActiveChains(item.chainIdHex)}>
-              <MenuItem icon={item.icon} title={item.chainName} checked={activeChains.includes(item.chainIdHex)} />
+              <MenuLine icon={item.icon} title={item.chainName} checked={activeChains.includes(item.chainIdHex)} />
             </Box>
           </React.Fragment>
         );

@@ -3,35 +3,12 @@ import { ethers } from 'ethers';
 import { IAddressItem } from '@/store/address';
 import BN from 'bignumber.js';
 import { chainIdMapping, chainMapping } from '@/config';
-import { Tooltip } from '@chakra-ui/react';
 import IconDefault from '@/assets/tokens/default.svg';
 import storage from '@/lib/storage';
 import { DecodeUserOp, DecodeResult } from '@soulwallet/decoder';
 import { UserOperation } from '@soulwallet/sdk';
 import IconSend from '@/assets/activities/send.svg';
 import IconContract from '@/assets/activities/contract.svg';
-
-export function notify(title: string, message: string) {
-  const randomId = nanoid();
-  // browser.notifications.create(randomId, {
-  //     type: "basic",
-  //     iconUrl: "../icon-48.png",
-  //     title,
-  //     message,
-  // });
-}
-
-// open browser window especially for background
-export function openWindow(url: string) {
-  // browser.windows.create({
-  //     url,
-  //     type: "popup",
-  //     width: 360,
-  //     height: 600 + 28, // 28 is title bar
-  //     top: 0,
-  //     left: windowWidth - 360,
-  // });
-}
 
 export function copyText(value: string) {
   const copied = document.createElement('input');

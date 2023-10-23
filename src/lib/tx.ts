@@ -1,5 +1,4 @@
 import { SoulWallet, Bundler } from '@soulwallet/sdk';
-import { notify } from '@/lib/tools';
 import { printUserOp } from '@/lib/tools';
 
 let soulWallet: any = null;
@@ -38,7 +37,7 @@ export const executeTransaction = async (userOp: any, chainConfig: any) => {
 
     if (ret.isErr()) {
       const errMsg = ret.ERR.message;
-      notify('Bundler Error', errMsg);
+      // notify('Bundler Error', errMsg);
       console.error(errMsg);
       reject(errMsg);
       return;
@@ -49,21 +48,21 @@ export const executeTransaction = async (userOp: any, chainConfig: any) => {
     if (userOpHashRet.isErr()) {
       const errMsg = userOpHashRet.ERR.message;
       console.error(errMsg);
-      notify('Bundler Error', errMsg);
+      // notify('Bundler Error', errMsg);
       reject(errMsg);
       return;
     }
 
     const userOpHash = userOpHashRet.OK;
 
-    notify('Transaction sent', 'Your transaction was sent to bundler');
+    // notify('Transaction sent', 'Your transaction was sent to bundler');
 
     while (true) {
       const receipt = await bundler.eth_getUserOperationReceipt(userOpHash);
       console.log('RECEIPT', receipt);
       if (receipt.isErr()) {
         const errMsg = receipt.ERR.message;
-        notify('Bundler Error', errMsg);
+        // notify('Bundler Error', errMsg);
         reject(errMsg);
       }
       if (receipt.OK === null) {
