@@ -16,8 +16,8 @@ export default function Footer() {
     >
       <Text>Beta {packageJson.version}</Text>
       <Flex gap="2" align={'center'}>
-        {config.socials.map((item) => (
-          <Link href={item.link} target="_blank">
+        {config.socials.map((item, idx) => (
+          <Link href={item.link} target="_blank" key={idx}>
             <Image src={item.icon} />
           </Link>
         ))}
