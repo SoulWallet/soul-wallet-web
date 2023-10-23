@@ -179,8 +179,10 @@ export default function GuardianForm({ cancelEdit }: any) {
       const keystore = chainConfig.contracts.l1Keystore;
       const salt = ethers.ZeroHash;
       const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
-      const initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
-      const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);
+      const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
+      const initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [initalkeysAddress]);
+      const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
+      console.log('initalkeys', initialKeys, initalkeysAddress, initalRawkeys);
       const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod)
 
       const walletInfo = {
@@ -191,7 +193,7 @@ export default function GuardianForm({ cancelEdit }: any) {
           initialGuardianHash,
           initialGuardianSafePeriod
         },
-        keys: initalkeys
+        keys: initalkeysAddress
       };
 
       const guardiansInfo = {
@@ -219,7 +221,7 @@ export default function GuardianForm({ cancelEdit }: any) {
         initialGuardianHash,
         initialGuardianSafePeriod,
         newGuardianHash,
-        initalkeys[0],
+        initalRawkeys,
         keySignature,
       ]
       const result = await api.guardian.createTask({
@@ -229,7 +231,8 @@ export default function GuardianForm({ cancelEdit }: any) {
       })
       console.log('handleSubmit', result);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
+      console.log('error', error.message)
       setLoading(false);
     }
   };

@@ -114,12 +114,10 @@ export default function Create() {
       },
     };
 
-    // const res1 = await api.guardian.backupWallet(walletInfo)
-    // const res2 = await api.guardian.backupGuardians(guardiansInfo)
-
+    const result = await api.guardian.backupWallet(walletInfo)
     setGuardiansInfo(guardiansInfo)
     setSlotInfo(slotInfo)
-    console.log('createSlotInfo', slotInfo, walletInfo, guardiansInfo)
+    console.log('createSlotInfo', slotInfo, walletInfo, guardiansInfo, result)
   };
 
   const onConfirm = async () => {
