@@ -123,24 +123,22 @@ export default function useWallet() {
     // default valid time
     const validAfter = Math.floor(Date.now() / 1000);
     const validUntil = validAfter + 3600;
-    const packedHashRet = await soulWallet.packRawHash(hash, validAfter, validUntil);
-    if (packedHashRet.isErr()) {
-      throw new Error(packedHashRet.ERR.message);
-    }
+
+    const packed1271HashRet = await soulWallet.getEIP1271TypedData(selectedAddress, hash);
+    const packedHashRet = await soulWallet.packRawHash(packed1271HashRet.OK.typedMessage);
+    const signature = await getSignature(packedHashRet.OK.packedHash, packedHashRet.OK.validationData);
+    // const packedHashRet = await soulWallet.packRawHash(hash, validAfter, validUntil);
+    // if (packedHashRet.isErr()) {
+    //   throw new Error(packedHashRet.ERR.message);
+    // }
     
-    const packedHash = packedHashRet.OK;
+    // const packedHash = packedHashRet.OK;
 
-    const packed1271HashRet = await soulWallet.getEIP1271TypedData(selectedAddress, packedHash.packedHash);
+    // const packed1271HashRet = await soulWallet.getEIP1271TypedData(selectedAddress, packedHash.packedHash);
 
-    if (packed1271HashRet.isErr()) {
-      throw new Error(packed1271HashRet.ERR.message);
-    }
-
-    const packed1271Hash = packed1271HashRet.OK;
-
-    const signature = await getSignature(packed1271Hash.typedMessage, packedHash.validationData);
-
-    console.log('hash is', hash, signature);
+    // if (packed1271HashRet.isErr()) {
+    //   throw new Error(packed1271HashRet.ERR.message);
+    // }
     return signature;
   };
 
