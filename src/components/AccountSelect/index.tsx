@@ -40,20 +40,20 @@ const CreateAccount = () => {
   );
 };
 
-const DestroyAccount = () => {
-  const doDestroy = async () => {
-    localStorage.clear();
-    location.href = '/launch';
-  };
+// const DestroyAccount = () => {
+//   const doDestroy = async () => {
+//     localStorage.clear();
+//     location.href = '/launch';
+//   };
 
-  return (
-    <MenuItem onClick={doDestroy} pl="44px" as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
-      <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1} color="red">
-        Reset Wallet (for test)
-      </Text>
-    </MenuItem>
-  );
-};
+//   return (
+//     <MenuItem onClick={doDestroy} pl="44px" as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
+//       <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1} color="red">
+//         Reset Wallet (for test)
+//       </Text>
+//     </MenuItem>
+//   );
+// };
 
 export default function AccountSelect() {
   const { navigate } = useBrowser();
@@ -68,7 +68,12 @@ export default function AccountSelect() {
             <Flex
               align="center"
               gap="2px"
+              px="3"
+              py="10px"
+              h="40px"
+              bg="#f2f2f2"
               fontWeight={'800'}
+              roundedLeft={"full"}
               cursor={'pointer'}
               _hover={{ color: 'brand.red' }}
               onClick={() => navigate('/accounts')}
@@ -104,7 +109,7 @@ export default function AccountSelect() {
             })}
             <MenuDivider />
             <CreateAccount />
-            <DestroyAccount />
+            {/* <DestroyAccount /> */}
           </MenuList>
         </>
       )}

@@ -25,35 +25,39 @@ export default function Header() {
   };
 
   return (
-    <Flex as="header" h="100px" px="8" borderBottom={'1px solid #D7D7D7'} align="center" justify={'space-between'}>
+    <Flex
+      as="header"
+      h="64px"
+      px="8"
+      bg="#fff"
+      borderBottom={'1px solid #e6e6e6'}
+      align="center"
+      justify={'space-between'}
+    >
       <Link to="/wallet">
-        <Image src={IconLogo} w="180px" />
+        <Image src={IconLogo} h="40px" />
       </Link>
-      <Flex align={'center'} gap="15px" marginLeft="auto">
+      <Flex align={'center'} gap="2" marginLeft="auto">
         <Button
           px="5"
           onClick={() => setTransferVisible(true)}
-          bg="#1e1e1e"
-          _hover={{bg: "#4e4e54"}}
-          color="#fff"
-          fontWeight={'700'}
-          lineHeight={"1"}
+          bg="#F2F2F2"
+          fontWeight={'800'}
+          lineHeight={'1'}
           rounded="50px"
         >
           Send & Receive
         </Button>
-        <Flex align={'center'} px="3" py="10px" gap="8" rounded="full" bg="#fff">
-          <Flex align={'center'} gap="4">
-            <Flex gap="1" align={'center'}>
+          <Flex align={'center'} gap="2px">
+            <AccountSelect />
+            <Flex gap="1" align={'center'} px="3" py="10px" roundedRight={"full"} bg="#f2f2f2">
               <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
                 {toShortAddress(selectedAddress, 5, 4)}
               </Text>
               <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy()} />
             </Flex>
-            <AccountSelect />
           </Flex>
-          <ChainSelect />
-        </Flex>
+        <ChainSelect />
       </Flex>
       {transferVisible && <TransferAssets onClose={() => setTransferVisible(false)} />}
       <Box

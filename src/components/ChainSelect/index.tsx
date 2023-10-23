@@ -15,7 +15,7 @@ export default function ChainSelect() {
       {({ isOpen }) => (
         <>
           <MenuButton data-testid="btn-chain-select">
-            <Flex p="5px" bg="rgba(98, 126, 234, 0.15)" rounded={'full'} cursor={'pointer'}>
+            <Flex px="3" py="10px" bg="#f2f2f2" rounded={'full'} cursor={'pointer'}>
               <Image src={selectedChainItem.icon} w="22px" h="22px" />
               <Image src={IconCheveronRight} transform={isOpen ? 'rotate(90deg)' : 'none'} w="20px" h="20px" />
             </Flex>
