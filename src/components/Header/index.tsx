@@ -13,7 +13,7 @@ export default function Header() {
   return (
     <Flex
       as="header"
-      h="64px"
+      h="72px"
       px="8"
       bg="#fff"
       borderBottom={'1px solid #e6e6e6'}
@@ -21,7 +21,7 @@ export default function Header() {
       justify={'space-between'}
     >
       <Link to="/wallet">
-        <Image src={IconLogo} h="40px" />
+        <Image src={IconLogo} h="44px" />
       </Link>
       <Flex align={'center'} gap="2" marginLeft="auto">
         <Button
