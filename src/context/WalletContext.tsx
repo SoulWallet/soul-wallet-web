@@ -2,7 +2,6 @@ import { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
 import SignTransactionModal from '@/components/SignTransactionModal';
 import SignMessageModal from '@/components/SignMessageModal';
-import useKeyring from '@/hooks/useKeyring';
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
@@ -13,7 +12,6 @@ interface IWalletContext {
   ethersProvider: ethers.JsonRpcProvider;
   account: string;
   getAccount: () => Promise<void>;
-  replaceAddress: () => Promise<void>;
   showSign: () => Promise<void>;
   showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
@@ -24,7 +22,6 @@ export const WalletContext = createContext<IWalletContext>({
   ethersProvider: new ethers.JsonRpcProvider(),
   account: '',
   getAccount: async () => {},
-  replaceAddress: async () => {},
   showSign: async () => {},
   showSignTransaction: async () => {},
   showSignMessage: async () => {},
@@ -44,7 +41,6 @@ export const WalletContextProvider = ({ children }: any) => {
   const signModal = createRef<any>();
   const signTransactionModal = createRef<any>();
   const signMessageModal = createRef<any>();
-  const keystore = useKeyring();
 
   const ethersProvider = useMemo(() => {
     if (!selectedChainItem) {
@@ -54,11 +50,6 @@ export const WalletContextProvider = ({ children }: any) => {
   }, [selectedChainItem]);
 
   const getAccount = async () => {};
-
-  const replaceAddress = async () => {
-    await keystore.replaceAddress();
-    await getAccount();
-  };
 
   const checkRecoverStatus = async () => {
     const res = (await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId })).data;
@@ -79,8 +70,6 @@ export const WalletContextProvider = ({ children }: any) => {
 
     // check if should replace key
     if (res.status >= 3 && account !== `0x${res.newKey.slice(-40)}`) {
-      replaceAddress();
-
       setGuardiansInfo({
         guardians: recoveringGuardiansInfo.guardians,
         guardianNames: recoveringGuardiansInfo.guardianNames,
@@ -172,7 +161,6 @@ export const WalletContextProvider = ({ children }: any) => {
         ethersProvider,
         account,
         getAccount,
-        replaceAddress,
         showSign,
         showSignTransaction,
         showSignMessage,

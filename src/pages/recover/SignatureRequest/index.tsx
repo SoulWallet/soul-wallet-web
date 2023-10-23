@@ -61,7 +61,7 @@ const SignatureRequest = ({ changeStep }: any) => {
   const guardianSignatures = recoveringGuardiansInfo.guardianSignatures
 
   const toast = useToast();
-  const { account, getAccount, replaceAddress } = useWalletContext();
+  const { account, getAccount} = useWalletContext();
   const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
   const { navigate } = useBrowser();
 
@@ -102,7 +102,6 @@ const SignatureRequest = ({ changeStep }: any) => {
       setChainStatusList(statusList);
 
       if (status === 3 && newKey && account !== `0x${newKey.slice(-40)}`) {
-        replaceAddress();
         updateGuardiansInfo({
           guardians: recoveringGuardiansInfo.guardians,
           guardianNames: recoveringGuardiansInfo.guardianNames,
@@ -159,7 +158,6 @@ const SignatureRequest = ({ changeStep }: any) => {
   };
 
   const replaceWallet = async () => {
-    replaceAddress();
     updateRecoveringGuardiansInfo({
       recoverRecordId: null
     });
