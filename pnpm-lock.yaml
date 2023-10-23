@@ -42,8 +42,8 @@ dependencies:
     specifier: ^0.1.2
     version: 0.1.2
   '@soulwallet/sdk':
-    specifier: ^0.1.5
-    version: 0.1.5
+    specifier: ^0.1.7
+    version: 0.1.7
   '@types/node':
     specifier: 20.6.2
     version: 20.6.2
@@ -1822,8 +1822,8 @@ packages:
     resolution: {integrity: sha512-ntYnmdoZK/xpe2mg+lnyIz2CjVdPUx44jreJu2W1hIeE817AtrlLeeU0r7QOnbqgiZpEHkB/12iwkX+ujiWshQ==}
     dev: false
 
-  /@soulwallet/sdk@0.1.5:
-    resolution: {integrity: sha512-ThKHqogsxp0lptOn3oXqAITXGa2zWv/ZghUPxt12WyonsFNoB3cOGfFT6oHchUUtwdkNmUqKD7h5Gi+nzWsu9g==}
+  /@soulwallet/sdk@0.1.7:
+    resolution: {integrity: sha512-ZdBW6y8FImTqy16E6Zt237ZAXRGvDV9Nez2pKvFTcSs52PbGRK5jrZHE+WMA24RitRu5lcq4Amj0G2esv/wbcQ==}
     dependencies:
       '@soulwallet/abi': 0.1.2
       '@soulwallet/result': 0.1.2

@@ -1,28 +1,14 @@
-import { Box, Flex, Text, Image, useToast, Button } from '@chakra-ui/react';
-import { copyText } from '@/lib/tools';
+import { Box, Flex, Image, Button } from '@chakra-ui/react';
 import { useState } from 'react';
-import IconCopy from '@/assets/copy.svg';
 import ChainSelect from '../ChainSelect';
 import PageSelect from '../PageSelect';
 import IconLogo from '@/assets/logo-all-v3.svg';
-import AccountSelect from '../AccountSelect';
-import { toShortAddress } from '@/lib/tools';
-import { useAddressStore } from '@/store/address';
 import TransferAssets from '../TransferAssets';
 import { Link } from 'react-router-dom';
+import { AccountSelectFull } from '../AccountSelect';
 
 export default function Header() {
-  const { selectedAddress, getIsActivated } = useAddressStore();
   const [transferVisible, setTransferVisible] = useState(false);
-  const toast = useToast();
-
-  const doCopy = () => {
-    copyText(selectedAddress);
-    toast({
-      title: 'Copied',
-      status: 'success',
-    });
-  };
 
   return (
     <Flex
@@ -48,15 +34,7 @@ export default function Header() {
         >
           Send & Receive
         </Button>
-          <Flex align={'center'} gap="2px">
-            <AccountSelect />
-            <Flex gap="1" align={'center'} px="3" py="10px" roundedRight={"full"} bg="#f2f2f2">
-              <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
-                {toShortAddress(selectedAddress, 5, 4)}
-              </Text>
-              <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy()} />
-            </Flex>
-          </Flex>
+        <AccountSelectFull />
         <ChainSelect />
       </Flex>
       {transferVisible && <TransferAssets onClose={() => setTransferVisible(false)} />}

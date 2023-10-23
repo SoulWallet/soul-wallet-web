@@ -6,6 +6,7 @@ import Button from './Button';
 import useConfig from '@/hooks/useConfig';
 import { InfoWrap, InfoItem } from './SignModal/index';
 import config from '@/config';
+import { AccountSelect } from './AccountSelect';
 
 enum SecurityLevel {
   High = 'High',
@@ -66,7 +67,6 @@ export default function ConnectDapp({ origin, msgId }: any) {
           position={'relative'}
         >
           <DappAvatar avatar={IconLogo} />
-          {/** TODO, get favicon here */}
           <DappAvatar avatar={`${config.faviconUrl}${origin}`} />
           <Image src={IconLock} position={'absolute'} left="0" right="0" bottom="-3" m="auto" />
         </Flex>
@@ -94,9 +94,10 @@ export default function ConnectDapp({ origin, msgId }: any) {
         </InfoItem>
         <InfoItem>
           <Text>{title}:</Text>
-          <Text>
+          <AccountSelect />
+          {/* <Text>
             {address.slice(0, 5)}...{address.slice(-4)}
-          </Text>
+          </Text> */}
         </InfoItem>
       </InfoWrap>
       <Button w="100%" fontSize={'20px'} py="5" fontWeight={'800'} mt="6" onClick={() => onConfirm(address)}>

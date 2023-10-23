@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, Box } from '@chakra-ui/react';
+import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, Box, useToast } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
+import { copyText } from '@/lib/tools';
 import IconLoading from '@/assets/loading.gif';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
@@ -9,7 +10,7 @@ import { useAddressStore } from '@/store/address';
 import { toShortAddress } from '@/lib/tools';
 import AddressIcon from '../AddressIcon';
 import useSdk from '@/hooks/useSdk';
-import IconPlus from '@/assets/icons/plus.svg';
+import IconCopy from '@/assets/copy.svg';
 import { PlusSquareIcon } from '@chakra-ui/icons';
 
 const CreateAccount = () => {
@@ -55,7 +56,30 @@ const CreateAccount = () => {
 //   );
 // };
 
-export default function AccountSelect() {
+export function AccountSelectFull() {
+  const { selectedAddress } = useAddressStore();
+  const toast = useToast();
+  const doCopy = () => {
+    copyText(selectedAddress);
+    toast({
+      title: 'Copied',
+      status: 'success',
+    });
+  };
+  return (
+    <Flex align={'center'} gap="2px">
+      <AccountSelect />
+      <Flex gap="1" align={'center'} px="3" py="10px" roundedRight={'full'} bg="#f2f2f2">
+        <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
+          {toShortAddress(selectedAddress, 5, 4)}
+        </Text>
+        <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy()} />
+      </Flex>
+    </Flex>
+  );
+}
+
+export function AccountSelect() {
   const { navigate } = useBrowser();
   const { selectedAddressItem } = useConfig();
   const { addressList, setSelectedAddress } = useAddressStore();
@@ -73,7 +97,7 @@ export default function AccountSelect() {
               h="40px"
               bg="#f2f2f2"
               fontWeight={'800'}
-              roundedLeft={"full"}
+              roundedLeft={'full'}
               cursor={'pointer'}
               _hover={{ color: 'brand.red' }}
               onClick={() => navigate('/accounts')}
