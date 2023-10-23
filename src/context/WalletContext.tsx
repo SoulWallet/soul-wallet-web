@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
-import SignModal from '@/components/SignModal';
 import SignTransactionModal from '@/components/SignTransactionModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import useKeyring from '@/hooks/useKeyring';
@@ -35,12 +34,8 @@ export const WalletContext = createContext<IWalletContext>({
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
   const [account, setAccount] = useState<string>('');
-  const {
-    recoveringGuardiansInfo,
-    setGuardiansInfo,
-    setRecoveringGuardiansInfo,
-  } = useGuardianStore();
-  const recoverRecordId = recoveringGuardiansInfo.recoverRecordId
+  const { recoveringGuardiansInfo, setGuardiansInfo, setRecoveringGuardiansInfo } = useGuardianStore();
+  const recoverRecordId = recoveringGuardiansInfo.recoverRecordId;
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { addressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
@@ -90,15 +85,15 @@ export const WalletContextProvider = ({ children }: any) => {
         guardians: recoveringGuardiansInfo.guardians,
         guardianNames: recoveringGuardiansInfo.guardianNames,
         threshold: recoveringGuardiansInfo.threshold,
-      })
+      });
     }
 
     // recover process finished
     if (res.status === 4) {
       setRecoveringGuardiansInfo({
         ...recoveringGuardiansInfo,
-        recoverRecordId: null
-      })
+        recoverRecordId: null,
+      });
     }
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;
@@ -155,7 +150,7 @@ export const WalletContextProvider = ({ children }: any) => {
   };
 
   const showSignTransaction = async (txns: any, origin?: string, sendTo?: string) => {
-    console.log('show sign transac')
+    console.log('show sign transac');
     return await signTransactionModal.current.show(txns, origin, sendTo);
   };
 
@@ -171,8 +166,6 @@ export const WalletContextProvider = ({ children }: any) => {
     checkActivated();
   }, [selectedAddress, selectedChainId]);
 
-  console.log('Render WalletContext')
-
   return (
     <WalletContext.Provider
       value={{
@@ -187,7 +180,6 @@ export const WalletContextProvider = ({ children }: any) => {
       }}
     >
       {children}
-      <SignModal ref={signModal} />
       <SignTransactionModal ref={signTransactionModal} />
       <SignMessageModal ref={signMessageModal} />
     </WalletContext.Provider>

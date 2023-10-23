@@ -4,11 +4,12 @@ import IconLogo from '@/assets/logo-all-v3.svg';
 import { useSearchParams } from 'react-router-dom';
 import SignTransaction from '@/components/SignTransactionModal/comp/SignTransaction';
 import SignMessage from '@/components/SignMessageModal/comp/SignMessage';
+import SwitchChain from '@/components/SwitchChain';
 import { useAddressStore } from '@/store/address';
 
 // when user has the created wallet
 export default function Popup() {
-  const {addressList} =useAddressStore();
+  const { addressList } = useAddressStore();
   const [searchParams] = useSearchParams();
   const action = searchParams.get('action');
   const origin = searchParams.get('origin');
@@ -16,6 +17,11 @@ export default function Popup() {
   const data = searchParams.get('data') === 'undefined' ? {} : JSON.parse(searchParams.get('data') || '{}');
   const txns = data.txns;
   const message = data.message;
+  const targetChainId = data.targetChainId;
+
+  if (!addressList || !addressList.length) {
+    return;
+  }
 
   const onTxSuccess = (receipt: any) => {
     window.opener.postMessage(
@@ -43,10 +49,18 @@ export default function Popup() {
     window.close();
   };
 
-  if(!addressList || !addressList.length){
-    return
-  }
-
+  const onSwitch = () => {
+    window.opener.postMessage(
+      {
+        id,
+        payload: {
+          chainId: targetChainId,
+        },
+      },
+      '*',
+    );
+    window.close();
+  };
 
   return (
     <Box p="6" h="100vh">
@@ -69,6 +83,7 @@ export default function Popup() {
           onSign={onSign}
         />
       )}
+      {action === 'switchChain' && <SwitchChain targetChainId={targetChainId.chainId} onSwitch={onSwitch} />}
     </Box>
   );
 }

@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Menu, MenuButton, MenuList, MenuItem, Tooltip, useDisclosure } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import SwitchNetworkLine from '@/assets/switch-chain-line.svg';
-import Button from '../../Button';
+import Button from './Button';
 import useConfig from '@/hooks/useConfig';
 import IconChevronRight from '@/assets/icons/chevron-right-red.svg';
 import IconCheckmark from '@/assets/icons/checkmark.svg';
-import { InfoWrap, InfoItem } from '../index';
+import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { useChainStore } from '@/store/chain';
 import { useAddressStore } from '@/store/address';
 import { toShortAddress, getChainInfo } from '@/lib/tools';
@@ -20,28 +20,22 @@ const ChainAvatar = ({ avatar }: any) => (
   </Flex>
 );
 
-export default function ConnectDapp({ onConfirm, targetChainId }: any) {
+export default function ConnectDapp({ onSwitch, targetChainId }: any) {
   const { selectedAddressItem } = useConfig();
-  const { selectedChainId } = useChainStore();
+  const { selectedChainId, setSelectedChainId } = useChainStore();
   const { addressList, setSelectedAddress } = useAddressStore();
-  const { setSelectedChainId } = useChainStore();
   const { title, address } = selectedAddressItem;
   const [errorType, setErrorType] = useState(0);
   const { navigate } = useBrowser();
 
   const checkIfCanSwitch = () => {
     const chainSupported = config.chainList.filter((item) => item.chainIdHex === targetChainId).length > 0;
-
-    const targetChainActivited = selectedAddressItem.activatedChains.includes(targetChainId);
-    const otherAccountsTargetChainActivited =
-      addressList.filter((item) => item.activatedChains.includes(targetChainId)).length > 0;
+    // const targetChainActivited = selectedAddressItem.activatedChains.includes(targetChainId);
+    // const otherAccountsTargetChainActivited =
+    //   addressList.filter((item) => item.activatedChains.includes(targetChainId)).length > 0;
 
     if (!chainSupported) {
       setErrorType(1);
-    } else if (!targetChainActivited && otherAccountsTargetChainActivited) {
-      setErrorType(2);
-    } else if (!targetChainActivited && !otherAccountsTargetChainActivited) {
-      setErrorType(3);
     }
   };
 
@@ -55,7 +49,12 @@ export default function ConnectDapp({ onConfirm, targetChainId }: any) {
     checkIfCanSwitch();
   }, []);
 
-  const canSwitch = selectedAddressItem.activatedChains.includes(targetChainId);
+  const onConfirm = () => {
+    setSelectedChainId(targetChainId);
+    onSwitch(targetChainId);
+  };
+
+  // const canSwitch = selectedAddressItem.activatedChains.includes(targetChainId);
 
   return (
     <Box pt="5">
@@ -126,7 +125,7 @@ export default function ConnectDapp({ onConfirm, targetChainId }: any) {
           </Text>
         </InfoItem>
       </InfoWrap>
-      <Button w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" disabled={!canSwitch} onClick={onConfirm}>
+      <Button w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
         Switch network
       </Button>
 
@@ -142,7 +141,7 @@ export default function ConnectDapp({ onConfirm, targetChainId }: any) {
           }}
         />
       )}
-
+      {/* 
       {errorType === 2 && (
         <ErrorModal
           text="Please activate your account or select an activated account on this network to continue"
@@ -173,7 +172,7 @@ export default function ConnectDapp({ onConfirm, targetChainId }: any) {
             navigate('/activate');
           }}
         />
-      )}
+      )} */}
     </Box>
   );
 }

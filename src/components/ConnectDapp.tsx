@@ -4,7 +4,7 @@ import IconLogo from '@/assets/logo-v3.svg';
 import IconLock from '@/assets/icons/lock.svg';
 import Button from './Button';
 import useConfig from '@/hooks/useConfig';
-import { InfoWrap, InfoItem } from './SignModal/index';
+import { InfoWrap, InfoItem } from '@/components/SignTransactionModal'
 import config from '@/config';
 import { AccountSelect } from './AccountSelect';
 import { useCredentialStore } from '@/store/credential';

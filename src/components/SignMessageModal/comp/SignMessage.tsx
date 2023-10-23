@@ -1,7 +1,6 @@
-import React from 'react';
-import { Flex, Box, Text, Image } from '@chakra-ui/react';
+import { Flex, Box, Text } from '@chakra-ui/react';
 import Button from '../../Button';
-import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
+import { AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
 import useWallet from '@/hooks/useWallet';
 import useConfig from '@/hooks/useConfig';
 import { toShortAddress } from '@/lib/tools';

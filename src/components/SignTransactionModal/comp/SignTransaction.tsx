@@ -2,7 +2,7 @@ import { Flex, Box, Text, useToast } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
 import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
 import Button from '../../Button';
-import { InfoWrap, InfoItem } from '../index';
+import { InfoWrap, InfoItem } from '@/components/SignTransactionModal'
 import BN from 'bignumber.js';
 import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';

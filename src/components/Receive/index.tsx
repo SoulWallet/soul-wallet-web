@@ -1,5 +1,5 @@
 import { Box, Text, Flex, useToast, Tooltip } from '@chakra-ui/react';
-import { InfoWrap, InfoItem } from '@/components/SignModal';
+import { InfoWrap, InfoItem } from '@/components/SignTransactionModal'
 import { Image } from '@chakra-ui/react';
 import { copyText } from '@/lib/tools';
 import ReceiveCode from '@/components/ReceiveCode';
