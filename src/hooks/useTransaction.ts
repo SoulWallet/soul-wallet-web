@@ -10,12 +10,26 @@ import { Transaction } from '@soulwallet/sdk';
 import useQuery from './useQuery';
 import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { ABI_ReceivePayment } from '@soulwallet/abi';
 
 export default function useTransaction() {
   const { showSignTransaction } = useWalletContext();
   const { soulWallet } = useSdk();
   const { set1559Fee, getGasPrice } = useQuery();
   const { selectedAddress } = useAddressStore();
+
+
+  const payTask = async (contractAddress: string, value: string, paymentId: string) => {
+    const soulAbi = new ethers.Interface(ABI_ReceivePayment);
+    const callData = soulAbi.encodeFunctionData('pay(bytes32)', [paymentId]);
+    const tx: Transaction = {
+      to: contractAddress,
+      data: callData,
+      value
+    };
+
+    showSignTransaction([tx], '');
+  };
 
   const sendEth = async (to: string, amount: string) => {
 
@@ -27,7 +41,7 @@ export default function useTransaction() {
     };
 
     showSignTransaction([tx], '', to);
-  
+
   };
 
   const sendErc20 = async (tokenAddress: string, to: string, amount: string, decimals: number) => {
@@ -40,7 +54,7 @@ export default function useTransaction() {
     };
 
     showSignTransaction([tx], '', to);
- 
+
   };
 
   const getUserOp: any = async (txns: any, payToken: string) => {
@@ -80,5 +94,6 @@ export default function useTransaction() {
     sendErc20,
     sendEth,
     getUserOp,
+    payTask,
   };
 }

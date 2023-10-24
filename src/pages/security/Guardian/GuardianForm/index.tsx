@@ -124,7 +124,7 @@ export default function GuardianForm({ cancelEdit }: any) {
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
   const [loading, setLoading] = useState(false);
-  const { sendErc20, sendEth } = useTransaction();
+  const { sendErc20, payTask } = useTransaction();
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -241,17 +241,30 @@ export default function GuardianForm({ cancelEdit }: any) {
       const txns = [{
         data: '0x',
         to: '0x22979c5a68932bbed6004c8cb106ea15219accdc',
-        value: String(Number(task.estiamtedFee) / (Math.pow(10, 18)))
+        value: task.estiamtedFee
       }]
-      console.log('handleSubmit', result, txns);
       // await showSignPayment(txns)
-      await sendEth('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).shiftedBy(-18).toString())
+      // await sendEth('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).shiftedBy(-18).toString())
+      await payTask('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).toString(), task.taskID);
+      // 0x9e584021d6d66154f24b15156fa9bc23f8ab1903a92e01e20a4756b45902f2e3
+      console.log('handleSubmit', result, txns);
       setLoading(false);
     } catch (error: any) {
       console.log('error', error.message)
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const test = async () => {
+      const result2 = await api.guardian.getTask({
+        taskID: '0x9e584021d6d66154f24b15156fa9bc23f8ab1903a92e01e20a4756b45902f2e3'
+      })
+      console.log('taskID', result2);
+    }
+
+    test()
+  }, [])
 
   const addGuardian = () => {
     const id = nextRandomId();
