@@ -149,8 +149,8 @@ export default function Launch() {
 
               background="rgba(255, 255, 255, 0.2)"
               borderRadius="16px"
-              boxShadow="0 4px 30px rgba(0, 0, 0, 0.1)"
-              backdropFilter="blur(5px)"
+              boxShadow="0 4px 30px rgba(0, 0, 0, 0.25)"
+              backdropFilter="blur(4px)"
             >
               <Logo direction="column" />
               <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="50px 0" width="320px">
