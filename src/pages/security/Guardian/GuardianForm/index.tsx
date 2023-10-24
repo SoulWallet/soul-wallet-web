@@ -236,9 +236,10 @@ export default function GuardianForm({ cancelEdit }: any) {
        *       } */
       const task = result.data
       const txns = [{
+        data: '0x',
         from: selectedAddress,
         to: '0x22979c5a68932bbed6004c8cb106ea15219accdc',
-        value: task.estiamtedFee
+        value: String(Number(task.estiamtedFee))
       }]
       console.log('handleSubmit', result, txns);
       await showSignPayment(txns)
