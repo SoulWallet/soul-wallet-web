@@ -29,7 +29,7 @@ export default function useKeystore() {
   const getSlot = (
     initialKeys: string[],
     initialGuardianHash: string,
-    initialGuardianSafePeriod: number = 5 * 60,
+    initialGuardianSafePeriod: number = 300,
   ) => {
     const initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
     const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);

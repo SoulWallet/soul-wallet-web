@@ -5,7 +5,7 @@ import { ABI_SoulWallet } from '@soulwallet/abi';
 import { useGuardianStore } from '@/store/guardian';
 import { addPaymasterAndData } from '@/lib/tools';
 import Erc20ABI from '../contract/abi/ERC20.json';
-import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
+import { L1KeyStore, UserOpUtils, UserOperation } from '@soulwallet/sdk';
 import { executeTransaction } from '@/lib/tx';
 import BN from 'bignumber.js';
 import useConfig from './useConfig';
@@ -25,7 +25,7 @@ export default function useWallet() {
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
     const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash, '0x', Number(initialGuardianSafePeriod));
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash, '0x', initialGuardianSafePeriod);
 
     if (userOpRet.isErr()) {
       throw new Error(userOpRet.ERR.message);

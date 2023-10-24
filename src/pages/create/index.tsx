@@ -77,7 +77,7 @@ export default function Create() {
     const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
     const initialGuardianHash = calcGuardianHash([], 0);
     const salt = ethers.ZeroHash;
-    let initialGuardianSafePeriod = toHex(5 * 60);
+    let initialGuardianSafePeriod = toHex(300);
     const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
     const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
     const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
