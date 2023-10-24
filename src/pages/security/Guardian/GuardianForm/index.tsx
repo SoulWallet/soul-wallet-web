@@ -211,9 +211,7 @@ export default function GuardianForm({ cancelEdit }: any) {
       // const res1 = await api.guardian.backupWallet(walletInfo)
       // const res2 = await api.guardian.backupGuardians(guardiansInfo)
 
-      const {
-        keySignature
-      } = await getReplaceGuardianInfo(newGuardianHash)
+      const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
 
       const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
       const parameters = [
