@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
 import SignTransactionModal from '@/components/SignTransactionModal';
+import SignPaymentModal from '@/components/SignPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
@@ -14,6 +15,7 @@ interface IWalletContext {
   getAccount: () => Promise<void>;
   showSign: () => Promise<void>;
   showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
+  showSignPayment: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
   checkActivated: () => Promise<boolean>;
 }
@@ -24,6 +26,7 @@ export const WalletContext = createContext<IWalletContext>({
   getAccount: async () => {},
   showSign: async () => {},
   showSignTransaction: async () => {},
+  showSignPayment: async () => {},
   showSignMessage: async () => {},
   checkActivated: async () => false,
 });
@@ -40,6 +43,7 @@ export const WalletContextProvider = ({ children }: any) => {
 
   const signModal = createRef<any>();
   const signTransactionModal = createRef<any>();
+  const signPaymentModal = createRef<any>();
   const signMessageModal = createRef<any>();
 
   const ethersProvider = useMemo(() => {
@@ -95,7 +99,7 @@ export const WalletContextProvider = ({ children }: any) => {
     // IMPORTANT TODO, Judge first available chain and set as default
     if (
       chainRecoverStatus.filter((item: any) => item.chainId === selectedChainItem.chainIdHex && item.status === 1)
-        .length === 0
+                        .length === 0
     ) {
       setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
     }
@@ -143,6 +147,11 @@ export const WalletContextProvider = ({ children }: any) => {
     return await signTransactionModal.current.show(txns, origin, sendTo);
   };
 
+  const showSignPayment = async (txns: any, origin?: string, sendTo?: string) => {
+    console.log('show sign payment');
+    return await signPaymentModal.current.show(txns, origin, sendTo);
+  };
+
   const showSignMessage = async (messageToSign: string, origin?: string) => {
     return await signMessageModal.current.show(messageToSign, origin);
   };
@@ -164,11 +173,13 @@ export const WalletContextProvider = ({ children }: any) => {
         showSign,
         showSignTransaction,
         showSignMessage,
+        showSignPayment,
         checkActivated,
       }}
     >
       {children}
       <SignTransactionModal ref={signTransactionModal} />
+      <SignPaymentModal ref={signPaymentModal} />
       <SignMessageModal ref={signMessageModal} />
     </WalletContext.Provider>
   );

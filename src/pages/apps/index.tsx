@@ -54,10 +54,10 @@ export default function Apps() {
 
   return (
     <Box width="100%" height="100vh">
-      <Box height="102px">
+      <Box height="72px">
         <Header />
       </Box>
-      <Box width="100%" height="calc(100% - 102px)">
+      <Box width="100%" height="calc(100% - 72px)">
         {appUrl && (
           <iframe
             id={`iframe-${appUrl}`}

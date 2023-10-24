@@ -118,7 +118,7 @@ export default function GuardianForm({ cancelEdit }: any) {
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
   const { slotInfo } = useGuardianStore();
-  const { account } = useWalletContext();
+  const { account, showSignPayment } = useWalletContext();
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
   const [loading, setLoading] = useState(false);
@@ -227,7 +227,21 @@ export default function GuardianForm({ cancelEdit }: any) {
         functionName,
         parameters
       })
-      console.log('handleSubmit', result);
+      /*
+       *       {
+       *         "taskID": "0x71ce6968923265971710e66e26f60d3a9fa52eb0cf83ea5775227b9d2ca313a6",
+       *         "status": 0,
+       *         "estiamtedFee": "0x1e5a2be0463b4",
+       *         "transactionHash": ""
+       *       } */
+      const task = result.data
+      const txns = [{
+        from: selectedAddress,
+        to: '0x22979c5a68932bbed6004c8cb106ea15219accdc',
+        value: task.estiamtedFee
+      }]
+      console.log('handleSubmit', result, txns);
+      await showSignPayment(txns)
       setLoading(false);
     } catch (error: any) {
       console.log('error', error.message)
