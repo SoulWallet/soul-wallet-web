@@ -120,25 +120,15 @@ export default function useWallet() {
   };
 
   const signRawHash = async (hash: string) => {
-    // default valid time
-    const validAfter = Math.floor(Date.now() / 1000);
-    const validUntil = validAfter + 3600;
-
     const packed1271HashRet = await soulWallet.getEIP1271TypedData(selectedAddress, hash);
     const packedHashRet = await soulWallet.packRawHash(packed1271HashRet.OK.typedMessage);
     const signature = await getSignature(packedHashRet.OK.packedHash, packedHashRet.OK.validationData);
-    // const packedHashRet = await soulWallet.packRawHash(hash, validAfter, validUntil);
-    // if (packedHashRet.isErr()) {
-    //   throw new Error(packedHashRet.ERR.message);
-    // }
-    
-    // const packedHash = packedHashRet.OK;
+    return signature;
+  };
 
-    // const packed1271HashRet = await soulWallet.getEIP1271TypedData(selectedAddress, packedHash.packedHash);
-
-    // if (packed1271HashRet.isErr()) {
-    //   throw new Error(packed1271HashRet.ERR.message);
-    // }
+  const signWithPasskey = async (hash: string) => {
+    const packedHashRet = await soulWallet.packRawHash(hash);
+    const signature = await getSignature(packedHashRet.OK.packedHash, packedHashRet.OK.validationData);
     return signature;
   };
 
@@ -148,5 +138,6 @@ export default function useWallet() {
     getSetGuardianCalldata,
     signAndSend,
     signRawHash,
+    signWithPasskey,
   };
 }

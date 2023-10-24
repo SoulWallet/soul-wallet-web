@@ -73,8 +73,7 @@ export default function useKeystore() {
     }
     const { domain, types, value } = ret.OK;
 
-    // TODO, to be tested
-    const keySignature = await showSignMessage({ domain, types, value }, 'typedData');
+    const keySignature = await showSignMessage({ domain, types, value }, 'passkey');
 
     return {
       slot,
@@ -94,7 +93,7 @@ export default function useKeystore() {
     }
     const { domain, types, value } = ret.OK;
 
-    const keySignature = await showSignMessage({ domain, types, value }, 'typedData');
+    const keySignature = await showSignMessage({ domain, types, value }, 'passkey');
 
     return {
       slot,
