@@ -22,6 +22,7 @@ import { useGuardianStore } from '@/store/guardian';
 import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';
 import { L1KeyStore } from '@soulwallet/sdk';
+import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
@@ -122,6 +123,7 @@ export default function GuardianForm({ cancelEdit }: any) {
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
   const [loading, setLoading] = useState(false);
+  const { sendErc20, sendEth } = useTransaction();
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -241,7 +243,8 @@ export default function GuardianForm({ cancelEdit }: any) {
         value: String(Number(task.estiamtedFee))
       }]
       console.log('handleSubmit', result, txns);
-      await showSignPayment(txns)
+      // await showSignPayment(txns)
+      await sendEth('0x22979c5a68932bbed6004c8cb106ea15219accdc', String(Number(task.estiamtedFee)))
       setLoading(false);
     } catch (error: any) {
       console.log('error', error.message)
