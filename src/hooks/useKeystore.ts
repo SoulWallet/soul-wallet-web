@@ -92,9 +92,9 @@ export default function useKeystore() {
     if (ret.isErr()) {
       throw new Error(ret.ERR.message);
     }
-    const { domain, types, value: message } = ret.OK;
+    const { domain, types, value } = ret.OK;
 
-    const keySignature = await showSignMessage({ domain, types, message }, 'typedData');
+    const keySignature = await showSignMessage({ domain, types, value }, 'typedData');
 
     return {
       slot,
