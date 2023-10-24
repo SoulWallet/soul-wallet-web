@@ -11,6 +11,7 @@ import MinusIcon from '@/assets/icons/minus.svg';
 import DoubleFormInput from '@/components/web/Form/DoubleFormInput';
 import useWallet from '@/hooks/useWallet';
 import useForm from '@/hooks/useForm';
+import BN from 'bignumber.js'
 import Icon from '@/components/Icon';
 import { nextRandomId } from '@/lib/tools';
 import DropDownIcon from '@/components/Icons/DropDown';
@@ -244,7 +245,7 @@ export default function GuardianForm({ cancelEdit }: any) {
       }]
       console.log('handleSubmit', result, txns);
       // await showSignPayment(txns)
-      await sendEth('0x22979c5a68932bbed6004c8cb106ea15219accdc', String(Number(task.estiamtedFee)))
+      await sendEth('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).shiftedBy(-18).toString())
       setLoading(false);
     } catch (error: any) {
       console.log('error', error.message)

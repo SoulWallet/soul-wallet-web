@@ -15,6 +15,7 @@ export default {
   l1Provider: `https://goerli.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18`,
   scanUrl: 'https://testnet.arbiscan.io/',
   bundlerUrl: 'https://api-dev.soulwallet.io/bundler/arb-goerli/rpc',
+  // bundlerUrl: 'https://arb-goerli.g.alchemy.com/v2/M3uND7od01QVjQN9Px8TCxnMcPRgWTCH',
   maxCostMultiplier: 120,
   chainId: 421613,
   chainIdHex: `0x${(421613).toString(16)}`,
