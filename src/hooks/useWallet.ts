@@ -24,8 +24,8 @@ export default function useWallet() {
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
-    const { initialKeys, initialGuardianHash } = slotInfo;
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash);
+    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash, '0x', initialGuardianSafePeriod);
 
     if (userOpRet.isErr()) {
       throw new Error(userOpRet.ERR.message);

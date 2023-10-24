@@ -1,4 +1,4 @@
 export const keystoreContracts = {
-    l1Keystore: '0x87179848a284cdec09cc65245cf57bb19652a8e5',
-    keyStoreModuleProxy: '0x179bc1cc380b099922d5bb815a9c22b69b579606',
+    l1Keystore: '0x177d6f5fe773f5929163a610223cb296c35f000f',
+    keyStoreModuleProxy: '0x1280af3599abd5ea2985e5065432a177565aeedf',
 }
