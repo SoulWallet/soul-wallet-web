@@ -240,7 +240,7 @@ export default function GuardianForm({ cancelEdit }: any) {
       const txns = [{
         data: '0x',
         to: '0x22979c5a68932bbed6004c8cb106ea15219accdc',
-        value: String(Number(task.estiamtedFee))
+        value: String(Number(task.estiamtedFee) / (Math.pow(10, 18)))
       }]
       console.log('handleSubmit', result, txns);
       // await showSignPayment(txns)
