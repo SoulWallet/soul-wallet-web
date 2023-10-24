@@ -1,6 +1,6 @@
 import { Modal, ModalOverlay, ModalContent, ModalBody, ModalHeader, ModalCloseButton } from '@chakra-ui/react';
 
-export default function TxModal({ title, visible, foo, onClose, children }: any) {
+export default function TxModal({ title, visible, onClose, children }: any) {
   return (
     visible && (
       <Modal isOpen={true} onClose={onClose}>
