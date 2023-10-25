@@ -82,7 +82,11 @@ export function AccountSelectFull() {
 export function AccountSelect({ labelType = 'title', ...restProps }: any) {
   const { navigate } = useBrowser();
   const { selectedAddressItem } = useConfig();
-  const { addressList, setSelectedAddress } = useAddressStore();
+  const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
+
+  if(!selectedAddress){
+    return
+  }
 
   return (
     <Menu>

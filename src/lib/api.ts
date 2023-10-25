@@ -61,6 +61,10 @@ const sponsor = {
     }),
 };
 
+const operation = {
+  feedback: (params: any) => axio.post('/operation/feedback', params),
+}
+
 export default {
   balance,
   recovery,
@@ -68,4 +72,5 @@ export default {
   notification,
   guardian,
   sponsor,
+  operation,
 };

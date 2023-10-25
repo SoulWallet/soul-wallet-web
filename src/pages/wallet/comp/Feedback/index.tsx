@@ -1,11 +1,27 @@
 import { useState } from 'react';
-import { Textarea, Image, Text, Box } from '@chakra-ui/react';
+import { Textarea, Image, Text, Box, useToast } from '@chakra-ui/react';
 import HomeCard from '../HomeCard';
 import IconPlus from '@/assets/icons/dapp-plus.svg';
+import api from '@/lib/api';
 import Button from '@/components/Button';
 export default function Feedback() {
   const [value, setValue] = useState('');
-  const doSubmit = async () => {};
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const doSubmit = async () => {
+    setLoading(true);
+    const res = await api.operation.feedback({
+      body: value,
+    });
+    if (true) {
+      setValue('');
+      toast({
+        title: 'Feedback submitted',
+        status: 'success',
+      });
+    }
+    setLoading(false);
+  };
   return (
     <HomeCard title={'Feedback'}>
       <Textarea
@@ -25,7 +41,7 @@ Share your contact for follow-up`}
       />
       {value && (
         <>
-          <Box
+          {/* <Box
             border="1px dashed #000"
             _hover={{ bg: '#fafafa' }}
             cursor={'pointer'}
@@ -41,8 +57,8 @@ Share your contact for follow-up`}
             <Text fontWeight={'600'} color="#brand.gray">
               Attach media (optional)
             </Text>
-          </Box>
-          <Button onClick={doSubmit} fontSize="20px" fontWeight={'800'} w="100%" py="4">
+          </Box> */}
+          <Button loading={loading} onClick={doSubmit} fontSize="20px" fontWeight={'800'} w="100%" py="4">
             Submit
           </Button>
         </>

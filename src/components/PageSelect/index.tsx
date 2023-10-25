@@ -8,9 +8,11 @@ import useBrowser from '@/hooks/useBrowser';
 import MenuIcon from '@/components/Icons/Menu';
 import AssetIcon from '@/components/Icons/Asset';
 import ActivityIcon from '@/components/Icons/Activity';
+import LogoutIcon from '@/components/Icons/Logout';
 import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
 import { toCapitalize } from '@/lib/tools'
+import { useAddressStore } from '@/store/address';
 
 const getPageIcon = (type: string) => {
   if (type === 'asset') {
@@ -21,17 +23,23 @@ const getPageIcon = (type: string) => {
     return <AppsIcon />
   } else if (type === 'security') {
     return <SecurityIcon />
+  } else if(type === 'logout') {
+    return <LogoutIcon />
   }
 }
 
 export default function PageSelect() {
-  const { chainList, setSelectedChainId, selectedChainId } = useChainStore();
   const { navigate } = useBrowser();
-  const { selectedChainItem } = useConfig();
+  const { setSelectedAddress } = useAddressStore();
+
+  const doLogout = () =>{
+    setSelectedAddress('');
+    navigate('/launch');
+  }
 
   return (
     <Menu>
-      {({ isOpen }) => (
+      {() => (
         <>
           <MenuButton data-testid="btn-page-select">
             <Flex p="5px" rounded={'full'} cursor={'pointer'}>
@@ -39,11 +47,11 @@ export default function PageSelect() {
             </Flex>
           </MenuButton>
           <MenuList width="264px" display="flex" paddingTop="0px" paddingBottom="20px" paddingRight="20px" flexWrap="wrap" boxSizing="border-box">
-            {['asset', 'activity', 'apps', 'security'].map((item: any, idx: number) => {
+            {['asset', 'activity', 'apps', 'security', 'logout'].map((item: any, idx: number) => {
               return (
                 <MenuItem
                   key={item}
-                  onClick={() => navigate(`/${item}`)}
+                  onClick={() => item === 'logout' ? doLogout() : navigate(`/${item}`)}
                   width="60px"
                   height="60px"
                   borderRadius="16px"

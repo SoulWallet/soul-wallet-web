@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 export default function FindRoute({ children }: any) {
   const { navigate } = useBrowser();
   const location = useLocation();
-  const { addressList } = useAddressStore();
+  const { addressList, selectedAddress, } = useAddressStore();
   const isRecover = location.pathname.includes('recover');
 
   const findRoute = async () => {
@@ -20,7 +20,7 @@ export default function FindRoute({ children }: any) {
 
     if (isRecover || recovering) {
       navigate('/recover');
-    } else if (!addressList.length) {
+    } else if (!addressList.length || !selectedAddress) {
       navigate({
         pathname: '/launch',
         search: location.search,

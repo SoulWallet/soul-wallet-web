@@ -36,7 +36,7 @@ export default function Launch() {
   const { navigate } = useBrowser();
   const toast = useToast();
   const { credentials, clearCredentials } = useCredentialStore();
-  const { addressList, clearAddressList } = useAddressStore();
+  const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -111,6 +111,7 @@ export default function Launch() {
     toggleModal();
     auth(passKey);
     console.log('onSelectPassKey', passKey);
+    setSelectedAddress(addressList[0].address)
   };
 
   const toggleModal = () => {
