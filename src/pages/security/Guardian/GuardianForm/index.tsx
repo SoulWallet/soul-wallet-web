@@ -211,7 +211,6 @@ export default function GuardianForm({ cancelEdit }: any) {
       };
 
       // const res1 = await api.guardian.backupWallet(walletInfo)
-      // const res2 = await api.guardian.backupGuardians(guardiansInfo)
 
       const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
 
@@ -229,13 +228,12 @@ export default function GuardianForm({ cancelEdit }: any) {
         functionName,
         parameters
       })
-      /*
-       *       {
-       *         "taskID": "0x71ce6968923265971710e66e26f60d3a9fa52eb0cf83ea5775227b9d2ca313a6",
-       *         "status": 0,
-       *         "estiamtedFee": "0x1e5a2be0463b4",
-       *         "transactionHash": ""
-       *       } */
+      /* {
+       *   "taskID": "0xfc1e5a082b9d06f4031108b18c160c730fde805e391e1a306474d2f370e61a63",
+       *   "status": 0,
+       *   "estiamtedFee": "0x1e7601b1a4db9",
+       *   "transactionHash": ""
+       * } */
       const task = result.data
       const txns = [{
         data: '0x',
@@ -245,6 +243,7 @@ export default function GuardianForm({ cancelEdit }: any) {
       // await showSignPayment(txns)
       // await sendEth('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).shiftedBy(-18).toString())
       await payTask('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).toString(), task.taskID);
+      await api.guardian.backupGuardians(guardiansInfo)
       // 0x9e584021d6d66154f24b15156fa9bc23f8ab1903a92e01e20a4756b45902f2e3
       console.log('handleSubmit', result, txns);
       setLoading(false);
@@ -257,7 +256,7 @@ export default function GuardianForm({ cancelEdit }: any) {
   useEffect(() => {
     const test = async () => {
       const result2 = await api.guardian.getTask({
-        taskID: '0x9e584021d6d66154f24b15156fa9bc23f8ab1903a92e01e20a4756b45902f2e3'
+        taskID: '0xfc1e5a082b9d06f4031108b18c160c730fde805e391e1a306474d2f370e61a63'
       })
       console.log('taskID', result2);
     }

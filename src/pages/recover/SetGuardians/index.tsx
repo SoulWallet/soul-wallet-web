@@ -32,6 +32,9 @@ import Steps from '@/components/web/Steps';
 import { ethers } from 'ethers';
 import config from '@/config';
 import useConfig from '@/hooks/useConfig';
+import { useCredentialStore } from '@/store/credential';
+import usePassKey from '@/hooks/usePasskey';
+import { L1KeyStore } from '@soulwallet/sdk';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
@@ -124,6 +127,9 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
+  const { account } = useWalletContext();
+  const { credentials } = useCredentialStore();
+  const { getCoordinates } = usePassKey();
   const {
     recoveringGuardiansInfo,
     setRecoveringGuardiansInfo,
@@ -140,7 +146,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
     validate,
-    initialValues: getInitialValues(defaultGuardianIds, recoveringGuardiansInfo.guardians),
+    initialValues: getInitialValues(defaultGuardianIds, recoveringGuardiansInfo.guardianDetails.guardians),
   });
 
   const amountForm = useForm({
@@ -148,7 +154,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
     validate: amountValidate,
     restProps: amountData,
     initialValues: {
-      amount: recoveringGuardiansInfo.threshold || getRecommandCount(amountData.guardiansCount),
+      amount: recoveringGuardiansInfo.guardianDetails.threshold || getRecommandCount(amountData.guardiansCount),
     },
   });
 
@@ -171,8 +177,9 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
     setAmountData({ guardiansCount: guardiansList.length });
   }, [guardiansList]);
 
-  const handleNextStep = () => {
-    changeStep(3)
+  const handleNextStep = async () => {
+    await handleSubmit()
+    // changeStep(3)
   }
 
   const handleSubmit = async () => {
@@ -193,21 +200,33 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
         .filter((i) => !!i);
       console.log('guardiansList', guardiansList);
 
+      const keystore = chainConfig.contracts.l1Keystore;
+      const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+      const newOwners = L1KeyStore.initialKeysToAddress(initialKeys);
       const guardianAddresses = guardiansList.map((item: any) => item.address);
       const threshold = amountForm.values.amount || 0;
+      const slot = recoveringGuardiansInfo.slot
+      const slotInitInfo = recoveringGuardiansInfo.slotInitInfo
 
-      setRecoveringGuardiansInfo({
-        recoverRecordId: null,
-        guardians: guardianAddresses,
-        threshold
+      const params = {
+        guardianDetails: {
+          guardians: guardianAddresses,
+          threshold: threshold,
+          salt: ethers.ZeroHash,
+        },
+        slot,
+        slotInitInfo: slotInitInfo,
+        keystore,
+        newOwners
+      }
+
+      const res = await api.guardian.createRecoverRecord(params)
+      const recoveryRecordID = res.data.recoveryRecordID
+      updateRecoveringGuardiansInfo({
+        recoveryRecordID,
       });
 
       setLoading(false);
-
-      stepDispatch({
-        type: StepActionTypeEn.JumpToTargetStep,
-        payload: RecoverStepEn.ResetPassword,
-      });
     } catch (e: any) {
       setLoading(false);
       toast({
@@ -224,14 +243,14 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
 
       const params = {
         guardianDetails: {
-          guardians: recoveringGuardiansInfo.guardians,
-          threshold: recoveringGuardiansInfo.threshold,
+          guardians: recoveringGuardiansInfo.guardianDetails.guardians,
+          threshold: recoveringGuardiansInfo.guardianDetails.threshold,
           salt: ethers.ZeroHash,
         },
-        slot: recoveringGuardiansInfo.slot,
-        slotInitInfo: recoveringGuardiansInfo.slotInitInfo,
+        slot: recoveringGuardiansInfo.guardianDetails.slot,
+        slotInitInfo: recoveringGuardiansInfo.guardianDetails.slotInitInfo,
         keystore,
-        newKey: recoveringGuardiansInfo.newKey,
+        newKey: recoveringGuardiansInfo.guardianDetails.newKey,
       };
 
       const result = await api.guardian.createRecoverRecord(params);
@@ -239,11 +258,6 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       updateRecoveringGuardiansInfo({ recoverRecordId: recoveryRecordID });
       setLoading(false);
       console.log('handleNext', params, result);
-
-      stepDispatch({
-        type: StepActionTypeEn.JumpToTargetStep,
-        payload: RecoverStepEn.GuardiansChecking,
-      });
     } catch (e: any) {
       setLoading(false);
       toast({
@@ -286,10 +300,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       setUploaded(true);
 
       setTimeout(() => {
-        stepDispatch({
-          type: StepActionTypeEn.JumpToTargetStep,
-          payload: RecoverStepEn.ResetPassword,
-        });
+
       }, 1000);
     } catch (e: any) {
       setUploading(false);

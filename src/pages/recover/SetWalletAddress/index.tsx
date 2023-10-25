@@ -38,54 +38,54 @@ const validate = (values: any) => {
 export default function Recover({ changeStep }: any) {
   const { navigate } = useBrowser();
   const [loading, setLoading] = useState(false);
+  const { getActiveGuardianHash2 } = useKeystore();
   const toast = useToast();
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
     fields: ['address'],
     validate,
   });
+  const { updateRecoveringGuardiansInfo } = useGuardianStore();
   const disabled = loading || invalid;
 
   const handleNext = async () => {
     if (disabled) return;
 
-    try {
-      setLoading(true);
-      const result = await api.guardian.getSlotInfo({ walletAddress: values.address });
-      console.log('getSlotInfo', result)
-      const data = result.data;
-      const slot = data.slot;
-      const slotInitInfo = data.slotInitInfo;
-      /* setRecoverRecordId(null);
-       * setRecoveringSlot(slot); */
-      /* setRecoveringSlotInitInfo(slotInitInfo); */
-      const guardianDetails = data.guardianDetails;
+  try {
+    setLoading(true);
+    const walletAddress = values.address
+    const res1 = await api.guardian.getSlotInfo({ walletAddress });
+    const slotInitInfo = res1.data.slotInitInfo
+    const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
+    const activeGuardianInfo = await getActiveGuardianHash2(slotInitInfo)
+    let activeGuardianHash
 
-      if (guardianDetails && guardianDetails.guardians) {
-        const guardians = guardianDetails.guardians;
-        const threshold = guardianDetails.threshold;
-        /* setRecoveringGuardians(guardians);
-         * setRecoveringThreshold(threshold); */
-        setLoading(false);
-
-        /* dispatch({
-         *   type: StepActionTypeEn.JumpToTargetStep,
-         *   payload: RecoverStepEn.ResetPassword,
-         * }); */
-      } else {
-        setLoading(false);
-        /* dispatch({
-         *   type: StepActionTypeEn.JumpToTargetStep,
-         *   payload: RecoverStepEn.UploadGuardians,
-         * }); */
-      }
-    } catch (e: any) {
-      setLoading(false);
-      toast({
-        title: e.message,
-        status: 'error',
-      });
+    if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+      activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+    } else {
+      activeGuardianHash = activeGuardianInfo.activeGuardianHash
     }
-  };
+
+    const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
+    const data = res2.data;
+    const guardianDetails = data.guardianDetails;
+    console.log('getGuardianDetails', res2)
+
+    updateRecoveringGuardiansInfo({
+      slot,
+      slotInitInfo,
+      activeGuardianInfo,
+      guardianDetails
+    })
+    setLoading(false);
+    changeStep(1)
+  } catch (e: any) {
+    setLoading(false);
+    toast({
+      title: e.message,
+      status: 'error',
+    });
+  }
+};
 
   const goBack = () => {
     navigate('/launch');

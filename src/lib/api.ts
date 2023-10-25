@@ -37,10 +37,11 @@ const account = {
 };
 
 const guardian = {
-  backupWallet: (params: any) => axio.post('/backup/public-backup-wallet-info', params),
+  backupSlot: (params: any) => axio.post('/backup/public-backup-slot-info', params),
   backupGuardians: (params: any) => axio.post('/backup/public-backup-guardians', params),
   emailBackup: (params: any) => axio.post('/social-recovery/email-backup-guardians', params),
   getSlotInfo: (params: any) => axio.get('/social-recovery/slot-info', { params }),
+  getGuardianDetails: (params: any) => axio.get('/social-recovery/guardian-details', { params }),
   createRecoverRecord: (params: any) => axio.post('/social-recovery/create-recovery-record', params),
   getRecoverRecord: (params: any) => axio.get('/social-recovery/recovery-record', { params }),
   createTask: (params: any) => axio.post('/keystore-execute-helper/create-task', params),

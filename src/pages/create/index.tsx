@@ -99,7 +99,7 @@ export default function Create() {
         initialGuardianHash,
         initialGuardianSafePeriod
       },
-      keys: initalkeysAddress
+      initialKeys: initalkeysAddress
     };
 
     const guardiansInfo = {
@@ -114,7 +114,7 @@ export default function Create() {
       },
     };
 
-    const result = await api.guardian.backupWallet(walletInfo)
+    const result = await api.guardian.backupSlot(walletInfo)
     setGuardiansInfo(guardiansInfo)
     setSlotInfo(slotInfo)
     console.log('createSlotInfo', slotInfo, walletInfo, guardiansInfo, result)

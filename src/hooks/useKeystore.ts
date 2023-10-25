@@ -64,6 +64,30 @@ export default function useKeystore() {
     };
   };
 
+  const getActiveGuardianHash2 = async (slotInitInfo: any) => {
+    const { initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
+    const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
+    const now = Math.floor(Date.now() / 1000);
+    const res = await getKeyStoreInfo(slot);
+    if (res.isErr()) {
+      return {
+        guardianHash: null,
+        activeGuardianHash: null,
+        guardianActivateAt: null,
+        pendingGuardianHash: null,
+      };
+    }
+    const { guardianHash, pendingGuardianHash, guardianActivateAt } = res.OK;
+
+    return {
+      guardianHash,
+      activeGuardianHash:
+      pendingGuardianHash !== ethers.ZeroHash && guardianActivateAt < now ? pendingGuardianHash : guardianHash,
+      guardianActivateAt,
+      pendingGuardianHash,
+    };
+  };
+
   const getReplaceGuardianInfo = async (newGuardianHash: string) => {
     const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
     const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod)
@@ -108,6 +132,7 @@ export default function useKeystore() {
     getKeyStoreInfo,
     getActiveGuardianHash,
     getReplaceGuardianInfo,
+    getActiveGuardianHash2,
     getCancelSetGuardianInfo,
   };
 }

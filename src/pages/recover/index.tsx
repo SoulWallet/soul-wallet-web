@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FullscreenContainer from '@/components/FullscreenContainer';
 import { Box, useToast } from '@chakra-ui/react';
 import Heading1 from '@/components/web/Heading1';
@@ -34,6 +34,14 @@ export default function Recover() {
   const changeStep = (step: number) => {
     setStep(step)
   }
+
+  useEffect(() => {
+    const main = async () => {
+      const result = await api.guardian.getRecoverRecord({ recoveryRecordID: '0x7079f804b0a44b81c715f80ca84f4f281604e41d3f11a641d67609af72dd54c4' });
+      console.log('guardianSignatures', result);
+    }
+    main()
+  }, [])
 
   if (step === 0) {
     return <SetWalletAddress changeStep={changeStep} />

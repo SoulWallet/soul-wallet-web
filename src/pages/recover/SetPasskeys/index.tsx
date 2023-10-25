@@ -59,7 +59,7 @@ export default function SetPasskeys({ changeStep }: any) {
   }
 
   const onSkip = () => {
-    // setIsReady(true)
+    setIsReady(true)
   }
 
   const handleNext = async () => {
