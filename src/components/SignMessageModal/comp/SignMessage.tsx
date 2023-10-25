@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Flex, Box, Text } from '@chakra-ui/react';
 import Button from '../../Button';
 import { AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
@@ -6,6 +7,7 @@ import useConfig from '@/hooks/useConfig';
 import { toShortAddress } from '@/lib/tools';
 import { ethers } from 'ethers';
 import { TypedDataEncoder } from 'ethers';
+import useWalletContext from '@/context/hooks/useWalletContext';
 
 const getHash = (message: string) => {
   return ethers.hashMessage(message);
@@ -18,7 +20,9 @@ const getTypedHash = (typedData: any) => {
 
 export default function SignMessage({ messageToSign, onSign, signType, origin }: any) {
   const { selectedAddressItem } = useConfig();
-  const { signRawHash, signWithPasskey, } = useWallet();
+  const { signRawHash, signWithPasskey } = useWallet();
+  const [isActivated, setIsActivated] = useState(false);
+  const { checkActivated } = useWalletContext();
   const onConfirm = async () => {
     let signHash;
     let signature;
@@ -28,15 +32,23 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
     } else if (signType === 'typedData') {
       signHash = getTypedHash(messageToSign);
       signature = await signRawHash(signHash);
-    }else if(signType === 'passkey'){
+    } else if (signType === 'passkey') {
       signHash = getTypedHash(messageToSign);
       // IMPORTANT TODO, remove 0x00 from passkey signature
-      signature = (await signWithPasskey(signHash)).replace('0x00', '0x')
+      signature = (await signWithPasskey(signHash)).replace('0x00', '0x');
     } else {
       throw new Error('signType not supported');
     }
     onSign(signature);
   };
+
+  const checkIsActivated = async () => {
+    setIsActivated(await checkActivated());
+  };
+
+  useEffect(() => {
+    checkIsActivated();
+  }, []);
 
   return (
     <>
@@ -60,7 +72,12 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
           memo={toShortAddress(selectedAddressItem.address)}
         />
       </Flex>
-      <Button w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
+      {!isActivated && (
+        <Text color="red" mt="4">
+          Please activate your wallet before signing message
+        </Text>
+      )}
+      <Button disabled={!isActivated} w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
         Confirm
       </Button>
     </>
