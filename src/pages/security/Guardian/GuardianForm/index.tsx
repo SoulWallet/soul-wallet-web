@@ -120,7 +120,6 @@ export default function GuardianForm({ cancelEdit }: any) {
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
   const { slotInfo } = useGuardianStore();
-  const { account, showSignPayment } = useWalletContext();
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
   const [loading, setLoading] = useState(false);

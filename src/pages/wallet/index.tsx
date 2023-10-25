@@ -7,6 +7,7 @@ import Feedback from './comp/Feedback';
 import AppContainer from '@/components/AppContainer';
 import DappList from '@/components/DappList';
 import Footer from '@/components/Footer';
+import { L1KeyStore } from '@soulwallet/sdk';
 
 export default function Wallet() {
   // const isActivated = getIsActivated(selectedAddress, selectedChainId);
@@ -21,7 +22,6 @@ export default function Wallet() {
   //   guardians.length === 0 &&
   //   (!storage.getItem('skipSet') || storage.getItem('skipSet') !== 'true') &&
   //   !skipSet;
-  console.log('Render wallet page');
 
   return (
     <Box color="#000">

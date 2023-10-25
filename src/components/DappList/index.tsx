@@ -61,7 +61,7 @@ const AddDappItem = () => (
 export default function DappList() {
   return (
     <HomeCard title="Apps">
-      <Grid templateColumns={'repeat(4, 1fr)'} rounded="20px" gap="6" fontSize={'14px'} lineHeight={'1'}>
+      <Grid templateColumns={'repeat(3, 1fr)'} rounded="20px" gap="6" fontSize={'14px'} lineHeight={'1'}>
         {dappList.map((item, index) => (
           <DappItem key={index} item={item} />
         ))}

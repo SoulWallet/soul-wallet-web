@@ -6,7 +6,6 @@
 import { GuardianItem } from '@/lib/type';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
-import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 
 export interface GuardianStore {

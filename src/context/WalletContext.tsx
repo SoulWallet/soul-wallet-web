@@ -1,9 +1,12 @@
 import { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
+import { L1KeyStore } from '@soulwallet/sdk';
 import SignTransactionModal from '@/components/SignTransactionModal';
 import SignPaymentModal from '@/components/SignPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import useConfig from '@/hooks/useConfig';
+import { useCredentialStore } from '@/store/credential';
+import usePassKey from '@/hooks/usePasskey';
 import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
 import { useChainStore } from '@/store/chain';
@@ -11,8 +14,6 @@ import { useAddressStore } from '@/store/address';
 
 interface IWalletContext {
   ethersProvider: ethers.JsonRpcProvider;
-  account: string;
-  getAccount: () => Promise<void>;
   showSign: () => Promise<void>;
   showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignPayment: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
@@ -22,8 +23,6 @@ interface IWalletContext {
 
 export const WalletContext = createContext<IWalletContext>({
   ethersProvider: new ethers.JsonRpcProvider(),
-  account: '',
-  getAccount: async () => {},
   showSign: async () => {},
   showSignTransaction: async () => {},
   showSignPayment: async () => {},
@@ -33,7 +32,8 @@ export const WalletContext = createContext<IWalletContext>({
 
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
-  const [account, setAccount] = useState<string>('');
+  const { getCoordinates } = usePassKey();
+  const {credentials} =useCredentialStore();
   const { recoveringGuardiansInfo, setGuardiansInfo, setRecoveringGuardiansInfo } = useGuardianStore();
   const recoverRecordId = recoveringGuardiansInfo.recoverRecordId;
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
@@ -53,8 +53,6 @@ export const WalletContextProvider = ({ children }: any) => {
     return new ethers.JsonRpcProvider(selectedChainItem.provider);
   }, [selectedChainItem]);
 
-  const getAccount = async () => {};
-
   const checkRecoverStatus = async () => {
     const res = (await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId })).data;
     const { addressList } = useAddressStore.getState();
@@ -73,12 +71,18 @@ export const WalletContextProvider = ({ children }: any) => {
     }
 
     // check if should replace key
-    if (res.status >= 3 && account !== `0x${res.newKey.slice(-40)}`) {
-      setGuardiansInfo({
-        guardians: recoveringGuardiansInfo.guardians,
-        guardianNames: recoveringGuardiansInfo.guardianNames,
-        threshold: recoveringGuardiansInfo.threshold,
-      });
+    if (res.status >= 3) {
+      const currentKeysRaw = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+      const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
+      const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
+      const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
+      if(newKeyHash !== currentKeyHash){
+        setGuardiansInfo({
+          guardians: recoveringGuardiansInfo.guardians,
+          guardianNames: recoveringGuardiansInfo.guardianNames,
+          threshold: recoveringGuardiansInfo.threshold,
+        });
+      }
     }
 
     // recover process finished
@@ -104,10 +108,6 @@ export const WalletContextProvider = ({ children }: any) => {
       setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
     }
   };
-
-  useEffect(() => {
-    getAccount();
-  }, []);
 
   useEffect(() => {
     if (!recoverRecordId) {
@@ -168,8 +168,6 @@ export const WalletContextProvider = ({ children }: any) => {
     <WalletContext.Provider
       value={{
         ethersProvider,
-        account,
-        getAccount,
         showSign,
         showSignTransaction,
         showSignMessage,

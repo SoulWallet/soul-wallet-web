@@ -110,7 +110,6 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
-  const { account } = useWalletContext();
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,

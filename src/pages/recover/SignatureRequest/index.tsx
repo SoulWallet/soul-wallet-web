@@ -61,7 +61,6 @@ const SignatureRequest = ({ changeStep }: any) => {
   const guardianSignatures = recoveringGuardiansInfo.guardianSignatures
 
   const toast = useToast();
-  const { account, getAccount} = useWalletContext();
   const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
   const { navigate } = useBrowser();
 
@@ -88,45 +87,45 @@ const SignatureRequest = ({ changeStep }: any) => {
     generateQR(`${config.officialWebUrl}/recover/${recoverRecordId}`);
   }, []);
 
-  const getRecoverRecord = async () => {
-    try {
-      const result = await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId });
-      console.log('guardianSignatures', result);
-      const guardianSignatures = result.data.guardianSignatures;
-      updateGuardiansInfo({
-        guardianSignatures
-      });
-      const status = result.data.status;
-      setRecoverStatus(status);
-      const statusList = result.data.statusData.chainRecoveryStatus;
-      setChainStatusList(statusList);
+  // const getRecoverRecord = async () => {
+  //   try {
+  //     const result = await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId });
+  //     console.log('guardianSignatures', result);
+  //     const guardianSignatures = result.data.guardianSignatures;
+  //     updateGuardiansInfo({
+  //       guardianSignatures
+  //     });
+  //     const status = result.data.status;
+  //     setRecoverStatus(status);
+  //     const statusList = result.data.statusData.chainRecoveryStatus;
+  //     setChainStatusList(statusList);
 
-      if (status === 3 && newKey && account !== `0x${newKey.slice(-40)}`) {
-        updateGuardiansInfo({
-          guardians: recoveringGuardiansInfo.guardians,
-          guardianNames: recoveringGuardiansInfo.guardianNames,
-          threshold: recoveringGuardiansInfo.threshold,
-        });
-      } else if (status === 4) {
-        updateRecoveringGuardiansInfo({
-          recoverRecordId: null
-        });
-      }
+  //     if (status === 3) {
+  //       updateGuardiansInfo({
+  //         guardians: recoveringGuardiansInfo.guardians,
+  //         guardianNames: recoveringGuardiansInfo.guardianNames,
+  //         threshold: recoveringGuardiansInfo.threshold,
+  //       });
+  //     } else if (status === 4) {
+  //       updateRecoveringGuardiansInfo({
+  //         recoverRecordId: null
+  //       });
+  //     }
 
-      setLoaded(true);
-      console.log('recoveryRecordID', result, guardianSignatures);
-    } catch (error: any) {
-      console.log('error', error);
-    }
-  };
+  //     setLoaded(true);
+  //     console.log('recoveryRecordID', result, guardianSignatures);
+  //   } catch (error: any) {
+  //     console.log('error', error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getRecoverRecord();
+  // useEffect(() => {
+  //   getRecoverRecord();
 
-    setInterval(async () => {
-      getRecoverRecord();
-    }, 5000);
-  }, []);
+  //   setInterval(async () => {
+  //     getRecoverRecord();
+  //   }, 5000);
+  // }, []);
 
   const handleCopy = async () => {
     let url;
@@ -172,8 +171,6 @@ const SignatureRequest = ({ changeStep }: any) => {
   const openWallet = async () => {
     navigate('/wallet');
   };
-
-  console.log('account111', account, recoverStatus, chainStatusList);
 
   if (!loaded && false) {
     return (
