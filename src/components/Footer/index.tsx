@@ -17,8 +17,21 @@ export default function Footer() {
       <Text>Beta {packageJson.version}</Text>
       <Flex gap="2" align={'center'}>
         {config.socials.map((item, idx) => (
-          <Link href={item.link} target="_blank" key={idx}>
-            <Image src={item.icon} />
+          <Link
+            href={item.link}
+            target="_blank"
+            key={idx}
+            _hover={{
+              '> .icon': {
+                display: 'none',
+              },
+              '> .icon-activated': {
+                display: 'block',
+              },
+            }}
+          >
+            <Image src={item.icon} className="icon" />
+            <Image src={item.iconActivated} display={'none'} className="icon-activated" />
           </Link>
         ))}
       </Flex>

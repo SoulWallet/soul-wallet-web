@@ -1,6 +1,9 @@
 import IconTwitter from '@/assets/socials/twitter.svg';
 import IconTelegram from '@/assets/socials/telegram.svg';
 import IconGithub from '@/assets/socials/github.svg';
+import IconTwitterActivated from '@/assets/socials/twitter-activated.svg';
+import IconTelegramActivated from '@/assets/socials/telegram-activated.svg';
+import IconGithubActivated from '@/assets/socials/github-activated.svg';
 import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
 import IconEth from '@/assets/chains/eth.svg';
@@ -55,14 +58,17 @@ export default {
   socials: [
     {
       icon: IconTwitter,
+      iconActivated: IconTwitterActivated,
       link: 'https://twitter.com/soulwallet_eth',
     },
     {
       icon: IconTelegram,
+      iconActivated: IconTelegramActivated,
       link: 'https://t.me/+XFUHusXFdTYyODQ9',
     },
     {
       icon: IconGithub,
+      iconActivated: IconGithubActivated,
       link: 'https://github.com/proofofsoulprotocol',
     },
   ],
