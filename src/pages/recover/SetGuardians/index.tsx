@@ -127,7 +127,6 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
-  const { account } = useWalletContext();
   const { credentials } = useCredentialStore();
   const { getCoordinates } = usePassKey();
   const {
