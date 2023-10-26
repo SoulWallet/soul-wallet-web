@@ -16,7 +16,7 @@ export default function Test() {
       <Button p="4" onClick={getCredentials} mb="6">
         Get Credentials
       </Button>
-      <Button p="4" onClick={register} mb="6">
+      <Button p="4" onClick={() => register('Test Passkey')} mb="6">
         Register
       </Button>
       <Box>
