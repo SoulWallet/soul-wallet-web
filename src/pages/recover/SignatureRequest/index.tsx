@@ -43,8 +43,6 @@ const getProgressPercent = (startTime: any, endTime: any) => {
 const SignatureRequest = ({ changeStep }: any) => {
   const [loaded, setLoaded] = useState(false);
   const [replaced, setReplaced] = useState(false);
-  const [recoverStatus, setRecoverStatus] = useState(0);
-  const [chainStatusList, setChainStatusList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showPayButton, setShowPayButton] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
@@ -59,6 +57,7 @@ const SignatureRequest = ({ changeStep }: any) => {
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID
   const guardianSignatures = recoveringGuardiansInfo.recoveryRecord.guardianSignatures
   const chainRecoveryStatus = recoveringGuardiansInfo.recoveryRecord.statusData.chainRecoveryStatus || []
+  const recoverStatus = recoveringGuardiansInfo.recoveryRecord.status
 
   const toast = useToast();
   const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
