@@ -73,7 +73,10 @@ export default function SetPasskeys({ changeStep }: any) {
   const createWallet = async () => {
     try {
       setIsCreating(true);
-      // await register();
+      const credentials = getRecoveringGuardiansInfo().credentials || []
+      const credentialName = `Passkey ${credentials.length + 1}`
+      const credentialKey = await register(credentialName);
+      addCredential(credentialKey)
       setIsCreating(false);
       // navigate('/create');
     } catch (error: any) {
@@ -177,7 +180,7 @@ export default function SetPasskeys({ changeStep }: any) {
         </Box>
       </Box>
       <Box margin="48px 0">
-        <PassKeyList passKeys={credentials} setPassKeyName={() => {}} />
+        <PassKeyList passKeys={credentials} setPassKeyName={changeCredentialName} />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
         <Button onClick={createWallet} _styles={{ width: '320px', marginBottom: '12px', background: '#9648FA' }} _hover={{ background: '#9648FA' }} disabled={isCreating} loading={isCreating}>

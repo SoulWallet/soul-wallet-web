@@ -47,7 +47,7 @@ export default function Create() {
       setIsCreating(true);
       const credentialName = `Passkey ${credentials.length + 1}`;
       const credentialKey = await register(credentialName);
-      addCredential(credentialKey)
+      addCredential(credentialKey);
       setIsCreating(false);
       // navigate('/create');
     } catch (error: any) {

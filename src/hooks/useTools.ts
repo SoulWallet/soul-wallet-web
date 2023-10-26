@@ -82,5 +82,6 @@ export default function useTools() {
     formatGuardianFile,
     getJsonFromFile,
     generateQrCode,
+    generateJsonName
   };
 }

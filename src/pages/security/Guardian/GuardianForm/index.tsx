@@ -112,14 +112,43 @@ const amountValidate = (values: any, props: any) => {
   return errors;
 };
 
+const getDefaultGuardianIds = (count: number) => {
+  const ids = [];
 
-export default function GuardianForm({ cancelEdit }: any) {
+  for (let i = 0; i < count; i++) {
+    ids.push(nextRandomId());
+  }
+
+  return ids;
+};
+
+const getInitialValues = (ids: string[], guardians: string[], guardianNames: string[]) => {
+  const idCount = ids.length;
+  const guardianCount = guardians.length;
+  const count = idCount > guardianCount ? idCount : guardianCount;
+  const values: any = {};
+
+  for (let i = 0; i < count; i++) {
+    if (ids[i]) {
+      values[`address_${ids[i]}`] = guardians[i];
+      values[`name_${ids[i]}`] = guardianNames[i];
+    }
+  }
+
+  return values;
+};
+
+export default function GuardianForm({ cancelEdit, startBackup }: any) {
+  const { guardiansInfo } = useGuardianStore();
+  const guardianDetails = guardiansInfo.guardianDetails
+  const threshold = guardianDetails.threshold
   const { selectedAddress } = useAddressStore();
+  const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 3 && guardianDetails.guardians.length) || 3)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
-  const { slotInfo } = useGuardianStore();
+  const { slotInfo, setGuardiansInfo } = useGuardianStore();
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
   const [loading, setLoading] = useState(false);
@@ -128,6 +157,7 @@ export default function GuardianForm({ cancelEdit }: any) {
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
     validate,
+    initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardiansInfo.guardianNames)
   });
 
   const amountForm = useForm({
@@ -243,7 +273,9 @@ export default function GuardianForm({ cancelEdit }: any) {
       // await showSignPayment(txns)
       // await sendEth('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).shiftedBy(-18).toString())
       await payTask('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).toString(), task.taskID);
-      await api.guardian.backupGuardians(guardiansInfo)
+      setGuardiansInfo(guardiansInfo)
+      startBackup()
+      // await api.guardian.backupGuardians(guardiansInfo)
       // 0x9e584021d6d66154f24b15156fa9bc23f8ab1903a92e01e20a4756b45902f2e3
       console.log('handleSubmit', result, txns);
       setLoading(false);
