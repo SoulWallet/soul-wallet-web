@@ -30,6 +30,7 @@ import SignatureRequest from './SignatureRequest'
 
 export default function Recover() {
   const [step, setStep] = useState(0)
+  const { recoveringGuardiansInfo } = useGuardianStore();
 
   const changeStep = (step: number) => {
     setStep(step)
@@ -40,7 +41,11 @@ export default function Recover() {
       const result = await api.guardian.getRecoverRecord({ recoveryRecordID: '0x7079f804b0a44b81c715f80ca84f4f281604e41d3f11a641d67609af72dd54c4' });
       console.log('guardianSignatures', result);
     }
-    main()
+    // main()
+
+    if (recoveringGuardiansInfo.recoveryRecord) {
+      changeStep(3)
+    }
   }, [])
 
   if (step === 0) {

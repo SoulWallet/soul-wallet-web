@@ -127,13 +127,13 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
-  const { credentials } = useCredentialStore();
   const { getCoordinates } = usePassKey();
   const {
     recoveringGuardiansInfo,
     setRecoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,
   } = useGuardianStore();
+  const credentials = recoveringGuardiansInfo.credentials
 
   const [amountData, setAmountData] = useState<any>({});
   const [showMannualInput, setShowMannualInput] = useState(false);
@@ -224,7 +224,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       updateRecoveringGuardiansInfo({
         recoveryRecordID,
       });
-
+      changeStep(3)
       setLoading(false);
     } catch (e: any) {
       setLoading(false);

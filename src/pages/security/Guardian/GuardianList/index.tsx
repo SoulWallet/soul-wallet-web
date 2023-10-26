@@ -111,7 +111,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
   const guardianDetails = guardiansInfo.guardianDetails
   const guardianNames = guardiansInfo.guardianNames
 
-  const guardianList = guardianDetails.guardians.map((guardian, i) => {
+  const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
     return {
       address: guardian,
       name: guardianNames[i]

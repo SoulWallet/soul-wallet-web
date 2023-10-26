@@ -69,7 +69,7 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
         ...guardiansInfo
       });
       setSending(false);
-      emailForm.clearFields()
+      emailForm.clearFields(['email'])
       toast({
         title: 'Email Backup Success!',
         status: 'success',

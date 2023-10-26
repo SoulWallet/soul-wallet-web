@@ -56,9 +56,9 @@ const SignatureRequest = ({ changeStep }: any) => {
     updateRecoveringGuardiansInfo,
   } = useGuardianStore();
   // const { initRecoverWallet } = useWallet();
-  const recoverRecordId = recoveringGuardiansInfo.recoverRecordId
-  const newKey = recoveringGuardiansInfo.newKey
-  const guardianSignatures = recoveringGuardiansInfo.guardianSignatures
+  const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID
+  const guardianSignatures = recoveringGuardiansInfo.recoveryRecord.guardianSignatures
+  const chainRecoveryStatus = recoveringGuardiansInfo.recoveryRecord.statusData.chainRecoveryStatus || []
 
   const toast = useToast();
   const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
@@ -68,7 +68,7 @@ const SignatureRequest = ({ changeStep }: any) => {
   const dispatch = useStepDispatchContext();
 
   const doCopy = () => {
-    copyText(`${config.officialWebUrl}/recover/${recoverRecordId}`);
+    copyText(`${config.officialWebUrl}/recover/${recoveryRecordID}`);
     toast({
       title: 'Copy success!',
       status: 'success',
@@ -84,56 +84,16 @@ const SignatureRequest = ({ changeStep }: any) => {
   };
 
   useEffect(() => {
-    generateQR(`${config.officialWebUrl}/recover/${recoverRecordId}`);
+    generateQR(`${config.officialWebUrl}/recover/${recoveryRecordID}`);
   }, []);
-
-  // const getRecoverRecord = async () => {
-  //   try {
-  //     const result = await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId });
-  //     console.log('guardianSignatures', result);
-  //     const guardianSignatures = result.data.guardianSignatures;
-  //     updateGuardiansInfo({
-  //       guardianSignatures
-  //     });
-  //     const status = result.data.status;
-  //     setRecoverStatus(status);
-  //     const statusList = result.data.statusData.chainRecoveryStatus;
-  //     setChainStatusList(statusList);
-
-  //     if (status === 3) {
-  //       updateGuardiansInfo({
-  //         guardians: recoveringGuardiansInfo.guardians,
-  //         guardianNames: recoveringGuardiansInfo.guardianNames,
-  //         threshold: recoveringGuardiansInfo.threshold,
-  //       });
-  //     } else if (status === 4) {
-  //       updateRecoveringGuardiansInfo({
-  //         recoverRecordId: null
-  //       });
-  //     }
-
-  //     setLoaded(true);
-  //     console.log('recoveryRecordID', result, guardianSignatures);
-  //   } catch (error: any) {
-  //     console.log('error', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getRecoverRecord();
-
-  //   setInterval(async () => {
-  //     getRecoverRecord();
-  //   }, 5000);
-  // }, []);
 
   const handleCopy = async () => {
     let url;
 
     if (recoverStatus === 1) {
-      url = `${config.officialWebUrl}/pay-recover/${recoverRecordId}`;
+      url = `${config.officialWebUrl}/pay-recover/${recoveryRecordID}`;
     } else {
-      url = `${config.officialWebUrl}/recover/${recoverRecordId}`;
+      url = `${config.officialWebUrl}/recover/${recoveryRecordID}`;
     }
 
     copyText(url);
@@ -151,20 +111,19 @@ const SignatureRequest = ({ changeStep }: any) => {
   const handlePay = async () => {
     setShowPayButton(false)
     setShowProgress(true)
-    return
-    const url = `${config.officialWebUrl}/pay-recover/${recoverRecordId}`;
+    const url = `${config.officialWebUrl}/pay-recover/${recoveryRecordID}`;
     window.open(url, '_blank');
   };
 
   const replaceWallet = async () => {
     updateRecoveringGuardiansInfo({
-      recoverRecordId: null
+      recoveryRecordID: null
     });
-    updateGuardiansInfo({
-      guardians: recoveringGuardiansInfo.guardians,
-      guardianNames: recoveringGuardiansInfo.guardianNames,
-      threshold: recoveringGuardiansInfo.threshold,
-    });
+    /* updateGuardiansInfo({
+     *   guardians: recoveringGuardiansInfo.guardians,
+     *   guardianNames: recoveringGuardiansInfo.guardianNames,
+     *   threshold: recoveringGuardiansInfo.threshold,
+     * }); */
     navigate('/wallet');
   };
 
@@ -296,7 +255,7 @@ const SignatureRequest = ({ changeStep }: any) => {
               </Box>
             )}
           </Box>
-          {chainStatusList.map((item: any) => (
+          {chainRecoveryStatus.map((item: any) => (
             <Box
               key={item.chainId}
               display="flex"
@@ -355,7 +314,7 @@ const SignatureRequest = ({ changeStep }: any) => {
     );
   }
 
-  const signatures = (recoveringGuardiansInfo.guardians || []).map((item: any) => {
+  const signatures = (recoveringGuardiansInfo.guardianDetails.guardians || []).map((item: any) => {
     const isValid = (guardianSignatures || []).filter((sig: any) => sig.guardian === item && sig.valid).length === 1;
     return { guardian: item, isValid };
   });
@@ -408,7 +367,7 @@ const SignatureRequest = ({ changeStep }: any) => {
       </Box>
       <Box marginBottom="0.75em">
         <TextBody textAlign="center">
-          Waiting for signatures ({recoveringGuardiansInfo.threshold} of {recoveringGuardiansInfo.guardians.length} complete)
+          Waiting for signatures ({recoveringGuardiansInfo.threshold} of {recoveringGuardiansInfo.guardianDetails.guardians.length} complete)
         </TextBody>
       </Box>
       <Box

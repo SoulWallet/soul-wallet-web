@@ -33,13 +33,13 @@ export const WalletContext = createContext<IWalletContext>({
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
   const { getCoordinates } = usePassKey();
-  const {credentials} =useCredentialStore();
-  const { recoveringGuardiansInfo, setGuardiansInfo, setRecoveringGuardiansInfo } = useGuardianStore();
-  const recoverRecordId = recoveringGuardiansInfo.recoverRecordId;
+  const { recoveringGuardiansInfo, setGuardiansInfo, updateRecoveringGuardiansInfo } = useGuardianStore();
+  const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { addressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
     useAddressStore();
+  const credentials = recoveringGuardiansInfo.credentials
 
   const signModal = createRef<any>();
   const signTransactionModal = createRef<any>();
@@ -54,7 +54,10 @@ export const WalletContextProvider = ({ children }: any) => {
   }, [selectedChainItem]);
 
   const checkRecoverStatus = async () => {
-    const res = (await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId })).data;
+    const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
+    updateRecoveringGuardiansInfo({
+      recoveryRecord: res,
+    });
     const { addressList } = useAddressStore.getState();
     console.log('addresslist is:', addressList);
     if (addressList.length === 0) {
@@ -87,9 +90,8 @@ export const WalletContextProvider = ({ children }: any) => {
 
     // recover process finished
     if (res.status === 4) {
-      setRecoveringGuardiansInfo({
-        ...recoveringGuardiansInfo,
-        recoverRecordId: null,
+      updateRecoveringGuardiansInfo({
+        recoveryRecordID: null,
       });
     }
 
@@ -102,15 +104,15 @@ export const WalletContextProvider = ({ children }: any) => {
 
     // IMPORTANT TODO, Judge first available chain and set as default
     if (
-      chainRecoverStatus.filter((item: any) => item.chainId === selectedChainItem.chainIdHex && item.status === 1)
-                        .length === 0
+      chainRecoverStatus.length &&
+      chainRecoverStatus.filter((item: any) => item.status === 1).length === 0
     ) {
-      setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
+      // setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
     }
   };
 
   useEffect(() => {
-    if (!recoverRecordId) {
+    if (!recoveryRecordID) {
       return;
     }
 
@@ -123,7 +125,7 @@ export const WalletContextProvider = ({ children }: any) => {
     return () => {
       clearInterval(recoverCheckInterval);
     };
-  }, [recoverRecordId]);
+  }, [recoveryRecordID]);
 
   const checkActivated = async () => {
     const res = getIsActivated(selectedAddress, selectedChainId);
