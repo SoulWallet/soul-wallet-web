@@ -67,6 +67,16 @@ export default function Recover({ changeStep }: any) {
 
       const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
       const data = res2.data;
+
+      if (!data) {
+        setLoading(false);
+        toast({
+          title: 'No guardians found!',
+          status: 'error',
+        });
+        return
+      }
+
       const guardianDetails = data.guardianDetails;
       console.log('getGuardianDetails', res2)
 
