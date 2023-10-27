@@ -55,6 +55,7 @@ export default function Recover({ changeStep }: any) {
       const walletAddress = values.address
       const res1 = await api.guardian.getSlotInfo({ walletAddress });
       const slotInitInfo = res1.data.slotInitInfo
+      const initalkeysAddress = res1.data.initialKeys
       const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
       const activeGuardianInfo = await getActiveGuardianHash2(slotInitInfo)
       let activeGuardianHash
@@ -84,7 +85,8 @@ export default function Recover({ changeStep }: any) {
         slot,
         slotInitInfo,
         activeGuardianInfo,
-        guardianDetails
+        guardianDetails,
+        initalkeysAddress
       })
       setLoading(false);
       changeStep(1)

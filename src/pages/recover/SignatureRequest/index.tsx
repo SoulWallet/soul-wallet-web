@@ -21,6 +21,7 @@ import api from '@/lib/api';
 import config from '@/config';
 import useBrowser from '@/hooks/useBrowser';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
+import { useCredentialStore } from '@/store/credential';
 import Steps from '@/components/web/Steps';
 
 const getProgressPercent = (startTime: any, endTime: any) => {
@@ -48,16 +49,24 @@ const SignatureRequest = ({ changeStep }: any) => {
   const [showProgress, setShowProgress] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
+  const { addCredential } = useCredentialStore();
   const {
     updateGuardiansInfo,
     recoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,
+    setSlotInfo
   } = useGuardianStore();
   // const { initRecoverWallet } = useWallet();
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID
-  const guardianSignatures = recoveringGuardiansInfo.recoveryRecord.guardianSignatures
-  const chainRecoveryStatus = recoveringGuardiansInfo.recoveryRecord.statusData.chainRecoveryStatus || []
-  const recoverStatus = recoveringGuardiansInfo.recoveryRecord.status
+  let guardianSignatures: any
+  let chainRecoveryStatus: any
+  let recoverStatus: any
+
+  if (recoveringGuardiansInfo.recoveryRecord) {
+    guardianSignatures = recoveringGuardiansInfo.recoveryRecord.guardianSignatures
+    chainRecoveryStatus = recoveringGuardiansInfo.recoveryRecord.statusData.chainRecoveryStatus || []
+    recoverStatus = recoveringGuardiansInfo.recoveryRecord.status
+  }
 
   const toast = useToast();
   const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
@@ -115,14 +124,25 @@ const SignatureRequest = ({ changeStep }: any) => {
   };
 
   const replaceWallet = async () => {
-    updateRecoveringGuardiansInfo({
-      recoveryRecordID: null
+    for (const credential of recoveringGuardiansInfo.credentials) {
+      addCredential(credential)
+    }
+
+    updateGuardiansInfo({
+      guardianDetails: recoveringGuardiansInfo.guardianDetails,
+      guardianHash: recoveringGuardiansInfo.guardianHash,
+      guardianNames: recoveringGuardiansInfo.guardianNames,
+      keystore: recoveringGuardiansInfo.keystore,
+      slot: recoveringGuardiansInfo.slot
     });
-    /* updateGuardiansInfo({
-     *   guardians: recoveringGuardiansInfo.guardians,
-     *   guardianNames: recoveringGuardiansInfo.guardianNames,
-     *   threshold: recoveringGuardiansInfo.threshold,
-     * }); */
+
+    setSlotInfo({
+      ...recoveringGuardiansInfo.slotInitInfo,
+      initialKeys: recoveringGuardiansInfo.credentials,
+      initalkeysAddress: recoveringGuardiansInfo.initalkeysAddress,
+      slot: recoveringGuardiansInfo.slot
+    })
+
     navigate('/wallet');
   };
 
@@ -306,7 +326,7 @@ const SignatureRequest = ({ changeStep }: any) => {
             </Box>
           ))}
         </Box>
-        <Button disabled={false} _styles={{ width: '320px' }}>
+        <Button disabled={false} onClick={replaceWallet} _styles={{ width: '320px' }}>
           Open my wallet
         </Button>
       </Box>
