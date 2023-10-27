@@ -121,15 +121,6 @@ export default function usePasskey() {
     const { r, s } = decodeDER(signature);
     const { x, y } = credential.coords;
 
-    /*
-        authenticatorData
-        clientData
-        credentialId
-        signature
-    */
-    // const authenticationParsed = await server.verifyAuthentication(authentication, credentialKey, expected);
-    // console.log(JSON.stringify(authenticationParsed, null, 2));
-
     return {
       messageHash: userOpHash,
       publicKey: {
@@ -143,9 +134,23 @@ export default function usePasskey() {
     };
   };
 
-  const authenticate = async (credentialId: string, challenge: string) => {
+  const getKeyBySignature = (signature: string | undefined) => {
+    if(!signature){
+      return
+    }
+    const signatureBase64 = base64urlTobase64(signature);
+    const { r, s } = decodeDER(signatureBase64);
+
+    console.log('r s:', r, s);
+
+    return {
+      r,s
+    }
+  }
+
+  const authenticate = async (challenge: string, credentialId?: string) => {
     try {
-      return await client.authenticate([credentialId], challenge);
+      return await client.authenticate(credentialId ? [credentialId] : [], challenge);
     } catch (err) {}
   };
 
@@ -155,5 +160,6 @@ export default function usePasskey() {
     sign,
     authenticate,
     getCoordinates,
+    getKeyBySignature,
   };
 }

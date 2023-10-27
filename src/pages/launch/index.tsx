@@ -14,6 +14,7 @@ import {
   ModalContent,
   ModalHeader
 } from '@chakra-ui/react';
+import api from '@/lib/api';
 import TextBody from '@/components/web/TextBody';
 import Button from '@/components/web/Button';
 import Logo from '@/components/web/Logo';
@@ -32,37 +33,36 @@ import config from '@/config'
 import { Link } from 'react-router-dom';
 
 export default function Launch() {
-  const { register, authenticate } = usePassKey();
+  const { register, authenticate, getKeyBySignature, } = usePassKey();
   const { navigate } = useBrowser();
   const toast = useToast();
+
   const { credentials, clearCredentials } = useCredentialStore();
-  const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
+  const { addressList, clearAddressList } = useAddressStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const isPopup = searchParams.get('isPopup');
 
   const login = async () => {
-    if (credentials.length) {
-      toggleModal();
-    } else {
-      toast({
-        title: 'No account yet',
-        status: 'error',
-      });
-    }
-  };
-
-  const auth = async (credential: any) => {
     try {
       setIsAuthing(true);
-      const credentialId = credential.id;
       const challenge = btoa('1234567890');
-      await authenticate(credentialId, challenge);
+      const res = await authenticate(challenge);
+      const foo = getKeyBySignature(res?.signature);
+      console.log('auth result', res, foo);
       setIsAuthing(false);
+
+
+      // find local storage first, if null, getSlotInfo
+      const slotInfo = await api.guardian.getSlotInfo({
+        key: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEStR_v0JBFvprC6vvQmChpbz1EVTp8uAlmWvWARUHSw2AUh74Le1kVSXMPdsOmsF61IiOIz4piKPcRWFDls992A=="
+      });
+
+      console.log('slot info', slotInfo);
+
       toast({
-        title: `${credential.name} logged in`,
+        title: `Logged in`,
         status: 'success',
       });
       if (isPopup === 'true') {
@@ -105,17 +105,6 @@ export default function Launch() {
         status: 'error',
       });
     }
-  };
-
-  const onSelectPassKey = async (passKey: any) => {
-    toggleModal();
-    auth(passKey);
-    console.log('onSelectPassKey', passKey);
-    setSelectedAddress(addressList[0].address)
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -179,16 +168,6 @@ export default function Launch() {
                 <TextBody color="#1E1E1E" marginTop="24px" fontSize="16px" textAlign="center">
                   Soul Wallet will create a smart contract wallet for you using passkey.
                 </TextBody>
-                <Modal isOpen={isModalOpen} onClose={toggleModal}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Sellect PassKey</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody overflow="scroll">
-                      <PassKeySelect passKeys={credentials} onSelect={onSelectPassKey} />
-                    </ModalBody>
-                  </ModalContent>
-                </Modal>
               </Box>
               <TextBody color="#000000" fontWeight="800" fontSize="20px" textAlign="center">
                 <Link to="/recover">Lost your wallet?</Link>
