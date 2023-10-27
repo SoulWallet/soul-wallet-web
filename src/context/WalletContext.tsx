@@ -40,7 +40,7 @@ export const WalletContextProvider = ({ children }: any) => {
     updateGuardiansInfo,
     setSlotInfo
   } = useGuardianStore();
-  const { credentials, addCredential } = useCredentialStore();
+  const { credentials, setCredentials } = useCredentialStore();
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
@@ -51,10 +51,8 @@ export const WalletContextProvider = ({ children }: any) => {
   const signPaymentModal = createRef<any>();
   const signMessageModal = createRef<any>();
 
-  const replaceWallet = async () => {
-    for (const credential of recoveringGuardiansInfo.credentials) {
-      addCredential(credential)
-    }
+  const replaceSlotInfo = async () => {
+    setCredentials(recoveringGuardiansInfo.credentials)
 
     updateGuardiansInfo({
       guardianDetails: recoveringGuardiansInfo.guardianDetails,
@@ -81,6 +79,8 @@ export const WalletContextProvider = ({ children }: any) => {
 
   const checkRecoverStatus = async () => {
     const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
+    console.log('res address: ', res.addresses)
+
     updateRecoveringGuardiansInfo({
       recoveryRecord: res,
     });
@@ -96,20 +96,24 @@ export const WalletContextProvider = ({ children }: any) => {
           allowedOrigins: [],
         });
       }
+      console.log('to set selected address: ', res.addresses)
       setSelectedAddress(res.addresses[0]);
     }
 
     // check if should replace key
     if (res.status >= 3) {
-      const currentKeysRaw = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
-      const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
-      const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
-      const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
-      console.log('newKeyHash', newKeyHash)
-      console.log('currentKeyHash', currentKeyHash)
-      if(newKeyHash !== currentKeyHash){
-        replaceWallet();
-      }
+      replaceSlotInfo();
+      // const currentKeysRaw = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+      // const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
+      // const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
+
+      // // const currentKeyHash = L1KeyStore.getSlot()
+      // const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
+      // console.log('newKeyHash', newKeyHash)
+      // console.log('currentKeyHash', currentKeyHash)
+      // if(newKeyHash !== currentKeyHash){
+      //   replaceWallet();
+      // }
     }
 
     // recover process finished
@@ -137,6 +141,8 @@ export const WalletContextProvider = ({ children }: any) => {
     if (!recoveryRecordID) {
       return;
     }
+
+    console.log('check recover status')
 
     checkRecoverStatus();
 

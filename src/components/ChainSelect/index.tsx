@@ -1,15 +1,26 @@
 import React from 'react';
-import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider } from '@chakra-ui/react';
+import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, useToast } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
 import { useChainStore } from '@/store/chain';
 import useConfig from '@/hooks/useConfig';
-import useBrowser from '@/hooks/useBrowser';
 
 export default function ChainSelect() {
   const { chainList, setSelectedChainId, selectedChainId } = useChainStore();
-  const { navigate } = useBrowser();
+  const toast = useToast();
   const { selectedChainItem } = useConfig();
+
+  const doSwitchChain = (item: any) => {
+    if (item.recovering) {
+      toast({
+        title: 'This chain is recovering',
+        status: 'info',
+      });
+    } else {
+      setSelectedChainId(item.chainIdHex);
+    }
+  };
+
   return (
     <Menu>
       {({ isOpen }) => (
@@ -21,7 +32,7 @@ export default function ChainSelect() {
             </Flex>
           </MenuButton>
 
-          <MenuList w="200px">
+          <MenuList w="260px">
             {chainList.map((item: any, idx: number) => {
               return (
                 <React.Fragment key={idx}>
@@ -29,7 +40,7 @@ export default function ChainSelect() {
                   <MenuItem
                     key={item.chainIdHex}
                     filter={item.recovering ? 'grayscale(1)' : ''}
-                    onClick={() => (item.recovering ? navigate('/recover') : setSelectedChainId(item.chainIdHex))}
+                    onClick={() => doSwitchChain(item)}
                   >
                     <Flex w="100%" align={'center'} justify={'space-between'}>
                       <Flex align={'center'} gap="2">

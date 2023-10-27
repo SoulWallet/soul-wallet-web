@@ -5,6 +5,7 @@ import { persist } from 'zustand/middleware';
 export interface ICredentialStore {
   credentials: any;
   addCredential: (credential: any) => void;
+  setCredentials: (credentials: any) => void;
   changeCredentialName: (credentialId: string, name: string) => void;
   clearCredentials: () => void;
 }
@@ -19,6 +20,11 @@ const createCredentialSlice = immer<ICredentialStore>((set) => ({
     set((state) => {
       state.credentials.push(credential);
     });
+  },
+  setCredentials: (credentials: any) => {
+    set((state) => {
+      state.credentials = credentials;
+    })
   },
   changeCredentialName: (credentialId: string, name: string) => {
     set((state) => {

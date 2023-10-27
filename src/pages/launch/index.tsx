@@ -52,24 +52,35 @@ export default function Launch() {
       console.log('auth result', res, foo);
       setIsAuthing(false);
 
+      if(res){
+        setSelectedAddress(addressList[0].address)
 
-      // find local storage first, if null, getSlotInfo
-      const slotInfo = await api.guardian.getSlotInfo({
-        key: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEStR_v0JBFvprC6vvQmChpbz1EVTp8uAlmWvWARUHSw2AUh74Le1kVSXMPdsOmsF61IiOIz4piKPcRWFDls992A=="
-      });
-
-      console.log('slot info', slotInfo);
-
-      toast({
-        title: `Logged in`,
-        status: 'success',
-      });
-      if (isPopup === 'true') {
-        // redirect to popup
-        navigate({ pathname: '/popup', search: location.href });
-      } else {
-        navigate('/wallet');
+        // find local storage first, if null, getSlotInfo
+        // const slotInfo = await api.guardian.getSlotInfo({
+        //   key: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEStR_v0JBFvprC6vvQmChpbz1EVTp8uAlmWvWARUHSw2AUh74Le1kVSXMPdsOmsF61IiOIz4piKPcRWFDls992A=="
+        // });
+  
+        // console.log('slot info', slotInfo);
+  
+        toast({
+          title: 'Logged in',
+          status: 'success',
+        });
+        if (isPopup === 'true') {
+          // redirect to popup
+          navigate({ pathname: '/popup', search: location.href });
+        } else {
+          navigate('/wallet');
+        }
+      }else{
+        // failed to login
+        toast({
+          title: "Failed to login",
+          status: "error"
+        })
       }
+
+  
     } catch (error: any) {
       console.log('error', error);
       setIsAuthing(false);
@@ -145,17 +156,15 @@ export default function Launch() {
             >
               <Logo direction="column" />
               <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="50px 0" width="320px">
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  {credentials.length && addressList.length ? (
+                <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" gap="6">
                     <Button
                       disabled={isAuthing}
                       loading={isAuthing}
                       onClick={login}
-                      _styles={{ width: '282px', borderRadius: '40px', marginRight: '20px' }}
+                      _styles={{ width: '282px', borderRadius: '40px' }}
                     >
                       Login
                     </Button>
-                  ) : (
                     <Button
                       disabled={isCreating}
                       loading={isCreating}
@@ -164,7 +173,6 @@ export default function Launch() {
                     >
                       Create new wallet
                     </Button>
-                  )}
                 </Box>
                 <TextBody color="#1E1E1E" marginTop="24px" fontSize="16px" textAlign="center">
                   Soul Wallet will create a smart contract wallet for you using passkey.
