@@ -442,7 +442,7 @@ const SignatureRequest = ({ changeStep }: any) => {
           </Box>
         ))}
       </Box>
-      <Button disabled={false} onClick={handleNext} _styles={{ width: '320px' }}>
+      <Button disabled={!recoverStatus} onClick={handleNext} _styles={{ width: '320px' }}>
         Next
       </Button>
     </Box>
