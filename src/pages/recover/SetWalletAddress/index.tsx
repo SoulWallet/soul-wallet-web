@@ -50,42 +50,54 @@ export default function Recover({ changeStep }: any) {
   const handleNext = async () => {
     if (disabled) return;
 
-  try {
-    setLoading(true);
-    const walletAddress = values.address
-    const res1 = await api.guardian.getSlotInfo({ walletAddress });
-    const slotInitInfo = res1.data.slotInitInfo
-    const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
-    const activeGuardianInfo = await getActiveGuardianHash2(slotInitInfo)
-    let activeGuardianHash
+    try {
+      setLoading(true);
+      const walletAddress = values.address
+      const res1 = await api.guardian.getSlotInfo({ walletAddress });
+      const slotInitInfo = res1.data.slotInitInfo
+      const initalkeysAddress = res1.data.initialKeys
+      const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
+      const activeGuardianInfo = await getActiveGuardianHash2(slotInitInfo)
+      let activeGuardianHash
 
-    if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
-      activeGuardianHash = activeGuardianInfo.pendingGuardianHash
-    } else {
-      activeGuardianHash = activeGuardianInfo.activeGuardianHash
+      if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+        activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+      } else {
+        activeGuardianHash = activeGuardianInfo.activeGuardianHash
+      }
+
+      const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
+      const data = res2.data;
+
+      if (!data) {
+        setLoading(false);
+        toast({
+          title: 'No guardians found!',
+          status: 'error',
+        });
+        return
+      }
+
+      const guardianDetails = data.guardianDetails;
+      console.log('getGuardianDetails', res2)
+
+      updateRecoveringGuardiansInfo({
+        slot,
+        slotInitInfo,
+        activeGuardianInfo,
+        guardianDetails,
+        initalkeysAddress
+      })
+      setLoading(false);
+      changeStep(1)
+    } catch (e: any) {
+      setLoading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
     }
-
-    const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
-    const data = res2.data;
-    const guardianDetails = data.guardianDetails;
-    console.log('getGuardianDetails', res2)
-
-    updateRecoveringGuardiansInfo({
-      slot,
-      slotInitInfo,
-      activeGuardianInfo,
-      guardianDetails
-    })
-    setLoading(false);
-    changeStep(1)
-  } catch (e: any) {
-    setLoading(false);
-    toast({
-      title: e.message,
-      status: 'error',
-    });
-  }
-};
+  };
 
   const goBack = () => {
     navigate('/launch');

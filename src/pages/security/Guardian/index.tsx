@@ -18,6 +18,11 @@ import TextButton from '@/components/web/TextButton';
 import RoundButton from '@/components/web/Button';
 import PlusIcon from '@/components/Icons/Plus';
 import SuccessIcon from "@/components/Icons/Success";
+import api from '@/lib/api';
+import { L1KeyStore } from '@soulwallet/sdk';
+import { useAddressStore } from '@/store/address';
+import useKeystore from '@/hooks/useKeystore';
+import { useGuardianStore } from '@/store/guardian';
 import GuardianIntro from './GuardianIntro'
 import GuardianList from './GuardianList'
 import GuardianForm from './GuardianForm'
@@ -51,8 +56,12 @@ function GuardianEditor() {
 }
 
 export default function Guardian({ setActiveSection }: any) {
+  const { getActiveGuardianHash2 } = useKeystore();
+  const { selectedAddress } = useAddressStore();
   const [status, setStatus] = useState<string>('intro');
   const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
+  const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  const { setGuardiansInfo } = useGuardianStore();
 
   const startManage = () => {
     setStatus('managing')
@@ -74,6 +83,60 @@ export default function Guardian({ setActiveSection }: any) {
     setStatus('managing')
   }
 
+  const getGuardianInfo = async () => {
+    try {
+      const res1 = await api.guardian.getSlotInfo({ walletAddress: selectedAddress });
+      const slotInitInfo = res1.data.slotInitInfo
+      const keystore = res1.data.keystore
+      const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
+      const activeGuardianInfo = await getActiveGuardianHash2(slotInitInfo)
+      let activeGuardianHash
+
+      if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+        activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+      } else {
+        activeGuardianHash = activeGuardianInfo.activeGuardianHash
+      }
+
+      const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
+      const data = res2.data;
+      const guardianDetails = data.guardianDetails;
+
+      const guardiansInfo = {
+        keystore,
+        slot,
+        guardianHash: activeGuardianHash,
+        guardianNames: [],
+        guardianDetails,
+      };
+
+      setGuardiansInfo(guardiansInfo)
+      startManage()
+      setIsLoaded(false)
+    } catch (error) {
+      setIsLoaded(false)
+    }
+  }
+
+  useEffect(() => {
+    getGuardianInfo()
+  }, [])
+
+  if (isLoaded) {
+    return (
+      <Box width="100%" height="100vh">
+        <Box height="102px">
+          <Header />
+        </Box>
+        <Box width="100%" height="calc(100% - 102px)">
+          <Box padding="32px 39px">
+            <Heading1 textAlign="center">Loading...</Heading1>
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <Box width="100%" height="100vh">
       <Box height="102px">
@@ -81,11 +144,11 @@ export default function Guardian({ setActiveSection }: any) {
       </Box>
       <Box width="100%" height="calc(100% - 102px)">
         <Box padding="32px 39px">
-          <Heading1>Passkey and Guardian Settings</Heading1>
+          <Heading1>Guardian Settings</Heading1>
           <Box display="flex" width="100%">
-            <Heading2 fontSize="18px" color="#898989" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
-              Passkey
-            </Heading2>
+            {/* <Heading2 fontSize="18px" color="#898989" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
+                Passkey
+                </Heading2> */}
             <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
               Guardian
             </Heading2>
@@ -108,7 +171,7 @@ export default function Guardian({ setActiveSection }: any) {
           </Box>
           {status === 'intro' && <GuardianIntro startManage={startManage} />}
           {status === 'managing' && <GuardianList startBackup={startBackup} />}
-          {status === 'editing' && <GuardianForm cancelEdit={cancelEdit} />}
+          {status === 'editing' && <GuardianForm cancelEdit={cancelEdit} startBackup={startBackup} />}
           {status === 'backuping' && <GuardianBackup cancelBackup={cancelBackup} />}
         </Box>
       </Box>

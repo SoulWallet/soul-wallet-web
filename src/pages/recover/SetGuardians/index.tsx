@@ -127,13 +127,13 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
-  const { credentials } = useCredentialStore();
   const { getCoordinates } = usePassKey();
   const {
     recoveringGuardiansInfo,
     setRecoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,
   } = useGuardianStore();
+  const credentials = recoveringGuardiansInfo.credentials
 
   const [amountData, setAmountData] = useState<any>({});
   const [showMannualInput, setShowMannualInput] = useState(false);
@@ -224,39 +224,8 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       updateRecoveringGuardiansInfo({
         recoveryRecordID,
       });
-
+      changeStep(3)
       setLoading(false);
-    } catch (e: any) {
-      setLoading(false);
-      toast({
-        title: e.message,
-        status: 'error',
-      });
-    }
-  };
-
-  const handleNext = async () => {
-    try {
-      setLoading(true);
-      const keystore = chainConfig.contracts.l1Keystore;
-
-      const params = {
-        guardianDetails: {
-          guardians: recoveringGuardiansInfo.guardianDetails.guardians,
-          threshold: recoveringGuardiansInfo.guardianDetails.threshold,
-          salt: ethers.ZeroHash,
-        },
-        slot: recoveringGuardiansInfo.guardianDetails.slot,
-        slotInitInfo: recoveringGuardiansInfo.guardianDetails.slotInitInfo,
-        keystore,
-        newKey: recoveringGuardiansInfo.guardianDetails.newKey,
-      };
-
-      const result = await api.guardian.createRecoverRecord(params);
-      const recoveryRecordID = result.data.recoveryRecordID;
-      updateRecoveringGuardiansInfo({ recoverRecordId: recoveryRecordID });
-      setLoading(false);
-      console.log('handleNext', params, result);
     } catch (e: any) {
       setLoading(false);
       toast({
@@ -275,31 +244,35 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
         return;
       }
 
-      const fileJson: any = await getJsonFromFile(file);
+      const data: any = await getJsonFromFile(file);
 
-      const data = fileJson;
-      const guardianDetails = data.guardianDetails;
-      const keystore = data.keystore;
-      const guardians = guardianDetails.guardians;
-      const threshold = guardianDetails.threshold;
-      const slot = data.slot;
-      const slotInitInfo = data.slotInitInfo;
-      // const newKey = ethers.zeroPadValue(account, 32)
-      console.log('handleFileParseResult', fileJson);
+      const keystore = chainConfig.contracts.l1Keystore;
+      const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+      const newOwners = L1KeyStore.initialKeysToAddress(initialKeys);
+      const slot = recoveringGuardiansInfo.slot
+      const slotInitInfo = recoveringGuardiansInfo.slotInitInfo
 
-      updateRecoveringGuardiansInfo({
-        recoverRecordId: null,
-        guardians,
-        threshold,
+      const params = {
+        guardianDetails: data.guardianDetails,
         slot,
-        slotInitInfo
-      })
+        slotInitInfo,
+        keystore,
+        newOwners
+      }
+
+      console.log('createRecoverRecord', params);
+
+      const res = await api.guardian.createRecoverRecord(params)
+      const recoveryRecordID = res.data.recoveryRecordID
+      updateRecoveringGuardiansInfo({
+        recoveryRecordID,
+      });
 
       setUploading(false);
       setUploaded(true);
 
       setTimeout(() => {
-
+        changeStep(3)
       }, 1000);
     } catch (e: any) {
       setUploading(false);

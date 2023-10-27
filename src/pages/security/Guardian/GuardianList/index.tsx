@@ -16,6 +16,7 @@ import { nextRandomId } from '@/lib/tools';
 import DropDownIcon from '@/components/Icons/DropDown';
 import PlusIcon from '@/components/Icons/Plus';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { useGuardianStore } from '@/store/guardian';
 import { nanoid } from 'nanoid';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
@@ -106,93 +107,17 @@ const amountValidate = (values: any, props: any) => {
 
 
 export default function GuardianList({ onSubmit, loading, textButton, startBackup }: any) {
-  const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
-  const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
-  const [guardiansList, setGuardiansList] = useState([]);
-  const [amountData, setAmountData] = useState<any>({});
+  const { guardiansInfo } = useGuardianStore();
+  const guardianDetails = guardiansInfo.guardianDetails
+  const guardianNames = guardiansInfo.guardianNames
 
-  const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
-    fields,
-    validate,
-  });
-
-  const amountForm = useForm({
-    fields: ['amount'],
-    validate: amountValidate,
-    restProps: amountData,
-    initialValues: {
-      amount: getRecommandCount(amountData.guardiansCount),
-    },
-  });
-
-  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading;
-
-  useEffect(() => {
-    setGuardiansList(
-      Object.keys(values)
-            .filter((key) => key.indexOf('address') === 0)
-            .map((key) => values[key])
-            .filter((address) => !!String(address).trim().length) as any,
-    );
-  }, [values]);
-
-  useEffect(() => {
-    setAmountData({ guardiansCount: guardiansList.length });
-  }, [guardiansList]);
-
-  const handleSubmit = async () => {
-    if (disabled) return;
-
-    const guardiansList = guardianIds
-      .map((id) => {
-        const addressKey = `address_${id}`;
-        const nameKey = `name_${id}`;
-        let address = values[addressKey];
-
-        if (address && address.length) {
-          return { address, name: values[nameKey] };
-        }
-
-        return null;
-      })
-      .filter((i) => !!i);
-    console.log('guardiansList', guardiansList);
-
-    const guardianAddresses = guardiansList.map((item: any) => item.address);
-    const guardianNames = guardiansList.map((item: any) => item.name);
-    const threshold = amountForm.values.amount || 0;
-
-    if (onSubmit) onSubmit(guardianAddresses, guardianNames, threshold);
-  };
-
-  const addGuardian = () => {
-    const id = nextRandomId();
-    const newGuardianIds = [...guardianIds, id];
-    const newFields = getFieldsByGuardianIds(newGuardianIds);
-    setGuardianIds(newGuardianIds);
-    setFields(newFields);
-    addFields(getFieldsByGuardianIds([id]));
-  };
-
-  const removeGuardian = (deleteId: string) => {
-    if (guardianIds.length > 1) {
-      const newGuardianIds = guardianIds.filter((id) => id !== deleteId);
-      const newFields = getFieldsByGuardianIds(newGuardianIds);
-      setGuardianIds(newGuardianIds);
-      setFields(newFields);
-      removeFields(getFieldsByGuardianIds([deleteId]));
+  const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
+    return {
+      address: guardian,
+      name: guardianNames[i]
     }
-  };
-
-  const selectAmount = (amount: any) => () => {
-    amountForm.onChange('amount')(amount);
-  };
-
-  useEffect(() => {
-    if (!amountForm.values.amount || Number(amountForm.values.amount) > amountData.guardiansCount) {
-      amountForm.onChange('amount')(getRecommandCount(amountData.guardiansCount));
-    }
-  }, [amountData.guardiansCount, amountForm.values.amount]);
+  })
+  console.log('guardiansInfo', guardiansInfo)
 
   return (
     <Fragment>
@@ -216,29 +141,25 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
               gap="0.75em"
               width="100%"
             >
-              {guardianIds.map((id: any, i: number) => (
-                <Box position="relative" width="100%" key={id}>
+              {guardianList.map((item: any, i: number) => (
+                <Box position="relative" width="100%" key={i}>
                   <DoubleFormInfo
                     rightPlaceholder={`Guardian address ${i + 1}`}
-                    rightValue={'0xAAAA12345678E25FDa5f8a56B8e267fDaB6dS123'}
-                    _rightInputStyles={
-                    !!values[`address_${id}`]
-                    ? {
+                    rightValue={item.address}
+                    _rightInputStyles={{
                       fontFamily: 'Martian',
                       fontWeight: 600,
                       fontSize: '14px',
-                    }
-                    : {}
-                    }
+                    }}
                     _rightContainerStyles={{ width: '70%', minWidth: '520px' }}
-                    leftValue={'Vitalik'}
+                    leftValue={item.name}
                     leftComponent={
                       <Text color="#898989" fontWeight="600">
                         eth:
                       </Text>
                     }
                     _leftContainerStyles={{ width: '30%', minWidth: '240px' }}
-                    onEnter={handleSubmit}
+                    onEnter={() => {}}
                     _styles={{ width: '100%', minWidth: '760px', fontSize: '16px' }}
                   />
                 </Box>
@@ -269,7 +190,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
               }}
             >
               <Box display="flex" alignItems="center" justifyContent="space-between">
-                1
+                {guardianDetails.threshold || 0}
                 <DropDownIcon />
               </Box>
             </Box>

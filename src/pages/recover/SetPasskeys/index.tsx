@@ -23,15 +23,22 @@ export default function SetPasskeys({ changeStep }: any) {
   const { navigate } = useBrowser();
   const { register, getCoordinates } = usePassKey();
   const { chainConfig } = useConfig();
-  const { credentials, changeCredentialName } = useCredentialStore();
+  // const { credentials, changeCredentialName } = useCredentialStore();
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const { calcGuardianHash } = useKeystore();
-  const { updateSlotInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const {
+    updateSlotInfo,
+    setEditingGuardiansInfo,
+    recoveringGuardiansInfo,
+    getRecoveringGuardiansInfo,
+    updateRecoveringGuardiansInfo
+  } = useGuardianStore();
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
   const toast = useToast();
+  const credentials = recoveringGuardiansInfo.credentials || []
 
   const onStepChange = (i: number) => {
     if (i == 0) {
@@ -41,10 +48,35 @@ export default function SetPasskeys({ changeStep }: any) {
     }
   };
 
+  const addCredential = async (credential: any) => {
+    const credentials = getRecoveringGuardiansInfo().credentials || []
+    credentials.push(credential)
+
+    updateRecoveringGuardiansInfo({
+      credentials
+    })
+  }
+
+  const changeCredentialName = async (credentialId: string, name: string) => {
+    const credentials = getRecoveringGuardiansInfo().credentials || []
+    const index = credentials.findIndex((item: any) => item.id === credentialId);
+
+    if (index > -1) {
+      credentials[index].name = name;
+
+      updateRecoveringGuardiansInfo({
+        credentials
+      })
+    }
+  }
+
   const createWallet = async () => {
     try {
       setIsCreating(true);
-      await register();
+      const credentials = getRecoveringGuardiansInfo().credentials || []
+      const credentialName = `Passkey ${credentials.length + 1}`
+      const credentialKey = await register(credentialName);
+      addCredential(credentialKey)
       setIsCreating(false);
       // navigate('/create');
     } catch (error: any) {
@@ -154,7 +186,7 @@ export default function SetPasskeys({ changeStep }: any) {
         <Button onClick={createWallet} _styles={{ width: '320px', marginBottom: '12px', background: '#9648FA' }} _hover={{ background: '#9648FA' }} disabled={isCreating} loading={isCreating}>
           Add another passkey
         </Button>
-        <Button onClick={handleNext} _styles={{ width: '320px' }} disabled={isCreating}>
+        <Button onClick={handleNext} _styles={{ width: '320px' }} disabled={isCreating || !credentials.length}>
           Continue
         </Button>
       </Box>

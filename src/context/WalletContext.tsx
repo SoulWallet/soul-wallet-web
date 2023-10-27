@@ -33,18 +33,44 @@ export const WalletContext = createContext<IWalletContext>({
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
   const { getCoordinates } = usePassKey();
-  const {credentials} =useCredentialStore();
-  const { recoveringGuardiansInfo, setGuardiansInfo, setRecoveringGuardiansInfo } = useGuardianStore();
-  const recoverRecordId = recoveringGuardiansInfo.recoverRecordId;
+  const {
+    recoveringGuardiansInfo,
+    updateRecoveringGuardiansInfo,
+    setRecoveringGuardiansInfo,
+    updateGuardiansInfo,
+    setSlotInfo
+  } = useGuardianStore();
+  const { credentials, addCredential } = useCredentialStore();
+  const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { addressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
     useAddressStore();
-
   const signModal = createRef<any>();
   const signTransactionModal = createRef<any>();
   const signPaymentModal = createRef<any>();
   const signMessageModal = createRef<any>();
+
+  const replaceWallet = async () => {
+    for (const credential of recoveringGuardiansInfo.credentials) {
+      addCredential(credential)
+    }
+
+    updateGuardiansInfo({
+      guardianDetails: recoveringGuardiansInfo.guardianDetails,
+      guardianHash: recoveringGuardiansInfo.guardianHash,
+      guardianNames: recoveringGuardiansInfo.guardianNames,
+      keystore: recoveringGuardiansInfo.keystore,
+      slot: recoveringGuardiansInfo.slot
+    });
+
+    setSlotInfo({
+      ...recoveringGuardiansInfo.slotInitInfo,
+      initialKeys: recoveringGuardiansInfo.credentials,
+      initalkeysAddress: recoveringGuardiansInfo.initalkeysAddress,
+      slot: recoveringGuardiansInfo.slot
+    })
+  };
 
   const ethersProvider = useMemo(() => {
     if (!selectedChainItem) {
@@ -54,7 +80,10 @@ export const WalletContextProvider = ({ children }: any) => {
   }, [selectedChainItem]);
 
   const checkRecoverStatus = async () => {
-    const res = (await api.guardian.getRecoverRecord({ recoveryRecordID: recoverRecordId })).data;
+    const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
+    updateRecoveringGuardiansInfo({
+      recoveryRecord: res,
+    });
     const { addressList } = useAddressStore.getState();
     console.log('addresslist is:', addressList);
     if (addressList.length === 0) {
@@ -76,21 +105,16 @@ export const WalletContextProvider = ({ children }: any) => {
       const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
       const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
       const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
+      console.log('newKeyHash', newKeyHash)
+      console.log('currentKeyHash', currentKeyHash)
       if(newKeyHash !== currentKeyHash){
-        setGuardiansInfo({
-          guardians: recoveringGuardiansInfo.guardians,
-          guardianNames: recoveringGuardiansInfo.guardianNames,
-          threshold: recoveringGuardiansInfo.threshold,
-        });
+        replaceWallet();
       }
     }
 
     // recover process finished
     if (res.status === 4) {
-      setRecoveringGuardiansInfo({
-        ...recoveringGuardiansInfo,
-        recoverRecordId: null,
-      });
+      setRecoveringGuardiansInfo({})
     }
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;
@@ -102,15 +126,15 @@ export const WalletContextProvider = ({ children }: any) => {
 
     // IMPORTANT TODO, Judge first available chain and set as default
     if (
-      chainRecoverStatus.filter((item: any) => item.chainId === selectedChainItem.chainIdHex && item.status === 1)
-                        .length === 0
+      chainRecoverStatus.length &&
+      chainRecoverStatus.filter((item: any) => item.status === 1).length === 0
     ) {
       setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
     }
   };
 
   useEffect(() => {
-    if (!recoverRecordId) {
+    if (!recoveryRecordID) {
       return;
     }
 
@@ -123,7 +147,7 @@ export const WalletContextProvider = ({ children }: any) => {
     return () => {
       clearInterval(recoverCheckInterval);
     };
-  }, [recoverRecordId]);
+  }, [recoveryRecordID]);
 
   const checkActivated = async () => {
     const res = getIsActivated(selectedAddress, selectedChainId);

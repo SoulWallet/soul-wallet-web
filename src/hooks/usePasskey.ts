@@ -14,7 +14,6 @@ const base64Tobase64url = (base64: string) => {
 };
 
 export default function usePasskey() {
-  const { addCredential, credentials } = useCredentialStore();
   const decodeDER = (signature: string) => {
     const derSignature = base64ToBuffer(signature);
     const parsedSignature = AsnParser.parse(derSignature, ECDSASigValue);
@@ -67,10 +66,9 @@ export default function usePasskey() {
     };
   };
 
-  const register = async (initialRegister = false) => {
+  const register = async (credentialName: string) => {
     // get total registered nums and generate name
     const randomChallenge = btoa('1234567890');
-    const credentialName = `Passkey ${initialRegister ? 1 : credentials.length + 1}`;
     const registration = await client.register(credentialName, randomChallenge, {
       authenticatorType: 'both',
     });
@@ -94,7 +92,7 @@ export default function usePasskey() {
       coords,
     };
 
-    addCredential(credentialKey);
+    return credentialKey;
   };
 
   const sign = async (credential: any, userOpHash: string) => {

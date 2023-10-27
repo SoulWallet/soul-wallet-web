@@ -13,6 +13,9 @@ import FormInput from '@/components/web/Form/FormInput';
 import { validateEmail } from '@/lib/tools';
 import { useGuardianStore } from '@/store/guardian';
 import useForm from '@/hooks/useForm';
+import useTools from '@/hooks/useTools';
+import { useAddressStore } from '@/store/address';
+import api from '@/lib/api';
 
 const validate = (values: any) => {
   const errors: any = {};
@@ -26,7 +29,9 @@ const validate = (values: any) => {
 };
 
 export default function GuardianBackup({ startManage, cancelBackup }: any) {
-  const { setEditingGuardiansInfo } = useGuardianStore();
+  const { guardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { generateJsonName, downloadJsonFile } = useTools()
+  const { selectedAddress } = useAddressStore();
   const [downloading, setDownloading] = useState(false);
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,64 +41,64 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
     validate,
   });
 
-  const getGuardiansInfo = async () => {
-    /* const keystore = chainConfig.contracts.l1Keystore;
-     * const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
-
-     * const guardianHash = calcGuardianHash(guardians, threshold);
-     * const initialGuardianHash = guardianHash;
-     * const salt = ethers.ZeroHash;
-     * let initialGuardianSafePeriod = L1KeyStore.days * 2;
-     * initialGuardianSafePeriod = toHex(initialGuardianSafePeriod as any);
-     * const slot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
-     * const slotInitInfo = {
-     *   initialKey,
-     *   initialGuardianHash,
-     *   initialGuardianSafePeriod,
-     * };
-
-     * return {
-     *   keystore,
-     *   slot,
-     *   guardianHash: initialGuardianHash,
-     *   guardianNames: [],
-     *   guardianDetails: {
-     *     guardians: [],
-     *     threshold: 0,
-     *     salt,
-     *   },
-     * }; */
-  };
-
   const handleBackupGuardians = async () => {
-    /* try {
-     *   setLoading(true);
-     *   const info = await getGuardiansInfo();
-     *   const result = await api.guardian.backupGuardians(info);
-     *   setSlot(info.slot);
-     *   setSlotInitInfo(info.slotInitInfo);
-     *   setLoading(false);
-     *   setLoaded(true);
-     *   toast({
-     *     title: 'OnChain Backup Success!',
-     *     status: 'success',
-     *   });
-     *   console.log('handleBackupGuardians', result);
-     * } catch (e: any) {
-     *   setLoading(false);
-     *   toast({
-     *     title: e.message,
-     *     status: 'error',
-     *   });
-     * } */
+    try {
+      setLoading(true);
+      await api.guardian.backupGuardians(guardiansInfo);
+      setLoading(false);
+      toast({
+        title: 'OnChain Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setLoading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
   }
 
   const handleEmailBackupGuardians = async () => {
-
+    try {
+      setSending(true);
+      const filename = generateJsonName('guardian');
+      await api.guardian.emailBackupGuardians({
+        email: emailForm.values.email,
+        filename,
+        ...guardiansInfo
+      });
+      setSending(false);
+      emailForm.clearFields(['email'])
+      toast({
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setSending(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
   }
 
   const handleDownloadGuardians = async () => {
-
+    try {
+      setDownloading(true);
+      await downloadJsonFile(guardiansInfo);
+      setDownloading(false);
+      toast({
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setDownloading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
   }
 
   return (
