@@ -33,18 +33,44 @@ export const WalletContext = createContext<IWalletContext>({
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
   const { getCoordinates } = usePassKey();
-  const { recoveringGuardiansInfo, setGuardiansInfo, updateRecoveringGuardiansInfo } = useGuardianStore();
+  const {
+    recoveringGuardiansInfo,
+    updateRecoveringGuardiansInfo,
+    setRecoveringGuardiansInfo,
+    updateGuardiansInfo,
+    setSlotInfo
+  } = useGuardianStore();
+  const { credentials, addCredential } = useCredentialStore();
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { addressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
     useAddressStore();
-  const credentials = recoveringGuardiansInfo.credentials
-
   const signModal = createRef<any>();
   const signTransactionModal = createRef<any>();
   const signPaymentModal = createRef<any>();
   const signMessageModal = createRef<any>();
+
+  const replaceWallet = async () => {
+    for (const credential of recoveringGuardiansInfo.credentials) {
+      addCredential(credential)
+    }
+
+    updateGuardiansInfo({
+      guardianDetails: recoveringGuardiansInfo.guardianDetails,
+      guardianHash: recoveringGuardiansInfo.guardianHash,
+      guardianNames: recoveringGuardiansInfo.guardianNames,
+      keystore: recoveringGuardiansInfo.keystore,
+      slot: recoveringGuardiansInfo.slot
+    });
+
+    setSlotInfo({
+      ...recoveringGuardiansInfo.slotInitInfo,
+      initialKeys: recoveringGuardiansInfo.credentials,
+      initalkeysAddress: recoveringGuardiansInfo.initalkeysAddress,
+      slot: recoveringGuardiansInfo.slot
+    })
+  };
 
   const ethersProvider = useMemo(() => {
     if (!selectedChainItem) {
@@ -79,20 +105,16 @@ export const WalletContextProvider = ({ children }: any) => {
       const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
       const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
       const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
+      console.log('newKeyHash', newKeyHash)
+      console.log('currentKeyHash', currentKeyHash)
       if(newKeyHash !== currentKeyHash){
-        setGuardiansInfo({
-          guardians: recoveringGuardiansInfo.guardians,
-          guardianNames: recoveringGuardiansInfo.guardianNames,
-          threshold: recoveringGuardiansInfo.threshold,
-        });
+        replaceWallet();
       }
     }
 
     // recover process finished
     if (res.status === 4) {
-      updateRecoveringGuardiansInfo({
-        recoveryRecordID: null,
-      });
+      setRecoveringGuardiansInfo({})
     }
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;
@@ -107,7 +129,7 @@ export const WalletContextProvider = ({ children }: any) => {
       chainRecoverStatus.length &&
       chainRecoverStatus.filter((item: any) => item.status === 1).length === 0
     ) {
-      // setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
+      setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
     }
   };
 

@@ -124,24 +124,24 @@ const SignatureRequest = ({ changeStep }: any) => {
   };
 
   const replaceWallet = async () => {
-    for (const credential of recoveringGuardiansInfo.credentials) {
-      addCredential(credential)
-    }
+    /* for (const credential of recoveringGuardiansInfo.credentials) {
+     *   addCredential(credential)
+     * }
 
-    updateGuardiansInfo({
-      guardianDetails: recoveringGuardiansInfo.guardianDetails,
-      guardianHash: recoveringGuardiansInfo.guardianHash,
-      guardianNames: recoveringGuardiansInfo.guardianNames,
-      keystore: recoveringGuardiansInfo.keystore,
-      slot: recoveringGuardiansInfo.slot
-    });
+     * updateGuardiansInfo({
+     *   guardianDetails: recoveringGuardiansInfo.guardianDetails,
+     *   guardianHash: recoveringGuardiansInfo.guardianHash,
+     *   guardianNames: recoveringGuardiansInfo.guardianNames,
+     *   keystore: recoveringGuardiansInfo.keystore,
+     *   slot: recoveringGuardiansInfo.slot
+     * });
 
-    setSlotInfo({
-      ...recoveringGuardiansInfo.slotInitInfo,
-      initialKeys: recoveringGuardiansInfo.credentials,
-      initalkeysAddress: recoveringGuardiansInfo.initalkeysAddress,
-      slot: recoveringGuardiansInfo.slot
-    })
+     * setSlotInfo({
+     *   ...recoveringGuardiansInfo.slotInitInfo,
+     *   initialKeys: recoveringGuardiansInfo.credentials,
+     *   initalkeysAddress: recoveringGuardiansInfo.initalkeysAddress,
+     *   slot: recoveringGuardiansInfo.slot
+     * }) */
 
     navigate('/wallet');
   };
