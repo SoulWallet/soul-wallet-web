@@ -76,7 +76,7 @@ export default function Create() {
 
   const createInitialSlotInfo = async () => {
     const keystore = chainConfig.contracts.l1Keystore;
-    const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+    const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
     const initialGuardianHash = calcGuardianHash([], 0);
     const salt = ethers.ZeroHash;
     let initialGuardianSafePeriod = toHex(300);

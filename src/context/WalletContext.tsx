@@ -33,7 +33,6 @@ export const WalletContext = createContext<IWalletContext>({
 
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
-  const { getCoordinates } = usePassKey();
   const { retrieveSlotInfo } = useWallet();
   const {
     recoveringGuardiansInfo,

@@ -22,7 +22,7 @@ import { useAddressStore } from '@/store/address';
 export default function SetPasskeys({ changeStep }: any) {
   const { navigate } = useBrowser();
   const { register, getCoordinates } = usePassKey();
-  const { chainConfig } = useConfig();
+  // const { chainConfig } = useConfig();
   // const { credentials, changeCredentialName } = useCredentialStore();
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
@@ -107,9 +107,9 @@ export default function SetPasskeys({ changeStep }: any) {
   };
 
   const createInitialSlotInfo = async () => {
-    const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+    const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
     const initialGuardianHash = calcGuardianHash([], 0);
-    const salt = ethers.ZeroHash;
+    // const salt = ethers.ZeroHash;
     let initialGuardianSafePeriod = toHex(300);
     const slotInitInfo = {
       initialKeys,

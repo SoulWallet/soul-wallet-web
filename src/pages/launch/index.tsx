@@ -80,7 +80,7 @@ export default function Launch() {
 
           console.log('slot init info', slotInitInfo, publicKey);
 
-          retrieveForNewDevice(slotInitInfo, { ...credential, publicKey });
+          await retrieveForNewDevice(slotInitInfo, { ...credential, publicKey });
         }
 
         toast({

@@ -200,7 +200,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       console.log('guardiansList', guardiansList);
 
       const keystore = chainConfig.contracts.l1Keystore;
-      const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+      const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
       const newOwners = L1KeyStore.initialKeysToAddress(initialKeys);
       const guardianAddresses = guardiansList.map((item: any) => item.address);
       const threshold = amountForm.values.amount || 0;
