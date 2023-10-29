@@ -12,6 +12,7 @@ import { useGuardianStore } from '@/store/guardian';
 import { useChainStore } from '@/store/chain';
 import { useAddressStore } from '@/store/address';
 import useWallet from '@/hooks/useWallet';
+import useSdk from '@/hooks/useSdk';
 
 interface IWalletContext {
   ethersProvider: ethers.JsonRpcProvider;
@@ -34,25 +35,40 @@ export const WalletContext = createContext<IWalletContext>({
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
   const { retrieveSlotInfo } = useWallet();
+  const {calcWalletAddress} =useSdk();
   const {
     recoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,
     setRecoveringGuardiansInfo,
     updateGuardiansInfo,
   } = useGuardianStore();
-  const { credentials, setCredentials } = useCredentialStore();
+  const { credentials, setCredentials, setSelectedCredentialId } = useCredentialStore();
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
-  const { addressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
+  const { addressList, setAddressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
     useAddressStore();
   const signModal = createRef<any>();
   const signTransactionModal = createRef<any>();
   const signPaymentModal = createRef<any>();
   const signMessageModal = createRef<any>();
 
-  const replaceWallet = async () => {
+  const boostAfterRecovered = async () => {
+    const initInfo = (await api.guardian.getSlotInfo({ walletAddress: selectedAddress })).data;
+    retrieveSlotInfo(initInfo);
+
     setCredentials(recoveringGuardiansInfo.credentials)
+
+    setSelectedCredentialId(recoveringGuardiansInfo.credentials[0].id);
+
+    const newAddress= await calcWalletAddress(0);
+    setAddressList([{
+      title: `Account 1`,
+      address: newAddress,
+      // TODO, check activate status
+      activatedChains: [],
+    }]);
+    setSelectedAddress(newAddress)
 
     updateGuardiansInfo({
       guardianDetails: recoveringGuardiansInfo.guardianDetails,
@@ -62,9 +78,9 @@ export const WalletContextProvider = ({ children }: any) => {
       slot: recoveringGuardiansInfo.slot
     });
 
-    const initInfo = (await api.guardian.getSlotInfo({ walletAddress: selectedAddress })).data;
-    retrieveSlotInfo(initInfo);
-  
+    setRecoveringGuardiansInfo({})
+
+
   };
 
   const ethersProvider = useMemo(() => {
@@ -98,22 +114,26 @@ export const WalletContextProvider = ({ children }: any) => {
 
     // check if should replace key
     if (res.status >= 3) {
-      const currentKeysRaw = await Promise.all(credentials.map((credential: any) => credential.publicKey))
-      const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
-      const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
+      // const currentKeysRaw = await Promise.all(credentials.map((credential: any) => credential.publicKey))
+      // const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
+      // const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
 
       // const currentKeyHash = L1KeyStore.getSlot()
-      const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
-      console.log('newKeyHash', newKeyHash)
-      console.log('currentKeyHash', currentKeyHash)
-      if(newKeyHash !== currentKeyHash){
-        replaceWallet();
-      }
+      // const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
+      // console.log('newKeyHash', newKeyHash)
+      // console.log('currentKeyHash', currentKeyHash)
+
+      // if no credentials taking effect, create these
+      // if(!credentials.length){
+
+      // IMPORTANT TODO, check when should boost
+        await boostAfterRecovered();
+      // }
     }
 
     // recover process finished
     if (res.status === 4) {
-      setRecoveringGuardiansInfo({})
+      // setRecoveringGuardiansInfo({})
     }
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;

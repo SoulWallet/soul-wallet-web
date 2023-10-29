@@ -69,7 +69,6 @@ export const executeTransaction = async (userOp: any, chainConfig: any) => {
         console.log('still waiting');
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
-        console.log('receipt is', receipt);
         if (receipt.OK.success) {
           resolve(receipt.OK.receipt);
         } else {

@@ -20,7 +20,7 @@ export default function useWallet() {
   const { slotInfo, setSlotInfo } = useGuardianStore();
   const { credentials, setCredentials, setSelectedCredentialId, } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
-  const {selectedAddress, addAddressItem, setSelectedAddress, } = useAddressStore();
+  const {selectedAddress, addAddressItem, setSelectedAddress, setAddressList, } = useAddressStore();
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
@@ -137,12 +137,11 @@ export default function useWallet() {
     retrieveSlotInfo(initInfo);
     // calc first address
     const newAddress= await calcWalletAddress(0);
-    addAddressItem({
+    setAddressList([{
       title: `Account 1`,
       address: newAddress,
-      // TODO, check activate status
       activatedChains: [],
-    });
+    }]);
     setSelectedAddress(newAddress)
     // set credentials
     const credentialKey = {
@@ -158,6 +157,16 @@ export default function useWallet() {
     ]);
 
     setSelectedCredentialId(credential.credentialId);
+
+    // IMPORTANT TODO, retrieve guardian
+    // updateGuardiansInfo({
+    //   guardianDetails: recoveringGuardiansInfo.guardianDetails,
+    //   guardianHash: recoveringGuardiansInfo.guardianHash,
+    //   guardianNames: recoveringGuardiansInfo.guardianNames,
+    //   keystore: recoveringGuardiansInfo.keystore,
+    //   slot: recoveringGuardiansInfo.slot
+    // });
+
   }
 
   const retrieveSlotInfo = (initInfo: any) => {
