@@ -13,6 +13,7 @@ import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
 import { toCapitalize } from '@/lib/tools'
 import { useAddressStore } from '@/store/address';
+import { useCredentialStore } from '@/store/credential';
 
 const getPageIcon = (type: string) => {
   if (type === 'asset') {
@@ -30,10 +31,10 @@ const getPageIcon = (type: string) => {
 
 export default function PageSelect() {
   const { navigate } = useBrowser();
-  const { setSelectedAddress } = useAddressStore();
+  const { setSelectedCredentialId, } = useCredentialStore();
 
   const doLogout = () =>{
-    setSelectedAddress('');
+    setSelectedCredentialId('')
     navigate('/launch');
   }
 

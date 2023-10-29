@@ -3,6 +3,8 @@ import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 
 export interface ICredentialStore {
+  selectedCredentialId: string;
+  setSelectedCredentialId: (credentialId: string) => void;
   credentials: any;
   addCredential: (credential: any) => void;
   setCredentials: (credentials: any) => void;
@@ -16,6 +18,12 @@ export const getIndexByCredentialId = (credentials: any, id: string) => {
 
 const createCredentialSlice = immer<ICredentialStore>((set) => ({
   credentials: [],
+  selectedCredentialId: "",
+  setSelectedCredentialId: (credentialId: string) => {
+    set(state=>{
+      state.selectedCredentialId = credentialId;
+    })
+  },
   addCredential: (credential: any) => {
     set((state) => {
       state.credentials.push(credential);

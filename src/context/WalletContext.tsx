@@ -11,6 +11,7 @@ import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
 import { useChainStore } from '@/store/chain';
 import { useAddressStore } from '@/store/address';
+import useWallet from '@/hooks/useWallet';
 
 interface IWalletContext {
   ethersProvider: ethers.JsonRpcProvider;
@@ -33,12 +34,12 @@ export const WalletContext = createContext<IWalletContext>({
 export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
   const { getCoordinates } = usePassKey();
+  const { retrieveSlotInfo } = useWallet();
   const {
     recoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,
     setRecoveringGuardiansInfo,
     updateGuardiansInfo,
-    setSlotInfo
   } = useGuardianStore();
   const { credentials, setCredentials } = useCredentialStore();
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
@@ -51,7 +52,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const signPaymentModal = createRef<any>();
   const signMessageModal = createRef<any>();
 
-  const replaceSlotInfo = async () => {
+  const replaceWallet = async () => {
     setCredentials(recoveringGuardiansInfo.credentials)
 
     updateGuardiansInfo({
@@ -62,12 +63,9 @@ export const WalletContextProvider = ({ children }: any) => {
       slot: recoveringGuardiansInfo.slot
     });
 
-    setSlotInfo({
-      ...recoveringGuardiansInfo.slotInitInfo,
-      initialKeys: recoveringGuardiansInfo.credentials,
-      initalkeysAddress: recoveringGuardiansInfo.initalkeysAddress,
-      slot: recoveringGuardiansInfo.slot
-    })
+    const initInfo = (await api.guardian.getSlotInfo({ walletAddress: selectedAddress })).data;
+    retrieveSlotInfo(initInfo);
+  
   };
 
   const ethersProvider = useMemo(() => {
@@ -79,13 +77,13 @@ export const WalletContextProvider = ({ children }: any) => {
 
   const checkRecoverStatus = async () => {
     const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
-    console.log('res address: ', res.addresses)
+    // console.log('res address: ', res.addresses)
 
     updateRecoveringGuardiansInfo({
       recoveryRecord: res,
     });
     const { addressList } = useAddressStore.getState();
-    console.log('addresslist is:', addressList);
+    // console.log('addresslist is:', addressList);
     if (addressList.length === 0) {
       // IMPORTANT TODO, the order??
       for (let [index, item] of Object.entries(res.addresses)) {
@@ -93,27 +91,25 @@ export const WalletContextProvider = ({ children }: any) => {
           title: `Account ${index + 1}`,
           address: item as any,
           activatedChains: [],
-          allowedOrigins: [],
+          // allowedOrigins: [],
         });
       }
       console.log('to set selected address: ', res.addresses)
-      setSelectedAddress(res.addresses[0]);
     }
 
     // check if should replace key
     if (res.status >= 3) {
-      replaceSlotInfo();
-      // const currentKeysRaw = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
-      // const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
-      // const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
+      const currentKeysRaw = await Promise.all(credentials.map((credential: any) => credential.publicKey))
+      const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
+      const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
 
-      // // const currentKeyHash = L1KeyStore.getSlot()
-      // const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
-      // console.log('newKeyHash', newKeyHash)
-      // console.log('currentKeyHash', currentKeyHash)
-      // if(newKeyHash !== currentKeyHash){
-      //   replaceWallet();
-      // }
+      // const currentKeyHash = L1KeyStore.getSlot()
+      const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
+      console.log('newKeyHash', newKeyHash)
+      console.log('currentKeyHash', currentKeyHash)
+      if(newKeyHash !== currentKeyHash){
+        replaceWallet();
+      }
     }
 
     // recover process finished
@@ -128,12 +124,20 @@ export const WalletContextProvider = ({ children }: any) => {
       });
     }
 
-    // IMPORTANT TODO, Judge first available chain and set as default
-    if (
-      chainRecoverStatus.length &&
-      chainRecoverStatus.filter((item: any) => item.status === 1).length === 0
-    ) {
-      setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
+    // if (
+    //   chainRecoverStatus.length &&
+    //   chainRecoverStatus.filter((item: any) => item.status === 1).length === 0
+    // ) {
+    //   setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
+    // }
+
+    // set if no selected address
+    if(!selectedAddress){
+      setSelectedAddress(res.addresses[0]);
+    }
+    // set goerli if no selected chainId
+    if(!selectedChainId){
+      setSelectedChainId('0x5')
     }
   };
 

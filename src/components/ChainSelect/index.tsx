@@ -7,19 +7,19 @@ import useConfig from '@/hooks/useConfig';
 
 export default function ChainSelect() {
   const { chainList, setSelectedChainId, selectedChainId } = useChainStore();
-  const toast = useToast();
+  // const toast = useToast();
   const { selectedChainItem } = useConfig();
 
-  const doSwitchChain = (item: any) => {
-    if (item.recovering) {
-      toast({
-        title: 'This chain is recovering',
-        status: 'info',
-      });
-    } else {
-      setSelectedChainId(item.chainIdHex);
-    }
-  };
+  // const doSwitchChain = (item: any) => {
+  //   if (item.recovering) {
+  //     toast({
+  //       title: 'This chain is recovering',
+  //       status: 'info',
+  //     });
+  //   } else {
+  //     ;
+  //   }
+  // };
 
   return (
     <Menu>
@@ -40,7 +40,7 @@ export default function ChainSelect() {
                   <MenuItem
                     key={item.chainIdHex}
                     filter={item.recovering ? 'grayscale(1)' : ''}
-                    onClick={() => doSwitchChain(item)}
+                    onClick={() => setSelectedChainId(item.chainIdHex)}
                   >
                     <Flex w="100%" align={'center'} justify={'space-between'}>
                       <Flex align={'center'} gap="2">

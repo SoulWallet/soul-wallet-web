@@ -77,7 +77,7 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
           Please activate your wallet before signing message
         </Text>
       )}
-      <Button disabled={!isActivated} w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
+      <Button checkCanSign disabled={!isActivated} w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
         Confirm
       </Button>
     </>

@@ -2,7 +2,8 @@ import { base64ToBigInt, base64ToBuffer, uint8ArrayToHexString } from '@/lib/too
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
 import { AsnParser } from '@peculiar/asn1-schema';
-import { useCredentialStore } from '@/store/credential';
+import { WebAuthN } from '@soulwallet/sdk';
+import { ethers } from 'ethers';
 
 const base64urlTobase64 = (base64url: string) => {
   const paddedUrl = base64url.padEnd(base64url.length + ((4 - (base64url.length % 4)) % 4), '=');
@@ -80,10 +81,10 @@ export default function usePasskey() {
 
     const credentialKey = {
       id: registration.credential.id,
-      publicKey: registration.credential.publicKey,
+      publicKey: coords,
       algorithm: 'ES256',
       name: credentialName,
-      coords,
+      // coords,
     };
 
     return credentialKey;
@@ -111,14 +112,11 @@ export default function usePasskey() {
     const signature = base64urlTobase64(authentication.signature);
     console.log(`signature: ${signature}`);
     const { r, s } = decodeDER(signature);
-    const { x, y } = credential.coords;
+    // const { x, y } = credential.coords;
 
     return {
       messageHash: userOpHash,
-      publicKey: {
-        x,
-        y,
-      },
+      publicKey: credential.publicKey,
       r,
       s,
       authenticatorData,
@@ -126,24 +124,73 @@ export default function usePasskey() {
     };
   };
 
-  const getKeyBySignature = (signature: string | undefined) => {
-    if(!signature){
-      return
-    }
-    const signatureBase64 = base64urlTobase64(signature);
-    const { r, s } = decodeDER(signatureBase64);
+  // const getKeyBySignature = (auth: any) => {
+  //   const signatureBase64 = base64urlTobase64(auth.signature);
+  //   const { r, s } = decodeDER(signatureBase64);
 
-    console.log('r s:', r, s);
+  //   const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(auth.authenticatorData)).toString(16)}`;
+  //   const clientData = atob(base64urlTobase64(auth.clientData));
+
+  //   const sliceIndex = clientData.indexOf(`","origin"`);
+  //   const clientDataSuffix = clientData.slice(sliceIndex);
+
+  //   console.log('params', signatureBase64, r, s, authenticatorData, clientDataSuffix);
+
+  //   const publicKeys = WebAuthN.recoverWebAuthNPublicKey(auth.signature, r, s, authenticatorData, clientDataSuffix);
+
+  //   console.log('pub keys', publicKeys);
+
+  //   // 导出的第一个公钥哈希
+  //   // publicKeys.0
+
+  //   // // 导出的第二个公钥哈希
+  //   // publicKeys.1
+
+  //   return {
+  //     r,
+  //     s,
+  //   };
+  // };
+
+  const authenticate = async () => {
+    const userOpHash = ethers.ZeroHash;
+    const userOpHashForBytes = userOpHash.startsWith('0x') ? userOpHash.substr(2) : userOpHash;
+
+    var byteArray = new Uint8Array(32);
+    for (var i = 0; i < 64; i += 2) {
+      byteArray[i / 2] = parseInt(userOpHashForBytes.substr(i, 2), 16);
+    }
+    let challenge = base64Tobase64url(btoa(String.fromCharCode(...byteArray)));
+
+    console.log('Authenticating...');
+    let authentication = await client.authenticate([], challenge, {
+      userVerification: 'required',
+    });
+    console.log('Authenticated', authentication)
+    const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
+    const clientData = atob(base64urlTobase64(authentication.clientData));
+
+    const sliceIndex = clientData.indexOf(`","origin"`);
+    const clientDataSuffix = clientData.slice(sliceIndex);
+    console.log('decoded clientData', clientData, clientDataSuffix);
+    const signature = base64urlTobase64(authentication.signature);
+    console.log(`signature: ${signature}`);
+    const { r, s } = decodeDER(signature);
+
+    const publicKeys = WebAuthN.recoverWebAuthNPublicKey(userOpHash, r, s, authenticatorData, clientDataSuffix);
+
+    console.log('PUB KEYs', publicKeys);
 
     return {
-      r,s
-    }
-  }
-
-  const authenticate = async (challenge: string, credentialId?: string) => {
-    try {
-      return await client.authenticate(credentialId ? [credentialId] : [], challenge);
-    } catch (err) {}
+      publicKeys,
+      // credentialId: authentication.credentialId,
+      credential: authentication,
+      // messageHash: userOpHash,
+      // r,
+      // s,
+      // authenticatorData,
+      // clientDataSuffix,
+    };
   };
 
   return {
@@ -152,6 +199,6 @@ export default function usePasskey() {
     sign,
     authenticate,
     getCoordinates,
-    getKeyBySignature,
+    // getKeyBySignature,
   };
 }

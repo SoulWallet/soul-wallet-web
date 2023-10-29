@@ -17,10 +17,10 @@ export default function useWallet() {
   const { sign } = usePasskey();
   const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
-  const { slotInfo } = useGuardianStore();
-  const { credentials } = useCredentialStore();
-  const { soulWallet } = useSdk();
-  const {selectedAddress} = useAddressStore();
+  const { slotInfo, setSlotInfo } = useGuardianStore();
+  const { credentials, setCredentials, setSelectedCredentialId, } = useCredentialStore();
+  const { soulWallet, calcWalletAddress } = useSdk();
+  const {selectedAddress, addAddressItem, setSelectedAddress, } = useAddressStore();
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
@@ -132,6 +132,49 @@ export default function useWallet() {
     return signature;
   };
 
+  const retrieveForNewDevice = async(initInfo: any, credential: any) => {
+    // set init info
+    retrieveSlotInfo(initInfo);
+    // calc first address
+    const newAddress= await calcWalletAddress(0);
+    addAddressItem({
+      title: `Account 1`,
+      address: newAddress,
+      // TODO, check activate status
+      activatedChains: [],
+    });
+    setSelectedAddress(newAddress)
+    // set credentials
+    const credentialKey = {
+      id: credential.credentialId,
+      publicKey: credential.publicKey,
+      algorithm: 'ES256',
+      name: 'Passkey 1',
+      // coords,
+    };
+
+    setCredentials([
+      credentialKey,
+    ]);
+
+    setSelectedCredentialId(credential.credentialId);
+  }
+
+  const retrieveSlotInfo = (initInfo: any) => {
+    // set slot info
+    const initalkeysAddress = L1KeyStore.initialKeysToAddress(initInfo.initialKeys);
+    const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
+
+    setSlotInfo({
+      initialKeys:  initInfo.initialKeys,
+      initialKeyHash,
+      initalkeysAddress,
+      slot: initInfo.slot,
+      initialGuardianHash: initInfo.slotInitInfo.initialGuardianHash,
+      initialGuardianSafePeriod: initInfo.slotInitInfo.initialGuardianSafePeriod,
+    })
+  }
+
   return {
     addPaymasterAndData,
     getActivateOp,
@@ -139,5 +182,7 @@ export default function useWallet() {
     signAndSend,
     signRawHash,
     signWithPasskey,
+    retrieveForNewDevice,
+    retrieveSlotInfo,
   };
 }

@@ -12,7 +12,7 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalContent,
-  ModalHeader
+  ModalHeader,
 } from '@chakra-ui/react';
 import api from '@/lib/api';
 import TextBody from '@/components/web/TextBody';
@@ -29,14 +29,16 @@ import homeExampleImage from '@/assets/home-example.png';
 import TwitterIcon from '@/components/Icons/Social/Twitter';
 import TelegramIcon from '@/components/Icons/Social/Telegram';
 import GithubIcon from '@/components/Icons/Social/Github';
-import config from '@/config'
+import config from '@/config';
 import { Link } from 'react-router-dom';
+import useWallet from '@/hooks/useWallet';
 
 export default function Launch() {
-  const { register, authenticate, getKeyBySignature, } = usePassKey();
+  const { register, authenticate } = usePassKey();
   const { navigate } = useBrowser();
   const toast = useToast();
-  const { addCredential, credentials, clearCredentials } = useCredentialStore();
+  const { retrieveForNewDevice } = useWallet();
+  const { addCredential, clearCredentials, credentials, setSelectedCredentialId } = useCredentialStore();
   const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -46,22 +48,41 @@ export default function Launch() {
   const login = async () => {
     try {
       setIsAuthing(true);
-      const challenge = btoa('1234567890');
-      const res = await authenticate(challenge);
-      const foo = getKeyBySignature(res?.signature);
-      console.log('auth result', res, foo);
+      const { publicKeys, credential } = await authenticate();
+      console.log('credential is', credential);
       setIsAuthing(false);
 
-      if(res){
-        setSelectedAddress(addressList[0].address)
+      if (publicKeys) {
+        if (credentials.length) {
+          setSelectedAddress(addressList[0].address);
+          setSelectedCredentialId(credential.credentialId);
+        } else {
+          // if no info on this device, init it
+          let slotInitInfo;
+          let publicKey;
+          try {
+            const res = (
+              await api.guardian.getSlotInfo({
+                key: publicKeys['0'],
+              })
+            ).data;
+            slotInitInfo = res;
+            publicKey = publicKeys['0'];
+          } catch (err) {
+            const res = (
+              await api.guardian.getSlotInfo({
+                key: publicKeys['1'],
+              })
+            ).data;
+            slotInitInfo = res;
+            publicKey = publicKeys['1'];
+          }
 
-        // find local storage first, if null, getSlotInfo
-        // const slotInfo = await api.guardian.getSlotInfo({
-        //   key: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEStR_v0JBFvprC6vvQmChpbz1EVTp8uAlmWvWARUHSw2AUh74Le1kVSXMPdsOmsF61IiOIz4piKPcRWFDls992A=="
-        // });
-  
-        // console.log('slot info', slotInfo);
-  
+          console.log('slot init info', slotInitInfo, publicKey);
+
+          retrieveForNewDevice(slotInitInfo, { ...credential, publicKey });
+        }
+
         toast({
           title: 'Logged in',
           status: 'success',
@@ -72,22 +93,20 @@ export default function Launch() {
         } else {
           navigate('/wallet');
         }
-      }else{
+      } else {
         // failed to login
         toast({
-          title: "Failed to login",
-          status: "error"
-        })
+          title: 'Failed to login',
+          status: 'error',
+        });
       }
-
-  
     } catch (error: any) {
       console.log('error', error);
       setIsAuthing(false);
-      toast({
-        title: error.message,
-        status: 'error',
-      });
+      // toast({
+      //   title: error.message,
+      //   status: 'error',
+      // });
     }
   };
 
@@ -103,7 +122,7 @@ export default function Launch() {
       setIsCreating(true);
       const credentialName = `Passkey 1`;
       const credentialKey = await register(credentialName);
-      addCredential(credentialKey)
+      addCredential(credentialKey);
       setIsCreating(false);
       navigate({
         pathname: '/create',
@@ -148,31 +167,37 @@ export default function Launch() {
               overflow="scroll"
               marginRight="-10px"
               zIndex="2"
-
               background="rgba(255, 255, 255, 0.2)"
               borderRadius="16px"
               boxShadow="0 4px 30px rgba(0, 0, 0, 0.25)"
               backdropFilter="blur(4px)"
             >
               <Logo direction="column" />
-              <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="50px 0" width="320px">
-                <Box display="flex" flexDir={"column"} justifyContent="center" alignItems="center" gap="6">
-                    <Button
-                      disabled={isAuthing}
-                      loading={isAuthing}
-                      onClick={login}
-                      _styles={{ width: '282px', borderRadius: '40px' }}
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      disabled={isCreating}
-                      loading={isCreating}
-                      onClick={createWallet}
-                      _styles={{ width: '282px', borderRadius: '40px' }}
-                    >
-                      Create new wallet
-                    </Button>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                margin="50px 0"
+                width="320px"
+              >
+                <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6">
+                  <Button
+                    disabled={isAuthing}
+                    loading={isAuthing}
+                    onClick={login}
+                    _styles={{ width: '282px', borderRadius: '40px' }}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    disabled={isCreating}
+                    loading={isCreating}
+                    onClick={createWallet}
+                    _styles={{ width: '282px', borderRadius: '40px' }}
+                  >
+                    Create new wallet
+                  </Button>
                 </Box>
                 <TextBody color="#1E1E1E" marginTop="24px" fontSize="16px" textAlign="center">
                   Soul Wallet will create a smart contract wallet for you using passkey.
@@ -188,9 +213,15 @@ export default function Launch() {
           </Box>
         </Box>
         <Box width="100%" display="flex" justifyContent="flex-end" padding="10px">
-          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}><TwitterIcon /></Box>
-          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[1].link}><TelegramIcon /></Box>
-          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[2].link}><GithubIcon /></Box>
+          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}>
+            <TwitterIcon />
+          </Box>
+          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[1].link}>
+            <TelegramIcon />
+          </Box>
+          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[2].link}>
+            <GithubIcon />
+          </Box>
         </Box>
       </Box>
     </Box>

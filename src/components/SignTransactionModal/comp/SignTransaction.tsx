@@ -237,6 +237,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
         onClick={onConfirm}
         loading={signing}
         disabled={loadingFee && !sponsor}
+        checkCanSign
       >
         Confirm
       </Button>

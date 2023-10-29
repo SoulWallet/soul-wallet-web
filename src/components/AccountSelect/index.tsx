@@ -26,7 +26,7 @@ const CreateAccount = () => {
       title: `Account ${newIndex + 1}`,
       address: newAddress,
       activatedChains: [],
-      allowedOrigins: [],
+      // allowedOrigins: [],
     });
     setCreating(false);
   };

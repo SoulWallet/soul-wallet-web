@@ -45,7 +45,7 @@ export default function ConnectDapp({ origin, msgId }: any) {
     // do auth first
     const credentialId = credentials[0].id;
     const challenge = btoa('1234567890');
-    const auth = await authenticate(challenge, credentialId);
+    const auth = await authenticate();
     console.log('auth', auth);
 
     if (auth) {

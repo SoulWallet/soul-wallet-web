@@ -252,7 +252,7 @@ export default function Accounts() {
       title: `Account ${newIndex + 1}`,
       address: newAddress,
       activatedChains: [],
-      allowedOrigins: [],
+      // allowedOrigins: [],
     });
     setAdding(false);
   };

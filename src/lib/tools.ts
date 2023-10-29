@@ -59,18 +59,18 @@ export const addPaymasterAndData = (payToken: string, paymaster: string) => {
   return paymasterAndData;
 };
 
-export const checkAllowed = (origin: string) => {
-  const addressStorage = storage.getJson('address-storage');
-  const selectedAddress = addressStorage.state.selectedAddress;
-  const selectedAddressItem = addressStorage.state.addressList.filter(
-    (item: IAddressItem) => item.address === selectedAddress,
-  )[0];
-  const allowedOrigins = selectedAddressItem.allowedOrigins;
-  return {
-    isAllowed: allowedOrigins.includes(origin),
-    selectedAddress,
-  };
-};
+// export const checkAllowed = (origin: string) => {
+//   const addressStorage = storage.getJson('address-storage');
+//   const selectedAddress = addressStorage.state.selectedAddress;
+//   const selectedAddressItem = addressStorage.state.addressList.filter(
+//     (item: IAddressItem) => item.address === selectedAddress,
+//   )[0];
+//   const allowedOrigins = selectedAddressItem.allowedOrigins;
+//   return {
+//     isAllowed: allowedOrigins.includes(origin),
+//     selectedAddress,
+//   };
+// };
 
 export const checkShouldInject = (origin: string) => {
   const settingStorage = storage.getJson('setting-storage');

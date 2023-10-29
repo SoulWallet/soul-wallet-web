@@ -6,7 +6,7 @@ export interface IAddressItem {
   title: string;
   address: string;
   activatedChains: string[];
-  allowedOrigins: string[];
+  // allowedOrigins: string[];
 }
 
 export interface IAddressStore {
@@ -17,7 +17,7 @@ export interface IAddressStore {
   addAddressItem: (addressItem: IAddressItem) => void;
   updateAddressItem: (address: string, addressItem: Partial<IAddressItem>) => void;
   deleteAddress: (address: string) => void;
-  toggleAllowedOrigin: (address: string, origin: string, isAdd?: boolean) => void;
+  // toggleAllowedOrigin: (address: string, origin: string, isAdd?: boolean) => void;
   toggleActivatedChain: (address: string, chainId: string, isAdd?: boolean) => void;
   getIsActivated: (address: string, chainId: string) => boolean;
   getSelectedAddressItem: () => IAddressItem;
@@ -25,7 +25,7 @@ export interface IAddressStore {
 }
 
 export const getIndexByAddress = (addressList: IAddressItem[], address: string) => {
-  return addressList.findIndex((item: IAddressItem) => item.address === address);
+  return addressList.findIndex((item: IAddressItem) => item.address.toLowerCase() === address.toLowerCase());
 };
 
 const createAddressSlice = immer<IAddressStore>((set, get) => ({
@@ -71,16 +71,16 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
       state.addressList.splice(index, 1);
     });
   },
-  toggleAllowedOrigin: (address, origin, isAdd = true) => {
-    set((state: IAddressStore) => {
-      const index = getIndexByAddress(state.addressList, address);
-      if (isAdd) {
-        state.addressList[index].allowedOrigins.push(origin);
-      } else {
-        state.addressList[index].allowedOrigins.splice(index, 1);
-      }
-    });
-  },
+  // toggleAllowedOrigin: (address, origin, isAdd = true) => {
+  //   set((state: IAddressStore) => {
+  //     const index = getIndexByAddress(state.addressList, address);
+  //     if (isAdd) {
+  //       state.addressList[index].allowedOrigins.push(origin);
+  //     } else {
+  //       state.addressList[index].allowedOrigins.splice(index, 1);
+  //     }
+  //   });
+  // },
   // IMPORTANT TODO, need to do some onchain check as well
   toggleActivatedChain: (address, chainId, isAdd = true) => {
     set((state: IAddressStore) => {
