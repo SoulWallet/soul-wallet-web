@@ -23,8 +23,6 @@ const SignTransactionModal = (_: unknown, ref: Ref<any>) => {
   const [activeTxns, setActiveTxns] = useState<any>(null);
   const [sendToAddress, setSendToAddress] = useState('');
 
-  console.log('render SignTransactionModal')
-
   useImperativeHandle(ref, () => ({
     async show(txns: any, origin: string, sendTo: string) {
       setVisible(true);
