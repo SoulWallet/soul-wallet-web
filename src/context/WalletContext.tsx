@@ -79,8 +79,7 @@ export const WalletContextProvider = ({ children }: any) => {
       slot: recoveringGuardiansInfo.slot
     });
 
-    setRecoveringGuardiansInfo({})
-
+    setRecoveringGuardiansInfo(null)
 
   };
 
@@ -115,21 +114,20 @@ export const WalletContextProvider = ({ children }: any) => {
 
     // check if should replace key
     if (res.status >= 3) {
-      // const currentKeysRaw = await Promise.all(credentials.map((credential: any) => credential.publicKey))
-      // const currentKeys = L1KeyStore.initialKeysToAddress(currentKeysRaw);
-      // const currentKeyHash = L1KeyStore.getKeyHash(currentKeys);
 
-      // const currentKeyHash = L1KeyStore.getSlot()
-      // const newKeyHash = L1KeyStore.getKeyHash(res.newOwners);
-      // console.log('newKeyHash', newKeyHash)
-      // console.log('currentKeyHash', currentKeyHash)
+      // new credential
 
-      // if no credentials taking effect, create these
-      // if(!credentials.length){
+      // const stagingKeysRaw = await Promise.all(credentials.map((credential: any) => credential.publicKey))
+      // const stagingKeys = L1KeyStore.initialKeysToAddress(stagingKeysRaw);
+      // const stagingKeyHash = L1KeyStore.getKeyHash(stagingKeys);
+      // const stagingCredentials = []
+      // const currentCredentials = []
+      // const onchainCredentials = res.newOwners;
 
-      // IMPORTANT TODO, check when should boost
-      await boostAfterRecovered();
-      // }
+      // if(onchainCredentials.include(stagingCredentials) && !onchainCredentials.include(currentCredentials) ){
+      if(recoveringGuardiansInfo){
+        await boostAfterRecovered();
+      }
     }
 
     // recover process finished
@@ -207,7 +205,6 @@ export const WalletContextProvider = ({ children }: any) => {
   const showSignMessage = async (messageToSign: string, origin?: string) => {
     return await signMessageModal.current.show(messageToSign, origin);
   };
-
 
   useEffect(() => {
     const { chainIdHex, paymasterTokens } = selectedChainItem;

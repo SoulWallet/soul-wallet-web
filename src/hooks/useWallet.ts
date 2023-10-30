@@ -5,10 +5,11 @@ import { ABI_SoulWallet } from '@soulwallet/abi';
 import { useGuardianStore } from '@/store/guardian';
 import { addPaymasterAndData } from '@/lib/tools';
 import Erc20ABI from '../contract/abi/ERC20.json';
-import { L1KeyStore, UserOpUtils, UserOperation } from '@soulwallet/sdk';
+import { L1KeyStore, UserOperation } from '@soulwallet/sdk';
 import { executeTransaction } from '@/lib/tx';
 import BN from 'bignumber.js';
 import useConfig from './useConfig';
+import api from '@/lib/api';
 import usePasskey from './usePasskey';
 import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
@@ -17,7 +18,7 @@ export default function useWallet() {
   const { sign } = usePasskey();
   const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
-  const { slotInfo, setSlotInfo } = useGuardianStore();
+  const { slotInfo, setSlotInfo, updateGuardiansInfo } = useGuardianStore();
   const { credentials, setCredentials, setSelectedCredentialId, } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
   const {selectedAddress, addAddressItem, setSelectedAddress, setAddressList, } = useAddressStore();
@@ -158,14 +159,17 @@ export default function useWallet() {
 
     setSelectedCredentialId(credential.credentialId);
 
-    // IMPORTANT TODO, retrieve guardian
-    // updateGuardiansInfo({
-    //   guardianDetails: recoveringGuardiansInfo.guardianDetails,
-    //   guardianHash: recoveringGuardiansInfo.guardianHash,
-    //   guardianNames: recoveringGuardiansInfo.guardianNames,
-    //   keystore: recoveringGuardiansInfo.keystore,
-    //   slot: recoveringGuardiansInfo.slot
-    // });
+    const guardianDetails = await api.guardian.getGuardianDetails({ guardianHash: initInfo.slotInitInfo.initialGuardianHash });
+
+    console.log('guardian details', guardianDetails)
+
+    updateGuardiansInfo({
+      guardianDetails: guardianDetails.data.guardianDetails,
+      guardianHash: initInfo.slotInitInfo.initialGuardianHash,
+      keystore: initInfo.keystore,
+      slot: initInfo.slot,
+      // guardianNames: initInfo.guardianNames,
+    });
 
   }
 
