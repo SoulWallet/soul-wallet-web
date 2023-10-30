@@ -28,7 +28,8 @@ export default function useTransaction() {
       value: BN(amount).toString()
     };
 
-    showSignTransaction([tx], '', '', true, BN(amount).shiftedBy(-18).toString());
+    const result = await showSignTransaction([tx], '', '', true, BN(amount).shiftedBy(-18).toString());
+    return result
   };
 
   const sendEth = async (to: string, amount: string) => {
