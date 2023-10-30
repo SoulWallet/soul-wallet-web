@@ -183,7 +183,7 @@ export default function SetPasskeys({ changeStep }: any) {
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
         <Button onClick={createWallet} _styles={{ width: '320px', marginBottom: '12px', background: '#9648FA' }} _hover={{ background: '#9648FA' }} disabled={isCreating} loading={isCreating}>
-          Add another passkey
+          {!credentials.length ? 'Add passkey' : 'Add another passkey'}
         </Button>
         <Button onClick={handleNext} _styles={{ width: '320px' }} disabled={isCreating || !credentials.length}>
           Continue

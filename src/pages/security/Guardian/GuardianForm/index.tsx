@@ -240,8 +240,6 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
         },
       };
 
-      // const res1 = await api.guardian.backupWallet(walletInfo)
-
       const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
 
       const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
@@ -253,30 +251,24 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
         initalRawkeys,
         keySignature,
       ]
+
       const result = await api.guardian.createTask({
         keystore,
         functionName,
         parameters
       })
-      /* {
-       *   "taskID": "0xfc1e5a082b9d06f4031108b18c160c730fde805e391e1a306474d2f370e61a63",
-       *   "status": 0,
-       *   "estiamtedFee": "0x1e7601b1a4db9",
-       *   "transactionHash": ""
-       * } */
+
       const task = result.data
       const txns = [{
         data: '0x',
         to: '0x22979c5a68932bbed6004c8cb106ea15219accdc',
         value: task.estiamtedFee
       }]
-      // await showSignPayment(txns)
-      // await sendEth('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).shiftedBy(-18).toString())
-      await payTask('0x22979c5a68932bbed6004c8cb106ea15219accdc', BN(task.estiamtedFee).toString(), task.taskID);
+
+      const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
+      await payTask(paymentContractAddress, BN(task.estiamtedFee).toString(), task.taskID);
       setGuardiansInfo(guardiansInfo)
       startBackup()
-      // await api.guardian.backupGuardians(guardiansInfo)
-      // 0x9e584021d6d66154f24b15156fa9bc23f8ab1903a92e01e20a4756b45902f2e3
       console.log('handleSubmit', result, txns);
       setLoading(false);
     } catch (error: any) {

@@ -144,7 +144,7 @@ export default function Launch() {
       height="100vh"
       display="flex"
       alignItems="center"
-      justifyContent="flex-end"
+      justifyContent="center"
       backgroundImage={`url(${bgGradientImage})`}
       backgroundPosition="center"
       backgroundRepeat="no-repeat"
@@ -152,76 +152,80 @@ export default function Launch() {
       overflow="scroll"
       position="relative"
     >
-      <Box width="100%">
-        <Box display="flex" justifyContent="flex-end">
-          <Box>
+      <Box display="flex" justifyContent="center">
+        <Box minHeight="calc(100% - 40px)">
+          <Box
+            padding="40px 0"
+            backgroundColor="rgba(255, 255, 255, 0.35)"
+            width="400px"
+            minHeight="calc(100% - 5px)"
+            display="flex"
+            alignItems="center"
+            justifyContent="space-around"
+            flexDirection="column"
+            overflow="scroll"
+            marginRight="-10px"
+            zIndex="2"
+            background="rgba(255, 255, 255, 0.2)"
+            borderRadius="16px"
+            boxShadow="0 4px 30px rgba(0, 0, 0, 0.25)"
+            backdropFilter="blur(4px)"
+          >
+            <Logo direction="column" />
             <Box
-              padding="40px 0"
-              backgroundColor="rgba(255, 255, 255, 0.35)"
-              width="400px"
-              minHeight="calc(100% - 5px)"
               display="flex"
-              alignItems="center"
-              justifyContent="space-around"
               flexDirection="column"
-              overflow="scroll"
-              marginRight="-10px"
-              zIndex="2"
-              background="rgba(255, 255, 255, 0.2)"
-              borderRadius="16px"
-              boxShadow="0 4px 30px rgba(0, 0, 0, 0.25)"
-              backdropFilter="blur(4px)"
+              alignItems="center"
+              justifyContent="center"
+              margin="50px 0"
+              width="320px"
             >
-              <Logo direction="column" />
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                margin="50px 0"
-                width="320px"
-              >
-                <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6">
-                  <Button
-                    disabled={isAuthing}
-                    loading={isAuthing}
-                    onClick={login}
-                    _styles={{ width: '282px', borderRadius: '40px' }}
-                  >
-                    Login
-                  </Button>
-                  <Button
-                    disabled={isCreating}
-                    loading={isCreating}
-                    onClick={createWallet}
-                    _styles={{ width: '282px', borderRadius: '40px' }}
-                  >
-                    Create new wallet
-                  </Button>
-                </Box>
-                <TextBody color="#1E1E1E" marginTop="24px" fontSize="16px" textAlign="center">
-                  Soul Wallet will create a smart contract wallet for you using passkey.
-                </TextBody>
+              <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6">
+                <Button
+                  disabled={isAuthing}
+                  loading={isAuthing}
+                  onClick={login}
+                  _styles={{ width: '282px', borderRadius: '40px' }}
+                >
+                  Login
+                </Button>
+                <Button
+                  disabled={isCreating}
+                  loading={isCreating}
+                  onClick={createWallet}
+                  _styles={{ width: '282px', borderRadius: '40px' }}
+                >
+                  Create new
+                </Button>
               </Box>
-              <TextBody color="#000000" fontWeight="800" fontSize="20px" textAlign="center">
-                <Link to="/recover">Lost your wallet?</Link>
+              <TextBody color="#1E1E1E" marginTop="24px" fontSize="16px" textAlign="center">
+                Soul Wallet will create a smart contract wallet for you using passkey.
               </TextBody>
             </Box>
-          </Box>
-          <Box minHeight="100%">
-            <Image src={homeExampleImage} marginLeft="auto" height="100%" />
+            <TextBody color="#000000" fontWeight="800" fontSize="20px" textAlign="center">
+              <Link to="/recover">Lost your wallet?</Link>
+            </TextBody>
           </Box>
         </Box>
-        <Box width="100%" display="flex" justifyContent="flex-end" padding="10px">
-          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}>
-            <TwitterIcon />
-          </Box>
-          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[1].link}>
-            <TelegramIcon />
-          </Box>
-          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[2].link}>
-            <GithubIcon />
-          </Box>
+        <Box height="100%">
+          <Image src={homeExampleImage} aspectRatio="1021 / 728" height="100%" />
+        </Box>
+      </Box>
+      <Box
+        position="absolute"
+        right="20px"
+        bottom="10px"
+        display="flex"
+        justifyContent="flex-end"
+      >
+        <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}>
+          <TwitterIcon />
+        </Box>
+        <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[1].link}>
+          <TelegramIcon />
+        </Box>
+        <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[2].link}>
+          <GithubIcon />
         </Box>
       </Box>
     </Box>
