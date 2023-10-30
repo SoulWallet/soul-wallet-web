@@ -2,14 +2,13 @@ import { Flex, Box, Text, useToast } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
 import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
 import Button from '../../Button';
-import { InfoWrap, InfoItem } from '@/components/SignTransactionModal'
+import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import BN from 'bignumber.js';
 import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
-import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
+import { useState, useEffect, } from 'react';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
-
 import { useChainStore } from '@/store/chain';
 import api from '@/lib/api';
 import { ethers } from 'ethers';
@@ -19,7 +18,7 @@ import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
-import ChainSelect from '@/components/ChainSelect'
+import ChainSelect from '@/components/ChainSelect';
 
 export default function SignTransaction({ onSuccess, txns, origin, sendToAddress, showSelectChain, showAmount }: any) {
   const toast = useToast();
@@ -30,6 +29,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
   const { checkActivated } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prechecked, setPrechecked] = useState(false);
+  const [totalMsgValue, setTotalMsgValue] = useState('');
   // const [prefundCalculated, setPrefundCalculated] = useState(false);
   // TODO, remember user's last select
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
@@ -153,6 +153,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     setPrechecked(true);
     setLoadingFee(true);
     setFeeCost('...');
+    setTotalMsgValue(txns.reduce((total:any, current:any) => total.plus(current.value), BN(0)).shiftedBy(-18).toString());
     setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
     let userOp = await getFinalUserOp(txns);
     setActiveOperation(userOp);
@@ -161,6 +162,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     setDecodedData(callDataDecodes);
     checkSponser(userOp);
     getFinalPrefund(userOp);
+
   };
 
   useEffect(() => {
@@ -192,12 +194,12 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
           </Box>
         )}
         {showSelectChain && (
-          <Box width="100%"><ChainSelect isInModal={true} /></Box>
+          <Box width="100%">
+            <ChainSelect isInModal={true} />
+          </Box>
         )}
 
-        {showAmount && (
-          <AddressInputReadonly label="Amount" value={`${showAmount} ETH`} />
-        )}
+        {showAmount && <AddressInputReadonly label="Amount" value={`${showAmount} ETH`} />}
 
         <AddressInputReadonly label="From" value={selectedAddressItem.title} memo={toShortAddress(selectedAddress)} />
         {sendToAddress ? (
@@ -207,7 +209,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
         ) : (
           ''
         )}
-
+        <AddressInput label="Send Value" value={`${totalMsgValue} ETH`} disabled={true} />
         <>
           <InfoWrap>
             <InfoItem align={sponsor && 'flex-start'}>

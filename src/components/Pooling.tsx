@@ -26,7 +26,6 @@ export default function Pooling({ children }: any) {
     fetchHistory(selectedAddress, [selectedChainId]);
 
     const interval = setInterval(() => {
-      console.log('fetch token balance and history');
       fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
       fetchHistory(selectedAddress, [selectedChainId]);
     }, 5000);

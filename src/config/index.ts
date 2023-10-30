@@ -22,8 +22,6 @@ export const chainIdMapping = {
   421613: 'Arbitrum Goerli',
 };
 
-
-
 // get all chainId mapping, especially for switch chain.
 export const chainMapping = {
   '0x1': {
@@ -52,8 +50,9 @@ export const chainMapping = {
   },
 };
 
+export const storeVersion = 1;
+
 export default {
-  walletName: 'Soul Wallet',
   faviconUrl: 'https://www.google.com/s2/favicons?domain=',
   socials: [
     {

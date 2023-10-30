@@ -7,6 +7,7 @@ import { GuardianItem } from '@/lib/type';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 import { create } from 'zustand';
+import { storeVersion } from '@/config';
 
 export interface GuardianStore {
   guardiansInfo: any;
@@ -84,5 +85,6 @@ export const createGuardianStore = (initProps?: any) =>
 export const useGuardianStore = create<GuardianStore>()(
   persist((...set) => ({ ...createGuardianSlice(...set) }), {
     name: 'guardian-storage',
+    version: storeVersion,
   }),
 );

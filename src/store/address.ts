@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
+import { storeVersion } from '@/config';
 
 export interface IAddressItem {
   title: string;
@@ -102,6 +103,6 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
 export const useAddressStore = create<IAddressStore>()(
   persist((...set) => ({ ...createAddressSlice(...set) }), {
     name: 'address-storage',
-    version: 8,
+    version: storeVersion,
   }),
 );
