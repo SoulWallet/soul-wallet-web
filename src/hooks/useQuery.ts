@@ -9,14 +9,11 @@ import useSdk from './useSdk';
 import { SignkeyType } from '@soulwallet/sdk';
 import { addPaymasterAndData } from '@/lib/tools';
 import useConfig from './useConfig';
-import { useBalanceStore } from '@/store/balance';
-import { printUserOp } from '@/lib/tools';
 
 export default function useQuery() {
   const { ethersProvider } = useWalletContext();
   const { soulWallet } = useSdk();
   const { chainConfig } = useConfig();
-  const { getTokenBalance } = useBalanceStore();
 
   const getEthPrice = async () => {
     // get price from coingecko

@@ -13,20 +13,35 @@ import api from '@/lib/api';
 import usePasskey from './usePasskey';
 import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
+import { useChainStore } from '@/store/chain';
 
 export default function useWallet() {
   const { sign } = usePasskey();
   const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
-  const { slotInfo, setSlotInfo, updateGuardiansInfo } = useGuardianStore();
-  const { credentials, setCredentials, setSelectedCredentialId, } = useCredentialStore();
+  const {
+    slotInfo,
+    setSlotInfo,
+    updateGuardiansInfo,
+    recoveringGuardiansInfo,
+    updateRecoveringGuardiansInfo,
+    setRecoveringGuardiansInfo,
+  } = useGuardianStore();
+  const { selectedChainId, updateChainItem, setSelectedChainId } = useChainStore();
+  const { credentials, setCredentials, setSelectedCredentialId } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
-  const {selectedAddress, addAddressItem, setSelectedAddress, setAddressList, } = useAddressStore();
+  const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
     const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash, '0x', initialGuardianSafePeriod);
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(
+      index,
+      initialKeys,
+      initialGuardianHash,
+      '0x',
+      initialGuardianSafePeriod,
+    );
 
     if (userOpRet.isErr()) {
       throw new Error(userOpRet.ERR.message);
@@ -86,7 +101,7 @@ export default function useWallet() {
     const credentialIndex = 0;
     const signatureData = await sign(credentials[credentialIndex], packedHash);
 
-    console.log('packUserOp256Signature params:', signatureData, validationData)
+    console.log('packUserOp256Signature params:', signatureData, validationData);
     const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, validationData);
 
     if (packedSignatureRet.isErr()) {
@@ -133,17 +148,19 @@ export default function useWallet() {
     return signature;
   };
 
-  const retrieveForNewDevice = async(initInfo: any, credential: any) => {
+  const retrieveForNewDevice = async (initInfo: any, credential: any) => {
     // set init info
     retrieveSlotInfo(initInfo);
     // calc first address
-    const newAddress= await calcWalletAddress(0);
-    setAddressList([{
-      title: `Account 1`,
-      address: newAddress,
-      activatedChains: [],
-    }]);
-    setSelectedAddress(newAddress)
+    const newAddress = await calcWalletAddress(0);
+    setAddressList([
+      {
+        title: `Account 1`,
+        address: newAddress,
+        activatedChains: [],
+      },
+    ]);
+    setSelectedAddress(newAddress);
     // set credentials
     const credentialKey = {
       id: credential.credentialId,
@@ -153,15 +170,15 @@ export default function useWallet() {
       // coords,
     };
 
-    setCredentials([
-      credentialKey,
-    ]);
+    setCredentials([credentialKey]);
 
     setSelectedCredentialId(credential.credentialId);
 
-    const guardianDetails = await api.guardian.getGuardianDetails({ guardianHash: initInfo.slotInitInfo.initialGuardianHash });
+    const guardianDetails = await api.guardian.getGuardianDetails({
+      guardianHash: initInfo.slotInitInfo.initialGuardianHash,
+    });
 
-    console.log('guardian details', guardianDetails)
+    console.log('guardian details', guardianDetails);
 
     updateGuardiansInfo({
       guardianDetails: guardianDetails.data.guardianDetails,
@@ -170,8 +187,7 @@ export default function useWallet() {
       slot: initInfo.slot,
       // guardianNames: initInfo.guardianNames,
     });
-
-  }
+  };
 
   const retrieveSlotInfo = (initInfo: any) => {
     // set slot info
@@ -179,14 +195,112 @@ export default function useWallet() {
     const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
 
     setSlotInfo({
-      initialKeys:  initInfo.initialKeys,
+      initialKeys: initInfo.initialKeys,
       initialKeyHash,
       initalkeysAddress,
       slot: initInfo.slot,
       initialGuardianHash: initInfo.slotInitInfo.initialGuardianHash,
       initialGuardianSafePeriod: initInfo.slotInitInfo.initialGuardianSafePeriod,
-    })
-  }
+    });
+  };
+
+  const boostAfterRecovered = async () => {
+    const initInfo = (await api.guardian.getSlotInfo({ walletAddress: selectedAddress })).data;
+    retrieveSlotInfo(initInfo);
+
+    setCredentials(recoveringGuardiansInfo.credentials);
+
+    setSelectedCredentialId(recoveringGuardiansInfo.credentials[0].id);
+
+    const newAddress = await calcWalletAddress(0);
+    setAddressList([
+      {
+        title: `Account 1`,
+        address: newAddress,
+        // TODO, check activate status
+        activatedChains: [],
+      },
+    ]);
+    setSelectedAddress(newAddress);
+
+    updateGuardiansInfo({
+      guardianDetails: recoveringGuardiansInfo.guardianDetails,
+      guardianHash: recoveringGuardiansInfo.guardianHash,
+      guardianNames: recoveringGuardiansInfo.guardianNames,
+      keystore: recoveringGuardiansInfo.keystore,
+      slot: recoveringGuardiansInfo.slot,
+    });
+
+    setRecoveringGuardiansInfo(null);
+  };
+
+  const checkRecoverStatus = async (recoveryRecordID: string) => {
+    const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
+    // console.log('res address: ', res.addresses)
+
+    updateRecoveringGuardiansInfo({
+      recoveryRecord: res,
+    });
+    const { addressList } = useAddressStore.getState();
+    // console.log('addresslist is:', addressList);
+    if (addressList.length === 0) {
+      // IMPORTANT TODO, the order??
+      for (let [index, item] of Object.entries(res.addresses)) {
+        addAddressItem({
+          title: `Account ${index + 1}`,
+          address: item as any,
+          activatedChains: [],
+          // allowedOrigins: [],
+        });
+      }
+      console.log('to set selected address: ', res.addresses);
+    }
+
+    // check if should replace key
+    if (res.status >= 3) {
+      // new credential
+
+      // const stagingKeysRaw = await Promise.all(credentials.map((credential: any) => credential.publicKey))
+      // const stagingKeys = L1KeyStore.initialKeysToAddress(stagingKeysRaw);
+      // const stagingKeyHash = L1KeyStore.getKeyHash(stagingKeys);
+      // const stagingCredentials = []
+      // const currentCredentials = []
+      // const onchainCredentials = res.newOwners;
+
+      // if(onchainCredentials.include(stagingCredentials) && !onchainCredentials.include(currentCredentials) ){
+      if (recoveringGuardiansInfo) {
+        await boostAfterRecovered();
+      }
+    }
+
+    // recover process finished
+    if (res.status === 4) {
+      // setRecoveringGuardiansInfo({})
+    }
+
+    const chainRecoverStatus = res.statusData.chainRecoveryStatus;
+    for (let item of chainRecoverStatus) {
+      updateChainItem(item.chainId, {
+        recovering: item.status === 0,
+      });
+    }
+
+    // if (
+    //   chainRecoverStatus.length &&
+    //   chainRecoverStatus.filter((item: any) => item.status === 1).length === 0
+    // ) {
+    //   setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
+    // }
+
+    // set if no selected address
+    if (!selectedAddress) {
+      setSelectedAddress(res.addresses[0]);
+    }
+    // set goerli if no selected chainId
+    if (!selectedChainId) {
+      setSelectedChainId('0x5');
+    }
+  };
 
   return {
     addPaymasterAndData,
@@ -197,5 +311,7 @@ export default function useWallet() {
     signWithPasskey,
     retrieveForNewDevice,
     retrieveSlotInfo,
+    boostAfterRecovered,
+    checkRecoverStatus,
   };
 }

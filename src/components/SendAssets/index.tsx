@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '../Button';
 import { Flex, Box, Text, useToast } from '@chakra-ui/react';
-import BN from 'bignumber.js';
 import useTransaction from '@/hooks/useTransaction';
 import { ethers } from 'ethers';
 import { useBalanceStore } from '@/store/balance';
 import AmountInput from './comp/AmountInput';
 import { AddressInput, AddressInputReadonly } from './comp/AddressInput';
-import { toShortAddress } from '@/lib/tools';
-import useConfig from '@/hooks/useConfig';
 
 interface ISendAssets {
   tokenAddress: string;
@@ -20,10 +17,9 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
   const [sendToken, setSendToken] = useState(tokenAddress);
   const [receiverAddress, setReceiverAddress] = useState<string>('');
   const toast = useToast();
-  const { selectedAddressItem } = useConfig();
 
   const selectedToken = getTokenBalance(sendToken);
-  const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
+  // const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
 
   const { sendErc20, sendEth } = useTransaction();
 

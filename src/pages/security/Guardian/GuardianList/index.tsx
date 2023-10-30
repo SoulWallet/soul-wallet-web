@@ -117,7 +117,6 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
       name: guardianNames[i]
     }
   })
-  console.log('guardiansInfo', guardiansInfo)
 
   return (
     <Fragment>

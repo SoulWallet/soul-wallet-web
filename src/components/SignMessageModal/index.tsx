@@ -27,17 +27,17 @@ const SignMessageModal = (_: unknown, ref: Ref<any>) => {
   }));
 
   const onClose = async () => {
-    promiseInfo.reject('User reject');
     setVisible(false);
+    promiseInfo.reject('User reject');
   };
 
   const onSign = async (signature: string) => {
-    promiseInfo.resolve(signature);
     setVisible(false);
     toast({
       title: 'Signed message',
       status: 'success',
     });
+    promiseInfo.resolve(signature);
   };
 
   return (

@@ -21,7 +21,7 @@ export default function ChainSelect({ isInModal }: any) {
   //   }
   // };
 
-  console.log('selectedChainItem', selectedChainItem)
+  // console.log('selectedChainItem', selectedChainItem)
   return (
     <Menu>
       {({ isOpen }) => (

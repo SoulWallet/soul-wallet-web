@@ -12,27 +12,13 @@ import IconLoading from '@/assets/loading.gif';
 import { ExternalLink } from '../HomeCard';
 
 export default function Activity() {
-  const { selectedAddress } = useAddressStore();
-  const { selectedChainId } = useChainStore();
   const [loading, setLoading] = useState(false);
   // IMPORTANT TODO: MOVE history list to store
   // const [historyList, setHistoryList] = useState<any>([]);
   const { chainConfig } = useConfig();
-  const { historyList, fetchHistory } = useHistoryStore();
+  const { historyList } = useHistoryStore();
 
-  useEffect(() => {
-    if (!selectedAddress || !selectedChainId) {
-      return;
-    }
 
-    const interval = setInterval(() => {
-      fetchHistory(selectedAddress, [selectedChainId]);
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [selectedAddress, selectedChainId]);
 
   return (
     <HomeCard title={'Activity'} external={<ExternalLink title="View all" to="/activity" />} contentHeight="290px">

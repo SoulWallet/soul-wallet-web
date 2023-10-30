@@ -29,19 +29,12 @@ export default function TextButton({
   _styles,
   ...restProps
 }: IProps) {
-  const doClick = () => {
-    if (!loading && !disabled) {
-      if (onClick) onClick();
-    }
-  };
-
   const moreProps: any = {};
 
   if (!disabled) {
     moreProps.href = href;
   }
 
-  console.log('_hover', _hover);
   return (
     <Button
       {...moreProps}

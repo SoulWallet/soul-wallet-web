@@ -41,8 +41,8 @@ export default function RoundButton({
   if (!disabled) {
     moreProps.href = href;
   }
-  console.log('disabled', disabled);
-  console.log('loading', loading);
+  // console.log('disabled', disabled);
+  // console.log('loading', loading);
 
   return (
     <Button

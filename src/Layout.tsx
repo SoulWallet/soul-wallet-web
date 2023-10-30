@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import Fonts from '@/styles/Fonts';
 import FindRoute from '@/components/FindRoute';
 import Theme from '@/styles/Theme';
+import Pooling from './components/Pooling';
 
 export default function Layout() {
   return (
@@ -12,6 +13,7 @@ export default function Layout() {
       <FindRoute>
         <WalletContextProvider>
           <Outlet />
+          <Pooling />
         </WalletContextProvider>
       </FindRoute>
     </ChakraProvider>
