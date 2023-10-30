@@ -319,7 +319,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
 
   return (
     <Fragment>
-      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px" overflow="scroll">
+      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px" overflow="auto">
         <Box width="40%" paddingRight="32px">
           <Heading1>Friend as guardian</Heading1>
           <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians.</TextBody>

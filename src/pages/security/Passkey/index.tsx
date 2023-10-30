@@ -70,7 +70,7 @@ function ManagePasskeyNetworkFeeModal({ isOpen, onClose }: any) {
           Manage Passkey Network Fee
         </ModalHeader>
         <ModalCloseButton top="14px" />
-        <ModalBody pb="12" px="12" overflow="scroll">
+        <ModalBody pb="12" px="12" overflow="auto">
           <Box
             bg="#ededed"
             h="100%"

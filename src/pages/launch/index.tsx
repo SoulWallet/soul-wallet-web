@@ -149,7 +149,7 @@ export default function Launch() {
       backgroundPosition="center"
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
-      overflow="scroll"
+      overflow="auto"
       position="relative"
     >
       <Box display="flex" justifyContent="center">
@@ -175,10 +175,12 @@ export default function Launch() {
             <Box
               display="flex"
               flexDirection="column"
+
               alignItems="center"
               justifyContent="center"
               margin="50px 0"
               width="320px"
+
             >
               <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6">
                 <Button
