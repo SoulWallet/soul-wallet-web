@@ -259,17 +259,11 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       })
 
       const task = result.data
-      const txns = [{
-        data: '0x',
-        to: '0x22979c5a68932bbed6004c8cb106ea15219accdc',
-        value: task.estiamtedFee
-      }]
-
       const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
-      await payTask(paymentContractAddress, BN(task.estiamtedFee).toString(), task.taskID);
+      const res2 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
+      console.log('handleSubmit1111', result, res2);
       setGuardiansInfo(guardiansInfo)
       startBackup()
-      console.log('handleSubmit', result, txns);
       setLoading(false);
     } catch (error: any) {
       console.log('error', error.message)

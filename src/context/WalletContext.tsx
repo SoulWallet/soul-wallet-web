@@ -17,7 +17,7 @@ import useSdk from '@/hooks/useSdk';
 interface IWalletContext {
   ethersProvider: ethers.JsonRpcProvider;
   showSign: () => Promise<void>;
-  showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
+  showSignTransaction: (txns: any, origin?: string, sendTo?: string, showSelectChain?: boolean, showAmount?: string) => Promise<void>;
   showSignPayment: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
   checkActivated: () => Promise<boolean>;
@@ -127,7 +127,7 @@ export const WalletContextProvider = ({ children }: any) => {
       // if(!credentials.length){
 
       // IMPORTANT TODO, check when should boost
-        await boostAfterRecovered();
+      await boostAfterRecovered();
       // }
     }
 
@@ -195,9 +195,9 @@ export const WalletContextProvider = ({ children }: any) => {
     await signModal.current.show();
   };
 
-  const showSignTransaction = async (txns: any, origin?: string, sendTo?: string) => {
+  const showSignTransaction = async (txns: any, origin?: string, sendTo?: string, showSelectChain?: boolean, showAmount?: string) => {
     console.log('show sign transac');
-    return await signTransactionModal.current.show(txns, origin, sendTo);
+    return await signTransactionModal.current.show(txns, origin, sendTo, showSelectChain, showAmount);
   };
 
   const showSignPayment = async (txns: any, origin?: string, sendTo?: string) => {

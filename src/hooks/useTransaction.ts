@@ -19,16 +19,16 @@ export default function useTransaction() {
   const { selectedAddress } = useAddressStore();
 
 
-  const payTask = async (contractAddress: string, value: string, paymentId: string) => {
+  const payTask = async (contractAddress: string, amount: string, paymentId: string) => {
     const soulAbi = new ethers.Interface(ABI_ReceivePayment);
     const callData = soulAbi.encodeFunctionData('pay(bytes32)', [paymentId]);
     const tx: Transaction = {
       to: contractAddress,
       data: callData,
-      value
+      value: BN(amount).toString()
     };
 
-    showSignTransaction([tx], '');
+    showSignTransaction([tx], '', '', true, BN(amount).shiftedBy(-18).toString());
   };
 
   const sendEth = async (to: string, amount: string) => {

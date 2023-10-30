@@ -1,11 +1,11 @@
 import React from 'react';
-import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, useToast } from '@chakra-ui/react';
+import { Box, Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, useToast } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
 import { useChainStore } from '@/store/chain';
 import useConfig from '@/hooks/useConfig';
 
-export default function ChainSelect() {
+export default function ChainSelect({ isInModal }: any) {
   const { chainList, setSelectedChainId, selectedChainId } = useChainStore();
   // const toast = useToast();
   const { selectedChainItem } = useConfig();
@@ -21,14 +21,18 @@ export default function ChainSelect() {
   //   }
   // };
 
+  console.log('selectedChainItem', selectedChainItem)
   return (
     <Menu>
       {({ isOpen }) => (
         <>
-          <MenuButton data-testid="btn-chain-select">
+          <MenuButton data-testid="btn-chain-select" width={isInModal ? '100%' : 'auto'} height={isInModal ? '48px' : '44px'}>
             <Flex px="3" py="10px" bg="#f2f2f2" rounded={'full'} cursor={'pointer'}>
               <Image src={selectedChainItem.icon} w="22px" h="22px" />
-              <Image src={IconCheveronRight} transform={isOpen ? 'rotate(90deg)' : 'none'} w="20px" h="20px" />
+              {isInModal && <Text fontWeight="800" fontSize="16px" marginLeft="4px">{selectedChainItem.chainName}</Text>}
+              <Box marginLeft={isInModal ? 'auto' : '0px'}>
+                <Image src={IconCheveronRight} transform={isOpen ? 'rotate(90deg)' : 'none'} w="20px" h="20px" />
+              </Box>
             </Flex>
           </MenuButton>
 
