@@ -196,7 +196,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
         )}
 
         {showAmount && (
-          <AddressInputReadonly label="Amount" value={showAmount} />
+          <AddressInputReadonly label="Amount" value={`${showAmount} ETH`} />
         )}
 
         <AddressInputReadonly label="From" value={selectedAddressItem.title} memo={toShortAddress(selectedAddress)} />
