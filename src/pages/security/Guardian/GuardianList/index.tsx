@@ -198,13 +198,15 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
           <TextBody>out of 3 guardian(s) confirmation. </TextBody>
         </Box>
       </Box>
-      <Box padding="40px">
-        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => startBackup()}>
-            Backup current guardians
-          </RoundButton>
+      {!!guardianList.length && (
+        <Box padding="40px">
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+            <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => startBackup()}>
+              Backup current guardians
+            </RoundButton>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Fragment>
   )
 }
