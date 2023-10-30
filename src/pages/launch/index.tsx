@@ -149,7 +149,7 @@ export default function Launch() {
       backgroundPosition="center"
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
-      overflow="scroll"
+      overflow="auto"
       position="relative"
     >
       <Box width="100%">
@@ -164,7 +164,7 @@ export default function Launch() {
               alignItems="center"
               justifyContent="space-around"
               flexDirection="column"
-              overflow="scroll"
+              overflow="auto"
               marginRight="-10px"
               zIndex="2"
               background="rgba(255, 255, 255, 0.2)"

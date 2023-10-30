@@ -53,7 +53,6 @@ const ModalV2 = ({ visible, children, onClose, footerComponent, id = nanoid() }:
   //       maxHeight="100vh"
   //       position="relative"
   //       padding="20px"
-  //       overflow="scroll"
   //     >
   //       {children}
   //     </Box>
