@@ -9,28 +9,11 @@ import { useAddressStore } from '@/store/address';
 import HomeCard from '../HomeCard';
 
 export default function Tokens() {
-  const { selectedAddress } = useAddressStore();
   const { tokenBalance, fetchTokenBalance } = useBalanceStore();
   const [transferVisible, setTransferVisible] = useState(false);
   const [tokenAddress, setTokenAddress] = useState('');
-  const { selectedChainItem } = useConfig();
-  const { navigate } = useBrowser();
 
-  useEffect(() => {
-    const { chainIdHex, paymasterTokens } = selectedChainItem;
 
-    if (!selectedAddress) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [selectedAddress, selectedChainItem]);
 
   const showTransfer = (tokenAddress: string) => {
     setTokenAddress(tokenAddress);

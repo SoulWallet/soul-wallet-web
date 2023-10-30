@@ -6,7 +6,7 @@ import SignPaymentModal from '@/components/SignPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import useConfig from '@/hooks/useConfig';
 import { useCredentialStore } from '@/store/credential';
-import usePassKey from '@/hooks/usePasskey';
+import { useBalanceStore } from '@/store/balance';
 import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
 import { useChainStore } from '@/store/chain';
@@ -45,6 +45,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const { credentials, setCredentials, setSelectedCredentialId } = useCredentialStore();
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
   const { setSelectedChainId, selectedChainId, updateChainItem } = useChainStore();
+  const { tokenBalance, fetchTokenBalance } = useBalanceStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { addressList, setAddressList, addAddressItem, selectedAddress, getIsActivated, setSelectedAddress, toggleActivatedChain } =
     useAddressStore();
@@ -196,18 +197,37 @@ export const WalletContextProvider = ({ children }: any) => {
   };
 
   const showSignTransaction = async (txns: any, origin?: string, sendTo?: string, showSelectChain?: boolean, showAmount?: string) => {
-    console.log('show sign transac');
     return await signTransactionModal.current.show(txns, origin, sendTo, showSelectChain, showAmount);
   };
 
   const showSignPayment = async (txns: any, origin?: string, sendTo?: string) => {
-    console.log('show sign payment');
     return await signPaymentModal.current.show(txns, origin, sendTo);
   };
 
   const showSignMessage = async (messageToSign: string, origin?: string) => {
     return await signMessageModal.current.show(messageToSign, origin);
   };
+
+
+  useEffect(() => {
+    const { chainIdHex, paymasterTokens } = selectedChainItem;
+
+    if (!selectedAddress || !selectedChainId) {
+      return;
+    }
+
+    fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
+
+    const interval = setInterval(() => {
+
+      console.log('fetch token balance')
+      fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [selectedAddress, selectedChainId]);
 
   // if address on chain is not activated, check again
   useEffect(() => {

@@ -120,7 +120,7 @@ export default function Launch() {
     try {
       resetWallet();
       setIsCreating(true);
-      const credentialName = `Passkey 1`;
+      const credentialName = `Passkey_1`;
       const credentialKey = await register(credentialName);
       addCredential(credentialKey);
       setIsCreating(false);

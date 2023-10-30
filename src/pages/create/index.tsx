@@ -45,7 +45,7 @@ export default function Create() {
   const createWallet = async () => {
     try {
       setIsCreating(true);
-      const credentialName = `Passkey ${credentials.length + 1}`;
+      const credentialName = `Passkey_${credentials.length + 1}`;
       const credentialKey = await register(credentialName);
       addCredential(credentialKey);
       setIsCreating(false);

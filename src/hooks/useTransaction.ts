@@ -28,7 +28,8 @@ export default function useTransaction() {
       value: BN(amount).toString()
     };
 
-    showSignTransaction([tx], '', '', true, BN(amount).shiftedBy(-18).toString());
+    await showSignTransaction([tx], '', '', true, BN(amount).shiftedBy(-18).toString());
+
   };
 
   const sendEth = async (to: string, amount: string) => {
@@ -39,9 +40,7 @@ export default function useTransaction() {
       value: amountInWei,
       data: '0x',
     };
-
-    showSignTransaction([tx], '', to);
-
+    return await showSignTransaction([tx], '', to);
   };
 
   const sendErc20 = async (tokenAddress: string, to: string, amount: string, decimals: number) => {
@@ -52,9 +51,7 @@ export default function useTransaction() {
       to: tokenAddress,
       data: callData,
     };
-
-    showSignTransaction([tx], '', to);
-
+    return showSignTransaction([tx], '', to);
   };
 
   const getUserOp: any = async (txns: any, payToken: string) => {

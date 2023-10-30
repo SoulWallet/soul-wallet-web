@@ -62,9 +62,11 @@ export default function usePasskey() {
   };
 
   const register = async (credentialName: string) => {
+    const unixTimestamp = Math.floor(Date.now() / 1000)
     // get total registered nums and generate name
     const randomChallenge = btoa('1234567890');
-    const registration = await client.register(credentialName, randomChallenge, {
+    const finalCredentialName = `${credentialName}_${unixTimestamp}`
+    const registration = await client.register(finalCredentialName, randomChallenge, {
       authenticatorType: 'both',
     });
     console.log('Registered: ', JSON.stringify(registration, null, 2));
@@ -83,7 +85,7 @@ export default function usePasskey() {
       id: registration.credential.id,
       publicKey: coords,
       algorithm: 'ES256',
-      name: credentialName,
+      name: finalCredentialName,
       // coords,
     };
 

@@ -12,7 +12,6 @@ import Launch from '@/pages/launch';
 import Asset from '@/pages/asset';
 import Activity from '@/pages/activity';
 import Security from '@/pages/security';
-import Test from './pages/test';
 
 export const router = createBrowserRouter([
   {
@@ -31,7 +30,6 @@ export const router = createBrowserRouter([
       { path: 'recover', element: <Recover /> },
       { path: 'popup', element: <Popup />},
       { path: 'security', element: <Security /> },
-      { path: 'test', element: <Test /> },
       {
         /* <Route path="create" element={<CreatePage />} />
           <Route path="recover" element={<RecoverPage />} />

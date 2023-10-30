@@ -74,7 +74,7 @@ export default function SetPasskeys({ changeStep }: any) {
     try {
       setIsCreating(true);
       const credentials = getRecoveringGuardiansInfo().credentials || []
-      const credentialName = `Passkey ${credentials.length + 1}`
+      const credentialName = `Passkey_${credentials.length + 1}`
       const credentialKey = await register(credentialName);
       addCredential(credentialKey)
       setIsCreating(false);
