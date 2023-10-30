@@ -163,7 +163,7 @@ export default function Launch() {
             alignItems="center"
             justifyContent="space-around"
             flexDirection="column"
-            overflow="scroll"
+            overflow="auto"
             marginRight="-10px"
             zIndex="2"
             background="rgba(255, 255, 255, 0.2)"
