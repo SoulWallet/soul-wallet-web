@@ -205,6 +205,9 @@ export default function useWallet() {
   };
 
   const boostAfterRecovered = async () => {
+    setRecoveringGuardiansInfo({
+      recoveryRecordID: recoveringGuardiansInfo.recoveryRecordID
+    });
     const initInfo = (await api.guardian.getSlotInfo({ walletAddress: selectedAddress })).data;
     retrieveSlotInfo(initInfo);
 
@@ -231,16 +234,12 @@ export default function useWallet() {
       slot: recoveringGuardiansInfo.slot,
     });
 
-    // setRecoveringGuardiansInfo({});
+  
   };
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {
     const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
     // console.log('res address: ', res.addresses)
-
-    updateRecoveringGuardiansInfo({
-      recoveryRecord: res,
-    });
     const { addressList } = useAddressStore.getState();
     // console.log('addresslist is:', addressList);
     if (addressList.length === 0) {
@@ -256,10 +255,15 @@ export default function useWallet() {
       console.log('to set selected address: ', res.addresses);
     }
 
+    if(res.status < 3) {
+      updateRecoveringGuardiansInfo({
+        recoveryRecord: res,
+      });
+    }
+
     // check if should replace key
     if (res.status >= 3) {
       // new credential
-
       // const stagingKeysRaw = await Promise.all(credentials.map((credential: any) => credential.publicKey))
       // const stagingKeys = L1KeyStore.initialKeysToAddress(stagingKeysRaw);
       // const stagingKeyHash = L1KeyStore.getKeyHash(stagingKeys);
@@ -267,7 +271,7 @@ export default function useWallet() {
       // const currentCredentials = []
       // const onchainCredentials = res.newOwners;
       // if(onchainCredentials.include(stagingCredentials) && !onchainCredentials.include(currentCredentials) ){
-      if (!Object.keys(recoveringGuardiansInfo)) {
+      if (Object.keys(recoveringGuardiansInfo).length > 1) {
         await boostAfterRecovered();
       }
     }

@@ -10,24 +10,11 @@ import Footer from '@/components/Footer';
 import { L1KeyStore } from '@soulwallet/sdk';
 
 export default function Wallet() {
-  // const isActivated = getIsActivated(selectedAddress, selectedChainId);
-  // const [skipSet, setSkipSet] = useState(false);
-
-  // const setPassKeyName = ({ id, name }: any) => {
-  //   changeCredentialName(id, name);
-  // };
-
-  // const showSetGuardian =
-  //   isActivated &&
-  //   guardians.length === 0 &&
-  //   (!storage.getItem('skipSet') || storage.getItem('skipSet') !== 'true') &&
-  //   !skipSet;
-
   return (
     <Box color="#000">
       <Header />
       <AppContainer minH="calc(100vh - 100px)">
-        <Grid templateColumns={'repeat(3, 1fr)'} gap="30px" mb="12">
+        <Grid templateColumns={{base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)'}} gap={{base: 4, lg: 6}} mb="12">
           <GridItem>
             <Balance />
           </GridItem>
@@ -37,7 +24,7 @@ export default function Wallet() {
           <GridItem>
             <Activity />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{base: 1, lg: 2}}>
             <DappList />
           </GridItem>
           <GridItem>
