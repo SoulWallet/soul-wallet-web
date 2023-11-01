@@ -4,7 +4,7 @@ import IconLogo from '@/assets/logo-v3.svg';
 import IconLock from '@/assets/icons/lock.svg';
 import Button from './Button';
 import useConfig from '@/hooks/useConfig';
-import { InfoWrap, InfoItem } from '@/components/SignTransactionModal'
+import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import config from '@/config';
 import { AccountSelect } from './AccountSelect';
 import { useCredentialStore } from '@/store/credential';
@@ -37,30 +37,28 @@ const DappAvatar = ({ avatar }: any) => (
 
 export default function ConnectDapp({ origin, msgId }: any) {
   const { selectedAddressItem, selectedChainItem } = useConfig();
-  const { credentials } = useCredentialStore();
-  const { authenticate } = usePasskey();
+  // const { credentials } = useCredentialStore();
+  // const { authenticate } = usePasskey();
   const { title, address } = selectedAddressItem;
 
   const onConfirm = async (address: string) => {
     // do auth first
-    const credentialId = credentials[0].id;
-    const challenge = btoa('1234567890');
-    const auth = await authenticate();
-    console.log('auth', auth);
+    // const credentialId = credentials[0].id;
+    // const challenge = btoa('1234567890');
+    // const auth = await authenticate();
+    // console.log('auth', auth);
 
-    if (auth) {
-      window.opener.postMessage(
-        {
-          id: msgId,
-          payload: {
-            address,
-            chainConfig: selectedChainItem,
-          },
+    window.opener.postMessage(
+      {
+        id: msgId,
+        payload: {
+          address,
+          chainConfig: selectedChainItem,
         },
-        '*',
-      );
-      window.close();
-    }
+      },
+      '*',
+    );
+    window.close();
   };
 
   return (

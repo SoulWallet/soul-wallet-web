@@ -127,10 +127,8 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
-  const { getCoordinates } = usePassKey();
   const {
     recoveringGuardiansInfo,
-    setRecoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,
   } = useGuardianStore();
   const credentials = recoveringGuardiansInfo.credentials
@@ -139,8 +137,6 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [showMannualInput, setShowMannualInput] = useState(false);
   const toast = useToast();
   const { chainConfig } = useConfig();
-
-  const stepDispatch = useStepDispatchContext();
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,

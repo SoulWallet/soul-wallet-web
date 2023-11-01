@@ -1,4 +1,4 @@
-import { base64ToBigInt, base64ToBuffer, uint8ArrayToHexString } from '@/lib/tools';
+import { base64ToBigInt, base64ToBuffer, getCurrentTimeFormatted, uint8ArrayToHexString } from '@/lib/tools';
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
 import { AsnParser } from '@peculiar/asn1-schema';
@@ -62,10 +62,8 @@ export default function usePasskey() {
   };
 
   const register = async (credentialName: string) => {
-    const unixTimestamp = Math.floor(Date.now() / 1000)
-    // get total registered nums and generate name
     const randomChallenge = btoa('1234567890');
-    const finalCredentialName = `${credentialName}_${unixTimestamp}`
+    const finalCredentialName = `${credentialName}_${getCurrentTimeFormatted()}`
     const registration = await client.register(finalCredentialName, randomChallenge, {
       authenticatorType: 'both',
     });
@@ -79,14 +77,11 @@ export default function usePasskey() {
 
     const coords = await getCoordinates(registration.credential.publicKey);
 
-    console.log('coords', coords);
-
     const credentialKey = {
       id: registration.credential.id,
       publicKey: coords,
       algorithm: 'ES256',
       name: finalCredentialName,
-      // coords,
     };
 
     return credentialKey;
@@ -114,7 +109,6 @@ export default function usePasskey() {
     const signature = base64urlTobase64(authentication.signature);
     console.log(`signature: ${signature}`);
     const { r, s } = decodeDER(signature);
-    // const { x, y } = credential.coords;
 
     return {
       messageHash: userOpHash,

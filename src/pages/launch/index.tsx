@@ -38,7 +38,7 @@ export default function Launch() {
   const { navigate } = useBrowser();
   const toast = useToast();
   const { retrieveForNewDevice } = useWallet();
-  const { addCredential, clearCredentials, credentials, setSelectedCredentialId } = useCredentialStore();
+  const { clearCredentials, credentials, setSelectedCredentialId } = useCredentialStore();
   const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -122,7 +122,6 @@ export default function Launch() {
        * setIsCreating(true);
        * const credentialName = `Passkey_1`;
        * const credentialKey = await register(credentialName);
-       * addCredential(credentialKey);
        * setIsCreating(false); */
       navigate({
         pathname: '/create',

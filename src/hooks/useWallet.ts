@@ -28,7 +28,7 @@ export default function useWallet() {
     setRecoveringGuardiansInfo,
   } = useGuardianStore();
   const { selectedChainId, updateChainItem, setSelectedChainId } = useChainStore();
-  const { credentials, setCredentials, setSelectedCredentialId } = useCredentialStore();
+  const { credentials, setCredentials, getSelectedCredential, } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
 
@@ -97,9 +97,7 @@ export default function useWallet() {
   };
 
   const getSignature = async (packedHash: string, validationData: string) => {
-    // IMPORT TODO, use the first credential for now
-    const credentialIndex = 0;
-    const signatureData = await sign(credentials[credentialIndex], packedHash);
+    const signatureData = await sign(getSelectedCredential(), packedHash);
 
     console.log('packUserOp256Signature params:', signatureData, validationData);
     const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, validationData);
@@ -172,8 +170,6 @@ export default function useWallet() {
 
     setCredentials([credentialKey]);
 
-    setSelectedCredentialId(credential.credentialId);
-
     const guardianDetails = await api.guardian.getGuardianDetails({
       guardianHash: initInfo.slotInitInfo.initialGuardianHash,
     });
@@ -205,15 +201,10 @@ export default function useWallet() {
   };
 
   const boostAfterRecovered = async () => {
-    setRecoveringGuardiansInfo({
-      recoveryRecordID: recoveringGuardiansInfo.recoveryRecordID
-    });
     const initInfo = (await api.guardian.getSlotInfo({ walletAddress: selectedAddress })).data;
     retrieveSlotInfo(initInfo);
 
     setCredentials(recoveringGuardiansInfo.credentials);
-
-    setSelectedCredentialId(recoveringGuardiansInfo.credentials[0].id);
 
     const newAddress = await calcWalletAddress(0);
     setAddressList([
@@ -233,8 +224,9 @@ export default function useWallet() {
       keystore: recoveringGuardiansInfo.keystore,
       slot: recoveringGuardiansInfo.slot,
     });
-
-  
+    updateRecoveringGuardiansInfo({
+      enabled: true,
+    });
   };
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {
@@ -271,7 +263,7 @@ export default function useWallet() {
       // const currentCredentials = []
       // const onchainCredentials = res.newOwners;
       // if(onchainCredentials.include(stagingCredentials) && !onchainCredentials.include(currentCredentials) ){
-      if (Object.keys(recoveringGuardiansInfo).length > 1) {
+      if (!recoveringGuardiansInfo.enabled) {
         await boostAfterRecovered();
       }
     }

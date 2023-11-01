@@ -49,12 +49,8 @@ const SignatureRequest = ({ changeStep }: any) => {
   const [showProgress, setShowProgress] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
-  const { addCredential } = useCredentialStore();
   const {
-    updateGuardiansInfo,
     recoveringGuardiansInfo,
-    updateRecoveringGuardiansInfo,
-    setSlotInfo
   } = useGuardianStore();
   // const { initRecoverWallet } = useWallet();
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID

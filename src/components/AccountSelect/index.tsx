@@ -68,7 +68,7 @@ export function AccountSelectFull({ ...restProps }) {
   };
   return (
     <Flex align={'center'} gap="2px" {...restProps}>
-      <AccountSelect pl={{base: "3", lg: "unset"}} wrapperProps={{ w: { base: '50%', lg: 'unset' } }} />
+      <AccountSelect pl={{base: "3", lg: "4"}} wrapperProps={{ w: { base: '50%', lg: 'unset' } }} />
       <Flex
         w={{ base: '50%', lg: 'unset' }}
         gap="1"

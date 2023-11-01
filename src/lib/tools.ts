@@ -105,6 +105,16 @@ const to10 = (n: any) => {
   return BN(n).toString();
 };
 
+export const getCurrentTimeFormatted = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hour = String(now.getHours()).padStart(2, '0');
+  const minute = String(now.getMinutes()).padStart(2, '0');
+  return `${year}${month}${day}${hour}${minute}`
+}
+
 export const base64ToBigInt = (base64String: string) => {
   const binaryString = atob(base64String);
   let result = BigInt(0);

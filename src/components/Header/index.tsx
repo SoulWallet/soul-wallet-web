@@ -1,5 +1,4 @@
 import { Box, Flex, Image, Button } from '@chakra-ui/react';
-import { useState } from 'react';
 import ChainSelect from '../ChainSelect';
 import PageSelect from '../PageSelect';
 import IconLogo from '@/assets/logo-all-v3.svg';

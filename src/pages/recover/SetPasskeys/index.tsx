@@ -125,9 +125,9 @@ export default function SetPasskeys({ changeStep }: any) {
       const recoveryRecord = await api.guardian.getRecoverRecord({ recoveryRecordID })
       updateRecoveringGuardiansInfo({
         recoveryRecordID,
-        recoveryRecord
+        recoveryRecord,
+        enabled: false,
       });
-
       setTimeout(() => {
         setIsConfirming(false)
         changeStep(4)

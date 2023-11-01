@@ -23,13 +23,13 @@ import SetWalletName from './SetWalletName'
 
 export default function Create() {
   const { navigate } = useBrowser();
-  const { register, getCoordinates } = usePassKey();
+  const { register } = usePassKey();
   const { chainConfig } = useConfig();
-  const { addCredential, credentials, changeCredentialName } = useCredentialStore();
+  const { addCredential, credentials, changeCredentialName, setSelectedCredentialId, } = useCredentialStore();
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const { calcGuardianHash, getSlot } = useKeystore();
+  const { calcGuardianHash } = useKeystore();
   const { setSlotInfo, setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
@@ -70,6 +70,7 @@ export default function Create() {
     console.log('createInitialWallet', newAddress);
     setSelectedAddress(newAddress);
     setEditingGuardiansInfo({});
+    setSelectedCredentialId(credentials[0].id)
   };
 
   const createInitialSlotInfo = async () => {
