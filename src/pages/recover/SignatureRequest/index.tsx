@@ -68,7 +68,7 @@ const SignatureRequest = ({ changeStep }: any) => {
     guardianSignatures = recoveryRecord && recoveryRecord.guardianSignatures
     chainRecoveryStatus = recoveryRecord && recoveryRecord.statusData && recoveryRecord.statusData.chainRecoveryStatus || []
 
-    hasChainFinished = !!chainRecoveryStatus.filter(item => !!item.status).length
+    hasChainFinished = !!chainRecoveryStatus.filter((item: any) => !!item.status).length
     recoverStatus = recoveryRecord && recoveryRecord.status
   }
 
