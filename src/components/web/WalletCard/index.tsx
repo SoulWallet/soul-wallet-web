@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import WalletCardIcon from '@/components/Icons/WalletCard';
 
-export default function WalletCard({ statusText, steps }: any) {
+export default function WalletCard({ statusText, titleText, steps }: any) {
   return (
     <Box
       width="100%"
@@ -36,7 +36,7 @@ export default function WalletCard({ statusText, steps }: any) {
           </Box>
         </Box>
         <Box width="100%" fontSize="16px" fontWeight="600" marginTop="10px" fontFamily="Martian">
-          YOUR SOUL WALLET!
+          {titleText || 'YOUR SOUL WALLET!'}
         </Box>
         {steps && <Box width="100%">{steps}</Box>}
       </Box>

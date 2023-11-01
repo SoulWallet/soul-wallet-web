@@ -14,12 +14,15 @@ export default function FindRoute({ children }: any) {
   const location = useLocation();
   const { addressList, selectedAddress, } = useAddressStore();
   const isRecover = location.pathname.includes('recover');
+  const isCreate = location.pathname.includes('create');
 
   const findRoute = async () => {
     const recovering = storage.getItem('recovering');
 
     if (isRecover || recovering) {
       navigate('/recover');
+    } else if (isCreate) {
+      navigate('/create');
     } else if (!addressList.length || !selectedAddress) {
       navigate({
         pathname: '/launch',

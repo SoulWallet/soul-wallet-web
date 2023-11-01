@@ -118,12 +118,12 @@ export default function Launch() {
 
   const createWallet = async () => {
     try {
-      resetWallet();
-      setIsCreating(true);
-      const credentialName = `Passkey_1`;
-      const credentialKey = await register(credentialName);
-      addCredential(credentialKey);
-      setIsCreating(false);
+      /* resetWallet();
+       * setIsCreating(true);
+       * const credentialName = `Passkey_1`;
+       * const credentialKey = await register(credentialName);
+       * addCredential(credentialKey);
+       * setIsCreating(false); */
       navigate({
         pathname: '/create',
         search: location.search,
@@ -187,7 +187,18 @@ export default function Launch() {
                   disabled={isAuthing}
                   loading={isAuthing}
                   onClick={login}
-                  _styles={{ width: '282px', borderRadius: '40px' }}
+                  _styles={{
+                    width: '282px',
+                    borderRadius: '40px',
+                    background: 'white',
+                    color: 'black'
+                  }}
+                  _hover={{
+                    width: '282px',
+                    borderRadius: '40px',
+                    background: 'white',
+                    color: 'black'
+                  }}
                 >
                   Login with passkey
                 </Button>

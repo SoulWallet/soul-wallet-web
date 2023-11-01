@@ -19,6 +19,7 @@ import { toHex } from '@/lib/tools';
 import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';
 import api from '@/lib/api';
+import SetWalletName from './SetWalletName'
 
 export default function Create() {
   const { navigate } = useBrowser();
@@ -33,13 +34,10 @@ export default function Create() {
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
   const toast = useToast();
+  const [step, setStep] = useState(0);
 
-  const onStepChange = (i: number) => {
-    if (i == 0) {
-      // navigate('/launch')
-    } else if (i == 1) {
-      setIsReady(false);
-    }
+  const changeStep = (i: number) => {
+    setStep(i)
   };
 
   const createWallet = async () => {
@@ -143,6 +141,12 @@ export default function Create() {
     }
   }
 
+  if (!step) {
+    return (
+      <SetWalletName changeStep={changeStep} />
+    )
+  }
+
   if (isReady) {
     return (
       <FullscreenContainer>
@@ -183,19 +187,17 @@ export default function Create() {
           <Steps
             backgroundColor="#1E1E1E"
             foregroundColor="white"
-            count={3}
+            count={2}
             activeIndex={1}
             marginTop="24px"
           />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <Heading1 marginBottom="0">Welcome, </Heading1>
-          <Heading1 textAlign="center">you have successfully created a passkey!</Heading1>
+          <Heading1>Welcome! Your passkey is ready.</Heading1>
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <TextBody color="#1E1E1E">
-            Next, try signing in with your passkey on a different device! One passkey won’t be backed up. If you lose
-            it, you may be locked out of your account.
+          <TextBody color="#1E1E1E" textAlign="center" fontSize="16px">
+            Add a second passkey from another device — it's free now, but will cost gas fee later. More devices enhance wallet security and protect against access loss if one device is lost or damaged.
           </TextBody>
         </Box>
       </Box>
@@ -203,10 +205,12 @@ export default function Create() {
         <PassKeyList passKeys={credentials} setPassKeyName={changeCredentialName} />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-        <Button onClick={createWallet} _styles={{ width: '300px', borderRadius: '40px' }} disabled={isCreating} loading={isCreating}>
-          Add another passkey
+        <Button onClick={createWallet} _styles={{ width: '300px', borderRadius: '40px', marginBottom: '12px', background: '#9648FA' }} disabled={isCreating} loading={isCreating}>
+          {credentials.length ? 'Add another passkey' : 'Add passkey'}
         </Button>
-        <TextButton onClick={onSkip}>Skip for now</TextButton>
+        <Button loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={onConfirm} _styles={{ width: '300px', borderRadius: '40px' }}>
+          Done
+        </Button>
       </Box>
     </FullscreenContainer>
   );
