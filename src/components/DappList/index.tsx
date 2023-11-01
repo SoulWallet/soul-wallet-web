@@ -25,7 +25,7 @@ const DappItem = ({ item }: any) => {
         <Image src={IconLink} />
         <Image src={IconBookmark} />
       </Flex>
-      <Image src={item.icon} w="56px" mb="1" />
+      <Image src={item.icon} h="52px" mb="1" />
       <Flex gap="5" align={'center'} mb="1">
         <Text fontWeight={'700'} fontSize={'16px'}>
           {item.title}

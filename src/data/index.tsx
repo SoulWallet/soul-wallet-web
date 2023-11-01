@@ -1,4 +1,5 @@
 import IconUniswap from '@/assets/dapps/uniswap.png';
+import IconAave from '@/assets/dapps/aave.png';
 // import IconDefault from '@/assets/icons/default.svg';
 
 export const dappList = [
@@ -10,11 +11,11 @@ export const dappList = [
     desc: 'Swap or provide liquidity on the Uniswap protocol',
   },
   {
-    icon: IconUniswap,
+    icon: IconAave,
     title: 'AAVE',
     category: 'DeFi',
     url: 'https://staging.aave.com/',
-    desc: 'Swap or provide liquidity on the Uniswap protocol',
+    desc: 'Earn interest, borrow assets, and build applications',
   },
   // {
   //   icon: IconDefault,
