@@ -139,7 +139,7 @@ const getInitialValues = (ids: string[], guardians: string[], guardianNames: str
 };
 
 export default function GuardianForm({ cancelEdit, startBackup }: any) {
-  const { guardiansInfo } = useGuardianStore();
+  const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
   const guardianDetails = guardiansInfo.guardianDetails
   const threshold = guardianDetails.threshold
   const { selectedAddress } = useAddressStore();
@@ -238,6 +238,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
           threshold: Number(threshold),
           salt,
         },
+        requireBackup: true
       };
 
       const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
@@ -310,6 +311,8 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       amountForm.onChange('amount')(getRecommandCount(amountData.guardiansCount));
     }
   }, [amountData.guardiansCount, amountForm.values.amount]);
+
+  const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
 
   return (
     <Fragment>
@@ -446,9 +449,11 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
           <RoundButton disabled={loading} loading={loading} _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={handleSubmit}>
             Confirm guardians
           </RoundButton>
-          <TextButton _styles={{ width: '320px' }} onClick={cancelEdit}>
-            Cancel
-          </TextButton>
+          {hasGuardians && (
+            <TextButton _styles={{ width: '320px' }} onClick={cancelEdit}>
+              Cancel
+            </TextButton>
+          )}
         </Box>
       </Box>
     </Fragment>

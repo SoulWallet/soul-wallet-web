@@ -60,8 +60,8 @@ export default function Guardian({ setActiveSection }: any) {
   const { selectedAddress } = useAddressStore();
   const [status, setStatus] = useState<string>('intro');
   const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
-  const [isLoaded, setIsLoaded] = useState<boolean>(true);
-  const { setGuardiansInfo, guardiansInfo } = useGuardianStore();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const { setGuardiansInfo, guardiansInfo, updateGuardiansInfo } = useGuardianStore();
 
   const startManage = () => {
     setStatus('managing')
@@ -116,20 +116,34 @@ export default function Guardian({ setActiveSection }: any) {
         guardianDetails,
       };
 
-      setGuardiansInfo(guardiansInfo)
-      startIntro()
+      updateGuardiansInfo({
+        ...guardiansInfo
+      })
 
-      setIsLoaded(false)
+      const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
+
+      if (hasGuardians) {
+        startManage()
+      } else {
+        startEdit()
+      }
+
+      setIsLoaded(true)
     } catch (error) {
-      setIsLoaded(false)
+      setIsLoaded(true)
     }
   }
 
   useEffect(() => {
-    getGuardianInfo()
+    if (guardiansInfo.requireBackup) {
+      startBackup()
+      setIsLoaded(true)
+    } else {
+      getGuardianInfo()
+    }
   }, [])
 
-  if (isLoaded) {
+  if (!isLoaded) {
     return (
       <Box width="100%" height="100vh">
         <Box height="102px">

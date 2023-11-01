@@ -61,12 +61,18 @@ const SignatureRequest = ({ changeStep }: any) => {
   let guardianSignatures: any
   let chainRecoveryStatus: any
   let recoverStatus: any
+  let hasChainFinished: any = false
 
   if (recoveringGuardiansInfo.recoveryRecord) {
-    guardianSignatures = recoveringGuardiansInfo.recoveryRecord.guardianSignatures
-    chainRecoveryStatus = recoveringGuardiansInfo.recoveryRecord.statusData.chainRecoveryStatus || []
-    recoverStatus = recoveringGuardiansInfo.recoveryRecord.status
+    const recoveryRecord = recoveringGuardiansInfo.recoveryRecord
+    guardianSignatures = recoveryRecord && recoveryRecord.guardianSignatures
+    chainRecoveryStatus = recoveryRecord && recoveryRecord.statusData && recoveryRecord.statusData.chainRecoveryStatus || []
+
+    hasChainFinished = !!chainRecoveryStatus.filter(item => !!item.status).length
+    recoverStatus = recoveryRecord && recoveryRecord.status
   }
+
+  const guardianDetails = recoveringGuardiansInfo.guardianDetails || recoveringGuardiansInfo.recoveryRecord.guardianDetails
 
   const toast = useToast();
   const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
@@ -307,14 +313,14 @@ const SignatureRequest = ({ changeStep }: any) => {
             </Box>
           ))}
         </Box>
-        <Button disabled={false} onClick={replaceWallet} _styles={{ width: '320px' }}>
+        <Button disabled={!hasChainFinished} onClick={replaceWallet} _styles={{ width: '320px' }}>
           Open my wallet
         </Button>
       </Box>
     );
   }
 
-  const signatures = (recoveringGuardiansInfo.recoveryRecord.guardianDetails.guardians || []).map((item: any) => {
+  const signatures = (guardianDetails.guardians || []).map((item: any) => {
     const isValid = (guardianSignatures || []).filter((sig: any) => sig.guardian === item && sig.valid).length === 1;
     return { guardian: item, isValid };
   });
@@ -367,7 +373,7 @@ const SignatureRequest = ({ changeStep }: any) => {
       </Box>
       <Box marginBottom="0.75em">
         <TextBody textAlign="center">
-          Waiting for signatures ({recoveringGuardiansInfo.recoveryRecord.threshold} of {recoveringGuardiansInfo.recoveryRecord.guardianDetails.guardians.length} complete)
+          Waiting for signatures ({guardianDetails.threshold} of {guardianDetails.guardians.length} complete)
         </TextBody>
       </Box>
       <Box

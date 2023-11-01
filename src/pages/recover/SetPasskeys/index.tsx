@@ -18,12 +18,12 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import { toHex } from '@/lib/tools';
 import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';
+import api from '@/lib/api';
 
 export default function SetPasskeys({ changeStep }: any) {
   const { navigate } = useBrowser();
   const { register, getCoordinates } = usePassKey();
-  // const { chainConfig } = useConfig();
-  // const { credentials, changeCredentialName } = useCredentialStore();
+  const { chainConfig } = useConfig();
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -95,7 +95,47 @@ export default function SetPasskeys({ changeStep }: any) {
   }
 
   const handleNext = async () => {
-    changeStep(2)
+    const hasGuardians = recoveringGuardiansInfo.guardianDetails && recoveringGuardiansInfo.guardianDetails.guardians && !!recoveringGuardiansInfo.guardianDetails.guardians.length
+
+    if (hasGuardians) {
+      setIsConfirming(true)
+      const keystore = chainConfig.contracts.l1Keystore;
+      const credentials = recoveringGuardiansInfo.credentials || []
+      const initialKeys = await Promise.all(credentials.map((credential: any) => {
+        console.log('credential.publicKey', credential.publicKey)
+        return credential.publicKey
+      }))
+      const newOwners = L1KeyStore.initialKeysToAddress(initialKeys);
+      const slot = recoveringGuardiansInfo.slot
+      const slotInitInfo = recoveringGuardiansInfo.slotInitInfo
+      const guardianDetails = recoveringGuardiansInfo.guardianDetails
+
+      const params = {
+        guardianDetails,
+        slot,
+        slotInitInfo,
+        keystore,
+        newOwners
+      }
+
+      console.log('createRecoverRecord', params);
+
+      const res = await api.guardian.createRecoverRecord(params)
+      const recoveryRecordID = res.data.recoveryRecordID
+      const recoveryRecord = await api.guardian.getRecoverRecord({ recoveryRecordID })
+      updateRecoveringGuardiansInfo({
+        recoveryRecordID,
+        recoveryRecord
+      });
+
+      setTimeout(() => {
+        setIsConfirming(false)
+        changeStep(4)
+      })
+    } else {
+      changeStep(3)
+    }
+
   }
 
   const createInitialWallet = async () => {
@@ -137,25 +177,6 @@ export default function SetPasskeys({ changeStep }: any) {
     }
   }
 
-  if (isReady) {
-    return (
-      <FullscreenContainer>
-        <Box width="480px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-            <TextBody color="#1E1E1E" textAlign="center" fontSize="24px">
-              Your passkey indicates that you already have an active wallet account on this device
-            </TextBody>
-          </Box>
-        </Box>
-        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-          <Button loading={isConfirming} disabled={isConfirming} onClick={onConfirm} _styles={{ width: '320px' }}>
-            Go to wallet
-          </Button>
-        </Box>
-      </FullscreenContainer>
-    );
-  }
-
   return (
     <FullscreenContainer>
       <Box width="480px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -185,7 +206,7 @@ export default function SetPasskeys({ changeStep }: any) {
         <Button onClick={createWallet} _styles={{ width: '320px', marginBottom: '12px', background: '#9648FA' }} _hover={{ background: '#9648FA' }} disabled={isCreating} loading={isCreating}>
           {!credentials.length ? 'Add passkey' : 'Add another passkey'}
         </Button>
-        <Button onClick={handleNext} _styles={{ width: '320px' }} disabled={isCreating || !credentials.length}>
+        <Button onClick={handleNext} _styles={{ width: '320px' }} loading={isConfirming} disabled={isCreating || isConfirming || !credentials.length}>
           Continue
         </Button>
       </Box>

@@ -224,7 +224,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       updateRecoveringGuardiansInfo({
         recoveryRecordID,
       });
-      changeStep(3)
+      changeStep(4)
       setLoading(false);
     } catch (e: any) {
       setLoading(false);
@@ -247,7 +247,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       const data: any = await getJsonFromFile(file);
 
       const keystore = chainConfig.contracts.l1Keystore;
-      const initialKeys = await Promise.all(credentials.map((credential: any) => getCoordinates(credential.publicKey)))
+      const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
       const newOwners = L1KeyStore.initialKeysToAddress(initialKeys);
       const slot = recoveringGuardiansInfo.slot
       const slotInitInfo = recoveringGuardiansInfo.slotInitInfo
@@ -272,7 +272,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       setUploaded(true);
 
       setTimeout(() => {
-        changeStep(3)
+        changeStep(4)
       }, 1000);
     } catch (e: any) {
       setUploading(false);

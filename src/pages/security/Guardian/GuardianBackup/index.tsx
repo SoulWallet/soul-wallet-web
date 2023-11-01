@@ -29,9 +29,10 @@ const validate = (values: any) => {
 };
 
 export default function GuardianBackup({ startManage, cancelBackup }: any) {
-  const { guardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { guardiansInfo, setEditingGuardiansInfo, updateGuardiansInfo } = useGuardianStore();
   const { generateJsonName, downloadJsonFile } = useTools()
   const { selectedAddress } = useAddressStore();
+  const [isDone, setIsDone] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,6 +47,10 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
       setLoading(true);
       await api.guardian.backupGuardians(guardiansInfo);
       setLoading(false);
+      setIsDone(true)
+      updateGuardiansInfo({
+        requireBackup: false
+      })
       toast({
         title: 'OnChain Backup Success!',
         status: 'success',
@@ -70,6 +75,10 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
       });
       setSending(false);
       emailForm.clearFields(['email'])
+      setIsDone(true)
+      updateGuardiansInfo({
+        requireBackup: false
+      })
       toast({
         title: 'Email Backup Success!',
         status: 'success',
@@ -88,6 +97,10 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
       setDownloading(true);
       await downloadJsonFile(guardiansInfo);
       setDownloading(false);
+      setIsDone(true)
+      updateGuardiansInfo({
+        requireBackup: false
+      })
       toast({
         title: 'Email Backup Success!',
         status: 'success',
@@ -180,7 +193,7 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
       </Box>
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => cancelBackup()}>
+          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => cancelBackup()} disabled={!isDone}>
             Done
           </RoundButton>
         </Box>

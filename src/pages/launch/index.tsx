@@ -150,9 +150,8 @@ export default function Launch() {
       backgroundRepeat="no-repeat"
       backgroundSize="cover"
       overflow="auto"
-      position="relative"
     >
-      <Box display="flex" justifyContent="center">
+      <Box display="flex" justifyContent="center" position="relative">
         <Box minHeight="calc(100% - 40px)">
           <Box
             padding="40px 0"
@@ -223,22 +222,22 @@ export default function Launch() {
         <Box height="100%">
           <Image src={homeExampleImage} aspectRatio="1021 / 728" height="100%" />
         </Box>
-      </Box>
-      <Box
-        position="absolute"
-        right="20px"
-        bottom="10px"
-        display="flex"
-        justifyContent="flex-end"
-      >
-        <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}>
-          <TwitterIcon />
-        </Box>
-        <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[1].link}>
-          <TelegramIcon />
-        </Box>
-        <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[2].link}>
-          <GithubIcon />
+        <Box
+          position="absolute"
+          right="10px"
+          bottom="-34px"
+          display="flex"
+          justifyContent="flex-end"
+        >
+          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}>
+            <TwitterIcon />
+          </Box>
+          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[1].link}>
+            <TelegramIcon />
+          </Box>
+          <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[2].link}>
+            <GithubIcon />
+          </Box>
         </Box>
       </Box>
     </Box>

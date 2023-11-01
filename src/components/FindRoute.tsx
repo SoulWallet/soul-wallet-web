@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import useBrowser from '../hooks/useBrowser';
 import { Box } from '@chakra-ui/react';
 import { useAddressStore } from '@/store/address';
+import { useGuardianStore } from '@/store/guardian';
 import storage from '@/lib/storage';
 import { useLocation } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ export default function FindRoute({ children }: any) {
   const { navigate } = useBrowser();
   const location = useLocation();
   const { addressList, selectedAddress, } = useAddressStore();
+  const { guardiansInfo } = useGuardianStore();
   const isRecover = location.pathname.includes('recover');
   const isCreate = location.pathname.includes('create');
 
@@ -21,6 +23,8 @@ export default function FindRoute({ children }: any) {
 
     if (isRecover || recovering) {
       navigate('/recover');
+    } else if (guardiansInfo && guardiansInfo.requireBackup) {
+      navigate('/security');
     } else if (isCreate) {
       navigate('/create');
     } else if (!addressList.length || !selectedAddress) {

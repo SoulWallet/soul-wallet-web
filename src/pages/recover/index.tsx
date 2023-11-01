@@ -24,6 +24,7 @@ import WalletCard from '@/components/web/WalletCard';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import api from '@/lib/api';
 import SetWalletAddress from './SetWalletAddress'
+import SetWalletName from './SetWalletName'
 import SetPasskeys from './SetPasskeys'
 import SetGuardians from './SetGuardians'
 import SignatureRequest from './SignatureRequest'
@@ -45,7 +46,7 @@ export default function Recover() {
         updateRecoveringGuardiansInfo({
           recoveryRecord: result.data,
         })
-        changeStep(3)
+        changeStep(4)
         setLoading(false)
       }
     }
@@ -66,10 +67,12 @@ export default function Recover() {
   if (step === 0) {
     return <SetWalletAddress changeStep={changeStep} />
   } else if (step === 1) {
-    return <SetPasskeys changeStep={changeStep} />
+    return <SetWalletName changeStep={changeStep} />
   } else if (step === 2) {
-    return <SetGuardians changeStep={changeStep} />
+    return <SetPasskeys changeStep={changeStep} />
   } else if (step === 3) {
+    return <SetGuardians changeStep={changeStep} />
+  } else if (step === 4) {
     return (
       <FullscreenContainer>
         <SignatureRequest changeStep={changeStep} />
