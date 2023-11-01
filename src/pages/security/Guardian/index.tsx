@@ -113,13 +113,7 @@ export default function Guardian({ setActiveSection }: any) {
       };
 
       setGuardiansInfo(guardiansInfo)
-      const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
-
-      if (hasGuardians) {
-        startManage()
-      } else {
-        startEdit()
-      }
+      startIntro()
 
       setIsLoaded(false)
     } catch (error) {
