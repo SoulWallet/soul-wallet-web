@@ -37,10 +37,10 @@ const createGuardianSlice = immer<GuardianStore>((set, get) => ({
   editingGuardiansInfo: {},
   slotInfo: {},
 
-  setGuardiansInfo: (value: any) => set({ guardiansInfo: value }),
-  setRecoveringGuardiansInfo: (value: any) => set({ recoveringGuardiansInfo: value }),
-  setEditingGuardiansInfo: (value: any) => set({ editingGuardiansInfo: value }),
-  setSlotInfo: (value: any) => set({ slotInfo: value }),
+  setGuardiansInfo: (value: any) => set({ guardiansInfo: value || {} }),
+  setRecoveringGuardiansInfo: (value: any) => set({ recoveringGuardiansInfo: value || {} }),
+  setEditingGuardiansInfo: (value: any) => set({ editingGuardiansInfo: value || {} }),
+  setSlotInfo: (value: any) => set({ slotInfo: value || {} }),
 
   updateGuardiansInfo: (value: any) => set({
     guardiansInfo: {

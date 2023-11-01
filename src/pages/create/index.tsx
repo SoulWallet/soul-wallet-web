@@ -158,7 +158,6 @@ export default function Create() {
               count={3}
               activeIndex={2}
               marginTop="24px"
-              onStepChange={onStepChange}
               showBackButton
             />
           </Box>
