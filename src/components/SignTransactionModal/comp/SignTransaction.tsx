@@ -20,7 +20,7 @@ import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
 import ChainSelect from '@/components/ChainSelect';
 
-export default function SignTransaction({ onSuccess, txns, origin, sendToAddress, showSelectChain, showAmount }: any) {
+export default function SignTransaction({ onSuccess, txns, origin, sendToAddress, showSelectChain }: any) {
   const toast = useToast();
   const [loadingFee, setLoadingFee] = useState(true);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
@@ -202,8 +202,6 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
             <ChainSelect isInModal={true} />
           </Box>
         )}
-
-        {showAmount && <AddressInputReadonly label="Amount" value={`${showAmount} ETH`} />}
 
         <AddressInputReadonly label="From" value={selectedAddressItem.title} memo={toShortAddress(selectedAddress)} />
         {sendToAddress ? (

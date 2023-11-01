@@ -20,7 +20,7 @@ interface IWalletContext {
     origin?: string,
     sendTo?: string,
     showSelectChain?: boolean,
-    showAmount?: string,
+    // showAmount?: string,
   ) => Promise<void>;
   showSignPayment: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
@@ -93,9 +93,9 @@ export const WalletContextProvider = ({ children }: any) => {
     origin?: string,
     sendTo?: string,
     showSelectChain?: boolean,
-    showAmount?: string,
+    // showAmount?: string,
   ) => {
-    return await signTransactionModal.current.show(txns, origin, sendTo, showSelectChain, showAmount);
+    return await signTransactionModal.current.show(txns, origin, sendTo, showSelectChain);
   };
 
   const showSignPayment = async (txns: any, origin?: string, sendTo?: string) => {
