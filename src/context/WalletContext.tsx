@@ -1,13 +1,10 @@
 import { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
-import { L1KeyStore } from '@soulwallet/sdk';
 import SignTransactionModal from '@/components/SignTransactionModal';
 import SignPaymentModal from '@/components/SignPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
+import TransferAssetsModal from '@/components/TransferAssetsModal';
 import useConfig from '@/hooks/useConfig';
-import { useCredentialStore } from '@/store/credential';
-import { useBalanceStore } from '@/store/balance';
-import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
 import { useChainStore } from '@/store/chain';
 import { useAddressStore } from '@/store/address';
@@ -24,6 +21,7 @@ interface IWalletContext {
   ) => Promise<void>;
   showSignPayment: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
+  showTransferAssets: (tokenAddress?: string, transferType?:string) => Promise<void>;
   checkActivated: () => Promise<boolean>;
 }
 
@@ -32,6 +30,7 @@ export const WalletContext = createContext<IWalletContext>({
   showSignTransaction: async () => {},
   showSignPayment: async () => {},
   showSignMessage: async () => {},
+  showTransferAssets: async () => {},
   checkActivated: async () => false,
 });
 
@@ -47,6 +46,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const signTransactionModal = createRef<any>();
   const signPaymentModal = createRef<any>();
   const signMessageModal = createRef<any>();
+  const transferAssetsModal = createRef<any>();
 
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
@@ -57,7 +57,7 @@ export const WalletContextProvider = ({ children }: any) => {
   }, [selectedChainItem]);
 
   useEffect(() => {
-    console.log('recover id',recoveryRecordID )
+    console.log('recover id', recoveryRecordID);
     if (!recoveryRecordID) {
       return;
     }
@@ -106,6 +106,10 @@ export const WalletContextProvider = ({ children }: any) => {
     return await signMessageModal.current.show(messageToSign, origin);
   };
 
+  const showTransferAssets = async (tokenAddress?: string, transferType?: string) => {
+    return await transferAssetsModal.current.show(tokenAddress, transferType);
+  };
+
   // if address on chain is not activated, check again
   useEffect(() => {
     if (!selectedAddress || !selectedChainId) {
@@ -121,6 +125,7 @@ export const WalletContextProvider = ({ children }: any) => {
         showSignTransaction,
         showSignMessage,
         showSignPayment,
+        showTransferAssets,
         checkActivated,
       }}
     >
@@ -128,6 +133,7 @@ export const WalletContextProvider = ({ children }: any) => {
       <SignTransactionModal ref={signTransactionModal} />
       <SignPaymentModal ref={signPaymentModal} />
       <SignMessageModal ref={signMessageModal} />
+      <TransferAssetsModal ref={transferAssetsModal} />
     </WalletContext.Provider>
   );
 };

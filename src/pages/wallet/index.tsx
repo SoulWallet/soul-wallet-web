@@ -8,6 +8,7 @@ import AppContainer from '@/components/AppContainer';
 import DappList from '@/components/DappList';
 import Footer from '@/components/Footer';
 import { L1KeyStore } from '@soulwallet/sdk';
+import { AccountSelectFull } from '@/components/AccountSelect';
 
 export default function Wallet() {
   return (
@@ -16,6 +17,7 @@ export default function Wallet() {
       <AppContainer minH="calc(100vh - 100px)">
         <Grid templateColumns={{base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)'}} gap={{base: 4, lg: 6}} mb="12">
           <GridItem>
+            <AccountSelectFull display={{base: "flex", lg: "none"}} w="100%" />
             <Balance />
           </GridItem>
           <GridItem>

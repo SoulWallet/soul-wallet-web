@@ -1,8 +1,6 @@
-import { useState } from 'react';
+import { useState, useImperativeHandle, forwardRef, Ref } from 'react';
 import {
   Box,
-  Flex,
-  Image,
   Text,
   Modal,
   ModalOverlay,
@@ -14,7 +12,6 @@ import {
 import Receive from '../Receive';
 import SendAssets from '../SendAssets';
 import { ethers } from 'ethers';
-
 const tabs = [
   {
     text: 'Send',
@@ -24,12 +21,34 @@ const tabs = [
   },
 ];
 
-export default function TransferAssets({ onClose, tokenAddress = ethers.ZeroAddress }: any) {
+function TransferAssetsModal(_: any, ref: Ref<any>) {
   const [activeTab, setActiveTab] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [tokenAddress, setTokenAddress] = useState('');
+  const [promiseInfo, setPromiseInfo] = useState<any>({});
+
+  const onClose = async () => {
+    setVisible(false);
+    promiseInfo.reject('User reject');
+  };
+
+  useImperativeHandle(ref, () => ({
+    async show(_tokenAddress: string = ethers.ZeroAddress, transferType: string = 'send') {
+      setVisible(true);
+      setTokenAddress(_tokenAddress);
+      setActiveTab(transferType === 'send' ? 0 : 1);
+      return new Promise((resolve, reject) => {
+        setPromiseInfo({
+          resolve,
+          reject,
+        });
+      });
+    },
+  }));
   return (
-    <Modal isOpen={true} onClose={onClose}>
+    <Modal isOpen={visible} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent maxW={'640px'}>
+      <ModalContent maxW={{ base: '90%', lg: '640px' }}>
         <ModalHeader
           display={'flex'}
           justifyContent={'center'}
@@ -63,12 +82,12 @@ export default function TransferAssets({ onClose, tokenAddress = ethers.ZeroAddr
           ))}
         </ModalHeader>
         <ModalCloseButton top="14px" />
-        <ModalBody pb="12" px="12">
+        <ModalBody pb={{ base: 4, lg: 12 }} px={{ base: 3, lg: 12 }}>
           <Box
             roundedBottom="20px"
             roundedTopLeft={activeTab === 0 ? '0' : '20px'}
             roundedTopRight={activeTab === 1 ? '0' : '20px'}
-            p="6"
+            p={{ base: 3, lg: 6 }}
           >
             {activeTab === 0 && <SendAssets tokenAddress={tokenAddress} />}
             {activeTab === 1 && <Receive />}
@@ -78,3 +97,5 @@ export default function TransferAssets({ onClose, tokenAddress = ethers.ZeroAddr
     </Modal>
   );
 }
+
+export default forwardRef(TransferAssetsModal);

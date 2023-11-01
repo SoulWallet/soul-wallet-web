@@ -56,7 +56,7 @@ const CreateAccount = () => {
 //   );
 // };
 
-export function AccountSelectFull() {
+export function AccountSelectFull({ ...restProps }) {
   const { selectedAddress } = useAddressStore();
   const toast = useToast();
   const doCopy = () => {
@@ -67,9 +67,17 @@ export function AccountSelectFull() {
     });
   };
   return (
-    <Flex align={'center'} gap="2px">
-      <AccountSelect />
-      <Flex gap="1" align={'center'} px="3" py="10px" roundedRight={'full'} bg="#f2f2f2">
+    <Flex align={'center'} gap="2px" {...restProps}>
+      <AccountSelect pl={{base: "3", lg: "unset"}} wrapperProps={{ w: { base: '50%', lg: 'unset' } }} />
+      <Flex
+        w={{ base: '50%', lg: 'unset' }}
+        gap="1"
+        align={'center'}
+        px="3"
+        py="10px"
+        roundedRight={'full'}
+        bg={{ base: '#fff', lg: '#f2f2f2' }}
+      >
         <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
           {toShortAddress(selectedAddress, 5, 4)}
         </Text>
@@ -79,27 +87,27 @@ export function AccountSelectFull() {
   );
 }
 
-export function AccountSelect({ labelType = 'title', ...restProps }: any) {
+export function AccountSelect({ labelType = 'title', wrapperProps, ...restProps }: any) {
   const { navigate } = useBrowser();
   const { selectedAddressItem } = useConfig();
   const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
 
-  if(!selectedAddress){
-    return
+  if (!selectedAddress) {
+    return;
   }
 
   return (
     <Menu>
       {({ isOpen }) => (
         <>
-          <MenuButton data-testid="btn-account-select">
+          <MenuButton data-testid="btn-account-select" {...wrapperProps}>
             <Flex
               align="center"
               gap="2px"
               px="3"
               py="10px"
               h="40px"
-              bg="#f2f2f2"
+              bg={{ base: '#fff', lg: '#f2f2f2' }}
               fontWeight={'800'}
               roundedLeft={'full'}
               cursor={'pointer'}
