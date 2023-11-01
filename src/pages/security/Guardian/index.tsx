@@ -71,6 +71,10 @@ export default function Guardian({ setActiveSection }: any) {
     setStatus('backuping')
   }
 
+  const startIntro = () => {
+    setStatus('intro')
+  }
+
   const startEdit = () => {
     setStatus('editing')
   }
