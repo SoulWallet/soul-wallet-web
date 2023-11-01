@@ -1,23 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ExternalLink } from '../HomeCard';
 import ListItem from '@/components/ListItem';
 import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
-import useConfig from '@/hooks/useConfig';
-import TransferAssets from '@/components/TransferAssets';
-import useBrowser from '@/hooks/useBrowser';
-import { useAddressStore } from '@/store/address';
 import HomeCard from '../HomeCard';
+import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function Tokens() {
-  const { tokenBalance, fetchTokenBalance } = useBalanceStore();
-  const [transferVisible, setTransferVisible] = useState(false);
-  const [tokenAddress, setTokenAddress] = useState('');
-
-
+  const { showTransferAssets } = useWalletContext();
+  const { tokenBalance } = useBalanceStore();
 
   const showTransfer = (tokenAddress: string) => {
-    setTokenAddress(tokenAddress);
-    setTransferVisible(true);
+    showTransferAssets(tokenAddress);
   };
 
   return (
@@ -34,7 +27,6 @@ export default function Tokens() {
           onClick={() => showTransfer(item.contractAddress)}
         />
       ))}
-      {transferVisible && <TransferAssets tokenAddress={tokenAddress} onClose={() => setTransferVisible(false)} />}
     </HomeCard>
   );
 }

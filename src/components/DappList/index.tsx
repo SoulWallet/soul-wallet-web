@@ -49,6 +49,7 @@ const AddDappItem = () => (
     display={'flex'}
     flexDir={'column'}
     gap="3"
+    p="4"
     rounded="20px"
     alignItems={'center'}
     justifyContent={'center'}
@@ -61,7 +62,13 @@ const AddDappItem = () => (
 export default function DappList() {
   return (
     <HomeCard title="Apps">
-      <Grid templateColumns={'repeat(3, 1fr)'} rounded="20px" gap="6" fontSize={'14px'} lineHeight={'1'}>
+      <Grid
+        templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
+        rounded="20px"
+        gap={{ base: 3, lg: 6 }}
+        fontSize={'14px'}
+        lineHeight={'1'}
+      >
         {dappList.map((item, index) => (
           <DappItem key={index} item={item} />
         ))}

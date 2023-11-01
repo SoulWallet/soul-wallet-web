@@ -300,7 +300,7 @@ export default function useWallet() {
       setSelectedAddress(res.addresses[0]);
     }
     // set goerli if no selected chainId
-    if (!selectedChainId) {
+    if (selectedChainId) {
       setSelectedChainId('0x5');
     }
   };

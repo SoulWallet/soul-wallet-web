@@ -4,14 +4,13 @@ import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import { useBalanceStore } from '@/store/balance';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
-import TransferAssets from '@/components/TransferAssets';
 import Button from '@/components/Button';
+import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function TokensTable() {
+  const { showTransferAssets } = useWalletContext();
   const { selectedAddress } = useAddressStore();
   const { tokenBalance } = useBalanceStore();
-  const [transferVisible, setTransferVisible] = useState(false);
-  const [tokenAddress, setTokenAddress] = useState('');
 
   const getTokenBalance = async () => {
     const res = await api.balance.token({
@@ -20,8 +19,8 @@ export default function TokensTable() {
         {
           chainID: '',
           reservedTokenAddresses: [],
-        }
-      ]
+        },
+      ],
     });
     console.log('ressssss', res);
   };
@@ -31,8 +30,7 @@ export default function TokensTable() {
   }, []);
 
   const showTransfer = (tokenAddress: string) => {
-    setTokenAddress(tokenAddress);
-    setTransferVisible(true);
+    showTransferAssets(tokenAddress);
   };
 
   return (
@@ -87,7 +85,6 @@ export default function TokensTable() {
           );
         })}
       </Tbody>
-      {transferVisible && <TransferAssets tokenAddress={tokenAddress} onClose={() => setTransferVisible(false)} />}
     </Table>
   );
 }

@@ -12,7 +12,7 @@ import { storeVersion } from '@/config';
 export interface GuardianStore {
   guardiansInfo: any;
   recoveringGuardiansInfo: any;
-  recoveringPasskeyEnabled: boolean;
+  // recoveringPasskeyEnabled: boolean;
   editingGuardiansInfo: any;
   slotInfo: any;
 
@@ -34,7 +34,7 @@ export interface GuardianStore {
 
 const createGuardianSlice = immer<GuardianStore>((set, get) => ({
   guardiansInfo: {},
-  recoveringPasskeyEnabled: true,
+  // recoveringPasskeyEnabled: true,
   recoveringGuardiansInfo: {},
   editingGuardiansInfo: {},
   slotInfo: {},
