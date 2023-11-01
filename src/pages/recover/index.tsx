@@ -30,7 +30,8 @@ import SignatureRequest from './SignatureRequest'
 
 export default function Recover() {
   const [step, setStep] = useState(0)
-  const { recoveringGuardiansInfo } = useGuardianStore();
+  const [loading, setLoading] = useState(false)
+  const { recoveringGuardiansInfo, updateRecoveringGuardiansInfo } = useGuardianStore();
 
   const changeStep = (step: number) => {
     setStep(step)
@@ -38,15 +39,29 @@ export default function Recover() {
 
   useEffect(() => {
     const main = async () => {
-      const result = await api.guardian.getRecoverRecord({ recoveryRecordID: '0x7079f804b0a44b81c715f80ca84f4f281604e41d3f11a641d67609af72dd54c4' });
-      console.log('guardianSignatures', result);
+      if (recoveringGuardiansInfo.recoveryRecordID) {
+        setLoading(true)
+        const result = await api.guardian.getRecoverRecord({ recoveryRecordID: recoveringGuardiansInfo.recoveryRecordID });
+        updateRecoveringGuardiansInfo({
+          recoveryRecord: result.data,
+        })
+        changeStep(3)
+        setLoading(false)
+      }
     }
-    // main()
 
-    if (recoveringGuardiansInfo.recoveryRecord) {
-      changeStep(3)
-    }
+    main()
   }, [])
+
+  if (loading) {
+    return (
+      <FullscreenContainer>
+        <Box width="100%" height="100%" textAlign="center">
+          <Heading1>Loading...</Heading1>
+        </Box>
+      </FullscreenContainer>
+    )
+  }
 
   if (step === 0) {
     return <SetWalletAddress changeStep={changeStep} />

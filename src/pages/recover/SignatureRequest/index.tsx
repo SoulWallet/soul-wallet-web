@@ -124,25 +124,6 @@ const SignatureRequest = ({ changeStep }: any) => {
   };
 
   const replaceWallet = async () => {
-    /* for (const credential of recoveringGuardiansInfo.credentials) {
-     *   addCredential(credential)
-     * }
-
-     * updateGuardiansInfo({
-     *   guardianDetails: recoveringGuardiansInfo.guardianDetails,
-     *   guardianHash: recoveringGuardiansInfo.guardianHash,
-     *   guardianNames: recoveringGuardiansInfo.guardianNames,
-     *   keystore: recoveringGuardiansInfo.keystore,
-     *   slot: recoveringGuardiansInfo.slot
-     * });
-
-     * setSlotInfo({
-     *   ...recoveringGuardiansInfo.slotInitInfo,
-     *   initialKeys: recoveringGuardiansInfo.credentials,
-     *   initalkeysAddress: recoveringGuardiansInfo.initalkeysAddress,
-     *   slot: recoveringGuardiansInfo.slot
-     * }) */
-
     navigate('/wallet');
   };
 
@@ -333,7 +314,7 @@ const SignatureRequest = ({ changeStep }: any) => {
     );
   }
 
-  const signatures = (recoveringGuardiansInfo.guardianDetails.guardians || []).map((item: any) => {
+  const signatures = (recoveringGuardiansInfo.recoveryRecord.guardianDetails.guardians || []).map((item: any) => {
     const isValid = (guardianSignatures || []).filter((sig: any) => sig.guardian === item && sig.valid).length === 1;
     return { guardian: item, isValid };
   });
@@ -386,7 +367,7 @@ const SignatureRequest = ({ changeStep }: any) => {
       </Box>
       <Box marginBottom="0.75em">
         <TextBody textAlign="center">
-          Waiting for signatures ({recoveringGuardiansInfo.threshold} of {recoveringGuardiansInfo.guardianDetails.guardians.length} complete)
+          Waiting for signatures ({recoveringGuardiansInfo.recoveryRecord.threshold} of {recoveringGuardiansInfo.recoveryRecord.guardianDetails.guardians.length} complete)
         </TextBody>
       </Box>
       <Box
