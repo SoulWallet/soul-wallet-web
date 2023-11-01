@@ -4,8 +4,20 @@ import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import Heading1 from '@/components/web/Heading1';
 import TextBody from '@/components/web/TextBody';
 import RoundButton from '@/components/web/Button';
+import { useGuardianStore } from '@/store/guardian';
 
-export default function GuardianIntro({ startManage }: any) {
+export default function GuardianIntro({ startManage, startEdit }: any) {
+  const { guardiansInfo } = useGuardianStore();
+  const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
+
+  const setup = () => {
+    if (hasGuardians) {
+      startManage()
+    } else {
+      startEdit()
+    }
+  }
+
   return (
     <Fragment>
       <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex">
@@ -13,7 +25,7 @@ export default function GuardianIntro({ startManage }: any) {
           <Heading1>Set up guardian</Heading1>
           <TextBody fontSize="18px" marginBottom="20px">To secure future social recovery of your wallet. Set up your guardians now! </TextBody>
           <Box>
-            <RoundButton _styles={{ width: '320px', maxWidth: '100%' }} onClick={() => startManage()}>
+            <RoundButton _styles={{ width: '320px', maxWidth: '100%' }} onClick={() => setup()}>
               Set up now
             </RoundButton>
           </Box>

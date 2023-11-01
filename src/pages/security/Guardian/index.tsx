@@ -61,7 +61,7 @@ export default function Guardian({ setActiveSection }: any) {
   const [status, setStatus] = useState<string>('intro');
   const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
-  const { setGuardiansInfo } = useGuardianStore();
+  const { setGuardiansInfo, guardiansInfo } = useGuardianStore();
 
   const startManage = () => {
     setStatus('managing')
@@ -82,6 +82,8 @@ export default function Guardian({ setActiveSection }: any) {
   const cancelBackup = () => {
     setStatus('managing')
   }
+
+  console.log('guardiansInfo', guardiansInfo)
 
   const getGuardianInfo = async () => {
     try {
@@ -111,7 +113,14 @@ export default function Guardian({ setActiveSection }: any) {
       };
 
       setGuardiansInfo(guardiansInfo)
-      startManage()
+      const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
+
+      if (hasGuardians) {
+        startManage()
+      } else {
+        startEdit()
+      }
+
       setIsLoaded(false)
     } catch (error) {
       setIsLoaded(false)
@@ -169,7 +178,7 @@ export default function Guardian({ setActiveSection }: any) {
               </Box>
             )}
           </Box>
-          {status === 'intro' && <GuardianIntro startManage={startManage} />}
+          {status === 'intro' && <GuardianIntro startManage={startManage} startEdit={startEdit} />}
           {status === 'managing' && <GuardianList startBackup={startBackup} />}
           {status === 'editing' && <GuardianForm cancelEdit={cancelEdit} startBackup={startBackup} />}
           {status === 'backuping' && <GuardianBackup cancelBackup={cancelBackup} />}
