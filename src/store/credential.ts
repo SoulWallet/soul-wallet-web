@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
-import { storeVersion } from '@/config';
 
 export interface ICredentialStore {
   selectedCredentialId: string;
@@ -60,6 +59,5 @@ const createCredentialSlice = immer<ICredentialStore>((set, get) => ({
 export const useCredentialStore = create<ICredentialStore>()(
   persist((...set) => ({ ...createCredentialSlice(...set) }), {
     name: 'credential-storage',
-    version: storeVersion,
   }),
 );

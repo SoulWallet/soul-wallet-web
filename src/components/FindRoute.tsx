@@ -4,29 +4,34 @@
 
 import { useEffect } from 'react';
 import useBrowser from '../hooks/useBrowser';
-import { Box } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
 import { useAddressStore } from '@/store/address';
 import { useGuardianStore } from '@/store/guardian';
 import storage from '@/lib/storage';
 import { useLocation } from 'react-router-dom';
+import { storeVersion } from '@/config';
 
 export default function FindRoute({ children }: any) {
   const { navigate } = useBrowser();
   const location = useLocation();
-  const { addressList, selectedAddress, } = useAddressStore();
+  const { addressList, selectedAddress } = useAddressStore();
   const { guardiansInfo } = useGuardianStore();
-  const isRecover = location.pathname.includes('recover');
-  const isCreate = location.pathname.includes('create');
+  // const isRecover = location.pathname.includes('recover');
+  // const isCreate = location.pathname.includes('create');
 
   const findRoute = async () => {
-    const recovering = storage.getItem('recovering');
+    if (storeVersion !== storage.getItem('storeVersion')) {
+      storage.clear();
+      storage.setItem('storeVersion', storeVersion);
+      // toast({
+      //   status: 'info',
+      //   title: `There are break changes during development, please create new wallet`,
+      //   duration: 3000,
+      // })
+    }
 
-    if (isRecover || recovering) {
-      navigate('/recover');
-    } else if (guardiansInfo && guardiansInfo.requireBackup) {
+    if (guardiansInfo && guardiansInfo.requireBackup) {
       navigate('/security');
-    } else if (isCreate) {
-      navigate('/create');
     } else if (!addressList.length || !selectedAddress) {
       navigate({
         pathname: '/launch',

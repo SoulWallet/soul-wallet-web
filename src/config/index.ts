@@ -49,8 +49,8 @@ export const chainMapping = {
     name: 'Arbitrum Goerli',
   },
 };
-
-export const storeVersion = 1;
+// This is an important store switch which will clear all users' data
+export const storeVersion = '1';
 
 export default {
   faviconUrl: 'https://www.google.com/s2/favicons?domain=',
