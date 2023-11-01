@@ -189,7 +189,7 @@ export default function Launch() {
                   onClick={login}
                   _styles={{ width: '282px', borderRadius: '40px' }}
                 >
-                  Login
+                  Login with passkey
                 </Button>
                 <Button
                   disabled={isCreating}
@@ -197,7 +197,7 @@ export default function Launch() {
                   onClick={createWallet}
                   _styles={{ width: '282px', borderRadius: '40px' }}
                 >
-                  Create new
+                  Create new wallet
                 </Button>
               </Box>
               <TextBody color="#1E1E1E" marginTop="24px" fontSize="16px" textAlign="center">

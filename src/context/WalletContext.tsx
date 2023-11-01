@@ -57,6 +57,7 @@ export const WalletContextProvider = ({ children }: any) => {
   }, [selectedChainItem]);
 
   useEffect(() => {
+    console.log('recover id',recoveryRecordID )
     if (!recoveryRecordID) {
       return;
     }
@@ -65,7 +66,7 @@ export const WalletContextProvider = ({ children }: any) => {
 
     checkRecoverStatus(recoveryRecordID);
 
-    const interval = setInterval(checkRecoverStatus, 5000);
+    const interval = setInterval(() => checkRecoverStatus(recoveryRecordID), 5000);
 
     setRecoverCheckInterval(interval);
 
@@ -110,7 +111,6 @@ export const WalletContextProvider = ({ children }: any) => {
     if (!selectedAddress || !selectedChainId) {
       return;
     }
-    console.log('before check!!');
     checkActivated();
   }, [selectedAddress, selectedChainId]);
 

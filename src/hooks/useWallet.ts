@@ -231,7 +231,7 @@ export default function useWallet() {
       slot: recoveringGuardiansInfo.slot,
     });
 
-    setRecoveringGuardiansInfo(null);
+    // setRecoveringGuardiansInfo({});
   };
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {
@@ -266,16 +266,15 @@ export default function useWallet() {
       // const stagingCredentials = []
       // const currentCredentials = []
       // const onchainCredentials = res.newOwners;
-
       // if(onchainCredentials.include(stagingCredentials) && !onchainCredentials.include(currentCredentials) ){
-      if (recoveringGuardiansInfo) {
+      if (!Object.keys(recoveringGuardiansInfo)) {
         await boostAfterRecovered();
       }
     }
 
     // recover process finished
     if (res.status === 4) {
-      // setRecoveringGuardiansInfo({})
+      setRecoveringGuardiansInfo({})
     }
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;
