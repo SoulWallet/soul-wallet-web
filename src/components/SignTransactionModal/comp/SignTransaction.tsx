@@ -6,7 +6,7 @@ import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import BN from 'bignumber.js';
 import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
-import { useState, useEffect, } from 'react';
+import { useState, useEffect } from 'react';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
 import { useChainStore } from '@/store/chain';
@@ -153,7 +153,12 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     setPrechecked(true);
     setLoadingFee(true);
     setFeeCost('...');
-    setTotalMsgValue(txns.reduce((total:any, current:any) => total.plus(current.value), BN(0)).shiftedBy(-18).toString());
+    setTotalMsgValue(
+      txns
+        .reduce((total: any, current: any) => total.plus(current.value), BN(0))
+        .shiftedBy(-18)
+        .toFixed()
+    );
     setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
     let userOp = await getFinalUserOp(txns);
     setActiveOperation(userOp);
@@ -162,7 +167,6 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     setDecodedData(callDataDecodes);
     checkSponser(userOp);
     getFinalPrefund(userOp);
-
   };
 
   useEffect(() => {
@@ -209,7 +213,9 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
         ) : (
           ''
         )}
-        <AddressInput label="Send Value" value={`${totalMsgValue} ETH`} disabled={true} />
+        {BN(totalMsgValue).isGreaterThan(0) && (
+          <AddressInput label="Send Value" value={`${totalMsgValue} ETH`} disabled={true} />
+        )}
         <>
           <InfoWrap>
             <InfoItem align={sponsor && 'flex-start'}>
@@ -217,7 +223,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
               {sponsor ? (
                 <Box textAlign={'right'}>
                   <Flex mb="1" gap="4" justify={'flex-end'}>
-                    {feeCost && (
+                    {feeCost && feeCost !== '...' && (
                       <Text textDecoration={'line-through'}>
                         {BN(feeCost.split(' ')[0]).toFixed(6) || '0'} {payTokenSymbol}
                       </Text>

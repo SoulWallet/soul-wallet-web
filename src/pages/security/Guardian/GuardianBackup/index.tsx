@@ -130,7 +130,7 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
             _styles={{ width: '320px', marginTop: '12px' }}
             LeftIcon={<DownloadIcon />}
           >
-            Download to Local
+            Download
           </RoundButton>
           <TextBody marginTop="12px">Or</TextBody>
           <FormInput
