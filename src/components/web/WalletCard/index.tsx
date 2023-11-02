@@ -5,6 +5,7 @@ export default function WalletCard({ statusText, titleText, steps }: any) {
   return (
     <Box
       width="100%"
+      maxWidth="360px"
       height="240px"
       padding="24px"
       position="relative"

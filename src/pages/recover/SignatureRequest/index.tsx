@@ -200,6 +200,7 @@ const SignatureRequest = ({ changeStep }: any) => {
     return (
       <Box
         width="400px"
+        maxWidth="calc(100vw - 20px)"
         display="flex"
         flexDirection="column"
         alignItems="center"
