@@ -249,7 +249,7 @@ export default function Launch() {
         </Box>
         <Box
           position={{
-            base: 'default',
+            base: 'unset',
             lg: 'absolute',
           }}
           right="10px"
