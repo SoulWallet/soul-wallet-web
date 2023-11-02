@@ -3,7 +3,6 @@ import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 import config from '@/config';
 import BN from 'bignumber.js';
-import { storeVersion } from '@/config';
 
 interface IChainItem {
   chainId: number;
@@ -56,7 +55,6 @@ const createChainSlice = immer<IChainStore>((set, get) => ({
 export const useChainStore = create<IChainStore>()(
   persist((...set) => ({ ...createChainSlice(...set) }), {
     name: 'chain-storage',
-    version: storeVersion,
     // partialize: (state) => ({ selectedChainId: state.selectedChainId }),
   }),
 );

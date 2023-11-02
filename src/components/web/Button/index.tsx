@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, ButtonProps } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
-import IconLoading from '@/assets/loading.gif';
+import IconLoading from '@/assets/loading.svg';
 import { Box } from '@chakra-ui/react';
 
 // TODO: error & retry

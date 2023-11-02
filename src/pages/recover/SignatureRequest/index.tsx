@@ -71,11 +71,7 @@ const SignatureRequest = ({ changeStep }: any) => {
   const guardianDetails = recoveringGuardiansInfo.guardianDetails || recoveringGuardiansInfo.recoveryRecord.guardianDetails
 
   const toast = useToast();
-  const [showVerificationModal, setShowVerificationModal] = useState<boolean>(false);
   const { navigate } = useBrowser();
-
-  const { cachedGuardians } = useRecoveryContext();
-  const dispatch = useStepDispatchContext();
 
   const doCopy = () => {
     copyText(`${config.officialWebUrl}/recover/${recoveryRecordID}`);
