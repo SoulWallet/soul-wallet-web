@@ -1,4 +1,4 @@
-import { Flex, Box, Text, useToast } from '@chakra-ui/react';
+import { Flex, Box, Text, useToast, Image } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
 import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
 import Button from '../../Button';
@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
 import { useChainStore } from '@/store/chain';
+import IconLoading from '@/assets/loading.svg';
 import api from '@/lib/api';
 import { ethers } from 'ethers';
 import { useBalanceStore } from '@/store/balance';
@@ -44,6 +45,8 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
   const { chainConfig, selectedAddressItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
   const { getUserOp } = useTransaction();
+  const selectedToken = getTokenBalance(payToken);
+  const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
 
   const checkSponser = async (userOp: UserOperation) => {
     const res = await api.sponsor.check(
@@ -138,14 +141,6 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     }
   };
 
-  // const onPayTokenChange = async () => {
-  //   // const newUserOp = await getFinalUserOp(txns);
-  //   // setActiveOperation(newUserOp);
-  //   // setPrefundCalculated(false);
-  //   setLoadingFee(true);
-  //   doPrecheck();
-  // };
-
   const doPrecheck = async () => {
     if (prechecked) {
       return;
@@ -157,7 +152,7 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
       txns
         .reduce((total: any, current: any) => total.plus(current.value), BN(0))
         .shiftedBy(-18)
-        .toFixed()
+        .toFixed(),
     );
     setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
     let userOp = await getFinalUserOp(txns);
@@ -167,6 +162,15 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
     setDecodedData(callDataDecodes);
     checkSponser(userOp);
     getFinalPrefund(userOp);
+    if (payToken === ethers.ZeroAddress) {
+      // ETH is not enough
+      if (BN(totalMsgValue).isGreaterThanOrEqualTo(selectedTokenBalance)) {
+        console.log('Balance not enough!');
+      }
+    } else {
+      // ERC20 is not enough
+      // TODO, check erc20 send amount in user op
+    }
   };
 
   useEffect(() => {
@@ -230,13 +234,13 @@ export default function SignTransaction({ onSuccess, txns, origin, sendToAddress
                   </Flex>
                   <Text color="#898989">Sponsored by {sponsor.sponsorParty || 'Soul Wallet'}</Text>
                 </Box>
-              ) : feeCost ? (
+              ) : feeCost !== '...' ? (
                 <Flex gap="2">
                   <Text>{feeCost.split(' ')[0]}</Text>
                   <GasSelect gasToken={payToken} onChange={setPayToken} />
                 </Flex>
               ) : (
-                <Text>Loading...</Text>
+                <Image src={IconLoading} />
               )}
             </InfoItem>
           </InfoWrap>

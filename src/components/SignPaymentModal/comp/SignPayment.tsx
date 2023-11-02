@@ -1,10 +1,11 @@
-import { Flex, Box, Text, useToast } from '@chakra-ui/react';
+import { Flex, Box, Text, useToast, Image } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
 import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
 import Button from '../../Button';
-import { InfoWrap, InfoItem } from '@/components/SignPaymentModal'
+import { InfoWrap, InfoItem } from '@/components/SignPaymentModal';
 import BN from 'bignumber.js';
 import { toShortAddress } from '@/lib/tools';
+import IconLoading from '@/assets/loading.svg';
 import useConfig from '@/hooks/useConfig';
 import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
 import useQuery from '@/hooks/useQuery';
@@ -216,13 +217,13 @@ export default function SignPayment({ onSuccess, txns, origin, sendToAddress }: 
                   </Flex>
                   <Text color="#898989">Sponsored by {sponsor.sponsorParty || 'Soul Wallet'}</Text>
                 </Box>
-              ) : feeCost ? (
+              ) : feeCost !== '...' ? (
                 <Flex gap="2">
-                  <Text>{feeCost.split(' ')[0]}</Text>
-                  <GasSelect gasToken={payToken} onChange={setPayToken} />
-                </Flex>
+                <Text>{feeCost.split(' ')[0]}</Text>
+                <GasSelect gasToken={payToken} onChange={setPayToken} />
+              </Flex>
               ) : (
-                <Text>Loading...</Text>
+                <Image src={IconLoading} />
               )}
             </InfoItem>
           </InfoWrap>

@@ -50,8 +50,6 @@ export default function Launch() {
       setIsAuthing(true);
       const { publicKeys, credential } = await authenticate();
       console.log('credential is', credential);
-      setIsAuthing(false);
-
       if (publicKeys) {
         if (credentials.length) {
           setSelectedAddress(addressList[0].address);
@@ -100,6 +98,8 @@ export default function Launch() {
           status: 'error',
         });
       }
+      setIsAuthing(false);
+
     } catch (error: any) {
       console.log('error', error);
       setIsAuthing(false);
