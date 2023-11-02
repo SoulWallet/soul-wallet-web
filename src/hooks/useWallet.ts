@@ -231,26 +231,19 @@ export default function useWallet() {
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {
     const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
-    // console.log('res address: ', res.addresses)
+    updateRecoveringGuardiansInfo({
+      recoveryRecord: res,
+    });
     const { addressList } = useAddressStore.getState();
-    // console.log('addresslist is:', addressList);
     if (addressList.length === 0) {
-      // IMPORTANT TODO, the order??
       for (let [index, item] of Object.entries(res.addresses)) {
         addAddressItem({
           title: `Account ${index + 1}`,
           address: item as any,
           activatedChains: [],
-          // allowedOrigins: [],
         });
       }
       console.log('to set selected address: ', res.addresses);
-    }
-
-    if(res.status < 3) {
-      updateRecoveringGuardiansInfo({
-        recoveryRecord: res,
-      });
     }
 
     // check if should replace key
@@ -279,13 +272,6 @@ export default function useWallet() {
         recovering: item.status === 0,
       });
     }
-
-    // if (
-    //   chainRecoverStatus.length &&
-    //   chainRecoverStatus.filter((item: any) => item.status === 1).length === 0
-    // ) {
-    //   setSelectedChainId(chainRecoverStatus.filter((item: any) => item.status)[0].chainId);
-    // }
 
     // set if no selected address
     if (!selectedAddress) {
