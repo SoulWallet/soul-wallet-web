@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
 import { Flex, Text } from '@chakra-ui/react';
-import SignPayment from './comp/SignPayment';
+import ConfirmPayment from './comp/ConfirmPayment';
 import TxModal from '../TxModal';
 
 export const InfoWrap = ({ children, ...restProps }: any) => (
@@ -15,21 +15,21 @@ export const InfoItem = ({ children, ...restProps }: any) => (
   </Flex>
 );
 
-const SignPaymentModal = (_: unknown, ref: Ref<any>) => {
+const ConfirmPaymentModal = (_: unknown, ref: Ref<any>) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [origin, setOrigin] = useState<string>('');
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const [signing, setSigning] = useState<boolean>(false);
-  const [activeTxns, setActiveTxns] = useState<any>(null);
+  const [fee, setFee] = useState<any>(null);
   const [sendToAddress, setSendToAddress] = useState('');
 
   useImperativeHandle(ref, () => ({
-    async show(txns: any, origin: string, sendTo: string) {
+    async show(fee: any, origin: string, sendTo: string) {
       setVisible(true);
       setOrigin(origin);
 
       setSendToAddress(sendTo);
-      setActiveTxns(txns);
+      setFee(fee);
 
       return new Promise((resolve, reject) => {
         setPromiseInfo({
@@ -54,8 +54,8 @@ const SignPaymentModal = (_: unknown, ref: Ref<any>) => {
 
   return (
     <div ref={ref}>
-      <TxModal title="Confirm Payment" visible={visible} onClose={onClose}>
-        <SignPayment txns={activeTxns} origin={origin} sendToAddress={sendToAddress} onSuccess={onSuccess} />
+      <TxModal title="Edit Guardians" visible={visible} onClose={onClose}>
+        <ConfirmPayment fee={fee} origin={origin} sendToAddress={sendToAddress} onSuccess={onSuccess} />
         <Text
           color="danger"
           fontSize="20px"
@@ -73,4 +73,4 @@ const SignPaymentModal = (_: unknown, ref: Ref<any>) => {
   );
 };
 
-export default forwardRef(SignPaymentModal);
+export default forwardRef(ConfirmPaymentModal);

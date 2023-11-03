@@ -21,8 +21,8 @@ export default function FindRoute({ children }: any) {
 
   const findRoute = async () => {
     if (storeVersion !== storage.getItem('storeVersion')) {
-      storage.clear();
-      storage.setItem('storeVersion', storeVersion);
+      // storage.clear();
+      // storage.setItem('storeVersion', storeVersion);
       // toast({
       //   status: 'info',
       //   title: `There are break changes during development, please create new wallet`,
