@@ -64,6 +64,7 @@ const sponsor = {
 
 const operation = {
   feedback: (params: any) => axio.post('/operation/feedback', params),
+  fileUploadUrl: (params: any) => axio.get('/operation/file-upload-url', {params}),
 }
 
 export default {
