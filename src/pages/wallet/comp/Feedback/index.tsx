@@ -41,7 +41,7 @@ Share your contact for follow-up`}
       />
       {value && (
         <>
-          {/* <Box
+          <Box
             border="1px dashed #000"
             _hover={{ bg: '#fafafa' }}
             cursor={'pointer'}
@@ -57,7 +57,7 @@ Share your contact for follow-up`}
             <Text fontWeight={'600'} color="#brand.gray">
               Attach media (optional)
             </Text>
-          </Box> */}
+          </Box>
           <Button loading={loading} onClick={doSubmit} fontSize="20px" fontWeight={'800'} w="100%" py="4">
             Submit
           </Button>

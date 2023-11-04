@@ -1,25 +1,9 @@
 import { Flex, Box, Text, useToast, Image } from '@chakra-ui/react';
-import GasSelect from '../../SendAssets/comp/GasSelect';
-import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
 import Button from '../../Button';
-import { InfoWrap, InfoItem } from '@/components/ConfirmPaymentModal';
 import BN from 'bignumber.js';
 import { toShortAddress } from '@/lib/tools';
-import IconLoading from '@/assets/loading.svg';
 import useConfig from '@/hooks/useConfig';
-import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
-import useQuery from '@/hooks/useQuery';
-import { decodeCalldata } from '@/lib/tools';
-
-import { useChainStore } from '@/store/chain';
-import api from '@/lib/api';
-import { ethers } from 'ethers';
 import { useBalanceStore } from '@/store/balance';
-import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
-import useTransaction from '@/hooks/useTransaction';
-import useWalletContext from '@/context/hooks/useWalletContext';
-import useWallet from '@/hooks/useWallet';
-import { useAddressStore, getIndexByAddress } from '@/store/address';
 import ChainSelect from '@/components/ChainSelect';
 
 export default function ConfirmPayment({ onSuccess, fee, origin, sendToAddress }: any) {
