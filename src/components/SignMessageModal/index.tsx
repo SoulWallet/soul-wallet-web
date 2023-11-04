@@ -1,5 +1,5 @@
 import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
-import { Flex, Text, useToast } from '@chakra-ui/react';
+import { Text, useToast } from '@chakra-ui/react';
 import SignMessage from './comp/SignMessage';
 import TxModal from '../TxModal';
 

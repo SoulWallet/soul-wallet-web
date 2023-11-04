@@ -141,6 +141,7 @@ export default function useDapp() {
   };
 
   const chainId = async () => {
+    console.log('return chain id', getSelectedChainItem().chainIdHex )
     return getSelectedChainItem().chainIdHex;
   };
 
@@ -149,9 +150,7 @@ export default function useDapp() {
   };
 
   const ethCall = async (params: any) => {
-    return await ethersProvider.call(params[0]);
-    // TODO
-    // return await ethersProvider.call(params[0], params[1]);
+    return await ethersProvider.call(params[0], params[1]);
   };
 
   const getSafeInfo = (): SafeInfo => {
@@ -225,7 +224,7 @@ export default function useDapp() {
   };// eth_getTransactionReceipt
 
   const handleRequest = async (request: any) => {
-    console.log('safe message request', request)
+    console.log('safe message request', request.method, request.params, )
     switch (request.method) {
       case Methods.getSafeInfo:
         return getSafeInfo();

@@ -25,7 +25,7 @@ export const useHistoryStore = create<IHistoryStore>()(
           // TODO, skip decode when exists in store
           // console.log('activity decoded', callDataDecodes);
 
-          const functionName = callDataDecodes.map((item: any) => item.functionName || item.method.name).join(', ');
+          const functionName = callDataDecodes.map((item: any) => item.functionName || item.method && item.method.name).join(', ');
 
           const status = item.success ? ActivityStatusEn.Success : ActivityStatusEn.Error;
 

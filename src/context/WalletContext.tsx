@@ -11,7 +11,7 @@ import { useAddressStore } from '@/store/address';
 import useWallet from '@/hooks/useWallet';
 
 interface IWalletContext {
-  ethersProvider: ethers.JsonRpcProvider;
+  ethersProvider: any;
   showSignTransaction: (
     txns: any,
     origin?: string,

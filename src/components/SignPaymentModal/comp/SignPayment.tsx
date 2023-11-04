@@ -217,13 +217,11 @@ export default function SignPayment({ onSuccess, txns, origin, sendToAddress }: 
                   </Flex>
                   <Text color="#898989">Sponsored by {sponsor.sponsorParty || 'Soul Wallet'}</Text>
                 </Box>
-              ) : feeCost !== '...' ? (
-                <Flex gap="2">
-                <Text>{feeCost.split(' ')[0]}</Text>
-                <GasSelect gasToken={payToken} onChange={setPayToken} />
-              </Flex>
               ) : (
-                <Image src={IconLoading} />
+                <Flex gap="2">
+                  {feeCost === '...' ?<Image src={IconLoading} />:  <Text>{feeCost.split(' ')[0]}</Text> }
+                  <GasSelect gasToken={payToken} onChange={setPayToken} />
+              </Flex>
               )}
             </InfoItem>
           </InfoWrap>

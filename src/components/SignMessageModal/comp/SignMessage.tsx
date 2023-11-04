@@ -14,8 +14,9 @@ const getHash = (message: string) => {
 };
 
 const getTypedHash = (typedData: any) => {
-  console.log('Sign typed data:', typedData.domain, typedData.types, typedData.value);
-  return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.value);
+  // IMPORTANT TODO, value of message?
+  delete typedData.types.EIP712Domain;
+  return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.value || typedData.message);
 };
 
 export default function SignMessage({ messageToSign, onSign, signType, origin }: any) {
@@ -24,22 +25,27 @@ export default function SignMessage({ messageToSign, onSign, signType, origin }:
   const [isActivated, setIsActivated] = useState(false);
   const { checkActivated } = useWalletContext();
   const onConfirm = async () => {
-    let signHash;
-    let signature;
-    if (signType === 'message') {
-      signHash = getHash(messageToSign);
-      signature = await signRawHash(signHash);
-    } else if (signType === 'typedData') {
-      signHash = getTypedHash(messageToSign);
-      signature = await signRawHash(signHash);
-    } else if (signType === 'passkey') {
-      signHash = getTypedHash(messageToSign);
-      // IMPORTANT TODO, remove 0x00 from passkey signature
-      signature = (await signWithPasskey(signHash)).replace('0x00', '0x');
-    } else {
-      throw new Error('signType not supported');
+    try{
+      let signHash;
+      let signature;
+      if (signType === 'message') {
+        signHash = getHash(messageToSign);
+        signature = await signRawHash(signHash);
+      } else if (signType === 'typedData') {
+        signHash = getTypedHash(messageToSign);
+        signature = await signRawHash(signHash);
+      } else if (signType === 'passkey') {
+        signHash = getTypedHash(messageToSign);
+        // IMPORTANT TODO, remove 0x00 from passkey signature
+        signature = (await signWithPasskey(signHash)).replace('0x00', '0x');
+      } else {
+        throw new Error('signType not supported');
+      }
+      onSign(signature);
+    }catch(err){
+      console.log('sign failed');
+      throw new Error('Sign failed');
     }
-    onSign(signature);
   };
 
   const checkIsActivated = async () => {

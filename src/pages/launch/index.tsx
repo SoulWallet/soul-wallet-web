@@ -58,21 +58,22 @@ export default function Launch() {
           // if no info on this device, init it
           let slotInitInfo;
           let publicKey;
-          try {
-            const res = (
-              await api.guardian.getSlotInfo({
-                key: publicKeys['0'],
-              })
-            ).data;
+          const res = (
+            await api.guardian.getSlotInfo({
+              key: publicKeys['0'],
+            })
+          ).data;
+
+          if (res) {
             slotInitInfo = res;
             publicKey = publicKeys['0'];
-          } catch (err) {
-            const res = (
+          } else {
+            const res2 = (
               await api.guardian.getSlotInfo({
                 key: publicKeys['1'],
               })
             ).data;
-            slotInitInfo = res;
+            slotInitInfo = res2;
             publicKey = publicKeys['1'];
           }
 
@@ -99,7 +100,6 @@ export default function Launch() {
         });
       }
       setIsAuthing(false);
-
     } catch (error: any) {
       console.log('error', error);
       setIsAuthing(false);
@@ -173,12 +173,10 @@ export default function Launch() {
             <Box
               display="flex"
               flexDirection="column"
-
               alignItems="center"
               justifyContent="center"
               margin="50px 0"
               width="320px"
-
             >
               <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6">
                 <Button
@@ -189,13 +187,13 @@ export default function Launch() {
                     width: '282px',
                     borderRadius: '40px',
                     background: 'white',
-                    color: 'black'
+                    color: 'black',
                   }}
                   _hover={{
                     width: '282px',
                     borderRadius: '40px',
                     background: 'white',
-                    color: 'black'
+                    color: 'black',
                   }}
                 >
                   Login with passkey
@@ -221,13 +219,7 @@ export default function Launch() {
         <Box height="100%">
           <Image src={homeExampleImage} aspectRatio="1021 / 728" height="100%" />
         </Box>
-        <Box
-          position="absolute"
-          right="10px"
-          bottom="-34px"
-          display="flex"
-          justifyContent="flex-end"
-        >
+        <Box position="absolute" right="10px" bottom="-34px" display="flex" justifyContent="flex-end">
           <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}>
             <TwitterIcon />
           </Box>
