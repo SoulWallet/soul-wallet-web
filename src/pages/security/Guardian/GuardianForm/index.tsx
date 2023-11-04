@@ -153,6 +153,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
   const { chainConfig } = useConfig();
   const [loading, setLoading] = useState(false);
   const { sendErc20, payTask } = useTransaction();
+  const { showConfirmPayment } = useWalletContext();
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -253,16 +254,17 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
         keySignature,
       ]
 
-      const result = await api.guardian.createTask({
+      const res1 = await api.guardian.createTask({
         keystore,
         functionName,
         parameters
       })
 
-      const task = result.data
+      const task = res1.data
       const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
-      const res2 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
-      console.log('handleSubmit1111', result, res2);
+      const res2 = await showConfirmPayment(task.estiamtedFee);
+      const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
+      console.log('handleSubmit1111', res1, res2, res3);
       setGuardiansInfo(guardiansInfo)
       startBackup()
       setLoading(false);

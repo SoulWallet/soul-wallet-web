@@ -139,7 +139,10 @@ export default function Launch() {
 
   return (
     <Box
-      width="100vw"
+      width={{
+        base: '100%',
+        lg: '100vw',
+      }}
       height="100vh"
       display="flex"
       alignItems="center"
@@ -150,12 +153,27 @@ export default function Launch() {
       backgroundSize="cover"
       overflow="auto"
     >
-      <Box display="flex" justifyContent="center" position="relative">
+      <Box
+        display="flex"
+        justifyContent="center"
+        position="relative"
+        flexDirection={{
+          base: 'column',
+          lg: 'row'
+        }}
+      >
         <Box minHeight="calc(100% - 40px)">
           <Box
             padding="40px 0"
             backgroundColor="rgba(255, 255, 255, 0.35)"
-            width="400px"
+            maxWidth={{
+              base: 'calc(100vw - 40px)',
+              lg: '400px',
+            }}
+            width={{
+              base: '360px',
+              lg: '400px',
+            }}
             minHeight="calc(100% - 5px)"
             display="flex"
             alignItems="center"
@@ -176,9 +194,12 @@ export default function Launch() {
               alignItems="center"
               justifyContent="center"
               margin="50px 0"
-              width="320px"
+              width={{
+                base: '230px',
+                lg: '320px',
+              }}
             >
-              <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6">
+              <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6" maxWidth="100%">
                 <Button
                   disabled={isAuthing}
                   loading={isAuthing}
@@ -188,6 +209,7 @@ export default function Launch() {
                     borderRadius: '40px',
                     background: 'white',
                     color: 'black',
+                    maxWidth: '100%'
                   }}
                   _hover={{
                     width: '282px',
@@ -202,7 +224,7 @@ export default function Launch() {
                   disabled={isCreating}
                   loading={isCreating}
                   onClick={createWallet}
-                  _styles={{ width: '282px', borderRadius: '40px' }}
+                  _styles={{ width: '282px', borderRadius: '40px', maxWidth: '100%' }}
                 >
                   Create new wallet
                 </Button>
@@ -216,10 +238,32 @@ export default function Launch() {
             </TextBody>
           </Box>
         </Box>
-        <Box height="100%">
+        <Box
+          height="100%"
+          display={{
+            base: 'none',
+            lg: 'block',
+          }}
+        >
           <Image src={homeExampleImage} aspectRatio="1021 / 728" height="100%" />
         </Box>
-        <Box position="absolute" right="10px" bottom="-34px" display="flex" justifyContent="flex-end">
+        <Box
+          position={{
+            base: 'unset',
+            lg: 'absolute',
+          }}
+          right="10px"
+          bottom="-34px"
+          display="flex"
+          justifyContent={{
+            base: 'center',
+            lg: 'flex-end'
+          }}
+          padding={{
+            base: '10px',
+            lg: '0'
+          }}
+        >
           <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}>
             <TwitterIcon />
           </Box>

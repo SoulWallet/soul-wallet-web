@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, createRef, useMemo } from 'react';
 import { ethers } from 'ethers';
 import SignTransactionModal from '@/components/SignTransactionModal';
-import SignPaymentModal from '@/components/SignPaymentModal';
+import ConfirmPaymentModal from '@/components/ConfirmPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import TransferAssetsModal from '@/components/TransferAssetsModal';
 import useConfig from '@/hooks/useConfig';
@@ -19,7 +19,7 @@ interface IWalletContext {
     showSelectChain?: boolean,
     // showAmount?: string,
   ) => Promise<void>;
-  showSignPayment: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
+  showConfirmPayment: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
   showTransferAssets: (tokenAddress?: string, transferType?:string) => Promise<void>;
   checkActivated: () => Promise<boolean>;
@@ -28,7 +28,7 @@ interface IWalletContext {
 export const WalletContext = createContext<IWalletContext>({
   ethersProvider: new ethers.JsonRpcProvider(),
   showSignTransaction: async () => {},
-  showSignPayment: async () => {},
+  showConfirmPayment: async () => {},
   showSignMessage: async () => {},
   showTransferAssets: async () => {},
   checkActivated: async () => false,
@@ -44,7 +44,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
   const signTransactionModal = createRef<any>();
-  const signPaymentModal = createRef<any>();
+  const confirmPaymentModal = createRef<any>();
   const signMessageModal = createRef<any>();
   const transferAssetsModal = createRef<any>();
 
@@ -98,8 +98,8 @@ export const WalletContextProvider = ({ children }: any) => {
     return await signTransactionModal.current.show(txns, origin, sendTo, showSelectChain);
   };
 
-  const showSignPayment = async (txns: any, origin?: string, sendTo?: string) => {
-    return await signPaymentModal.current.show(txns, origin, sendTo);
+  const showConfirmPayment = async (fee: any, origin?: string, sendTo?: string) => {
+    return await confirmPaymentModal.current.show(fee, origin, sendTo);
   };
 
   const showSignMessage = async (messageToSign: string, origin?: string) => {
@@ -124,14 +124,14 @@ export const WalletContextProvider = ({ children }: any) => {
         ethersProvider,
         showSignTransaction,
         showSignMessage,
-        showSignPayment,
+        showConfirmPayment,
         showTransferAssets,
         checkActivated,
       }}
     >
       {children}
       <SignTransactionModal ref={signTransactionModal} />
-      <SignPaymentModal ref={signPaymentModal} />
+      <ConfirmPaymentModal ref={confirmPaymentModal} />
       <SignMessageModal ref={signMessageModal} />
       <TransferAssetsModal ref={transferAssetsModal} />
     </WalletContext.Provider>

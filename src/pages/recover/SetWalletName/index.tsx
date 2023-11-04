@@ -93,7 +93,7 @@ export default function SetWalletName({ changeStep }: any) {
 
   return (
     <FullscreenContainer>
-      <Box width="400px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+      <Box width="400px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
         <WalletCard
           statusText="SETTING UP..."
           titleText="NEW SOUL WALLET"
