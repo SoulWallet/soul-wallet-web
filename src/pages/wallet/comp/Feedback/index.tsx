@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Textarea, Image, Text, Box, useToast, Input as CInput } from '@chakra-ui/react';
 import HomeCard from '../HomeCard';
 import IconPlus from '@/assets/icons/dapp-plus.svg';
@@ -40,6 +40,14 @@ export default function Feedback() {
   const onUploaded = (file: any) => {
     setFileList((prev: any) => {
       return [...prev, file];
+    });
+  };
+
+  const removeFromFiles = (index: number) => {
+    setFileList((prev: any) => {
+      prev.splice(index, 1);
+      console.log('prev is', prev);
+      return [...prev];
     });
   };
 
@@ -85,7 +93,6 @@ Share your contact for follow-up`}
             <Box
               border="1px dashed #000"
               _hover={{ bg: '#fafafa' }}
-              cursor={'pointer'}
               display={'flex'}
               gap="2"
               py="2"
@@ -94,8 +101,28 @@ Share your contact for follow-up`}
               alignItems={'center'}
               mb="3"
             >
-              {fileList.map((item: any) => (
-                <Image h="16" src={item.accessUrl} key={item.fileKey} />
+              {fileList.map((item: any, idx: number) => (
+                <Box key={item.fileKey} pos="relative" _hover={{ '& > .delete-modal': { display: 'flex' } }}>
+                  <Box
+                    onClick={() => removeFromFiles(idx)}
+                    className="delete-modal"
+                    pos={'absolute'}
+                    top="0"
+                    right="0"
+                    bottom="0"
+                    left="0"
+                    bg="rgba(30,30,30,.4)"
+                    zIndex={'100'}
+                    display={'none'}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    cursor={"pointer"}
+                  >
+                    <Text color="#fff" >Delete</Text>
+                  </Box>
+                  {item.fileType.startsWith('video') && <video style={{ height: '64px' }} src={item.accessUrl} />}
+                  {item.fileType.startsWith('image') && <Image h="16" src={item.accessUrl} />}
+                </Box>
               ))}
             </Box>
           )}
