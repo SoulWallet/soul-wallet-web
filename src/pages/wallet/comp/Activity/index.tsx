@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ActivityItem from './comp/ActivityItem';
-import { Image } from '@chakra-ui/react';
-import scanApi from '@/lib/scanApi';
-import { useAddressStore } from '@/store/address';
+import { Image, Divider } from '@chakra-ui/react';
 import EmptyHint from '@/components/EmptyHint';
 import useConfig from '@/hooks/useConfig';
-import { useChainStore } from '@/store/chain';
 import { useHistoryStore } from '@/store/history';
 import HomeCard from '../HomeCard';
 import IconLoading from '@/assets/loading.gif';
@@ -17,8 +14,6 @@ export default function Activity() {
   // const [historyList, setHistoryList] = useState<any>([]);
   const { chainConfig } = useConfig();
   const { historyList } = useHistoryStore();
-
-
 
   return (
     <HomeCard title={'Activity'} external={<ExternalLink title="View all" to="/activity" />} contentHeight="290px">
@@ -42,9 +37,11 @@ export default function Activity() {
             )}
           </>
         ))}
-
       {historyList.map((item: any, idx: number) => (
-        <ActivityItem key={idx} idx={idx} item={item} scanUrl={chainConfig.scanUrl} />
+        <React.Fragment key={idx}>
+          {idx !== 0 && <Divider my="10px" />}
+          <ActivityItem key={idx} idx={idx} item={item} scanUrl={chainConfig.scanUrl} />
+        </React.Fragment>
       ))}
     </HomeCard>
   );

@@ -29,7 +29,7 @@ export default function ListItem({ icon, title, titleDesc, onClick, amount, amou
       onClick={onClick}
       justify={'space-between'}
       align={'center'}
-      py="3"
+      // py="3"
       cursor={'pointer'}
       pt={idx === 0 ? '0px' : ''}
       transition={'all'}

@@ -22,7 +22,6 @@ export default function HomeCard({ title, external, contentHeight, titleProps, c
       </Flex>
       <Box
         h={{ lg: contentHeight }}
-        overflowY={'auto'}
         bg="#fff"
         rounded="20px"
         p={{ base: 3, lg: 6 }}
@@ -30,7 +29,9 @@ export default function HomeCard({ title, external, contentHeight, titleProps, c
         lineHeight={'1'}
         {...restProps}
       >
-        {children}
+        <Box overflowY={'auto'} h="100%" w="100%">
+          {children}
+        </Box>
       </Box>
     </Box>
   );
