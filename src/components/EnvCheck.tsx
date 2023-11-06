@@ -2,33 +2,42 @@
  * Check user's current environment
  */
 
-import { useEffect } from 'react';
-import { getNativeCredentialCreateMethod } from '@/lib/tools';
-
-
+import { useEffect, useState } from 'react';
+import { isNativeMethod } from '@/lib/tools';
+import { Alert, AlertIcon, AlertTitle, Flex } from '@chakra-ui/react';
+import Button from './Button';
+import { useSettingStore } from '@/store/setting';
 
 export default function EnvCheck({ children }: any) {
-  // useNativeMethod('navigator.credentials.create')
-  // useNativeMethod('alert')
+  const { ignoreWebauthnOverride, setIgnoreWebauthnOverride } = useSettingStore();
+  const [isWebauthnNative, setIsWebauthnNative] = useState(true);
   const checkNativeMethod = async () => {
-    const nativeCredentialCreateMethod = getNativeCredentialCreateMethod();
-    console.log('credentialCreate', nativeCredentialCreateMethod.toString(), window.navigator.credentials.create);
-    console.log('is equal', nativeCredentialCreateMethod === window.navigator.credentials.create);
+    setIsWebauthnNative(isNativeMethod(window.navigator.credentials.create));
   };
-
-  Function.prototype.toString = () => {
-    return 'function() { /* [native code] */ }'
-  }
 
   useEffect(() => {
     checkNativeMethod();
-
-    console.log('111', checkNativeMethod.toString())
-
-    // Array.prototype.push.toString = ()=>{
-    //   return 'good job'
-    // }
   }, []);
 
-  return children;
+  return (
+    <>
+      {!isWebauthnNative && !ignoreWebauthnOverride && (
+        <Alert status="warning" justifyContent={'space-between'}>
+          <Flex>
+            <AlertIcon />
+            <AlertTitle>Your passkey has been overridden by plugins.</AlertTitle>
+          </Flex>
+          <Button
+            py="2"
+            onClick={() => {
+              setIgnoreWebauthnOverride(true);
+            }}
+          >
+            I understand the risk
+          </Button>
+        </Alert>
+      )}
+      {children}
+    </>
+  );
 }

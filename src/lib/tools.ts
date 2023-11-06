@@ -115,14 +115,8 @@ export const getCurrentTimeFormatted = () => {
   return `${year}${month}${day}${hour}${minute}`
 }
 
-export const getNativeCredentialCreateMethod = () => {
-  // todo, move to common
-  const iframe:any = document.createElement('iframe');
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
-  const nativeMethod = iframe.contentWindow.navigator.credentials.create.bind(window);
-  document.body.removeChild(iframe);
-  return nativeMethod;
+export const isNativeMethod = (fn: any) => {
+  return /\{\s*\[native code\]\s*\}/.test('' + fn);
 }
 
 export const base64ToBigInt = (base64String: string) => {
