@@ -140,6 +140,7 @@ export default function Launch() {
         lg: '100vw',
       }}
       height="100vh"
+      padding="20px"
       display="flex"
       alignItems="center"
       justifyContent="center"
@@ -157,8 +158,9 @@ export default function Launch() {
           base: 'column',
           lg: 'row',
         }}
+        height="calc(100% - 80px)"
       >
-        <Box minHeight="calc(100% - 40px)">
+        <Box>
           <Box
             padding="40px 0"
             backgroundColor="rgba(255, 255, 255, 0.35)"
@@ -171,6 +173,7 @@ export default function Launch() {
               lg: '400px',
             }}
             minHeight="calc(100% - 5px)"
+            maxHeight="100%"
             display="flex"
             alignItems="center"
             justifyContent="space-around"
