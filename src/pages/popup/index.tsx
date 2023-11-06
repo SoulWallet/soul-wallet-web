@@ -12,7 +12,6 @@ export default function Popup() {
   const { addressList } = useAddressStore();
   const [searchParams] = useSearchParams();
   const action = searchParams.get('action');
-  const origin = searchParams.get('origin');
   const id = searchParams.get('id');
   const data = searchParams.get('data') === 'undefined' ? {} : JSON.parse(searchParams.get('data') || '{}');
   const txns = data.txns;
@@ -64,24 +63,18 @@ export default function Popup() {
 
   return (
     <Box p="6" h="100vh">
-      {action === 'getAccounts' && <ConnectDapp origin={origin} msgId={id} />}
+      {action === 'getAccounts' && <ConnectDapp msgId={id} />}
       {action === 'signTransaction' && (
         <>
           <Image src={IconLogo} mx="auto" w="200px" />
-          <SignTransaction txns={txns} origin={origin} msgId={id} onSuccess={onTxSuccess} />
+          <SignTransaction txns={txns} msgId={id} onSuccess={onTxSuccess} />
         </>
       )}
       {action === 'signMessage' && (
-        <SignMessage origin={origin} msgId={id} messageToSign={message} signType="message" onSign={onSign} />
+        <SignMessage msgId={id} messageToSign={message} signType="message" onSign={onSign} />
       )}
       {action === 'signTypedDataV4' && (
-        <SignMessage
-          origin={origin}
-          msgId={id}
-          messageToSign={JSON.parse(message)}
-          signType="typedData"
-          onSign={onSign}
-        />
+        <SignMessage msgId={id} messageToSign={JSON.parse(message)} signType="typedData" onSign={onSign} />
       )}
       {action === 'switchChain' && <SwitchChain targetChainId={targetChainId.chainId} onSwitch={onSwitch} />}
     </Box>

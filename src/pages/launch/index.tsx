@@ -38,8 +38,8 @@ export default function Launch() {
   const { navigate } = useBrowser();
   const toast = useToast();
   const { retrieveForNewDevice } = useWallet();
-  const { clearCredentials, credentials, setSelectedCredentialId } = useCredentialStore();
-  const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
+  const { clearCredentials } = useCredentialStore();
+  const { clearAddressList } = useAddressStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [searchParams] = useSearchParams();
@@ -51,36 +51,36 @@ export default function Launch() {
       const { publicKeys, credential } = await authenticate();
       console.log('credential is', credential);
       if (publicKeys) {
-        if (credentials.length) {
-          setSelectedAddress(addressList[0].address);
-          setSelectedCredentialId(credential.credentialId);
+        localStorage.clear();
+        // if (credentials.length) {
+        //   setSelectedAddress(addressList[0].address);
+        //   setSelectedCredentialId(credential.credentialId);
+        // } else {
+        // if no info on this device, init it
+        let slotInitInfo;
+        let publicKey;
+        const res = (
+          await api.guardian.getSlotInfo({
+            key: publicKeys['0'],
+          })
+        ).data;
+
+        if (res) {
+          slotInitInfo = res;
+          publicKey = publicKeys['0'];
         } else {
-          // if no info on this device, init it
-          let slotInitInfo;
-          let publicKey;
-          const res = (
+          const res2 = (
             await api.guardian.getSlotInfo({
-              key: publicKeys['0'],
+              key: publicKeys['1'],
             })
           ).data;
-
-          if (res) {
-            slotInitInfo = res;
-            publicKey = publicKeys['0'];
-          } else {
-            const res2 = (
-              await api.guardian.getSlotInfo({
-                key: publicKeys['1'],
-              })
-            ).data;
-            slotInitInfo = res2;
-            publicKey = publicKeys['1'];
-          }
-
-          console.log('slot init info', slotInitInfo, publicKey);
-
-          await retrieveForNewDevice(slotInitInfo, { ...credential, publicKey });
+          slotInitInfo = res2;
+          publicKey = publicKeys['1'];
         }
+
+        console.log('slot init info', slotInitInfo, publicKey);
+
+        await retrieveForNewDevice(slotInitInfo, { ...credential, publicKey });
 
         toast({
           title: 'Logged in',
@@ -103,10 +103,6 @@ export default function Launch() {
     } catch (error: any) {
       console.log('error', error);
       setIsAuthing(false);
-      // toast({
-      //   title: error.message,
-      //   status: 'error',
-      // });
     }
   };
 
@@ -159,7 +155,7 @@ export default function Launch() {
         position="relative"
         flexDirection={{
           base: 'column',
-          lg: 'row'
+          lg: 'row',
         }}
       >
         <Box minHeight="calc(100% - 40px)">
@@ -199,7 +195,14 @@ export default function Launch() {
                 lg: '320px',
               }}
             >
-              <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6" maxWidth="100%">
+              <Box
+                display="flex"
+                flexDir={'column'}
+                justifyContent="center"
+                alignItems="center"
+                gap="6"
+                maxWidth="100%"
+              >
                 <Button
                   disabled={isAuthing}
                   loading={isAuthing}
@@ -209,7 +212,7 @@ export default function Launch() {
                     borderRadius: '40px',
                     background: 'white',
                     color: 'black',
-                    maxWidth: '100%'
+                    maxWidth: '100%',
                   }}
                   _hover={{
                     width: '282px',
@@ -257,11 +260,11 @@ export default function Launch() {
           display="flex"
           justifyContent={{
             base: 'center',
-            lg: 'flex-end'
+            lg: 'flex-end',
           }}
           padding={{
             base: '10px',
-            lg: '0'
+            lg: '0',
           }}
         >
           <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[0].link}>

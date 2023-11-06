@@ -5,17 +5,20 @@ import Fonts from '@/styles/Fonts';
 import FindRoute from '@/components/FindRoute';
 import Theme from '@/styles/Theme';
 import Pooling from './components/Pooling';
+import EnvCheck from './components/EnvCheck';
 
 export default function Layout() {
   return (
     <ChakraProvider theme={Theme} toastOptions={{ defaultOptions: { duration: 1000 } }}>
       <Fonts />
-      <FindRoute>
-        <WalletContextProvider>
-          <Outlet />
-          <Pooling />
-        </WalletContextProvider>
-      </FindRoute>
+      <EnvCheck>
+        <FindRoute>
+          <WalletContextProvider>
+            <Outlet />
+            <Pooling />
+          </WalletContextProvider>
+        </FindRoute>
+      </EnvCheck>
     </ChakraProvider>
   );
 }

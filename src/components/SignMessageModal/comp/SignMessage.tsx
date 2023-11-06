@@ -19,11 +19,13 @@ const getTypedHash = (typedData: any) => {
   return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.value || typedData.message);
 };
 
-export default function SignMessage({ messageToSign, onSign, signType, origin }: any) {
+export default function SignMessage({ messageToSign, onSign, signType }: any) {
   const { selectedAddressItem } = useConfig();
   const { signRawHash, signWithPasskey } = useWallet();
   const [isActivated, setIsActivated] = useState(false);
   const { checkActivated } = useWalletContext();
+  const origin = document.referrer;
+
   const onConfirm = async () => {
     try{
       let signHash;

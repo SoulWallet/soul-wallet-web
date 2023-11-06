@@ -28,7 +28,7 @@ export default function useWallet() {
     setRecoveringGuardiansInfo,
   } = useGuardianStore();
   const { selectedChainId, updateChainItem, setSelectedChainId } = useChainStore();
-  const { credentials, setCredentials, getSelectedCredential, } = useCredentialStore();
+  const { credentials, setCredentials, getSelectedCredential } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
 
@@ -170,19 +170,20 @@ export default function useWallet() {
 
     setCredentials([credentialKey]);
 
-    const guardianDetails = await api.guardian.getGuardianDetails({
-      guardianHash: initInfo.slotInitInfo.initialGuardianHash,
-    });
+    // const guardianDetails = await api.guardian.getGuardianDetails({
+    //   guardianHash: initInfo.slotInitInfo.initialGuardianHash,
+    // });
 
-    console.log('guardian details', guardianDetails);
+    // console.log('guardian details', guardianDetails);
 
-    updateGuardiansInfo({
-      guardianDetails: guardianDetails.data.guardianDetails,
-      guardianHash: initInfo.slotInitInfo.initialGuardianHash,
-      keystore: initInfo.keystore,
-      slot: initInfo.slot,
-      // guardianNames: initInfo.guardianNames,
-    });
+    // updateGuardiansInfo({
+    //   // TODO, second params
+    //   guardianDetails: guardianDetails ? guardianDetails.data.guardianDetails : [],
+    //   // IMPORTANT TODO, current guardian hash
+    //   guardianHash: initInfo.slotInitInfo.initialGuardianHash,
+    //   keystore: initInfo.keystore,
+    //   slot: initInfo.slot,
+    // });
   };
 
   const retrieveSlotInfo = (initInfo: any) => {
@@ -263,7 +264,7 @@ export default function useWallet() {
 
     // recover process finished
     if (res.status === 4) {
-      setRecoveringGuardiansInfo({})
+      setRecoveringGuardiansInfo({});
     }
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;

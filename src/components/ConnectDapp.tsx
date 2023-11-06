@@ -7,8 +7,6 @@ import useConfig from '@/hooks/useConfig';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import config from '@/config';
 import { AccountSelect } from './AccountSelect';
-import { useCredentialStore } from '@/store/credential';
-import usePasskey from '@/hooks/usePasskey';
 
 enum SecurityLevel {
   High = 'High',
@@ -35,12 +33,10 @@ const DappAvatar = ({ avatar }: any) => (
   </Flex>
 );
 
-export default function ConnectDapp({ origin, msgId }: any) {
+export default function ConnectDapp({ msgId }: any) {
   const { selectedAddressItem, selectedChainItem } = useConfig();
-  // const { credentials } = useCredentialStore();
-  // const { authenticate } = usePasskey();
   const { title, address } = selectedAddressItem;
-
+  const origin = document.referrer;
   const onConfirm = async (address: string) => {
     // do auth first
     // const credentialId = credentials[0].id;
