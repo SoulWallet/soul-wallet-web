@@ -34,7 +34,7 @@ import { Link } from 'react-router-dom';
 import useWallet from '@/hooks/useWallet';
 
 export default function Launch() {
-  const { register, authenticate } = usePassKey();
+  const { authenticate } = usePassKey();
   const { navigate } = useBrowser();
   const toast = useToast();
   const { retrieveForNewDevice } = useWallet();

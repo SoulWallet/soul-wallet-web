@@ -18,15 +18,17 @@ export default function FindRoute({ children }: any) {
   const { guardiansInfo } = useGuardianStore();
 
   const findRoute = async () => {
-    if (storeVersion !== storage.getItem('storeVersion')) {
-      console.log('ready to clear storage', storeVersion, storage.getItem('storeVersion'))
-      storage.clear();
+    const storageVersion = storage.getItem('storeVersion');
+
+    console.log('storage', storeVersion, storageVersion);
+
+    if (storeVersion !== storageVersion) {
+      if (storageVersion) {
+      console.log('ready to clear storage');
+        storage.clear();
+      }
+      console.log('ready to set store version')
       storage.setItem('storeVersion', storeVersion);
-      // toast({
-      //   status: 'info',
-      //   title: `There are break changes during development, please create new wallet`,
-      //   duration: 3000,
-      // })
     }
 
     if (guardiansInfo && guardiansInfo.requireBackup) {
