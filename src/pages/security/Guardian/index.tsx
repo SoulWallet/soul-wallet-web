@@ -105,10 +105,7 @@ export default function Guardian({ setActiveSection }: any) {
       const guardianDetails = data.guardianDetails;
 
       const guardiansInfo = {
-        keystore,
-        slot,
         guardianHash: activeGuardianHash,
-        guardianNames: [],
         guardianDetails,
       };
 
