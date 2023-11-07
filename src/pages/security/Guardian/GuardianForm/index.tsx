@@ -140,7 +140,12 @@ const getInitialValues = (ids: string[], guardians: string[], guardianNames: str
 
 export default function GuardianForm({ cancelEdit, startBackup }: any) {
   const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
-  const guardianDetails = guardiansInfo.guardianDetails
+  const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
+    guardians: [],
+    threshold: 0
+  }
+  const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
+
   const threshold = guardianDetails.threshold
   const { selectedAddress } = useAddressStore();
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 3 && guardianDetails.guardians.length) || 3)
@@ -158,7 +163,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
     validate,
-    initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardiansInfo.guardianNames)
+    initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardianNames)
   });
 
   const amountForm = useForm({
@@ -314,7 +319,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
     }
   }, [amountData.guardiansCount, amountForm.values.amount]);
 
-  const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
+  const hasGuardians = guardianDetails && guardianDetails.guardians && !!guardianDetails.guardians.length
 
   return (
     <Fragment>

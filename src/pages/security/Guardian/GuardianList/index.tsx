@@ -108,8 +108,13 @@ const amountValidate = (values: any, props: any) => {
 
 export default function GuardianList({ onSubmit, loading, textButton, startBackup }: any) {
   const { guardiansInfo } = useGuardianStore();
-  const guardianDetails = guardiansInfo.guardianDetails
-  const guardianNames = guardiansInfo.guardianNames
+  const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
+    guardians: [],
+    guardianNames: [],
+    threshold: 0
+  }
+
+  const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
 
   const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
     return {

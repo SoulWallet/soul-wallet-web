@@ -56,7 +56,7 @@ function GuardianEditor() {
 }
 
 export default function Guardian({ setActiveSection }: any) {
-  const { getActiveGuardianHash2 } = useKeystore();
+  const { getActiveGuardianHash } = useKeystore();
   const { selectedAddress } = useAddressStore();
   const [status, setStatus] = useState<string>('intro');
   const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
@@ -91,11 +91,7 @@ export default function Guardian({ setActiveSection }: any) {
 
   const getGuardianInfo = async () => {
     try {
-      const res1 = await api.guardian.getSlotInfo({ walletAddress: selectedAddress });
-      const slotInitInfo = res1.data.slotInitInfo
-      const keystore = res1.data.keystore
-      const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
-      const activeGuardianInfo = await getActiveGuardianHash2(slotInitInfo)
+      const activeGuardianInfo = await getActiveGuardianHash()
       let activeGuardianHash
 
       if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
