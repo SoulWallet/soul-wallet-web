@@ -75,7 +75,8 @@ export default function useDapp() {
   };
 
   const estimateGas = async (params: any) => {
-    return await ethersProvider.estimateGas(params[0]);
+    const res = await ethersProvider.estimateGas(params[0]);
+    return Number(res);
   };
 
   const gasPrice = async () => {
@@ -90,7 +91,8 @@ export default function useDapp() {
   };
 
   const getBalance = async (params: any) => {
-    return await ethersProvider.getBalance(params[0], params[1]);
+    const res = await ethersProvider.getBalance(params[0], params[1])
+    return Number(res);
   };
 
   const getTransactionReceipt = async (params: any) => {
@@ -224,7 +226,7 @@ export default function useDapp() {
   };// eth_getTransactionReceipt
 
   const handleRequest = async (request: any) => {
-    console.log('safe message request', request.method, request.params, )
+    console.log('SAFE REQUEST', request.method, request.params, )
     switch (request.method) {
       case Methods.getSafeInfo:
         return getSafeInfo();
