@@ -4,6 +4,8 @@ import { getMessageType } from '@/lib/tools';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain'
+import BN from 'bignumber.js'
+import config from '@/config';
 import {
   Methods,
   SafeInfo,
@@ -29,6 +31,7 @@ import {
   getSDKVersion,
   TransactionStatus
 } from '@safe-global/safe-apps-sdk';
+import useConfig from './useConfig';
 
 export interface MethodToResponse {
   [Methods.sendTransactions]: SendTransactionsResponse;
@@ -48,6 +51,7 @@ export default function useDapp() {
   const { ethersProvider, showSignTransaction, showSignMessage } = useWalletContext();
   const { getSelectedChainItem } = useChainStore();
   const { selectedAddress, getSelectedAddressItem } = useAddressStore();
+  const {chainConfig} = useConfig();
 
   const getAccounts = () => {
     return getSelectedAddressItem().address;
@@ -76,7 +80,7 @@ export default function useDapp() {
 
   const estimateGas = async (params: any) => {
     const res = await ethersProvider.estimateGas(params[0]);
-    return Number(res);
+    return res;
   };
 
   const gasPrice = async () => {
@@ -105,7 +109,9 @@ export default function useDapp() {
 
   const signTypedDataV4 = async (params: any) => {
     const msg = params[1]
-    return await showSignMessage(msg, 'typedData');
+    const res = await showSignMessage(msg, 'typedData');
+    console.log('signature is', res);
+    return res;
     // const res = await windowBus.send("signMessageV4", {
     //     data: params[1],
   // });
@@ -239,12 +245,12 @@ export default function useDapp() {
         }
       case Methods.signMessage:
         const signature = await signMessage([request.params.message]);
-        return { messageHash: signature as any };
+        return { signature };
       case Methods.signTypedMessage:
         const params = request.params;
         const typedData = params.typedData;
         const signatureV4 = await signTypedDataV4([, typedData])
-        return { messageHash: signatureV4 as any };
+        return { signature: signatureV4 };
       case Methods.getTxBySafeTxHash:
         const { safeTxHash } = request.params;
         return await getTransactionByHash([safeTxHash]);

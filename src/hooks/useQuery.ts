@@ -7,7 +7,7 @@ import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
 import { SignkeyType } from '@soulwallet/sdk';
-import { addPaymasterAndData } from '@/lib/tools';
+import { addPaymasterAndData, printUserOp } from '@/lib/tools';
 import useConfig from './useConfig';
 
 export default function useQuery() {
