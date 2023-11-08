@@ -47,11 +47,12 @@ export default function Launch() {
 
   const login = async () => {
     try {
+      // make sure no storage left
+      storage.clear();
       setIsAuthing(true);
       const { publicKeys, credential } = await authenticate();
       console.log('credential is', credential);
       if (publicKeys) {
-        localStorage.clear();
         // if (credentials.length) {
         //   setSelectedAddress(addressList[0].address);
         //   setSelectedCredentialId(credential.credentialId);

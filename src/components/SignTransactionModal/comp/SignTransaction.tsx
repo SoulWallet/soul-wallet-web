@@ -1,6 +1,6 @@
-import { Flex, Box, Text, useToast, Image } from '@chakra-ui/react';
+import { Flex, Box, Text, useToast, Image, Divider } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
-import { AddressInput, AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
+import IconCopy from '@/assets/copy.svg';
 import Button from '../../Button';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import BN from 'bignumber.js';
@@ -20,6 +20,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
 import ChainSelect from '@/components/ChainSelect';
+import useTools from '@/hooks/useTools';
 
 export default function SignTransaction({ onSuccess, txns, sendToAddress }: any) {
   const toast = useToast();
@@ -42,13 +43,13 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
   // const [targetChainId, setTargetChainId] = useState('');
   const { getPrefund } = useQuery();
-  const { chainConfig, selectedAddressItem } = useConfig();
+  const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
   const { getUserOp } = useTransaction();
+  const { doCopy } = useTools();
   const selectedToken = getTokenBalance(payToken);
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
   // const origin = document.referrer;
-
 
   const checkSponser = async (userOp: UserOperation) => {
     const res = await api.sponsor.check(
@@ -188,12 +189,18 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     doPrecheck();
   }, [txns, payToken]);
 
+  const toAddress = sendToAddress
+    ? sendToAddress
+    : decodedData[0] && decodedData[0].to
+    ? decodedData[0] && decodedData[0].to
+    : '';
+
   return (
     <>
-      <Flex flexDir={'column'} gap="5" mt="6">
-        {decodedData && decodedData.length > 0 && (
-          <Box bg="#fff" py="3" px="4" rounded="20px" fontWeight={'800'}>
-            <Box>
+      <Flex flexDir={'column'} gap="5" mt="10">
+        <Flex flexDir={'column'} align={'center'} fontWeight={'800'} lineHeight={'1'}>
+          {decodedData && decodedData.length > 0 && (
+            <Box mb="18px" fontSize={'12px'} fontFamily={'Martian'}>
               {decodedData.map((item: any, index: number) => (
                 <Text mr="1" textTransform="capitalize" key={index}>
                   {decodedData.length > 1 && `${index + 1}.`}
@@ -201,27 +208,39 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 </Text>
               ))}
             </Box>
-          </Box>
-        )}
-        {/* {showSelectChain && (
-          <Box width="100%">
-            <ChainSelect isInModal={true} />
-          </Box>
-        )} */}
+          )}
+          {totalMsgValue && (
+            <>
+              <Text fontSize={'32px'} mb="3" color="#000">
+                {totalMsgValue} ETH
+              </Text>
+              {/** TODO, change to real price */}
+              <Text color="brand.gray">${BN(totalMsgValue).times(1900).toFormat()}</Text>
+            </>
+          )}
+        </Flex>
 
-        <AddressInputReadonly label="From" value={selectedAddressItem.title} memo={toShortAddress(selectedAddress)} />
-        {sendToAddress ? (
-          <AddressInput label="To" value={sendToAddress} disabled={true} />
-        ) : decodedData[0] && decodedData[0].to ? (
-          <AddressInput label="To" value={decodedData[0] && decodedData[0].to} disabled={true} />
-        ) : (
-          ''
-        )}
-        {BN(totalMsgValue).isGreaterThan(0) && (
-          <AddressInput label="Send Value" value={`${totalMsgValue} ETH`} disabled={true} />
-        )}
+        <Divider borderColor={'#d7d7d7'} mb="3" />
+
         <>
-          <InfoWrap>
+          <InfoWrap color="#646464" fontSize="12px">
+            <InfoItem>
+              <Text>To</Text>
+              <Flex align={'center'} gap="1">
+                <Text>{toAddress}</Text>
+                <Image src={IconCopy} onClick={() => doCopy(toAddress)} cursor={'pointer'} opacity={0.5}  />
+              </Flex>
+            </InfoItem>
+            <InfoItem>
+              <Text>From</Text>
+              <Text>
+                {selectedAddressItem.title}({toShortAddress(selectedAddress)})
+              </Text>
+            </InfoItem>
+            <InfoItem>
+              <Text>Network</Text>
+              <Text>{selectedChainItem.chainName}</Text>
+            </InfoItem>
             <InfoItem align={sponsor && 'flex-start'}>
               <Text>Gas fee</Text>
               {sponsor ? (
@@ -238,7 +257,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 </Box>
               ) : (
                 <Flex gap="2">
-                  {feeCost === '...' ? <Image src={IconLoading} /> :<Text>{feeCost.split(' ')[0]}</Text> }
+                  {feeCost === '...' ? <Image src={IconLoading} /> : <Text>{feeCost.split(' ')[0]}</Text>}
                   <GasSelect gasToken={payToken} onChange={setPayToken} />
                 </Flex>
               )}
@@ -247,11 +266,13 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         </>
       </Flex>
       <Button
-        w="100%"
+        w="320px"
+        display={"block"}
         fontSize={'20px'}
         py="4"
         fontWeight={'800'}
-        mt="6"
+        mt="12"
+        mx="auto"
         onClick={onConfirm}
         loading={signing}
         disabled={loadingFee && !sponsor}

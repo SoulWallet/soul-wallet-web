@@ -39,21 +39,19 @@ const validate = (values: any) => {
 export default function SetWalletName({ changeStep }: any) {
   const { navigate } = useBrowser();
   const [loading, setLoading] = useState(false);
-  const { getActiveGuardianHash2 } = useKeystore();
   const { register } = usePassKey();
-  const { addCredential, clearCredentials, credentials, setSelectedCredentialId } = useCredentialStore();
-  const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
+  const { addCredential, clearCredentials, } = useCredentialStore();
+  // const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
   const toast = useToast();
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
     fields: ['name'],
     validate,
   });
-  const { updateRecoveringGuardiansInfo } = useGuardianStore();
   const disabled = loading || invalid;
 
   const resetWallet = () => {
-    clearCredentials();
-    clearAddressList();
+    // clearCredentials();
+    // clearAddressList();
     storage.clear();
   };
 

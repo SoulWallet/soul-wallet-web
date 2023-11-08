@@ -4,6 +4,7 @@ import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
 import { useChainStore } from '@/store/chain';
 import useConfig from '@/hooks/useConfig';
+import storage from '@/lib/storage';
 import useBrowser from '@/hooks/useBrowser';
 import MenuIcon from '@/components/Icons/Menu';
 import AssetIcon from '@/components/Icons/Asset';
@@ -31,11 +32,10 @@ const getPageIcon = (type: string) => {
 
 export default function PageSelect() {
   const { navigate } = useBrowser();
-  const { setSelectedCredentialId, } = useCredentialStore();
 
   const doLogout = () =>{
-    setSelectedCredentialId('')
-    navigate('/launch');
+    storage.clear();
+    location.href = '/launch'
   }
 
   return (

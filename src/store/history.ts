@@ -6,7 +6,6 @@ import { ActivityStatusEn } from '@/pages/wallet/comp/Activity/comp/ActivityItem
 
 export interface IHistoryStore {
   historyList: any[];
-  //   getHistory: (tokenAddress: string) => any;
   fetchHistory: (address: string, chainId: string[]) => void;
 }
 
@@ -22,8 +21,6 @@ export const useHistoryStore = create<IHistoryStore>()(
           const item = res.data.ops[i];
           // decode calldata
           const callDataDecodes = await decodeCalldata(item.chainId, item.entrypointAddress, item.userOp);
-          // TODO, skip decode when exists in store
-          // console.log('activity decoded', callDataDecodes);
 
           const functionName = callDataDecodes.map((item: any) => item.functionName || item.method && item.method.name).join(', ');
 

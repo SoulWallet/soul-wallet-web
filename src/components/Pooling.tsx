@@ -8,9 +8,11 @@ import { useHistoryStore } from '@/store/history';
 import { useBalanceStore } from '@/store/balance';
 import useConfig from '@/hooks/useConfig';
 import { useChainStore } from '@/store/chain';
-export default function Pooling({ children }: any) {
+import { useCredentialStore } from '@/store/credential';
+export default function Pooling() {
   const { selectedAddress } = useAddressStore();
   const { fetchHistory } = useHistoryStore();
+  const {setSelectedCredentialId, selectedCredentialId,} = useCredentialStore();
   const { selectedChainItem } = useConfig();
   const { selectedChainId } = useChainStore();
   const { fetchTokenBalance } = useBalanceStore();
@@ -18,7 +20,7 @@ export default function Pooling({ children }: any) {
   useEffect(() => {
     const { chainIdHex, paymasterTokens } = selectedChainItem;
 
-    if (!selectedAddress || !selectedChainId) {
+    if (!selectedAddress || !selectedChainId || !selectedCredentialId) {
       return;
     }
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, Box, useToast } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
-import { copyText } from '@/lib/tools';
 import IconLoading from '@/assets/loading.gif';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
@@ -12,6 +11,7 @@ import AddressIcon from '../AddressIcon';
 import useSdk from '@/hooks/useSdk';
 import IconCopy from '@/assets/copy.svg';
 import { PlusSquareIcon } from '@chakra-ui/icons';
+import useTools from '@/hooks/useTools';
 
 const CreateAccount = () => {
   const [creating, setCreating] = useState(false);
@@ -58,14 +58,8 @@ const CreateAccount = () => {
 
 export function AccountSelectFull({ ...restProps }) {
   const { selectedAddress } = useAddressStore();
-  const toast = useToast();
-  const doCopy = () => {
-    copyText(selectedAddress);
-    toast({
-      title: 'Copied',
-      status: 'success',
-    });
-  };
+  const { doCopy } = useTools();
+ 
   return (
     <Flex align={'center'} gap="2px" {...restProps}>
       <AccountSelect pl={{base: "3", lg: "4"}} wrapperProps={{ w: { base: '50%', lg: 'unset' } }} />
@@ -81,7 +75,7 @@ export function AccountSelectFull({ ...restProps }) {
         <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
           {toShortAddress(selectedAddress, 5, 4)}
         </Text>
-        <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy()} />
+        <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy(selectedAddress)} />
       </Flex>
     </Flex>
   );

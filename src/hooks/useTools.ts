@@ -1,8 +1,7 @@
 import api from '@/lib/api';
-import { ethers } from 'ethers';
 import QRCode from 'qrcode';
 import { GuardianItem } from '@/lib/type';
-
+import { copyText } from '@/lib/tools';
 import { useToast } from '@chakra-ui/react';
 
 export default function useTools() {
@@ -24,6 +23,14 @@ export default function useTools() {
   const generateJsonName = (name: string) => {
     const date = new Date();
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${name}.json`;
+  };
+
+  const doCopy = (text: string) => {
+    copyText(text);
+    toast({
+      title: 'Copied',
+      status: 'success',
+    });
   };
 
   const downloadJsonFile = (jsonToSave: any) => {
@@ -82,6 +89,7 @@ export default function useTools() {
     formatGuardianFile,
     getJsonFromFile,
     generateQrCode,
-    generateJsonName
+    generateJsonName,
+    doCopy,
   };
 }

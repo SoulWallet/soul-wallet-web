@@ -20,14 +20,10 @@ export default function FindRoute({ children }: any) {
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
 
-    console.log('storage', storeVersion, storageVersion);
-
     if (storeVersion !== storageVersion) {
       if (storageVersion) {
-      console.log('ready to clear storage');
         storage.clear();
       }
-      console.log('ready to set store version')
       storage.setItem('storeVersion', storeVersion);
     }
 

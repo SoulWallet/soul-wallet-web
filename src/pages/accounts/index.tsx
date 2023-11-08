@@ -32,6 +32,7 @@ import IconEdit from '@/assets/icons/edit.svg';
 import IconCopy from '@/assets/icons/copy.svg';
 import useSdk from '@/hooks/useSdk';
 import { useChainStore } from '@/store/chain';
+import useTools from '@/hooks/useTools';
 
 const EditNameModal = ({ isOpen, onClose, item }: any) => {
   const toast = useToast();
@@ -107,15 +108,8 @@ const AccountItem = ({ item, selected, onClick }: any) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { getIsActivated } = useAddressStore();
   const { selectedChainId } = useChainStore();
+  const { doCopy } = useTools();
   const isActivated = getIsActivated(item.address, selectedChainId);
-
-  const doCopy = () => {
-    copyText(item.address);
-    toast({
-      title: 'Copied',
-      status: 'success',
-    });
-  };
 
   const accountMenus = [
     {
@@ -126,7 +120,7 @@ const AccountItem = ({ item, selected, onClick }: any) => {
     {
       title: 'Copy address',
       icon: <Image src={IconCopy} />,
-      onClick: doCopy,
+      onClick: () => doCopy(item.address),
     },
   ];
 

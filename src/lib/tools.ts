@@ -248,7 +248,7 @@ export const toCapitalize = (str: string) => {
 
 export const decodeCalldata = async (chainId: string, entrypoint: string, userOp: UserOperation) => {
   const decodeRet = await DecodeUserOp(parseInt(chainId), entrypoint, userOp);
-  console.log('decoded tx:', decodeRet.OK)
+  // console.log('decoded tx:', decodeRet.OK)
   if (decodeRet.isErr()) {
     console.error(decodeRet.ERR);
     return [];
