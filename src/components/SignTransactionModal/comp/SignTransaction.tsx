@@ -21,7 +21,7 @@ import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
 import ChainSelect from '@/components/ChainSelect';
 
-export default function SignTransaction({ onSuccess, txns, sendToAddress, showSelectChain }: any) {
+export default function SignTransaction({ onSuccess, txns, sendToAddress }: any) {
   const toast = useToast();
   const [loadingFee, setLoadingFee] = useState(true);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
@@ -47,7 +47,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress, showSe
   const { getUserOp } = useTransaction();
   const selectedToken = getTokenBalance(payToken);
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
-  const origin = document.referrer;
+  // const origin = document.referrer;
 
 
   const checkSponser = async (userOp: UserOperation) => {
@@ -203,11 +203,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress, showSe
             </Box>
           </Box>
         )}
-        {showSelectChain && (
+        {/* {showSelectChain && (
           <Box width="100%">
             <ChainSelect isInModal={true} />
           </Box>
-        )}
+        )} */}
 
         <AddressInputReadonly label="From" value={selectedAddressItem.title} memo={toShortAddress(selectedAddress)} />
         {sendToAddress ? (
