@@ -146,8 +146,6 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
   }
   const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
 
-  const threshold = guardianDetails.threshold
-  const { selectedAddress } = useAddressStore();
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 3 && guardianDetails.guardians.length) || 3)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));

@@ -58,6 +58,8 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
     checkIsActivated();
   }, []);
 
+  const shouldDisable = signType !== 'passkey' && !isActivated;
+
   return (
     <>
       <Text fontSize="20px" fontWeight="800" color="#1e1e1e">
@@ -80,12 +82,12 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
           memo={toShortAddress(selectedAddressItem.address)}
         />
       </Flex>
-      {!isActivated && (
+      {shouldDisable && (
         <Text color="red" mt="4">
           Please activate your wallet before signing message
         </Text>
       )}
-      <Button checkCanSign disabled={!isActivated} w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
+      <Button checkCanSign disabled={shouldDisable} w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
         Confirm
       </Button>
     </>

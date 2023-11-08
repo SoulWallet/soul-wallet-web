@@ -19,7 +19,7 @@ export default function Balance() {
       </Text>
       <Flex fontSize={'16px'} gap="1">
         <Text color="#10c003" fontWeight={'700'}>
-          + $8.88 (0.8%)
+          + $0 (0%)
         </Text>
         <Text fontWeight={'600'}>Past day</Text>
       </Flex>

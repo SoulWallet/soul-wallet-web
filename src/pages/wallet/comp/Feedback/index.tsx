@@ -54,10 +54,7 @@ export default function Feedback() {
   return (
     <HomeCard title={'Feedback'}>
       <Textarea
-        placeholder={`Let us know how we can help. 
-Suggest features you want to include
-For bugs, include steps to reproduce.
-Share your contact for follow-up`}
+        placeholder={`Let us know how we can help. (For bugs, include steps to reproduce.)`}
         border="none"
         _placeholder={{ color: 'brand.gray' }}
         bg="#f5f5f5"
