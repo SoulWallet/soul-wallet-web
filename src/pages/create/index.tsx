@@ -43,8 +43,8 @@ export default function Create() {
   const createWallet = async () => {
     try {
       setIsCreating(true);
-      const credentialName = `Passkey_${credentials.length + 1}`;
-      const credentialKey = await register(credentialName);
+      const walletName =  credentials[0].name.match(/(.*?)_\d+/)[1];
+      const credentialKey = await register(walletName);
       addCredential(credentialKey);
       setIsCreating(false);
       // navigate('/create');

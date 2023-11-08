@@ -117,9 +117,10 @@ export default function Launch() {
     try {
       /* resetWallet();
        * setIsCreating(true);
-       * const credentialName = `Passkey_1`;
        * const credentialKey = await register(credentialName);
        * setIsCreating(false); */
+      // make sure storage is clear
+      storage.clear();
       navigate({
         pathname: '/create',
         search: location.search,

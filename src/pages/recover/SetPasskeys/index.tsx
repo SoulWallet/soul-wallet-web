@@ -74,8 +74,8 @@ export default function SetPasskeys({ changeStep }: any) {
     try {
       setIsCreating(true);
       const credentials = getRecoveringGuardiansInfo().credentials || []
-      const credentialName = `Passkey_${credentials.length + 1}`
-      const credentialKey = await register(credentialName);
+      const walletName =  credentials[0].name.match(/(.*?)_\d+/)[1];
+      const credentialKey = await register(walletName);
       addCredential(credentialKey)
       setIsCreating(false);
       // navigate('/create');

@@ -5,6 +5,7 @@ import IconPlus from '@/assets/icons/dapp-plus.svg';
 import api from '@/lib/api';
 import Button from '@/components/Button';
 import Uploader from '@/components/Uploader';
+import { useAddressStore } from '@/store/address';
 
 const Input = ({ ...restProps }: any) => {
   return <CInput bg="#f5f5f5" rounded="20px" border="none" py="4" {...restProps} />;
@@ -16,6 +17,7 @@ export default function Feedback() {
   const [contact, setContact] = useState('');
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
+  const { selectedAddress } = useAddressStore();
 
   const toast = useToast();
   const doSubmit = async () => {
@@ -23,7 +25,7 @@ export default function Feedback() {
     const res = await api.operation.feedback({
       body: value,
       contact,
-      address,
+      address: selectedAddress,
       fileKeys: fileList.map((item: any) => item.fileKey),
     });
     console.log('subscribe res', res);
@@ -131,13 +133,13 @@ export default function Feedback() {
             value={contact}
             onChange={(e: any) => setContact(e.target.value)}
           />
-          <Input
+          {/* <Input
             mb="3"
             h="52px"
             placeholder="Your walelt address (optional)"
             value={address}
             onChange={(e: any) => setAddress(e.target.value)}
-          />
+          /> */}
           <Button loading={loading} onClick={doSubmit} fontSize="20px" fontWeight={'800'} w="100%" py="4">
             Submit
           </Button>

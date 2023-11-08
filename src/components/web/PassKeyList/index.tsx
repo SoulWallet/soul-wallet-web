@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Box, Text, Input, BoxProps } from '@chakra-ui/react';
-import EditIcon from '@/components/Icons/Edit';
+// import EditIcon from '@/components/Icons/Edit';
 import ComputerIcon from '@/components/Icons/Computer';
 
 function PassKeyItem({ passKey, setPassKeyName }: any) {
@@ -41,13 +41,13 @@ function PassKeyItem({ passKey, setPassKeyName }: any) {
           <Text color="rgb(51, 51, 51)" fontSize="14px">
             last used: Steptember 11 2023, 1:03 PM
           </Text>
-          <Text color="rgb(51, 51, 51)" fontSize="14px">
+          {/* <Text color="rgb(51, 51, 51)" fontSize="14px">
             backup: none
-          </Text>
+          </Text> */}
         </Box>
-        <Box marginLeft="auto" borderRadius="48px" width="48px" height="48px" display="flex" alignItems="center" justifyContent="center" cursor="pointer" _hover={{ background: 'rgba(0, 0, 0, 0.04)' }} onClick={() => setIsEditing(true)}>
+        {/* <Box marginLeft="auto" borderRadius="48px" width="48px" height="48px" display="flex" alignItems="center" justifyContent="center" cursor="pointer" _hover={{ background: 'rgba(0, 0, 0, 0.04)' }} onClick={() => setIsEditing(true)}>
           <EditIcon />
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );
