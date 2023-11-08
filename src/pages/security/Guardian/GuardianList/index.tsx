@@ -199,7 +199,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
               </Box>
             </Box>
           </Box>
-          <TextBody>out of 3 guardian(s) confirmation. </TextBody>
+          <TextBody>out of {guardianDetails.guardians.length} guardian(s) confirmation. </TextBody>
         </Box>
       </Box>
       {!!guardianList.length && (

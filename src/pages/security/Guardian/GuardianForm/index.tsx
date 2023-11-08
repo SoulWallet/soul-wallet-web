@@ -214,12 +214,11 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
       const keystore = chainConfig.contracts.l1Keystore;
       const salt = ethers.ZeroHash;
-      const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
+      const { initialKeys, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
       const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
       const initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [initalkeysAddress]);
       const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
       console.log('initalkeys', initialKeys, initalkeysAddress, initalRawkeys);
-      const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod)
 
       const walletInfo = {
         keystore,
