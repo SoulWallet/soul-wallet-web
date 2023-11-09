@@ -37,23 +37,42 @@ export default function GuardianIntro({ startManage, startEdit }: any) {
         </Box>
       </Box>
       <Box padding="40px">
-        <Box display="flex" alignItems="center" justifyContent="flex-start" marginBottom="16px">
-          <ArrowRightIcon />
-          <TextBody fontSize="16px" fontWeight="800" marginLeft="5px">
-            What is Soul Wallet guardian?
-          </TextBody>
+        <Box marginBottom="16px">
+          <Box display="flex" alignItems="center" justifyContent="flex-start">
+            {/* <ArrowRightIcon /> */}
+            <TextBody fontSize="16px" fontWeight="800">
+              What is Soul Wallet guardian?
+            </TextBody>
+          </Box>
+          <Box maxWidth="560px">
+            <TextBody fontSize="14px" fontWeight="700">
+              Guardians are Ethereum wallet addresses that assist you in recovering your wallet if needed. Soul Wallet replaces recovery phrases with guardian-signature social recovery, improving security and usability.
+            </TextBody>
+          </Box>
         </Box>
-        <Box display="flex" alignItems="center" justifyContent="flex-start" marginBottom="16px">
-          <ArrowRightIcon />
-          <TextBody fontSize="16px" fontWeight="800" marginLeft="5px">
-            What wallet can be set as guardian?
-          </TextBody>
+        <Box marginBottom="16px">
+          <Box display="flex" alignItems="center" justifyContent="flex-start">
+            <TextBody fontSize="16px" fontWeight="800">
+              Who can be my guardians?
+            </TextBody>
+          </Box>
+          <Box maxWidth="560px">
+            <TextBody fontSize="14px" fontWeight="700">
+              Choose trusted friends or use your existing Ethereum wallets as guardians. You can setup using regular Ethereum wallets (e.g MetaMask, Ledger, Coinbase Wallet, etc) and other Soul Wallets as your guardians. If choosing a Soul Wallet as your guardian, ensure it's activated on Ethereum for social recovery.
+            </TextBody>
+          </Box>
         </Box>
-        <Box display="flex" alignItems="center" justifyContent="flex-start">
-          <ArrowRightIcon />
-          <TextBody fontSize="16px" fontWeight="800" marginLeft="5px">
-            What is wallet recovery?
-          </TextBody>
+        <Box>
+          <Box display="flex" alignItems="center" justifyContent="flex-start">
+            <TextBody fontSize="16px" fontWeight="800">
+              What is wallet recovery?
+            </TextBody>
+          </Box>
+          <Box maxWidth="560px">
+            <TextBody fontSize="14px" fontWeight="700">
+              If your Soul Wallet is lost or stolen, social recovery helps you easily retrieve wallets with guardian signatures. The guardian list will be stored in an Ethereum-based keystore contract.
+            </TextBody>
+          </Box>
         </Box>
       </Box>
     </Fragment>
