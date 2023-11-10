@@ -27,9 +27,9 @@ export default function ChainSelect({ isInModal }: any) {
       {({ isOpen }) => (
         <>
           <MenuButton data-testid="btn-chain-select" width={isInModal ? '100%' : 'auto'} height={isInModal ? '48px' : '44px'}>
-            <Flex px="3" py="10px" bg="#f2f2f2" rounded={'full'} cursor={'pointer'}>
-              <Image src={selectedChainItem.icon} w="22px" h="22px" />
-              {isInModal && <Text fontWeight="800" fontSize="16px" marginLeft="4px">{selectedChainItem.chainName}</Text>}
+            <Flex px="3" py="10px" bg={isInModal ? 'transparent': '#f2f2f2'} rounded={'full'} cursor={'pointer'}>
+              {!isInModal && <Image src={selectedChainItem.icon} w="22px" h="22px" />}
+              {isInModal && <Text fontWeight="800" fontSize="12px" marginLeft="4px">{selectedChainItem.chainName}</Text>}
               <Box marginLeft={isInModal ? 'auto' : '0px'}>
                 <Image src={IconCheveronRight} transform={isOpen ? 'rotate(90deg)' : 'none'} w="20px" h="20px" />
               </Box>
