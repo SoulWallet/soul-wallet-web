@@ -5,6 +5,7 @@ import IconLogo from '@/assets/logo-all-v3.svg';
 import { Link } from 'react-router-dom';
 import { AccountSelectFull } from '../AccountSelect';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import GuideButton from '../GuideButton';
 
 export default function Header() {
   const { showTransferAssets } = useWalletContext();
@@ -23,6 +24,7 @@ export default function Header() {
         <Image src={IconLogo} h="44px" />
       </Link>
       <Flex align={'center'} gap="2" marginLeft="auto">
+        <GuideButton />
         <Flex align={'center'} gap="2" display={{ base: 'none', lg: 'flex' }}>
           <Button
             px="5"

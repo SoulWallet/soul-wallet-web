@@ -10,11 +10,14 @@ export default function Balance() {
       title={'Balance'}
       titleProps={{ display: { base: 'none', lg: 'block' } }}
       external={<></>}
-      // py={{ base: '12', lg: 'unset' }}
       mt={{ base: '10px', lg: 'unset' }}
-      contentHeight="290px"
+      px="8"
+      contentHeight="160px"
     >
-      <Text mt={{ base: 4, lg: 'unset' }} fontSize={'48px'} fontWeight={'800'} mb="3" lineHeight={'1'}>
+      <Text color="#000" fontSize={'16px'} fontWeight={'600'} mb="4" fontFamily={'Martian'}>
+        User
+      </Text>
+      <Text mt={{ base: 4, lg: 'unset' }} fontSize={'48px'} fontWeight={'800'} mb="4" lineHeight={'1'}>
         $0
       </Text>
       <Flex fontSize={'16px'} gap="1">

@@ -1,9 +1,5 @@
 import React from 'react';
 import { Box, Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider } from '@chakra-ui/react';
-import IconCheveronRight from '@/assets/icons/chevron-right.svg';
-import IconChecked from '@/assets/icons/checked.svg';
-import { useChainStore } from '@/store/chain';
-import useConfig from '@/hooks/useConfig';
 import storage from '@/lib/storage';
 import useBrowser from '@/hooks/useBrowser';
 import MenuIcon from '@/components/Icons/Menu';
@@ -13,8 +9,6 @@ import LogoutIcon from '@/components/Icons/Logout';
 import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
 import { toCapitalize } from '@/lib/tools'
-import { useAddressStore } from '@/store/address';
-import { useCredentialStore } from '@/store/credential';
 
 const getPageIcon = (type: string) => {
   if (type === 'asset') {

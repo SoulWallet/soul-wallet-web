@@ -5,7 +5,7 @@ import useConfig from '@/hooks/useConfig';
 
 interface IProps extends Omit<ButtonProps, 'type'> {
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   loading?: boolean;
   disabled?: boolean;
   checkCanSign?: boolean;
@@ -16,7 +16,7 @@ export default function Button({ onClick, children, loading, disabled, href, che
   const { selectedChainItem } = useConfig();
   // const [canSion, setCanSign] = useState(false);
   const doClick = () => {
-    if (!loading && !disabled && canSign) {
+    if (!loading && !disabled && canSign && onClick) {
       onClick();
     }
   };
