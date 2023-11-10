@@ -17,6 +17,7 @@ interface IProps extends Omit<ButtonProps, 'type'> {
   href?: string;
   _styles?: any;
   LeftIcon?: any;
+  loadingColor?: any;
 }
 
 export default function RoundButton({
