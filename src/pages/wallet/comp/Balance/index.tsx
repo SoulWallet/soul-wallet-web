@@ -3,8 +3,10 @@ import HomeCard from '../HomeCard';
 import Button from '@/components/Button';
 import { ethers } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { useCredentialStore } from '@/store/credential';
 export default function Balance() {
   const { showTransferAssets } = useWalletContext();
+  const { walletName } = useCredentialStore();
   return (
     <HomeCard
       title={'Balance'}
@@ -14,9 +16,12 @@ export default function Balance() {
       px="8"
       contentHeight="160px"
     >
-      <Text color="#000" fontSize={'16px'} fontWeight={'600'} mb="4" fontFamily={'Martian'}>
-        User
-      </Text>
+      {walletName && (
+        <Text color="#000" fontSize={'16px'} fontWeight={'600'} mb="4" fontFamily={'Martian'}>
+          {walletName}
+        </Text>
+      )}
+
       <Text mt={{ base: 4, lg: 'unset' }} fontSize={'48px'} fontWeight={'800'} mb="4" lineHeight={'1'}>
         $0
       </Text>

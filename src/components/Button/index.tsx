@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button as CButton, ButtonProps, Image, useToast } from '@chakra-ui/react';
+import React from 'react';
+import { Button as CButton, ButtonProps, Image } from '@chakra-ui/react';
 import IconLoading from '@/assets/loading.gif';
 import useConfig from '@/hooks/useConfig';
 

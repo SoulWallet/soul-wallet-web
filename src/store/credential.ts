@@ -5,6 +5,8 @@ import { persist } from 'zustand/middleware';
 export interface ICredentialStore {
   selectedCredentialId: string;
   setSelectedCredentialId: (credentialId: string) => void;
+  walletName: string;
+  setWalletName: (name: string) => void;
   credentials: any;
   getSelectedCredential: () => void;
   addCredential: (credential: any) => void;
@@ -19,11 +21,17 @@ export const getIndexByCredentialId = (credentials: any, id: string) => {
 
 const createCredentialSlice = immer<ICredentialStore>((set, get) => ({
   credentials: [],
-  selectedCredentialId: "",
+  selectedCredentialId: '',
+  walletName: '',
+  setWalletName: (name: string) => {
+    set({
+      walletName: name,
+    });
+  },
   setSelectedCredentialId: (credentialId: string) => {
-    set(state=>{
+    set((state) => {
       state.selectedCredentialId = credentialId;
-    })
+    });
   },
   addCredential: (credential: any) => {
     set((state) => {
@@ -35,7 +43,7 @@ const createCredentialSlice = immer<ICredentialStore>((set, get) => ({
       state.credentials = credentials;
       // set the first one as default
       state.selectedCredentialId = credentials[0].id;
-    })
+    });
   },
   getSelectedCredential: () => {
     const index = getIndexByCredentialId(get().credentials, get().selectedCredentialId);

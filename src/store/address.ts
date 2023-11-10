@@ -30,6 +30,7 @@ export const getIndexByAddress = (addressList: IAddressItem[], address: string) 
 
 const createAddressSlice = immer<IAddressStore>((set, get) => ({
   selectedAddress: '',
+  walletName: '',
   addressList: [],
   getSelectedAddressItem: () => {
     const index = getIndexByAddress(get().addressList, get().selectedAddress);
@@ -39,6 +40,7 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
     set({
       selectedAddress: address,
     }),
+
   setAddressList: (addressList: IAddressItem[]) => {
     set((state) => {
       state.addressList = addressList;

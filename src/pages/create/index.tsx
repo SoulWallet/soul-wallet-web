@@ -25,7 +25,7 @@ export default function Create() {
   const { navigate } = useBrowser();
   const { register } = usePassKey();
   const { chainConfig } = useConfig();
-  const { addCredential, credentials, changeCredentialName, setSelectedCredentialId, } = useCredentialStore();
+  const { addCredential, credentials, changeCredentialName, setSelectedCredentialId, walletName, } = useCredentialStore();
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -43,7 +43,6 @@ export default function Create() {
   const createWallet = async () => {
     try {
       setIsCreating(true);
-      const walletName =  credentials[0].name.match(/(.*?)_\d+/)[1];
       const credentialKey = await register(walletName);
       addCredential(credentialKey);
       setIsCreating(false);

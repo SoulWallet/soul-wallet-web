@@ -6,8 +6,6 @@ import TextBody from '@/components/web/TextBody';
 import Button from '@/components/web/Button';
 import TextButton from '@/components/web/TextButton';
 import Steps from '@/components/web/Steps';
-import PassKeyList from '@/components/web/PassKeyList';
-import storage from '@/lib/storage';
 import usePassKey from '@/hooks/usePasskey';
 import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
@@ -39,8 +37,8 @@ const validate = (values: any) => {
 export default function SetWalletName({ changeStep }: any) {
   const { navigate } = useBrowser();
   const [loading, setLoading] = useState(false);
-  const { getActiveGuardianHash2 } = useKeystore();
   const { register } = usePassKey();
+  const { setWalletName, } = useCredentialStore();
   const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
   const toast = useToast();
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
@@ -66,13 +64,11 @@ export default function SetWalletName({ changeStep }: any) {
     try {
       setLoading(true);
       const walletName = values.name || 'Wallet 1';
-
-      const credentials = getRecoveringGuardiansInfo().credentials || []
+      setWalletName(walletName)
       const credentialName = walletName;
       const credentialKey = await register(credentialName);
       addCredential(credentialKey);
       setLoading(false);
-
       changeStep(2)
     } catch (e: any) {
       setLoading(false);

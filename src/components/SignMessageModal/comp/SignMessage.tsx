@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Flex, Box, Text } from '@chakra-ui/react';
 import Button from '../../Button';
-import { AddressInputReadonly } from '../../SendAssets/comp/AddressInput';
 import useWallet from '@/hooks/useWallet';
 import useConfig from '@/hooks/useConfig';
 import { toShortAddress } from '@/lib/tools';
+import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { ethers } from 'ethers';
 import { TypedDataEncoder } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
@@ -15,7 +15,7 @@ const getHash = (message: string) => {
 
 const getTypedHash = (typedData: any) => {
   // IMPORTANT TODO, value of message?
-  // delete typedData.types.EIP712Domain;
+  delete typedData.types.EIP712Domain;
   return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.value || typedData.message);
 };
 
@@ -27,7 +27,7 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
   const origin = document.referrer;
 
   const onConfirm = async () => {
-    try{
+    try {
       let signHash;
       let signature;
       if (signType === 'message') {
@@ -43,9 +43,9 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
       } else {
         throw new Error('signType not supported');
       }
-      console.log('signed sig: ', signature)
+      console.log('signed sig: ', signature);
       onSign(signature);
-    }catch(err){
+    } catch (err) {
       console.log('sign failed');
       throw new Error('Sign failed');
     }
@@ -74,21 +74,33 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
       )}
 
       <Flex flexDir={'column'} gap="5" mt="6">
-        <Box bg="#fff" py="3" px="4" rounded="20px" fontWeight={'800'} maxH="160px" overflowY={'auto'}>
+        <Box bg="#f2f2f2" py="3" px="4" rounded="20px" fontWeight={'800'} maxH="160px" overflowY={'auto'}>
           {signType === 'typedData' || signType === 'passkey' ? JSON.stringify(messageToSign) : messageToSign}
         </Box>
-        <AddressInputReadonly
-          label="From"
-          value={selectedAddressItem.title}
-          memo={toShortAddress(selectedAddressItem.address)}
-        />
+        <InfoWrap color="#646464" fontSize="12px">
+          <InfoItem>
+            <Text>From</Text>
+            <Text>
+              {selectedAddressItem.title}({toShortAddress(selectedAddressItem.address)})
+            </Text>
+          </InfoItem>
+        </InfoWrap>
       </Flex>
       {shouldDisable && (
         <Text color="red" mt="4">
           Please activate your wallet before signing message
         </Text>
       )}
-      <Button checkCanSign disabled={shouldDisable} w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
+      <Button
+        checkCanSign
+        disabled={shouldDisable}
+        w="100%"
+        fontSize={'20px'}
+        py="4"
+        fontWeight={'800'}
+        mt="6"
+        onClick={onConfirm}
+      >
         Confirm
       </Button>
     </>

@@ -26,7 +26,6 @@ export default function SetPasskeys({ changeStep }: any) {
   const { chainConfig } = useConfig();
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
-  const [isReady, setIsReady] = useState(false);
   const { calcGuardianHash } = useKeystore();
   const {
     updateSlotInfo,
@@ -35,18 +34,11 @@ export default function SetPasskeys({ changeStep }: any) {
     getRecoveringGuardiansInfo,
     updateRecoveringGuardiansInfo
   } = useGuardianStore();
+  const { walletName } = useCredentialStore();
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
   const toast = useToast();
   const credentials = recoveringGuardiansInfo.credentials || []
-
-  const onStepChange = (i: number) => {
-    if (i == 0) {
-      // navigate('/launch')
-    } else if (i == 1) {
-      setIsReady(false);
-    }
-  };
 
   const addCredential = async (credential: any) => {
     const credentials = getRecoveringGuardiansInfo().credentials || []
@@ -74,7 +66,6 @@ export default function SetPasskeys({ changeStep }: any) {
     try {
       setIsCreating(true);
       const credentials = getRecoveringGuardiansInfo().credentials || []
-      const walletName =  credentials[0].name.match(/(.*?)_\d+/)[1];
       const credentialKey = await register(walletName);
       addCredential(credentialKey)
       setIsCreating(false);
@@ -88,10 +79,6 @@ export default function SetPasskeys({ changeStep }: any) {
         status: 'error',
       });
     }
-  }
-
-  const onSkip = () => {
-    setIsReady(true)
   }
 
   const handleNext = async () => {
