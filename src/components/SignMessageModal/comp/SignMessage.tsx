@@ -15,7 +15,7 @@ const getHash = (message: string) => {
 
 const getTypedHash = (typedData: any) => {
   // IMPORTANT TODO, value of message?
-  delete typedData.types.EIP712Domain;
+  // delete typedData.types.EIP712Domain;
   return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.value || typedData.message);
 };
 
@@ -43,6 +43,7 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
       } else {
         throw new Error('signType not supported');
       }
+      console.log('signed sig: ', signature)
       onSign(signature);
     }catch(err){
       console.log('sign failed');
