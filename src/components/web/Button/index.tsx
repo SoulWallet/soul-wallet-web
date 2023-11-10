@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, ButtonProps } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
-import IconLoading from '@/assets/loading.svg';
+import IconLoading from '@/assets/loading.gif';
+import BlackIconLoading from '@/assets/loading.svg';
 import { Box } from '@chakra-ui/react';
 
 // TODO: error & retry
@@ -28,6 +29,7 @@ export default function RoundButton({
   _styles,
   LeftIcon,
   _hover,
+  loadingColor,
   ...restProps
 }: IProps) {
   const doClick = () => {
@@ -60,7 +62,8 @@ export default function RoundButton({
       color="white"
       {..._styles}
     >
-      {loading && <Image height="20px" width="20px" marginRight="8px" src={IconLoading} />}
+      {loading && loadingColor !== 'dark' && <Image height="20px" width="20px" marginRight="8px" src={IconLoading} />}
+      {loading && loadingColor === 'dark' && <Image height="20px" width="20px" marginRight="8px" src={BlackIconLoading} />}
       <Box marginRight="4px">{LeftIcon}</Box>
       {children}
     </Button>
