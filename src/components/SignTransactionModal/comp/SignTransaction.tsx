@@ -267,7 +267,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       </Flex>
       <Button
         w="320px"
-        display={"block"}
+        display={"flex"}
+        gap="2"
         fontSize={'20px'}
         py="4"
         fontWeight={'800'}

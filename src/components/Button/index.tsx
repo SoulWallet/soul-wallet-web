@@ -32,7 +32,6 @@ export default function Button({ onClick, children, loading, disabled, href, che
   return (
     <CButton
       color="#fff"
-      // bg={'brand.red'}
       bg="#1c1c1e"
       _hover={!disabled && { bg: '#4e4e54' }}
       h="unset"
@@ -45,8 +44,8 @@ export default function Button({ onClick, children, loading, disabled, href, che
       {...moreProps}
       {...restProps}
     >
+      {loading && <Image src={IconLoading} w="20px" h="20px"/>}
       {children}
-      {loading && <Image src={IconLoading} w="20px" h="20px" ml="1" />}
     </CButton>
   );
 }
