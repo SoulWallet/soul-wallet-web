@@ -15,7 +15,7 @@ export default function Balance() {
       contentHeight="160px"
     >
       <Text color="#000" fontSize={'16px'} fontWeight={'600'} mb="4" fontFamily={'Martian'}>
-        Zengjiajun
+        User
       </Text>
       <Text mt={{ base: 4, lg: 'unset' }} fontSize={'48px'} fontWeight={'800'} mb="4" lineHeight={'1'}>
         $0
