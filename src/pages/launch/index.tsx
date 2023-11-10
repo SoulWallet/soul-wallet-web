@@ -225,6 +225,7 @@ export default function Launch() {
                     background: 'white',
                     color: 'black',
                   }}
+                  loadingColor="dark"
                 >
                   Login with passkey
                 </Button>
