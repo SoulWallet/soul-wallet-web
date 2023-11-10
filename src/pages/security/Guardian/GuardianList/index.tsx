@@ -1,5 +1,22 @@
 import React, { useState, useRef, useImperativeHandle, useCallback, useEffect, Fragment } from 'react';
-import { Box, Button, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Text,
+  Image,
+  useToast,
+  Select,
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody
+} from '@chakra-ui/react';
 import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import Heading1 from '@/components/web/Heading1';
 import Heading3 from '@/components/web/Heading3';
@@ -18,6 +35,7 @@ import PlusIcon from '@/components/Icons/Plus';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useGuardianStore } from '@/store/guardian';
 import { nanoid } from 'nanoid';
+import GuardianModal from '../GuardianModal'
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
@@ -105,8 +123,9 @@ const amountValidate = (values: any, props: any) => {
   return errors;
 };
 
-
 export default function GuardianList({ onSubmit, loading, textButton, startBackup }: any) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   const { guardiansInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
@@ -130,7 +149,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
           <Heading1>Current guardian</Heading1>
           <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians.</TextBody>
           <Box>
-            <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => {}}>
+            <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
               Learn more
             </TextButton>
           </Box>
@@ -211,6 +230,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
           </Box>
         </Box>
       )}
+      <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </Fragment>
   )
 }

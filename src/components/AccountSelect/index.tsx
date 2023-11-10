@@ -81,7 +81,7 @@ export function AccountSelectFull({ ...restProps }) {
   );
 }
 
-export function AccountSelect({ labelType = 'title', wrapperProps, ...restProps }: any) {
+export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ...restProps }: any) {
   const { navigate } = useBrowser();
   const { selectedAddressItem } = useConfig();
   const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
@@ -101,7 +101,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, ...restProps 
               px="3"
               py="10px"
               h="40px"
-              bg={{ base: '#fff', lg: '#f2f2f2' }}
+              bg={isInModal ? 'transparent' : { base: '#fff', lg: '#f2f2f2' }}
               fontWeight={'800'}
               roundedLeft={'full'}
               cursor={'pointer'}
@@ -109,8 +109,9 @@ export function AccountSelect({ labelType = 'title', wrapperProps, ...restProps 
               onClick={() => navigate('/accounts')}
               {...restProps}
             >
-              {labelType === 'title' && selectedAddressItem && <Text>{selectedAddressItem.title}</Text>}
-              {labelType === 'address' && selectedAddressItem && (
+              {isInModal && selectedAddressItem && <Text>{selectedAddressItem.title} ({toShortAddress(selectedAddressItem.address, 4, 6)})</Text>}
+              {!isInModal && labelType === 'title' && selectedAddressItem && <Text>{selectedAddressItem.title}</Text>}
+              {!isInModal && labelType === 'address' && selectedAddressItem && (
                 <Text>{toShortAddress(selectedAddressItem.address, 4, 6)}</Text>
               )}
               <Image src={IconCheveronRight} w="20px" h="20px" transform={isOpen ? 'rotate(90deg)' : 'none'} />

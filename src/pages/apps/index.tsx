@@ -19,35 +19,44 @@ export default function Apps() {
 
   }
 
-  const listner =  async (msg: any) => {
-    const request = msg.data;
-    if (!request.id) return;
-
-    try {
-      let result = await handleRequest(request);
-      const response = makeResponse(request.id, result);
-      console.log('safe message response', request, response);
-      iframeRef.current.contentWindow.postMessage(response, msg.origin);
-    } catch (error: any) {
-      const errorResponse = makeError(request.id, error.message);
-      console.log('safe message error', errorResponse);
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-      iframeRef.current.contentWindow.postMessage(errorResponse, msg.origin);
-    }
-  }
-
   useEffect(() => {
+    const listner =  async (msg: any) => {
+      const request = msg.data;
+      if (!request.id) return;
+
+      try {
+        let result = await handleRequest(request);
+        const response = makeResponse(request.id, result);
+        console.log('safe message response', request, response);
+
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage(response, msg.origin);
+        }
+      } catch (error: any) {
+        const errorResponse = makeError(request.id, error.message);
+        console.log('safe message error', errorResponse);
+        toast({
+          title: error.message,
+          status: 'error',
+        });
+
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage(errorResponse, msg.origin);
+        }
+      }
+    }
+
     window.addEventListener('message', listner);
+
     return () => {
       window.removeEventListener('message', listner)
     }
   }, [])
 
   useEffect(() => {
-    if (iframeRef.current) iframeRef.current.src += '';
+    if (iframeRef.current) {
+      iframeRef.current.src = (iframeRef.current.src || '') + '';
+    }
   }, [chainConfig, selectedAddress])
 
   const IFRAME_SANDBOX_ALLOWED_FEATURES = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock'

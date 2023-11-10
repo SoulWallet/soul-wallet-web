@@ -25,6 +25,7 @@ import useConfig from '@/hooks/useConfig';
 import { L1KeyStore } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
+import GuardianModal from '../GuardianModal'
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
@@ -139,6 +140,7 @@ const getInitialValues = (ids: string[], guardians: string[], guardianNames: str
 };
 
 export default function GuardianForm({ cancelEdit, startBackup }: any) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
@@ -325,7 +327,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
           <Heading1>Friend as guardian</Heading1>
           <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians.</TextBody>
           <Box>
-            <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => {}}>
+            <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
               Learn more
             </TextButton>
           </Box>
@@ -460,6 +462,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
           )}
         </Box>
       </Box>
+      <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </Fragment>
   )
 }
