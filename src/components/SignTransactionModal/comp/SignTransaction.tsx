@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
 import { useChainStore } from '@/store/chain';
-import IconLoading from '@/assets/loading.gif';
+import IconLoading from '@/assets/loading.svg';
 import api from '@/lib/api';
 import { ethers } from 'ethers';
 import { useBalanceStore } from '@/store/balance';
