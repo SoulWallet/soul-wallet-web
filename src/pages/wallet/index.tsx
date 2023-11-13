@@ -7,7 +7,6 @@ import Feedback from './comp/Feedback';
 import AppContainer from '@/components/AppContainer';
 import DappList from '@/components/DappList';
 import Footer from '@/components/Footer';
-import { L1KeyStore } from '@soulwallet/sdk';
 import { AccountSelectFull } from '@/components/AccountSelect';
 import Guidance from './comp/Guidance';
 
@@ -21,7 +20,7 @@ export default function Wallet() {
             <AccountSelectFull display={{base: "flex", lg: "none"}} w="100%" />
             <Balance />
             <Box h="2" />
-            {/* <Guidance /> */}
+            <Guidance />
           </GridItem>
           <GridItem>
             <Tokens />
@@ -36,9 +35,6 @@ export default function Wallet() {
             <Feedback />
           </GridItem>
         </Grid>
-        {/* <Grid templateColumns={'2fr 1fr'} gap="36px">
-         
-        </Grid> */}
         <Footer />
       </AppContainer>
     </Box>

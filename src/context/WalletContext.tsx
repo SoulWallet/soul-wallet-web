@@ -4,6 +4,7 @@ import SignTransactionModal from '@/components/SignTransactionModal';
 import ConfirmPaymentModal from '@/components/ConfirmPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import ClaimAssetsModal from '@/components/ClaimAssetsModal';
+import TestGuideModal from '@/components/TestGuideModal';
 import TransferAssetsModal from '@/components/TransferAssetsModal';
 import useConfig from '@/hooks/useConfig';
 import { useGuardianStore } from '@/store/guardian';
@@ -19,7 +20,8 @@ interface IWalletContext {
     sendTo?: string,
   ) => Promise<void>;
   showConfirmPayment: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
-  showClaimAssets: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
+  showClaimAssets: () => Promise<void>;
+  showTestGuide: () => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
   showTransferAssets: (tokenAddress?: string, transferType?:string) => Promise<void>;
   checkActivated: () => Promise<boolean>;
@@ -32,6 +34,7 @@ export const WalletContext = createContext<IWalletContext>({
   showSignMessage: async () => {},
   showTransferAssets: async () => {},
   showClaimAssets: async () => {},
+  showTestGuide: async () => {},
   checkActivated: async () => false,
 });
 
@@ -49,6 +52,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const signMessageModal = useRef<any>();
   const transferAssetsModal = useRef<any>();
   const claimAssetsModal = useRef<any>();
+  const testGuideModal = useRef<any>();
   
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
@@ -116,6 +120,10 @@ export const WalletContextProvider = ({ children }: any) => {
     return await claimAssetsModal.current.show();
   };
 
+  const showTestGuide = async () => {
+    return await testGuideModal.current.show();
+  };
+
   // if address on chain is not activated, check again
   useEffect(() => {
     if (!selectedAddress || !selectedChainId) {
@@ -133,6 +141,7 @@ export const WalletContextProvider = ({ children }: any) => {
         showConfirmPayment,
         showTransferAssets,
         showClaimAssets,
+        showTestGuide,
         checkActivated,
       }}
     >
@@ -143,6 +152,7 @@ export const WalletContextProvider = ({ children }: any) => {
       <SignMessageModal ref={signMessageModal} />
       <ClaimAssetsModal ref={claimAssetsModal} />
       <TransferAssetsModal ref={transferAssetsModal} />
+      <TestGuideModal ref={testGuideModal} />
     </WalletContext.Provider>
   );
 };

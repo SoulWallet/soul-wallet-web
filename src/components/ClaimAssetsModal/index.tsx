@@ -60,7 +60,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const onClose = async () => {
     setVisible(false);
     setLoading(false);
-    promiseInfo.reject('User reject');
+    promiseInfo.reject('User close');
   };
 
   const claimAmount = selectedChainId === '0x5' ? '0.002' : '0.001';

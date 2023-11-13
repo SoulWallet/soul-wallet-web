@@ -4,26 +4,24 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import IconGuide from '@/assets/icons/guide.svg';
 import IconDollar from '@/assets/icons/dollar.svg';
 
-
 export default function GuideButton() {
-  const { showClaimAssets, } = useWalletContext();
+  const { showClaimAssets, showTestGuide } = useWalletContext();
 
-
-const links = [
-  {
-    icon: IconGuide,
-    title: 'Test guide',
-    onClick: () => {},
-  },
-  {
-    icon: IconDollar,
-    title: 'Test tokens',
-    onClick: showClaimAssets,
-  },
-];
+  const links = [
+    {
+      icon: IconGuide,
+      title: 'Test guide',
+      onClick: showTestGuide,
+    },
+    {
+      icon: IconDollar,
+      title: 'Test tokens',
+      onClick: showClaimAssets,
+    },
+  ];
 
   return (
-    <Menu >
+    <Menu>
       {() => (
         <>
           <MenuButton data-testid="btn-guide">
