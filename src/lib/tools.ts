@@ -1,10 +1,10 @@
 import { nanoid } from 'nanoid';
-import { ethers } from 'ethers';
-import { IAddressItem } from '@/store/address';
+import { ethers, Contract, } from 'ethers';
 import BN from 'bignumber.js';
 import { chainIdMapping, chainMapping } from '@/config';
 import IconDefault from '@/assets/tokens/default.svg';
 import storage from '@/lib/storage';
+import ERC20ABI from '../abi/ERC20.json';
 import { DecodeUserOp, DecodeResult } from '@soulwallet/decoder';
 import { UserOperation } from '@soulwallet/sdk';
 import IconSend from '@/assets/activities/send.svg';
@@ -246,7 +246,7 @@ export const toCapitalize = (str: string) => {
 }
 
 
-export const decodeCalldata = async (chainId: string, entrypoint: string, userOp: UserOperation) => {
+export const decodeCalldata = async (chainId: string, entrypoint: string, userOp: UserOperation, ethersProvider: any) => {
   const decodeRet = await DecodeUserOp(parseInt(chainId), entrypoint, userOp);
   // console.log('decoded tx:', decodeRet.OK)
   if (decodeRet.isErr()) {
@@ -265,6 +265,19 @@ export const decodeCalldata = async (chainId: string, entrypoint: string, userOp
   for (let i of decoded) {
     if (!i.method && i.value) {
       i.functionName = 'Transfer ETH';
+    }
+
+    if(i.method && i.method.name === 'transfer'){
+      // get erc20 info
+      const tokenAddress = i.to;
+      const tokenContract = new Contract(tokenAddress, ERC20ABI, ethersProvider);
+
+      const decimals = await tokenContract.decimals();
+      const symbol = await tokenContract.symbol();
+      const amount = BN(i.method.params['1']).shiftedBy(-BN(decimals)).toFixed();
+
+      i.sendErc20Amount = `${amount} ${symbol}`
+      i.sendErc20Address = i.method.params['0'];
     }
   }
 

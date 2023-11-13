@@ -1,15 +1,19 @@
-export default function useErc20Contract() {
-  return {
-    async getAllowance(tokenAddress: string, spenderAddress: string) {
-      // const tokenContract = new web3.eth.Contract(Erc20Abi, tokenAddress);
-      // return await tokenContract.methods.allowance(walletAddress, spenderAddress).call();
-    },
+import useWalletContext from '@/context/hooks/useWalletContext';
+import {Contract} from 'ethers'
+import ERC20ABI from './abi/ERC20.json';
 
-    async balanceOf(tokenAddress: string) {
-      // const tokenContract = new web3.eth.Contract(Erc20Abi, tokenAddress);
-      // const res = await tokenContract.methods.balanceOf(walletAddress).call();
-      // const decimals = await tokenContract.methods.decimals().call();
-      // return new BN(res).shiftedBy(-decimals).toString();
+
+export default function useErc20Contract() {
+  const {ethersProvider} = useWalletContext();
+
+  return {
+    async tokenInfo(tokenAddress: string) {
+      const tokenContract = new Contract(tokenAddress, ERC20ABI, ethersProvider);
+      // todo, change to multicall
+      return {
+        symbol: await tokenContract.symbol(),
+        decimals: await tokenContract.decimals(),
+      }
     },
   };
 }

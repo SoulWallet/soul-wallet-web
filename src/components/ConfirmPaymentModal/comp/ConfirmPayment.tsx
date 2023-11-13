@@ -11,7 +11,7 @@ import { AccountSelect } from '@/components/AccountSelect';
 import IconEth from '@/assets/chains/eth.svg';
 import api from '@/lib/api';
 
-export default function ConfirmPayment({ onSuccess, fee, origin, sendToAddress }: any) {
+export default function ConfirmPayment({ onSuccess, fee }: any) {
   const toast = useToast();
   const { tokenBalance } = useBalanceStore();
   const { chainConfig, selectedAddressItem } = useConfig();

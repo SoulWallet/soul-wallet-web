@@ -28,7 +28,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const [decodedData, setDecodedData] = useState<any>({});
   const [signing, setSigning] = useState<boolean>(false);
-  const { checkActivated } = useWalletContext();
+  const { checkActivated, ethersProvider } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prechecked, setPrechecked] = useState(false);
   const [totalMsgValue, setTotalMsgValue] = useState('');
@@ -153,14 +153,19 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     setFeeCost('...');
     setTotalMsgValue(
       txns
-        .reduce((total: any, current: any) => total.plus(current.value), BN(0))
+        .reduce((total: any, current: any) => total.plus(current.value || 0), BN(0))
         .shiftedBy(-18)
         .toFixed(),
     );
     setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
     let userOp = await getFinalUserOp(txns);
     setActiveOperation(userOp);
-    const callDataDecodes = await decodeCalldata(selectedChainId, chainConfig.contracts.entryPoint, userOp);
+    const callDataDecodes = await decodeCalldata(
+      selectedChainId,
+      chainConfig.contracts.entryPoint,
+      userOp,
+      ethersProvider,
+    );
     console.log('decoded data', callDataDecodes);
     setDecodedData(callDataDecodes);
     checkSponser(userOp);
@@ -205,11 +210,12 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 <Text mr="1" textTransform="capitalize" key={index}>
                   {decodedData.length > 1 && `${index + 1}.`}
                   {item.functionName ? item.functionName : item.method ? item.method.name : ''}
+                  {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
                 </Text>
               ))}
             </Box>
           )}
-          {totalMsgValue && (
+          {totalMsgValue && Number(totalMsgValue) > 0 && (
             <>
               <Text fontSize={'32px'} mb="3" color="#000">
                 {totalMsgValue} ETH
@@ -228,7 +234,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               <Text>To</Text>
               <Flex align={'center'} gap="1">
                 <Text>{toAddress}</Text>
-                <Image src={IconCopy} onClick={() => doCopy(toAddress)} cursor={'pointer'} opacity={0.5}  />
+                <Image src={IconCopy} onClick={() => doCopy(toAddress)} cursor={'pointer'} opacity={0.5} />
               </Flex>
             </InfoItem>
             <InfoItem>
@@ -267,7 +273,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       </Flex>
       <Button
         w="320px"
-        display={"flex"}
+        display={'flex'}
         gap="2"
         fontSize={'20px'}
         py="4"

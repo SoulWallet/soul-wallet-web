@@ -13,6 +13,8 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Flex,
+  Link,
 } from '@chakra-ui/react';
 import api from '@/lib/api';
 import TextBody from '@/components/web/TextBody';
@@ -30,8 +32,30 @@ import TwitterIcon from '@/components/Icons/Social/Twitter';
 import TelegramIcon from '@/components/Icons/Social/Telegram';
 import GithubIcon from '@/components/Icons/Social/Github';
 import config from '@/config';
-import { Link } from 'react-router-dom';
 import useWallet from '@/hooks/useWallet';
+import { Link as RLink } from 'react-router-dom'
+
+const LaunchFooter = () => {
+  return (
+    <Flex flexDir={'column'} gap="5">
+      <Text>
+        If you have any questions, reach out to us at{' '}
+        <Link href="mailto:Support@SoulWallet.io">Support@SoulWallet.io</Link>
+      </Text>
+      <Flex align="center" gap="4">
+        <Link href={config.socials[0].link}>
+          <TwitterIcon />
+        </Link>
+        <Link href={config.socials[1].link}>
+          <TelegramIcon />
+        </Link>
+        <Link href={config.socials[2].link}>
+          <GithubIcon />
+        </Link>
+      </Flex>
+    </Flex>
+  );
+};
 
 export default function Launch() {
   const { authenticate } = usePassKey();
@@ -243,7 +267,7 @@ export default function Launch() {
               </TextBody>
             </Box>
             <TextBody color="#000000" fontWeight="800" fontSize="20px" textAlign="center">
-              <Link to="/recover">Lost your wallet?</Link>
+              <Link to="/recover" as={RLink}>Lost your wallet?</Link>
             </TextBody>
           </Box>
         </Box>
@@ -256,7 +280,7 @@ export default function Launch() {
         >
           <Image src={homeExampleImage} aspectRatio="1021 / 728" height="100%" />
         </Box>
-        <Box
+        {/* <Box
           position={{
             base: 'unset',
             lg: 'absolute',
@@ -282,7 +306,7 @@ export default function Launch() {
           <Box as="a" margin="0 5px" cursor="pointer" target="_blank" href={config.socials[2].link}>
             <GithubIcon />
           </Box>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

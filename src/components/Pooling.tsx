@@ -9,7 +9,9 @@ import { useBalanceStore } from '@/store/balance';
 import useConfig from '@/hooks/useConfig';
 import { useChainStore } from '@/store/chain';
 import { useCredentialStore } from '@/store/credential';
+import useWalletContext from '@/context/hooks/useWalletContext';
 export default function Pooling() {
+  const { ethersProvider } = useWalletContext();
   const { selectedAddress } = useAddressStore();
   const { fetchHistory } = useHistoryStore();
   const {setSelectedCredentialId, selectedCredentialId,} = useCredentialStore();
@@ -25,12 +27,12 @@ export default function Pooling() {
     }
 
     fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
-    fetchHistory(selectedAddress, [selectedChainId]);
+    fetchHistory(selectedAddress, [selectedChainId], ethersProvider,);
 
     const interval = setInterval(() => {
       fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
-      fetchHistory(selectedAddress, [selectedChainId]);
-    }, 5000);
+      fetchHistory(selectedAddress, [selectedChainId], ethersProvider,);
+    }, 8000);
 
     return () => {
       clearInterval(interval);
