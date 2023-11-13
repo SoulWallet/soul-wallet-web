@@ -53,6 +53,7 @@ export const chainMapping = {
 export const storeVersion = '1';
 
 export default {
+  homepage: "https://www.soulwallet.io",
   faviconUrl: 'https://www.google.com/s2/favicons?domain=',
   socials: [
     {

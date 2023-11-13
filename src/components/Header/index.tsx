@@ -8,7 +8,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import GuideButton from '../GuideButton';
 
 export default function Header() {
-  const { showTransferAssets } = useWalletContext();
+  const { showTransferAssets, showClaimAssets, } = useWalletContext();
 
   return (
     <Flex

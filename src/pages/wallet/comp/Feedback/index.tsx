@@ -15,7 +15,6 @@ export default function Feedback() {
   const [value, setValue] = useState('');
   const [fileList, setFileList] = useState<any>([]);
   const [contact, setContact] = useState('');
-  const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const { selectedAddress } = useAddressStore();
 

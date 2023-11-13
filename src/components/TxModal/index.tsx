@@ -1,11 +1,11 @@
 import { Modal, ModalOverlay, ModalContent, ModalBody, ModalHeader, ModalCloseButton } from '@chakra-ui/react';
 
-export default function TxModal({ title, visible, onClose, children }: any) {
+export default function TxModal({ title, visible, onClose, children, width }: any) {
   return (
     visible && (
       <Modal isOpen={true} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxW={{ base: '90%', lg: '640px' }}>
+        <ModalContent maxW={width || { base: '90%', lg: '640px' }}>
           <ModalHeader fontWeight={'800'} textAlign={'center'} borderBottom={'1px solid #d7d7d7'}>
             {title}
           </ModalHeader>

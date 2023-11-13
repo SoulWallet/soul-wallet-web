@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import SignTransactionModal from '@/components/SignTransactionModal';
 import ConfirmPaymentModal from '@/components/ConfirmPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
+import ClaimAssetsModal from '@/components/ClaimAssetsModal';
 import TransferAssetsModal from '@/components/TransferAssetsModal';
 import useConfig from '@/hooks/useConfig';
 import { useGuardianStore } from '@/store/guardian';
@@ -16,10 +17,9 @@ interface IWalletContext {
     txns: any,
     origin?: string,
     sendTo?: string,
-    // showSelectChain?: boolean,
-    // showAmount?: string,
   ) => Promise<void>;
   showConfirmPayment: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
+  showClaimAssets: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
   showTransferAssets: (tokenAddress?: string, transferType?:string) => Promise<void>;
   checkActivated: () => Promise<boolean>;
@@ -31,6 +31,7 @@ export const WalletContext = createContext<IWalletContext>({
   showConfirmPayment: async () => {},
   showSignMessage: async () => {},
   showTransferAssets: async () => {},
+  showClaimAssets: async () => {},
   checkActivated: async () => false,
 });
 
@@ -47,7 +48,8 @@ export const WalletContextProvider = ({ children }: any) => {
   const confirmPaymentModal = useRef<any>();
   const signMessageModal = useRef<any>();
   const transferAssetsModal = useRef<any>();
-
+  const claimAssetsModal = useRef<any>();
+  
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
     if (!selectedChainItem) {
@@ -110,6 +112,10 @@ export const WalletContextProvider = ({ children }: any) => {
     return await transferAssetsModal.current.show(tokenAddress, transferType);
   };
 
+  const showClaimAssets = async () => {
+    return await claimAssetsModal.current.show();
+  };
+
   // if address on chain is not activated, check again
   useEffect(() => {
     if (!selectedAddress || !selectedChainId) {
@@ -126,13 +132,16 @@ export const WalletContextProvider = ({ children }: any) => {
         showSignMessage,
         showConfirmPayment,
         showTransferAssets,
+        showClaimAssets,
         checkActivated,
       }}
     >
       {children}
+      {/** todo, move to another component **/ }
       <SignTransactionModal ref={signTransactionModal} />
       <ConfirmPaymentModal ref={confirmPaymentModal} />
       <SignMessageModal ref={signMessageModal} />
+      <ClaimAssetsModal ref={claimAssetsModal} />
       <TransferAssetsModal ref={transferAssetsModal} />
     </WalletContext.Provider>
   );

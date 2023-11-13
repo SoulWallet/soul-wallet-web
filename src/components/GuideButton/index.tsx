@@ -1,7 +1,13 @@
 import React from 'react';
 import { Box, Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider } from '@chakra-ui/react';
+import useWalletContext from '@/context/hooks/useWalletContext';
 import IconGuide from '@/assets/icons/guide.svg';
 import IconDollar from '@/assets/icons/dollar.svg';
+
+
+export default function GuideButton() {
+  const { showClaimAssets, } = useWalletContext();
+
 
 const links = [
   {
@@ -12,11 +18,10 @@ const links = [
   {
     icon: IconDollar,
     title: 'Test tokens',
-    onClick: () => {},
+    onClick: showClaimAssets,
   },
 ];
 
-export default function GuideButton() {
   return (
     <Menu >
       {() => (
