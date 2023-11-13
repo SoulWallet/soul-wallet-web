@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, createRef, useMemo } from 'react';
+import { createContext, useState, useEffect, useRef, useMemo } from 'react';
 import { ethers } from 'ethers';
 import SignTransactionModal from '@/components/SignTransactionModal';
 import ConfirmPaymentModal from '@/components/ConfirmPaymentModal';
@@ -43,10 +43,10 @@ export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainId } = useChainStore();
   const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
-  const signTransactionModal = createRef<any>();
-  const confirmPaymentModal = createRef<any>();
-  const signMessageModal = createRef<any>();
-  const transferAssetsModal = createRef<any>();
+  const signTransactionModal = useRef<any>();
+  const confirmPaymentModal = useRef<any>();
+  const signMessageModal = useRef<any>();
+  const transferAssetsModal = useRef<any>();
 
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
