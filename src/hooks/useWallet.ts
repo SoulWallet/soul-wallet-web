@@ -159,6 +159,7 @@ export default function useWallet() {
       },
     ]);
     setSelectedAddress(newAddress);
+    // IMPORTANT TODO, get wallet name from credential storage
     // set credentials
     const credentialKey = {
       id: credential.credentialId,

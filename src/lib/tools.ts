@@ -11,8 +11,9 @@ import IconSend from '@/assets/activities/send.svg';
 import IconContract from '@/assets/activities/contract.svg';
 
 export function clearStorageWithCredentials (){
-  const credentialKey = 'credential-storage'
+  const credentialKey = 'local-credentials'
   const credentialStorage = storage.getItem(credentialKey);
+  console.log('ready to do clear', storage.getItem('credential-storage'))
   storage.clear();
   if(credentialStorage){
       storage.setItem(credentialKey, credentialStorage)
@@ -121,7 +122,8 @@ export const getCurrentTimeFormatted = () => {
   const day = String(now.getDate()).padStart(2, '0');
   const hour = String(now.getHours()).padStart(2, '0');
   const minute = String(now.getMinutes()).padStart(2, '0');
-  return `${year}${month}${day}${hour}${minute}`
+  const second = String(now.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day}-${hour}:${minute}:${second}`
 }
 
 export const isNativeMethod = (fn: any) => {

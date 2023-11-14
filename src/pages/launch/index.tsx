@@ -223,8 +223,8 @@ const LaunchFooter = () => {
     <Flex flexDir={'column'} align={'center'} gap="5" mt="178px" mb="34px">
       <Text>
         If you have any questions, reach out to us at{' '}
-        <Link href="mailto:Support@SoulWallet.io" color="#2D5AF6" textDecoration={'underline'}>
-          Support@SoulWallet.io
+        <Link href="mailto:support@SoulWallet.io" color="#2D5AF6" textDecoration={'underline'}>
+          support@SoulWallet.io
         </Link>
       </Text>
       <Flex align="center" gap="4">
@@ -281,7 +281,7 @@ const FeaturesSection = () => {
           flexBasis="auto"
           w="320px"
           h="320px"
-          bg="rgba(255, 255, 255, 0.60)"
+          bg="#F5EBF7"
           rounded="full"
           textAlign={'center'}
           key={idx}

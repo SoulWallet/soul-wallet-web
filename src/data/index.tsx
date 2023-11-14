@@ -61,21 +61,18 @@ export const featureList = [
   },
   {
     icon: IconFeature1,
-
     title: 'Easy to use<br/> web wallet',
     content: 'No Browser Extension. No Install. Pay gas fees with stable coins and get sponsors for transactions.',
   },
   {
     icon: IconFeature2,
-
     title: 'Free access<br/> to Dapps',
-    content: 'Connect to dapps with web sdk. See the demo dapp',
+    content: 'Use Soul Wallet on Ethereum L2. Connect to dapps with web sdk. See the demo dapp',
   },
   {
     icon: IconFeature3,
-
-    title: 'Never lose<br/> your wallet',
+    title: 'Social recovery<br/>with built-in.',
     content:
-      'Use wallet on your Mac/Pc/Phone. Find your wallet back with Social Recovery, even if all your devices are lost.',
+      'Use wallet on your Mac/PC/Phone. Find your wallet back with Social Recovery, even if all your devices are lost.',
   },
 ];
