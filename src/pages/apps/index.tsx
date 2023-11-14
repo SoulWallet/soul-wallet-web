@@ -5,13 +5,14 @@ import useDapp from '@/hooks/useDapp';
 import { useQuery } from '@/hooks/useBrowser';
 import { useAddressStore } from '@/store/address';
 import useConfig from '@/hooks/useConfig';
+import { useChainStore } from '@/store/chain';
 
 export default function Apps() {
   const iframeRef = useRef<any>()
   const toast = useToast();
   const { handleRequest, makeResponse, makeError } = useDapp();
   const { selectedAddress } = useAddressStore();
-  const { chainConfig } = useConfig();
+  const { selectedChainId } = useChainStore();
   const query = useQuery()
   const appUrl = query.get('appUrl')
 
@@ -57,7 +58,7 @@ export default function Apps() {
     if (iframeRef.current) {
       iframeRef.current.src = (iframeRef.current.src || '') + '';
     }
-  }, [chainConfig, selectedAddress])
+  }, [selectedChainId, selectedAddress])
 
   const IFRAME_SANDBOX_ALLOWED_FEATURES = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock'
 
