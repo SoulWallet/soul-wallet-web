@@ -25,6 +25,7 @@ import useConfig from '@/hooks/useConfig';
 import { L1KeyStore } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
+import { useCredentialStore } from '@/store/credential';
 import GuardianModal from '../GuardianModal'
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
@@ -159,6 +160,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
   const [loading, setLoading] = useState(false);
   const { sendErc20, payTask } = useTransaction();
   const { showConfirmPayment } = useWalletContext();
+  const { credentials } = useCredentialStore();
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -217,10 +219,18 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       const keystore = chainConfig.contracts.l1Keystore;
       const salt = ethers.ZeroHash;
       const { initialKeys, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
+      const currentKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
       const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
-      const initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [initalkeysAddress]);
+      const currentkeysAddress = L1KeyStore.initialKeysToAddress(currentKeys);
+      console.log('initialKeys', initalkeysAddress, currentkeysAddress)
+      let initalRawkeys
+      if (initalkeysAddress.join('') === currentkeysAddress.join('')) {
+        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [initalkeysAddress]);
+      } else {
+        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentkeysAddress]);
+      }
+
       const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
-      console.log('initalkeys', initialKeys, initalkeysAddress, initalRawkeys);
 
       const walletInfo = {
         keystore,
