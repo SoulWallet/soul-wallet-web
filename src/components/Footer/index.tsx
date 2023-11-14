@@ -14,7 +14,7 @@ export default function Footer() {
       fontWeight={'300'}
       fontFamily={'Martian'}
     >
-      <Text>Beta {packageJson.version}</Text>
+      <Text>Alpha Test {packageJson.version}</Text>
       <Flex gap="2" align={'center'}>
         {config.socials.map((item, idx) => (
           <Link

@@ -1,5 +1,9 @@
 import IconUniswap from '@/assets/dapps/uniswap.png';
 import IconAave from '@/assets/dapps/aave.png';
+import IconFeature0 from '@/assets/icons/features/0.svg';
+import IconFeature1 from '@/assets/icons/features/1.svg';
+import IconFeature2 from '@/assets/icons/features/2.svg';
+import IconFeature3 from '@/assets/icons/features/3.svg';
 // import IconDefault from '@/assets/icons/default.svg';
 
 export const dappList = [
@@ -26,11 +30,10 @@ export const dappList = [
   // },
 ];
 
-
 export const faqList = [
   {
     title: `What is passkey?`,
-    content: `A passkey is a FIDO credential stored on your computer or phone. Soul Wallet users use passkey to sign transactions without directly touching the private keys. <a href="#" style="color:#2D5AF6; text-decoration: underline;">See more details here.</a>`,
+    content: `A passkey is a FIDO credential stored on your computer or phone. Soul Wallet users use passkey to sign transactions without directly touching the private keys. <a href="https://blog.google/inside-google/googlers/ask-a-techspert/how-passkeys-work/" target='_blank' style="color:#2D5AF6; text-decoration: underline;">See more details here.</a>`,
   },
   {
     title: `Where is the private key and seed phrase?`,
@@ -46,6 +49,33 @@ export const faqList = [
   },
   {
     title: `What is KeyStore?`,
-    content: `Keystore is a special smart contract that stores the owner of wallet. Currently Soul Wallet keystore is on L1 to achieve the highest security. <a href="#" style="color:#2D5AF6; text-decoration: underline;">See more details here.</a>`,
+    content: `Keystore is a special smart contract that stores the owner of wallet. Currently Soul Wallet keystore is on L1 to achieve the highest security. <a href="https://vitalik.ca/general/2023/06/20/deeperdive.html" target='_blank' style="color:#2D5AF6; text-decoration: underline;">See more details here.</a>`,
   },
-]
+];
+
+export const featureList = [
+  {
+    icon: IconFeature0,
+    title: 'Self-custody<br/> with passkey',
+    content: 'Sign every transaction with FaceID/TouchID/Pin. Achieve hardware wallet level security with passkey.',
+  },
+  {
+    icon: IconFeature1,
+
+    title: 'Easy to use<br/> web wallet',
+    content: 'No Browser Extension. No Install. Pay gas fees with stable coins and get sponsors for transactions.',
+  },
+  {
+    icon: IconFeature2,
+
+    title: 'Free access<br/> to Dapps',
+    content: 'Connect to dapps with web sdk. See the demo dapp',
+  },
+  {
+    icon: IconFeature3,
+
+    title: 'Never lose<br/> your wallet',
+    content:
+      'Use wallet on your Mac/Pc/Phone. Find your wallet back with Social Recovery, even if all your devices are lost.',
+  },
+];

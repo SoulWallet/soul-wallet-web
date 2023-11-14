@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import FullscreenContainer from '@/components/FullscreenContainer';
-import { StepActionTypeEn, useStepDispatchContext, CreateStepEn, RecoverStepEn } from '@/context/StepContext';
 import useBrowser from '@/hooks/useBrowser';
 import { Box, Text, Image, useToast, Grid, GridItem, Flex, Link } from '@chakra-ui/react';
 import api from '@/lib/api';
@@ -9,19 +7,19 @@ import Button from '@/components/web/Button';
 import Logo from '@/components/web/Logo';
 import usePassKey from '@/hooks/usePasskey';
 import storage from '@/lib/storage';
-import { PassKeySelect } from '@/components/web/PassKeyList';
 import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
 import { useSearchParams } from 'react-router-dom';
-import bgGradientImage from '@/assets/bg-gradient.png';
+import bgGradientImage from '@/assets/bg-gradient.jpeg';
 import homeExampleImage from '@/assets/home-example.png';
 import TwitterIcon from '@/components/Icons/Social/Twitter';
 import TelegramIcon from '@/components/Icons/Social/Telegram';
 import GithubIcon from '@/components/Icons/Social/Github';
 import config from '@/config';
+import packageJson from '../../../package.json'
 import useWallet from '@/hooks/useWallet';
 import { Link as RLink } from 'react-router-dom';
-import { faqList } from '@/data';
+import { faqList, featureList } from '@/data';
 
 const SignCard = () => {
   const { authenticate } = usePassKey();
@@ -141,13 +139,12 @@ const SignCard = () => {
       borderRadius="20px"
       boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
       backdropFilter="blur(12.5px)"
-      pos="absolute"
-      left="0"
-      right="0"
-      top="40px"
-      m="auto"
+      mx="auto"
     >
-      <Logo direction="column" />
+      <Box textAlign={'center'}>
+        <Logo direction="column" />
+        <Text mt='2' fontWeight={'600'} fontSize={'12px'} fontFamily={'Martian'}>Alpha Test {packageJson.version}</Text>
+      </Box>
       <Box
         display="flex"
         flexDirection="column"
@@ -159,11 +156,12 @@ const SignCard = () => {
           lg: '320px',
         }}
       >
-        <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="6" maxWidth="100%">
+        <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="3" maxWidth="100%">
           <Button
             disabled={isAuthing}
             loading={isAuthing}
             onClick={login}
+            border={'1px solid #898989'}
             _styles={{
               width: '282px',
               borderRadius: '40px',
@@ -185,6 +183,8 @@ const SignCard = () => {
             disabled={isCreating}
             loading={isCreating}
             onClick={createWallet}
+            bg='auto'
+            bgGradient={'linear-gradient(180deg, #FF2B9D 0%, #FF9BBF 100%)'}
             _styles={{ width: '282px', borderRadius: '40px', maxWidth: '100%' }}
           >
             Create new wallet
@@ -250,13 +250,49 @@ const FaqSection = () => {
   );
 };
 
+const FeaturesSection = () => {
+  return (
+    <Flex mt="-10" gap="9">
+      {featureList.map((item, idx: number) => (
+        <Flex
+          flexDir={'column'}
+          align={'center'}
+          justify={'center'}
+          mt={idx === 1 || idx === 2 ? '144px' : '0'}
+          py="70px"
+          px="48px"
+          flexGrow={0} flexShrink={0} flexBasis="auto"
+          w="320px"
+          h="320px"
+          bg="rgba(255, 255, 255, 0.60)"
+          rounded="full"
+          textAlign={'center'}
+          key={idx}
+        >
+          <Image src={item.icon} mb="2" w="16" />
+          <Text fontSize={'24px'} fontWeight={'800'} mb="2" dangerouslySetInnerHTML={{ __html: item.title }} />
+          <Text fontSize={'16px'} fontWeight={'600'}>
+            {item.content}
+          </Text>
+        </Flex>
+      ))}
+    </Flex>
+  );
+};
+
+const Banner = () => {
+  return (
+    <Box bgImage={homeExampleImage} pt='12' bgRepeat={'no-repeat'} bgSize={'contain'}>
+      <SignCard />
+      <FeaturesSection />
+    </Box>
+  );
+};
+
 export default function Launch() {
   return (
-    <Box p="10" bg="#bbbcef">
-      <Box pos="relative">
-        <Image src={homeExampleImage} />
-        <SignCard />
-      </Box>
+    <Box p="10" bgImage={bgGradientImage} bgSize={'cover'}>
+      <Banner />
       <FaqSection />
       <LaunchFooter />
     </Box>

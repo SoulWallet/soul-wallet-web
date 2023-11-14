@@ -11,12 +11,18 @@ import { useSettingStore } from '@/store/setting';
 export default function EnvCheck({ children }: any) {
   const { ignoreWebauthnOverride, setIgnoreWebauthnOverride } = useSettingStore();
   const [isWebauthnNative, setIsWebauthnNative] = useState(true);
+  const [isFirefox, setIsFirefox] = useState(false);
   const checkNativeMethod = async () => {
     setIsWebauthnNative(isNativeMethod(window.navigator.credentials.create));
   };
 
+  const checkIsFirefox = () => {
+    setIsFirefox(navigator.userAgent.indexOf('Firefox') !== -1);
+  };
+
   useEffect(() => {
     checkNativeMethod();
+    checkIsFirefox();
   }, []);
 
   return (
@@ -35,6 +41,14 @@ export default function EnvCheck({ children }: any) {
           >
             I understand the risk
           </Button>
+        </Alert>
+      )}
+      {isFirefox && (
+        <Alert status="warning" justifyContent={'space-between'}>
+          <Flex>
+            <AlertIcon />
+            <AlertTitle>Your are using firefox which is not supported yet.</AlertTitle>
+          </Flex>
         </Alert>
       )}
       {children}
