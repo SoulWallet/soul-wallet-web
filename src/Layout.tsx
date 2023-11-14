@@ -9,7 +9,7 @@ import EnvCheck from './components/EnvCheck';
 
 export default function Layout() {
   return (
-    <ChakraProvider theme={Theme} toastOptions={{ defaultOptions: { duration: 1000 } }}>
+    <ChakraProvider theme={Theme} toastOptions={{ defaultOptions: { duration: 1000, position: 'top-right' }, }}>
       <Fonts />
       <EnvCheck>
         <FindRoute>

@@ -11,13 +11,14 @@ import IconSend from '@/assets/activities/send.svg';
 import IconContract from '@/assets/activities/contract.svg';
 
 export function clearStorageWithCredentials (){
-  const credentialKey = 'local-credentials'
-  const credentialStorage = storage.getItem(credentialKey);
-  console.log('ready to do clear', storage.getItem('credential-storage'))
   storage.clear();
-  if(credentialStorage){
-      storage.setItem(credentialKey, credentialStorage)
-  }
+  // const credentialKey = 'local-credentials'
+  // const credentialStorage = storage.getItem(credentialKey);
+  // console.log('ready to do clear', storage.getItem('credential-storage'))
+  // storage.clear();
+  // if(credentialStorage){
+  //     storage.setItem(credentialKey, credentialStorage)
+  // }
 }
 
 export function copyText(value: string) {

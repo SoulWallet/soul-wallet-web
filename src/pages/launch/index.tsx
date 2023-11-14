@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useBrowser from '@/hooks/useBrowser';
 import {
   Box,
@@ -111,7 +111,6 @@ const SignCard = () => {
        * const credentialKey = await register(credentialName);
        * setIsCreating(false); */
       // make sure storage is clear
-      clearStorageWithCredentials();
       navigate({
         pathname: '/create',
         search: location.search,
@@ -307,6 +306,11 @@ const Banner = () => {
 };
 
 export default function Launch() {
+  useEffect(()=>{
+    // clear user's storage everytime visiting
+    clearStorageWithCredentials();
+  }, [])
+
   return (
     <Box p="10" bgImage={bgGradientImage} bgSize={'cover'}>
       <Banner />

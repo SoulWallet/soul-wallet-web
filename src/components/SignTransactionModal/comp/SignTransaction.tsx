@@ -202,14 +202,14 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   return (
     <>
-      <Flex flexDir={'column'} gap="5" mt="10">
+      <Flex flexDir={'column'} gap="5" mt="8">
         <Flex flexDir={'column'} align={'center'} fontWeight={'800'} lineHeight={'1'}>
           {decodedData && decodedData.length > 0 && (
             <Box mb="18px" fontSize={'12px'} fontFamily={'Martian'}>
               {decodedData.map((item: any, index: number) => (
-                <Text mr="1" textTransform="capitalize" key={index}>
+                <Text my="2" textTransform="capitalize" key={index}>
                   {decodedData.length > 1 && `${index + 1}.`}
-                  {item.functionName ? item.functionName : item.method ? item.method.name : ''}
+                  {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
                   {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
                 </Text>
               ))}

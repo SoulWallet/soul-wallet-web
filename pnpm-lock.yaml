@@ -30,20 +30,17 @@ dependencies:
     specifier: ^8.1.0
     version: 8.1.0(typescript@5.2.2)
   '@soulwallet/abi':
-    specifier: ^0.1.2
-    version: 0.1.2
-  '@soulwallet/assets':
-    specifier: ^0.1.2
-    version: 0.1.2
+    specifier: ^0.1.3
+    version: 0.1.3
   '@soulwallet/decoder':
-    specifier: ^0.1.2
-    version: 0.1.2
+    specifier: ^0.1.3
+    version: 0.1.3
   '@soulwallet/result':
     specifier: ^0.1.2
     version: 0.1.2
   '@soulwallet/sdk':
-    specifier: ^0.1.11
-    version: 0.1.11
+    specifier: ^0.1.12
+    version: 0.1.12
   '@types/node':
     specifier: 20.6.2
     version: 20.6.2
@@ -137,6 +134,10 @@ packages:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /@adraffy/ens-normalize@1.10.0:
+    resolution: {integrity: sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q==}
+    dev: false
 
   /@adraffy/ens-normalize@1.9.2:
     resolution: {integrity: sha512-0h+FrQDqe2Wn+IIGFkTCd4aAwTJ+7834Ek1COohCyV26AXhwQ7WQaz+4F/nLOeVl/3BtWHOHLPsq46V8YB46Eg==}
@@ -1796,23 +1797,23 @@ packages:
       '@scure/base': 1.1.3
     dev: false
 
-  /@soulwallet/abi@0.1.2:
-    resolution: {integrity: sha512-Pel6eKpqn43MPecEV9jr0Nrba12N2fFY5j0APmH4bnrTL3kZM5MgD5kVAE+8MCjGJZzQVPkPfSbzzdQYfSIxlg==}
+  /@soulwallet/abi@0.1.3:
+    resolution: {integrity: sha512-mnAiNjapORqX8Dt3l/hbVLr4FE399FFS0gQTt2bt6KFM7wIeer8JU+aJyUD3sYltmzJvi7xGypTf6Nii8QP4pw==}
     dev: false
 
-  /@soulwallet/assets@0.1.2:
-    resolution: {integrity: sha512-TpNIigViP/Si/hSOnwjOWMKPa5uVHjmrREeOVDmZ9URQLP3yE9kWs5IRbknBFF2V/82RLogYGwJ0N69OcWhJNg==}
+  /@soulwallet/assets@0.1.3:
+    resolution: {integrity: sha512-Quh/3n2Q54pTZmjOur6AyZ19xXZCM5JJhWoZ5sNnW6WzLwnHLteILT4/LXZsVJyZlv/KbQt4Bm9nm2W/FFHo+Q==}
     dependencies:
       '@soulwallet/result': 0.1.2
     dev: false
 
-  /@soulwallet/decoder@0.1.2:
-    resolution: {integrity: sha512-pqfTdGVmmy4ut7bmppQtm9PX5PNXxOn688g1kbIK/pY5OJ2FDjdMxRtNFmfNLoLjM0d47h7xQuwmsnFMqLO9dA==}
+  /@soulwallet/decoder@0.1.3:
+    resolution: {integrity: sha512-pF3pz9v6l9sg3VSGnqEk/Lco+D3Y62UTkIcQofrvb61namHfov2z2xvKRJeRzffVruQLF54rETOG2I7XNrxP1Q==}
     dependencies:
-      '@soulwallet/abi': 0.1.2
-      '@soulwallet/assets': 0.1.2
+      '@soulwallet/abi': 0.1.3
+      '@soulwallet/assets': 0.1.3
       '@soulwallet/result': 0.1.2
-      ethers: 6.7.1
+      ethers: 6.8.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -1822,12 +1823,12 @@ packages:
     resolution: {integrity: sha512-ntYnmdoZK/xpe2mg+lnyIz2CjVdPUx44jreJu2W1hIeE817AtrlLeeU0r7QOnbqgiZpEHkB/12iwkX+ujiWshQ==}
     dev: false
 
-  /@soulwallet/sdk@0.1.11:
-    resolution: {integrity: sha512-XRbva3LuWXQU2V4CxL+YcWHdXOQKwRDRfw70ApTNZQcvMcomoAqEEKtXsGJ622nlQ+XlfrkMjnJyfPdfFWoYBg==}
+  /@soulwallet/sdk@0.1.12:
+    resolution: {integrity: sha512-0JxQGDynqOkXHjqDPekkL9lUydhH5olQoCMhr15d6BeTeY2NSgCOWMYwXhTG+eqN0SNhqN7U1a5yH174h+oxuQ==}
     dependencies:
-      '@soulwallet/abi': 0.1.2
+      '@soulwallet/abi': 0.1.3
       '@soulwallet/result': 0.1.2
-      ethers: 6.7.1
+      ethers: 6.8.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -2677,6 +2678,22 @@ packages:
       '@adraffy/ens-normalize': 1.9.2
       '@noble/hashes': 1.1.2
       '@noble/secp256k1': 1.7.1
+      '@types/node': 18.15.13
+      aes-js: 4.0.0-beta.5
+      tslib: 2.4.0
+      ws: 8.5.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
+  /ethers@6.8.1:
+    resolution: {integrity: sha512-iEKm6zox5h1lDn6scuRWdIdFJUCGg3+/aQWu0F4K0GVyEZiktFkqrJbRjTn1FlYEPz7RKA707D6g5Kdk6j7Ljg==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@adraffy/ens-normalize': 1.10.0
+      '@noble/curves': 1.2.0
+      '@noble/hashes': 1.3.2
       '@types/node': 18.15.13
       aes-js: 4.0.0-beta.5
       tslib: 2.4.0

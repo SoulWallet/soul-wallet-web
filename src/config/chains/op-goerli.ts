@@ -32,10 +32,10 @@ export default {
   ],
   contracts: {
     ...keystoreContracts,
-    soulWalletFactory: '0x84e349541369e988685e253ba77c822550eda7ef',
-    defaultCallbackHandler: '0xdef24914185b8205f38bcaf4404817735495cbdc',
-    securityControlModule: '0x2e01dbcf407b499b0f6a0de7f5d95afad360dd70',
-    entryPoint: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789',
-    paymaster: '0xee4d0d07318dd076d588bccdf2383275b499f29f',
+    soulWalletFactory: import.meta.env.VITE_SoulwalletFactory,
+    defaultCallbackHandler: import.meta.env.VITE_DefaultCallbackHandler,
+    securityControlModule: import.meta.env.VITE_SecurityControlModule,
+    entryPoint: import.meta.env.VITE_EntryPoint,
+    paymaster: import.meta.env.VITE_Paymaster,
   },
 };
