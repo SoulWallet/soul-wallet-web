@@ -50,7 +50,7 @@ export const chainMapping = {
   },
 };
 // This is an important store switch which will clear all users' data
-export const storeVersion = '2';
+export const storeVersion = '3';
 
 export default {
   homepage: "https://www.soulwallet.io",
