@@ -10,6 +10,15 @@ import { UserOperation } from '@soulwallet/sdk';
 import IconSend from '@/assets/activities/send.svg';
 import IconContract from '@/assets/activities/contract.svg';
 
+export function clearStorageWithCredentials (){
+  const credentialKey = 'credential-storage'
+  const credentialStorage = storage.getItem(credentialKey);
+  storage.clear();
+  if(credentialStorage){
+      storage.setItem(credentialKey, credentialStorage)
+  }
+}
+
 export function copyText(value: string) {
   const copied = document.createElement('input');
   copied.setAttribute('value', value);

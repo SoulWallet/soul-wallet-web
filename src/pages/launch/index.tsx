@@ -1,14 +1,25 @@
 import { useState } from 'react';
 import useBrowser from '@/hooks/useBrowser';
-import { Box, Text, Image, useToast, Grid, GridItem, Flex, Link } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Image,
+  useToast,
+  Grid,
+  GridItem,
+  Flex,
+  Link,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@chakra-ui/react';
 import api from '@/lib/api';
 import TextBody from '@/components/web/TextBody';
 import Button from '@/components/web/Button';
 import Logo from '@/components/web/Logo';
 import usePassKey from '@/hooks/usePasskey';
 import storage from '@/lib/storage';
-import { useCredentialStore } from '@/store/credential';
-import { useAddressStore } from '@/store/address';
+import { clearStorageWithCredentials } from '@/lib/tools';
 import { useSearchParams } from 'react-router-dom';
 import bgGradientImage from '@/assets/bg-gradient.jpeg';
 import homeExampleImage from '@/assets/home-example.png';
@@ -16,7 +27,7 @@ import TwitterIcon from '@/components/Icons/Social/Twitter';
 import TelegramIcon from '@/components/Icons/Social/Telegram';
 import GithubIcon from '@/components/Icons/Social/Github';
 import config from '@/config';
-import packageJson from '../../../package.json'
+import packageJson from '../../../package.json';
 import useWallet from '@/hooks/useWallet';
 import { Link as RLink } from 'react-router-dom';
 import { faqList, featureList } from '@/data';
@@ -26,8 +37,6 @@ const SignCard = () => {
   const { navigate } = useBrowser();
   const toast = useToast();
   const { retrieveForNewDevice } = useWallet();
-  const { clearCredentials } = useCredentialStore();
-  const { clearAddressList } = useAddressStore();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -36,7 +45,7 @@ const SignCard = () => {
   const login = async () => {
     try {
       // make sure no storage left
-      storage.clear();
+      clearStorageWithCredentials();
       setIsAuthing(true);
       const { publicKeys, credential } = await authenticate();
       console.log('credential is', credential);
@@ -102,7 +111,7 @@ const SignCard = () => {
        * const credentialKey = await register(credentialName);
        * setIsCreating(false); */
       // make sure storage is clear
-      storage.clear();
+      clearStorageWithCredentials();
       navigate({
         pathname: '/create',
         search: location.search,
@@ -124,10 +133,7 @@ const SignCard = () => {
         base: 'calc(100vw - 40px)',
         lg: '400px',
       }}
-      width={{
-        base: '360px',
-        lg: '400px',
-      }}
+      width="400px"
       h="640px"
       display="flex"
       alignItems="center"
@@ -143,7 +149,9 @@ const SignCard = () => {
     >
       <Box textAlign={'center'}>
         <Logo direction="column" />
-        <Text mt='2' fontWeight={'600'} fontSize={'12px'} fontFamily={'Martian'}>Alpha Test {packageJson.version}</Text>
+        <Text mt="2" fontWeight={'600'} fontSize={'12px'} fontFamily={'Martian'}>
+          Alpha Test {packageJson.version}
+        </Text>
       </Box>
       <Box
         display="flex"
@@ -157,33 +165,40 @@ const SignCard = () => {
         }}
       >
         <Box display="flex" flexDir={'column'} justifyContent="center" alignItems="center" gap="3" maxWidth="100%">
-          <Button
-            disabled={isAuthing}
-            loading={isAuthing}
-            onClick={login}
-            border={'1px solid #898989'}
-            _styles={{
-              width: '282px',
-              borderRadius: '40px',
-              background: 'white',
-              color: 'black',
-              maxWidth: '100%',
-            }}
-            _hover={{
-              width: '282px',
-              borderRadius: '40px',
-              background: 'white',
-              color: 'black',
-            }}
-            loadingColor="dark"
-          >
-            Login with passkey
-          </Button>
+          <Popover trigger="hover">
+            <PopoverTrigger>
+              <Button
+                disabled={isAuthing}
+                loading={isAuthing}
+                onClick={login}
+                border={'1px solid #898989'}
+                pos={'relative'}
+                _styles={{
+                  width: '282px',
+                  borderRadius: '40px',
+                  background: 'white',
+                  color: 'black',
+                  maxWidth: '100%',
+                }}
+                _hover={{
+                  width: '282px',
+                  borderRadius: '40px',
+                  background: 'white',
+                  color: 'black',
+                }}
+                loadingColor="dark"
+              >
+                Login with passkey
+              </Button>
+            </PopoverTrigger>
+            {/* <PopoverContent>123</PopoverContent> */}
+          </Popover>
+
           <Button
             disabled={isCreating}
             loading={isCreating}
             onClick={createWallet}
-            bg='auto'
+            bg="auto"
             bgGradient={'linear-gradient(180deg, #FF2B9D 0%, #FF9BBF 100%)'}
             _styles={{ width: '282px', borderRadius: '40px', maxWidth: '100%' }}
           >
@@ -232,11 +247,11 @@ const LaunchFooter = () => {
 
 const FaqSection = () => {
   return (
-    <Box w="880px" mx="auto" mt="145px">
+    <Box w={{ base: 'auto', lg: '880px' }} mx="auto" mt="145px">
       <Text fontSize={'40px'} fontWeight={'800'} mb={10}>
         FAQs
       </Text>
-      <Grid templateColumns={'repeat(2, 1fr)'} rowGap={12} columnGap={10}>
+      <Grid templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }} rowGap={12} columnGap={10}>
         {faqList.map((item) => (
           <GridItem>
             <Text fontSize={'20px'} fontWeight={'800'} mb="3">
@@ -252,16 +267,18 @@ const FaqSection = () => {
 
 const FeaturesSection = () => {
   return (
-    <Flex mt="-10" gap="9">
+    <Flex mt="-10" gap="9" justify={'center'} flexDir={{ base: 'column', lg: 'row' }}>
       {featureList.map((item, idx: number) => (
         <Flex
           flexDir={'column'}
           align={'center'}
           justify={'center'}
-          mt={idx === 1 || idx === 2 ? '144px' : '0'}
+          mt={{ base: '0', lg: idx === 1 || idx === 2 ? '144px' : '0' }}
           py="70px"
           px="48px"
-          flexGrow={0} flexShrink={0} flexBasis="auto"
+          flexGrow={0}
+          flexShrink={0}
+          flexBasis="auto"
           w="320px"
           h="320px"
           bg="rgba(255, 255, 255, 0.60)"
@@ -282,7 +299,7 @@ const FeaturesSection = () => {
 
 const Banner = () => {
   return (
-    <Box bgImage={homeExampleImage} pt='12' bgRepeat={'no-repeat'} bgSize={'contain'}>
+    <Box bgImage={homeExampleImage} bgPos={'center'} pt="12" bgRepeat={'no-repeat'} bgSize={'contain'}>
       <SignCard />
       <FeaturesSection />
     </Box>

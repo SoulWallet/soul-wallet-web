@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider } from '@chakra-ui/react';
-import storage from '@/lib/storage';
 import useBrowser from '@/hooks/useBrowser';
 import MenuIcon from '@/components/Icons/Menu';
 import AssetIcon from '@/components/Icons/Asset';
@@ -9,6 +8,7 @@ import LogoutIcon from '@/components/Icons/Logout';
 import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
 import { toCapitalize } from '@/lib/tools'
+import { clearStorageWithCredentials } from '@/lib/tools';
 
 const getPageIcon = (type: string) => {
   if (type === 'asset') {
@@ -28,7 +28,7 @@ export default function PageSelect() {
   const { navigate } = useBrowser();
 
   const doLogout = () =>{
-    storage.clear();
+    clearStorageWithCredentials();
     location.href = '/launch'
   }
 

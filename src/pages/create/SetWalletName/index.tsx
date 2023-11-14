@@ -6,11 +6,8 @@ import TextBody from '@/components/web/TextBody';
 import Button from '@/components/web/Button';
 import TextButton from '@/components/web/TextButton';
 import Steps from '@/components/web/Steps';
-import PassKeyList from '@/components/web/PassKeyList';
-import storage from '@/lib/storage';
 import usePassKey from '@/hooks/usePasskey';
 import { useCredentialStore } from '@/store/credential';
-import { useAddressStore } from '@/store/address';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
@@ -19,6 +16,7 @@ import { ethers } from 'ethers';
 import { L1KeyStore } from '@soulwallet/sdk';
 import { toHex } from '@/lib/tools';
 import useSdk from '@/hooks/useSdk';
+import { clearStorageWithCredentials } from '@/lib/tools';
 import FormInput from '@/components/web/Form/FormInput';
 import useForm from '@/hooks/useForm';
 import WalletCard from '@/components/web/WalletCard';
@@ -49,9 +47,7 @@ export default function SetWalletName({ changeStep }: any) {
   const disabled = loading || invalid;
 
   const resetWallet = () => {
-    // clearCredentials();
-    // clearAddressList();
-    storage.clear();
+    clearStorageWithCredentials();
   };
 
   const handleNext = async () => {

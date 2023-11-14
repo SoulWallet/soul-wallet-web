@@ -22,6 +22,7 @@ export default function FindRoute({ children }: any) {
 
     if (storeVersion !== storageVersion) {
       if (storageVersion) {
+        // when upgrade, clear all for now
         storage.clear();
       }
       storage.setItem('storeVersion', storeVersion);
