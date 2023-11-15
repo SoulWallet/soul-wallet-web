@@ -19,7 +19,6 @@ import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
-import ChainSelect from '@/components/ChainSelect';
 import useTools from '@/hooks/useTools';
 
 export default function SignTransaction({ onSuccess, txns, sendToAddress }: any) {
@@ -49,7 +48,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { doCopy } = useTools();
   const selectedToken = getTokenBalance(payToken);
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
-  // const origin = document.referrer;
+  const origin = document.referrer;
+
+  console.log('origin is', origin)
 
   const checkSponser = async (userOp: UserOperation) => {
     const res = await api.sponsor.check(

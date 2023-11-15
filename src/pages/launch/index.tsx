@@ -50,10 +50,9 @@ const SignCard = () => {
       const { publicKey, credential } = await authenticate();
       console.log('credential is', credential);
       if (publicKey) {
-        const slotInitInfo = await api.guardian.getSlotInfo({
+        const slotInitInfo = (await api.guardian.getSlotInfo({
           key: publicKey,
-        });
-
+        })).data;
         // if (credentials.length) {
         //   setSelectedAddress(addressList[0].address);
         //   setSelectedCredentialId(credential.credentialId);

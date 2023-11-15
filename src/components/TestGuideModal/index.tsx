@@ -27,7 +27,6 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
     });
 
     setFinishedSteps(res.data.finishedSteps);
-    console.log('1111', res);
   };
 
   useImperativeHandle(ref, () => ({

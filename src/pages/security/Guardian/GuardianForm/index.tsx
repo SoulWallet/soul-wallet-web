@@ -282,6 +282,10 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       setGuardiansInfo(guardiansInfo)
       startBackup()
       setLoading(false);
+      api.operation.finishStep({
+        slot,
+        steps: [1],
+      })
     } catch (error: any) {
       console.log('error', error.message)
       setLoading(false);

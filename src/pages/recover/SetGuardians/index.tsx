@@ -222,6 +222,10 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       });
       changeStep(4)
       setLoading(false);
+      api.operation.finishStep({
+        slot,
+        steps: [4],
+      })
     } catch (e: any) {
       setLoading(false);
       toast({
