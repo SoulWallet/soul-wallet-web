@@ -7,13 +7,15 @@ import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
 import { SignkeyType } from '@soulwallet/sdk';
-import { addPaymasterAndData, printUserOp } from '@/lib/tools';
+import { addPaymasterAndData } from '@/lib/tools';
 import useConfig from './useConfig';
+import { useCredentialStore } from '@/store/credential';
 
 export default function useQuery() {
   const { ethersProvider } = useWalletContext();
   const { soulWallet } = useSdk();
   const { chainConfig } = useConfig();
+  const { getSelectedCredential } = useCredentialStore();
 
   const getEthPrice = async () => {
     // get price from coingecko
@@ -73,6 +75,8 @@ export default function useQuery() {
     }
   };
   const set1559Fee = async (userOp: any, payToken: string) => {
+    const selectedCredential: any = getSelectedCredential();
+
     // set 1559 fee
     if (!userOp.maxFeePerGas || !userOp.maxPriorityFeePerGas) {
       const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
@@ -84,8 +88,14 @@ export default function useQuery() {
       userOp.paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
     }
 
+    const signerKeyType = selectedCredential.algorithm === 'ES256' ? SignkeyType.P256 : selectedCredential.algorithm === 'RS256'? SignkeyType.RS256: null
+
+    if(!signerKeyType){
+      throw new Error('algorithm not supported');
+    }
+
     // get gas limit
-    const gasLimit = await soulWallet.estimateUserOperationGas(userOp, SignkeyType.P256);
+    const gasLimit = await soulWallet.estimateUserOperationGas(userOp, signerKeyType);
 
     if (gasLimit.isErr()) {
       throw new Error(gasLimit.ERR.message);

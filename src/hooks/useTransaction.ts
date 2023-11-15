@@ -64,19 +64,8 @@ export default function useTransaction() {
       }
 
       let userOp = userOpRet.OK;
-
-      // set preVerificationGas
-      // const gasLimit = await soulWallet.estimateUserOperationGas(userOp, SignkeyType.P256);
-
-      // if (gasLimit.isErr()) {
-      //   throw new Error(gasLimit.ERR.message);
-      // }
-
       userOp = await set1559Fee(userOp, payToken);
 
-      // paymasterAndData length calc 1872 = ((236 - 2) / 2) * 16;
-      // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(1872).toString(16)}`;
-      // for send transaction with activate
       userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
       userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
 

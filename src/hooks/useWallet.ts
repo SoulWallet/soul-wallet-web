@@ -27,7 +27,7 @@ export default function useWallet() {
     updateRecoveringGuardiansInfo,
     setRecoveringGuardiansInfo,
   } = useGuardianStore();
-  const { selectedChainId, updateChainItem, setSelectedChainId } = useChainStore();
+  const { updateChainItem, setSelectedChainId } = useChainStore();
   const { credentials, setCredentials, getSelectedCredential } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
@@ -97,10 +97,20 @@ export default function useWallet() {
   };
 
   const getSignature = async (packedHash: string, validationData: string) => {
-    const signatureData = await sign(getSelectedCredential(), packedHash);
+    const selectedCredential: any = getSelectedCredential();
+    const signatureData: any = await sign(selectedCredential, packedHash);
 
     console.log('packUserOp256Signature params:', signatureData, validationData);
-    const packedSignatureRet = await soulWallet.packUserOpP256Signature(signatureData, validationData);
+    const packedSignatureRet =
+      selectedCredential.algorithm === 'ES256'
+        ? await soulWallet.packUserOpP256Signature(signatureData, validationData)
+        : selectedCredential.algorithm === 'RS256'
+        ? await soulWallet.packUserOpRS256Signature(signatureData, validationData)
+        : null;
+
+    if (!packedSignatureRet) {
+      throw new Error('algorithm not supported');
+    }
 
     if (packedSignatureRet.isErr()) {
       throw new Error(packedSignatureRet.ERR.message);
@@ -164,27 +174,12 @@ export default function useWallet() {
     const credentialKey = {
       id: credential.credentialId,
       publicKey: credential.publicKey,
-      algorithm: 'ES256',
+      algorithm: credential.algorithm,
       name: 'Passkey 1',
       // coords,
     };
 
     setCredentials([credentialKey]);
-
-    // const guardianDetails = await api.guardian.getGuardianDetails({
-    //   guardianHash: initInfo.slotInitInfo.initialGuardianHash,
-    // });
-
-    // console.log('guardian details', guardianDetails);
-
-    // updateGuardiansInfo({
-    //   // TODO, second params
-    //   guardianDetails: guardianDetails ? guardianDetails.data.guardianDetails : [],
-    //   // IMPORTANT TODO, current guardian hash
-    //   guardianHash: initInfo.slotInitInfo.initialGuardianHash,
-    //   keystore: initInfo.keystore,
-    //   slot: initInfo.slot,
-    // });
   };
 
   const retrieveSlotInfo = (initInfo: any) => {
@@ -218,6 +213,9 @@ export default function useWallet() {
       },
     ]);
     setSelectedAddress(newAddress);
+
+    // set goerli if no selected chainId
+    setSelectedChainId('0x5');
 
     updateGuardiansInfo({
       guardianDetails: recoveringGuardiansInfo.guardianDetails,
@@ -273,15 +271,6 @@ export default function useWallet() {
       updateChainItem(item.chainId, {
         recovering: item.status === 0,
       });
-    }
-
-    // set if no selected address
-    if (!selectedAddress) {
-      setSelectedAddress(res.addresses[0]);
-    }
-    // set goerli if no selected chainId
-    if (selectedChainId) {
-      setSelectedChainId('0x5');
     }
   };
 

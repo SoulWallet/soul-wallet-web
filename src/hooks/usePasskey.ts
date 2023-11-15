@@ -1,4 +1,14 @@
-import { base64ToBigInt, base64ToBuffer, getCurrentTimeFormatted, uint8ArrayToHexString } from '@/lib/tools';
+import api from '@/lib/api';
+import {
+  base64ToBigInt,
+  base64ToBuffer,
+  getCurrentTimeFormatted,
+  uint8ArrayToHexString,
+  parseBase64url,
+  arrayBufferToHex,
+  hexToUint8Array,
+  stringToUint8Array,
+} from '@/lib/tools';
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
 import { AsnParser } from '@peculiar/asn1-schema';
@@ -35,7 +45,7 @@ export default function usePasskey() {
     };
   };
 
-  const getCoordinates = async (credentialPublicKey: string) => {
+  const getES256Coordinates = async (credentialPublicKey: string) => {
     const publicKeyBinary = Uint8Array.from(atob(base64urlTobase64(credentialPublicKey)), (c) => c.charCodeAt(0));
 
     const publicKey = await crypto.subtle.importKey(
@@ -55,34 +65,71 @@ export default function usePasskey() {
 
     const Qy = base64ToBigInt(base64urlTobase64(jwk.y));
 
-    return {
+    return WebAuthN.publicKeyToKeyhash({
       x: `0x${Qx.toString(16).padStart(64, '0')}`,
       y: `0x${Qy.toString(16).padStart(64, '0')}`,
+    })
+  };
+
+  const getRS256Coordinates = async (credentialPublicKey: string) => {
+    const algoParams = {
+      name: 'RSASSA-PKCS1-v1_5',
+      hash: 'SHA-256',
     };
+    const buffer = parseBase64url(credentialPublicKey);
+    const cryptoKey = await crypto.subtle.importKey('spki', buffer, algoParams, true, ['verify']);
+    // publick key
+    const jwk: any = await crypto.subtle.exportKey('jwk', cryptoKey);
+    console.log('======== public key ========');
+    console.log('alg:', jwk.alg);
+    console.log('kty:', jwk.kty);
+    console.log('e:', parseBase64url(jwk.e));
+    console.log('n:', parseBase64url(jwk.n));
+    console.log('======== Hex e ========');
+    console.log(arrayBufferToHex(parseBase64url(jwk.e)));
+    console.log('======== Hex n ========');
+    console.log(arrayBufferToHex(parseBase64url(jwk.n)));
+
+    return WebAuthN.publicKeyToKeyhash({
+      e: arrayBufferToHex(parseBase64url(jwk.e)),
+      n: arrayBufferToHex(parseBase64url(jwk.n)),
+    })
+  };
+
+  const getPublicKey = async (credential: any) => {
+    if (credential.algorithm === 'ES256') {
+      return await getES256Coordinates(credential.publicKey);
+    } else if (credential.algorithm === 'RS256') {
+      return await getRS256Coordinates(credential.publicKey);
+    }
   };
 
   const register = async (credentialName: string) => {
     const randomChallenge = btoa('1234567890');
-    const finalCredentialName = `${credentialName}_${getCurrentTimeFormatted()}`
+    const finalCredentialName = `${credentialName}_${getCurrentTimeFormatted()}`;
     const registration = await client.register(finalCredentialName, randomChallenge, {
       authenticatorType: 'both',
     });
-    console.log('Registered: ', JSON.stringify(registration, null, 2));
-    // verify locally
-    // const registrationParsed = await server.verifyRegistration(registration, {
-    //     challenge: randomChallenge,
-    //     origin: window.origin,
-    // });
-    // console.log('Parsed Registration: ', JSON.stringify(registrationParsed, null, 2));
 
-    const coords = await getCoordinates(registration.credential.publicKey);
+    console.log('Registered: ', JSON.stringify(registration, null, 2));
+
+    const publicKey = await getPublicKey(registration.credential);
 
     const credentialKey = {
       id: registration.credential.id,
-      publicKey: coords,
-      algorithm: 'ES256',
+      publicKey,
+      algorithm: registration.credential.algorithm,
       name: finalCredentialName,
     };
+
+    // backup credential info
+    await api.backup.publicBackupCredentialId({
+      credentialID: credentialKey.id,
+      data: JSON.stringify({
+        publicKey: credentialKey.publicKey,
+        algorithm: credentialKey.algorithm,
+      }),
+    });
 
     return credentialKey;
   };
@@ -108,45 +155,28 @@ export default function usePasskey() {
     console.log('decoded clientData', clientData, clientDataSuffix);
     const signature = base64urlTobase64(authentication.signature);
     console.log(`signature: ${signature}`);
-    const { r, s } = decodeDER(signature);
 
-    return {
-      messageHash: userOpHash,
-      publicKey: credential.publicKey,
-      r,
-      s,
-      authenticatorData,
-      clientDataSuffix,
-    };
+    if (credential.algorithm === 'ES256') {
+      const { r, s } = decodeDER(signature);
+
+      return {
+        messageHash: userOpHash,
+        publicKey: credential.publicKey,
+        r,
+        s,
+        authenticatorData,
+        clientDataSuffix,
+      };
+    } else if (credential.algorithm === 'RS256') {
+      return {
+        messageHash: userOpHash,
+        publicKey: credential.publicKey,
+        signature,
+        authenticatorData,
+        clientDataSuffix,
+      };
+    }
   };
-
-  // const getKeyBySignature = (auth: any) => {
-  //   const signatureBase64 = base64urlTobase64(auth.signature);
-  //   const { r, s } = decodeDER(signatureBase64);
-
-  //   const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(auth.authenticatorData)).toString(16)}`;
-  //   const clientData = atob(base64urlTobase64(auth.clientData));
-
-  //   const sliceIndex = clientData.indexOf(`","origin"`);
-  //   const clientDataSuffix = clientData.slice(sliceIndex);
-
-  //   console.log('params', signatureBase64, r, s, authenticatorData, clientDataSuffix);
-
-  //   const publicKeys = WebAuthN.recoverWebAuthNPublicKey(auth.signature, r, s, authenticatorData, clientDataSuffix);
-
-  //   console.log('pub keys', publicKeys);
-
-  //   // 导出的第一个公钥哈希
-  //   // publicKeys.0
-
-  //   // // 导出的第二个公钥哈希
-  //   // publicKeys.1
-
-  //   return {
-  //     r,
-  //     s,
-  //   };
-  // };
 
   const authenticate = async () => {
     const userOpHash = ethers.ZeroHash;
@@ -162,8 +192,8 @@ export default function usePasskey() {
     let authentication = await client.authenticate([], challenge, {
       userVerification: 'required',
     });
-    console.log('Authenticated', authentication)
-    const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
+    console.log('Authenticated', authentication);
+    // const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
     const clientData = atob(base64urlTobase64(authentication.clientData));
 
     const sliceIndex = clientData.indexOf(`","origin"`);
@@ -171,21 +201,23 @@ export default function usePasskey() {
     console.log('decoded clientData', clientData, clientDataSuffix);
     const signature = base64urlTobase64(authentication.signature);
     console.log(`signature: ${signature}`);
-    const { r, s } = decodeDER(signature);
 
-    const publicKeys = WebAuthN.recoverWebAuthNPublicKey(userOpHash, r, s, authenticatorData, clientDataSuffix);
+    const credentialInfo = JSON.parse(
+      (
+        await api.backup.credential({
+          credentialID: authentication.credentialId,
+        })
+      ).data.data,
+    );
 
-    console.log('PUB KEYs', publicKeys);
+    console.log('credential info', credentialInfo);
 
     return {
-      publicKeys,
-      // credentialId: authentication.credentialId,
-      credential: authentication,
-      // messageHash: userOpHash,
-      // r,
-      // s,
-      // authenticatorData,
-      // clientDataSuffix,
+      publicKey: credentialInfo.publicKey,
+      credential: {
+        ...authentication,
+        algorithm: credentialInfo.algorithm,
+      },
     };
   };
 
@@ -194,7 +226,5 @@ export default function usePasskey() {
     register,
     sign,
     authenticate,
-    getCoordinates,
-    // getKeyBySignature,
   };
 }

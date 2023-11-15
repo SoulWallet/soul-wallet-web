@@ -47,36 +47,40 @@ const SignCard = () => {
       // make sure no storage left
       clearStorageWithCredentials();
       setIsAuthing(true);
-      const { publicKeys, credential } = await authenticate();
+      const { publicKey, credential } = await authenticate();
       console.log('credential is', credential);
-      if (publicKeys) {
+      if (publicKey) {
+        const slotInitInfo = await api.guardian.getSlotInfo({
+          key: publicKey,
+        });
+
         // if (credentials.length) {
         //   setSelectedAddress(addressList[0].address);
         //   setSelectedCredentialId(credential.credentialId);
         // } else {
         // if no info on this device, init it
-        let slotInitInfo;
-        let publicKey;
-        const res = (
-          await api.guardian.getSlotInfo({
-            key: publicKeys['0'],
-          })
-        ).data;
+        // let slotInitInfo;
+        // let publicKey;
+        // const res = (
+        //   await api.guardian.getSlotInfo({
+        //     key: publicKeys['0'],
+        //   })
+        // ).data;
 
-        if (res) {
-          slotInitInfo = res;
-          publicKey = publicKeys['0'];
-        } else {
-          const res2 = (
-            await api.guardian.getSlotInfo({
-              key: publicKeys['1'],
-            })
-          ).data;
-          slotInitInfo = res2;
-          publicKey = publicKeys['1'];
-        }
+        // if (res) {
+        //   slotInitInfo = res;
+        //   publicKey = publicKeys['0'];
+        // } else {
+        //   const res2 = (
+        //     await api.guardian.getSlotInfo({
+        //       key: publicKeys['1'],
+        //     })
+        //   ).data;
+        //   slotInitInfo = res2;
+        //   publicKey = publicKeys['1'];
+        // }
 
-        console.log('slot init info', slotInitInfo, publicKey);
+        // console.log('credential info', credential);
 
         await retrieveForNewDevice(slotInitInfo, { ...credential, publicKey });
 
@@ -306,10 +310,10 @@ const Banner = () => {
 };
 
 export default function Launch() {
-  useEffect(()=>{
+  useEffect(() => {
     // clear user's storage everytime visiting
     clearStorageWithCredentials();
-  }, [])
+  }, []);
 
   return (
     <Box p="10" bgImage={bgGradientImage} bgSize={'cover'}>

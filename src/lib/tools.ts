@@ -10,6 +10,32 @@ import { UserOperation } from '@soulwallet/sdk';
 import IconSend from '@/assets/activities/send.svg';
 import IconContract from '@/assets/activities/contract.svg';
 
+
+export function parseBase64url(base64url: string) {
+  base64url = base64url.replace(/\-/g, "+").replace(/_/g, "/");
+  return Uint8Array.from(atob(base64url), c => c.charCodeAt(0)).buffer;
+}
+
+export function arrayBufferToHex(arrayBuffer: any) {
+  const uint8Array = new Uint8Array(arrayBuffer);
+  return '0x' + Array.from(uint8Array).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+export function hexToUint8Array(hex: string) {
+  if (hex.startsWith('0x')) hex = hex.slice(2);
+  const len = hex.length;
+  const uint8Array = new Uint8Array(len / 2);
+  for (let i = 0; i < len; i += 2) {
+      uint8Array[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+  }
+  return uint8Array;
+}
+
+export function stringToUint8Array(str: string) {
+  return new TextEncoder().encode(str);
+}
+
+
 export function clearStorageWithCredentials (){
   storage.clear();
   // const credentialKey = 'local-credentials'

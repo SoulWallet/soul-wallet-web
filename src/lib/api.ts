@@ -53,6 +53,12 @@ const balance = {
   token: (params: any) => axio.post('/token/ft', params),
 };
 
+const backup = {
+  publicBackupCredentialId: (params: any) => axio.post('/backup/public-backup-credential-id', params),
+  credential: (params: any) => axio.get('/backup/credential', { params }),
+};
+
+
 const sponsor = {
   check: (chainId: string, entryPoint: string, op: UserOperation) =>
     axio.post('/sponsor/sponsor-op', {
@@ -76,4 +82,5 @@ export default {
   guardian,
   sponsor,
   operation,
+  backup,
 };

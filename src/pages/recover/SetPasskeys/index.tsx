@@ -22,7 +22,7 @@ import api from '@/lib/api';
 
 export default function SetPasskeys({ changeStep }: any) {
   const { navigate } = useBrowser();
-  const { register, getCoordinates } = usePassKey();
+  const { register } = usePassKey();
   const { chainConfig } = useConfig();
   const [isCreating, setIsCreating] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
