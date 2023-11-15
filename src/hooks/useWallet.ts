@@ -28,7 +28,7 @@ export default function useWallet() {
     setRecoveringGuardiansInfo,
   } = useGuardianStore();
   const { updateChainItem, setSelectedChainId } = useChainStore();
-  const { credentials, setCredentials, getSelectedCredential } = useCredentialStore();
+  const { setCredentials, getSelectedCredential } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
 

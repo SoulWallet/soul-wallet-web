@@ -7,6 +7,8 @@ import BN from 'bignumber.js'
 import { useBalanceStore } from '@/store/balance';
 import AmountInput from './comp/AmountInput';
 import { AddressInput, AddressInputReadonly } from './comp/AddressInput';
+import api from '@/lib/api';
+import { useGuardianStore } from '@/store/guardian';
 
 interface ISendAssets {
   tokenAddress: string;
@@ -17,6 +19,7 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
   const { getTokenBalance } = useBalanceStore();
   const [sendToken, setSendToken] = useState(tokenAddress);
   const [receiverAddress, setReceiverAddress] = useState<string>('');
+  const { slotInfo } = useGuardianStore();
   const toast = useToast();
 
   const selectedToken = getTokenBalance(sendToken);
@@ -54,6 +57,12 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
     } else {
       await sendErc20(sendToken, trimedAddress, amount, selectedToken.decimals);
     }
+
+    api.operation.finishStep({
+      slot: slotInfo.slot,
+      steps: [0],
+    })
+
     resetState();
   };
 

@@ -58,7 +58,6 @@ const backup = {
   credential: (params: any) => axio.get('/backup/credential', { params }),
 };
 
-
 const sponsor = {
   check: (chainId: string, entryPoint: string, op: UserOperation) =>
     axio.post('/sponsor/sponsor-op', {
@@ -70,9 +69,14 @@ const sponsor = {
 
 const operation = {
   feedback: (params: any) => axio.post('/operation/feedback', params),
-  fileUploadUrl: (params: any) => axio.get('/operation/file-upload-url', {params}),
+  fileUploadUrl: (params: any) => axio.get('/operation/file-upload-url', { params }),
   requestTestToken: (params: any) => axio.post('/operation/request-test-token', params),
-}
+  finishStep: (params: any) =>
+    axio.post('/operation/finish-step', {
+      taskID: 0,
+      ...params,
+    }),
+};
 
 export default {
   balance,

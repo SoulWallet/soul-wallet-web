@@ -27,7 +27,15 @@ export default function Guidance() {
           {currentStep.desc}
         </Text>
       </Flex>
-      <Button px="6" py="10px" fontWeight={'800'} onClick={currentStep.onClick}>
+      <Button
+        px="6"
+        py="10px"
+        fontWeight={'800'}
+        onClick={currentStep.onClick}
+        bg="#6A52EF"
+        color="white"
+        _hover={{ bg: '#6A52EF', color: 'white' }}
+      >
         {currentStep.buttonText}
       </Button>
     </Flex>

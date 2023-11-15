@@ -58,10 +58,6 @@ export default function Create() {
     }
   }
 
-  const onSkip = () => {
-    setIsReady(true)
-  }
-
   const createInitialWallet = async () => {
     const newAddress = await calcWalletAddress(0);
     const walletName = `Account 1`;

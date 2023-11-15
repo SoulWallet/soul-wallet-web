@@ -1,8 +1,10 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
 import { useToast, Text, Image, Box, Flex, Divider } from '@chakra-ui/react';
 import TxModal from '../TxModal';
-import IconChecked from '@/assets/icons/checked.svg';
 import IconUnchecked from '@/assets/icons/unchecked.svg';
+import IconChecked from '@/assets/icons/checked.svg';
+import api from '@/lib/api';
+import { useGuardianStore } from '@/store/guardian';
 
 const guideList = [
   'Send and receive tokens.',
@@ -13,12 +15,25 @@ const guideList = [
 ];
 
 const TestGuideModal = (_: unknown, ref: Ref<any>) => {
+  const { slotInfo } = useGuardianStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
+  const [finishedSteps, setFinishedSteps] = useState<number[]>([]);
+
+  const getStepInfo = async () => {
+    const res = await api.operation.finishStep({
+      slot: slotInfo.slot,
+      steps: [],
+    });
+
+    setFinishedSteps(res.data.finishedSteps);
+    console.log('1111', res);
+  };
 
   useImperativeHandle(ref, () => ({
     async show() {
       setVisible(true);
+      getStepInfo();
       return new Promise((resolve, reject) => {
         setPromiseInfo({
           resolve,
@@ -51,7 +66,7 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
             <React.Fragment key={idx}>
               {idx ? <Divider my="3" /> : ''}
               <Flex gap="2">
-                <Image src={IconUnchecked} w="5" />
+                <Image src={finishedSteps.includes(idx) ? IconChecked : IconUnchecked} w="5" />
                 <Text fontWeight={'800'} fontSize={'16px'}>
                   {idx + 1}. {item}
                 </Text>
