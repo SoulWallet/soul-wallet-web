@@ -52,8 +52,18 @@ export const chainMapping = {
 // This is an important store switch which will clear all users' data
 export const storeVersion = '3';
 
+export const bundlerErrMapping: { [key: string]: string } = {
+  'Operation Failed: AA23/OOG': 'Check signature or increase gas limit.',
+  'Operation Failed: AA23': 'Signature issue.',
+  'Insufficient ETH: AA21': 'Not enough ETH balance without paymaster.',
+  'Insufficient Paymaster Funds: AA31': "Paymaster's balance is too low.",
+  'Paymaster Issue: AA33/OOG': 'Paymaster error or low gas limit.',
+  'Paymaster Issue: AA33': 'Specific paymaster problem.',
+  'Wallet Already Created: AA10': 'This wallet already exists.',
+};
+
 export default {
-  homepage: "https://www.soulwallet.io",
+  homepage: 'https://www.soulwallet.io',
   faviconUrl: 'https://www.google.com/s2/favicons?domain=',
   socials: [
     {
@@ -77,9 +87,5 @@ export default {
   soulScanURL: 'https://api-dev.soulwallet.io/opapi',
   officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
   /* @vite-ignore */
-  chainList: [
-    ArbConfig,
-     OpConfig,
-    GoerliConfig,
-  ],
+  chainList: [ArbConfig, OpConfig, GoerliConfig],
 };

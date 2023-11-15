@@ -21,6 +21,7 @@ import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
 import useTools from '@/hooks/useTools';
 import { useGuardianStore } from '@/store/guardian';
+import { bundlerErrMapping } from '@/config';
 
 export default function SignTransaction({ onSuccess, txns, sendToAddress }: any) {
   const toast = useToast();
@@ -49,6 +50,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { getUserOp } = useTransaction();
   const { doCopy } = useTools();
   const selectedToken = getTokenBalance(payToken);
+  const [hintText, setHintText] = useState('');
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
   const origin = document.referrer;
 
@@ -122,22 +124,22 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const markupStep = () => {
     const safeUrl = location.href;
 
-    let steps:number[] = [];
+    let steps: number[] = [];
 
-    if(safeUrl.includes('app.uniswap.org')){
-      steps = [2]
+    if (safeUrl.includes('app.uniswap.org')) {
+      steps = [2];
     }
-    if(safeUrl.includes('staging.aave.com')){
-      steps = [3]
+    if (safeUrl.includes('staging.aave.com')) {
+      steps = [3];
     }
 
-    if(steps.length > 0 ){
+    if (steps.length > 0) {
       api.operation.finishStep({
         slot: slotInfo.slot,
         steps,
-      })
+      });
     }
-  }
+  };
 
   const getFinalPrefund = async (userOp: any) => {
     setLoadingFee(true);
@@ -156,7 +158,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const getFinalUserOp = async (txns: any) => {
     const isActivated = await checkActivated();
-    if (isActivated) {
+    if (false && isActivated) {
       // if activated, get userOp directly
       return await getUserOp(txns, payToken);
     } else {
@@ -171,36 +173,50 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     if (prechecked) {
       return;
     }
-    setPrechecked(true);
-    setLoadingFee(true);
-    setFeeCost('...');
-    setTotalMsgValue(
-      txns
-        .reduce((total: any, current: any) => total.plus(current.value || 0), BN(0))
-        .shiftedBy(-18)
-        .toFixed(),
-    );
-    setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
-    let userOp = await getFinalUserOp(txns);
-    setActiveOperation(userOp);
-    const callDataDecodes = await decodeCalldata(
-      selectedChainId,
-      chainConfig.contracts.entryPoint,
-      userOp,
-      ethersProvider,
-    );
-    console.log('decoded data', callDataDecodes);
-    setDecodedData(callDataDecodes);
-    checkSponser(userOp);
-    getFinalPrefund(userOp);
-    if (payToken === ethers.ZeroAddress) {
-      // ETH is not enough
-      if (BN(totalMsgValue).isGreaterThanOrEqualTo(selectedTokenBalance)) {
-        console.log('Balance not enough!');
+    try {
+      setPrechecked(true);
+      setLoadingFee(true);
+      setFeeCost('...');
+      setTotalMsgValue(
+        txns
+          .reduce((total: any, current: any) => total.plus(current.value || 0), BN(0))
+          .shiftedBy(-18)
+          .toFixed(),
+      );
+      setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
+      let userOp = await getFinalUserOp(txns);
+      setActiveOperation(userOp);
+      const callDataDecodes = await decodeCalldata(
+        selectedChainId,
+        chainConfig.contracts.entryPoint,
+        userOp,
+        ethersProvider,
+      );
+      console.log('decoded data', callDataDecodes);
+      setDecodedData(callDataDecodes);
+      checkSponser(userOp);
+      getFinalPrefund(userOp);
+      if (payToken === ethers.ZeroAddress) {
+        // ETH is not enough
+        if (BN(totalMsgValue).isGreaterThanOrEqualTo(selectedTokenBalance)) {
+          console.log('Balance not enough!');
+        }
+      } else {
+        // ERC20 is not enough
+        // TODO, check erc20 send amount in user op
       }
-    } else {
-      // ERC20 is not enough
-      // TODO, check erc20 send amount in user op
+    } catch (err: any) {
+      const errMessage: any = err.message;
+      setHintText(`${errMessage}, ${bundlerErrMapping[errMessage]}`);
+      toast({
+        title: errMessage,
+        description: bundlerErrMapping[errMessage],
+        status: 'error',
+        duration: 5000,
+      });
+      // setHintText(err);
+    } finally {
+      // setLoadingFee(false);
     }
   };
 
@@ -252,13 +268,13 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           )}
         </Flex>
 
-        <Divider borderColor={'#d7d7d7'}/>
+        <Divider borderColor={'#d7d7d7'} />
 
         {decodedData && decodedData.length > 1 && (
           <>
             <InfoWrap color="#646464" fontSize="12px" gap="3">
-              {decodedData.map((item: any, index: number) => (
-                <InfoItem>
+              {decodedData.map((item: any, idx: number) => (
+                <InfoItem key={idx}>
                   <Text>
                     {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}{' '}
                     {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
@@ -310,6 +326,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 </Flex>
               )}
             </InfoItem>
+            {hintText && (
+              <InfoItem>
+                <Text color="#f00">{hintText}</Text>
+              </InfoItem>
+            )}
           </InfoWrap>
         </>
       </Flex>

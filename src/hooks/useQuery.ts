@@ -100,11 +100,6 @@ export default function useQuery() {
     const gasLimit = await soulWallet.estimateUserOperationGas(userOp, signerKeyType);
 
     if (gasLimit.isErr()) {
-      console.log('estimate ERRRRRR', gasLimit)
-      toast({
-        title: gasLimit.ERR.message,
-        status: 'error',
-      })
       throw new Error(gasLimit.ERR.message);
     }
 
