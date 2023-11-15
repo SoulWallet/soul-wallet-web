@@ -55,7 +55,7 @@ export default function SetWalletName({ changeStep }: any) {
 
     try {
       setLoading(true);
-      resetWallet();
+      // resetWallet();
       const walletName = values.name || 'Wallet 1';
       setWalletName(walletName)
       const credentialName = walletName;

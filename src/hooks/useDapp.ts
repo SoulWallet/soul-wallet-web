@@ -50,8 +50,7 @@ export interface MethodToResponse {
 export default function useDapp() {
   const { ethersProvider, showSignTransaction, showSignMessage } = useWalletContext();
   const { getSelectedChainItem } = useChainStore();
-  const { selectedAddress, getSelectedAddressItem } = useAddressStore();
-  const {chainConfig} = useConfig();
+  const { getSelectedAddressItem } = useAddressStore();
 
   const getAccounts = () => {
     return getSelectedAddressItem().address;
@@ -67,15 +66,14 @@ export default function useDapp() {
     return await ethersProvider.getBlock(blockHashOrBlockTag, prefetchTxs);
   };
 
-  const sendTransaction = async (txns: any) => {
+  const sendTransaction = async (txns: any, origin?: string) => {
     txns.forEach((item: any) => {
       if (!item.value) {
         item.value = '0x0';
       }
     });
-
     // return receipt
-    return await showSignTransaction(txns);
+    return await showSignTransaction(txns, origin);
   };
 
   const estimateGas = async (params: any) => {

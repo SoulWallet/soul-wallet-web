@@ -35,7 +35,7 @@ export default function SetPasskeys({ changeStep }: any) {
     updateRecoveringGuardiansInfo
   } = useGuardianStore();
   const { walletName } = useCredentialStore();
-  const { setSelectedAddress, setAddressList } = useAddressStore();
+  const { setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
   const toast = useToast();
   const credentials = recoveringGuardiansInfo.credentials || []
@@ -129,7 +129,6 @@ export default function SetPasskeys({ changeStep }: any) {
     const newAddress = await calcWalletAddress(0);
     const walletName = `Account 1`;
     setAddressList([{ title: walletName, address: newAddress, activatedChains: [],}]);
-    setSelectedAddress(newAddress);
     setEditingGuardiansInfo({});
   };
 

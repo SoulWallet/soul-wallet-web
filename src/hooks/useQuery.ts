@@ -10,12 +10,14 @@ import { SignkeyType } from '@soulwallet/sdk';
 import { addPaymasterAndData } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useCredentialStore } from '@/store/credential';
+import { useToast } from '@chakra-ui/react';
 
 export default function useQuery() {
   const { ethersProvider } = useWalletContext();
   const { soulWallet } = useSdk();
   const { chainConfig } = useConfig();
   const { getSelectedCredential } = useCredentialStore();
+  const toast = useToast();
 
   const getEthPrice = async () => {
     // get price from coingecko
@@ -98,6 +100,11 @@ export default function useQuery() {
     const gasLimit = await soulWallet.estimateUserOperationGas(userOp, signerKeyType);
 
     if (gasLimit.isErr()) {
+      console.log('estimate ERRRRRR', gasLimit)
+      toast({
+        title: gasLimit.ERR.message,
+        status: 'error',
+      })
       throw new Error(gasLimit.ERR.message);
     }
 

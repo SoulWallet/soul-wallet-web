@@ -45,6 +45,11 @@ const createCredentialSlice = immer<ICredentialStore>((set, get) => ({
       state.selectedCredentialId = credentials[0].id;
     });
   },
+  clearCredentials: ()=>{
+    set(state=>{
+      state.credentials = [];
+    });
+  },
   getSelectedCredential: () => {
     const index = getIndexByCredentialId(get().credentials, get().selectedCredentialId);
     return get().credentials[index];
@@ -55,11 +60,6 @@ const createCredentialSlice = immer<ICredentialStore>((set, get) => ({
       if (index > -1) {
         state.credentials[index].name = name;
       }
-    });
-  },
-  clearCredentials: () => {
-    set((state) => {
-      state.credentials = [];
     });
   },
 }));

@@ -62,8 +62,6 @@ export default function Create() {
     const newAddress = await calcWalletAddress(0);
     const walletName = `Account 1`;
     setAddressList([{ title: walletName, address: newAddress, activatedChains: []}]);
-    console.log('createInitialWallet', newAddress);
-    setSelectedAddress(newAddress);
     setEditingGuardiansInfo({});
     setSelectedCredentialId(credentials[0].id)
   };

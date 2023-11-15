@@ -8,7 +8,6 @@ import LogoutIcon from '@/components/Icons/Logout';
 import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
 import { toCapitalize } from '@/lib/tools'
-import { clearStorageWithCredentials } from '@/lib/tools';
 
 const getPageIcon = (type: string) => {
   if (type === 'asset') {
@@ -28,7 +27,6 @@ export default function PageSelect() {
   const { navigate } = useBrowser();
 
   const doLogout = () =>{
-    clearStorageWithCredentials();
     location.href = '/launch'
   }
 

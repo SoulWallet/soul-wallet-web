@@ -20,6 +20,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
 import useTools from '@/hooks/useTools';
+import { useGuardianStore } from '@/store/guardian';
 
 export default function SignTransaction({ onSuccess, txns, sendToAddress }: any) {
   const toast = useToast();
@@ -40,6 +41,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [sponsor, setSponsor] = useState<any>(null);
   const { selectedChainId } = useChainStore();
   const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
+  const { slotInfo } = useGuardianStore();
   // const [targetChainId, setTargetChainId] = useState('');
   const { getPrefund } = useQuery();
   const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
@@ -49,8 +51,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const selectedToken = getTokenBalance(payToken);
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
   const origin = document.referrer;
-
-  console.log('origin is', origin)
 
   const checkSponser = async (userOp: UserOperation) => {
     const res = await api.sponsor.check(
@@ -105,6 +105,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
       onSuccess(receipt);
 
+      markupStep();
+
       clearState();
     } catch (err) {
       console.log('sign page failed', err);
@@ -116,6 +118,26 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       setSigning(false);
     }
   };
+
+  const markupStep = () => {
+    const safeUrl = location.href;
+
+    let steps:number[] = [];
+
+    if(safeUrl.includes('app.uniswap.org')){
+      steps = [2]
+    }
+    if(safeUrl.includes('staging.aave.com')){
+      steps = [3]
+    }
+
+    if(steps.length > 0 ){
+      api.operation.finishStep({
+        slot: slotInfo.slot,
+        steps,
+      })
+    }
+  }
 
   const getFinalPrefund = async (userOp: any) => {
     setLoadingFee(true);
@@ -134,7 +156,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const getFinalUserOp = async (txns: any) => {
     const isActivated = await checkActivated();
-    if (isActivated) {
+    if (false && isActivated) {
       // if activated, get userOp directly
       return await getUserOp(txns, payToken);
     } else {

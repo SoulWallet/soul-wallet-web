@@ -168,7 +168,6 @@ export default function useWallet() {
         activatedChains: [],
       },
     ]);
-    setSelectedAddress(newAddress);
     // IMPORTANT TODO, get wallet name from credential storage
     // set credentials
     const credentialKey = {
@@ -212,8 +211,6 @@ export default function useWallet() {
         activatedChains: [],
       },
     ]);
-    setSelectedAddress(newAddress);
-
     // set goerli if no selected chainId
     setSelectedChainId('0x5');
 

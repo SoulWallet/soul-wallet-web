@@ -31,6 +31,8 @@ import packageJson from '../../../package.json';
 import useWallet from '@/hooks/useWallet';
 import { Link as RLink } from 'react-router-dom';
 import { faqList, featureList } from '@/data';
+import { useCredentialStore } from '@/store/credential';
+import { useAddressStore } from '@/store/address';
 
 const SignCard = () => {
   const { authenticate } = usePassKey();
@@ -42,17 +44,18 @@ const SignCard = () => {
 
   const [searchParams] = useSearchParams();
   const isPopup = searchParams.get('isPopup');
+
   const login = async () => {
     try {
-      // make sure no storage left
-      clearStorageWithCredentials();
       setIsAuthing(true);
       const { publicKey, credential } = await authenticate();
       console.log('credential is', credential);
       if (publicKey) {
-        const slotInitInfo = (await api.guardian.getSlotInfo({
-          key: publicKey,
-        })).data;
+        const slotInitInfo = (
+          await api.guardian.getSlotInfo({
+            key: publicKey,
+          })
+        ).data;
         // if (credentials.length) {
         //   setSelectedAddress(addressList[0].address);
         //   setSelectedCredentialId(credential.credentialId);
@@ -254,8 +257,8 @@ const FaqSection = () => {
         FAQs
       </Text>
       <Grid templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }} rowGap={12} columnGap={10}>
-        {faqList.map((item) => (
-          <GridItem>
+        {faqList.map((item, idx) => (
+          <GridItem key={idx}>
             <Text fontSize={'20px'} fontWeight={'800'} mb="3">
               {item.title}
             </Text>
@@ -309,9 +312,17 @@ const Banner = () => {
 };
 
 export default function Launch() {
+  const { clearCredentials } = useCredentialStore();
+  const { clearAddresses } = useAddressStore();
+  const clearPreviousData = () => {
+    // make sure no storage left
+    clearCredentials();
+    clearAddresses();
+    clearStorageWithCredentials();
+  };
   useEffect(() => {
     // clear user's storage everytime visiting
-    clearStorageWithCredentials();
+    clearPreviousData();
   }, []);
 
   return (
