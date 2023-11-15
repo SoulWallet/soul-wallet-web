@@ -207,10 +207,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       }
     } catch (err: any) {
       const errMessage: any = err.message;
-      setHintText(`${errMessage}, ${bundlerErrMapping[errMessage]}`);
+      const descMessage = bundlerErrMapping[errMessage];
+      setHintText(`${errMessage}${descMessage ? ', ' + descMessage : ''}`);
       toast({
         title: errMessage,
-        description: bundlerErrMapping[errMessage],
+        description: descMessage,
         status: 'error',
         duration: 5000,
       });

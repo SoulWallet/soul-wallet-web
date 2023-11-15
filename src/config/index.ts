@@ -53,13 +53,11 @@ export const chainMapping = {
 export const storeVersion = '3';
 
 export const bundlerErrMapping: { [key: string]: string } = {
-  'Operation Failed: AA23/OOG': 'Check signature or increase gas limit.',
-  'Operation Failed: AA23': 'Signature issue.',
-  'Insufficient ETH: AA21': 'Not enough ETH balance without paymaster.',
-  'Insufficient Paymaster Funds: AA31': "Paymaster's balance is too low.",
-  'Paymaster Issue: AA33/OOG': 'Paymaster error or low gas limit.',
-  'Paymaster Issue: AA33': 'Specific paymaster problem.',
-  'Wallet Already Created: AA10': 'This wallet already exists.',
+  'AA23 reverted (or OOG)': 'Operation Failed: Check signature or verificationGasLimit too small.',
+  "AA21 didn't pay prefund": 'Not enough ETH balance in your wallet',
+  'AA31 paymaster deposit too low': 'Insufficient Paymaster Funds',
+  'AA33 reverted (or OOG)': 'Paymaster error or verificationGasLimit too small.',
+  'AA10 sender already constructed': 'Wallet Already Exists',
 };
 
 export default {
