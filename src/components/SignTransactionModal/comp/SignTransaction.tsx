@@ -194,25 +194,28 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     doPrecheck();
   }, [txns, payToken]);
 
-  const toAddress = sendToAddress
-    ? sendToAddress
-    : decodedData[0] && decodedData[0].to
-    ? decodedData[0] && decodedData[0].to
-    : '';
+  // const toAddress = sendToAddress
+  //   ? sendToAddress
+  //   : decodedData[0] && decodedData[0].to
+  //   ? decodedData[0] && decodedData[0].to
+  //   : '';
 
   return (
     <>
       <Flex flexDir={'column'} gap="5" mt="8">
         <Flex flexDir={'column'} align={'center'} fontWeight={'800'} lineHeight={'1'}>
-          {decodedData && decodedData.length > 0 && (
+          {decodedData && (
             <Box mb="18px" fontSize={'12px'} fontFamily={'Martian'}>
-              {decodedData.map((item: any, index: number) => (
-                <Text my="2" textTransform="capitalize" key={index}>
-                  {decodedData.length > 1 && `${index + 1}.`}
-                  {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
-                  {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
-                </Text>
-              ))}
+              {decodedData.length === 1
+                ? decodedData.map((item: any, index: number) => (
+                    <Text my="2" textTransform="capitalize" key={index}>
+                      {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
+                      {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
+                    </Text>
+                  ))
+                : decodedData.length > 1
+                ? 'Batch transaction'
+                : 'Send transaction'}
             </Box>
           )}
           {totalMsgValue && Number(totalMsgValue) > 0 && (
@@ -226,17 +229,33 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           )}
         </Flex>
 
-        <Divider borderColor={'#d7d7d7'} mb="3" />
+        <Divider borderColor={'#d7d7d7'}/>
+
+        {decodedData && decodedData.length > 1 && (
+          <>
+            <InfoWrap color="#646464" fontSize="12px" gap="3">
+              {decodedData.map((item: any, index: number) => (
+                <InfoItem>
+                  <Text>
+                    {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}{' '}
+                    {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
+                  </Text>
+                  {/** todo, change to send address **/}
+                  {item.to && (
+                    <Flex align={'center'} gap="1">
+                      <Text>{toShortAddress(item.to)}</Text>
+                      <Image src={IconCopy} onClick={() => doCopy(item.to)} cursor={'pointer'} opacity={0.5} />
+                    </Flex>
+                  )}
+                </InfoItem>
+              ))}
+            </InfoWrap>
+            <Divider borderColor={'#d7d7d7'} mb="3" />
+          </>
+        )}
 
         <>
           <InfoWrap color="#646464" fontSize="12px">
-            <InfoItem>
-              <Text>To</Text>
-              <Flex align={'center'} gap="1">
-                <Text>{toAddress}</Text>
-                <Image src={IconCopy} onClick={() => doCopy(toAddress)} cursor={'pointer'} opacity={0.5} />
-              </Flex>
-            </InfoItem>
             <InfoItem>
               <Text>From</Text>
               <Text>
@@ -283,6 +302,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         onClick={onConfirm}
         loading={signing}
         disabled={loadingFee && !sponsor}
+        bg="#6A52EF"
+        color="white"
+        _hover={{ bg: '#6A52EF', color: 'white' }}
         checkCanSign
       >
         Confirm

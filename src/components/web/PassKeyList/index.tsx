@@ -7,23 +7,23 @@ function PassKeyItem({ passKey, setPassKeyName }: any) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(passKey.name);
 
-  const onChange = (event: any) => {
-    setName(event.target.value);
-  }
+  // const onChange = (event: any) => {
+  //   setName(event.target.value);
+  // }
 
-  const onKeyDown = (event: any) => {
-    if (event.keyCode === 13) {
-      setPassKeyName(passKey.id, name);
-      setIsEditing(false);
-    }
-  }
+  // const onKeyDown = (event: any) => {
+  //   if (event.keyCode === 13) {
+  //     setPassKeyName(passKey.id, name);
+  //     setIsEditing(false);
+  //   }
+  // }
 
-  const onBlur = () => {
-    if (isEditing) {
-      setPassKeyName(passKey.id, name);
-      setIsEditing(false);
-    }
-  }
+  // const onBlur = () => {
+  //   if (isEditing) {
+  //     setPassKeyName(passKey.id, name);
+  //     setIsEditing(false);
+  //   }
+  // }
 
   return (
     <Box background="white" borderRadius="16px" padding="16px" width="100%" marginBottom="4px">
@@ -35,12 +35,12 @@ function PassKeyItem({ passKey, setPassKeyName }: any) {
               {passKey.name}
             </Text>
           )}
-          {isEditing && (
+          {/* {isEditing && (
             <Input type="text" value={name} fontSize="16px" color="rgb(7, 32, 39)" fontWeight="700" marginBottom="4px" onChange={onChange} onBlur={onBlur} onKeyDown={onKeyDown} />
           )}
           <Text color="rgb(51, 51, 51)" fontSize="14px">
             last used: Steptember 11 2023, 1:03 PM
-          </Text>
+          </Text> */}
           {/* <Text color="rgb(51, 51, 51)" fontSize="14px">
             backup: none
           </Text> */}
