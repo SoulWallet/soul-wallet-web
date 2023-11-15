@@ -158,7 +158,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const getFinalUserOp = async (txns: any) => {
     const isActivated = await checkActivated();
-    if (false && isActivated) {
+    if (isActivated) {
       // if activated, get userOp directly
       return await getUserOp(txns, payToken);
     } else {
