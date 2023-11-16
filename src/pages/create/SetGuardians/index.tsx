@@ -772,7 +772,7 @@ export default function SetGuardians({ changeStep }: any) {
           <Box width="40%" display="flex" alignItems="center">
             <Heading1 marginBottom="0">Threshold</Heading1>
           </Box>
-          <Box width="60%" display="flex" alignItems="center">
+          <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
             <TextBody>Wallet recovery requires</TextBody>
             <Box width="80px" margin="0 10px">
               <Menu>
@@ -844,9 +844,9 @@ export default function SetGuardians({ changeStep }: any) {
                 </Tooltip>
               </Box>
             </Box>
-            <Box width="60%" display="flex" alignItems="center">
-              <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)}>
-                <Box width="30px" height="30px" background="white" borderRadius="30px" marginLeft={keepPrivate ? 'auto' : '0'} transition="all 0.2s ease" />
+            <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
+              <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
+                <Box width="30px" height="30px" background="white" borderRadius="30px" />
               </Box>
               <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
             </Box>
