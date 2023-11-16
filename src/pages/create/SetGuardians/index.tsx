@@ -266,7 +266,7 @@ export default function SetGuardians({ changeStep }: any) {
   const { generateJsonName, downloadJsonFile } = useTools()
   const { sendErc20, payTask } = useTransaction();
   const { showConfirmPayment } = useWalletContext();
-  const createdGuardiansInfo = useRef()
+  const createdGuardiansInfo = useRef<any>()
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -533,7 +533,7 @@ export default function SetGuardians({ changeStep }: any) {
     setSelectedCredentialId(credentials[0].id)
   };
 
-  const createInitialSlotInfo = async ({ guardians, guardianNames, threshold }) => {
+  const createInitialSlotInfo = async ({ guardians, guardianNames, threshold }: any) => {
     const keystore = chainConfig.contracts.l1Keystore;
     const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
     const initialGuardianHash = calcGuardianHash(guardians, threshold);
@@ -582,22 +582,6 @@ export default function SetGuardians({ changeStep }: any) {
     console.log('createSlotInfo', slotInfo, walletInfo, guardiansInfo, result)
     return guardiansInfo
   };
-
-  const onConfirm = async () => {
-    try {
-      setIsConfirming(true)
-      await createInitialSlotInfo()
-      await createInitialWallet()
-      setIsConfirming(false)
-    } catch (error: any) {
-      setIsConfirming(false)
-      console.log('error', error)
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-    }
-  }
 
   if (status === 'backuping') {
     return (
