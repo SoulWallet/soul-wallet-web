@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { ethers, Contract, } from 'ethers';
+import { ethers, Contract } from 'ethers';
 import BN from 'bignumber.js';
 import { chainIdMapping, chainMapping } from '@/config';
 import IconDefault from '@/assets/tokens/default.svg';
@@ -10,15 +10,19 @@ import { UserOperation } from '@soulwallet/sdk';
 import IconSend from '@/assets/activities/send.svg';
 import IconContract from '@/assets/activities/contract.svg';
 
-
 export function parseBase64url(base64url: string) {
-  base64url = base64url.replace(/\-/g, "+").replace(/_/g, "/");
-  return Uint8Array.from(atob(base64url), c => c.charCodeAt(0)).buffer;
+  base64url = base64url.replace(/\-/g, '+').replace(/_/g, '/');
+  return Uint8Array.from(atob(base64url), (c) => c.charCodeAt(0)).buffer;
 }
 
 export function arrayBufferToHex(arrayBuffer: any) {
   const uint8Array = new Uint8Array(arrayBuffer);
-  return '0x' + Array.from(uint8Array).map(b => b.toString(16).padStart(2, '0')).join('');
+  return (
+    '0x' +
+    Array.from(uint8Array)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('')
+  );
 }
 
 export function hexToUint8Array(hex: string) {
@@ -26,7 +30,7 @@ export function hexToUint8Array(hex: string) {
   const len = hex.length;
   const uint8Array = new Uint8Array(len / 2);
   for (let i = 0; i < len; i += 2) {
-      uint8Array[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+    uint8Array[i / 2] = parseInt(hex.substring(i, i + 2), 16);
   }
   return uint8Array;
 }
@@ -35,8 +39,7 @@ export function stringToUint8Array(str: string) {
   return new TextEncoder().encode(str);
 }
 
-
-export function clearStorageWithCredentials (){
+export function clearStorageWithCredentials() {
   storage.clear();
   // const credentialKey = 'local-credentials'
   // const credentialStorage = storage.getItem(credentialKey);
@@ -150,12 +153,12 @@ export const getCurrentTimeFormatted = () => {
   const hour = String(now.getHours()).padStart(2, '0');
   const minute = String(now.getMinutes()).padStart(2, '0');
   const second = String(now.getSeconds()).padStart(2, '0');
-  return `${year}-${month}-${day}-${hour}:${minute}:${second}`
-}
+  return `${year}-${month}-${day}-${hour}:${minute}:${second}`;
+};
 
 export const isNativeMethod = (fn: any) => {
   return /\{\s*\[native code\]\s*\}/.test('' + fn);
-}
+};
 
 export const base64ToBigInt = (base64String: string) => {
   const binaryString = atob(base64String);
@@ -204,6 +207,10 @@ export const printUserOp = (userOp: any) => {
       },
     ]),
   );
+};
+
+export const findMissingNumbers = (range: number[], existArray: number[]) => {
+  return range.filter((item) => !existArray.includes(item));
 };
 
 export const truncateString = (str: string, num: number) => {
@@ -280,11 +287,15 @@ export const toHex = (num: any) => {
 };
 
 export const toCapitalize = (str: string) => {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
-
-export const decodeCalldata = async (chainId: string, entrypoint: string, userOp: UserOperation, ethersProvider: any) => {
+export const decodeCalldata = async (
+  chainId: string,
+  entrypoint: string,
+  userOp: UserOperation,
+  ethersProvider: any,
+) => {
   const decodeRet = await DecodeUserOp(parseInt(chainId), entrypoint, userOp);
   // console.log('decoded tx:', decodeRet.OK)
   if (decodeRet.isErr()) {
@@ -305,7 +316,7 @@ export const decodeCalldata = async (chainId: string, entrypoint: string, userOp
       i.functionName = 'Transfer ETH';
     }
 
-    if(i.method && i.method.name === 'transfer'){
+    if (i.method && i.method.name === 'transfer') {
       // get erc20 info
       const tokenAddress = i.to;
       const tokenContract = new Contract(tokenAddress, ERC20ABI, ethersProvider);
@@ -314,14 +325,13 @@ export const decodeCalldata = async (chainId: string, entrypoint: string, userOp
       const symbol = await tokenContract.symbol();
       const amount = BN(i.method.params['1']).shiftedBy(-BN(decimals)).toFixed();
 
-      i.sendErc20Amount = `${amount} ${symbol}`
+      i.sendErc20Amount = `${amount} ${symbol}`;
       i.sendErc20Address = i.method.params['0'];
     }
   }
 
   return decoded;
 };
-
 
 export const getIconMapping = (name: string) => {
   switch (name) {

@@ -1,21 +1,63 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import Button from '@/components/Button';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { guideList } from '@/data';
+import useBrowser from '@/hooks/useBrowser';
+import api from '@/lib/api';
+import { useGuardianStore } from '@/store/guardian';
+import { useAddressStore } from '@/store/address';
+import { findMissingNumbers } from '@/lib/tools';
 
 export default function Guidance() {
-  const { showClaimAssets } = useWalletContext();
-  const steps = [
-    {
-      title: 'Begin with Tokens!',
-      desc: `Grab some test tokens to explore the features and capabilities we offer.`,
-      buttonText: 'Claim',
-      onClick: showClaimAssets,
-    },
-  ];
+  const { showClaimAssets, showTransferAssets } = useWalletContext();
+  const { navigate } = useBrowser();
+  const { slotInfo } = useGuardianStore();
+  const { setFinishedSteps, finishedSteps } = useAddressStore();
 
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const currentStep = steps[currentStepIndex];
+  const onClick = (id: number) => {
+    switch (id) {
+      case 0:
+        showClaimAssets();
+        break;
+      case 1:
+        showTransferAssets();
+        break;
+      case 2:
+        navigate('/security');
+        break;
+      case 3:
+        navigate(`/apps?appUrl=${encodeURIComponent('https://app.uniswap.org')}`);
+        break;
+      case 4:
+        navigate(`/apps?appUrl=${encodeURIComponent('https://staging.aave.com')}`);
+        break;
+      case 5:
+        navigate(`/recover`);
+        break;
+    }
+  };
+
+  const checkSteps = async () => {
+    const res = await api.operation.finishStep({
+      slot: slotInfo.slot,
+      steps: [],
+    });
+
+    setFinishedSteps(res.data.finishedSteps);
+  };
+
+  useEffect(() => {
+    checkSteps();
+  }, []);
+
+  const missingSteps = findMissingNumbers([0,1,2,3,4,5], finishedSteps);
+
+  if(!missingSteps.length){
+    return;
+  }
+
+  const currentStep = guideList[missingSteps[0]];
 
   return (
     <Flex px="6" h="120px" gap="6" bg="#fff" rounded="20px" align={'center'} justify={'space-between'}>
@@ -28,10 +70,11 @@ export default function Guidance() {
         </Text>
       </Flex>
       <Button
+        boxSizing="content-box"
         px="6"
         py="10px"
         fontWeight={'800'}
-        onClick={currentStep.onClick}
+        onClick={() => onClick(currentStep.id)}
         bg="#6A52EF"
         color="white"
         _hover={{ bg: '#6A52EF', color: 'white' }}

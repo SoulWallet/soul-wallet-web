@@ -82,8 +82,6 @@ const SignCard = () => {
         //   publicKey = publicKeys['1'];
         // }
 
-        // console.log('credential info', credential);
-
         await retrieveForNewDevice(slotInitInfo, { ...credential, publicKey });
 
         toast({
@@ -98,16 +96,22 @@ const SignCard = () => {
         }
       } else {
         // failed to login
-        toast({
-          title: 'Failed to login',
-          status: 'error',
-        });
+        showError();
       }
       setIsAuthing(false);
     } catch (error: any) {
-      console.log('error', error);
+      showError();
       setIsAuthing(false);
     }
+  };
+
+  const showError = () => {
+    toast({
+      title: 'Login error',
+      status: 'error',
+      description: `wallet doesn't exist, please try to create a new one`,
+      duration: 3000,
+    });
   };
 
   const createWallet = async () => {

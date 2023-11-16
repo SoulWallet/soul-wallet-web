@@ -14,6 +14,7 @@ export default function Balance() {
       external={<></>}
       mt={{ base: '10px', lg: 'unset' }}
       px="8"
+      overflow="none"
       contentHeight="160px"
     >
       <Box p="4">
@@ -22,7 +23,7 @@ export default function Balance() {
             {walletName}
           </Text>
         )}
-        <Text mt={{ base: 4, lg: 'unset' }} fontSize={'48px'} fontWeight={'800'} mb="4" lineHeight={'1'}>
+        <Text mt={{ base: 4, lg: 'unset' }} fontSize={'48px'} fontWeight={'800'} lineHeight={'1'}>
           $0
         </Text>
         {/* <Flex fontSize={'16px'} gap="1">

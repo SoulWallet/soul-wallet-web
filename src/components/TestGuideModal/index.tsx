@@ -5,20 +5,14 @@ import IconUnchecked from '@/assets/icons/unchecked.svg';
 import IconChecked from '@/assets/icons/checked.svg';
 import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
-
-const guideList = [
-  'Send and receive tokens.',
-  'Change guardians.',
-  'Execute a token swap on Uniswap.',
-  'Deposit tokens into the Aave protocol to earn interest.',
-  'Recover the wallet.',
-];
+import { guideList } from '@/data';
+import { useAddressStore } from '@/store/address';
 
 const TestGuideModal = (_: unknown, ref: Ref<any>) => {
   const { slotInfo } = useGuardianStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
-  const [finishedSteps, setFinishedSteps] = useState<number[]>([]);
+  const { setFinishedSteps, finishedSteps } = useAddressStore();
 
   const getStepInfo = async () => {
     const res = await api.operation.finishStep({
@@ -67,7 +61,7 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
               <Flex gap="2">
                 <Image src={finishedSteps.includes(idx) ? IconChecked : IconUnchecked} w="5" />
                 <Text fontWeight={'800'} fontSize={'16px'}>
-                  {idx + 1}. {item}
+                  {idx + 1}. {item.statusText}
                 </Text>
               </Flex>
             </React.Fragment>

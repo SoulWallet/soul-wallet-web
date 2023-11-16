@@ -18,10 +18,7 @@ import useForm from '@/hooks/useForm';
 import Icon from '@/components/Icon';
 import { nextRandomId, validateEmail } from '@/lib/tools';
 import MinusIcon from '@/assets/icons/minus.svg';
-import useSdk from '@/hooks/useSdk';
 import useKeystore from '@/hooks/useKeystore';
-import useWalletContext from '@/context/hooks/useWalletContext';
-import { useAddressStore } from '@/store/address';
 import { useGuardianStore } from '@/store/guardian';
 import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import ArrowDownIcon from '@/components/Icons/ArrowDown';
@@ -35,6 +32,7 @@ import useConfig from '@/hooks/useConfig';
 import { useCredentialStore } from '@/store/credential';
 import usePassKey from '@/hooks/usePasskey';
 import { L1KeyStore } from '@soulwallet/sdk';
+import { useAddressStore } from '@/store/address';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
@@ -127,6 +125,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
+  const { setFinishedSteps } = useAddressStore();
   const {
     recoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,
@@ -222,10 +221,11 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       });
       changeStep(4)
       setLoading(false);
-      api.operation.finishStep({
+      const resSteps = await api.operation.finishStep({
         slot,
-        steps: [4],
+        steps: [5],
       })
+      setFinishedSteps(resSteps.data.finishedSteps);
     } catch (e: any) {
       setLoading(false);
       toast({
