@@ -12,9 +12,10 @@ import { useGuardianStore } from '@/store/guardian';
 
 interface ISendAssets {
   tokenAddress: string;
+  onSent: () => void;
 }
 
-export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
+export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const [amount, setAmount] = useState<string>('');
   const { getTokenBalance } = useBalanceStore();
   const [sendToken, setSendToken] = useState(tokenAddress);
@@ -64,11 +65,14 @@ export default function SendAssets({ tokenAddress = '' }: ISendAssets) {
     })
 
     resetState();
+
+    onSent();
   };
 
   const resetState = () => {
     setAmount('');
     setReceiverAddress('');
+
   };
 
   return (
