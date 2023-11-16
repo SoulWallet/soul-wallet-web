@@ -885,20 +885,26 @@ export default function SetGuardians({ changeStep }: any) {
               </TextBody>
             </Box>
             <Box maxWidth="560px">
-              <TextBody fontSize="14px" fontWeight="700">
-                Choose trusted friends or use your existing Ethereum wallets as guardians. You can setup using regular Ethereum wallets (e.g MetaMask, Ledger, Coinbase Wallet, etc) and other Soul Wallets as your guardians. If choosing a Soul Wallet as your guardian, ensure it's activated on Ethereum for social recovery.
+              <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
+                Pick friends you trust or use your current Ethereum wallets as guardians for extra security.
+              </TextBody>
+              <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
+                Both EOA wallets (e.g MetaMask) and smart contract wallet are supported.
+              </TextBody>
+              <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
+                If choosing smart contract wallet as your guardian, make sure it's deployed on Ethereum.
               </TextBody>
             </Box>
           </Box>
           <Box>
             <Box display="flex" alignItems="center" justifyContent="flex-start">
               <TextBody fontSize="16px" fontWeight="800">
-                What is wallet recovery?
+                What is social recovery?
               </TextBody>
             </Box>
             <Box maxWidth="560px">
               <TextBody fontSize="14px" fontWeight="700">
-                If your Soul Wallet is lost or stolen, social recovery helps you easily retrieve wallets with guardian signatures. The guardian list will be stored in an Ethereum-based keystore contract.
+                If you lose your Soul Wallet, simply have your chosen friends (guardians) sign to recover it.
               </TextBody>
             </Box>
           </Box>
