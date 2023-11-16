@@ -309,6 +309,8 @@ export default function SetGuardians({ changeStep }: any) {
       await createInitialWallet()
       setIsDone(true)
       setSkipping(false);
+      setIsSkipOpen(false)
+      changeStep(3)
     } catch (error: any) {
       console.log('error', error.message)
       setSkipping(false);
@@ -459,6 +461,7 @@ export default function SetGuardians({ changeStep }: any) {
       await api.guardian.backupGuardians(guardiansInfo);
       setIsDone(true)
       setLoading(false);
+      changeStep(3);
     } catch (error: any) {
       console.log('error', error.message)
       setLoading(false);
@@ -650,7 +653,7 @@ export default function SetGuardians({ changeStep }: any) {
               }
             />
             <Button
-              onClick={() => {}}
+              onClick={() => changeStep(3)}
               disabled={!isDone}
               _styles={{ width: '320px', marginTop: '45px' }}
             >
@@ -843,10 +846,10 @@ export default function SetGuardians({ changeStep }: any) {
           </Box>
         )}
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="36px">
-          <Button _styles={{ width: '300px', marginBottom: '12px' }} disabled={loading || disabled} loading={loading} onClick={keepPrivate ? () => startBackup() : () => handleSubmit()}>
+          <Button _styles={{ width: '320px', marginBottom: '12px' }} disabled={loading || disabled} loading={loading} onClick={keepPrivate ? () => startBackup() : () => handleSubmit()}>
             Confirm
           </Button>
-          <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '300px' }}>
+          <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
             Set up later
           </TextButton>
         </Box>
@@ -921,10 +924,10 @@ export default function SetGuardians({ changeStep }: any) {
         </Box>
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-        <Button onClick={startEdit} _styles={{ width: '300px', marginBottom: '12px' }}>
+        <Button onClick={startEdit} _styles={{ width: '320px', marginBottom: '12px' }}>
           Set up now
         </Button>
-        <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '300px' }}>
+        <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
           Set up later
         </TextButton>
       </Box>

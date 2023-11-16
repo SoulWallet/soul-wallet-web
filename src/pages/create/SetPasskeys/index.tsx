@@ -97,10 +97,10 @@ export default function SetPasskeys({ changeStep }: any) {
         <PassKeyList passKeys={credentials} setPassKeyName={changeCredentialName} />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-        <Button onClick={createWallet} _styles={{ width: '300px', marginBottom: '12px', background: '#9648FA' }} _hover={{ background: '#9648FA' }} disabled={isCreating} loading={isCreating}>
+        <Button onClick={createWallet} _styles={{ width: '320px', marginBottom: '12px', background: '#9648FA' }} _hover={{ background: '#9648FA' }} disabled={isCreating} loading={isCreating}>
           {credentials.length ? 'Add another passkey' : 'Add passkey'}
         </Button>
-        <Button disabled={!credentials.length} onClick={onConfirm} _styles={{ width: '300px' }}>
+        <Button disabled={!credentials.length} onClick={onConfirm} _styles={{ width: '320px' }}>
           Continue
         </Button>
       </Box>
