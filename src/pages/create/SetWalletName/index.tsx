@@ -73,48 +73,27 @@ export default function SetWalletName({ changeStep }: any) {
     }
   };
 
-  const goBack = () => {
-    navigate('/launch');
-  };
-
-  const onStepChange = () => {
-
-  }
-
   return (
     <FullscreenContainer>
-      <Box width="400px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-        <WalletCard
-          statusText="SETTING UP..."
-          titleText="NEW SOUL WALLET"
-          steps={
-            <Steps
-              backgroundColor="#29510A"
-              foregroundColor="#E2FC89"
-              count={2}
-              activeIndex={0}
-              marginTop="24px"
-              onStepChange={onStepChange}
-            />
-          }
-        />
-        <Box width="320px" display="flex" alignItems="center" justifyContent="flex-start" marginBottom="32px">
-          <TextButton
-            color="#1E1E1E"
-            fontSize="16px"
-            fontWeight="800"
-            width="57px"
-            padding="0"
-            alignItems="center"
-            justifyContent="center"
-            onClick={goBack}
-          >
-            <ArrowLeftIcon />
-            <Box marginLeft="2px" fontSize="16px">Back</Box>
-          </TextButton>
+      <Box width="480px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+        <Box marginBottom="12px" marginRight="24px">
+          <Steps
+            backgroundColor="#1E1E1E"
+            foregroundColor="white"
+            count={3}
+            activeIndex={0}
+            marginTop="24px"
+            onStepChange={changeStep}
+            showBackButton
+          />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <Heading1>Name your wallet</Heading1>
+          <Heading1>Create new wallet</Heading1>
+        </Box>
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="24px">
+          <TextBody color="#1E1E1E" textAlign="center" fontSize="16px">
+            Enter a name so that we can create a passkey wallet for you
+          </TextBody>
         </Box>
         <FormInput
           label=""
@@ -134,7 +113,6 @@ export default function SetWalletName({ changeStep }: any) {
         >
           Continue
         </Button>
-        <TextBody textAlign="center" color="#898989" marginTop="12px">Notice: Some Windows users may need a mobile device to add a passkey.</TextBody>
       </Box>
     </FullscreenContainer>
   )

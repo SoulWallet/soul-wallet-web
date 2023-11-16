@@ -41,8 +41,8 @@ export default function useKeystore() {
   };
 
   const getActiveGuardianHash = async () => {
-    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
-    const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod);
+    const slotInfo = getSlotInfo()
+    const slot = slotInfo.slot
     const now = Math.floor(Date.now() / 1000);
     const res = await getKeyStoreInfo(slot);
     if (res.isErr()) {
@@ -89,8 +89,8 @@ export default function useKeystore() {
   };
 
   const getReplaceGuardianInfo = async (newGuardianHash: string) => {
-    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
-    const slot = getSlot(initialKeys, initialGuardianHash, initialGuardianSafePeriod)
+    const slotInfo = getSlotInfo()
+    const slot = slotInfo.slot
     const ret = await keystore.getTypedData(KeyStoreTypedDataType.TYPE_HASH_SET_GUARDIAN, slot, newGuardianHash);
     if (ret.isErr()) {
       throw new Error(ret.ERR.message);
@@ -102,10 +102,7 @@ export default function useKeystore() {
     return {
       slot,
       newGuardianHash,
-      keySignature,
-      initialKeys,
-      initialGuardianHash,
-      initialGuardianSafePeriod,
+      keySignature
     };
   };
 
