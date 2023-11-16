@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import FullscreenContainer from '@/components/FullscreenContainer';
-import { Box, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Image,
+  useToast,
+  Select,
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+  Tooltip
+} from '@chakra-ui/react';
 import Heading1 from '@/components/web/Heading1';
 import TextBody from '@/components/web/TextBody';
 import Button from '@/components/web/Button';
@@ -19,8 +30,12 @@ import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';
 import WarningIcon from '@/components/Icons/Warning';
 import SecureIcon from '@/components/Icons/Secure';
+import ArrowDownIcon from '@/components/Icons/ArrowDown';
 import api from '@/lib/api';
 import MinusIcon from '@/assets/icons/minus.svg';
+import IconButton from '@/components/web/IconButton';
+import SendIcon from '@/components/Icons/Send';
+import FormInput from '@/components/web/Form/FormInput';
 import DoubleFormInput from '@/components/web/Form/DoubleFormInput';
 import useWallet from '@/hooks/useWallet';
 import useForm from '@/hooks/useForm';
@@ -29,10 +44,13 @@ import Icon from '@/components/Icon';
 import { nextRandomId } from '@/lib/tools';
 import DropDownIcon from '@/components/Icons/DropDown';
 import PlusIcon from '@/components/Icons/Plus';
+import QuestionIcon from '@/components/Icons/Question';
+import DownloadIcon from '@/components/Icons/Download';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { nanoid } from 'nanoid';
 import useTransaction from '@/hooks/useTransaction';
 import GuardianModal from '@/pages/security/Guardian/GuardianModal'
+import useTools from '@/hooks/useTools';
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -158,7 +176,13 @@ export default function SetGuardians({ changeStep }: any) {
   const { calcWalletAddress } = useSdk();
   const [status, setStatus] = useState<string>('intro');
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showAdvance, setShowAdvance] = useState(false)
+  const [keepPrivate, setKeepPrivate] = useState(false)
   const toast = useToast();
+  const emailForm = useForm({
+    fields: ['email'],
+    validate,
+  });
 
   const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
@@ -173,7 +197,11 @@ export default function SetGuardians({ changeStep }: any) {
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
+  const [isDone, setIsDone] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { generateJsonName, downloadJsonFile } = useTools()
   const { sendErc20, payTask } = useTransaction();
   const { showConfirmPayment } = useWalletContext();
 
@@ -206,6 +234,78 @@ export default function SetGuardians({ changeStep }: any) {
   useEffect(() => {
     setAmountData({ guardiansCount: guardiansList.length });
   }, [guardiansList]);
+
+  const handleBackupGuardians = async () => {
+    try {
+      setLoading(true);
+      await api.guardian.backupGuardians(guardiansInfo);
+      setLoading(false);
+      setIsDone(true)
+      updateGuardiansInfo({
+        requireBackup: false
+      })
+      toast({
+        title: 'OnChain Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setLoading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  }
+
+  const handleEmailBackupGuardians = async () => {
+    try {
+      setSending(true);
+      const filename = generateJsonName('guardian');
+      await api.guardian.emailBackupGuardians({
+        email: emailForm.values.email,
+        filename,
+        ...guardiansInfo
+      });
+      setSending(false);
+      emailForm.clearFields(['email'])
+      setIsDone(true)
+      updateGuardiansInfo({
+        requireBackup: false
+      })
+      toast({
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setSending(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  }
+
+  const handleDownloadGuardians = async () => {
+    try {
+      setDownloading(true);
+      await downloadJsonFile(guardiansInfo);
+      setDownloading(false);
+      setIsDone(true)
+      updateGuardiansInfo({
+        requireBackup: false
+      })
+      toast({
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setDownloading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  }
 
   const handleSubmit = async () => {
     if (disabled) return;
@@ -440,6 +540,73 @@ export default function SetGuardians({ changeStep }: any) {
     }
   }
 
+  if (status === 'backuping') {
+    return (
+      <FullscreenContainer>
+        <Box width="320px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+          <Box marginBottom="12px">
+            <Steps
+              backgroundColor="#1E1E1E"
+              foregroundColor="white"
+              count={3}
+              activeIndex={2}
+              marginTop="24px"
+            />
+          </Box>
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+            <Heading1>Backup guardians</Heading1>
+          </Box>
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="24px">
+            <TextBody color="#1E1E1E" textAlign="center" fontSize="14px">
+              Save your guardians list for easy wallet recovery.
+            </TextBody>
+          </Box>
+          <Box>
+            <Button
+              onClick={handleDownloadGuardians}
+              disabled={downloading}
+              loading={downloading}
+              _styles={{ width: '320px', marginTop: '12px' }}
+              LeftIcon={<DownloadIcon />}
+            >
+              Download
+            </Button>
+            <TextBody marginTop="12px" textAlign="center">Or</TextBody>
+            <FormInput
+              label=""
+              placeholder="Send to Email"
+              value={emailForm.values.email}
+              errorMsg={emailForm.showErrors.email && emailForm.errors.email}
+              onChange={emailForm.onChange('email')}
+              onBlur={emailForm.onBlur('email')}
+              onEnter={handleEmailBackupGuardians}
+              _styles={{ width: '320px', marginTop: '12px' }}
+              _inputStyles={{ background: 'white' }}
+              RightIcon={
+                <IconButton
+                  onClick={handleEmailBackupGuardians}
+                  disabled={sending || !emailForm.values.email}
+                  loading={sending}
+                >
+                  {!emailForm.values.email && <SendIcon opacity="0.4" />}
+                  {!!emailForm.values.email && <SendIcon color={'#EE3F99'} />}
+                </IconButton>
+              }
+            />
+            <Button
+              onClick={() => {} }
+              disabled={downloading}
+              _styles={{ width: '320px', marginTop: '45px' }}
+            >
+              Done
+            </Button>
+          </Box>
+        </Box>
+
+      </FullscreenContainer>
+    )
+  }
+
   if (status === 'editing') {
     return (
       <FullscreenContainer>
@@ -454,7 +621,7 @@ export default function SetGuardians({ changeStep }: any) {
             />
           </Box>
           <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="20px">
-            <Heading1 fontSize="24px">Setup guardians for social recovery</Heading1>
+            <Heading1>Setup guardians for social recovery</Heading1>
           </Box>
         </Box>
         <Box width="100%" bg="#EDEDED" borderRadius="20px" padding="45px" display="flex" alignItems="flex-start" justifyContent="space-around" margin="0 auto">
@@ -536,7 +703,7 @@ export default function SetGuardians({ changeStep }: any) {
             </Box>
           </Box>
         </Box>
-        <Box background="#EDEDED" borderRadius="20px" padding="20px 45px" display="flex" marginTop="36px">
+        <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="36px">
           <Box width="40%" display="flex" alignItems="center">
             <Heading1 marginBottom="0">Threshold</Heading1>
           </Box>
@@ -585,14 +752,35 @@ export default function SetGuardians({ changeStep }: any) {
             <TextBody>out of {amountData.guardiansCount || 0} guardian(s) confirmation. </TextBody>
           </Box>
         </Box>
+        <TextButton onClick={() => setShowAdvance(!showAdvance)} color="#EC588D" _hover={{ color: '#EC588D' }} marginTop="20px">
+          <Text fontSize="18px" marginRight="5px">Advance setting</Text>
+          <Box transform={showAdvance ? 'rotate(-180deg)' : ''}><ArrowDownIcon color="#EC588D" /></Box>
+        </TextButton>
+        {showAdvance && (
+          <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="20px">
+            <Box width="40%" display="flex" alignItems="center">
+              <Heading1 marginBottom="0">
+                Keep guardians private
+              </Heading1>
+              <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer"><QuestionIcon /></Box>
+            </Box>
+            <Box width="60%" display="flex" alignItems="center">
+              <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)}>
+                <Box width="30px" height="30px" background="white" borderRadius="30px" marginLeft={keepPrivate ? 'auto' : '0'} transition="all 0.2s ease" />
+              </Box>
+              <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
+            </Box>
+          </Box>
+        )}
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="36px">
-          <Button _styles={{ width: '300px', marginBottom: '12px' }} disabled={isCreating} loading={isCreating}>
+          <Button _styles={{ width: '300px', marginBottom: '12px' }} disabled={isCreating} loading={isCreating} onClick={keepPrivate ? () => startBackup() : () => {}}>
             Confirm
           </Button>
           <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={onConfirm} _styles={{ width: '300px' }}>
             Set up later
           </TextButton>
         </Box>
+        <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </FullscreenContainer>
     );
   }
@@ -622,14 +810,13 @@ export default function SetGuardians({ changeStep }: any) {
         <Box width="40%" marginRight="45px">
           <Box marginBottom="16px">
             <Box display="flex" alignItems="center" justifyContent="flex-start">
-              {/* <ArrowRightIcon /> */}
               <TextBody fontSize="16px" fontWeight="800">
-                What is Soul Wallet guardian?
+                What is guardian?
               </TextBody>
             </Box>
             <Box maxWidth="560px">
               <TextBody fontSize="14px" fontWeight="700">
-                Guardians are Ethereum wallet addresses that assist you in recovering your wallet if needed. Soul Wallet replaces recovery phrases with guardian-signature social recovery, improving security and usability.
+                Guardians are Ethereum wallets that help you get back into your wallet if you're locked out.
               </TextBody>
             </Box>
           </Box>
