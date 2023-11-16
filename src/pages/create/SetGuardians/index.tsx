@@ -10,7 +10,13 @@ import {
   MenuList,
   MenuButton,
   MenuItem,
-  Tooltip
+  Tooltip,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody
 } from '@chakra-ui/react';
 import Heading1 from '@/components/web/Heading1';
 import TextBody from '@/components/web/TextBody';
@@ -51,6 +57,60 @@ import { nanoid } from 'nanoid';
 import useTransaction from '@/hooks/useTransaction';
 import GuardianModal from '@/pages/security/Guardian/GuardianModal'
 import useTools from '@/hooks/useTools';
+
+function SkipModal({ isOpen, onClose, doSkip }: any) {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent bg="#ededed" maxW={'480px'} display="flex" alignItems="center" justifyContent="flex-start" padding="30px" overflow="scroll">
+        <Box width="320px">
+          <Box
+            width="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            padding="20px"
+            paddingTop="10px"
+          >
+            <WarningIcon />
+          </Box>
+          <Box marginBottom="16px">
+            <Box display="flex" alignItems="center" justifyContent="flex-start">
+              <TextBody fontSize="16px" fontWeight="800">
+                What if I don’t set up guardians now?
+              </TextBody>
+            </Box>
+            <Box maxWidth="100%">
+              <TextBody fontSize="14px" fontWeight="500">
+                Guardians are required to recover your wallet. You will need to pay a network fee when setting up your guardians after wallet creation.
+              </TextBody>
+            </Box>
+          </Box>
+          <Box marginBottom="16px">
+            <Box display="flex" alignItems="center" justifyContent="flex-start">
+              <TextBody fontSize="16px" fontWeight="800">
+                Can I change my guardians in the future?
+              </TextBody>
+            </Box>
+            <Box maxWidth="100%">
+              <TextBody fontSize="14px" fontWeight="500">
+                Yes. You can always setup or edit your guardians in your wallet. (Network fee will occur.)
+              </TextBody>
+            </Box>
+          </Box>
+          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
+            <Button onClick={onClose} _styles={{ width: '320px', marginBottom: '12px' }}>
+              Set up now
+            </Button>
+            <TextButton loading={false} onClick={doSkip} _styles={{ width: '320px', maxWidth: '320px', padding: '0 20px', whiteSpace: 'break-spaces' }}>
+              I understand the risks, skip for now
+            </TextButton>
+          </Box>
+        </Box>
+      </ModalContent>
+    </Modal>
+  )
+}
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -176,6 +236,7 @@ export default function SetGuardians({ changeStep }: any) {
   const { calcWalletAddress } = useSdk();
   const [status, setStatus] = useState<string>('intro');
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSkipOpen, setIsSkipOpen] = useState(false)
   const [showAdvance, setShowAdvance] = useState(false)
   const [keepPrivate, setKeepPrivate] = useState(false)
   const toast = useToast();
@@ -234,6 +295,10 @@ export default function SetGuardians({ changeStep }: any) {
   useEffect(() => {
     setAmountData({ guardiansCount: guardiansList.length });
   }, [guardiansList]);
+
+  const doSkip = async () => {
+
+  }
 
   const handleBackupGuardians = async () => {
     try {
@@ -762,7 +827,22 @@ export default function SetGuardians({ changeStep }: any) {
               <Heading1 marginBottom="0">
                 Keep guardians private
               </Heading1>
-              <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer"><QuestionIcon /></Box>
+              <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer">
+                <Tooltip
+                  label={(
+                    <Box background="white" padding="28px 24px 28px 24px" width="100%" borderRadius="16px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.4)">
+                      <TextBody fontSize="16px" fontWeight="800">Privacy Setting</TextBody>
+                      <TextBody fontSize="16px" fontWeight="600" marginBottom="20px">This setting will only reveal guardian address when you use the social recovery.</TextBody>
+                      <TextBody fontSize="16px" fontWeight="600">But you need to enter the complete guardian list and threshold values for recovery.</TextBody>
+                    </Box>
+                  )}
+                  placement="top"
+                  background="transparent"
+                  boxShadow="none"
+                >
+                  <span><QuestionIcon /></span>
+                </Tooltip>
+              </Box>
             </Box>
             <Box width="60%" display="flex" alignItems="center">
               <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)}>
@@ -776,11 +856,12 @@ export default function SetGuardians({ changeStep }: any) {
           <Button _styles={{ width: '300px', marginBottom: '12px' }} disabled={isCreating} loading={isCreating} onClick={keepPrivate ? () => startBackup() : () => {}}>
             Confirm
           </Button>
-          <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={onConfirm} _styles={{ width: '300px' }}>
+          <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '300px' }}>
             Set up later
           </TextButton>
         </Box>
         <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} />
       </FullscreenContainer>
     );
   }
@@ -853,10 +934,11 @@ export default function SetGuardians({ changeStep }: any) {
         <Button onClick={startEdit} _styles={{ width: '300px', marginBottom: '12px' }}>
           Set up now
         </Button>
-        <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={onConfirm} _styles={{ width: '300px' }}>
+        <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '300px' }}>
           Set up later
         </TextButton>
       </Box>
+      <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} />
     </FullscreenContainer>
   );
 }
