@@ -110,6 +110,7 @@ export default function SetWalletName({ changeStep }: any) {
           onClick={handleNext}
           _styles={{ width: '320px', marginTop: '12px' }}
           loading={loading}
+          disabled={loading}
         >
           Continue
         </Button>

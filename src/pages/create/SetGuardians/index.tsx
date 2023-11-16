@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import FullscreenContainer from '@/components/FullscreenContainer';
 import {
   Box,
@@ -58,7 +58,7 @@ import useTransaction from '@/hooks/useTransaction';
 import GuardianModal from '@/pages/security/Guardian/GuardianModal'
 import useTools from '@/hooks/useTools';
 
-function SkipModal({ isOpen, onClose, doSkip }: any) {
+function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -102,8 +102,8 @@ function SkipModal({ isOpen, onClose, doSkip }: any) {
             <Button onClick={onClose} _styles={{ width: '320px', marginBottom: '12px' }}>
               Set up now
             </Button>
-            <TextButton loading={false} onClick={doSkip} _styles={{ width: '320px', maxWidth: '320px', padding: '0 20px', whiteSpace: 'break-spaces' }}>
-              I understand the risks, skip for now
+            <TextButton loading={skipping} disabled={skipping} onClick={doSkip} _styles={{ width: '320px', maxWidth: '320px', padding: '0 20px', whiteSpace: 'break-spaces' }}>
+              {skipping ? 'Skipping' : 'I understand the risks, skip for now'}
             </TextButton>
           </Box>
         </Box>
@@ -262,9 +262,11 @@ export default function SetGuardians({ changeStep }: any) {
   const [downloading, setDownloading] = useState(false);
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [skipping, setSkipping] = useState(false);
   const { generateJsonName, downloadJsonFile } = useTools()
   const { sendErc20, payTask } = useTransaction();
   const { showConfirmPayment } = useWalletContext();
+  const createdGuardiansInfo = useRef()
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -297,34 +299,56 @@ export default function SetGuardians({ changeStep }: any) {
   }, [guardiansList]);
 
   const doSkip = async () => {
-
-  }
-
-  const handleBackupGuardians = async () => {
     try {
-      setLoading(true);
-      await api.guardian.backupGuardians(guardiansInfo);
-      setLoading(false);
-      setIsDone(true)
-      updateGuardiansInfo({
-        requireBackup: false
+      setSkipping(true);
+      await createInitialSlotInfo({
+        guardians: [],
+        guardianNames: [],
+        threshold: 0
       })
-      toast({
-        title: 'OnChain Backup Success!',
-        status: 'success',
-      });
-    } catch (e: any) {
-      setLoading(false);
-      toast({
-        title: e.message,
-        status: 'error',
-      });
+      await createInitialWallet()
+      setIsDone(true)
+      setSkipping(false);
+    } catch (error: any) {
+      console.log('error', error.message)
+      setSkipping(false);
     }
   }
 
   const handleEmailBackupGuardians = async () => {
     try {
       setSending(true);
+      let guardiansInfo
+
+      if (createdGuardiansInfo.current) {
+        guardiansInfo = createdGuardiansInfo.current
+      } else {
+        const guardiansList = guardianIds
+          .map((id) => {
+            const addressKey = `address_${id}`;
+            const nameKey = `name_${id}`;
+            let address = values[addressKey];
+
+            if (address && address.length) {
+              return { address, name: values[nameKey] };
+            }
+
+            return null;
+          })
+          .filter((i) => !!i);
+
+        const guardianAddresses = guardiansList.map((item: any) => item.address);
+        const guardianNames = guardiansList.map((item: any) => item.name);
+        const threshold = amountForm.values.amount || 0;
+
+        guardiansInfo = await createInitialSlotInfo({
+          guardians: guardianAddresses,
+          guardianNames,
+          threshold
+        })
+        await createInitialWallet()
+      }
+
       const filename = generateJsonName('guardian');
       await api.guardian.emailBackupGuardians({
         email: emailForm.values.email,
@@ -353,6 +377,37 @@ export default function SetGuardians({ changeStep }: any) {
   const handleDownloadGuardians = async () => {
     try {
       setDownloading(true);
+      let guardiansInfo
+
+      if (createdGuardiansInfo.current) {
+        guardiansInfo = createdGuardiansInfo.current
+      } else {
+        const guardiansList = guardianIds
+          .map((id) => {
+            const addressKey = `address_${id}`;
+            const nameKey = `name_${id}`;
+            let address = values[addressKey];
+
+            if (address && address.length) {
+              return { address, name: values[nameKey] };
+            }
+
+            return null;
+          })
+          .filter((i) => !!i);
+
+        const guardianAddresses = guardiansList.map((item: any) => item.address);
+        const guardianNames = guardiansList.map((item: any) => item.name);
+        const threshold = amountForm.values.amount || 0;
+
+        guardiansInfo = await createInitialSlotInfo({
+          guardians: guardianAddresses,
+          guardianNames,
+          threshold
+        })
+        await createInitialWallet()
+      }
+
       await downloadJsonFile(guardiansInfo);
       setDownloading(false);
       setIsDone(true)
@@ -395,76 +450,15 @@ export default function SetGuardians({ changeStep }: any) {
       const guardianNames = guardiansList.map((item: any) => item.name);
       const threshold = amountForm.values.amount || 0;
 
-      const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
-      const keystore = chainConfig.contracts.l1Keystore;
-      const salt = ethers.ZeroHash;
-      const { initialKeys, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
-      const currentKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
-      const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
-      const currentkeysAddress = L1KeyStore.initialKeysToAddress(currentKeys);
-      console.log('initialKeys', initalkeysAddress, currentkeysAddress)
-      let initalRawkeys
-      if (initalkeysAddress.join('') === currentkeysAddress.join('')) {
-        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [initalkeysAddress]);
-      } else {
-        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentkeysAddress]);
-      }
-
-      const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
-
-      const walletInfo = {
-        keystore,
-        slot,
-        slotInfo: {
-          initialKeyHash,
-          initialGuardianHash,
-          initialGuardianSafePeriod
-        },
-        keys: initalkeysAddress
-      };
-
-      const guardiansInfo = {
-        keystore,
-        slot,
-        guardianHash: newGuardianHash,
+      const guardiansInfo = await createInitialSlotInfo({
+        guardians: guardianAddresses,
         guardianNames,
-        guardianDetails: {
-          guardians: guardianAddresses,
-          threshold: Number(threshold),
-          salt,
-        },
-        requireBackup: true
-      };
-
-      /* const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
-
-       * const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
-       * const parameters = [
-       *   initialKeyHash,
-       *   initialGuardianHash,
-       *   initialGuardianSafePeriod,
-       *   newGuardianHash,
-       *   initalRawkeys,
-       *   keySignature,
-       * ]
-
-       * const res1 = await api.guardian.createTask({
-       *   keystore,
-       *   functionName,
-       *   parameters
-       * })
-
-       * const task = res1.data
-       * const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
-       * const res2 = await showConfirmPayment(task.estiamtedFee);
-       * const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID); */
-      setGuardiansInfo(guardiansInfo)
-      // startBackup()
+        threshold
+      })
+      await createInitialWallet()
+      await api.guardian.backupGuardians(guardiansInfo);
+      setIsDone(true)
       setLoading(false);
-      /* api.operation.finishStep({
-       *   slot,
-       *   steps: [1],
-       * }) */
     } catch (error: any) {
       console.log('error', error.message)
       setLoading(false);
@@ -536,10 +530,10 @@ export default function SetGuardians({ changeStep }: any) {
     setSelectedCredentialId(credentials[0].id)
   };
 
-  const createInitialSlotInfo = async () => {
+  const createInitialSlotInfo = async ({ guardians, guardianNames, threshold }) => {
     const keystore = chainConfig.contracts.l1Keystore;
     const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
-    const initialGuardianHash = calcGuardianHash([], 0);
+    const initialGuardianHash = calcGuardianHash(guardians, threshold);
     const salt = ethers.ZeroHash;
     let initialGuardianSafePeriod = toHex(300);
     const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
@@ -570,10 +564,10 @@ export default function SetGuardians({ changeStep }: any) {
       keystore,
       slot,
       guardianHash: initialGuardianHash,
-      guardianNames: [],
+      guardianNames,
       guardianDetails: {
-        guardians: [],
-        threshold: 0,
+        guardians,
+        threshold,
         salt,
       },
     };
@@ -581,7 +575,9 @@ export default function SetGuardians({ changeStep }: any) {
     const result = await api.guardian.backupSlot(walletInfo)
     setGuardiansInfo(guardiansInfo)
     setSlotInfo(slotInfo)
+    createdGuardiansInfo.current = guardiansInfo
     console.log('createSlotInfo', slotInfo, walletInfo, guardiansInfo, result)
+    return guardiansInfo
   };
 
   const onConfirm = async () => {
@@ -590,11 +586,6 @@ export default function SetGuardians({ changeStep }: any) {
       await createInitialSlotInfo()
       await createInitialWallet()
       setIsConfirming(false)
-      if(location.search){
-        navigate({pathname: '/popup', search: location.search})
-      }else{
-        navigate('/wallet')
-      }
     } catch (error: any) {
       setIsConfirming(false)
       console.log('error', error)
@@ -659,15 +650,14 @@ export default function SetGuardians({ changeStep }: any) {
               }
             />
             <Button
-              onClick={() => {} }
-              disabled={downloading}
+              onClick={() => {}}
+              disabled={!isDone}
               _styles={{ width: '320px', marginTop: '45px' }}
             >
               Done
             </Button>
           </Box>
         </Box>
-
       </FullscreenContainer>
     )
   }
@@ -853,7 +843,7 @@ export default function SetGuardians({ changeStep }: any) {
           </Box>
         )}
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="36px">
-          <Button _styles={{ width: '300px', marginBottom: '12px' }} disabled={isCreating} loading={isCreating} onClick={keepPrivate ? () => startBackup() : () => {}}>
+          <Button _styles={{ width: '300px', marginBottom: '12px' }} disabled={loading || disabled} loading={loading} onClick={keepPrivate ? () => startBackup() : () => handleSubmit()}>
             Confirm
           </Button>
           <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '300px' }}>
@@ -861,7 +851,7 @@ export default function SetGuardians({ changeStep }: any) {
           </TextButton>
         </Box>
         <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-        <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} />
+        <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} skipping={skipping} />
       </FullscreenContainer>
     );
   }
@@ -938,7 +928,7 @@ export default function SetGuardians({ changeStep }: any) {
           Set up later
         </TextButton>
       </Box>
-      <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} />
+      <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} skipping={skipping} />
     </FullscreenContainer>
   );
 }
