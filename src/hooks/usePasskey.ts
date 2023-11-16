@@ -211,8 +211,6 @@ export default function usePasskey() {
       ).data.data,
     );
 
-    console.log('credential info', credentialInfo);
-
     return {
       publicKey: credentialInfo.publicKey,
       credential: {

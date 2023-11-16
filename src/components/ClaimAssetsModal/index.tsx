@@ -63,15 +63,23 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
     promiseInfo.reject('User close');
   };
 
-  const claimAmount = selectedChainId === '0x5' ? '0.002' : '0.001';
+  let claimAmount, claimUsdcAmount;
+
+  if (selectedChainId === '0x5') {
+      claimAmount = '0.002';
+      claimUsdcAmount = '5';
+  } else {
+      claimAmount = '0.001';
+      claimUsdcAmount = '10';
+  }
 
   return (
     <div ref={ref}>
-      <TxModal visible={visible} width={{ base: '90%', lg: '500px' }} onClose={onClose} title="Today's claim left: 1">
+      <TxModal visible={visible} width={{ base: '90%', lg: '500px' }} onClose={onClose} title="Claim test token">
         <Box textAlign="center">
           <Text fontSize={'16px'} fontWeight={'600'} mt="8" color="#000">
             Each wallet address can claim test tokens
-            <br /> ({claimAmount}ETH) twice per day.
+            <br /> ({claimAmount}ETH and {claimUsdcAmount} USDC) twice per day.
           </Text>
           <Button loading={loading} mt="6" mx="auto" py="3" px="4" onClick={doClaim} gap="2" display={'flex'}>
             <Image src={IconDollar} />
