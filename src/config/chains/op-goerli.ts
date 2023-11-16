@@ -28,7 +28,7 @@ export default {
   recovering: false,
   paymasterTokens: [
     // test u
-    '0xe05606174bac4A6364B31bd0eCA4bf4dD368f8C6',
+    '0x7E07E15D2a87A24492740D16f5bdF58c16db0c4E',
   ],
   contracts: {
     ...keystoreContracts,
