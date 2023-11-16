@@ -70,7 +70,7 @@ export default function SetPasskeys({ changeStep }: any) {
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
           <Heading1>Add another passkey</Heading1>
         </Box>
-        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="" marginTop="16px">
+        <Box display="flex" alignItems="center" justifyContent="center" marginTop="16px">
           {(!credentials.length || credentials.length === 1) && (
             <Box background="rgba(255, 4, 32, 0.08)" borderRadius="20px" padding="24px 16px 24px 16px" display="flex" alignItems="center" justifyContent="center">
               <Box display="flex" alignItems="center" justifyContent="center" margin="11px" padding="10px" marginRight="16px">
