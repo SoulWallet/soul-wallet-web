@@ -1,11 +1,10 @@
-import { Box, Flex, Grid, GridItem, Image, Text } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Image, Text } from '@chakra-ui/react';
 import { dappList } from '@/data';
 import { Link } from 'react-router-dom';
 import IconLink from '@/assets/icons/link.svg';
 import IconBookmark from '@/assets/icons/bookmark.svg';
 import IconPlus from '@/assets/icons/dapp-plus.svg';
 import HomeCard from '@/pages/wallet/comp/HomeCard';
-// const tabs = ['My Dapps', 'Explore more', 'Wallet connect'];
 
 const DappItem = ({ item }: any) => {
   return (
@@ -72,7 +71,7 @@ export default function DappList() {
         {dappList.map((item, index) => (
           <DappItem key={index} item={item} />
         ))}
-        <AddDappItem />
+        {/* <AddDappItem /> */}
       </Grid>
     </HomeCard>
   );

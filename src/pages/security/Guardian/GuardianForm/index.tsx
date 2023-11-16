@@ -148,7 +148,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
     threshold: 0
   }
   const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
-
+  const { setFinishedSteps } = useAddressStore();
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 3 && guardianDetails.guardians.length) || 3)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
@@ -282,10 +282,11 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       setGuardiansInfo(guardiansInfo)
       startBackup()
       setLoading(false);
-      api.operation.finishStep({
+      const res = await api.operation.finishStep({
         slot,
-        steps: [1],
+        steps: [2],
       })
+      setFinishedSteps(res.data.finishedSteps);
     } catch (error: any) {
       console.log('error', error.message)
       setLoading(false);

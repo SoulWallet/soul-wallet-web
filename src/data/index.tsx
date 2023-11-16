@@ -18,7 +18,7 @@ export const dappList = [
     icon: IconAave,
     title: 'AAVE',
     category: 'DeFi',
-    url: 'https://staging.aave.com/',
+    url: 'https://staging.aave.com',
     desc: 'Earn interest, borrow assets, and build applications',
   },
   // {
@@ -74,5 +74,50 @@ export const featureList = [
     title: 'Social recovery<br/>with built-in.',
     content:
       'Use wallet on your Mac/PC/Phone. Find your wallet back with Social Recovery, even if all your devices are lost.',
+  },
+];
+
+export const guideList = [
+  {
+    id: 0,
+    title: 'Begin with Tokens!',
+    desc: `Grab some test tokens to explore the features and capabilities we offer.`,
+    buttonText: 'Claim',
+    statusText: `Claim test tokens`,
+  },
+  {
+    id: 1,
+    title: 'Make Your First Move!',
+    desc: `Experience the ease of transactions. Send tokens to another address.`,
+    buttonText: 'Send',
+    statusText: 'Send tokens',
+  },
+  {
+    id: 2,
+    title: 'Guard Your Wallet!',
+    desc: `Adjust your guardian settings for enhanced security.`,
+    buttonText: 'Edit Guardian',
+    statusText: 'Change guardians',
+  },
+  {
+    id: 3,
+    title: 'Trade with Ease!',
+    desc: `Dive into the world of Dapps and DeFi. Execute a token swap on Uniswap with your wallet.`,
+    buttonText: 'Uniswap',
+    statusText: 'Execute a token swap on Uniswap',
+  },
+  {
+    id: 4,
+    title: 'Grow Your Tokens!',
+    desc: `Deposit tokens into Aave and start earning interest.`,
+    buttonText: 'Aave',
+    statusText: 'Deposit tokens into the Aave protocol',
+  },
+  {
+    id: 5,
+    title: 'Recover With Ease!',
+    desc: `Checkout “Lost your wallet?” Our guided wallet recovery process ensures you’re never locked out of your funds.`,
+    buttonText: 'Recover',
+    statusText: 'Recover the wallet',
   },
 ];

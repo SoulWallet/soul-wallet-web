@@ -9,6 +9,7 @@ import AmountInput from './comp/AmountInput';
 import { AddressInput, AddressInputReadonly } from './comp/AddressInput';
 import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
+import { useAddressStore } from '@/store/address';
 
 interface ISendAssets {
   tokenAddress: string;
@@ -18,6 +19,7 @@ interface ISendAssets {
 export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const [amount, setAmount] = useState<string>('');
   const { getTokenBalance } = useBalanceStore();
+  const { setFinishedSteps, finishedSteps } = useAddressStore();
   const [sendToken, setSendToken] = useState(tokenAddress);
   const [receiverAddress, setReceiverAddress] = useState<string>('');
   const { slotInfo } = useGuardianStore();
@@ -59,10 +61,12 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
       await sendErc20(sendToken, trimedAddress, amount, selectedToken.decimals);
     }
 
-    api.operation.finishStep({
+    const res = await api.operation.finishStep({
       slot: slotInfo.slot,
-      steps: [0],
+      steps: [1],
     })
+
+    setFinishedSteps(res.data.finishedSteps);
 
     resetState();
 

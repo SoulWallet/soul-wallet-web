@@ -41,7 +41,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [activeOperation, setActiveOperation] = useState<UserOperation>();
   const [sponsor, setSponsor] = useState<any>(null);
   const { selectedChainId } = useChainStore();
-  const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
+  const { toggleActivatedChain, addressList, selectedAddress, setFinishedSteps } = useAddressStore();
   const { slotInfo } = useGuardianStore();
   // const [targetChainId, setTargetChainId] = useState('');
   const { getPrefund } = useQuery();
@@ -121,23 +121,26 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  const markupStep = () => {
+  const markupStep = async() => {
     const safeUrl = location.href;
 
     let steps: number[] = [];
 
     if (safeUrl.includes('app.uniswap.org')) {
-      steps = [2];
+      steps = [3];
     }
     if (safeUrl.includes('staging.aave.com')) {
-      steps = [3];
+      steps = [4];
     }
 
     if (steps.length > 0) {
-      api.operation.finishStep({
+      const res = await api.operation.finishStep({
         slot: slotInfo.slot,
         steps,
       });
+
+    setFinishedSteps(res.data.finishedSteps);
+
     }
   };
 

@@ -6,13 +6,15 @@ import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import IconDollar from '@/assets/icons/dollar-white.svg';
+import { useGuardianStore } from '@/store/guardian';
 
 const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const { slotInfo } = useGuardianStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
-  const { selectedAddress } = useAddressStore();
+  const { selectedAddress, setFinishedSteps } = useAddressStore();
   const { selectedChainId } = useChainStore();
 
   useImperativeHandle(ref, () => ({
@@ -39,6 +41,12 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
           title: 'Claimed',
           status: 'success',
         });
+        const res = await api.operation.finishStep({
+          slot: slotInfo.slot,
+          steps: [0],
+        });
+
+        setFinishedSteps(res.data.finishedSteps);
         setVisible(false);
       } else {
         toast({
@@ -66,11 +74,11 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   let claimAmount, claimUsdcAmount;
 
   if (selectedChainId === '0x5') {
-      claimAmount = '0.002';
-      claimUsdcAmount = '5';
+    claimAmount = '0.002';
+    claimUsdcAmount = '5';
   } else {
-      claimAmount = '0.001';
-      claimUsdcAmount = '10';
+    claimAmount = '0.001';
+    claimUsdcAmount = '10';
   }
 
   return (
