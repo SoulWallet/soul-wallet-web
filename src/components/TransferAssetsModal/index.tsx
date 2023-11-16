@@ -29,7 +29,7 @@ function TransferAssetsModal(_: any, ref: Ref<any>) {
 
   const onClose = async () => {
     setVisible(false);
-    promiseInfo.reject('User reject');
+    promiseInfo.reject('User close');
   };
 
   useImperativeHandle(ref, () => ({
@@ -89,7 +89,7 @@ function TransferAssetsModal(_: any, ref: Ref<any>) {
             roundedTopRight={activeTab === 1 ? '0' : '20px'}
             p={{ base: 3, lg: 6 }}
           >
-            {activeTab === 0 && <SendAssets tokenAddress={tokenAddress} />}
+            {activeTab === 0 && <SendAssets tokenAddress={tokenAddress} onSent={onClose} />}
             {activeTab === 1 && <Receive />}
           </Box>
         </ModalBody>
