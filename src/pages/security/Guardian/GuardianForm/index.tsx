@@ -546,7 +546,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
               }
             />
             <Button
-              onClick={() => setIsConfirmOpen(false)}
+              onClick={() => setIsConfirmOpen(true)}
               disabled={!isDone || loading || disabled}
               loading={loading}
               _styles={{ width: '320px', marginTop: '60px' }}
@@ -555,6 +555,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
             </Button>
           </Box>
         </Box>
+        <DoubleCheckModal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)} onSubmit={handleSubmit} />
       </Box>
     )
   }
