@@ -19,7 +19,7 @@ export default function FindRoute({ children }: any) {
 
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
-    const isRecoverPage = location.pathname.includes('recover')
+    const isRecoverPage = location.pathname.includes('recover');
 
     if (storeVersion !== storageVersion) {
       if (storageVersion) {
@@ -31,7 +31,7 @@ export default function FindRoute({ children }: any) {
 
     if (guardiansInfo && guardiansInfo.requireBackup) {
       navigate('/security');
-    } else if (!addressList.length || !selectedAddress && !isRecoverPage) {
+    } else if ((!addressList.length || !selectedAddress) && !isRecoverPage) {
       navigate({
         pathname: '/launch',
         search: location.search,
