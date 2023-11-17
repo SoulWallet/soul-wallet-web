@@ -600,7 +600,7 @@ export default function SetGuardians({ changeStep }: any) {
           <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
             <Heading1>Backup guardians</Heading1>
           </Box>
-          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="24px">
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="60px">
             <TextBody color="#1E1E1E" textAlign="center" fontSize="14px">
               Save your guardians list for easy wallet recovery.
             </TextBody>
@@ -610,12 +610,13 @@ export default function SetGuardians({ changeStep }: any) {
               onClick={handleDownloadGuardians}
               disabled={downloading}
               loading={downloading}
-              _styles={{ width: '320px', marginTop: '12px' }}
+              _styles={{ width: '320px', background: '#9648FA' }}
+              _hover={{ background: '#9648FA' }}
               LeftIcon={<DownloadIcon />}
             >
               Download
             </Button>
-            <TextBody marginTop="12px" textAlign="center">Or</TextBody>
+            <TextBody marginTop="8px" textAlign="center" display="flex" alignItems="center" justifyContent="center">Or</TextBody>
             <FormInput
               label=""
               placeholder="Send to Email"
@@ -624,7 +625,7 @@ export default function SetGuardians({ changeStep }: any) {
               onChange={emailForm.onChange('email')}
               onBlur={emailForm.onBlur('email')}
               onEnter={handleEmailBackupGuardians}
-              _styles={{ width: '320px', marginTop: '12px' }}
+              _styles={{ width: '320px', marginTop: '8px' }}
               _inputStyles={{ background: 'white' }}
               RightIcon={
                 <IconButton
@@ -640,9 +641,9 @@ export default function SetGuardians({ changeStep }: any) {
             <Button
               onClick={() => changeStep(3)}
               disabled={!isDone}
-              _styles={{ width: '320px', marginTop: '45px' }}
+              _styles={{ width: '320px', marginTop: '60px' }}
             >
-              Done
+              Continue
             </Button>
           </Box>
         </Box>
