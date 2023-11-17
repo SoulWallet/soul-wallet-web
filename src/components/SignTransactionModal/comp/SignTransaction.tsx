@@ -121,7 +121,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  const markupStep = async() => {
+  const markupStep = async () => {
     const safeUrl = location.href;
 
     let steps: number[] = [];
@@ -139,8 +139,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         steps,
       });
 
-    setFinishedSteps(res.data.finishedSteps);
-
+      setFinishedSteps(res.data.finishedSteps);
     }
   };
 
@@ -299,6 +298,12 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
         <>
           <InfoWrap color="#646464" fontSize="12px">
+            {sendToAddress && (
+              <InfoItem>
+                <Text>Send to</Text>
+                <Text>{sendToAddress}</Text>
+              </InfoItem>
+            )}
             <InfoItem>
               <Text>From</Text>
               <Text>

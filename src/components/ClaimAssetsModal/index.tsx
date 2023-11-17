@@ -75,10 +75,10 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
 
   if (selectedChainId === '0x5') {
     claimAmount = '0.002';
-    claimUsdcAmount = '5';
+    claimUsdcAmount = '10';
   } else {
     claimAmount = '0.001';
-    claimUsdcAmount = '10';
+    claimUsdcAmount = '5';
   }
 
   return (
