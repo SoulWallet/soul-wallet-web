@@ -44,6 +44,7 @@ import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
+import DoubleCheckModal from '../DoubleCheckModal'
 import GuardianModal from '../GuardianModal'
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
@@ -134,6 +135,7 @@ const amountValidate = (values: any, props: any) => {
 
 export default function GuardianList({ onSubmit, textButton, startBackup }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const [showAdvance, setShowAdvance] = useState(false)
   const [showAdvance2, setShowAdvance2] = useState(false)
   const [loading, setLoading] = useState(false);
@@ -166,7 +168,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   }
   let pendingGuardianList: any = []
   let pendingGuardianNames: any = []
-  const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails
+  const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash
 
   if (isPending) {
     pendingGuardianDetails = (editingGuardiansInfo && editingGuardiansInfo.guardianDetails)
@@ -181,6 +183,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
 
   const handleCancel = async () => {
     try {
+      setIsConfirmOpen(false)
       setLoading(true);
       const guardianAddresses = guardianDetails.guardians
       const threshold = guardianDetails.threshold
@@ -374,7 +377,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
               <Heading1>Pending new guardians</Heading1>
               <TextBody fontSize="18px" marginBottom="20px">You have a pending guardian update. New guardians updating in 12:56:73. </TextBody>
               <Box>
-                <RoundButton _styles={{ width: '168px', maxWidth: '100%', borderRadius: '50px', height: '31px', fontSize: '16px', fontWeight: '700' }} onClick={handleCancel} loading={loading} disabled={loading}>
+                <RoundButton _styles={{ width: '168px', maxWidth: '100%', borderRadius: '50px', height: '31px', fontSize: '16px', fontWeight: '700' }} onClick={() => setIsConfirmOpen(true)} loading={loading} disabled={loading}>
                   Discard change
                 </RoundButton>
               </Box>
@@ -493,6 +496,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
         </Box>
       )}
       <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <DoubleCheckModal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)} onSubmit={handleCancel} />
     </Fragment>
   )
 }

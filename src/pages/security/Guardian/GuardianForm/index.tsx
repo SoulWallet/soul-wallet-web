@@ -36,6 +36,7 @@ import { useCredentialStore } from '@/store/credential';
 import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GuardianModal from '../GuardianModal'
+import DoubleCheckModal from '../DoubleCheckModal'
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -151,6 +152,7 @@ const getInitialValues = (ids: string[], guardians: string[], guardianNames: str
 
 export default function GuardianForm({ cancelEdit, startBackup }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
@@ -214,6 +216,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
   }, [guardiansList]);
 
   const handleSubmit = async () => {
+    setIsConfirmOpen(false)
     if (disabled) return;
 
     try {
@@ -303,7 +306,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       console.log('handleSubmit1111', res1, res2, res3);
       // setGuardiansInfo(guardiansInfo)
       setEditingGuardiansInfo(guardiansInfo)
-      // startBackup()
+      cancelEdit()
       setLoading(false);
       const res = await api.operation.finishStep({
         slot,
@@ -543,7 +546,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
               }
             />
             <Button
-              onClick={handleSubmit}
+              onClick={() => setIsConfirmOpen(false)}
               disabled={!isDone || loading || disabled}
               loading={loading}
               _styles={{ width: '320px', marginTop: '60px' }}
@@ -608,7 +611,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
                       </Text>
                     }
                     _leftContainerStyles={{ width: '30%', minWidth: '240px' }}
-                    onEnter={handleSubmit}
+                    onEnter={() => setIsConfirmOpen(false)}
                     _styles={{ width: '100%', minWidth: '760px', fontSize: '16px' }}
                   />
                   {i > 0 && (
@@ -723,7 +726,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       )}
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <Button disabled={loading || disabled} loading={loading} _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={keepPrivate ? () => setStatus('backuping') : () => handleSubmit()}>
+          <Button disabled={loading || disabled} loading={loading} _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={keepPrivate ? () => setStatus('backuping') : () => setIsConfirmOpen(true)}>
             Confirm guardians
           </Button>
           {hasGuardians && (
@@ -734,6 +737,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
         </Box>
       </Box>
       <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <DoubleCheckModal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)} onSubmit={handleSubmit} />
     </Fragment>
   )
 }

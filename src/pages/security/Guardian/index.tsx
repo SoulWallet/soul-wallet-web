@@ -63,7 +63,7 @@ export default function Guardian({ setActiveSection }: any) {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { setGuardiansInfo, guardiansInfo, updateGuardiansInfo, editingGuardiansInfo } = useGuardianStore();
 
-  const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails
+  const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash
 
   const startManage = () => {
     setStatus('managing')
