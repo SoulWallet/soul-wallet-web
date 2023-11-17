@@ -131,7 +131,10 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
     updateRecoveringGuardiansInfo,
   } = useGuardianStore();
   const credentials = recoveringGuardiansInfo.credentials
-  const guardianDetails = recoveringGuardiansInfo.guardianDetails || recoveringGuardiansInfo.recoveryRecord.guardianDetails
+  const guardianDetails =  {
+    guardians: [],
+    threshold: 0
+  }
 
   const [amountData, setAmountData] = useState<any>({});
   const [showMannualInput, setShowMannualInput] = useState(false);
