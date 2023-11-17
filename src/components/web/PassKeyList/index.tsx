@@ -31,7 +31,7 @@ function PassKeyItem({ passKey, setPassKeyName }: any) {
         <Box width="50px" height="50px" background="#efefef" borderRadius="50px" marginRight="16px" display="flex" alignItems="center" justifyContent="center"><ComputerIcon /></Box>
         <Box>
           {!isEditing && (
-            <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="600">
+            <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="800">
               {passKey.name}
             </Text>
           )}

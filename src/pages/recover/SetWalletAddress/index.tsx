@@ -38,7 +38,7 @@ const validate = (values: any) => {
 export default function Recover({ changeStep }: any) {
   const { navigate } = useBrowser();
   const [loading, setLoading] = useState(false);
-  const { getActiveGuardianHash2 } = useKeystore();
+  const { getActiveGuardianHash } = useKeystore();
   const toast = useToast();
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
     fields: ['address'],
@@ -57,7 +57,7 @@ export default function Recover({ changeStep }: any) {
       const slotInitInfo = res1.data.slotInitInfo
       const initalkeysAddress = res1.data.initialKeys
       const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
-      const activeGuardianInfo = await getActiveGuardianHash2(slotInitInfo)
+      const activeGuardianInfo = await getActiveGuardianHash(slotInitInfo)
       let activeGuardianHash
 
       if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {

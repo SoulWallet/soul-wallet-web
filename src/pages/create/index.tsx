@@ -1,11 +1,4 @@
 import React, { useState } from 'react';
-import FullscreenContainer from '@/components/FullscreenContainer';
-import { Box, useToast } from '@chakra-ui/react';
-import Heading1 from '@/components/web/Heading1';
-import TextBody from '@/components/web/TextBody';
-import Button from '@/components/web/Button';
-import TextButton from '@/components/web/TextButton';
-import Steps from '@/components/web/Steps';
 import useBrowser from '@/hooks/useBrowser';
 import SetWalletName from './SetWalletName'
 import SetPasskeys from './SetPasskeys'

@@ -9,8 +9,8 @@ export default function useKeystore() {
   const { chainConfig } = useConfig();
   const { getSlotInfo } = useGuardianStore();
   const { showSignMessage } = useWalletContext();
-  const slotInfo = getSlotInfo()
-  const slot = slotInfo.slot
+  const slotInfo = getSlotInfo();
+  const slot = slotInfo.slot;
 
   const keystore = new L1KeyStore(chainConfig.l1Provider, chainConfig.contracts.l1Keystore);
 
@@ -41,32 +41,8 @@ export default function useKeystore() {
     return keystore.getKeyStoreInfo(slot);
   };
 
-  const getActiveGuardianHash = async () => {
-    const slotInfo = getSlotInfo()
-    const slot = slotInfo.slot
-    const now = Math.floor(Date.now() / 1000);
-    const res = await getKeyStoreInfo(slot);
-    if (res.isErr()) {
-      return {
-        guardianHash: null,
-        activeGuardianHash: null,
-        guardianActivateAt: null,
-        pendingGuardianHash: null,
-      };
-    }
-    const { guardianHash, pendingGuardianHash, guardianActivateAt } = res.OK;
-
-    return {
-      guardianHash,
-      activeGuardianHash:
-      pendingGuardianHash !== ethers.ZeroHash && guardianActivateAt < now ? pendingGuardianHash : guardianHash,
-      guardianActivateAt,
-      pendingGuardianHash,
-    };
-  };
-
-  const getActiveGuardianHash2 = async (slotInitInfo: any) => {
-    const { initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
+  const getActiveGuardianHash = async (slotInitInfo: any) => {
+    const { initialKeyHash, initialGuardianHash, initialGuardianSafePeriod, } = slotInitInfo;
     const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
     const now = Math.floor(Date.now() / 1000);
     const res = await getKeyStoreInfo(slot);
@@ -78,20 +54,30 @@ export default function useKeystore() {
         pendingGuardianHash: null,
       };
     }
-    const { guardianHash, pendingGuardianHash, guardianActivateAt } = res.OK;
+    const { guardianHash, pendingGuardianHash, guardianActivateAt, key } = res.OK;
 
-    return {
-      guardianHash,
-      activeGuardianHash:
-      pendingGuardianHash !== ethers.ZeroHash && guardianActivateAt < now ? pendingGuardianHash : guardianHash,
-      guardianActivateAt,
-      pendingGuardianHash,
-    };
+    // todo, judge initial guardian slot when empty slot
+    if (BigInt(key) > 0) {
+      return {
+        guardianHash,
+        activeGuardianHash:
+          pendingGuardianHash !== ethers.ZeroHash && guardianActivateAt < now ? pendingGuardianHash : guardianHash,
+        guardianActivateAt,
+        pendingGuardianHash,
+      };
+    } else {
+      return {
+        guardianHash: initialGuardianHash,
+        activeGuardianHash: initialGuardianHash,
+        guardianActivateAt: 0,
+        pendingGuardianHash: ethers.ZeroHash,
+      };
+    }
   };
 
   const getReplaceGuardianInfo = async (newGuardianHash: string) => {
-    const slotInfo = getSlotInfo()
-    const slot = slotInfo.slot
+    const slotInfo = getSlotInfo();
+    const slot = slotInfo.slot;
     const ret = await keystore.getTypedData(KeyStoreTypedDataType.TYPE_HASH_SET_GUARDIAN, slot, newGuardianHash);
     if (ret.isErr()) {
       throw new Error(ret.ERR.message);
@@ -103,7 +89,7 @@ export default function useKeystore() {
     return {
       slot,
       newGuardianHash,
-      keySignature
+      keySignature,
     };
   };
 
@@ -130,7 +116,6 @@ export default function useKeystore() {
     getKeyStoreInfo,
     getActiveGuardianHash,
     getReplaceGuardianInfo,
-    getActiveGuardianHash2,
     getCancelSetGuardianInfo,
   };
 }
