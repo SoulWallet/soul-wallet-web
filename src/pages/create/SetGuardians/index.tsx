@@ -458,8 +458,8 @@ export default function SetGuardians({ changeStep }: any) {
         guardianNames,
         threshold
       })
-      await createInitialWallet()
       await api.guardian.backupGuardians(guardiansInfo);
+      await createInitialWallet()
       setIsDone(true)
       setLoading(false);
       changeStep(3);
@@ -574,6 +574,7 @@ export default function SetGuardians({ changeStep }: any) {
         threshold,
         salt,
       },
+      keepPrivate
     };
 
     const result = await api.guardian.backupSlot(walletInfo)

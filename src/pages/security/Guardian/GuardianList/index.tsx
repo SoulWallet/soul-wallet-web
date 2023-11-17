@@ -15,7 +15,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
+  Tooltip
 } from '@chakra-ui/react';
 import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import Heading1 from '@/components/web/Heading1';
@@ -32,6 +33,8 @@ import Icon from '@/components/Icon';
 import { nextRandomId } from '@/lib/tools';
 import DropDownIcon from '@/components/Icons/DropDown';
 import PlusIcon from '@/components/Icons/Plus';
+import ArrowDownIcon from '@/components/Icons/ArrowDown';
+import QuestionIcon from '@/components/Icons/Question';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useGuardianStore } from '@/store/guardian';
 import { nanoid } from 'nanoid';
@@ -125,8 +128,10 @@ const amountValidate = (values: any, props: any) => {
 
 export default function GuardianList({ onSubmit, loading, textButton, startBackup }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showAdvance, setShowAdvance] = useState(false)
+  const [showAdvance2, setShowAdvance2] = useState(false)
 
-  const { guardiansInfo } = useGuardianStore();
+  const { guardiansInfo, editingGuardiansInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
     guardianNames: [],
@@ -142,12 +147,32 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
     }
   })
 
+  let pendingGuardianDetails: any = {
+    guardians: [],
+    guardianNames: [],
+    threshold: 0
+  }
+  let pendingGuardianList: any = []
+  let pendingGuardianNames: any = []
+  const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails
+
+  if (isPending) {
+    pendingGuardianDetails = (editingGuardiansInfo && editingGuardiansInfo.guardianDetails)
+    pendingGuardianNames = (editingGuardiansInfo && editingGuardiansInfo.guardianNames)
+    pendingGuardianList = pendingGuardianDetails.guardians.map((guardian: any, i: number) => {
+      return {
+        address: guardian,
+        name: guardianNames[i]
+      }
+    })
+  }
+
   return (
     <Fragment>
-      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px" overflow="auto">
-        <Box width="40%" paddingRight="32px">
-          <Heading1>Current guardian</Heading1>
-          <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians.</TextBody>
+      <Box width="100%" bg="#EDEDED" borderRadius="20px" padding="45px" display="flex" alignItems="flex-start" justifyContent="space-around" margin="0 auto">
+        <Box width="40%" marginRight="45px">
+          <Heading1>Current guardians</Heading1>
+          <TextBody fontSize="18px" marginBottom="20px">Please enter Ethereum wallet address to set up guardians.</TextBody>
           <Box>
             <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
               Learn more
@@ -191,11 +216,11 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
           </Box>
         </Box>
       </Box>
-      <Box background="#D9D9D9" borderRadius="20px" padding="20px 45px" display="flex">
+      <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="36px">
         <Box width="40%" display="flex" alignItems="center">
-          <Heading1 marginBottom="0">Required confirmation</Heading1>
+          <Heading1 marginBottom="0">Threshold</Heading1>
         </Box>
-        <Box width="60%" display="flex" alignItems="center">
+        <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
           <TextBody>Wallet recovery requires</TextBody>
           <Box width="80px" margin="0 10px">
             <Box
@@ -221,6 +246,158 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
           <TextBody>out of {guardianDetails.guardians.length} guardian(s) confirmation. </TextBody>
         </Box>
       </Box>
+      <TextButton onClick={() => setShowAdvance(!showAdvance)} color="#EC588D" _hover={{ color: '#EC588D' }} marginTop="20px">
+        <Text fontSize="18px" marginRight="5px">Advance setting</Text>
+        <Box transform={showAdvance ? 'rotate(-180deg)' : ''}><ArrowDownIcon color="#EC588D" /></Box>
+      </TextButton>
+      {showAdvance && (
+        <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="20px">
+          <Box width="40%" display="flex" alignItems="center">
+            <Heading1 marginBottom="0">
+              Keep guardians private
+            </Heading1>
+            <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer">
+              <Tooltip
+                label={(
+                  <Box background="white" padding="28px 24px 28px 24px" width="100%" borderRadius="16px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.4)">
+                    <TextBody fontSize="16px" fontWeight="800">Privacy Setting</TextBody>
+                    <TextBody fontSize="16px" fontWeight="600" marginBottom="20px">This setting will only reveal guardian address when you use the social recovery.</TextBody>
+                    <TextBody fontSize="16px" fontWeight="600">But you need to enter the complete guardian list and threshold values for recovery.</TextBody>
+                  </Box>
+                )}
+                placement="top"
+                background="transparent"
+                boxShadow="none"
+              >
+                <span><QuestionIcon /></span>
+              </Tooltip>
+            </Box>
+          </Box>
+          <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
+            <Box width="72px" height="40px" background={(guardiansInfo.keepPrivate) ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" transition="all 0.2s ease" paddingLeft={(guardiansInfo.keepPrivate) ? '37px' : '5px'}>
+              <Box width="30px" height="30px" background="white" borderRadius="30px" />
+            </Box>
+            <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
+          </Box>
+        </Box>
+      )}
+      {isPending && (
+        <Fragment>
+          <Box width="100%" height="1px" background="#D7D7D7" marginTop="20px" />
+          <Box width="100%" bg="#D7D7D7" borderRadius="20px" padding="45px" display="flex" alignItems="flex-start" justifyContent="space-around" margin="0 auto" marginTop="20px">
+            <Box width="40%" marginRight="45px">
+              <Heading1>Pending new guardians</Heading1>
+              <TextBody fontSize="18px" marginBottom="20px">You have a pending guardian update. New guardians updating in 12:56:73. </TextBody>
+              <Box>
+                <RoundButton _styles={{ width: '168px', maxWidth: '100%', borderRadius: '50px', height: '31px', fontSize: '16px', fontWeight: '700' }} onClick={() => {}}>
+                  Discard change
+                </RoundButton>
+              </Box>
+            </Box>
+            <Box width="60%">
+              <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-start"
+                  justifyContent="center"
+                  gap="0.75em"
+                  width="100%"
+                >
+                  {pendingGuardianList.map((item: any, i: number) => (
+                    <Box position="relative" width="100%" key={i}>
+                      <DoubleFormInfo
+                        rightPlaceholder={`Guardian address ${i + 1}`}
+                        rightValue={item.address}
+                        _rightInputStyles={{
+                          fontFamily: 'Martian',
+                          fontWeight: 600,
+                          fontSize: '14px',
+                        }}
+                        _rightContainerStyles={{ width: '70%', minWidth: '520px' }}
+                        leftValue={item.name}
+                        leftComponent={
+                          <Text color="#898989" fontWeight="600">
+                            eth:
+                          </Text>
+                        }
+                        _leftContainerStyles={{ width: '30%', minWidth: '240px' }}
+                        onEnter={() => {}}
+                        _styles={{ width: '100%', minWidth: '760px', fontSize: '16px' }}
+                      />
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          <Box background="#D7D7D7" borderRadius="20px" padding="16px 45px" display="flex" marginTop="36px">
+            <Box width="40%" display="flex" alignItems="center">
+              <Heading1 marginBottom="0">Threshold</Heading1>
+            </Box>
+            <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
+              <TextBody>Wallet recovery requires</TextBody>
+              <Box width="80px" margin="0 10px">
+                <Box
+                  px={2}
+                  py={2}
+                  width="80px"
+                  transition="all 0.2s"
+                  borderRadius="16px"
+                  borderWidth="1px"
+                  padding="12px"
+                  background="white"
+                  _expanded={{
+                    borderColor: '#3182ce',
+                    boxShadow: '0 0 0 1px #3182ce',
+                  }}
+                >
+                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                    {pendingGuardianDetails.threshold || 0}
+                    <DropDownIcon />
+                  </Box>
+                </Box>
+              </Box>
+              <TextBody>out of {pendingGuardianDetails.guardians.length} guardian(s) confirmation. </TextBody>
+            </Box>
+          </Box>
+          <TextButton onClick={() => setShowAdvance2(!showAdvance2)} color="#EC588D" _hover={{ color: '#EC588D' }} marginTop="20px">
+            <Text fontSize="18px" marginRight="5px">Advance setting</Text>
+            <Box transform={showAdvance2 ? 'rotate(-180deg)' : ''}><ArrowDownIcon color="#EC588D" /></Box>
+          </TextButton>
+          {showAdvance2 && (
+            <Box background="#D7D7D7" borderRadius="20px" padding="16px 45px" display="flex" marginTop="20px">
+              <Box width="40%" display="flex" alignItems="center">
+                <Heading1 marginBottom="0">
+                  Keep guardians private
+                </Heading1>
+                <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer">
+                  <Tooltip
+                    label={(
+                      <Box background="white" padding="28px 24px 28px 24px" width="100%" borderRadius="16px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.4)">
+                        <TextBody fontSize="16px" fontWeight="800">Privacy Setting</TextBody>
+                        <TextBody fontSize="16px" fontWeight="600" marginBottom="20px">This setting will only reveal guardian address when you use the social recovery.</TextBody>
+                        <TextBody fontSize="16px" fontWeight="600">But you need to enter the complete guardian list and threshold values for recovery.</TextBody>
+                      </Box>
+                    )}
+                    placement="top"
+                    background="transparent"
+                    boxShadow="none"
+                  >
+                    <span><QuestionIcon /></span>
+                  </Tooltip>
+                </Box>
+              </Box>
+              <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
+                <Box width="72px" height="40px" background={(editingGuardiansInfo.keepPrivate) ? '#1CD20F' : 'white'} borderRadius="40px" padding="5px" cursor="pointer" transition="all 0.2s ease" paddingLeft={(editingGuardiansInfo.keepPrivate) ? '37px' : '5px'}>
+                  <Box width="30px" height="30px" background="#D7D7D7" borderRadius="30px" />
+                </Box>
+                <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
+              </Box>
+            </Box>
+          )}
+        </Fragment>
+      )}
       {!!guardianList.length && (
         <Box padding="40px">
           <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">

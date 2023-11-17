@@ -1,13 +1,17 @@
 import React, { useState, useRef, useImperativeHandle, useCallback, useEffect, Fragment } from 'react';
-import { Box, Button, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react';
+import { Box, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem, Tooltip } from '@chakra-ui/react';
+import FullscreenContainer from '@/components/FullscreenContainer';
 import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import Heading1 from '@/components/web/Heading1';
 import Heading3 from '@/components/web/Heading3';
 import TextBody from '@/components/web/TextBody';
-import RoundButton from '@/components/web/Button';
+import Button from '@/components/web/Button';
 import TextButton from '@/components/web/TextButton';
 import { ethers } from 'ethers';
 import MinusIcon from '@/assets/icons/minus.svg';
+import IconButton from '@/components/web/IconButton';
+import SendIcon from '@/components/Icons/Send';
+import FormInput from '@/components/web/Form/FormInput';
 import DoubleFormInput from '@/components/web/Form/DoubleFormInput';
 import useWallet from '@/hooks/useWallet';
 import useForm from '@/hooks/useForm';
@@ -16,6 +20,9 @@ import Icon from '@/components/Icon';
 import { nextRandomId } from '@/lib/tools';
 import DropDownIcon from '@/components/Icons/DropDown';
 import PlusIcon from '@/components/Icons/Plus';
+import ArrowDownIcon from '@/components/Icons/ArrowDown';
+import QuestionIcon from '@/components/Icons/Question';
+import DownloadIcon from '@/components/Icons/Download';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useAddressStore } from '@/store/address';
 import { nanoid } from 'nanoid';
@@ -26,9 +33,11 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 import { useCredentialStore } from '@/store/credential';
+import useTools from '@/hooks/useTools';
+import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GuardianModal from '../GuardianModal'
 
-const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
+const defaultGuardianIds = [nextRandomId()];
 
 const getNumberArray = (count: number) => {
   const arr = [];
@@ -149,18 +158,30 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
   }
   const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
   const { setFinishedSteps } = useAddressStore();
-  const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 3 && guardianDetails.guardians.length) || 3)
+  const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
-  const { slotInfo, setGuardiansInfo } = useGuardianStore();
+  const { slotInfo, setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
   const [loading, setLoading] = useState(false);
   const { sendErc20, payTask } = useTransaction();
   const { showConfirmPayment } = useWalletContext();
   const { credentials } = useCredentialStore();
+  const [showAdvance, setShowAdvance] = useState(false)
+  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
+  const [status, setStatus] = useState<string>('editing');
+  const [isDone, setIsDone] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [sending, setSending] = useState(false);
+  const { generateJsonName, downloadJsonFile } = useTools()
+  const toast = useToast();
+  const emailForm = useForm({
+    fields: ['email'],
+    validate,
+  });
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
@@ -253,7 +274,8 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
           threshold: Number(threshold),
           salt,
         },
-        requireBackup: true
+        requireBackup: true,
+        keepPrivate
       };
 
       const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
@@ -279,8 +301,9 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       const res2 = await showConfirmPayment(task.estiamtedFee);
       const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
       console.log('handleSubmit1111', res1, res2, res3);
-      setGuardiansInfo(guardiansInfo)
-      startBackup()
+      // setGuardiansInfo(guardiansInfo)
+      setEditingGuardiansInfo(guardiansInfo)
+      // startBackup()
       setLoading(false);
       const res = await api.operation.finishStep({
         slot,
@@ -335,12 +358,210 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
 
   const hasGuardians = guardianDetails && guardianDetails.guardians && !!guardianDetails.guardians.length
 
+  const handleEmailBackupGuardians = async () => {
+    try {
+      setSending(true);
+      const keystore = chainConfig.contracts.l1Keystore;
+      const slot = slotInfo.slot
+      const guardiansList = guardianIds
+        .map((id) => {
+          const addressKey = `address_${id}`;
+          const nameKey = `name_${id}`;
+          let address = values[addressKey];
+
+          if (address && address.length) {
+            return { address, name: values[nameKey] };
+          }
+
+          return null;
+        })
+        .filter((i) => !!i);
+
+      const guardianAddresses = guardiansList.map((item: any) => item.address);
+      const guardianNames = guardiansList.map((item: any) => item.name);
+      const threshold = amountForm.values.amount || 0;
+      const guardianHash = calcGuardianHash(guardianAddresses, threshold);
+      const salt = ethers.ZeroHash;
+
+      const guardiansInfo = {
+        keystore,
+        slot,
+        guardianHash,
+        guardianNames,
+        guardianDetails: {
+          guardians: guardianAddresses,
+          threshold,
+          salt,
+        },
+        keepPrivate
+      };
+
+      const filename = generateJsonName('guardian');
+      await api.guardian.emailBackupGuardians({
+        email: emailForm.values.email,
+        filename,
+        ...guardiansInfo
+      });
+      setSending(false);
+      emailForm.clearFields(['email'])
+      setIsDone(true)
+      updateGuardiansInfo({
+        requireBackup: false
+      })
+      toast({
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setSending(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  }
+
+  const handleDownloadGuardians = async () => {
+    try {
+      setDownloading(true);
+      const keystore = chainConfig.contracts.l1Keystore;
+      const slot = slotInfo.slot
+      const guardiansList = guardianIds
+        .map((id) => {
+          const addressKey = `address_${id}`;
+          const nameKey = `name_${id}`;
+          let address = values[addressKey];
+
+          if (address && address.length) {
+            return { address, name: values[nameKey] };
+          }
+
+          return null;
+        })
+        .filter((i) => !!i);
+
+      const guardianAddresses = guardiansList.map((item: any) => item.address);
+      const guardianNames = guardiansList.map((item: any) => item.name);
+      const threshold = amountForm.values.amount || 0;
+      const guardianHash = calcGuardianHash(guardianAddresses, threshold);
+      const salt = ethers.ZeroHash;
+
+      const guardiansInfo = {
+        keystore,
+        slot,
+        guardianHash,
+        guardianNames,
+        guardianDetails: {
+          guardians: guardianAddresses,
+          threshold,
+          salt,
+        },
+        keepPrivate
+      };
+
+      await downloadJsonFile(guardiansInfo);
+      setDownloading(false);
+      setIsDone(true)
+      updateGuardiansInfo({
+        requireBackup: false
+      })
+      toast({
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setDownloading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  }
+
+  const goBack = () => {
+    setStatus('editing');
+  };
+
+  if (status === 'backuping') {
+    return (
+      <Box width="100%" display="flex" alignItems="center" justifyContent="center">
+        <Box width="320px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+          <Box width="100%">
+            <TextButton
+              color="#1E1E1E"
+              fontSize="16px"
+              fontWeight="800"
+              width="57px"
+              padding="0"
+              alignItems="center"
+              justifyContent="center"
+              onClick={goBack}
+            >
+              <ArrowLeftIcon />
+              <Box marginLeft="2px" fontSize="16px">Back</Box>
+            </TextButton>
+          </Box>
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+            <Heading1>Backup guardians</Heading1>
+          </Box>
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="60px">
+            <TextBody color="#1E1E1E" textAlign="center" fontSize="14px">
+              Save your guardians list for easy wallet recovery.
+            </TextBody>
+          </Box>
+          <Box>
+            <Button
+              onClick={handleDownloadGuardians}
+              disabled={downloading}
+              loading={downloading}
+              _styles={{ width: '320px', background: '#9648FA' }}
+              _hover={{ background: '#9648FA' }}
+              LeftIcon={<DownloadIcon />}
+            >
+              Download
+            </Button>
+            <TextBody marginTop="8px" textAlign="center" display="flex" alignItems="center" justifyContent="center">Or</TextBody>
+            <FormInput
+              label=""
+              placeholder="Send to Email"
+              value={emailForm.values.email}
+              errorMsg={emailForm.showErrors.email && emailForm.errors.email}
+              onChange={emailForm.onChange('email')}
+              onBlur={emailForm.onBlur('email')}
+              onEnter={handleEmailBackupGuardians}
+              _styles={{ width: '320px', marginTop: '8px' }}
+              _inputStyles={{ background: 'white' }}
+              RightIcon={
+                <IconButton
+                  onClick={handleEmailBackupGuardians}
+                  disabled={sending || !emailForm.values.email}
+                  loading={sending}
+                >
+                  {!emailForm.values.email && <SendIcon opacity="0.4" />}
+                  {!!emailForm.values.email && <SendIcon color={'#EE3F99'} />}
+                </IconButton>
+              }
+            />
+            <Button
+              onClick={handleSubmit}
+              disabled={!isDone || loading || disabled}
+              loading={loading}
+              _styles={{ width: '320px', marginTop: '60px' }}
+            >
+              Continue
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <Fragment>
-      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex" marginBottom="20px" overflow="auto">
-        <Box width="40%" paddingRight="32px">
-          <Heading1>Friend as guardian</Heading1>
-          <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians.</TextBody>
+      <Box width="100%" bg="#EDEDED" borderRadius="20px" padding="45px" display="flex" alignItems="flex-start" justifyContent="space-around" margin="0 auto">
+        <Box width="40%" marginRight="45px">
+          <Heading1>Guardians</Heading1>
+          <TextBody fontSize="18px" marginBottom="20px">Please enter Ethereum wallet address to set up guardians.</TextBody>
           <Box>
             <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
               Learn more
@@ -416,11 +637,11 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
           </Box>
         </Box>
       </Box>
-      <Box background="#D9D9D9" borderRadius="20px" padding="20px 45px" display="flex">
+      <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="36px">
         <Box width="40%" display="flex" alignItems="center">
-          <Heading1 marginBottom="0">Required confirmation</Heading1>
+          <Heading1 marginBottom="0">Threshold</Heading1>
         </Box>
-        <Box width="60%" display="flex" alignItems="center">
+        <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
           <TextBody>Wallet recovery requires</TextBody>
           <Box width="80px" margin="0 10px">
             <Menu>
@@ -462,14 +683,49 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
               </MenuList>
             </Menu>
           </Box>
-          <TextBody>out of {amountData.guardiansCount || 0} guardian(s) confirmation. </TextBody>
+          <TextBody>out of {guardianDetails.guardians.length} guardian(s) confirmation. </TextBody>
         </Box>
       </Box>
+      <TextButton onClick={() => setShowAdvance(!showAdvance)} color="#EC588D" _hover={{ color: '#EC588D' }} marginTop="20px">
+        <Text fontSize="18px" marginRight="5px">Advance setting</Text>
+        <Box transform={showAdvance ? 'rotate(-180deg)' : ''}><ArrowDownIcon color="#EC588D" /></Box>
+      </TextButton>
+      {showAdvance && (
+        <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="20px">
+          <Box width="40%" display="flex" alignItems="center">
+            <Heading1 marginBottom="0">
+              Keep guardians private
+            </Heading1>
+            <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer">
+              <Tooltip
+                label={(
+                  <Box background="white" padding="28px 24px 28px 24px" width="100%" borderRadius="16px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.4)">
+                    <TextBody fontSize="16px" fontWeight="800">Privacy Setting</TextBody>
+                    <TextBody fontSize="16px" fontWeight="600" marginBottom="20px">This setting will only reveal guardian address when you use the social recovery.</TextBody>
+                    <TextBody fontSize="16px" fontWeight="600">But you need to enter the complete guardian list and threshold values for recovery.</TextBody>
+                  </Box>
+                )}
+                placement="top"
+                background="transparent"
+                boxShadow="none"
+              >
+                <span><QuestionIcon /></span>
+              </Tooltip>
+            </Box>
+          </Box>
+          <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
+            <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
+              <Box width="30px" height="30px" background="white" borderRadius="30px" />
+            </Box>
+            <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
+          </Box>
+        </Box>
+      )}
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <RoundButton disabled={loading} loading={loading} _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={handleSubmit}>
+          <Button disabled={loading || disabled} loading={loading} _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={keepPrivate ? () => setStatus('backuping') : () => handleSubmit()}>
             Confirm guardians
-          </RoundButton>
+          </Button>
           {hasGuardians && (
             <TextButton _styles={{ width: '320px' }} onClick={cancelEdit}>
               Cancel

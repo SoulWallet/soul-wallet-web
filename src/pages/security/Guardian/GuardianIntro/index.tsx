@@ -20,7 +20,7 @@ export default function GuardianIntro({ startManage, startEdit }: any) {
 
   return (
     <Fragment>
-      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex">
+      <Box background="#EDEDED" borderRadius="20px" padding="45px" display="flex">
         <Box width="40%" paddingRight="32px">
           <Heading1>Set up guardian</Heading1>
           <TextBody fontSize="18px" marginBottom="20px">To secure future social recovery of your wallet. Set up your guardians now! </TextBody>
