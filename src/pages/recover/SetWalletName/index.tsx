@@ -63,7 +63,7 @@ export default function SetWalletName({ changeStep }: any) {
     if (disabled) return;
 
     try {
-      clearPreviousData();
+      // clearPreviousData();
       setLoading(true);
       const walletName = values.name || 'Wallet 1';
       setWalletName(walletName)
