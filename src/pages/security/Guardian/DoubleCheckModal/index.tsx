@@ -25,7 +25,7 @@ export default function DoubleCheckModal({ isOpen, onClose, onSubmit }: any) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent bg="#ededed" maxW={'750px'}>
+      <ModalContent bg="#ededed" maxW={'500px'}>
         <ModalHeader
           display={'flex'}
           justifyContent={'center'}
