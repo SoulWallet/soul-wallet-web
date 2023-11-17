@@ -22,6 +22,7 @@ import useForm from '@/hooks/useForm';
 import WalletCard from '@/components/web/WalletCard';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import api from '@/lib/api';
+import useTools from '@/hooks/useTools';
 
 const validate = (values: any) => {
   const errors: any = {};
@@ -39,7 +40,7 @@ export default function SetWalletName({ changeStep }: any) {
   const [loading, setLoading] = useState(false);
   const { register } = usePassKey();
   const { setWalletName, } = useCredentialStore();
-  const { addressList, clearAddressList, setSelectedAddress } = useAddressStore();
+  const { clearPreviousData } = useTools();
   const toast = useToast();
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
     fields: ['name'],
@@ -62,6 +63,7 @@ export default function SetWalletName({ changeStep }: any) {
     if (disabled) return;
 
     try {
+      clearPreviousData();
       setLoading(true);
       const walletName = values.name || 'Wallet 1';
       setWalletName(walletName)

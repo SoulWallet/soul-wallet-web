@@ -19,7 +19,6 @@ import Button from '@/components/web/Button';
 import Logo from '@/components/web/Logo';
 import usePassKey from '@/hooks/usePasskey';
 import storage from '@/lib/storage';
-import { clearStorageWithCredentials } from '@/lib/tools';
 import { useSearchParams } from 'react-router-dom';
 import bgGradientImage from '@/assets/bg-gradient.jpeg';
 import homeExampleImage from '@/assets/home-example.png';
@@ -316,19 +315,6 @@ const Banner = () => {
 };
 
 export default function Launch() {
-  const { clearCredentials } = useCredentialStore();
-  const { clearAddresses } = useAddressStore();
-  const clearPreviousData = () => {
-    // make sure no storage left
-    clearCredentials();
-    clearAddresses();
-    clearStorageWithCredentials();
-  };
-  useEffect(() => {
-    // clear user's storage everytime visiting
-    clearPreviousData();
-  }, []);
-
   return (
     <Box p="10" bgImage={bgGradientImage} bgSize={'cover'}>
       <Banner />

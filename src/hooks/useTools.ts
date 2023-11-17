@@ -3,9 +3,26 @@ import QRCode from 'qrcode';
 import { GuardianItem } from '@/lib/type';
 import { copyText } from '@/lib/tools';
 import { useToast } from '@chakra-ui/react';
+import { useCredentialStore } from '@/store/credential';
+import { useAddressStore } from '@/store/address';
+import { clearStorageWithCredentials } from '@/lib/tools';
+import { useGuardianStore } from '@/store/guardian';
 
 export default function useTools() {
   const toast = useToast();
+
+  const { clearCredentials } = useCredentialStore();
+  const { clearAddresses } = useAddressStore();
+  const {clearGuardianInfo} = useGuardianStore();
+  const clearPreviousData = () => {
+    // make sure no storage left
+    clearCredentials();
+    clearAddresses();
+    clearGuardianInfo();
+    clearStorageWithCredentials();
+  };
+
+
   const formatGuardianFile = (walletAddress: string, guardiansList: GuardianItem[] = []) => {
     // remove id
     const guardians = guardiansList.map((item) => {
@@ -91,5 +108,6 @@ export default function useTools() {
     generateQrCode,
     generateJsonName,
     doCopy,
+    clearPreviousData,
   };
 }

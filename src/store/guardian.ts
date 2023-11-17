@@ -18,6 +18,7 @@ export interface GuardianStore {
   setRecoveringGuardiansInfo: (value: any) => void;
   setEditingGuardiansInfo: (value: any) => void;
   setSlotInfo: (value: any) => void;
+  clearGuardianInfo: () => void;
 
   updateGuardiansInfo: (value: any) => void;
   updateRecoveringGuardiansInfo: (value: any) => void;
@@ -66,6 +67,13 @@ const createGuardianSlice = immer<GuardianStore>((set, get) => ({
     }
   }),
 
+  clearGuardianInfo: () => set({
+    guardiansInfo: {},
+    recoveringGuardiansInfo: {},
+    editingGuardiansInfo: {},
+    slotInfo: {},
+  }),
+
   getGuardiansInfo: () => get().guardiansInfo,
   getRecoveringGuardiansInfo: () => get().recoveringGuardiansInfo,
   getEditingGuardiansInfo: () => get().editingGuardiansInfo,
@@ -74,9 +82,9 @@ const createGuardianSlice = immer<GuardianStore>((set, get) => ({
 
 export type GuardianState = ReturnType<typeof createGuardianStore>;
 
-type GuardianStoreInitialProps = {
-  guardians: GuardianItem[];
-};
+// type GuardianStoreInitialProps = {
+//   guardians: GuardianItem[];
+// };
 
 export const createGuardianStore = (initProps?: any) =>
   create<GuardianStore>()((...a) => ({ ...createGuardianSlice(...a), ...initProps }));

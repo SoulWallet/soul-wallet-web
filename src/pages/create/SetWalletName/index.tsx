@@ -8,6 +8,7 @@ import TextButton from '@/components/web/TextButton';
 import Steps from '@/components/web/Steps';
 import usePassKey from '@/hooks/usePasskey';
 import { useCredentialStore } from '@/store/credential';
+import { useAddressStore } from '@/store/address';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
@@ -22,6 +23,7 @@ import useForm from '@/hooks/useForm';
 import WalletCard from '@/components/web/WalletCard';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import api from '@/lib/api';
+import useTools from '@/hooks/useTools';
 
 const validate = (values: any) => {
   const errors: any = {};
@@ -35,8 +37,8 @@ const validate = (values: any) => {
 };
 
 export default function SetWalletName({ changeStep }: any) {
-  const { navigate } = useBrowser();
   const [loading, setLoading] = useState(false);
+  const {clearPreviousData} = useTools();
   const { register } = usePassKey();
   const { addCredential, setWalletName, } = useCredentialStore();
   const toast = useToast();
@@ -44,16 +46,14 @@ export default function SetWalletName({ changeStep }: any) {
     fields: ['name'],
     validate,
   });
-  const disabled = loading || invalid;
 
-  const resetWallet = () => {
-    clearStorageWithCredentials();
-  };
+  const disabled = loading || invalid;
 
   const handleNext = async () => {
     if (disabled) return;
 
     try {
+      clearPreviousData();
       setLoading(true);
       // resetWallet();
       const walletName = values.name || 'Wallet 1';
