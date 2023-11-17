@@ -38,6 +38,12 @@ import QuestionIcon from '@/components/Icons/Question';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useGuardianStore } from '@/store/guardian';
 import { nanoid } from 'nanoid';
+import { L1KeyStore } from '@soulwallet/sdk';
+import { useCredentialStore } from '@/store/credential';
+import useKeystore from '@/hooks/useKeystore';
+import useConfig from '@/hooks/useConfig';
+import useTransaction from '@/hooks/useTransaction';
+import api from '@/lib/api';
 import GuardianModal from '../GuardianModal'
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
@@ -126,12 +132,18 @@ const amountValidate = (values: any, props: any) => {
   return errors;
 };
 
-export default function GuardianList({ onSubmit, loading, textButton, startBackup }: any) {
+export default function GuardianList({ onSubmit, textButton, startBackup }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showAdvance, setShowAdvance] = useState(false)
   const [showAdvance2, setShowAdvance2] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const { credentials } = useCredentialStore();
+  const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
+  const { chainConfig } = useConfig();
+  const { showConfirmPayment } = useWalletContext();
+  const { payTask } = useTransaction();
 
-  const { guardiansInfo, editingGuardiansInfo } = useGuardianStore();
+  const { guardiansInfo, editingGuardiansInfo, slotInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
     guardianNames: [],
@@ -166,6 +178,79 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
       }
     })
   }
+
+  const handleCancel = async () => {
+    try {
+      setLoading(true);
+      const guardianAddresses = guardianDetails.guardians
+      const threshold = guardianDetails.threshold
+      const keepPrivate = !!guardiansInfo.keepPrivate
+      const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
+      const keystore = chainConfig.contracts.l1Keystore;
+      const salt = ethers.ZeroHash;
+      const { initialKeys, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
+      const currentKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
+      const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
+      const currentkeysAddress = L1KeyStore.initialKeysToAddress(currentKeys);
+      console.log('initialKeys', initalkeysAddress, currentkeysAddress)
+      let initalRawkeys
+      if (initalkeysAddress.join('') === currentkeysAddress.join('')) {
+        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [initalkeysAddress]);
+      } else {
+        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentkeysAddress]);
+      }
+
+      const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
+
+      /* const guardiansInfo = {
+       *   keystore,
+       *   slot,
+       *   guardianHash: newGuardianHash,
+       *   guardianNames,
+       *   guardianDetails: {
+       *     guardians: guardianAddresses,
+       *     threshold: Number(threshold),
+       *     salt,
+       *   },
+       *   requireBackup: true,
+       *   keepPrivate
+       * };
+       */
+      const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
+
+      const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
+      const parameters = [
+        initialKeyHash,
+        initialGuardianHash,
+        initialGuardianSafePeriod,
+        newGuardianHash,
+        initalRawkeys,
+        keySignature,
+      ]
+
+      const res1 = await api.guardian.createTask({
+        keystore,
+        functionName,
+        parameters
+      })
+
+      const task = res1.data
+      const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
+      const res2 = await showConfirmPayment(task.estiamtedFee);
+      const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
+      console.log('handleSubmit1111', res1, res2, res3);
+      setEditingGuardiansInfo(guardiansInfo)
+      setLoading(false);
+      const res = await api.operation.finishStep({
+        slot,
+        steps: [2],
+      })
+      setFinishedSteps(res.data.finishedSteps);
+    } catch (error: any) {
+      console.log('error', error.message)
+      setLoading(false);
+    }
+  };
 
   return (
     <Fragment>
@@ -289,7 +374,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
               <Heading1>Pending new guardians</Heading1>
               <TextBody fontSize="18px" marginBottom="20px">You have a pending guardian update. New guardians updating in 12:56:73. </TextBody>
               <Box>
-                <RoundButton _styles={{ width: '168px', maxWidth: '100%', borderRadius: '50px', height: '31px', fontSize: '16px', fontWeight: '700' }} onClick={() => {}}>
+                <RoundButton _styles={{ width: '168px', maxWidth: '100%', borderRadius: '50px', height: '31px', fontSize: '16px', fontWeight: '700' }} onClick={handleCancel} loading={loading} disabled={loading}>
                   Discard change
                 </RoundButton>
               </Box>
