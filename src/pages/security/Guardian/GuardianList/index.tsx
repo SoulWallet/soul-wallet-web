@@ -44,6 +44,7 @@ import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
+import { useAddressStore } from '@/store/address';
 import DoubleCheckModal from '../DoubleCheckModal'
 import GuardianModal from '../GuardianModal'
 import { useAddressStore } from '@/store/address';
@@ -147,8 +148,9 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   const { setEditingGuardiansInfo } = useGuardianStore();
   const { showConfirmPayment } = useWalletContext();
   const { payTask } = useTransaction();
+  const { setFinishedSteps } = useAddressStore();
 
-  const { guardiansInfo, editingGuardiansInfo, slotInfo } = useGuardianStore();
+  const { guardiansInfo, editingGuardiansInfo, slotInfo, setEditingGuardiansInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
     guardianNames: [],
