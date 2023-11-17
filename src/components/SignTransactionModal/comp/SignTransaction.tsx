@@ -335,6 +335,25 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 </Flex>
               )}
             </InfoItem>
+            <InfoItem color="#000" fontWeight="600">
+              <Text>Total</Text>
+              {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
+              {totalMsgValue && Number(totalMsgValue) && !sponsor && feeCost !== '...' ? '+' : ''}
+              {!sponsor && feeCost !== '...' ? `${BN(feeCost.split(' ')[0]).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
+              {!sponsor &&
+              feeCost !== '...' &&
+              decodedData &&
+              decodedData.length > 0 &&
+              decodedData.filter((item: any) => item.sendErc20Amount).length > 0
+                ? '+'
+                : ''}
+              {decodedData &&
+                decodedData.length > 0 &&
+                decodedData
+                  .filter((item: any) => item.sendErc20Amount)
+                  .map((item: any) => item.sendErc20Amount)
+                  .join('+')}
+            </InfoItem>
             {hintText && (
               <InfoItem>
                 <Text color="#f00">{hintText}</Text>
