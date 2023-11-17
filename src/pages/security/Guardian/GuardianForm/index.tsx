@@ -281,6 +281,8 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
         keepPrivate
       };
 
+      await api.guardian.backupGuardians(guardiansInfo);
+
       const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
 
       const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`

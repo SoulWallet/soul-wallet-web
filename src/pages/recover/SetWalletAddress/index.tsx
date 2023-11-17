@@ -71,10 +71,11 @@ export default function Recover({ changeStep }: any) {
 
       if (!data) {
         setLoading(false);
-        toast({
-          title: 'No guardians found!',
-          status: 'error',
-        });
+        /* toast({
+         *   title: 'No guardians found!',
+         *   status: 'error',
+         * }); */
+        changeStep(1)
         return
       }
 

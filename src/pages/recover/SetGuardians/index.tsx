@@ -131,6 +131,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
     updateRecoveringGuardiansInfo,
   } = useGuardianStore();
   const credentials = recoveringGuardiansInfo.credentials
+  const guardianDetails = recoveringGuardiansInfo.guardianDetails || recoveringGuardiansInfo.recoveryRecord.guardianDetails
 
   const [amountData, setAmountData] = useState<any>({});
   const [showMannualInput, setShowMannualInput] = useState(false);
@@ -140,7 +141,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
     validate,
-    initialValues: getInitialValues(defaultGuardianIds, recoveringGuardiansInfo.guardianDetails.guardians),
+    initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians),
   });
 
   const amountForm = useForm({
@@ -148,7 +149,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
     validate: amountValidate,
     restProps: amountData,
     initialValues: {
-      amount: recoveringGuardiansInfo.guardianDetails.threshold || getRecommandCount(amountData.guardiansCount),
+      amount: guardianDetails.threshold || getRecommandCount(amountData.guardiansCount),
     },
   });
 
