@@ -47,16 +47,12 @@ export default function SetWalletName({ changeStep }: any) {
     validate,
   });
 
-  const disabled = loading || invalid;
-
   const handleNext = async () => {
-    if (disabled) return;
-
     try {
       clearPreviousData();
       setLoading(true);
       // resetWallet();
-      const walletName = values.name || 'Wallet 1';
+      const walletName = values.name || 'Wallet_1';
       setWalletName(walletName)
       const credentialName = walletName;
       const credentialKey = await register(credentialName);
@@ -112,7 +108,7 @@ export default function SetWalletName({ changeStep }: any) {
           loading={loading}
           disabled={loading}
         >
-          Continue
+          Continue with passkey
         </Button>
       </Box>
     </FullscreenContainer>

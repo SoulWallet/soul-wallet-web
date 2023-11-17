@@ -1,26 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import FullscreenContainer from '@/components/FullscreenContainer';
 import { Box, useToast } from '@chakra-ui/react';
 import Heading1 from '@/components/web/Heading1';
 import TextBody from '@/components/web/TextBody';
 import Button from '@/components/web/Button';
-import TextButton from '@/components/web/TextButton';
 import Steps from '@/components/web/Steps';
 import PassKeyList from '@/components/web/PassKeyList';
 import usePassKey from '@/hooks/usePasskey';
 import { useCredentialStore } from '@/store/credential';
-import useBrowser from '@/hooks/useBrowser';
-import useConfig from '@/hooks/useConfig';
-import useKeystore from '@/hooks/useKeystore';
-import { useGuardianStore } from '@/store/guardian';
-import { ethers } from 'ethers';
-import { L1KeyStore } from '@soulwallet/sdk';
-import { toHex } from '@/lib/tools';
-import useSdk from '@/hooks/useSdk';
-import { useAddressStore } from '@/store/address';
 import WarningIcon from '@/components/Icons/Warning';
 import SecureIcon from '@/components/Icons/Secure';
-import api from '@/lib/api';
 
 export default function SetPasskeys({ changeStep }: any) {
   const { register } = usePassKey();
@@ -28,7 +17,6 @@ export default function SetPasskeys({ changeStep }: any) {
     addCredential,
     credentials,
     changeCredentialName,
-    setSelectedCredentialId,
     walletName,
   } = useCredentialStore();
   const [isCreating, setIsCreating] = useState(false);
@@ -68,7 +56,7 @@ export default function SetPasskeys({ changeStep }: any) {
           />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <Heading1>Add another passkey</Heading1>
+          <Heading1>Welcome, {walletName}!</Heading1>
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" marginTop="16px">
           {(!credentials.length || credentials.length === 1) && (
