@@ -19,6 +19,7 @@ import { toHex } from '@/lib/tools';
 import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';
 import api from '@/lib/api';
+import { defaultGuardianSafePeriod } from '@/config';
 
 export default function SetPasskeys({ changeStep }: any) {
   const { navigate } = useBrowser();
@@ -136,7 +137,7 @@ export default function SetPasskeys({ changeStep }: any) {
     const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
     const initialGuardianHash = calcGuardianHash([], 0);
     // const salt = ethers.ZeroHash;
-    let initialGuardianSafePeriod = toHex(300);
+    let initialGuardianSafePeriod = toHex(defaultGuardianSafePeriod);
     const slotInitInfo = {
       initialKeys,
       initialGuardianHash,

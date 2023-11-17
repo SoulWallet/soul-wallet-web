@@ -3,6 +3,7 @@ import { useGuardianStore } from '@/store/guardian';
 import useConfig from './useConfig';
 import { ethers } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { defaultGuardianSafePeriod } from '@/config';
 
 export default function useKeystore() {
   const { chainConfig } = useConfig();
@@ -29,7 +30,7 @@ export default function useKeystore() {
   const getSlot = (
     initialKeys: string[],
     initialGuardianHash: string,
-    initialGuardianSafePeriod: number = 300,
+    initialGuardianSafePeriod: number = defaultGuardianSafePeriod,
   ) => {
     const initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
     const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);

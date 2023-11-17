@@ -57,6 +57,7 @@ import { nanoid } from 'nanoid';
 import useTransaction from '@/hooks/useTransaction';
 import GuardianModal from '@/pages/security/Guardian/GuardianModal'
 import useTools from '@/hooks/useTools';
+import { defaultGuardianSafePeriod } from '@/config';
 
 function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
   return (
@@ -538,7 +539,7 @@ export default function SetGuardians({ changeStep }: any) {
     const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
     const initialGuardianHash = calcGuardianHash(guardians, threshold);
     const salt = ethers.ZeroHash;
-    let initialGuardianSafePeriod = toHex(300);
+    let initialGuardianSafePeriod = toHex(defaultGuardianSafePeriod);
     const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
     const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
     const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);

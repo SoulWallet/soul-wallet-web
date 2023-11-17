@@ -52,6 +52,8 @@ export const chainMapping = {
 // This is an important store switch which will clear all users' data
 export const storeVersion = '3';
 
+export const defaultGuardianSafePeriod = 1;
+
 export const bundlerErrMapping: { [key: string]: string } = {
   'AA23 reverted (or OOG)': 'Operation Failed: Check signature or verificationGasLimit too small.',
   "AA21 didn't pay prefund": 'Not enough ETH balance in your wallet',
