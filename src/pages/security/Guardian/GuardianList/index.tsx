@@ -145,10 +145,8 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const { chainConfig } = useConfig();
   const { setFinishedSteps } = useAddressStore();
-  const { setEditingGuardiansInfo } = useGuardianStore();
   const { showConfirmPayment } = useWalletContext();
   const { payTask } = useTransaction();
-  const { setFinishedSteps } = useAddressStore();
 
   const { guardiansInfo, editingGuardiansInfo, slotInfo, setEditingGuardiansInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
