@@ -57,11 +57,9 @@ function GuardianEditor() {
 
 export default function Guardian({ setActiveSection }: any) {
   const { getActiveGuardianHash } = useKeystore();
-  const { selectedAddress } = useAddressStore();
   const [status, setStatus] = useState<string>('intro');
-  const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const { setGuardiansInfo, guardiansInfo, updateGuardiansInfo, editingGuardiansInfo } = useGuardianStore();
+  const { guardiansInfo, updateGuardiansInfo, editingGuardiansInfo,  slotInfo, } = useGuardianStore();
 
   const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash
 
@@ -93,7 +91,7 @@ export default function Guardian({ setActiveSection }: any) {
 
   const getGuardianInfo = async () => {
     try {
-      const activeGuardianInfo = await getActiveGuardianHash()
+      const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
       let activeGuardianHash
 
       if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
