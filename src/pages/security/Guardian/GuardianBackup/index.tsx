@@ -193,8 +193,8 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
       </Box>
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => cancelBackup()} disabled={!isDone}>
-            Done
+          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => cancelBackup()}>
+            Back
           </RoundButton>
         </Box>
       </Box>

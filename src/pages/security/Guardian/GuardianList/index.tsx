@@ -398,7 +398,7 @@ export default function GuardianList({ onSubmit, loading, textButton, startBacku
           )}
         </Fragment>
       )}
-      {!!guardianList.length && (
+      {!!guardianList.length && !isPending && (
         <Box padding="40px">
           <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
             <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => startBackup()}>

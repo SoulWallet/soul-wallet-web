@@ -61,7 +61,9 @@ export default function Guardian({ setActiveSection }: any) {
   const [status, setStatus] = useState<string>('intro');
   const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const { setGuardiansInfo, guardiansInfo, updateGuardiansInfo } = useGuardianStore();
+  const { setGuardiansInfo, guardiansInfo, updateGuardiansInfo, editingGuardiansInfo } = useGuardianStore();
+
+  const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails
 
   const startManage = () => {
     setStatus('managing')
@@ -168,6 +170,21 @@ export default function Guardian({ setActiveSection }: any) {
             </Heading2>
             {(status === 'managing') && (
               <Box marginLeft="auto">
+                {isPending && (
+                  <Button
+                    px="5"
+                    onClick={() => startBackup()}
+                    bg="#1e1e1e"
+                    _hover={{bg: "#4e4e54"}}
+                    color="#fff"
+                    fontWeight={'700'}
+                    rounded="50px"
+                    disabled={(status as any) === 'editing'}
+                    marginRight="14px"
+                  >
+                    Backup Current Guardians
+                  </Button>
+                )}
                 <Button
                   px="5"
                   onClick={() => startEdit()}
