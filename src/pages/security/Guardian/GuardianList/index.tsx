@@ -47,7 +47,6 @@ import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import DoubleCheckModal from '../DoubleCheckModal'
 import GuardianModal from '../GuardianModal'
-import { useAddressStore } from '@/store/address';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
