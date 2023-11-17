@@ -46,6 +46,7 @@ import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 import DoubleCheckModal from '../DoubleCheckModal'
 import GuardianModal from '../GuardianModal'
+import { useAddressStore } from '@/store/address';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
@@ -142,6 +143,8 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   const { credentials } = useCredentialStore();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const { chainConfig } = useConfig();
+  const { setFinishedSteps } = useAddressStore();
+  const { setEditingGuardiansInfo } = useGuardianStore();
   const { showConfirmPayment } = useWalletContext();
   const { payTask } = useTransaction();
 
