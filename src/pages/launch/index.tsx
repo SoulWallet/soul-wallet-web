@@ -275,7 +275,7 @@ const FaqSection = () => {
 
 const FeaturesSection = () => {
   return (
-    <Flex mt={{ base: "8", lg: "-10"}} gap="9" justify={'center'} flexDir={{ base: 'column', lg: 'row' }}>
+    <Flex mt={{ base: "8", lg: "-10"}} gap="9" justify={'center'} align={{base: 'center', lg: 'unset'}} flexDir={{ base: 'column', lg: 'row' }}>
       {featureList.map((item, idx: number) => (
         <Flex
           flexDir={'column'}
@@ -316,7 +316,7 @@ const Banner = () => {
 
 export default function Launch() {
   return (
-    <Box p="10" bgImage={bgGradientImage} bgSize={'cover'}>
+    <Box p={{ base: 5, lg: 10}} bgImage={bgGradientImage} bgSize={'cover'}>
       <Banner />
       <FaqSection />
       <LaunchFooter />
