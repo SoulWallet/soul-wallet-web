@@ -219,7 +219,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       Object.keys(values)
             .filter((key) => key.indexOf('address') === 0)
             .map((key) => values[key]) as any
-            // .filter((address) => !!String(address).trim().length) as any,
+      // .filter((address) => !!String(address).trim().length) as any,
     );
   }, [values]);
 
@@ -256,17 +256,8 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       const salt = ethers.ZeroHash;
       const { initialKeys, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
       const currentKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
-      const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
-      const currentkeysAddress = L1KeyStore.initialKeysToAddress(currentKeys);
-      console.log('initialKeys', initalkeysAddress, currentkeysAddress)
-      let initalRawkeys
-      if (initalkeysAddress.join('') === currentkeysAddress.join('')) {
-        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [initalkeysAddress]);
-      } else {
-        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentkeysAddress]);
-      }
-
-      const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
+      const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
+      const initialKeyHash = L1KeyStore.getKeyHash(initialKeys);
 
       const walletInfo = {
         keystore,
@@ -276,7 +267,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
           initialGuardianHash,
           initialGuardianSafePeriod
         },
-        keys: initalkeysAddress
+        keys: initialKeys
       };
 
       const guardiansInfo = {
@@ -303,7 +294,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
         initialGuardianHash,
         initialGuardianSafePeriod,
         newGuardianHash,
-        initalRawkeys,
+        rawKeys,
         keySignature,
       ]
 

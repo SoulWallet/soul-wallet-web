@@ -199,32 +199,9 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
       const salt = ethers.ZeroHash;
       const { initialKeys, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
       const currentKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
-      const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
-      const currentkeysAddress = L1KeyStore.initialKeysToAddress(currentKeys);
-      console.log('initialKeys', initalkeysAddress, currentkeysAddress)
-      let initalRawkeys
-      if (initalkeysAddress.join('') === currentkeysAddress.join('')) {
-        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [initalkeysAddress]);
-      } else {
-        initalRawkeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentkeysAddress]);
-      }
+      const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
+      const initialKeyHash = L1KeyStore.getKeyHash(initialKeys);
 
-      const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
-
-      /* const guardiansInfo = {
-       *   keystore,
-       *   slot,
-       *   guardianHash: newGuardianHash,
-       *   guardianNames,
-       *   guardianDetails: {
-       *     guardians: guardianAddresses,
-       *     threshold: Number(threshold),
-       *     salt,
-       *   },
-       *   requireBackup: true,
-       *   keepPrivate
-       * };
-       */
       const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
 
       const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
@@ -233,7 +210,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
         initialGuardianHash,
         initialGuardianSafePeriod,
         newGuardianHash,
-        initalRawkeys,
+        rawKeys,
         keySignature,
       ]
 
