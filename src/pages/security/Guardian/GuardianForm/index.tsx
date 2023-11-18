@@ -218,7 +218,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
     setGuardiansList(
       Object.keys(values)
             .filter((key) => key.indexOf('address') === 0)
-            .map((key) => values[key])
+            .map((key) => values[key]) as any
             // .filter((address) => !!String(address).trim().length) as any,
     );
   }, [values]);
