@@ -14,11 +14,13 @@ import usePasskey from './usePasskey';
 import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
+import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function useWallet() {
   const { sign } = usePasskey();
   const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
+  const { ethersProvider } = useWalletContext();
   const {
     slotInfo,
     setSlotInfo,
@@ -78,13 +80,23 @@ export default function useWallet() {
       userOp.callData = soulAbi.encodeFunctionData('executeBatch(address[],bytes[])', [finalTos, finalCalldatas]);
     }
 
-    userOp.callGasLimit = `0x${(50000 * finalTos.length + 1).toString(16)}`;
-
     userOp = await set1559Fee(userOp, payToken);
 
-    // paymasterAndData length calc 1872 = ((236 - 2) / 2) * 16;
-    // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(1872).toString(16)}`;
-    // for send transaction with activate
+    let callGasLimit = BN(approveTos.length * 50000);
+
+    for (let i = 0; i < extraTxs.length; i++) {
+      // get gas from tx or onchain
+      const gas = BN(extraTxs[i].gas).isGreaterThan(0) ? BN(extraTxs[i].gas) : (await ethersProvider.estimateGas(extraTxs[i]));
+      callGasLimit = callGasLimit.plus(gas);
+    }
+
+    console.log('estimate callGaslimit', callGasLimit);
+
+    userOp.callGasLimit = `0x${
+      BN(callGasLimit).isGreaterThan(finalTos.length * 50000)
+        ? callGasLimit.toString(16)
+        : Number(finalTos.length * 50000).toString(16)
+    }`;
     userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
     userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
 
