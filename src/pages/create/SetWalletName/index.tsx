@@ -61,7 +61,7 @@ export default function SetWalletName({ changeStep }: any) {
 
   return (
     <FullscreenContainer>
-      <Box width="480px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="flex-start" minHeight="100vh">
+      <Box width="480px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
         <Box marginBottom="12px" marginRight="24px">
           <Steps
             backgroundColor="#1E1E1E"
@@ -100,7 +100,7 @@ export default function SetWalletName({ changeStep }: any) {
         >
           Continue with passkey
         </Button>
-        <TextBody textAlign="center" marginTop="auto" color="#898989" fontSize="16px" fontWeight="600">Please note: Not all browsers support passkey functionality. For optimal performance, we recommend using Chrome or Safari.</TextBody>
+        <TextBody textAlign="center" marginTop="100px" color="#898989" fontSize="16px" fontWeight="600">Please note: Not all browsers support passkey functionality. For optimal performance, we recommend using Chrome or Safari.</TextBody>
       </Box>
     </FullscreenContainer>
   )

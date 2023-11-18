@@ -54,6 +54,15 @@ export default function Recover({ changeStep }: any) {
       setLoading(true);
       const walletAddress = values.address
       const res1 = await api.guardian.getSlotInfo({ walletAddress });
+      if (!res1.data) {
+        setLoading(false);
+        toast({
+          title: 'No wallet found!',
+          status: 'error',
+        });
+        return
+      }
+
       const slotInitInfo = res1.data.slotInitInfo
       const initalkeysAddress = res1.data.initialKeys
       const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
