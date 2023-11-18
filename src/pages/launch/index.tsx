@@ -120,10 +120,14 @@ const SignCard = () => {
        * const credentialKey = await register(credentialName);
        * setIsCreating(false); */
       // make sure storage is clear
-      navigate({
-        pathname: '/create',
-        search: location.search,
-      });
+      storage.clear();
+      location.href = '/create';
+
+      // IMPORTANT TODO, for dApp as well
+      // navigate({
+      //   pathname: '/create',
+      //   search: location.search,
+      // });
     } catch (error: any) {
       console.log('error', error);
       setIsCreating(false);

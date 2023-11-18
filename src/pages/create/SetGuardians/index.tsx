@@ -104,7 +104,7 @@ function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
               Set up now
             </Button>
             <TextButton loading={skipping} disabled={skipping} onClick={doSkip} _styles={{ width: '320px', maxWidth: '320px', padding: '0 20px', whiteSpace: 'break-spaces' }}>
-              {skipping ? 'Skipping' : 'I understand the risks, skip for now'}
+              {skipping ? 'Skipping...' : 'I understand the risks, skip for now'}
             </TextButton>
           </Box>
         </Box>

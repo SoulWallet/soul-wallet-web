@@ -104,7 +104,6 @@ export default function Recover({ changeStep }: any) {
           guardianDetails,
           initalkeysAddress,
           guardianHash: activeGuardianHash,
-          guardianDetails,
           guardianNames,
         })
         setLoading(false);

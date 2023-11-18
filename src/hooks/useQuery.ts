@@ -11,18 +11,20 @@ import { addPaymasterAndData } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useCredentialStore } from '@/store/credential';
 import { useToast } from '@chakra-ui/react';
+import { useBalanceStore } from '@/store/balance';
 
 export default function useQuery() {
   const { ethersProvider } = useWalletContext();
   const { soulWallet } = useSdk();
   const { chainConfig } = useConfig();
+  const { getTokenBalance } = useBalanceStore();
   const { getSelectedCredential } = useCredentialStore();
-  const toast = useToast();
 
   const getEthPrice = async () => {
     // get price from coingecko
     const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
     console.log('res', await res.json());
+    return await res.json();
   };
 
   const getGasPrice = async () => {
@@ -59,7 +61,6 @@ export default function useQuery() {
     }
 
     const requiredEth = BN(preFund.OK.missfund).shiftedBy(-18);
-
     // erc20
     if (payToken === ethers.ZeroAddress) {
       return {
@@ -67,9 +68,11 @@ export default function useQuery() {
         userOp,
       };
     } else {
-      // IMPORTANT TODO, get erc20 price
-      getEthPrice();
-      const erc20Price = 1853;
+      // important todo, should get decimals here
+      // const selectedToken = getTokenBalance(payToken);
+      // const res = await getEthPrice();
+      // console.log('11111 price', res);
+      const erc20Price = 2000;
       return {
         requiredAmount: requiredEth.times(erc20Price).times(chainConfig.maxCostMultiplier).div(100).toFixed(),
         userOp,
@@ -90,9 +93,14 @@ export default function useQuery() {
       userOp.paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
     }
 
-    const signerKeyType = selectedCredential.algorithm === 'ES256' ? SignkeyType.P256 : selectedCredential.algorithm === 'RS256'? SignkeyType.RS256: null
+    const signerKeyType =
+      selectedCredential.algorithm === 'ES256'
+        ? SignkeyType.P256
+        : selectedCredential.algorithm === 'RS256'
+        ? SignkeyType.RS256
+        : null;
 
-    if(!signerKeyType){
+    if (!signerKeyType) {
       throw new Error('algorithm not supported');
     }
 
@@ -103,7 +111,7 @@ export default function useQuery() {
       throw new Error(gasLimit.ERR.message);
     }
 
-    return userOp
+    return userOp;
   };
 
   // const getWalletType = async (address: string) => {

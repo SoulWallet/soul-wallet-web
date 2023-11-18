@@ -143,26 +143,25 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  const getFinalPrefund = async (userOp: any) => {
+  const getFinalPrefund = async (userOp: any, payTokenAddress:string) => {
     setLoadingFee(true);
-    console.log('get final prefund');
+    console.log('get final prefund payToken', payTokenAddress);
     // TODO, extract this for other functions
-    const { requiredAmount } = await getPrefund(userOp, payToken);
+    const { requiredAmount } = await getPrefund(userOp, payTokenAddress);
 
-    if (ethers.ZeroAddress === payToken) {
+    if (ethers.ZeroAddress === payTokenAddress) {
       setFeeCost(`${requiredAmount} ${chainConfig.chainToken}`);
     } else {
       setFeeCost(`${requiredAmount} USDC`);
     }
-    // setPrefundCalculated(true);
     setLoadingFee(false);
   };
 
-  const getFinalUserOp = async (txns: any) => {
+  const getFinalUserOp = async (txns: any, payTokenAddress: string) => {
     const isActivated = await checkActivated();
     if (isActivated) {
       // if activated, get userOp directly
-      return await getUserOp(txns, payToken);
+      return await getUserOp(txns, payTokenAddress);
     } else {
       const activateIndex = getIndexByAddress(addressList, selectedAddress);
       console.log('activate index', activateIndex, addressList, selectedAddress, txns);
@@ -171,10 +170,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  const doPrecheck = async () => {
+  const doPrecheck = async (payTokenAddress: string) => {
     if (prechecked) {
       return;
     }
+    console.log('trigger pre check', payTokenAddress)
     try {
       setPrechecked(true);
       setLoadingFee(true);
@@ -185,8 +185,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           .shiftedBy(-18)
           .toFixed(),
       );
-      setPayTokenSymbol(getTokenBalance(payToken).symbol || 'Unknown');
-      let userOp = await getFinalUserOp(txns);
+      setPayTokenSymbol(getTokenBalance(payTokenAddress).symbol || 'Unknown');
+
+      let userOp = await getFinalUserOp(txns, payTokenAddress);
       setActiveOperation(userOp);
       const callDataDecodes = await decodeCalldata(
         selectedChainId,
@@ -197,8 +198,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       console.log('decoded data', callDataDecodes);
       setDecodedData(callDataDecodes);
       // checkSponser(userOp);
-      getFinalPrefund(userOp);
-      if (payToken === ethers.ZeroAddress) {
+      getFinalPrefund(userOp, payTokenAddress);
+      if (payTokenAddress === ethers.ZeroAddress) {
         // ETH is not enough
         if (BN(totalMsgValue).isGreaterThanOrEqualTo(selectedTokenBalance)) {
           console.log('Balance not enough!');
@@ -227,20 +228,19 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     setPrechecked(false);
   }, [payToken]);
 
+  const onPayTokenChange = (val:string) => {
+    setPayToken(val);
+    doPrecheck(val);
+  }
+
   // IMPORTANT IMPORTANT TODO, rendered twice
   useEffect(() => {
     if (!txns || !txns.length || !payToken) {
       return;
     }
     console.log('do pre check', txns, payToken);
-    doPrecheck();
+    doPrecheck(payToken);
   }, [txns, payToken]);
-
-  // const toAddress = sendToAddress
-  //   ? sendToAddress
-  //   : decodedData[0] && decodedData[0].to
-  //   ? decodedData[0] && decodedData[0].to
-  //   : '';
 
   return (
     <>
@@ -331,28 +331,28 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               ) : (
                 <Flex gap="2">
                   {feeCost === '...' ? <Image src={IconLoading} /> : <Text>{feeCost.split(' ')[0]}</Text>}
-                  <GasSelect gasToken={payToken} onChange={setPayToken} />
+                  <GasSelect gasToken={payToken} onChange={(val:string) => onPayTokenChange(val)} />
                 </Flex>
               )}
             </InfoItem>
             <InfoItem color="#000" fontWeight="600">
               <Text>Total</Text>
               {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
-              {totalMsgValue && Number(totalMsgValue) && !sponsor && feeCost !== '...' ? '+' : ''}
+              {totalMsgValue && Number(totalMsgValue) && !sponsor && feeCost !== '...' ? ' + ' : ''}
               {!sponsor && feeCost !== '...' ? `${BN(feeCost.split(' ')[0]).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
               {!sponsor &&
               feeCost !== '...' &&
               decodedData &&
               decodedData.length > 0 &&
               decodedData.filter((item: any) => item.sendErc20Amount).length > 0
-                ? '+'
+                ? ' + '
                 : ''}
               {decodedData &&
                 decodedData.length > 0 &&
                 decodedData
                   .filter((item: any) => item.sendErc20Amount)
                   .map((item: any) => item.sendErc20Amount)
-                  .join('+')}
+                  .join(' + ')}
             </InfoItem>
             {hintText && (
               <InfoItem>

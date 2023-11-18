@@ -58,7 +58,10 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
   },
   clearAddresses: () =>{
     set(state=>{
+      console.log('ready to clear')
       state.addressList = [];
+      state.selectedAddress = '';
+      state.finishedSteps = [];
     })
   },
   addAddressItem: (addressItem: IAddressItem) => {

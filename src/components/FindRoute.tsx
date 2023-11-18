@@ -15,11 +15,11 @@ export default function FindRoute({ children }: any) {
   const { navigate } = useBrowser();
   const location = useLocation();
   const { addressList, selectedAddress } = useAddressStore();
-  const { guardiansInfo } = useGuardianStore();
 
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
     const isRecoverPage = location.pathname.includes('recover');
+    const isCreatePage = location.pathname.includes('create');
 
     if (storeVersion !== storageVersion) {
       if (storageVersion) {
@@ -31,8 +31,8 @@ export default function FindRoute({ children }: any) {
 
     // if (guardiansInfo && guardiansInfo.requireBackup) {
     //   navigate('/security');
-    // } else 
-    if ((!addressList.length || !selectedAddress) && !isRecoverPage) {
+    // } else
+    if ((!addressList.length || !selectedAddress) && !isRecoverPage && !isCreatePage) {
       navigate({
         pathname: '/launch',
         search: location.search,
