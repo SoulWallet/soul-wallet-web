@@ -90,7 +90,7 @@ export default function SetWalletName({ changeStep }: any) {
   return (
     <FullscreenContainer>
       <Box width="400px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-        <Box marginBottom="12px">
+        <Box marginBottom="12px" marginRight="24px">
           <Steps
             backgroundColor="#1E1E1E"
             foregroundColor="white"

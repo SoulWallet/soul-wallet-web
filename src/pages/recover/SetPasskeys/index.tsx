@@ -174,7 +174,6 @@ export default function SetPasskeys({ changeStep }: any) {
             count={4}
             activeIndex={1}
             marginTop="24px"
-            showBackButton
           />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
