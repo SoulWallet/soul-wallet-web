@@ -130,8 +130,7 @@ const isGuardiansListFilled = (list: any) => {
 
 const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const { getJsonFromFile } = useTools();
-  const keystore = useKeystore();
-  const calcGuardianHash = keystore.calcGuardianHash
+  const { calcGuardianHash } = useKeystore();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
