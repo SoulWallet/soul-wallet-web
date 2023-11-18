@@ -99,16 +99,20 @@ const SignCard = () => {
       }
       setIsAuthing(false);
     } catch (error: any) {
-      showError();
+      if (error.code === 0) {
+        showError('User rejected login');
+      } else {
+        showError(`Wallet doesn't exist, please try to create a new one`);
+      }
       setIsAuthing(false);
     }
   };
 
-  const showError = () => {
+  const showError = (msg: string = '') => {
     toast({
       title: 'Login error',
       status: 'error',
-      description: `wallet doesn't exist, please try to create a new one`,
+      description: msg,
       duration: 3000,
     });
   };
@@ -145,7 +149,7 @@ const SignCard = () => {
         base: 'calc(100vw - 20px)',
         lg: '400px',
       }}
-      width={{ base: "100%", lg: "400px"}}
+      width={{ base: '100%', lg: '400px' }}
       h="640px"
       display="flex"
       alignItems="center"
@@ -279,7 +283,13 @@ const FaqSection = () => {
 
 const FeaturesSection = () => {
   return (
-    <Flex mt={{ base: "8", lg: "-10"}} gap="9" justify={'center'} align={{base: 'center', lg: 'unset'}} flexDir={{ base: 'column', lg: 'row' }}>
+    <Flex
+      mt={{ base: '8', lg: '-10' }}
+      gap="9"
+      justify={'center'}
+      align={{ base: 'center', lg: 'unset' }}
+      flexDir={{ base: 'column', lg: 'row' }}
+    >
       {featureList.map((item, idx: number) => (
         <Flex
           flexDir={'column'}
@@ -311,7 +321,7 @@ const FeaturesSection = () => {
 
 const Banner = () => {
   return (
-    <Box bgImage={homeExampleImage} bgPos={'center'} pt={{ lg: "12"}} bgRepeat={'no-repeat'} bgSize={'contain'}>
+    <Box bgImage={homeExampleImage} bgPos={'center'} pt={{ lg: '12' }} bgRepeat={'no-repeat'} bgSize={'contain'}>
       <SignCard />
       <FeaturesSection />
     </Box>
@@ -320,7 +330,7 @@ const Banner = () => {
 
 export default function Launch() {
   return (
-    <Box p={{ base: 5, lg: 10}} bgImage={bgGradientImage} bgSize={'cover'}>
+    <Box p={{ base: 5, lg: 10 }} bgImage={bgGradientImage} bgSize={'cover'}>
       <Banner />
       <FaqSection />
       <LaunchFooter />
