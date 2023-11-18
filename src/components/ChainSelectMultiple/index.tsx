@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Image, Text, Divider, Menu, MenuButton, MenuList, } from '@chakra-ui/react';
+import { Flex, Box, Image, Text, Divider, Menu, MenuButton, MenuList } from '@chakra-ui/react';
 import IconChecked from '@/assets/icons/checked.svg';
 import IconUnchecked from '@/assets/icons/unchecked.svg';
 import IconAllNetwork from '@/assets/icons/all-network.svg';
@@ -41,12 +41,6 @@ export default function ChainSelectMultiple({ activeChains, onChange }: any) {
     onChange(chains);
   };
 
-  // return <Menu>
-  //   <MenuButton>
-
-  //   </MenuButton>
-  // </Menu>
-
   return (
     <Flex
       w="262px"
@@ -68,7 +62,7 @@ export default function ChainSelectMultiple({ activeChains, onChange }: any) {
       {chainList.map((item: any, idx: number) => {
         return (
           <React.Fragment key={idx}>
-            <Divider />
+            {idx ? <Divider /> : ''}
             <Box key={item.chainIdHex} onClick={() => toggleActiveChains(item.chainIdHex)}>
               <MenuLine icon={item.icon} title={item.chainName} checked={activeChains.includes(item.chainIdHex)} />
             </Box>

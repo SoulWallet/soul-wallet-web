@@ -47,6 +47,7 @@ export default function Asset() {
   const { chainList } = useChainStore();
   const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
 
+  console.log('')
   return (
     <Box color="#000">
       <Header />
@@ -57,7 +58,7 @@ export default function Asset() {
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
         <Flex gap="5" mt="3" alignItems={'flex-start'}>
           <Box w="100%" rounded="20px" bg="#fff" p="8">
-            {activeTab === 0 && <TokensTable />}
+            {activeTab === 0 && <TokensTable activeChains={activeChains} />}
             {activeTab === 1 && <NftsTable />}
           </Box>
           <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />

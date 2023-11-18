@@ -8,21 +8,23 @@ import { useChainStore } from '@/store/chain';
 import ActivityTable from './comp/ActivityTable';
 import { Tabs } from '../asset';
 
+
 const tabList = [
   {
     title: 'All',
     key: 'all',
   },
-  {
-    title: 'Pending',
-    key: 'pending',
-  },
+  // {
+  //   title: 'Pending',
+  //   key: 'pending',
+  // },
 ];
 
-export default function Activity() {
+export default function Activity({}) {
   const [activeTab, setActiveTab] = useState(0);
   const { chainList } = useChainStore();
   const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
+
 
   return (
     <Box color="#000">
@@ -34,8 +36,8 @@ export default function Activity() {
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
         <Flex gap="5" mt="3" alignItems={'flex-start'}>
           <Box w="100%" rounded="20px" bg="#fff" p="8">
-            {activeTab === 0 && <ActivityTable />}
-            {activeTab === 1 && <ActivityTable />}
+            {activeTab === 0 && <ActivityTable activeChains={activeChains} />}
+            {/* {activeTab === 1 && <ActivityTable />} */}
           </Box>
           <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
         </Flex>

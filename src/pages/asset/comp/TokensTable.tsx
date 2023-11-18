@@ -2,34 +2,54 @@ import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Table, Tr, Thead, Tbody, Th, Td, Image, GridItem, Grid } from '@chakra-ui/react';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
-import { useBalanceStore } from '@/store/balance';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
+import IconOpSquare from '@/assets/chains/op-square.svg';
+import IconArbSquare from '@/assets/chains/arb-square.svg';
 import Button from '@/components/Button';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { useChainStore } from '@/store/chain';
 
-export default function TokensTable() {
+const getChainIcon = (chainIdHex: string) => {
+  switch (chainIdHex) {
+    case '0x5':
+      return IconEthSquare;
+    case '0x66eed':
+      return IconArbSquare;
+    case '0x1a4':
+      return IconOpSquare;
+    default:
+      return '';
+  }
+};
+
+export default function TokensTable({ activeChains }: any) {
   const { showTransferAssets } = useWalletContext();
   const { selectedAddress } = useAddressStore();
-  const { tokenBalance } = useBalanceStore();
+  const { setSelectedChainId } = useChainStore();
+  const [balanceList, setBalanceList] = useState([]);
 
   const getTokenBalance = async () => {
     const res = await api.balance.token({
       walletAddress: selectedAddress,
-      chains: [
-        {
-          chainID: '',
-          reservedTokenAddresses: [],
-        },
-      ],
+      chains: activeChains.map((item: any) => ({
+        chainID: item,
+        reservedTokenAddresses: [],
+      })),
     });
-    console.log('ressssss', res);
+
+    setBalanceList(res.data);
   };
 
   useEffect(() => {
+    if (!activeChains || !activeChains.length) {
+      return;
+    }
     getTokenBalance();
-  }, []);
+  }, [activeChains]);
 
-  const showTransfer = (tokenAddress: string) => {
+  const showTransfer = (tokenAddress: string, chainIdHex: string) => {
+    // IMPORTANT TODO, change to this chain id
+    setSelectedChainId(chainIdHex);
     showTransferAssets(tokenAddress);
   };
 
@@ -44,7 +64,7 @@ export default function TokensTable() {
         </Tr>
       </Thead>
       <Tbody>
-        {tokenBalance.map((item: any, idx: number) => {
+        {balanceList.map((item: any, idx: number) => {
           return (
             <Tr
               key={idx}
@@ -59,7 +79,14 @@ export default function TokensTable() {
                 <Flex gap="4" align="center">
                   <Box pos="relative">
                     <Image src={item.logoURI} w="35px" h="35px" />
-                    <Image pos="absolute" right="-4px" bottom="-2px" src={IconEthSquare} w="15px" h="15px" />
+                    <Image
+                      pos="absolute"
+                      right="-4px"
+                      bottom="-2px"
+                      src={getChainIcon(item.chainID)}
+                      w="15px"
+                      h="15px"
+                    />
                   </Box>
                   <Text fontWeight={'800'} fontSize={'18px'}>
                     {item.symbol}
@@ -72,7 +99,7 @@ export default function TokensTable() {
                   py="2"
                   px="5"
                   onClick={() => {
-                    showTransfer(item.contractAddress);
+                    showTransfer(item.contractAddress, item.chainID);
                   }}
                 >
                   Send
