@@ -183,7 +183,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     try {
       setPrechecked(true);
       setLoadingFee(true);
-      // setFeeCost('...');
       setRequiredAmount('');
       setTotalMsgValue(
         txns
@@ -229,10 +228,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       // setLoadingFee(false);
     }
   };
-
-  // useEffect(() => {
-  //   setPrechecked(false);
-  // }, [payToken]);
 
   const onPayTokenChange = (val: string) => {
     console.log('onPayTokenChange', val);
