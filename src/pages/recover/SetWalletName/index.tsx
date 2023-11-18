@@ -60,8 +60,6 @@ export default function SetWalletName({ changeStep }: any) {
   }
 
   const handleNext = async () => {
-    if (disabled) return;
-
     try {
       // clearPreviousData();
       setLoading(true);
@@ -92,34 +90,16 @@ export default function SetWalletName({ changeStep }: any) {
   return (
     <FullscreenContainer>
       <Box width="400px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-        <WalletCard
-          statusText="SETTING UP..."
-          titleText="NEW SOUL WALLET"
-          steps={
-            <Steps
-              backgroundColor="#29510A"
-              foregroundColor="#E2FC89"
-              count={4}
-              activeIndex={1}
-              marginTop="24px"
-              onStepChange={onStepChange}
-            />
-          }
-        />
-        <Box width="320px" display="flex" alignItems="center" justifyContent="flex-start" marginBottom="32px">
-          <TextButton
-            color="#1E1E1E"
-            fontSize="16px"
-            fontWeight="800"
-            width="57px"
-            padding="0"
-            alignItems="center"
-            justifyContent="center"
-            onClick={goBack}
-          >
-            <ArrowLeftIcon />
-            <Box marginLeft="2px" fontSize="16px">Back</Box>
-          </TextButton>
+        <Box marginBottom="12px">
+          <Steps
+            backgroundColor="#1E1E1E"
+            foregroundColor="white"
+            count={4}
+            activeIndex={1}
+            marginTop="24px"
+            showBackButton
+            onStepChange={changeStep}
+          />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
           <Heading1>Name your wallet</Heading1>

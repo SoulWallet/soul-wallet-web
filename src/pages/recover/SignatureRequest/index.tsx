@@ -176,8 +176,8 @@ const SignatureRequest = ({ changeStep }: any) => {
         justifyContent="center"
         paddingBottom="20px"
       >
-        <Box marginBottom="12px" paddingRight="24px">
-          <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={4} activeIndex={3} marginTop="24px" showBackButton />
+        <Box marginBottom="12px">
+          <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={4} activeIndex={3} marginTop="24px" />
         </Box>
         <Heading1>Pay recovery fee</Heading1>
         <Box marginBottom="0.75em">
@@ -327,8 +327,8 @@ const SignatureRequest = ({ changeStep }: any) => {
       justifyContent="center"
       paddingBottom="20px"
     >
-      <Box marginBottom="12px" paddingRight="24px">
-        <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={4} activeIndex={2} marginTop="24px" showBackButton />
+      <Box marginBottom="12px">
+        <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={4} activeIndex={2} marginTop="24px" />
       </Box>
       <Heading1>Guardian signature request</Heading1>
       <Box marginBottom="0.75em">

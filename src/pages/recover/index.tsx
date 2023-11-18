@@ -33,9 +33,14 @@ export default function Recover() {
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const { recoveringGuardiansInfo, updateRecoveringGuardiansInfo } = useGuardianStore();
+  const { navigate } = useBrowser();
 
-  const changeStep = (step: number) => {
-    setStep(step)
+  const changeStep = (i: number) => {
+    if (i === -1) {
+      navigate('/launch');
+    } else {
+      setStep(i)
+    }
   }
 
   useEffect(() => {
