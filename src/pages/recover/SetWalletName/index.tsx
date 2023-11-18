@@ -65,7 +65,7 @@ export default function SetWalletName({ changeStep }: any) {
     try {
       // clearPreviousData();
       setLoading(true);
-      const walletName = values.name || 'Wallet 1';
+      const walletName = values.name || 'Wallet_1';
       setWalletName(walletName)
       const credentialName = walletName;
       const credentialKey = await register(credentialName);
@@ -126,7 +126,7 @@ export default function SetWalletName({ changeStep }: any) {
         </Box>
         <FormInput
           label=""
-          placeholder="Wallet 1"
+          placeholder="Wallet_1"
           value={values.name}
           onChange={onChange('name')}
           onBlur={onBlur('name')}

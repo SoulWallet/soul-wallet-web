@@ -196,7 +196,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       );
       console.log('decoded data', callDataDecodes);
       setDecodedData(callDataDecodes);
-      checkSponser(userOp);
+      // checkSponser(userOp);
       getFinalPrefund(userOp);
       if (payToken === ethers.ZeroAddress) {
         // ETH is not enough
