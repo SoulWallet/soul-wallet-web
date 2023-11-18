@@ -131,6 +131,7 @@ const isGuardiansListFilled = (list: any) => {
 const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const { getJsonFromFile } = useTools();
   const keystore = useKeystore();
+  const calcGuardianHash = keystore.calcGuardianHash
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
@@ -234,7 +235,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       const res = await api.guardian.createRecoverRecord(params)
       const recoveryRecordID = res.data.recoveryRecordID
       const guardians = guardianDetails.guardians
-      const guardianHash = keystore.calcGuardianHash(guardians, threshold);
+      const guardianHash = calcGuardianHash(guardians, threshold);
       updateRecoveringGuardiansInfo({
         recoveryRecordID,
         guardianDetails,
@@ -289,7 +290,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       const recoveryRecordID = res.data.recoveryRecordID
       const guardians = guardianDetails.guardians
       const threshold = guardianDetails.threshold
-      const guardianHash = keystore.calcGuardianHash(guardians, threshold);
+      const guardianHash = calcGuardianHash(guardians, threshold);
 
       updateRecoveringGuardiansInfo({
         recoveryRecordID,
