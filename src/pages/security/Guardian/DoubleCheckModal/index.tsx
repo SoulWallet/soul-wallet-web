@@ -48,7 +48,7 @@ export default function DoubleCheckModal({ isOpen, onClose, onSubmit }: any) {
             flexDirection="column"
           >
             <Box width="320px">
-              <TextBody marginBottom="20px" textAlign="center" fontSize="20px" fontWeight="800">
+              <TextBody marginBottom="36px" textAlign="center" fontSize="20px" fontWeight="800">
                 Are you sure you want to update your guardians list?
               </TextBody>
             </Box>
@@ -56,7 +56,7 @@ export default function DoubleCheckModal({ isOpen, onClose, onSubmit }: any) {
               <Button _styles={{ width: '320px', background: '#9648FA', color: 'white' }} _hover={{ background: '#9648FA', color: 'white' }} onClick={onSubmit}>
                 Confirm
               </Button>
-              <TextButton _styles={{ width: '320px' }} onClick={onClose}>
+              <TextButton _styles={{ width: '320px', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={onClose}>
                 Cancel
               </TextButton>
             </Box>
