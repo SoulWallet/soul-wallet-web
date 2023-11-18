@@ -182,7 +182,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
     pendingGuardianList = pendingGuardianDetails.guardians.map((guardian: any, i: number) => {
       return {
         address: guardian,
-        name: guardianNames[i]
+        name: pendingGuardianNames[i]
       }
     })
   }
