@@ -84,6 +84,7 @@ export default function Recover({ changeStep }: any) {
          *   status: 'error',
          * }); */
         console.log('No guardians found!')
+
         updateRecoveringGuardiansInfo({
           slot,
           slotInitInfo,
@@ -93,6 +94,7 @@ export default function Recover({ changeStep }: any) {
         changeStep(1)
       } else {
         const guardianDetails = data.guardianDetails;
+        const guardianNames = data.guardianNames;
         console.log('getGuardianDetails', res2)
 
         updateRecoveringGuardiansInfo({
@@ -100,7 +102,10 @@ export default function Recover({ changeStep }: any) {
           slotInitInfo,
           activeGuardianInfo,
           guardianDetails,
-          initalkeysAddress
+          initalkeysAddress,
+          guardianHash: activeGuardianHash,
+          guardianDetails,
+          guardianNames,
         })
         setLoading(false);
         changeStep(1)

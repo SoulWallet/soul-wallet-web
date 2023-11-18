@@ -217,23 +217,28 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       const threshold = amountForm.values.amount || 0;
       const slot = recoveringGuardiansInfo.slot
       const slotInitInfo = recoveringGuardiansInfo.slotInitInfo
+      const guardianDetails = {
+        guardians: guardianAddresses,
+        threshold: threshold,
+        salt: ethers.ZeroHash,
+      }
 
       const params = {
-        guardianDetails: {
-          guardians: guardianAddresses,
-          threshold: threshold,
-          salt: ethers.ZeroHash,
-        },
+        guardianDetails,
         slot,
-        slotInitInfo: slotInitInfo,
+        slotInitInfo,
         keystore,
         newOwners
       }
 
       const res = await api.guardian.createRecoverRecord(params)
       const recoveryRecordID = res.data.recoveryRecordID
+      const guardians = guardianDetails.guardians
+      const guardianHash = keystore.calcGuardianHash(guardians, threshold);
       updateRecoveringGuardiansInfo({
         recoveryRecordID,
+        guardianDetails,
+        guardianHash
       });
       changeStep(4)
       setLoading(false);
@@ -267,9 +272,11 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       const newOwners = L1KeyStore.initialKeysToAddress(initialKeys);
       const slot = recoveringGuardiansInfo.slot
       const slotInitInfo = recoveringGuardiansInfo.slotInitInfo
+      const guardianDetails = data.guardianDetails
+      const guardianNames = data.guardianNames
 
       const params = {
-        guardianDetails: data.guardianDetails,
+        guardianDetails,
         slot,
         slotInitInfo,
         keystore,
@@ -280,8 +287,15 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
 
       const res = await api.guardian.createRecoverRecord(params)
       const recoveryRecordID = res.data.recoveryRecordID
+      const guardians = guardianDetails.guardians
+      const threshold = guardianDetails.threshold
+      const guardianHash = keystore.calcGuardianHash(guardians, threshold);
+
       updateRecoveringGuardiansInfo({
         recoveryRecordID,
+        guardianDetails,
+        guardianHash,
+        guardianNames
       });
 
       setUploading(false);
