@@ -63,7 +63,7 @@ export default function Recover({ changeStep }: any) {
         return
       }
       const slotInitInfo = res1.data.slotInitInfo
-      const initalkeysAddress = res1.data.initialKeys
+      const initialKeysAddress = res1.data.initialKeys
       const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
       const activeGuardianInfo = await getActiveGuardianHash(slotInitInfo)
       let activeGuardianHash
@@ -89,7 +89,7 @@ export default function Recover({ changeStep }: any) {
           slot,
           slotInitInfo,
           activeGuardianInfo,
-          initalkeysAddress
+          initialKeysAddress
         })
         changeStep(1)
       } else {
@@ -102,7 +102,7 @@ export default function Recover({ changeStep }: any) {
           slotInitInfo,
           activeGuardianInfo,
           guardianDetails,
-          initalkeysAddress,
+          initialKeysAddress,
           guardianHash: activeGuardianHash,
           guardianNames,
         })

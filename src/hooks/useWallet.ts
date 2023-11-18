@@ -86,7 +86,9 @@ export default function useWallet() {
 
     for (let i = 0; i < extraTxs.length; i++) {
       // get gas from tx or onchain
-      const gas = BN(extraTxs[i].gas).isGreaterThan(0) ? BN(extraTxs[i].gas) : (await ethersProvider.estimateGas(extraTxs[i]));
+      const gas = BN(extraTxs[i].gas).isGreaterThan(0)
+        ? BN(extraTxs[i].gas)
+        : await ethersProvider.estimateGas(extraTxs[i]);
       callGasLimit = callGasLimit.plus(gas);
     }
 
@@ -195,13 +197,13 @@ export default function useWallet() {
 
   const retrieveSlotInfo = (initInfo: any) => {
     // set slot info
-    const initalkeysAddress = L1KeyStore.initialKeysToAddress(initInfo.initialKeys);
-    const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
+    const initialKeysAddress = L1KeyStore.initialKeysToAddress(initInfo.initialKeys);
+    const initialKeyHash = L1KeyStore.getKeyHash(initialKeysAddress);
 
     setSlotInfo({
       initialKeys: initInfo.initialKeys,
       initialKeyHash,
-      initalkeysAddress,
+      initialKeysAddress,
       slot: initInfo.slot,
       initialGuardianHash: initInfo.slotInitInfo.initialGuardianHash,
       initialGuardianSafePeriod: initInfo.slotInitInfo.initialGuardianSafePeriod,
@@ -209,12 +211,12 @@ export default function useWallet() {
   };
 
   const boostAfterRecovered = async () => {
-    const initInfo = (await api.guardian.getSlotInfo({ walletAddress: selectedAddress })).data;
-    retrieveSlotInfo(initInfo);
-
-    setCredentials(recoveringGuardiansInfo.credentials);
-
+    retrieveSlotInfo({
+      ...recoveringGuardiansInfo,
+      initialKeys: recoveringGuardiansInfo.initialKeysAddress,
+    });
     const newAddress = await calcWalletAddress(0);
+
     setAddressList([
       {
         title: `Account 1`,
@@ -223,6 +225,8 @@ export default function useWallet() {
         activatedChains: [],
       },
     ]);
+
+    setCredentials(recoveringGuardiansInfo.credentials);
     // set goerli if no selected chainId
     setSelectedChainId('0x5');
 
