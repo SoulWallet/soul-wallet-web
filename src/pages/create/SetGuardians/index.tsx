@@ -225,6 +225,18 @@ const getInitialValues = (ids: string[], guardians: string[], guardianNames: str
   return values;
 };
 
+const isGuardiansListFilled = (list: any) => {
+  if (!list.length) return false
+
+  let isFilled = true
+
+  for (const item of list) {
+    isFilled = isFilled && item
+  }
+
+  return isFilled
+}
+
 export default function SetGuardians({ changeStep }: any) {
   const { navigate } = useBrowser();
   const { register } = usePassKey();
@@ -284,14 +296,14 @@ export default function SetGuardians({ changeStep }: any) {
     },
   });
 
-  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading;
+  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading || !isGuardiansListFilled(guardiansList);
 
   useEffect(() => {
     setGuardiansList(
       Object.keys(values)
             .filter((key) => key.indexOf('address') === 0)
             .map((key) => values[key])
-            .filter((address) => !!String(address).trim().length) as any,
+            // .filter((address) => !!String(address).trim().length) as any,
     );
   }, [values]);
 

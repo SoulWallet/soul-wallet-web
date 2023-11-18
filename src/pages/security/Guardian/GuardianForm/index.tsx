@@ -150,6 +150,18 @@ const getInitialValues = (ids: string[], guardians: string[], guardianNames: str
   return values;
 };
 
+const isGuardiansListFilled = (list: any) => {
+  if (!list.length) return false
+
+  let isFilled = true
+
+  for (const item of list) {
+    isFilled = isFilled && item
+  }
+
+  return isFilled
+}
+
 export default function GuardianForm({ cancelEdit, startBackup }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
@@ -200,14 +212,14 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
     },
   });
 
-  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading;
+  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading || !isGuardiansListFilled(guardiansList);
 
   useEffect(() => {
     setGuardiansList(
       Object.keys(values)
             .filter((key) => key.indexOf('address') === 0)
             .map((key) => values[key])
-            .filter((address) => !!String(address).trim().length) as any,
+            // .filter((address) => !!String(address).trim().length) as any,
     );
   }, [values]);
 
@@ -680,7 +692,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
                   </MenuItem>
                 )}
                 {!!amountData.guardiansCount &&
-                 getNumberArray(amountData.guardiansCount || 0).map((i: any) => (
+                 getNumberArray(guardiansList.length || 0).map((i: any) => (
                    <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
                      {i}
                    </MenuItem>
@@ -688,7 +700,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
               </MenuList>
             </Menu>
           </Box>
-          <TextBody>out of {guardianDetails.guardians.length} guardian(s) confirmation. </TextBody>
+          <TextBody>out of {guardiansList.length || 0} guardian(s) confirmation. </TextBody>
         </Box>
       </Box>
       <TextButton onClick={() => setShowAdvance(!showAdvance)} color="#EC588D" _hover={{ color: '#EC588D' }} marginTop="20px">
