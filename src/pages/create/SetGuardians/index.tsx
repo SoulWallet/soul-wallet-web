@@ -552,15 +552,15 @@ export default function SetGuardians({ changeStep }: any) {
     const initialGuardianHash = calcGuardianHash(guardians, threshold);
     const salt = ethers.ZeroHash;
     let initialGuardianSafePeriod = toHex(defaultGuardianSafePeriod);
-    const initalkeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
-    const initialKeyHash = L1KeyStore.getKeyHash(initalkeysAddress);
+    const initialKeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
+    const initialKeyHash = L1KeyStore.getKeyHash(initialKeysAddress);
     const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
 
     const slotInfo = {
       initialKeys,
       initialGuardianHash,
       initialGuardianSafePeriod,
-      initalkeysAddress,
+      initialKeysAddress,
       initialKeyHash,
       slot
     };
@@ -573,7 +573,7 @@ export default function SetGuardians({ changeStep }: any) {
         initialGuardianHash,
         initialGuardianSafePeriod
       },
-      initialKeys: initalkeysAddress
+      initialKeys: initialKeysAddress
     };
 
     const guardiansInfo = {

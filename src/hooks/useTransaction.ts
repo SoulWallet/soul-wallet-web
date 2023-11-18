@@ -34,7 +34,8 @@ export default function useTransaction() {
   const sendEth = async (to: string, amount: string) => {
 
     const amountInWei = new BN(amount).shiftedBy(18).toString();
-    const tx: Transaction = {
+    const tx = {
+      from: selectedAddress,
       to,
       value: amountInWei,
       data: '0x',
@@ -46,7 +47,8 @@ export default function useTransaction() {
     const amountInWei = new BN(amount).shiftedBy(decimals).toString();
     const erc20Interface = new ethers.Interface(Erc20ABI);
     const callData = erc20Interface.encodeFunctionData('transfer', [to, amountInWei]);
-    const tx: Transaction = {
+    const tx = {
+      from: selectedAddress,
       to: tokenAddress,
       data: callData,
     };

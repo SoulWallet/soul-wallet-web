@@ -45,7 +45,6 @@ export const WalletContextProvider = ({ children }: any) => {
   const { recoveringGuardiansInfo } = useGuardianStore();
   const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
   const { selectedChainId } = useChainStore();
-  const [recoverCheckInterval, setRecoverCheckInterval] = useState<any>();
   const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
   const signTransactionModal = useRef<any>();
   const confirmPaymentModal = useRef<any>();
@@ -74,10 +73,8 @@ export const WalletContextProvider = ({ children }: any) => {
 
     const interval = setInterval(() => checkRecoverStatus(recoveryRecordID), 5000);
 
-    setRecoverCheckInterval(interval);
-
     return () => {
-      clearInterval(recoverCheckInterval);
+      clearInterval(interval);
     };
   }, [recoveryRecordID]);
 
