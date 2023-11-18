@@ -83,7 +83,7 @@ export default function SetWalletName({ changeStep }: any) {
         </Box>
         <FormInput
           label=""
-          placeholder="Wallet 1"
+          placeholder="Wallet_1"
           value={values.name}
           onChange={onChange('name')}
           onBlur={onBlur('name')}

@@ -29,9 +29,10 @@ export default function FindRoute({ children }: any) {
       storage.setItem('storeVersion', storeVersion);
     }
 
-    if (guardiansInfo && guardiansInfo.requireBackup) {
-      navigate('/security');
-    } else if ((!addressList.length || !selectedAddress) && !isRecoverPage) {
+    // if (guardiansInfo && guardiansInfo.requireBackup) {
+    //   navigate('/security');
+    // } else 
+    if ((!addressList.length || !selectedAddress) && !isRecoverPage) {
       navigate({
         pathname: '/launch',
         search: location.search,
