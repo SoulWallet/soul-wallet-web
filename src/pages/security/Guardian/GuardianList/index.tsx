@@ -34,6 +34,8 @@ import { nextRandomId } from '@/lib/tools';
 import DropDownIcon from '@/components/Icons/DropDown';
 import PlusIcon from '@/components/Icons/Plus';
 import ArrowDownIcon from '@/components/Icons/ArrowDown';
+import CopyIcon from '@/components/Icons/Copy';
+import OpenScanIcon from '@/components/Icons/OpenScan';
 import QuestionIcon from '@/components/Icons/Question';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useGuardianStore } from '@/store/guardian';
@@ -45,6 +47,7 @@ import useConfig from '@/hooks/useConfig';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
+import useTools from '@/hooks/useTools';
 import DoubleCheckModal from '../DoubleCheckModal'
 import GuardianModal from '../GuardianModal'
 
@@ -146,6 +149,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   const { setFinishedSteps } = useAddressStore();
   const { showConfirmPayment } = useWalletContext();
   const { payTask } = useTransaction();
+  const { doCopy } = useTools();
 
   const { guardiansInfo, editingGuardiansInfo, slotInfo, setEditingGuardiansInfo } = useGuardianStore();
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
@@ -257,6 +261,14 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
     }
   };
 
+  const copyAddress = (address) => {
+    doCopy(address)
+  }
+
+  const openScan = (address) => {
+    window.open(`https://goerli.etherscan.io/address/${address}`, '_blank')
+  }
+
   return (
     <Fragment>
       <Box width="100%" bg="#EDEDED" borderRadius="20px" padding="45px" display="flex" alignItems="flex-start" justifyContent="space-around" margin="0 auto">
@@ -295,6 +307,12 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
                       <Text color="#898989" fontWeight="600">
                         eth:
                       </Text>
+                    }
+                    rightComponent={
+                      <Box height="100%" display="flex" alignItems="center" justifyContent="center" padding="0 10px">
+                        <Box cursor="pointer" marginRight="4px" onClick={() => copyAddress(item.address)}><CopyIcon color="#898989" /></Box>
+                        <Box cursor="pointer" onClick={() => openScan(item.address)}><OpenScanIcon /></Box>
+                      </Box>
                     }
                     _leftContainerStyles={{ width: '30%', minWidth: '240px' }}
                     onEnter={() => {}}

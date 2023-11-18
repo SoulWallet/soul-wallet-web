@@ -232,7 +232,7 @@ export function DoubleFormInfo({
             <Box
               borderRadius="16px"
               paddingLeft={leftComponent ? '44px' : '24px'}
-              paddingRight="24px"
+              paddingRight={rightComponent ? '60px' : '24px'}
               height="48px"
               background="white"
               borderTopLeftRadius="0"
@@ -245,6 +245,21 @@ export function DoubleFormInfo({
               {rightValue ?? ''}
             </Box>
           </Box>
+          {rightComponent && (
+            <Box
+              position="absolute"
+              top="0"
+              right="0"
+              height="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              zIndex="2"
+              paddingLeft="10px"
+            >
+              {rightComponent}
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>
