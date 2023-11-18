@@ -62,7 +62,6 @@ export default function Recover({ changeStep }: any) {
         });
         return
       }
-
       const slotInitInfo = res1.data.slotInitInfo
       const initalkeysAddress = res1.data.initialKeys
       const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
@@ -80,26 +79,32 @@ export default function Recover({ changeStep }: any) {
 
       if (!data) {
         setLoading(false);
-        toast({
-          title: 'No guardians found!',
-          status: 'error',
-        });
+        /* toast({
+         *   title: 'No guardians found!',
+         *   status: 'error',
+         * }); */
+        console.log('No guardians found!')
+        updateRecoveringGuardiansInfo({
+          slot,
+          slotInitInfo,
+          activeGuardianInfo,
+          initalkeysAddress
+        })
         changeStep(1)
-        return
+      } else {
+        const guardianDetails = data.guardianDetails;
+        console.log('getGuardianDetails', res2)
+
+        updateRecoveringGuardiansInfo({
+          slot,
+          slotInitInfo,
+          activeGuardianInfo,
+          guardianDetails,
+          initalkeysAddress
+        })
+        setLoading(false);
+        changeStep(1)
       }
-
-      const guardianDetails = data.guardianDetails;
-      console.log('getGuardianDetails', res2)
-
-      updateRecoveringGuardiansInfo({
-        slot,
-        slotInitInfo,
-        activeGuardianInfo,
-        guardianDetails,
-        initalkeysAddress
-      })
-      setLoading(false);
-      changeStep(1)
     } catch (e: any) {
       setLoading(false);
       toast({

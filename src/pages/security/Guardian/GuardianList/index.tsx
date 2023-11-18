@@ -261,11 +261,11 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
     }
   };
 
-  const copyAddress = (address) => {
+  const copyAddress = (address: string) => {
     doCopy(address)
   }
 
-  const openScan = (address) => {
+  const openScan = (address: string) => {
     window.open(`https://goerli.etherscan.io/address/${address}`, '_blank')
   }
 

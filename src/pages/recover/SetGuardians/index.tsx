@@ -116,6 +116,18 @@ const amountValidate = (values: any, props: any) => {
   return errors;
 };
 
+const isGuardiansListFilled = (list: any) => {
+  if (!list.length) return false
+
+  let isFilled = true
+
+  for (const item of list) {
+    isFilled = isFilled && item
+  }
+
+  return isFilled
+}
+
 const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const { getJsonFromFile } = useTools();
   const keystore = useKeystore();
@@ -156,7 +168,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
     },
   });
 
-  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading;
+  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading || !isGuardiansListFilled(guardiansList);
 
   useEffect(() => {
     setAmountData({ guardiansCount: guardiansList.length });
@@ -166,8 +178,8 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
     setGuardiansList(
       Object.keys(values)
             .filter((key) => key.indexOf('address') === 0)
-            .map((key) => values[key])
-            .filter((address) => !!String(address).trim().length) as any,
+            .map((key) => values[key]) as any
+            // .filter((address) => !!String(address).trim().length) as any,
     );
   }, [values]);
 
@@ -506,11 +518,11 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
                     </MenuList>
                   </Menu>
                 </Box>
-                <TextBody>out of {amountData.guardiansCount || 0} guardian(s) confirmation. </TextBody>
+                <TextBody>out of {guardiansList.length || 0} guardian(s) confirmation. </TextBody>
               </Box>
             </Box>
             <Box display="flex" flexDirection="column" alignItems="center" marginTop="12px" width="100%">
-              <Button loading={loading} onClick={handleNextStep} _styles={{ width: '320px' }}>
+              <Button loading={loading} disabled={disabled || loading} onClick={handleNextStep} _styles={{ width: '320px' }}>
                 Next
               </Button>
             </Box>
