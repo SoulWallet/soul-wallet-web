@@ -224,11 +224,13 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  useEffect(() => {
-    setPrechecked(false);
-  }, [payToken]);
+  // useEffect(() => {
+  //   setPrechecked(false);
+  // }, [payToken]);
 
   const onPayTokenChange = (val:string) => {
+    console.log('onPayTokenChange', val);
+    setPrechecked(false);
     setPayToken(val);
     doPrecheck(val);
   }

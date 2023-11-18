@@ -325,7 +325,6 @@ export const decodeCalldata = async (
       const symbol = await tokenContract.symbol();
       const amount = BN(i.method.params['1']).shiftedBy(-BN(decimals)).toFixed();
 
-      console.log("SYMBOL IS", symbol)
       i.sendErc20Amount = `${amount} ${symbol}`;
       i.sendErc20Address = i.method.params['0'];
     }
