@@ -29,7 +29,7 @@ export default function useWallet() {
     updateRecoveringGuardiansInfo,
     setRecoveringGuardiansInfo,
   } = useGuardianStore();
-  const { updateChainItem, setSelectedChainId } = useChainStore();
+  const { updateChainItem, setSelectedChainId, selectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
@@ -211,6 +211,7 @@ export default function useWallet() {
   };
 
   const boostAfterRecovered = async () => {
+    console.log('trigger bootstAfterRecovered')
     retrieveSlotInfo({
       ...recoveringGuardiansInfo,
       initialKeys: recoveringGuardiansInfo.initialKeysAddress,
@@ -228,7 +229,9 @@ export default function useWallet() {
 
     setCredentials(recoveringGuardiansInfo.credentials);
     // set goerli if no selected chainId
-    setSelectedChainId('0x5');
+    if(!selectedChainId){
+      setSelectedChainId('0x5');
+    }
 
     updateGuardiansInfo({
       guardianDetails: recoveringGuardiansInfo.guardianDetails,
