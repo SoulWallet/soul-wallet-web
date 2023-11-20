@@ -222,7 +222,7 @@ const SignCard = () => {
           </Button>
         </Box>
         <TextBody color="#1E1E1E" marginTop="24px" fontSize="16px" textAlign="center">
-          Soul Wallet will create a smart contract wallet for you using passkey.
+          Create a smart contract wallet using passkey.
         </TextBody>
       </Box>
       <TextBody color="#000000" fontWeight="800" fontSize="20px" textAlign="center">
