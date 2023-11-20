@@ -31,6 +31,7 @@ export default function Feedback() {
     console.log('subscribe res', res);
     if (true) {
       setValue('');
+      setFileList([]);
       toast({
         title: 'Feedback submitted',
         status: 'success',
