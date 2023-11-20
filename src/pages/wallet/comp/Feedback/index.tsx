@@ -21,6 +21,13 @@ export default function Feedback() {
 
   const toast = useToast();
   const doSubmit = async () => {
+    if(!value){
+      toast({
+        title: 'Please enter your feedback',
+        status: 'error',
+      });
+      return;
+    }
     setLoading(true);
     const res = await api.operation.feedback({
       body: value,
