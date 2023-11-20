@@ -4,7 +4,6 @@ import IconFeature0 from '@/assets/icons/features/0.svg';
 import IconFeature1 from '@/assets/icons/features/1.svg';
 import IconFeature2 from '@/assets/icons/features/2.svg';
 import IconFeature3 from '@/assets/icons/features/3.svg';
-// import IconDefault from '@/assets/icons/default.svg';
 
 export const dappList = [
   {
@@ -56,24 +55,23 @@ export const faqList = [
 export const featureList = [
   {
     icon: IconFeature0,
-    title: 'Self-custody<br/> with passkey',
-    content: 'Sign every transaction with FaceID/TouchID/Pin. Achieve hardware wallet level security with passkey.',
+    title: 'Safe',
+    content: 'Explore Ethereum with people you trust. Bye-bye recovery phrase.',
   },
   {
     icon: IconFeature1,
-    title: 'Easy to use<br/> web wallet',
-    content: 'No Browser Extension. No Install. Pay gas fees with stable coins and get sponsors for transactions.',
+    title: 'Easy',
+    content: 'No need to download. Pay gas fees with any tokens (starting from stablecoins).',
   },
   {
     icon: IconFeature2,
-    title: 'Free access<br/> to Dapps',
-    content: 'Use Soul Wallet on Ethereum L2. Connect to dapps with web sdk. See the demo dapp',
+    title: 'Self-custody',
+    content: 'Access the wallet via on-device passkeys.',
   },
   {
     icon: IconFeature3,
-    title: 'Social recovery<br/>with built-in.',
-    content:
-      'Use wallet on your Mac/PC/Phone. Find your wallet back with Social Recovery, even if all your devices are lost.',
+    title: 'All-in-one Dapp store',
+    content: 'Experience the most popular Dapp in one place.',
   },
 ];
 

@@ -49,7 +49,7 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
 
     if (new BN(amount).isGreaterThan(selectedTokenBalance)) {
       toast({
-        title: 'Balance not enough',
+        title: 'Not enough balance',
         status: 'error',
       });
       return;
