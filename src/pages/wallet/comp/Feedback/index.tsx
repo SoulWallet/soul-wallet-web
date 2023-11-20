@@ -17,6 +17,7 @@ export default function Feedback() {
   const [contact, setContact] = useState('');
   const [loading, setLoading] = useState(false);
   const { selectedAddress } = useAddressStore();
+  const [showDetail, setShowDetail] = useState(false);
 
   const toast = useToast();
   const doSubmit = async () => {
@@ -36,6 +37,7 @@ export default function Feedback() {
       });
     }
     setLoading(false);
+    setShowDetail(false);
   };
 
   const onUploaded = (file: any) => {
@@ -64,9 +66,10 @@ export default function Feedback() {
         py="3"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onClick={() => setShowDetail(true)}
         mb="3"
       />
-      {value && (
+      {showDetail && (
         <>
           <Uploader onUploaded={onUploaded} mb="3">
             <Box
@@ -132,13 +135,6 @@ export default function Feedback() {
             value={contact}
             onChange={(e: any) => setContact(e.target.value)}
           />
-          {/* <Input
-            mb="3"
-            h="52px"
-            placeholder="Your walelt address (optional)"
-            value={address}
-            onChange={(e: any) => setAddress(e.target.value)}
-          /> */}
           <Button loading={loading} onClick={doSubmit} fontSize="20px" fontWeight={'800'} w="100%" py="4">
             Submit
           </Button>
