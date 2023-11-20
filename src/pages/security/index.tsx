@@ -3,12 +3,12 @@ import Passkey from './Passkey';
 import Guardian from './Guardian';
 
 export default function Security() {
-  const [activeSection, setActiveSection] = useState<string>('passkey');
+  const [activeSection, setActiveSection] = useState<string>('guardian');
 
   return (
     <>
-      {activeSection === 'passkey' && <Passkey setActiveSection={setActiveSection} />}
       {activeSection === 'guardian' && <Guardian setActiveSection={setActiveSection} />}
+      {activeSection === 'passkey' && <Passkey setActiveSection={setActiveSection} />}
     </>
   );
 }

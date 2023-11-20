@@ -184,11 +184,11 @@ export default function Passkey({ setActiveSection }: any) {
         <Box padding="32px 39px">
           <Heading1>Passkey and Guardian Settings</Heading1>
           <Box display="flex" width="100%">
-            <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
-              Passkey
-            </Heading2>
             <Heading2 fontSize="18px" color="#898989" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
               Guardian
+            </Heading2>
+            <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
+              Passkey
             </Heading2>
           </Box>
           <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex">

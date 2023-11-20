@@ -7,6 +7,7 @@ import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
 import Button from '@/components/Button';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import IconDefaultToken from '@/assets/tokens/default.svg';
 import { useChainStore } from '@/store/chain';
 
 const getChainIcon = (chainIdHex: string) => {
@@ -78,7 +79,7 @@ export default function TokensTable({ activeChains }: any) {
               <Td as={Flex} align="center" justify={'space-between'}>
                 <Flex gap="4" align="center">
                   <Box pos="relative">
-                    <Image src={item.logoURI} w="35px" h="35px" />
+                    <Image src={item.logoURI || IconDefaultToken} w="35px" h="35px" />
                     <Image
                       pos="absolute"
                       right="-4px"

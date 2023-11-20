@@ -202,12 +202,12 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       );
       console.log('decoded data', callDataDecodes);
       setDecodedData(callDataDecodes);
-      // checkSponser(userOp);
+      checkSponser(userOp);
       getFinalPrefund(userOp, payTokenAddress);
       if (payTokenAddress === ethers.ZeroAddress) {
         // ETH is not enough
         if (BN(totalMsgValue).isGreaterThanOrEqualTo(selectedTokenBalance)) {
-          console.log('Balance not enough!');
+          console.log('Not enough balance!');
         }
       } else {
         // ERC20 is not enough
@@ -274,8 +274,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                     </Text>
                   ))
                 : decodedData.length > 1
-                ? 'Batch transaction'
-                : 'Send transaction'}
+                  ? 'Batch transaction'
+                  : 'Send transaction'}
             </Box>
           )}
           {totalMsgValue && Number(totalMsgValue) > 0 && (
@@ -348,8 +348,14 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 </Box>
               ) : (
                 <Flex gap="2">
-                  {requiredAmount ? <Text>{requiredAmount}</Text> : <Image src={IconLoading} />}
-                  <GasSelect gasToken={payToken} onChange={(val: string) => onPayTokenChange(val)} />
+                  {requiredAmount ? (
+                    <>
+                      <Text>{requiredAmount}</Text>
+                      <GasSelect gasToken={payToken} onChange={(val: string) => onPayTokenChange(val)} />
+                    </>
+                  ) : (
+                    <Image src={IconLoading} />
+                  )}
                 </Flex>
               )}
             </InfoItem>
@@ -379,7 +385,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             )}
             {!balanceEnough && (
               <InfoItem>
-                <Text color="#f00">Balance not enough</Text>
+                <Text color="#f00">Not enough balance</Text>
               </InfoItem>
             )}
           </InfoWrap>

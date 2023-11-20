@@ -83,8 +83,8 @@ export default {
     },
   ],
   magicValue: '0x1626ba7e',
-  backendURL: 'https://api-dev.soulwallet.io/appapi',
-  soulScanURL: 'https://api-dev.soulwallet.io/opapi',
+  backendURL: `${import.meta.env.VITE_BACKEND_URL}/appapi`,
+  soulScanURL: `${import.meta.env.VITE_SCAN_URL}/opapi`,
   officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
   /* @vite-ignore */
   chainList: [ArbConfig, OpConfig, GoerliConfig],
