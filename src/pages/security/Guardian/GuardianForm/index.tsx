@@ -732,7 +732,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
           <Button disabled={loading || disabled} loading={loading} _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => setIsConfirmOpen(true)}>
-            Confirm guardians
+            Confirm
           </Button>
           {hasGuardians && (
             <TextButton _styles={{ width: '320px' }} onClick={cancelEdit}>

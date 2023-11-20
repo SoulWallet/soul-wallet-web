@@ -103,14 +103,14 @@ export const guideList = [
     id: 3,
     title: 'Trade with Ease!',
     desc: `Dive into the world of Dapps and DeFi. Execute a token swap on Uniswap with your wallet.`,
-    buttonText: 'Uniswap',
+    buttonText: 'Swap',
     statusText: 'Execute a token swap on Uniswap',
   },
   {
     id: 4,
     title: 'Grow Your Tokens!',
     desc: `Deposit tokens into Aave and start earning interest.`,
-    buttonText: 'Aave',
+    buttonText: 'Earn',
     statusText: 'Deposit tokens into the Aave protocol',
   },
   {

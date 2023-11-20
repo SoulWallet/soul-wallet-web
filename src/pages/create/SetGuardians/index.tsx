@@ -849,7 +849,7 @@ export default function SetGuardians({ changeStep }: any) {
             Confirm
           </Button>
           <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
-            Set up later
+            Later
           </TextButton>
         </Box>
         <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
@@ -933,7 +933,7 @@ export default function SetGuardians({ changeStep }: any) {
           Set up now
         </Button>
         <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
-          Set up later
+          Later
         </TextButton>
       </Box>
       <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} skipping={skipping} />
