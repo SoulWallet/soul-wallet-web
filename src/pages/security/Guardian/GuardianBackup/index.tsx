@@ -69,6 +69,14 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
   const handleEmailBackupGuardians = async () => {
     try {
       setSending(true);
+
+      if (!validateEmail(emailForm.values.email)) {
+        toast({
+          title: 'Invalid Email!',
+          status: 'error',
+        });
+      }
+
       const filename = generateJsonName('guardian');
       await api.guardian.emailBackupGuardians({
         email: emailForm.values.email,
