@@ -94,7 +94,7 @@ export default function Feedback() {
             >
               <Image src={IconPlus} w="28px" />
               <Text fontWeight={'600'} color="#brand.gray">
-                Attach media (optional)
+                Attachment (optional)
               </Text>
             </Box>
           </Uploader>
@@ -140,7 +140,7 @@ export default function Feedback() {
           <Input
             mb="3"
             h="52px"
-            placeholder="Your contact (optional)"
+            placeholder="Email (optional)"
             value={contact}
             onChange={(e: any) => setContact(e.target.value)}
           />
