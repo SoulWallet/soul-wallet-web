@@ -383,7 +383,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 <Text color="#f00">{hintText}</Text>
               </InfoItem>
             )}
-            {!balanceEnough && (
+            {!balanceEnough && !sponsor && (
               <InfoItem>
                 <Text color="#f00">Not enough balance</Text>
               </InfoItem>
