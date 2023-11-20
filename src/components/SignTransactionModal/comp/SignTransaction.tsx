@@ -37,7 +37,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   // TODO, remember user's last select
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
   const [payTokenSymbol, setPayTokenSymbol] = useState('');
-  const [feeCost, setFeeCost] = useState('');
+  // const [feeCost, setFeeCost] = useState('');
+  const [balanceEnough, setBalanceEnough] = useState(true);
+  const [requiredAmount, setRequiredAmount] = useState('');
   const [activeOperation, setActiveOperation] = useState<UserOperation>();
   const [sponsor, setSponsor] = useState<any>(null);
   const { selectedChainId } = useChainStore();
@@ -75,7 +77,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     // setPrefundCalculated(false);
     setPayToken(ethers.ZeroAddress);
     setPayTokenSymbol('');
-    setFeeCost('');
+    // setFeeCost('');
+    setRequiredAmount('');
     setActiveOperation(undefined);
     setSponsor(null);
     // setSendToAddress('');
@@ -143,17 +146,19 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  const getFinalPrefund = async (userOp: any, payTokenAddress:string) => {
+  const getFinalPrefund = async (userOp: any, payTokenAddress: string) => {
     setLoadingFee(true);
     console.log('get final prefund payToken', payTokenAddress);
     // TODO, extract this for other functions
     const { requiredAmount } = await getPrefund(userOp, payTokenAddress);
 
-    if (ethers.ZeroAddress === payTokenAddress) {
-      setFeeCost(`${requiredAmount} ${chainConfig.chainToken}`);
-    } else {
-      setFeeCost(`${requiredAmount} USDC`);
-    }
+    setRequiredAmount(requiredAmount);
+
+    // if (ethers.ZeroAddress === payTokenAddress) {
+    //   setFeeCost(`${requiredAmount} ${chainConfig.chainToken}`);
+    // } else {
+    //   setFeeCost(`${requiredAmount} USDC`);
+    // }
     setLoadingFee(false);
   };
 
@@ -174,11 +179,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     if (prechecked) {
       return;
     }
-    console.log('trigger pre check', payTokenAddress)
+    console.log('trigger pre check', payTokenAddress);
     try {
       setPrechecked(true);
       setLoadingFee(true);
-      setFeeCost('...');
+      setRequiredAmount('');
       setTotalMsgValue(
         txns
           .reduce((total: any, current: any) => total.plus(current.value || 0), BN(0))
@@ -224,16 +229,12 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  // useEffect(() => {
-  //   setPrechecked(false);
-  // }, [payToken]);
-
-  const onPayTokenChange = (val:string) => {
+  const onPayTokenChange = (val: string) => {
     console.log('onPayTokenChange', val);
     setPrechecked(false);
     setPayToken(val);
     doPrecheck(val);
-  }
+  };
 
   // IMPORTANT IMPORTANT TODO, rendered twice
   useEffect(() => {
@@ -243,6 +244,21 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     console.log('do pre check', txns, payToken);
     doPrecheck(payToken);
   }, [txns, payToken]);
+
+  useEffect(() => {
+    if (!requiredAmount || !payToken) {
+      return;
+    }
+
+    const token = getTokenBalance(payToken);
+
+    if (payToken === ethers.ZeroAddress) {
+      setBalanceEnough(BN(token.tokenBalanceFormatted).minus(totalMsgValue).isGreaterThanOrEqualTo(requiredAmount));
+    } else {
+      // todo, should minus sendErc20 token balance as well
+      setBalanceEnough(BN(token.tokenBalanceFormatted).isGreaterThanOrEqualTo(requiredAmount));
+    }
+  }, [requiredAmount, payToken]);
 
   return (
     <>
@@ -321,9 +337,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               {sponsor ? (
                 <Box textAlign={'right'}>
                   <Flex mb="1" gap="4" justify={'flex-end'}>
-                    {feeCost && feeCost !== '...' && (
+                    {requiredAmount && (
                       <Text textDecoration={'line-through'}>
-                        {BN(feeCost.split(' ')[0]).toFixed(6) || '0'} {payTokenSymbol}
+                        {BN(requiredAmount).toFixed(6) || '0'} {payTokenSymbol}
                       </Text>
                     )}
                     <Text>0 ETH</Text>
@@ -332,18 +348,18 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 </Box>
               ) : (
                 <Flex gap="2">
-                  {feeCost === '...' ? <Image src={IconLoading} /> : <Text>{feeCost.split(' ')[0]}</Text>}
-                  <GasSelect gasToken={payToken} onChange={(val:string) => onPayTokenChange(val)} />
+                  {requiredAmount ? <Text>{requiredAmount}</Text> : <Image src={IconLoading} />}
+                  <GasSelect gasToken={payToken} onChange={(val: string) => onPayTokenChange(val)} />
                 </Flex>
               )}
             </InfoItem>
             <InfoItem color="#000" fontWeight="600">
               <Text>Total</Text>
               {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
-              {totalMsgValue && Number(totalMsgValue) && !sponsor && feeCost !== '...' ? ' + ' : ''}
-              {!sponsor && feeCost !== '...' ? `${BN(feeCost.split(' ')[0]).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
+              {totalMsgValue && Number(totalMsgValue) && !sponsor && requiredAmount ? ' + ' : ''}
+              {!sponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
               {!sponsor &&
-              feeCost !== '...' &&
+              requiredAmount &&
               decodedData &&
               decodedData.length > 0 &&
               decodedData.filter((item: any) => item.sendErc20Amount).length > 0
@@ -361,6 +377,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 <Text color="#f00">{hintText}</Text>
               </InfoItem>
             )}
+            {!balanceEnough && (
+              <InfoItem>
+                <Text color="#f00">Balance not enough</Text>
+              </InfoItem>
+            )}
           </InfoWrap>
         </>
       </Flex>
@@ -375,7 +396,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         mx="auto"
         onClick={onConfirm}
         loading={signing}
-        disabled={loadingFee && !sponsor}
+        disabled={(loadingFee || !balanceEnough) && !sponsor}
         bg="#6A52EF"
         color="white"
         _hover={{ bg: '#6A52EF', color: 'white' }}

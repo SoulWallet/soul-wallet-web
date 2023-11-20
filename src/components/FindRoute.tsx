@@ -20,6 +20,7 @@ export default function FindRoute({ children }: any) {
     const storageVersion = storage.getItem('storeVersion');
     const isRecoverPage = location.pathname.includes('recover');
     const isCreatePage = location.pathname.includes('create');
+    const isLaunchPage = location.pathname.includes('launch');
 
     if (storeVersion !== storageVersion) {
       if (storageVersion) {
@@ -36,6 +37,10 @@ export default function FindRoute({ children }: any) {
       navigate({
         pathname: '/launch',
         search: location.search,
+      });
+    } else if (isLaunchPage && addressList.length && selectedAddress) {
+      navigate({
+        pathname: '/wallet',
       });
     }
   };

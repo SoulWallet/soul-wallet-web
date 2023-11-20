@@ -65,7 +65,7 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
                 {tokenBalance
                   .filter((item: ITokenBalanceItem) => item.contractAddress !== sendToken)
                   .map((item: ITokenBalanceItem) => (
-                    <MenuItem w="100%" key={item.symbol}>
+                    <MenuItem w="100%" key={item.contractAddress}>
                       <TokenLine
                         icon={item.logoURI}
                         symbol={item.symbol}
