@@ -713,12 +713,11 @@ export default function SetGuardians({ changeStep }: any) {
                       rightOnChange={onChange(`address_${id}`)}
                       rightOnBlur={onBlur(`address_${id}`)}
                       rightErrorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
-                      _rightInputStyles={
-                      !!values[`address_${id}`]
-                      ? {
-                      }
-                      : {}
-                      }
+                      _rightInputStyles={{
+                        fontFamily: 'Martian',
+                        fontWeight: 600,
+                        fontSize: '14px',
+                      }}
                       _rightContainerStyles={{ width: '70%', maxWidth: "70%" }}
                       leftAutoFocus={id === guardianIds[0]}
                       leftPlaceholder="Name"
@@ -893,6 +892,7 @@ export default function SetGuardians({ changeStep }: any) {
         </Box>
       </Box>
       <GreySection
+        padding={{ base: '16px', md: '16px 45px' }}
         leftPart={
           <Box>
             <Box marginBottom="16px">

@@ -35,6 +35,7 @@ import api from '@/lib/api';
 import { useCredentialStore } from '@/store/credential';
 import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
+import GreySection from '@/components/GreySection'
 import GuardianModal from '../GuardianModal'
 import DoubleCheckModal from '../DoubleCheckModal'
 
@@ -566,17 +567,20 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
 
   return (
     <Fragment>
-      <Box width="100%" bg="#EDEDED" borderRadius="20px" padding="45px" display="flex" alignItems="flex-start" justifyContent="space-around" margin="0 auto">
-        <Box width="40%" marginRight="45px">
-          <Heading1>Guardians</Heading1>
-          <TextBody fontSize="18px" marginBottom="20px">Please enter Ethereum wallet address to set up guardians.</TextBody>
-          <Box>
-            <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
-              Learn more
-            </TextButton>
-          </Box>
-        </Box>
-        <Box width="60%">
+      <GreySection
+        padding={{ base: '16px', md: '45px' }}
+        leftPart={
+          <Fragment>
+            <Heading1>Guardians</Heading1>
+            <TextBody fontSize="18px" marginBottom="20px">Please enter Ethereum wallet address to set up guardians.</TextBody>
+            <Box>
+              <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
+                Learn more
+              </TextButton>
+            </Box>
+          </Fragment>
+        }
+        rightPart={
           <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <Box
               display="flex"
@@ -584,26 +588,22 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
               alignItems="flex-start"
               justifyContent="center"
               gap="12px"
-              maxWidth="100%"
+              width="100%"
             >
               {guardianIds.map((id: any, i: number) => (
-                <Box position="relative" key={id}>
+                <Box position="relative" key={id} width="100%">
                   <DoubleFormInput
                     rightPlaceholder={`Guardian address ${i + 1}`}
                     rightValue={values[`address_${id}`]}
                     rightOnChange={onChange(`address_${id}`)}
                     rightOnBlur={onBlur(`address_${id}`)}
                     rightErrorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
-                    _rightInputStyles={
-                    !!values[`address_${id}`]
-                    ? {
+                    _rightInputStyles={{
                       fontFamily: 'Martian',
                       fontWeight: 600,
                       fontSize: '14px',
-                    }
-                    : {}
-                    }
-                    _rightContainerStyles={{ width: '70%', minWidth: '520px' }}
+                    }}
+                    _rightContainerStyles={{ width: '70%' }}
                     leftAutoFocus={id === guardianIds[0]}
                     leftPlaceholder="Name"
                     leftValue={values[`name_${id}`]}
@@ -615,16 +615,16 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
                         eth:
                       </Text>
                     }
-                    _leftContainerStyles={{ width: '30%', minWidth: '240px' }}
+                    _leftContainerStyles={{ width: '30%' }}
                     onEnter={() => setIsConfirmOpen(false)}
-                    _styles={{ width: '100%', minWidth: '760px', fontSize: '16px' }}
+                    _styles={{ width: '100%', fontSize: '16px' }}
                   />
                   {i > 0 && (
                     <Box
                       onClick={() => removeGuardian(id)}
                       position="absolute"
                       width="40px"
-                      right="-40px"
+                      right={{ base: '-28px', md: '-40px' }}
                       top="0"
                       height="100%"
                       display="flex"
@@ -637,97 +637,109 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
                   )}
                 </Box>
               ))}
-              <TextButton onClick={() => addGuardian()} color="#EC588D" _hover={{ color: '#EC588D' }}>
+              <TextButton onClick={() => addGuardian()} color="#EC588D" _hover={{ color: '#EC588D' }} padding="2px">
                 <PlusIcon color="#EC588D" />
                 <Text fontSize="18px" marginLeft="5px">Add more guardians</Text>
               </TextButton>
             </Box>
           </Box>
-        </Box>
-      </Box>
-      <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="36px">
-        <Box width="40%" display="flex" alignItems="center">
-          <Heading1 marginBottom="0">Threshold</Heading1>
-        </Box>
-        <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
-          <TextBody>Wallet recovery requires</TextBody>
-          <Box width="80px" margin="0 10px">
-            <Menu>
-              <MenuButton
-                px={2}
-                py={2}
-                width="80px"
-                transition="all 0.2s"
-                borderRadius="16px"
-                borderWidth="1px"
-                padding="12px"
-                background="white"
-                _hover={{
-                  borderColor: '#3182ce',
-                  boxShadow: '0 0 0 1px #3182ce',
-                }}
-                _expanded={{
-                  borderColor: '#3182ce',
-                  boxShadow: '0 0 0 1px #3182ce',
-                }}
-              >
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                  {amountForm.values.amount}
-                  <DropDownIcon />
-                </Box>
-              </MenuButton>
-              <MenuList>
-                {!amountData.guardiansCount && (
-                  <MenuItem key={nanoid(4)} onClick={selectAmount(0)}>
-                    0
-                  </MenuItem>
-                )}
-                {!!amountData.guardiansCount &&
-                 getNumberArray(guardiansList.length || 0).map((i: any) => (
-                   <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
-                     {i}
-                   </MenuItem>
-                ))}
-              </MenuList>
-            </Menu>
+        }
+      />
+      <GreySection
+        padding={{ base: '16px', md: '16px 45px' }}
+        marginTop="30px"
+        leftPart={
+          <Box display="flex" alignItems="center" height="50px">
+            <Heading1 marginBottom="0">Threshold</Heading1>
           </Box>
-          <TextBody>out of {guardiansList.length || 0} guardian(s) confirmation. </TextBody>
-        </Box>
-      </Box>
+        }
+        rightPart={
+          <Box display="flex" alignItems="center" flexWrap="wrap">
+            <TextBody>Wallet recovery requires</TextBody>
+            <Box width="80px" margin="0 10px">
+              <Menu>
+                <MenuButton
+                  px={2}
+                  py={2}
+                  width="80px"
+                  transition="all 0.2s"
+                  borderRadius="16px"
+                  borderWidth="1px"
+                  padding="12px"
+                  background="white"
+                  _hover={{
+                    borderColor: '#3182ce',
+                    boxShadow: '0 0 0 1px #3182ce',
+                  }}
+                  _expanded={{
+                    borderColor: '#3182ce',
+                    boxShadow: '0 0 0 1px #3182ce',
+                  }}
+                >
+                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                    {amountForm.values.amount}
+                    <DropDownIcon />
+                  </Box>
+                </MenuButton>
+                <MenuList>
+                  {!amountData.guardiansCount && (
+                    <MenuItem key={nanoid(4)} onClick={selectAmount(0)}>
+                      0
+                    </MenuItem>
+                  )}
+                  {!!amountData.guardiansCount &&
+                   getNumberArray(guardiansList.length || 0).map((i: any) => (
+                     <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
+                       {i}
+                     </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
+            </Box>
+            <TextBody>out of {guardiansList.length || 0} guardian(s) confirmation. </TextBody>
+          </Box>
+        }
+      />
       <TextButton onClick={() => setShowAdvance(!showAdvance)} color="#EC588D" _hover={{ color: '#EC588D' }} marginTop="20px">
         <Text fontSize="18px" marginRight="5px">Advance setting</Text>
         <Box transform={showAdvance ? 'rotate(-180deg)' : ''}><ArrowDownIcon color="#EC588D" /></Box>
       </TextButton>
       {showAdvance && (
-        <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="20px">
-          <Box width="40%" display="flex" alignItems="center">
-            <Heading1 marginBottom="0">
-              Keep guardians private
-            </Heading1>
-            <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer">
-              <Tooltip
-                label={(
-                  <Box background="white" padding="28px 24px 28px 24px" width="100%" borderRadius="16px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.4)">
-                    <TextBody fontSize="16px" fontWeight="800">Privacy Setting</TextBody>
-                    <TextBody fontSize="16px" fontWeight="600" marginBottom="20px">This setting will only reveal guardian address when you use the social recovery.</TextBody>
-                    <TextBody fontSize="16px" fontWeight="600">But you need to enter the complete guardian list and threshold values for recovery.</TextBody>
-                  </Box>
-                )}
-                placement="top"
-                background="transparent"
-                boxShadow="none"
-              >
-                <span><QuestionIcon /></span>
-              </Tooltip>
+        <GreySection
+          padding={{ base: '16px', md: '16px 45px' }}
+          marginTop="20px"
+          leftPart={
+            <Box display="flex" alignItems="center">
+              <Heading1 marginBottom="0">
+                Keep guardians private
+              </Heading1>
+              <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer">
+                <Tooltip
+                  label={(
+                    <Box background="white" padding="28px 24px 28px 24px" width="100%" borderRadius="16px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.4)">
+                      <TextBody fontSize="16px" fontWeight="800">Privacy Setting</TextBody>
+                      <TextBody fontSize="16px" fontWeight="600" marginBottom="20px">This setting will only reveal guardian address when you use the social recovery.</TextBody>
+                      <TextBody fontSize="16px" fontWeight="600">But you need to enter the complete guardian list and threshold values for recovery.</TextBody>
+                    </Box>
+                  )}
+                  placement="top"
+                  background="transparent"
+                  boxShadow="none"
+                >
+                  <span><QuestionIcon /></span>
+                </Tooltip>
+              </Box>
             </Box>
-          </Box>
-          <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
-            <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
-              <Box width="30px" height="30px" background="white" borderRadius="30px" />
+          }
+          rightPart={
+            <Box display="flex" alignItems="center">
+              <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
+                <Box width="30px" height="30px" background="white" borderRadius="30px" />
+              </Box>
+              <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
             </Box>
-            <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
-          </Box>
-        </Box>
+          }
+        />
       )}
       <Box padding="40px">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">

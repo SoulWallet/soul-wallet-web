@@ -17,7 +17,7 @@ export default function GreySection({ leftPart, rightPart, ...props }: any) {
       <Box width={{ base: '100%', md: '40%' }} paddingRight={{ base: '0', md: '30px' }}>
         {leftPart}
       </Box>
-      <Box width={{ base: '100%', md: '60%' }} marginTop={{ base: '20px', md: '0' }}>
+      <Box width={{ base: '100%', md: '60%' }} marginTop={{ base: '10px', md: '0' }}>
         {rightPart}
       </Box>
     </Box>

@@ -126,10 +126,10 @@ export default function DoubleFormInput({
               {leftComponent}
             </Box>
           )}
-          <Box width="100%">
+          <Box width="100%" position="relative">
             <Input
               type="text"
-              placeholder={rightPlaceholder}
+            // placeholder={rightPlaceholder}
               value={rightValue ?? ''}
               onChange={handleRightChange}
               onBlur={handleRightBlur}
@@ -144,6 +144,22 @@ export default function DoubleFormInput({
               width="100%"
               {..._rightInputStyles}
             />
+            {(rightPlaceholder && !rightValue) && (
+              <Text
+                position="absolute"
+                height="48px"
+                left={leftComponent ? '42px' : '24px'}
+                top="0"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                pointerEvents="none"
+                color="#898989"
+                zIndex="2"
+              >
+                {rightPlaceholder}
+              </Text>
+            )}
           </Box>
         </Box>
         <Text color="#FF4343" padding="0 10px" fontSize="14px">
@@ -207,7 +223,7 @@ export function DoubleFormInfo({
           </Box>
         </Box>
       </Box>
-      <Box display="flex" flexDirection="column" width="50%" {..._rightContainerStyles}>
+      <Box display="flex" flexDirection="column" width="50%" overflow="hidden" {..._rightContainerStyles}>
         {rightLabel && (
           <Box as="label" htmlFor="rightLabel">
             {rightLabel}
@@ -243,7 +259,13 @@ export function DoubleFormInfo({
               justifyContent="flex-start"
               {..._rightInputStyles}
             >
-              {rightValue ?? ''}
+              <Text
+                width="100%"
+                overflow="hidden"
+                textOverflow="ellipsis"
+              >
+                {rightValue ?? ''}
+              </Text>
             </Box>
           </Box>
           {rightComponent && (
