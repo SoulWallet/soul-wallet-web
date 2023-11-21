@@ -324,17 +324,6 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
     }
   };
 
-  useEffect(() => {
-    const test = async () => {
-      const result2 = await api.guardian.getTask({
-        taskID: '0xfc1e5a082b9d06f4031108b18c160c730fde805e391e1a306474d2f370e61a63'
-      })
-      console.log('taskID', result2);
-    }
-
-    test()
-  }, [])
-
   const addGuardian = () => {
     const id = nextRandomId();
     const newGuardianIds = [...guardianIds, id];
