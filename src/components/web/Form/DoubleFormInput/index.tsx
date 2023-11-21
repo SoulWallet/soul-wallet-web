@@ -263,6 +263,7 @@ export function DoubleFormInfo({
                 width="100%"
                 overflow="hidden"
                 textOverflow="ellipsis"
+                style={{ 'text-wrap': 'nowrap' } as any}
               >
                 {rightValue ?? ''}
               </Text>
