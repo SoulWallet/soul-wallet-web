@@ -9,6 +9,22 @@ import { DecodeUserOp, DecodeResult } from '@soulwallet/decoder';
 import { UserOperation } from '@soulwallet/sdk';
 import IconSend from '@/assets/activities/send.svg';
 import IconContract from '@/assets/activities/contract.svg';
+import IconEthSquare from '@/assets/chains/eth-square.svg';
+import IconOpSquare from '@/assets/chains/op-square.svg';
+import IconArbSquare from '@/assets/chains/arb-square.svg';
+
+export const getChainIcon = (chainIdHex: string) => {
+  switch (chainIdHex) {
+    case '0x5':
+      return IconEthSquare;
+    case '0x66eed':
+      return IconArbSquare;
+    case '0x1a4':
+      return IconOpSquare;
+    default:
+      return '';
+  }
+};
 
 export function parseBase64url(base64url: string) {
   base64url = base64url.replace(/\-/g, '+').replace(/_/g, '/');

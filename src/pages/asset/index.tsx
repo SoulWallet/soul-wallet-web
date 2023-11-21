@@ -47,7 +47,6 @@ export default function Asset() {
   const { chainList } = useChainStore();
   const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
 
-  console.log('')
   return (
     <Box color="#000">
       <Header />

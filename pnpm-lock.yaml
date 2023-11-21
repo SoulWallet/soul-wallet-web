@@ -10,7 +10,7 @@ specifiers:
   '@peculiar/asn1-schema': ^2.3.6
   '@safe-global/safe-apps-sdk': ^8.1.0
   '@soulwallet/abi': ^0.1.3
-  '@soulwallet/decoder': ^0.1.3
+  '@soulwallet/decoder': ^0.1.4
   '@soulwallet/result': ^0.1.2
   '@soulwallet/sdk': ^0.1.13
   '@types/node': 20.6.2
@@ -52,7 +52,7 @@ dependencies:
   '@peculiar/asn1-schema': 2.3.8
   '@safe-global/safe-apps-sdk': 8.1.0_typescript@5.2.2
   '@soulwallet/abi': 0.1.3
-  '@soulwallet/decoder': 0.1.3
+  '@soulwallet/decoder': 0.1.4
   '@soulwallet/result': 0.1.2
   '@soulwallet/sdk': 0.1.13
   '@types/node': 20.6.2
@@ -1757,8 +1757,8 @@ packages:
       '@soulwallet/result': 0.1.2
     dev: false
 
-  /@soulwallet/decoder/0.1.3:
-    resolution: {integrity: sha512-pF3pz9v6l9sg3VSGnqEk/Lco+D3Y62UTkIcQofrvb61namHfov2z2xvKRJeRzffVruQLF54rETOG2I7XNrxP1Q==}
+  /@soulwallet/decoder/0.1.4:
+    resolution: {integrity: sha512-3UxZJxGkKM2prokh4JrIEY9Vduv2RrGYfWir9UitRDdHRown9PtZ0vJ6K1hAD0wF9lzkztcqtx5RY5N6XKj2zw==}
     dependencies:
       '@soulwallet/abi': 0.1.3
       '@soulwallet/assets': 0.1.3
