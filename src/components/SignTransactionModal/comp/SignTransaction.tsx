@@ -262,7 +262,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   return (
     <>
-      <Flex flexDir={'column'} gap="5" mt="8" overflowY="auto">
+      <Flex flexDir={'column'} gap="5" mt="8">
         <Flex flexDir={'column'} align={'center'} fontWeight={'800'} lineHeight={'1'}>
           {decodedData && (
             <Box mb="18px" fontSize={'12px'} fontFamily={'Martian'}>
@@ -280,7 +280,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           )}
           {totalMsgValue && Number(totalMsgValue) > 0 && (
             <>
-              <Text fontSize={'32px'} mb="3" color="#000">
+              <Text  fontSize={{base: "20px", md: "24px", lg: "32px"}} mb="3" color="#000">
                 {totalMsgValue} ETH
               </Text>
               {/** TODO, change to real price */}

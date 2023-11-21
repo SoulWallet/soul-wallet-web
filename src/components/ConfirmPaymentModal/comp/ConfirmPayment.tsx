@@ -55,7 +55,7 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
           flexDirection="column"
         >
           <Box fontSize="12px" fontWeight="600" fontFamily="Martian">Estimated fee</Box>
-          <Box fontSize="32px" fontWeight="800" fontFamily="Nunito" textAlign="center">{BN(fee).shiftedBy(-18).toString()} ETH</Box>
+          <Box fontSize={{base: "20px", md: "24px", lg: "32px"}} fontWeight="800" fontFamily="Nunito" textAlign="center">{BN(fee).shiftedBy(-18).toString()} ETH</Box>
         </Box>
         <Box width="100%" display="flex" alignItems="center" justifyContent="center">
           <Box bg="#f2f2f2" width="320px" borderRadius="36px" height="36px" display="flex" alignItems="center" justifyContent="center">

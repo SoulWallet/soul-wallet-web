@@ -5,7 +5,7 @@ export default function TxModal({ title, visible, onClose, children, width, body
     visible && (
       <Modal isOpen={true} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxW={width || { base: '90%', lg: '640px' }}>
+        <ModalContent overflowY={'auto'} maxW={width || { base: '90%', lg: '640px' }}>
           <ModalHeader fontWeight={'800'} textAlign={'center'} borderBottom={'1px solid #d7d7d7'}>
             {title}
           </ModalHeader>

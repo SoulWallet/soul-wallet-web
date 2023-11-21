@@ -63,7 +63,7 @@ function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent bg="#ededed" maxW={'480px'} display="flex" alignItems="center" justifyContent="flex-start" padding="30px" overflow="scroll">
+      <ModalContent bg="#ededed"  maxW={{base: "360px", md: "480px"}} display="flex" alignItems="center" justifyContent="flex-start" padding="30px" overflow="auto">
         <Box width="320px">
           <Box
             width="100%"

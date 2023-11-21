@@ -35,7 +35,7 @@ function DisclaminerModal({ isOpen, onClose }: any) {
           Soul Wallet Public Alpha Testing Disclaimer
         </ModalHeader>
         <ModalCloseButton top="14px" />
-        <ModalBody px="20px" overflow="scroll">
+        <ModalBody px="20px" overflow="auto">
           <Box
             h="100%"
             roundedBottom="20px"
@@ -140,7 +140,7 @@ export default function SetWalletName({ changeStep }: any) {
 
   return (
     <FullscreenContainer>
-      <Box width="480px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+      <Box  w={{base: "360px", md: "480px"}} maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
           <Heading1 marginTop="20px">🎉 Wallet is ready!</Heading1>
         </Box>
