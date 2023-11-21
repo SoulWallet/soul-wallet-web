@@ -99,6 +99,7 @@ const SignCard = () => {
       }
       setIsAuthing(false);
     } catch (error: any) {
+      alert(error)
       if (error.code === 0) {
         showError('User rejected login');
       } else {
