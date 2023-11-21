@@ -44,8 +44,8 @@ export default function SetPasskeys({ changeStep }: any) {
   }
 
   return (
-    <FullscreenContainer>
-      <Box w={{base: "360px", md: "480px"}} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+    <FullscreenContainer padding="16px">
+      <Box w="360px" maxWidth="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
         <Box marginBottom="12px">
           <Steps
             backgroundColor="#1E1E1E"

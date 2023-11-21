@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import FullscreenContainer from '@/components/FullscreenContainer';
 import {
   Box,
@@ -58,6 +58,7 @@ import useTransaction from '@/hooks/useTransaction';
 import GuardianModal from '@/pages/security/Guardian/GuardianModal'
 import useTools from '@/hooks/useTools';
 import { defaultGuardianSafePeriod } from '@/config';
+import GreySection from '@/components/GreySection'
 
 function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
   return (
@@ -303,7 +304,7 @@ export default function SetGuardians({ changeStep }: any) {
       Object.keys(values)
             .filter((key) => key.indexOf('address') === 0)
             .map((key) => values[key]) as any
-            // .filter((address) => !!String(address).trim().length) as any,
+      // .filter((address) => !!String(address).trim().length) as any,
     );
   }, [values]);
 
@@ -599,8 +600,8 @@ export default function SetGuardians({ changeStep }: any) {
 
   if (status === 'backuping') {
     return (
-      <FullscreenContainer>
-        <Box width="320px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+      <FullscreenContainer padding="16px">
+        <Box width="320px" maxWidth="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
           <Box marginBottom="12px">
             <Steps
               backgroundColor="#1E1E1E"
@@ -666,8 +667,8 @@ export default function SetGuardians({ changeStep }: any) {
 
   if (status === 'editing') {
     return (
-      <FullscreenContainer>
-        <Box width="calc(100% - 40px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+      <FullscreenContainer padding="16px" margin="0 auto">
+        <Box width="calc(100% - 40px)" maxW="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="0 auto">
           <Box marginBottom="12px">
             <Steps
               backgroundColor="#1E1E1E"
@@ -677,21 +678,24 @@ export default function SetGuardians({ changeStep }: any) {
               marginTop="24px"
             />
           </Box>
-          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="20px">
+          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="20px" margin="0 auto" textAlign="center">
             <Heading1>Setup guardians for social recovery</Heading1>
           </Box>
         </Box>
-        <Box width="100%" bg="#EDEDED" borderRadius="20px" padding="45px" display="flex" alignItems="flex-start" justifyContent="space-around" margin="0 auto">
-          <Box width="40%" marginRight="45px">
-            <Heading1>Guardian</Heading1>
-            <TextBody fontSize="18px" marginBottom="20px">Please enter Ethereum wallet address to set up guardians.</TextBody>
-            <Box>
-              <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
-                Learn more
-              </TextButton>
-            </Box>
-          </Box>
-          <Box width="60%">
+        <GreySection
+          padding={{ base: '16px', md: '45px' }}
+          leftPart={
+            <Fragment>
+              <Heading1>Guardian</Heading1>
+              <TextBody fontSize="18px" marginBottom="20px">Please enter Ethereum wallet address to set up guardians.</TextBody>
+              <Box>
+                <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
+                  Learn more
+                </TextButton>
+              </Box>
+            </Fragment>
+          }
+          rightPart={
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
               <Box
                 display="flex"
@@ -699,10 +703,10 @@ export default function SetGuardians({ changeStep }: any) {
                 alignItems="flex-start"
                 justifyContent="center"
                 gap="12px"
-                maxWidth="100%"
+                width="100%"
               >
                 {guardianIds.map((id: any, i: number) => (
-                  <Box position="relative" key={id}>
+                  <Box position="relative" key={id} width="100%">
                     <DoubleFormInput
                       rightPlaceholder={`Guardian address ${i + 1}`}
                       rightValue={values[`address_${id}`]}
@@ -712,13 +716,10 @@ export default function SetGuardians({ changeStep }: any) {
                       _rightInputStyles={
                       !!values[`address_${id}`]
                       ? {
-                        fontFamily: 'Martian',
-                        fontWeight: 600,
-                        fontSize: '14px',
                       }
                       : {}
                       }
-                      _rightContainerStyles={{ width: '70%', minWidth: '520px' }}
+                      _rightContainerStyles={{ width: '70%', maxWidth: "70%" }}
                       leftAutoFocus={id === guardianIds[0]}
                       leftPlaceholder="Name"
                       leftValue={values[`name_${id}`]}
@@ -730,18 +731,18 @@ export default function SetGuardians({ changeStep }: any) {
                           eth:
                         </Text>
                       }
-                      _leftContainerStyles={{ width: '30%', minWidth: '240px' }}
+                      _leftContainerStyles={{ width: '30%' }}
                       onEnter={handleSubmit}
-                      _styles={{ width: '100%', minWidth: '760px', fontSize: '16px' }}
+                      _styles={{ width: '100%', fontSize: '16px' }}
                     />
                     {i > 0 && (
                       <Box
                         onClick={() => removeGuardian(id)}
                         position="absolute"
                         width="40px"
-                        right="-40px"
+                        right={{ base: '-28px', md: '-40px' }}
                         top="0"
-                        height="100%"
+                        height="48px"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
@@ -752,97 +753,109 @@ export default function SetGuardians({ changeStep }: any) {
                     )}
                   </Box>
                 ))}
-                <TextButton onClick={() => addGuardian()} color="#EC588D" _hover={{ color: '#EC588D' }}>
+                <TextButton onClick={() => addGuardian()} color="#EC588D" _hover={{ color: '#EC588D' }} padding="2px">
                   <PlusIcon color="#EC588D" />
                   <Text fontSize="18px" marginLeft="5px">Add more guardians</Text>
                 </TextButton>
               </Box>
             </Box>
-          </Box>
-        </Box>
-        <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="36px">
-          <Box width="40%" display="flex" alignItems="center">
-            <Heading1 marginBottom="0">Threshold</Heading1>
-          </Box>
-          <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
-            <TextBody>Wallet recovery requires</TextBody>
-            <Box width="80px" margin="0 10px">
-              <Menu>
-                <MenuButton
-                  px={2}
-                  py={2}
-                  width="80px"
-                  transition="all 0.2s"
-                  borderRadius="16px"
-                  borderWidth="1px"
-                  padding="12px"
-                  background="white"
-                  _hover={{
-                    borderColor: '#3182ce',
-                    boxShadow: '0 0 0 1px #3182ce',
-                  }}
-                  _expanded={{
-                    borderColor: '#3182ce',
-                    boxShadow: '0 0 0 1px #3182ce',
-                  }}
-                >
-                  <Box display="flex" alignItems="center" justifyContent="space-between">
-                    {amountForm.values.amount}
-                    <DropDownIcon />
-                  </Box>
-                </MenuButton>
-                <MenuList>
-                  {!amountData.guardiansCount && (
-                    <MenuItem key={nanoid(4)} onClick={selectAmount(0)}>
-                      0
-                    </MenuItem>
-                  )}
-                  {!!amountData.guardiansCount &&
-                   getNumberArray(amountData.guardiansCount || 0).map((i: any) => (
-                     <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
-                       {i}
-                     </MenuItem>
-                  ))}
-                </MenuList>
-              </Menu>
+          }
+        />
+        <GreySection
+          padding={{ base: '16px', md: '16px 45px' }}
+          marginTop="30px"
+          leftPart={
+            <Box display="flex" alignItems="center" height="50px">
+              <Heading1 marginBottom="0">Threshold</Heading1>
             </Box>
-            <TextBody>out of {amountData.guardiansCount || 0} guardian(s) confirmation. </TextBody>
-          </Box>
-        </Box>
+          }
+          rightPart={
+            <Box display="flex" alignItems="center" flexWrap="wrap">
+              <TextBody>Wallet recovery requires</TextBody>
+              <Box width="80px" margin="0 10px">
+                <Menu>
+                  <MenuButton
+                    px={2}
+                    py={2}
+                    width="80px"
+                    transition="all 0.2s"
+                    borderRadius="16px"
+                    borderWidth="1px"
+                    padding="12px"
+                    background="white"
+                    _hover={{
+                      borderColor: '#3182ce',
+                      boxShadow: '0 0 0 1px #3182ce',
+                    }}
+                    _expanded={{
+                      borderColor: '#3182ce',
+                      boxShadow: '0 0 0 1px #3182ce',
+                    }}
+                  >
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                      {amountForm.values.amount}
+                      <DropDownIcon />
+                    </Box>
+                  </MenuButton>
+                  <MenuList>
+                    {!amountData.guardiansCount && (
+                      <MenuItem key={nanoid(4)} onClick={selectAmount(0)}>
+                        0
+                      </MenuItem>
+                    )}
+                    {!!amountData.guardiansCount &&
+                     getNumberArray(amountData.guardiansCount || 0).map((i: any) => (
+                       <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
+                         {i}
+                       </MenuItem>
+                    ))}
+                  </MenuList>
+                </Menu>
+              </Box>
+              <TextBody>out of {amountData.guardiansCount || 0} guardian(s) confirmation. </TextBody>
+            </Box>
+          }
+        />
         <TextButton onClick={() => setShowAdvance(!showAdvance)} color="#EC588D" _hover={{ color: '#EC588D' }} marginTop="20px">
           <Text fontSize="18px" marginRight="5px">Advance setting</Text>
           <Box transform={showAdvance ? 'rotate(-180deg)' : ''}><ArrowDownIcon color="#EC588D" /></Box>
         </TextButton>
         {showAdvance && (
-          <Box background="#EDEDED" borderRadius="20px" padding="16px 45px" display="flex" marginTop="20px">
-            <Box width="40%" display="flex" alignItems="center">
-              <Heading1 marginBottom="0">
-                Keep guardians private
-              </Heading1>
-              <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer">
-                <Tooltip
-                  label={(
-                    <Box background="white" padding="28px 24px 28px 24px" width="100%" borderRadius="16px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.4)">
-                      <TextBody fontSize="16px" fontWeight="800">Privacy Setting</TextBody>
-                      <TextBody fontSize="16px" fontWeight="600" marginBottom="20px">This setting will only reveal guardian address when you use the social recovery.</TextBody>
-                      <TextBody fontSize="16px" fontWeight="600">But you need to enter the complete guardian list and threshold values for recovery.</TextBody>
-                    </Box>
-                  )}
-                  placement="top"
-                  background="transparent"
-                  boxShadow="none"
-                >
-                  <span><QuestionIcon /></span>
-                </Tooltip>
+          <GreySection
+            padding={{ base: '16px', md: '16px 45px' }}
+            marginTop="20px"
+            leftPart={
+              <Box display="flex" alignItems="center">
+                <Heading1 marginBottom="0">
+                  Keep guardians private
+                </Heading1>
+                <Box height="100%" display="flex" alignItems="center" justifyContent="center" marginLeft="4px" paddingTop="4px" cursor="pointer">
+                  <Tooltip
+                    label={(
+                      <Box background="white" padding="28px 24px 28px 24px" width="100%" borderRadius="16px" boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.4)">
+                        <TextBody fontSize="16px" fontWeight="800">Privacy Setting</TextBody>
+                        <TextBody fontSize="16px" fontWeight="600" marginBottom="20px">This setting will only reveal guardian address when you use the social recovery.</TextBody>
+                        <TextBody fontSize="16px" fontWeight="600">But you need to enter the complete guardian list and threshold values for recovery.</TextBody>
+                      </Box>
+                    )}
+                    placement="top"
+                    background="transparent"
+                    boxShadow="none"
+                  >
+                    <span><QuestionIcon /></span>
+                  </Tooltip>
+                </Box>
               </Box>
-            </Box>
-            <Box width="60%" display="flex" alignItems="center" paddingLeft="20px">
-              <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
-                <Box width="30px" height="30px" background="white" borderRadius="30px" />
+            }
+            rightPart={
+              <Box display="flex" alignItems="center">
+                <Box width="72px" minWidth="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
+                  <Box width="30px" height="30px" background="white" borderRadius="30px" />
+                </Box>
+                <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
               </Box>
-              <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
-            </Box>
-          </Box>
+            }
+          />
         )}
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="36px">
           <Button _styles={{ width: '320px', marginBottom: '12px' }} disabled={loading || disabled} loading={loading} onClick={keepPrivate ? () => startBackup() : () => handleSubmit()}>
@@ -859,8 +872,8 @@ export default function SetGuardians({ changeStep }: any) {
   }
 
   return (
-    <FullscreenContainer>
-      <Box width="calc(100% - 40px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+    <FullscreenContainer padding="16px">
+      <Box width="calc(100% - 40px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="0 auto" textAlign="center">
         <Box marginBottom="12px">
           <Steps
             backgroundColor="#1E1E1E"
@@ -879,55 +892,65 @@ export default function SetGuardians({ changeStep }: any) {
           </TextBody>
         </Box>
       </Box>
-      <Box width="calc(100% - 40px)" bg="#EDEDED" borderRadius="20px" padding="45px" paddingRight="2px" display="flex" alignItems="flex-start" justifyContent="space-around" margin="0 auto">
-        <Box width="40%" marginRight="45px">
-          <Box marginBottom="16px">
-            <Box display="flex" alignItems="center" justifyContent="flex-start">
-              <TextBody fontSize="16px" fontWeight="800">
-                What is guardian?
-              </TextBody>
-            </Box>
-            <Box maxWidth="560px">
-              <TextBody fontSize="14px" fontWeight="700">
-                Guardians are Ethereum wallets that help you get back into your wallet if you're locked out.
-              </TextBody>
-            </Box>
-          </Box>
-          <Box marginBottom="16px">
-            <Box display="flex" alignItems="center" justifyContent="flex-start">
-              <TextBody fontSize="16px" fontWeight="800">
-                Who can be my guardians?
-              </TextBody>
-            </Box>
-            <Box maxWidth="560px">
-              <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
-                Pick friends you trust or use your current Ethereum wallets as guardians for extra security.
-              </TextBody>
-              <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
-                Both EOA wallets (e.g MetaMask) and smart contract wallet are supported.
-              </TextBody>
-              <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
-                If choosing smart contract wallet as your guardian, make sure it's deployed on Ethereum.
-              </TextBody>
-            </Box>
-          </Box>
+      <GreySection
+        leftPart={
           <Box>
-            <Box display="flex" alignItems="center" justifyContent="flex-start">
-              <TextBody fontSize="16px" fontWeight="800">
-                What is social recovery?
-              </TextBody>
+            <Box marginBottom="16px">
+              <Box display="flex" alignItems="center" justifyContent="flex-start">
+                <TextBody fontSize="16px" fontWeight="800">
+                  What is guardian?
+                </TextBody>
+              </Box>
+              <Box maxWidth="560px">
+                <TextBody fontSize="14px" fontWeight="700">
+                  Guardians are Ethereum wallets that help you get back into your wallet if you're locked out.
+                </TextBody>
+              </Box>
             </Box>
-            <Box maxWidth="560px">
-              <TextBody fontSize="14px" fontWeight="700">
-                If you lose your Soul Wallet, simply have your chosen friends (guardians) sign to recover it.
-              </TextBody>
+            <Box marginBottom="16px">
+              <Box display="flex" alignItems="center" justifyContent="flex-start">
+                <TextBody fontSize="16px" fontWeight="800">
+                  Who can be my guardians?
+                </TextBody>
+              </Box>
+              <Box maxWidth="560px">
+                <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
+                  Pick friends you trust or use your current Ethereum wallets as guardians for extra security.
+                </TextBody>
+                <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
+                  Both EOA wallets (e.g MetaMask) and smart contract wallet are supported.
+                </TextBody>
+                <TextBody fontSize="14px" fontWeight="700" marginBottom="20px">
+                  If choosing smart contract wallet as your guardian, make sure it's deployed on Ethereum.
+                </TextBody>
+              </Box>
+            </Box>
+            <Box>
+              <Box display="flex" alignItems="center" justifyContent="flex-start">
+                <TextBody fontSize="16px" fontWeight="800">
+                  What is social recovery?
+                </TextBody>
+              </Box>
+              <Box maxWidth="560px">
+                <TextBody fontSize="14px" fontWeight="700">
+                  If you lose your Soul Wallet, simply have your chosen friends (guardians) sign to recover it.
+                </TextBody>
+              </Box>
             </Box>
           </Box>
-        </Box>
-        <Box as="video" width="760px" aspectRatio="auto" borderRadius="24px" controls>
-          <source src="https://static-assets.soulwallet.io/videos/guardians-and-recovery-intro.webm" type="video/webm" />
-        </Box>
-      </Box>
+        }
+        rightPart={
+          <Box
+            as="video"
+            width="760px"
+            aspectRatio="auto"
+            borderRadius="24px"
+            controls
+          >
+            <source src="https://static-assets.soulwallet.io/videos/guardians-and-recovery-intro.webm" type="video/webm" />
+          </Box>
+        }
+      />
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
         <Button onClick={startEdit} _styles={{ width: '320px', marginBottom: '12px' }}>
           Set up now

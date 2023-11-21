@@ -110,7 +110,7 @@ export default function DoubleFormInput({
             {rightLabel}
           </Box>
         )}
-        <Box position="relative">
+        <Box position="relative" display="flex" width="100%" maxWidth="100%">
           {leftComponent && (
             <Box
               position="absolute"
@@ -126,7 +126,7 @@ export default function DoubleFormInput({
               {leftComponent}
             </Box>
           )}
-          <Box>
+          <Box width="100%">
             <Input
               type="text"
               placeholder={rightPlaceholder}
@@ -141,6 +141,7 @@ export default function DoubleFormInput({
               borderTopLeftRadius="0"
               borderBottomLeftRadius="0"
               onKeyDown={onKeyDown}
+              width="100%"
               {..._rightInputStyles}
             />
           </Box>

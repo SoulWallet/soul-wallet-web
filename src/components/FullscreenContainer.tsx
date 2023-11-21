@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import Logo from '@/components/web/Logo';
 import { Box } from '@chakra-ui/react';
 
-export default function FullscreenContainer({ children }: { children: ReactNode }) {
+export default function FullscreenContainer({ children, ...props }: any) {
   return (
     <Box
       background="#F7F7F7"
@@ -15,6 +15,7 @@ export default function FullscreenContainer({ children }: { children: ReactNode 
       height="100vh"
       width="100%"
       maxWidth="100%"
+      {...props}
     >
       <Logo />
       <Box
