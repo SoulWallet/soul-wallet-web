@@ -40,7 +40,7 @@ export default function GuardianModal({ isOpen, onClose }: any) {
           About Guardian
         </ModalHeader>
         <ModalCloseButton top="14px" />
-        <ModalBody px="20px" overflow="scroll">
+        <ModalBody px="20px" overflow="auto">
           <Box
             bg="#ededed"
             h="100%"

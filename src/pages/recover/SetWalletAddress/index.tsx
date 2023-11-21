@@ -155,7 +155,7 @@ export default function Recover({ changeStep }: any) {
           onChange={onChange('address')}
           onBlur={onBlur('address')}
           errorMsg={showErrors.address && errors.address}
-          _styles={{  width: '460px',  }}
+          _styles={{  w: '460px', maxW: "98%",  }}
           autoFocus={true}
           onEnter={handleNext}
         />

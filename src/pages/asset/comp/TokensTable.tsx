@@ -2,43 +2,34 @@ import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Table, Tr, Thead, Tbody, Th, Td, Image, GridItem, Grid } from '@chakra-ui/react';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
-import IconEthSquare from '@/assets/chains/eth-square.svg';
-import IconOpSquare from '@/assets/chains/op-square.svg';
-import IconArbSquare from '@/assets/chains/arb-square.svg';
+import { getChainIcon } from '@/lib/tools';
 import Button from '@/components/Button';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import IconDefaultToken from '@/assets/tokens/default.svg';
 import { useChainStore } from '@/store/chain';
-
-const getChainIcon = (chainIdHex: string) => {
-  switch (chainIdHex) {
-    case '0x5':
-      return IconEthSquare;
-    case '0x66eed':
-      return IconArbSquare;
-    case '0x1a4':
-      return IconOpSquare;
-    default:
-      return '';
-  }
-};
+import IconLoading from '@/assets/loading.svg';
 
 export default function TokensTable({ activeChains }: any) {
   const { showTransferAssets } = useWalletContext();
+  const [loading, setLoading] = useState(false);
   const { selectedAddress } = useAddressStore();
   const { setSelectedChainId } = useChainStore();
   const [balanceList, setBalanceList] = useState([]);
 
   const getTokenBalance = async () => {
-    const res = await api.balance.token({
-      walletAddress: selectedAddress,
-      chains: activeChains.map((item: any) => ({
-        chainID: item,
-        reservedTokenAddresses: [],
-      })),
-    });
-
-    setBalanceList(res.data);
+    try {
+      setLoading(true);
+      const res = await api.balance.token({
+        walletAddress: selectedAddress,
+        chains: activeChains.map((item: any) => ({
+          chainID: item,
+          reservedTokenAddresses: [],
+        })),
+      });
+      setBalanceList(res.data);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -65,6 +56,7 @@ export default function TokensTable({ activeChains }: any) {
         </Tr>
       </Thead>
       <Tbody>
+        {loading && !balanceList.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
         {balanceList.map((item: any, idx: number) => {
           return (
             <Tr

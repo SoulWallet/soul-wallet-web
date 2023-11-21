@@ -25,7 +25,7 @@ export default function DoubleCheckModal({ isOpen, onClose, onSubmit }: any) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent maxW={'500px'}>
+      <ModalContent maxW={{base: '90%', md: '500px'}}>
         <ModalHeader
           display={'flex'}
           justifyContent={'center'}
@@ -37,7 +37,7 @@ export default function DoubleCheckModal({ isOpen, onClose, onSubmit }: any) {
           Edit Guardian
         </ModalHeader>
         <ModalCloseButton top="14px" />
-        <ModalBody px="20px" overflow="scroll">
+        <ModalBody px="20px" overflow="auto">
           <Box
             h="100%"
             roundedBottom="20px"
