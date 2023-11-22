@@ -193,7 +193,7 @@ export default function Passkey({ setActiveSection }: any) {
             </Heading2>
           </Box>
           <GreySection
-            padding={{ base: '16px', md: '16px 45px' }}
+            padding={{ base: '16px', md: '45px' }}
             leftPart={
               <Fragment>
                 <Heading1>My passkeys</Heading1>

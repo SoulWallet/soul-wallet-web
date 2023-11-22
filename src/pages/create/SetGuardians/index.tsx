@@ -667,8 +667,8 @@ export default function SetGuardians({ changeStep }: any) {
 
   if (status === 'editing') {
     return (
-      <FullscreenContainer padding="16px" margin="0 auto">
-        <Box width="calc(100% - 40px)" maxW="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="0 auto">
+      <FullscreenContainer padding="16px">
+        <Box width="100%" maxWidth="1200px" display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="0 auto">
           <Box marginBottom="12px">
             <Steps
               backgroundColor="#1E1E1E"
@@ -703,7 +703,7 @@ export default function SetGuardians({ changeStep }: any) {
                 alignItems="flex-start"
                 justifyContent="center"
                 gap="12px"
-                width="100%"
+                width={{ base: "100%", md: "760px" }}
               >
                 {guardianIds.map((id: any, i: number) => (
                   <Box position="relative" key={id} width="100%">
@@ -872,7 +872,7 @@ export default function SetGuardians({ changeStep }: any) {
 
   return (
     <FullscreenContainer padding="16px">
-      <Box width="calc(100% - 40px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="0 auto" textAlign="center">
+      <Box width="100%" maxWidth="1200px" display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="0 auto" textAlign="center">
         <Box marginBottom="12px">
           <Steps
             backgroundColor="#1E1E1E"
@@ -892,7 +892,7 @@ export default function SetGuardians({ changeStep }: any) {
         </Box>
       </Box>
       <GreySection
-        padding={{ base: '16px', md: '16px 45px' }}
+        padding={{ base: '16px', md: '45px' }}
         leftPart={
           <Box>
             <Box marginBottom="16px">
