@@ -163,15 +163,19 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   };
 
   const getFinalUserOp = async (txns: any, payTokenAddress: string) => {
-    const isActivated = await checkActivated();
-    if (isActivated) {
-      // if activated, get userOp directly
-      return await getUserOp(txns, payTokenAddress);
-    } else {
-      const activateIndex = getIndexByAddress(addressList, selectedAddress);
-      console.log('activate index', activateIndex, addressList, selectedAddress, txns);
-      // if not activated, prepend activate txns
-      return await getActivateOp(activateIndex, payToken, txns);
+    try{
+      const isActivated = await checkActivated();
+      if (isActivated) {
+        // if activated, get userOp directly
+        return await getUserOp(txns, payTokenAddress);
+      } else {
+        const activateIndex = getIndexByAddress(addressList, selectedAddress);
+        // if not activated, prepend activate txns
+        return await getActivateOp(activateIndex, payToken, txns);
+      }
+    }catch(err:any){
+      console.log('Get final userOp err:', err.message)
+      throw new Error(err.message);
     }
   };
 
