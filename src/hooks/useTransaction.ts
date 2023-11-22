@@ -72,8 +72,8 @@ export default function useTransaction() {
       userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
 
       return userOp;
-    } catch (err) {
-      console.log(err);
+    } catch (err:any) {
+      throw new Error(err.message);
     }
   };
 
