@@ -14,6 +14,7 @@ export default {
   provider: `https://goerli.optimism.io`,
   l1Provider: `https://goerli.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18`,
   scanUrl: 'https://goerli-optimism.etherscan.io/',
+  scanName: 'Etherscan',
   bundlerUrl: 'https://api-dev.soulwallet.io/bundler/op-goerli/rpc',
   maxCostMultiplier: 120,
   chainId: 420,
