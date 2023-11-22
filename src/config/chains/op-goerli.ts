@@ -11,7 +11,7 @@ export default {
   iconFaded: IconOpFaded,
   cardBg: 'radial-gradient(52.03% 100% at 100% 100%, #FF9595 0%, #E2FC89 100%)',
   cardBgUnactivated: 'radial-gradient(52.03% 100% at 100% 100%, #FF9595 0%, #D7D7D7 100%)',
-  provider: `https://optimism-goerli.publicnode.com`,
+  provider: `https://goerli.optimism.io`,
   l1Provider: `https://goerli.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18`,
   scanUrl: 'https://goerli-optimism.etherscan.io/',
   bundlerUrl: 'https://api-dev.soulwallet.io/bundler/op-goerli/rpc',
