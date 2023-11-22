@@ -10,15 +10,15 @@ import { useGuardianStore } from '@/store/guardian';
 
 export default function useTools() {
   const toast = useToast();
-
-  const { clearCredentials } = useCredentialStore();
-  const { clearAddresses } = useAddressStore();
-  const {clearGuardianInfo} = useGuardianStore();
+  // const { clearCredentials } = useCredentialStore();
+  // const { clearAddresses } = useAddressStore();
+  // const {clearGuardianInfo} = useGuardianStore();
   const clearPreviousData = () => {
+    console.log('do clear previous data');
     // make sure no storage left
-    clearCredentials();
-    clearAddresses();
-    clearGuardianInfo();
+    // clearCredentials();
+    // clearAddresses();
+    // clearGuardianInfo();
     clearStorageWithCredentials();
   };
 
