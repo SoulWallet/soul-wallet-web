@@ -5,6 +5,7 @@ import Heading1 from '@/components/web/Heading1';
 import TextBody from '@/components/web/TextBody';
 import RoundButton from '@/components/web/Button';
 import { useGuardianStore } from '@/store/guardian';
+import GreySection from '@/components/GreySection'
 
 export default function GuardianIntro({ startManage, startEdit }: any) {
   const { guardiansInfo } = useGuardianStore();
@@ -20,23 +21,32 @@ export default function GuardianIntro({ startManage, startEdit }: any) {
 
   return (
     <Fragment>
-      <Box background="#EDEDED" borderRadius="20px" padding="45px" display="flex">
-        <Box width="40%" paddingRight="32px">
-          <Heading1>Set up guardian</Heading1>
-          <TextBody fontSize="18px" marginBottom="20px">To secure future social recovery of your wallet. Set up your guardians now! </TextBody>
-          <Box>
-            <RoundButton _styles={{ width: '320px', maxWidth: '100%' }} onClick={() => setup()}>
-              Set up now
-            </RoundButton>
-          </Box>
-        </Box>
-        <Box width="60%">
-          <Box as="video" width="100%" aspectRatio="auto" borderRadius="24px" marginBottom="16px" marginTop="16px" controls>
+      <GreySection
+        padding={{ base: '16px', md: '16px 45px' }}
+        leftPart={
+          <Fragment>
+            <Heading1>Set up guardian</Heading1>
+            <TextBody fontSize="18px" marginBottom="20px">To secure future social recovery of your wallet. Set up your guardians now! </TextBody>
+            <Box>
+              <RoundButton _styles={{ width: '320px', maxWidth: '100%' }} onClick={() => setup()}>
+                Set up now
+              </RoundButton>
+            </Box>
+          </Fragment>
+        }
+        rightPart={
+          <Box
+            as="video"
+            width="760px"
+            aspectRatio="auto"
+            borderRadius="24px"
+            controls
+          >
             <source src="https://static-assets.soulwallet.io/videos/guardians-and-recovery-intro.webm" type="video/webm" />
           </Box>
-        </Box>
-      </Box>
-      <Box padding="40px">
+        }
+      />
+      <Box padding={{ base: '0px', md: '40px' }} paddingTop="40px">
         <Box marginBottom="16px">
           <Box display="flex" alignItems="center" justifyContent="flex-start">
             {/* <ArrowRightIcon /> */}

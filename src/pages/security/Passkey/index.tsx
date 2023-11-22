@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import {
   Box,
   Button,
@@ -20,6 +20,7 @@ import RoundButton from '@/components/web/Button';
 import PlusIcon from '@/components/Icons/Plus';
 import SuccessIcon from "@/components/Icons/Success";
 import { useCredentialStore } from '@/store/credential';
+import GreySection from '@/components/GreySection'
 
 function SyncPasskeModal({ isOpen, onClose }: any) {
   return (
@@ -191,92 +192,22 @@ export default function Passkey({ setActiveSection }: any) {
               Passkey
             </Heading2>
           </Box>
-          <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex">
-            <Box width="40%" paddingRight="32px">
-              <Heading1>My passkeys</Heading1>
-              <TextBody fontSize="18px" marginBottom="20px">A passkey allows you to manage your wallet, including access, transactions, and setting guardians from another device. </TextBody>
-            </Box>
-            <Box width="60%">
-              <PassKeyList passKeys={credentials} setPassKeyName={changeCredentialName} hideTitle={true} />
-            </Box>
-          </Box>
+          <GreySection
+            padding={{ base: '16px', md: '16px 45px' }}
+            leftPart={
+              <Fragment>
+                <Heading1>My passkeys</Heading1>
+                <TextBody fontSize="18px" marginBottom="20px">A passkey allows you to manage your wallet, including access, transactions, and setting guardians from another device. </TextBody>
+              </Fragment>
+            }
+            rightPart={
+              <Box>
+                <PassKeyList passKeys={credentials} setPassKeyName={changeCredentialName} hideTitle={true} />
+              </Box>
+            }
+          />
         </Box>
       </Box>
-    </Box>
-  );
-
-  return (
-    <Box width="100%" height="100vh">
-      <Box height="102px">
-        <Header />
-      </Box>
-      <Box width="100%" height="calc(100% - 102px)">
-        <Box padding="32px 39px">
-          <Heading1>Passkey and Guardian Settings</Heading1>
-          <Box display="flex" width="100%">
-            <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
-              Passkey
-            </Heading2>
-            <Heading2 fontSize="18px" color="#898989" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
-              Guardian
-            </Heading2>
-            <Box marginLeft="auto">
-              <Button
-                px="5"
-                onClick={() => setIsEditing(true)}
-                bg="#1e1e1e"
-                _hover={{bg: "#4e4e54"}}
-                color="#fff"
-                fontWeight={'700'}
-                rounded="50px"
-                disabled={isEditing}
-              >
-                Manage Passkey
-              </Button>
-            </Box>
-          </Box>
-          <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex">
-            <Box width="40%" paddingRight="32px">
-              <Heading1>My passkeys</Heading1>
-              <TextBody fontSize="18px" marginBottom="20px">Adding a passkey allows you to manage your wallet, including access, transactions, and setting guardians from another device. Future accounts will sync automatically.</TextBody>
-              <TextBody fontSize="18px" marginBottom="20px">Edit passkey setting and sync devices will take effect between 30 minutes to 1 day.</TextBody>
-              <Box>
-                <TextButton onClick={() => {}} color="#EC588D" _hover={{ color: '#EC588D' }} padding="0px">
-                  <PlusIcon color="#EC588D" />
-                  <Text marginLeft="5px">Add a new mobile device</Text>
-                </TextButton>
-              </Box>
-              <Box>
-                <TextButton onClick={() =>{}} color="#EC588D" _hover={{ color: '#EC588D' }} padding="0px">
-                  <PlusIcon color="#EC588D" />
-                  <Text marginLeft="5px">Add a new PC device</Text>
-                </TextButton>
-              </Box>
-              <Box>
-                <TextButton onClick={() => {}} color="#EC588D" _hover={{ color: '#EC588D' }} padding="0px">
-                  <PlusIcon color="#EC588D" />
-                  <Text marginLeft="5px">Add a USB security key </Text>
-                </TextButton>
-              </Box>
-            </Box>
-            <Box width="60%">
-              <PassKeyList passKeys={credentials} setPassKeyName={changeCredentialName} hideTitle={true} />
-            </Box>
-          </Box>
-        </Box>
-        <Box paddingBottom="20px">
-          <Box display="flex" flexDirection="column" alignItems="center" marginTop="0.75em">
-            <RoundButton _styles={{ width: '320px' }} onClick={() => setIsManagingNetworkFee(true)}>
-              Confirm change
-            </RoundButton>
-            <TextButton _styles={{ width: '320px' }}>
-              Cancel
-            </TextButton>
-          </Box>
-        </Box>
-      </Box>
-      <ManagePasskeyNetworkFeeModal isOpen={isManagingNetworkFee} onClose={() => setIsManagingNetworkFee(false)} />
-      <SyncPasskeModal isOpen={isSyncing} onClose={() => setIsSyncing(false)} />
     </Box>
   );
 }

@@ -188,6 +188,7 @@ export default function Guardian({ setActiveSection }: any) {
                     rounded="50px"
                     disabled={(status as any) === 'editing'}
                     marginRight="14px"
+                    fontSize={{ base: '12px', md: '16px' }}
                   >
                     Backup Current Guardians
                   </Button>
@@ -201,6 +202,7 @@ export default function Guardian({ setActiveSection }: any) {
                   fontWeight={'700'}
                   rounded="50px"
                   disabled={(status as any) === 'editing'}
+                  fontSize={{ base: '12px', md: '16px' }}
                 >
                   Edit Guardians
                 </Button>

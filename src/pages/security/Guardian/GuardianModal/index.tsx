@@ -45,7 +45,7 @@ export default function GuardianModal({ isOpen, onClose }: any) {
             bg="#ededed"
             h="100%"
             roundedBottom="20px"
-            p="6"
+            p={{ base: '2', md: '6' }}
           >
             <Box width="100%" paddingRight="32px">
               <TextBody marginBottom="20px" textAlign="center">
@@ -57,7 +57,7 @@ export default function GuardianModal({ isOpen, onClose }: any) {
                 <source src="https://static-assets.soulwallet.io/videos/guardians-and-recovery-intro.webm" type="video/webm" />
               </Box>
             </Box>
-            <Box padding="40px">
+            <Box padding={{ base: '0', md: '40px' }}>
               <Box marginBottom="16px">
                 <Box display="flex" alignItems="center" justifyContent="flex-start" mb="5px" cursor="pointer" onClick={() => setShowQuestion1(!showQuestion1)}>
                   <Box transform={showQuestion1 ? 'rotate(90deg)' : ''} mr="5px"><ArrowRightIcon /></Box>
