@@ -44,7 +44,9 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
     getTokenBalance();
   }, []);
 
-  console.log('ConfirmPayment', chainConfig, selectedAddressItem)
+  const hasBalance = tokenBalance && tokenBalance[0] && !!Number(tokenBalance[0].tokenBalance)
+
+  console.log('ConfirmPayment', chainConfig, selectedAddressItem, hasBalance)
   return (
     <>
       <Flex flexDir={'column'} gap="5" mt="6">
@@ -64,6 +66,7 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
             {tokenBalance && tokenBalance[0] && <Text fontSize="12px" fontWeight="600" marginLeft="5px">Available {tokenBalance[0].tokenBalanceFormatted}</Text>}
           </Box>
         </Box>
+        {!hasBalance && <Text fontSize="12px" fontWeight="500" fontFamily="Martian" textAlign="center">Not enough balance</Text>}
         <Box width="100%" height="1px" background="#D7D7D7" />
         <Box padding="0 10px">
           <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
@@ -87,6 +90,7 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
         fontWeight={'800'}
         mt="6"
         onClick={onConfirm}
+        disabled={!hasBalance}
         bg="#6A52EF"
         color="white"
         _hover={{ bg: '#6A52EF', color: 'white' }}

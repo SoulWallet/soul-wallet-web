@@ -26,6 +26,7 @@ export default function FindRoute({ children }: any) {
       if (storageVersion) {
         // when upgrade, clear all for now
         storage.clear();
+        window.location.href = '/launch'
       }
       storage.setItem('storeVersion', storeVersion);
     }
