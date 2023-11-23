@@ -109,6 +109,10 @@ export default function Guardian({ setActiveSection }: any) {
         guardianDetails,
       };
 
+      if (editingGuardiansInfo.guardianHash === guardiansInfo.guardianHash) {
+        guardiansInfo.guardianNames = editingGuardiansInfo.guardianNames
+      }
+
       updateGuardiansInfo({
         ...guardiansInfo
       })

@@ -44,9 +44,10 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
     getTokenBalance();
   }, []);
 
-  const hasBalance = tokenBalance && tokenBalance[0] && !!Number(tokenBalance[0].tokenBalance)
+  const hasBalance = tokenBalance && tokenBalance[0] && !!Number(tokenBalance[0].tokenBalance) && (tokenBalance[0].tokenBalance - fee > 0)
 
-  console.log('ConfirmPayment', chainConfig, selectedAddressItem, hasBalance)
+
+  console.log('ConfirmPayment', chainConfig, selectedAddressItem, hasBalance, fee - tokenBalance[0].tokenBalance > 0)
   return (
     <>
       <Flex flexDir={'column'} gap="5" mt="6">
