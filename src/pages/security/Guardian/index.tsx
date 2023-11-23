@@ -111,6 +111,7 @@ export default function Guardian({ setActiveSection }: any) {
 
       if (editingGuardiansInfo.guardianHash === guardiansInfo.guardianHash) {
         guardiansInfo.guardianNames = editingGuardiansInfo.guardianNames
+        guardiansInfo.keepPrivate = editingGuardiansInfo.keepPrivate
       }
 
       updateGuardiansInfo({
