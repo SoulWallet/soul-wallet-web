@@ -44,60 +44,60 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
     getTokenBalance();
   }, []);
 
-  const hasBalance = tokenBalance && tokenBalance[0] && !!Number(tokenBalance[0].tokenBalance) && (tokenBalance[0].tokenBalance - fee > 0)
+  const hasBalance = tokenBalance && tokenBalance[0] && !!Number(tokenBalance[0].tokenBalance) && (BN(tokenBalance[0].tokenBalance ).gt(BN(fee)))
 
 
-  console.log('ConfirmPayment', chainConfig, selectedAddressItem, hasBalance, fee - tokenBalance[0].tokenBalance > 0)
-  return (
-    <>
-      <Flex flexDir={'column'} gap="5" mt="6">
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
+  console.log('ConfirmPayment', chainConfig, selectedAddressItem, hasBalance, (BN(tokenBalance[0].tokenBalance ).gt(BN(fee))))
+    return (
+      <>
+        <Flex flexDir={'column'} gap="5" mt="6">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+          >
+            <Box fontSize="12px" fontWeight="600" fontFamily="Martian">Estimated fee</Box>
+            <Box fontSize={{base: "20px", md: "24px", lg: "32px"}} fontWeight="800" fontFamily="Nunito" textAlign="center">{BN(fee).shiftedBy(-18).toString()} ETH</Box>
+          </Box>
+          <Box width="100%" display="flex" alignItems="center" justifyContent="center">
+            <Box bg="#f2f2f2" width="320px" borderRadius="36px" height="36px" display="flex" alignItems="center" justifyContent="center">
+              <Image src={IconEth} w="5" h="5" />
+              <Text fontSize="16px" fontWeight="800" marginLeft="5px">ETH</Text>
+              {tokenBalance && tokenBalance[0] && <Text fontSize="12px" fontWeight="600" marginLeft="5px">Available {tokenBalance[0].tokenBalanceFormatted}</Text>}
+            </Box>
+          </Box>
+          {!hasBalance && <Text fontSize="12px" fontWeight="500" fontFamily="Martian" textAlign="center">Not enough balance</Text>}
+          <Box width="100%" height="1px" background="#D7D7D7" />
+          <Box padding="0 10px">
+            <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
+              <Box fontSize="12px" fontWeight="500" fontFamily="Martian">From:</Box>
+              <Box fontSize="12px" fontWeight="400" fontFamily="Martian" color="#6A52EF">
+                <AccountSelect isInModal={true} />
+              </Box>
+            </Box>
+            <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
+              <Box fontSize="12px" fontWeight="500" fontFamily="Martian">Network:</Box>
+              <Box fontSize="12px" fontWeight="400" fontFamily="Martian" color="#6A52EF">
+                <ChainSelect isInModal={true} />
+              </Box>
+            </Box>
+          </Box>
+        </Flex>
+        <Button
+          w="100%"
+          fontSize={'20px'}
+          py="4"
+          fontWeight={'800'}
+          mt="6"
+          onClick={onConfirm}
+          disabled={!hasBalance}
+          bg="#6A52EF"
+          color="white"
+          _hover={{ bg: '#6A52EF', color: 'white' }}
         >
-          <Box fontSize="12px" fontWeight="600" fontFamily="Martian">Estimated fee</Box>
-          <Box fontSize={{base: "20px", md: "24px", lg: "32px"}} fontWeight="800" fontFamily="Nunito" textAlign="center">{BN(fee).shiftedBy(-18).toString()} ETH</Box>
-        </Box>
-        <Box width="100%" display="flex" alignItems="center" justifyContent="center">
-          <Box bg="#f2f2f2" width="320px" borderRadius="36px" height="36px" display="flex" alignItems="center" justifyContent="center">
-            <Image src={IconEth} w="5" h="5" />
-            <Text fontSize="16px" fontWeight="800" marginLeft="5px">ETH</Text>
-            {tokenBalance && tokenBalance[0] && <Text fontSize="12px" fontWeight="600" marginLeft="5px">Available {tokenBalance[0].tokenBalanceFormatted}</Text>}
-          </Box>
-        </Box>
-        {!hasBalance && <Text fontSize="12px" fontWeight="500" fontFamily="Martian" textAlign="center">Not enough balance</Text>}
-        <Box width="100%" height="1px" background="#D7D7D7" />
-        <Box padding="0 10px">
-          <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
-            <Box fontSize="12px" fontWeight="500" fontFamily="Martian">From:</Box>
-            <Box fontSize="12px" fontWeight="400" fontFamily="Martian" color="#6A52EF">
-              <AccountSelect isInModal={true} />
-            </Box>
-          </Box>
-          <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
-            <Box fontSize="12px" fontWeight="500" fontFamily="Martian">Network:</Box>
-            <Box fontSize="12px" fontWeight="400" fontFamily="Martian" color="#6A52EF">
-              <ChainSelect isInModal={true} />
-            </Box>
-          </Box>
-        </Box>
-      </Flex>
-      <Button
-        w="100%"
-        fontSize={'20px'}
-        py="4"
-        fontWeight={'800'}
-        mt="6"
-        onClick={onConfirm}
-        disabled={!hasBalance}
-        bg="#6A52EF"
-        color="white"
-        _hover={{ bg: '#6A52EF', color: 'white' }}
-      >
-        Preview Payment
-      </Button>
-    </>
-  );
+          Preview Payment
+        </Button>
+      </>
+    );
 }
