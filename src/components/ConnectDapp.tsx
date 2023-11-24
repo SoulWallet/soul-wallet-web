@@ -94,10 +94,10 @@ export default function ConnectDapp({ msgId }: any) {
         </Box>
       </Box>
       <InfoWrap>
-        <InfoItem>
+        {/* <InfoItem>
           <Text>Site security:</Text>
           <Text color={getSecurityColor(SecurityLevel.High)}>{SecurityLevel.High}</Text>
-        </InfoItem>
+        </InfoItem> */}
         <InfoItem>
           <Text>{title}:</Text>
           <AccountSelect labelType="address" rounded="full" />

@@ -104,10 +104,15 @@ export default function Guardian({ setActiveSection }: any) {
       const data = res2.data;
       const guardianDetails = data.guardianDetails;
 
-      const guardiansInfo = {
+      const guardiansInfo: any = {
         guardianHash: activeGuardianHash,
         guardianDetails,
       };
+
+      if (editingGuardiansInfo.guardianHash === guardiansInfo.guardianHash) {
+        guardiansInfo.guardianNames = editingGuardiansInfo.guardianNames
+        guardiansInfo.keepPrivate = editingGuardiansInfo.keepPrivate
+      }
 
       updateGuardiansInfo({
         ...guardiansInfo
