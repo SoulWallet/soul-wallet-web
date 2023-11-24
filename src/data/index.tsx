@@ -1,5 +1,6 @@
 import IconUniswap from '@/assets/dapps/uniswap.png';
 import IconAave from '@/assets/dapps/aave.png';
+import IconLucky from '@/assets/dapps/lucky.png';
 import IconFeature0 from '@/assets/icons/features/0.svg';
 import IconFeature1 from '@/assets/icons/features/1.svg';
 import IconFeature2 from '@/assets/icons/features/2.svg';
@@ -12,6 +13,7 @@ export const dappList = [
     category: 'DeFi',
     url: 'https://app.uniswap.org',
     desc: 'Swap or provide liquidity on the Uniswap protocol',
+    isExternal: false,
   },
   {
     icon: IconAave,
@@ -19,6 +21,15 @@ export const dappList = [
     category: 'DeFi',
     url: 'https://staging.aave.com',
     desc: 'Earn interest, borrow assets, and build applications',
+    isExternal: false,
+  },
+  {
+    icon: IconLucky,
+    title: 'Lucky coin',
+    category: 'DeFi',
+    url: 'https://lucky-alpha.soulwallet.io',
+    desc: 'Get 3 free mint per day for free, earn your Lucky coin here!',
+    isExternal: true,
   },
   // {
   //   icon: IconDefault,
