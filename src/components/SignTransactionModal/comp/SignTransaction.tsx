@@ -163,7 +163,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   };
 
   const getFinalUserOp = async (txns: any, payTokenAddress: string) => {
-    try{
+    try {
       const isActivated = await checkActivated();
       if (isActivated) {
         // if activated, get userOp directly
@@ -173,8 +173,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         // if not activated, prepend activate txns
         return await getActivateOp(activateIndex, payToken, txns);
       }
-    }catch(err:any){
-      console.log('Get final userOp err:', err.message)
+    } catch (err: any) {
+      console.log('Get final userOp err:', err.message);
       throw new Error(err.message);
     }
   };
@@ -284,7 +284,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           )}
           {totalMsgValue && Number(totalMsgValue) > 0 && (
             <>
-              <Text  fontSize={{base: "20px", md: "24px", lg: "32px"}} mb="3" color="#000">
+              <Text fontSize={{ base: '20px', md: '24px', lg: '32px' }} mb="3" color="#000">
                 {totalMsgValue} ETH
               </Text>
               {/** TODO, change to real price */}
@@ -367,9 +367,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               <Text>Total</Text>
               {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
               {totalMsgValue && Number(totalMsgValue) && !sponsor && requiredAmount ? ' + ' : ''}
-              {!sponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
-              {!sponsor &&
-              requiredAmount &&
+              {requiredAmount ? (sponsor ? '0 ETH' : `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}`) : ''}
+              {requiredAmount &&
               decodedData &&
               decodedData.length > 0 &&
               decodedData.filter((item: any) => item.sendErc20Amount).length > 0
