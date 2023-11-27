@@ -36,6 +36,7 @@ import { useCredentialStore } from '@/store/credential';
 import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GreySection from '@/components/GreySection'
+import Backup from '@/components/Guardian/Backup';
 import GuardianModal from '../GuardianModal'
 import DoubleCheckModal from '../DoubleCheckModal'
 
@@ -493,8 +494,13 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
 
   if (status === 'backuping') {
     return (
-      <Box width="100%" display="flex" alignItems="center" justifyContent="center">
-        <Box width="320px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+      <Backup
+        handleEmailBackupGuardians={handleEmailBackupGuardians}
+        handleDownloadGuardians={handleDownloadGuardians}
+        downloading={downloading}
+        sending={sending}
+        emailForm={emailForm}
+        backButton={
           <Box width="100%">
             <TextButton
               color="#1E1E1E"
@@ -510,58 +516,18 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
               <Box marginLeft="2px" fontSize="16px">Back</Box>
             </TextButton>
           </Box>
-          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-            <Heading1>Backup guardians</Heading1>
-          </Box>
-          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="60px">
-            <TextBody color="#1E1E1E" textAlign="center" fontSize="14px">
-              Save your guardians list for easy wallet recovery.
-            </TextBody>
-          </Box>
-          <Box>
-            <Button
-              onClick={handleDownloadGuardians}
-              disabled={downloading}
-              loading={downloading}
-              _styles={{ width: '320px', background: '#9648FA' }}
-              _hover={{ background: '#9648FA' }}
-              LeftIcon={<DownloadIcon />}
-            >
-              Download
-            </Button>
-            <TextBody marginTop="8px" textAlign="center" display="flex" alignItems="center" justifyContent="center">Or</TextBody>
-            <FormInput
-              label=""
-              placeholder="Send to Email"
-              value={emailForm.values.email}
-              errorMsg={emailForm.showErrors.email && emailForm.errors.email}
-              onChange={emailForm.onChange('email')}
-              onBlur={emailForm.onBlur('email')}
-              onEnter={handleEmailBackupGuardians}
-              _styles={{ width: '320px', marginTop: '8px' }}
-              _inputStyles={{ background: 'white' }}
-              RightIcon={
-                <IconButton
-                  onClick={handleEmailBackupGuardians}
-                  disabled={sending || !emailForm.values.email}
-                  loading={sending}
-                >
-                  {!emailForm.values.email && <SendIcon opacity="0.4" />}
-                  {!!emailForm.values.email && <SendIcon color={'#EE3F99'} />}
-                </IconButton>
-              }
-            />
-            <Button
-              onClick={handleSubmit}
-              disabled={!isDone || loading || disabled}
-              loading={loading}
-              _styles={{ width: '320px', marginTop: '60px' }}
-            >
-              Continue
-            </Button>
-          </Box>
-        </Box>
-      </Box>
+        }
+        confirmButton={
+          <Button
+            onClick={handleSubmit}
+            disabled={!isDone || loading || disabled}
+            loading={loading}
+            _styles={{ width: '320px', marginTop: '60px' }}
+          >
+            Continue
+          </Button>
+        }
+      />
     )
   }
 

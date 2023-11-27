@@ -59,6 +59,7 @@ import GuardianModal from '@/pages/security/Guardian/GuardianModal'
 import useTools from '@/hooks/useTools';
 import { defaultGuardianSafePeriod } from '@/config';
 import GreySection from '@/components/GreySection'
+import Backup from '@/components/Guardian/Backup';
 
 function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
   return (
@@ -600,58 +601,25 @@ export default function SetGuardians({ changeStep }: any) {
 
   if (status === 'backuping') {
     return (
-      <FullscreenContainer padding="16px">
-        <Box width="320px" maxWidth="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-          <Box marginBottom="12px">
-            <Steps
-              backgroundColor="#1E1E1E"
-              foregroundColor="white"
-              count={3}
-              activeIndex={2}
-              marginTop="24px"
-            />
-          </Box>
-          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-            <Heading1>Backup guardians</Heading1>
-          </Box>
-          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="60px">
-            <TextBody color="#1E1E1E" textAlign="center" fontSize="14px">
-              Save your guardians list for easy wallet recovery.
-            </TextBody>
-          </Box>
-          <Box>
-            <Button
-              onClick={handleDownloadGuardians}
-              disabled={downloading}
-              loading={downloading}
-              _styles={{ width: '320px', background: '#9648FA' }}
-              _hover={{ background: '#9648FA' }}
-              LeftIcon={<DownloadIcon />}
-            >
-              Download
-            </Button>
-            <TextBody marginTop="8px" textAlign="center" display="flex" alignItems="center" justifyContent="center">Or</TextBody>
-            <FormInput
-              label=""
-              placeholder="Send to Email"
-              value={emailForm.values.email}
-              errorMsg={emailForm.showErrors.email && emailForm.errors.email}
-              onChange={emailForm.onChange('email')}
-              onBlur={emailForm.onBlur('email')}
-              onEnter={handleEmailBackupGuardians}
-              _styles={{ width: '320px', marginTop: '8px' }}
-              _inputStyles={{ background: 'white' }}
-              RightIcon={
-                <IconButton
-                  onClick={handleEmailBackupGuardians}
-                  disabled={sending || !emailForm.values.email}
-                  loading={sending}
-                >
-                  {!emailForm.values.email && <SendIcon opacity="0.4" />}
-                  {!!emailForm.values.email && <SendIcon color={'#EE3F99'} />}
-                </IconButton>
-              }
-            />
+      <FullscreenContainer>
+        <Backup
+          handleEmailBackupGuardians={handleEmailBackupGuardians}
+          handleDownloadGuardians={handleDownloadGuardians}
+          downloading={downloading}
+          sending={sending}
+          emailForm={emailForm}
+          step={
+            <Box marginBottom="12px">
+              <Steps
+                backgroundColor="#1E1E1E"
+                foregroundColor="white"
+                count={3}
+                activeIndex={2}
+                marginTop="24px"
+              />
+            </Box>
+          }
+          confirmButton={
             <Button
               onClick={() => changeStep(3)}
               disabled={!isDone}
@@ -659,8 +627,8 @@ export default function SetGuardians({ changeStep }: any) {
             >
               Continue
             </Button>
-          </Box>
-        </Box>
+          }
+        />
       </FullscreenContainer>
     )
   }
