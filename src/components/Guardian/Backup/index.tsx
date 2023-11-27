@@ -1,23 +1,13 @@
 import React, { Fragment, useState } from 'react';
 import { Box, Button, Text, useToast } from '@chakra-ui/react';
-import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import Heading1 from '@/components/web/Heading1';
 import Heading3 from '@/components/web/Heading3';
 import TextBody from '@/components/web/TextBody';
 import RoundButton from '@/components/web/Button';
 import DownloadIcon from '@/components/Icons/Download';
 import SendIcon from '@/components/Icons/Send';
-import BlockBoxIcon from '@/components/Icons/BlockBox';
 import IconButton from '@/components/web/IconButton';
 import FormInput from '@/components/web/Form/FormInput';
-import { validateEmail } from '@/lib/tools';
-import { useGuardianStore } from '@/store/guardian';
-import useForm from '@/hooks/useForm';
-import useTools from '@/hooks/useTools';
-import { useAddressStore } from '@/store/address';
-import TextButton from '@/components/web/TextButton';
-import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
-import api from '@/lib/api';
 
 export default function Backup({
   handleEmailBackupGuardians,
