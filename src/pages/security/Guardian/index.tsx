@@ -17,7 +17,7 @@ import TextBody from '@/components/web/TextBody';
 import TextButton from '@/components/web/TextButton';
 import RoundButton from '@/components/web/Button';
 import PlusIcon from '@/components/Icons/Plus';
-import SuccessIcon from "@/components/Icons/Success";
+import SuccessIcon from '@/components/Icons/Success';
 import api from '@/lib/api';
 import { L1KeyStore } from '@soulwallet/sdk';
 import { useAddressStore } from '@/store/address';
