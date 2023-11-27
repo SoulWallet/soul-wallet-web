@@ -37,8 +37,6 @@ import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GreySection from '@/components/GreySection'
 import Backup from '@/components/Guardian/Backup';
-import GuardianModal from '../GuardianModal'
-import DoubleCheckModal from '../DoubleCheckModal'
 
 const defaultGuardianIds = [nextRandomId()];
 

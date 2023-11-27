@@ -49,8 +49,6 @@ import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
 import GreySection from '@/components/GreySection'
-import DoubleCheckModal from '../DoubleCheckModal'
-import GuardianModal from '../GuardianModal'
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
