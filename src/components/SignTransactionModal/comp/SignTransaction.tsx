@@ -45,7 +45,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { selectedChainId } = useChainStore();
   const { toggleActivatedChain, addressList, selectedAddress, setFinishedSteps } = useAddressStore();
   const { slotInfo } = useGuardianStore();
-  // const [targetChainId, setTargetChainId] = useState('');
+  // todo, set false as default
+  const [useSponsor, setUseSponsor] = useState(true);
   const { getPrefund } = useQuery();
   const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
@@ -57,14 +58,18 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const origin = document.referrer;
 
   const checkSponser = async (userOp: UserOperation) => {
-    const res = await api.sponsor.check(
-      selectedChainId,
-      chainConfig.contracts.entryPoint,
-      UserOpUtils.userOperationFromJSON(UserOpUtils.userOperationToJSON(userOp)),
-    );
-    if (res.data.sponsorInfos && res.data.sponsorInfos.length > 0) {
-      // TODO, check >1 sponsor
-      setSponsor(res.data.sponsorInfos[0]);
+    try {
+      const res = await api.sponsor.check(
+        selectedChainId,
+        chainConfig.contracts.entryPoint,
+        UserOpUtils.userOperationFromJSON(UserOpUtils.userOperationToJSON(userOp)),
+      );
+      if (res.data.sponsorInfos && res.data.sponsorInfos.length > 0) {
+        // TODO, check >1 sponsor
+        setSponsor(res.data.sponsorInfos[0]);
+      }
+    } catch (err) {
+      setUseSponsor(false);
     }
   };
 
@@ -81,6 +86,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     setRequiredAmount('');
     setActiveOperation(undefined);
     setSponsor(null);
+    setUseSponsor(true);
     // setSendToAddress('');
   };
 
@@ -89,7 +95,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       setSigning(true);
 
       let userOp: any;
-      if (sponsor && sponsor.paymasterAndData) {
+      if (sponsor && useSponsor && sponsor.paymasterAndData) {
         userOp = { ...activeOperation, paymasterAndData: sponsor.paymasterAndData };
       } else {
         userOp = activeOperation;
@@ -163,7 +169,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   };
 
   const getFinalUserOp = async (txns: any, payTokenAddress: string) => {
-    try{
+    try {
       const isActivated = await checkActivated();
       if (isActivated) {
         // if activated, get userOp directly
@@ -173,8 +179,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         // if not activated, prepend activate txns
         return await getActivateOp(activateIndex, payToken, txns);
       }
-    }catch(err:any){
-      console.log('Get final userOp err:', err.message)
+    } catch (err: any) {
+      console.log('Get final userOp err:', err.message);
       throw new Error(err.message);
     }
   };
@@ -233,11 +239,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  const onPayTokenChange = (val: string) => {
-    console.log('onPayTokenChange', val);
+  const onPayTokenChange = (val: string, isSponsor: boolean) => {
     setPrechecked(false);
     setPayToken(val);
     doPrecheck(val);
+    setUseSponsor(isSponsor);
   };
 
   // IMPORTANT IMPORTANT TODO, rendered twice
@@ -284,7 +290,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           )}
           {totalMsgValue && Number(totalMsgValue) > 0 && (
             <>
-              <Text  fontSize={{base: "20px", md: "24px", lg: "32px"}} mb="3" color="#000">
+              <Text fontSize={{ base: '20px', md: '24px', lg: '32px' }} mb="3" color="#000">
                 {totalMsgValue} ETH
               </Text>
               {/** TODO, change to real price */}
@@ -336,39 +342,34 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               <Text>Network</Text>
               <Text>{selectedChainItem.chainName}</Text>
             </InfoItem>
-            <InfoItem align={sponsor && 'flex-start'}>
+            <InfoItem>
               <Text>Gas fee</Text>
-              {sponsor ? (
-                <Box textAlign={'right'}>
-                  <Flex mb="1" gap="4" justify={'flex-end'}>
-                    {requiredAmount && (
-                      <Text textDecoration={'line-through'}>
-                        {BN(requiredAmount).toFixed(6) || '0'} {payTokenSymbol}
-                      </Text>
-                    )}
-                    <Text>0 ETH</Text>
-                  </Flex>
-                  <Text color="#898989">Sponsored by {sponsor.sponsorParty || 'Soul Wallet'}</Text>
-                </Box>
-              ) : (
-                <Flex gap="2">
-                  {requiredAmount ? (
-                    <>
+              <Flex gap="2" fontWeight={'500'}>
+                {requiredAmount ? (
+                  <>
+                    {useSponsor ? (
+                      <Text textDecoration={'line-through'}>{requiredAmount} ETH</Text>
+                    ) : (
                       <Text>{requiredAmount}</Text>
-                      <GasSelect gasToken={payToken} onChange={(val: string) => onPayTokenChange(val)} />
-                    </>
-                  ) : (
-                    <Image src={IconLoading} />
-                  )}
-                </Flex>
-              )}
+                    )}
+                    <GasSelect
+                      gasToken={payToken}
+                      sponsor={sponsor}
+                      useSponsor={useSponsor}
+                      onChange={(val: string, isSponsor: boolean) => onPayTokenChange(val, isSponsor)}
+                    />
+                  </>
+                ) : (
+                  <Image src={IconLoading} />
+                )}
+              </Flex>
             </InfoItem>
             <InfoItem color="#000" fontWeight="600">
               <Text>Total</Text>
               {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
-              {totalMsgValue && Number(totalMsgValue) && !sponsor && requiredAmount ? ' + ' : ''}
-              {!sponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
-              {!sponsor &&
+              {totalMsgValue && Number(totalMsgValue) && !useSponsor && requiredAmount ? ' + ' : ''}
+              {!useSponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
+              {!useSponsor &&
               requiredAmount &&
               decodedData &&
               decodedData.length > 0 &&
@@ -387,7 +388,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 <Text color="#f00">{hintText}</Text>
               </InfoItem>
             )}
-            {!balanceEnough && !sponsor && (
+            {!balanceEnough && !useSponsor && (
               <InfoItem>
                 <Text color="#f00">Not enough balance</Text>
               </InfoItem>
@@ -406,7 +407,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         mx="auto"
         onClick={onConfirm}
         loading={signing}
-        disabled={(loadingFee || !balanceEnough) && !sponsor}
+        disabled={(loadingFee || !balanceEnough) && !useSponsor}
         bg="#6A52EF"
         color="white"
         _hover={{ bg: '#6A52EF', color: 'white' }}
