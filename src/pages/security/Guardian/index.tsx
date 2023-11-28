@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useRef, useState, useEffect, Fragment } from 'react';
 import {
   Box,
   Button,
@@ -59,7 +59,8 @@ export default function Guardian({ setActiveSection }: any) {
   const { getActiveGuardianHash } = useKeystore();
   const [status, setStatus] = useState<string>('intro');
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const { guardiansInfo, updateGuardiansInfo, editingGuardiansInfo,  slotInfo, } = useGuardianStore();
+  const { guardiansInfo, updateGuardiansInfo, editingGuardiansInfo, getEditingGuardiansInfo, slotInfo, } = useGuardianStore();
+  const intervalRef = useRef<any>()
 
   const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash
 
@@ -89,7 +90,7 @@ export default function Guardian({ setActiveSection }: any) {
 
   console.log('guardiansInfo', guardiansInfo)
 
-  const getGuardianInfo = async () => {
+  const getGuardianInfo = async (isFirstLoad?: any) => {
     try {
       const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
       let activeGuardianHash
@@ -109,27 +110,51 @@ export default function Guardian({ setActiveSection }: any) {
         guardianDetails,
       };
 
+      const editingGuardiansInfo = getEditingGuardiansInfo()
+
       if (editingGuardiansInfo.guardianHash === guardiansInfo.guardianHash) {
         guardiansInfo.guardianNames = editingGuardiansInfo.guardianNames
         guardiansInfo.keepPrivate = editingGuardiansInfo.keepPrivate
       }
 
+      console.log('guardiansInfo', guardiansInfo)
+
       updateGuardiansInfo({
         ...guardiansInfo
       })
 
-      const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
+      if (isFirstLoad) {
+        const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
 
-      if (hasGuardians) {
-        startManage()
-      } else {
-        startEdit()
+        if (hasGuardians) {
+          startManage()
+        } else {
+          startEdit()
+        }
       }
 
       setIsLoaded(true)
+      return guardiansInfo
     } catch (error) {
       setIsLoaded(true)
     }
+  }
+
+  const startGuardianInterval = () => {
+    return new Promise((reslove, reject) => {
+      intervalRef.current = setInterval(() => {
+        getGuardianInfo().then((guardianInfo: any) => {
+          if (guardianInfo.guardianHash === getEditingGuardiansInfo().guardianHash) {
+            clearGuardianInterval()
+            reslove(true)
+          }
+        })
+      }, 3000)
+    })
+  }
+
+  const clearGuardianInterval = () => {
+    if (intervalRef) clearInterval(intervalRef.current)
   }
 
   useEffect(() => {
@@ -137,7 +162,7 @@ export default function Guardian({ setActiveSection }: any) {
       startBackup()
       setIsLoaded(true)
     } else {
-      getGuardianInfo()
+      getGuardianInfo(true)
     }
   }, [])
 
@@ -216,7 +241,7 @@ export default function Guardian({ setActiveSection }: any) {
           </Box>
           {status === 'intro' && <GuardianIntro startManage={startManage} startEdit={startEdit} />}
           {status === 'managing' && <GuardianList startBackup={startBackup} />}
-          {status === 'editing' && <GuardianForm cancelEdit={cancelEdit} startBackup={startBackup} />}
+          {status === 'editing' && <GuardianForm cancelEdit={cancelEdit} startBackup={startBackup} startGuardianInterval={startGuardianInterval} />}
           {status === 'backuping' && <GuardianBackup cancelBackup={cancelBackup} />}
         </Box>
       </Box>
