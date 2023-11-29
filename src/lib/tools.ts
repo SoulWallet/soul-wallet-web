@@ -8,6 +8,10 @@ import ERC20ABI from '../abi/ERC20.json';
 import { DecodeUserOp, DecodeResult } from '@soulwallet/decoder';
 import { UserOperation } from '@soulwallet/sdk';
 import IconSend from '@/assets/activities/send.svg';
+import IconMint from '@/assets/activities/mint.svg';
+import IconApprove from '@/assets/activities/approve.svg';
+import IconTrade from '@/assets/activities/trade.svg';
+import IconReceive from '@/assets/activities/receive.svg';
 import IconContract from '@/assets/activities/contract.svg';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
@@ -350,11 +354,19 @@ export const decodeCalldata = async (
 };
 
 export const getIconMapping = (name: string) => {
-  switch (name) {
-    case 'Transfer ERC20':
+  switch (name.toLowerCase()) {
+    case 'transfer erc20':
       return IconSend;
-    case 'Transfer ETH':
+    case 'transfer eth':
       return IconSend;
+    case 'mint':
+    case 'mintToken':
+      return IconMint;
+    case 'approve':
+      return IconApprove;
+    case 'swap':
+    case 'deposit':
+      return IconTrade;
     default:
       return IconContract;
   }

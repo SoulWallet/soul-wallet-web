@@ -13,7 +13,7 @@ export default {
   cardBgUnactivated: 'radial-gradient(52.03% 100.00% at 100.00% 100.00%, #73DDFF 0%, #D7D7D7 100%)',
   provider: `https://goerli-rollup.arbitrum.io/rpc`,
   l1Provider: `https://goerli.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18`,
-  scanUrl: 'https://testnet.arbiscan.io/',
+  scanUrl: 'https://testnet.arbiscan.io',
   scanName: 'Arbiscan',
   bundlerUrl: 'https://api-dev.soulwallet.io/bundler/arb-goerli/rpc',
   // bundlerUrl: 'https://arb-goerli.g.alchemy.com/v2/M3uND7od01QVjQN9Px8TCxnMcPRgWTCH',
