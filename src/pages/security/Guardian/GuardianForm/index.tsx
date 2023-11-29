@@ -165,7 +165,7 @@ const isGuardiansListFilled = (list: any) => {
   return isFilled
 }
 
-export default function GuardianForm({ cancelEdit, startBackup }: any) {
+export default function GuardianForm({ cancelEdit, startBackup, startGuardianInterval }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
@@ -183,6 +183,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
   const { slotInfo, setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
+  const [pending, setPending] = useState(false);
   const [loading, setLoading] = useState(false);
   const { sendErc20, payTask } = useTransaction();
   const { showConfirmPayment } = useWalletContext();
@@ -314,8 +315,11 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
       console.log('handleSubmit1111', res1, res2, res3);
       // setGuardiansInfo(guardiansInfo)
       setEditingGuardiansInfo(guardiansInfo)
+      setPending(true)
+      await startGuardianInterval()
       cancelEdit()
       setLoading(false);
+      setPending(false)
       const res = await api.operation.finishStep({
         slot,
         steps: [2],
@@ -571,7 +575,7 @@ export default function GuardianForm({ cancelEdit, startBackup }: any) {
           <Box padding="40px">
             <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
               <Button disabled={loading || disabled} loading={loading} _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => setIsConfirmOpen(true)}>
-                Confirm
+                {pending ? 'Pending...' : 'Confirm'}
               </Button>
               {hasGuardians && (
                 <TextButton _styles={{ width: '320px' }} onClick={cancelEdit}>
