@@ -61,20 +61,30 @@ export default function ActivityTable({ activeChains }: any) {
     if (!activeChains || !activeChains.length) {
       return;
     }
+    setList([]);
     getList();
   }, [activeChains]);
 
   return (
     <Flex flexDir={'column'}>
-      {!list.length && (
-        <>{loading ? <Image src={IconLoading} display={'block'} w="50px" h="50px" mt="6" /> : <Text>No Activity</Text>}</>
+      {activeChains.length === 0 && (
+        <Text fontSize={'20px'} fontWeight={'600'}>
+          Please select a chain
+        </Text>
       )}
-      {list.map((item: IActivityItem, idx) => (
-        <React.Fragment key={idx}>
-          <Divider />
-          <ActivityItem key={idx} item={item} />
-        </React.Fragment>
-      ))}
+      {!list.length && (
+        <>
+          {loading ? <Image src={IconLoading} display={'block'} w="50px" h="50px" /> : <Text>No Activity</Text>}
+        </>
+      )}
+      {activeChains.length && list.length
+        ? list.map((item: IActivityItem, idx) => (
+            <React.Fragment key={idx}>
+              <Divider />
+              <ActivityItem key={idx} item={item} />
+            </React.Fragment>
+          ))
+        : ''}
     </Flex>
   );
 }

@@ -36,6 +36,7 @@ export default function TokensTable({ activeChains }: any) {
     if (!activeChains || !activeChains.length) {
       return;
     }
+    setBalanceList([]);
     getTokenBalance();
   }, [activeChains]);
 
@@ -56,54 +57,61 @@ export default function TokensTable({ activeChains }: any) {
         </Tr>
       </Thead>
       <Tbody>
+        {activeChains.length === 0 && (
+          <Text fontSize={'20px'} fontWeight={'600'} mt="6">
+            Please select a chain
+          </Text>
+        )}
         {loading && !balanceList.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
-        {balanceList.map((item: any, idx: number) => {
-          return (
-            <Tr
-              key={idx}
-              fontWeight={'700'}
-              _hover={{
-                '.send-button': {
-                  visibility: 'visible',
-                },
-              }}
-            >
-              <Td as={Flex} align="center" justify={'space-between'}>
-                <Flex gap="4" align="center">
-                  <Box pos="relative">
-                    <Image src={item.logoURI || IconDefaultToken} w="35px" h="35px" />
-                    <Image
-                      pos="absolute"
-                      right="-4px"
-                      bottom="-2px"
-                      src={getChainIcon(item.chainID)}
-                      w="15px"
-                      h="15px"
-                    />
-                  </Box>
-                  <Text fontWeight={'800'} fontSize={'18px'}>
-                    {item.symbol}
-                  </Text>
-                </Flex>
-                <Button
-                  transition={'none'}
-                  className="send-button"
-                  visibility={'hidden'}
-                  py="2"
-                  px="5"
-                  onClick={() => {
-                    showTransfer(item.contractAddress, item.chainID);
+        {activeChains.length && balanceList.length
+          ? balanceList.map((item: any, idx: number) => {
+              return (
+                <Tr
+                  key={idx}
+                  fontWeight={'700'}
+                  _hover={{
+                    '.send-button': {
+                      visibility: 'visible',
+                    },
                   }}
                 >
-                  Send
-                </Button>
-              </Td>
-              <Td isNumeric>0.0000</Td>
-              <Td isNumeric>{item.tokenBalanceFormatted}</Td>
-              <Td isNumeric>0.0000</Td>
-            </Tr>
-          );
-        })}
+                  <Td as={Flex} align="center" justify={'space-between'}>
+                    <Flex gap="4" align="center">
+                      <Box pos="relative">
+                        <Image src={item.logoURI || IconDefaultToken} w="35px" h="35px" />
+                        <Image
+                          pos="absolute"
+                          right="-4px"
+                          bottom="-2px"
+                          src={getChainIcon(item.chainID)}
+                          w="15px"
+                          h="15px"
+                        />
+                      </Box>
+                      <Text fontWeight={'800'} fontSize={'18px'}>
+                        {item.symbol}
+                      </Text>
+                    </Flex>
+                    <Button
+                      transition={'none'}
+                      className="send-button"
+                      visibility={'hidden'}
+                      py="2"
+                      px="5"
+                      onClick={() => {
+                        showTransfer(item.contractAddress, item.chainID);
+                      }}
+                    >
+                      Send
+                    </Button>
+                  </Td>
+                  <Td isNumeric>0.0000</Td>
+                  <Td isNumeric>{item.tokenBalanceFormatted}</Td>
+                  <Td isNumeric>0.0000</Td>
+                </Tr>
+              );
+            })
+          : ''}
       </Tbody>
     </Table>
   );
