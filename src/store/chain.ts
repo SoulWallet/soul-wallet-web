@@ -19,6 +19,7 @@ interface IChainStore {
   selectedChainId: string;
   chainList: IChainItem[];
   getSelectedChainItem: () => any;
+  getChainItem: (chainId: string) => any;
   setSelectedChainId: (chainId: string) => void;
   updateChainItem: (chainId: string, chainItem: Partial<IChainItem>) => void;
 }
@@ -31,6 +32,10 @@ const createChainSlice = immer<IChainStore>((set, get) => ({
   // default first one
   selectedChainId: config.chainList[0].chainIdHex,
   chainList: config.chainList,
+  getChainItem: (chainId: string) => {
+    const index = getIndexByChainId(get().chainList, chainId);
+    return get().chainList[index];
+  },
   getSelectedChainItem: () => {
     const index = getIndexByChainId(get().chainList, get().selectedChainId);
     return get().chainList[index];
