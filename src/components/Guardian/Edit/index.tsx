@@ -162,6 +162,163 @@ const isGuardiansListFilled = (list: any) => {
   return isFilled
 }
 
+const GuardianInput = ({
+  id,
+  values,
+  showErrors,
+  errors,
+  guardianIds,
+  onChange,
+  onBlur,
+  handleSubmit,
+  removeGuardian,
+  i
+}: any) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  const [resolvedAddress, setResolvedAddress] = useState('')
+  // const { ethersProvider } = useWalletContext();
+  const rightInputRef = useRef()
+  const menuRef = useRef()
+
+  const rightOnChange = (id: any, value: any) => {
+    onChange(`address_${id}`)(value)
+    setIsOpen(true)
+    setSearchText(value)
+  }
+
+  const rightOnFocus = (id: any, value: any) => {
+    setIsOpen(true)
+    setSearchText(value)
+  }
+
+  const rightOnBlur = (id: any, value: any) => {
+    onBlur(`address_${id}`)
+    // setIsOpen(false)
+  }
+
+  const setRightInput = (value: any) => {
+    rightInputRef.current = value
+  }
+
+  const resolveName = async (ensName: any) => {
+    try {
+      const ethersProvider = new ethers.JsonRpcProvider('https://goerli.infura.io/v3/997ec38ed1ff4c818b45a09f14546530');
+      const address = await ethersProvider.resolveName(`${ensName}.eth`);
+      console.log('address', address)
+
+      if (address) {
+        setResolvedAddress(address)
+        console.log(`The address of ${ensName} is ${address}`);
+      } else {
+        setResolvedAddress('')
+      }
+    } catch (error: any) {
+      setResolvedAddress('')
+      console.log('error', error.message)
+    }
+  }
+
+  useEffect(() => {
+    if (searchText) {
+      resolveName(searchText)
+    }
+  }, [searchText])
+
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (rightInputRef.current && !(rightInputRef.current as any).contains(event.target) && menuRef.current && !(menuRef.current as any).contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <Box position="relative" key={id} width="100%">
+      <DoubleFormInput
+        rightPlaceholder={`Guardian address ${i + 1}`}
+        rightValue={values[`address_${id}`]}
+        rightOnChange={(value: any) => rightOnChange(id, value)}
+        rightOnFocus={(value: any,) => rightOnFocus(id, value)}
+        rightOnBlur={(value: any) => rightOnBlur(id, value)}
+        setRightInput={setRightInput}
+        rightErrorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
+        _rightInputStyles={{
+          fontFamily: 'Martian',
+          fontWeight: 600,
+          fontSize: '14px',
+        }}
+        _rightContainerStyles={{ width: '70%', zIndex: 0 }}
+        leftAutoFocus={id === guardianIds[0]}
+        leftPlaceholder="Name"
+        leftValue={values[`name_${id}`]}
+        leftOnChange={onChange(`name_${id}`)}
+        leftOnBlur={onBlur(`name_${id}`)}
+        leftErrorMsg={showErrors[`name_${id}`] && errors[`name_${id}`]}
+        leftComponent={
+          <Text color="#898989" fontWeight="600">
+            eth:
+          </Text>
+        }
+        _leftContainerStyles={{ width: '30%' }}
+        onEnter={handleSubmit}
+        _styles={{ width: '100%', fontSize: '16px' }}
+      />
+      {i > 0 && (
+        <Box
+          onClick={() => removeGuardian(id)}
+          position="absolute"
+          width="40px"
+          right={{ base: '-28px', md: '-40px' }}
+          top="0"
+          height="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          cursor="pointer"
+        >
+          <Icon src={MinusIcon} />
+        </Box>
+      )}
+      <Box
+        position="absolute"
+        width="70%"
+        top="50px"
+        left="30%"
+        right="0"
+        ref={(menuRef as any)}
+        sx={{
+          div: {
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 'auto'
+          }
+        }}
+      >
+        <Menu
+          isOpen={isOpen}
+          // closeOnBlur
+          isLazy
+        >
+          {() => (
+            <Box maxWidth="100%" overflow="auto">
+              <MenuList background="white" maxWidth="100%">
+                <MenuItem maxWidth="100%">{searchText}.eth{resolvedAddress && ` (${resolvedAddress})`}</MenuItem>
+              </MenuList>
+            </Box>
+          )}
+        </Menu>
+      </Box>
+    </Box>
+  )
+}
+
 export default function Edit({
   description,
   guardianIds,
@@ -200,54 +357,22 @@ export default function Edit({
               alignItems="flex-start"
               justifyContent="center"
               gap="12px"
+              position="relative"
               width={formWidth || '100%'}
             >
               {guardianIds.map((id: any, i: number) => (
-                <Box position="relative" key={id} width="100%">
-                  <DoubleFormInput
-                    rightPlaceholder={`Guardian address ${i + 1}`}
-                    rightValue={values[`address_${id}`]}
-                    rightOnChange={onChange(`address_${id}`)}
-                    rightOnBlur={onBlur(`address_${id}`)}
-                    rightErrorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
-                    _rightInputStyles={{
-                      fontFamily: 'Martian',
-                      fontWeight: 600,
-                      fontSize: '14px',
-                    }}
-                    _rightContainerStyles={{ width: '70%' }}
-                    leftAutoFocus={id === guardianIds[0]}
-                    leftPlaceholder="Name"
-                    leftValue={values[`name_${id}`]}
-                    leftOnChange={onChange(`name_${id}`)}
-                    leftOnBlur={onBlur(`name_${id}`)}
-                    leftErrorMsg={showErrors[`name_${id}`] && errors[`name_${id}`]}
-                    leftComponent={
-                      <Text color="#898989" fontWeight="600">
-                        eth:
-                      </Text>
-                    }
-                    _leftContainerStyles={{ width: '30%' }}
-                    onEnter={handleSubmit}
-                    _styles={{ width: '100%', fontSize: '16px' }}
-                  />
-                  {i > 0 && (
-                    <Box
-                      onClick={() => removeGuardian(id)}
-                      position="absolute"
-                      width="40px"
-                      right={{ base: '-28px', md: '-40px' }}
-                      top="0"
-                      height="100%"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      cursor="pointer"
-                    >
-                      <Icon src={MinusIcon} />
-                    </Box>
-                  )}
-                </Box>
+                <GuardianInput
+                  id={id}
+                  values={values}
+                  showErrors={showErrors}
+                  errors={errors}
+                  guardianIds={guardianIds}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  handleSubmit={handleSubmit}
+                  removeGuardian={removeGuardian}
+                  i={i}
+                />
               ))}
               <TextButton onClick={() => addGuardian()} color="#EC588D" _hover={{ color: '#EC588D' }} padding="2px">
                 <PlusIcon color="#EC588D" />
@@ -345,7 +470,7 @@ export default function Edit({
           }
           rightPart={
             <Box display="flex" alignItems="center">
-              <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
+              <Box width="72px" minWidth="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
                 <Box width="30px" height="30px" background="white" borderRadius="30px" />
               </Box>
               <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>

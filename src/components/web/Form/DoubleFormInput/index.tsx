@@ -1,29 +1,5 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useRef } from 'react';
 import { Box, Text, Input } from '@chakra-ui/react';
-
-interface IProps {
-  leftValue?: string;
-  leftPlaceholder?: string;
-  leftErrorMsg?: string;
-  leftOnChange?: (value: string) => void;
-  leftOnBlur?: (value: string) => void;
-  rightValue?: string;
-  rightPlaceholder?: string;
-  rightErrorMsg?: string;
-  rightOnChange?: (value: string) => void;
-  rightOnBlur?: (value: string) => void;
-  _styles?: any;
-  _leftInputStyles?: any;
-  _rightInputStyles?: any;
-  _leftContainerStyles?: any;
-  _rightContainerStyles?: any;
-  leftLabel?: String;
-  rightLabel?: String;
-  leftComponent?: any;
-  rightComponent?: any;
-  leftAutoFocus?: any;
-  onEnter?: any;
-}
 
 export default function DoubleFormInput({
   leftLabel,
@@ -38,6 +14,8 @@ export default function DoubleFormInput({
   rightErrorMsg,
   rightOnChange,
   rightOnBlur,
+  rightOnFocus,
+  setRightInput,
   _styles,
   _leftInputStyles,
   _rightInputStyles,
@@ -47,7 +25,7 @@ export default function DoubleFormInput({
   rightComponent,
   leftAutoFocus,
   onEnter,
-}: IProps) {
+}: any) {
   const handleLeftChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (leftOnChange) leftOnChange(e.target.value);
   };
@@ -62,6 +40,10 @@ export default function DoubleFormInput({
 
   const handleRightBlur = (e: ChangeEvent<HTMLInputElement>) => {
     if (rightOnBlur) rightOnBlur(e.target.value);
+  };
+
+  const handleRightFocus = (e: ChangeEvent<HTMLInputElement>) => {
+    if (rightOnFocus) rightOnFocus(e.target.value);
   };
 
   const onKeyDown = (event: any) => {
@@ -104,7 +86,7 @@ export default function DoubleFormInput({
           {leftErrorMsg}
         </Text>
       </Box>
-      <Box display="flex" flexDirection="column" width="50%" {..._rightContainerStyles}>
+      <Box display="flex" flexDirection="column" width="50%" {..._rightContainerStyles} ref={setRightInput}>
         {rightLabel && (
           <Box as="label" htmlFor="rightLabel">
             {rightLabel}
@@ -133,6 +115,7 @@ export default function DoubleFormInput({
               value={rightValue ?? ''}
               onChange={handleRightChange}
               onBlur={handleRightBlur}
+              onFocus={handleRightFocus}
               borderRadius="16px"
               paddingLeft={leftComponent ? '40px' : '24px'}
               paddingRight="24px"
@@ -192,7 +175,7 @@ export function DoubleFormInfo({
   rightComponent,
   leftAutoFocus,
   onEnter,
-}: IProps) {
+}: any) {
   return (
     <Box display="flex" flexDirection="row" {..._styles}>
       <Box display="flex" flexDirection="column" width="50%" {..._leftContainerStyles}>
