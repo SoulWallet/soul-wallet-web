@@ -11,6 +11,7 @@ import { useGuardianStore } from '@/store/guardian';
 const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const [claimableCount, setClaimableCount] = useState(0);
   const { slotInfo } = useGuardianStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
@@ -20,6 +21,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   useImperativeHandle(ref, () => ({
     async show() {
       setVisible(true);
+      checkClaimable();
       return new Promise((resolve, reject) => {
         setPromiseInfo({
           resolve,
@@ -28,6 +30,21 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
       });
     },
   }));
+
+  const checkClaimable = async () => {
+    try {
+      const res: any = await api.operation.requestTestToken({
+        address: selectedAddress,
+        chainID: selectedChainId,
+        dryRun: true,
+      });
+      if (res.code === 200) {
+        setClaimableCount(res.data.remaining);
+      }
+    } catch (err) {
+      setClaimableCount(0);
+    }
+  };
 
   const doClaim = async () => {
     setLoading(true);
@@ -85,7 +102,17 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
             Each wallet address can claim test tokens
             <br /> (0.002 ETH and 10 USDC) twice per day.
           </Text>
-          <Button loading={loading} mt="6" mx="auto" py="3" px="4" onClick={doClaim} gap="2" display={'flex'}>
+          <Button
+            loading={loading}
+            disabled={!claimableCount}
+            mt="6"
+            mx="auto"
+            py="3"
+            px="4"
+            onClick={doClaim}
+            gap="2"
+            display={'flex'}
+          >
             <Image src={IconDollar} />
             <Text fontSize={'18px'} fontWeight={'800'} color="#fff">
               Claim

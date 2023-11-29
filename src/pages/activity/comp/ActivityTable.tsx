@@ -68,13 +68,13 @@ export default function ActivityTable({ activeChains }: any) {
   return (
     <Flex flexDir={'column'}>
       {activeChains.length === 0 && (
-        <Text fontSize={'20px'} fontWeight={'600'} mt="6">
+        <Text fontSize={'20px'} fontWeight={'600'}>
           Please select a chain
         </Text>
       )}
       {!list.length && (
         <>
-          {loading ? <Image src={IconLoading} display={'block'} w="50px" h="50px" mt="6" /> : <Text>No Activity</Text>}
+          {loading ? <Image src={IconLoading} display={'block'} w="50px" h="50px" /> : <Text>No Activity</Text>}
         </>
       )}
       {activeChains.length && list.length
