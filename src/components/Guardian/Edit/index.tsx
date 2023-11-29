@@ -239,6 +239,16 @@ const GuardianInput = ({
     };
   }, []);
 
+  const submitENSName = (name: any) => {
+    console.log('submitENSName', resolvedAddress)
+    setIsOpen(false)
+    onChange(`name_${id}`)(name)
+
+    setTimeout(() => {
+      onChange(`address_${id}`)(resolvedAddress)
+    })
+  }
+
   return (
     <Box position="relative" key={id} width="100%">
       <DoubleFormInput
@@ -309,7 +319,7 @@ const GuardianInput = ({
           {() => (
             <Box maxWidth="100%" overflow="auto">
               <MenuList background="white" maxWidth="100%">
-                <MenuItem maxWidth="100%">{searchText}.eth{resolvedAddress && ` (${resolvedAddress})`}</MenuItem>
+                <MenuItem maxWidth="100%" onClick={() => submitENSName(`${searchText}.eth`)}>{searchText}.eth{resolvedAddress && ` (${resolvedAddress})`}</MenuItem>
               </MenuList>
             </Box>
           )}
