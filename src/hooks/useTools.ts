@@ -5,14 +5,17 @@ import { copyText } from '@/lib/tools';
 import { useToast } from '@chakra-ui/react';
 import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
+import useBrowser from './useBrowser';
+import useWalletContext from '@/context/hooks/useWalletContext';
 import { clearStorageWithCredentials } from '@/lib/tools';
 import { useGuardianStore } from '@/store/guardian';
 
 export default function useTools() {
   const toast = useToast();
-  // const { clearCredentials } = useCredentialStore();
-  // const { clearAddresses } = useAddressStore();
-  // const {clearGuardianInfo} = useGuardianStore();
+
+  const { showClaimAssets, showTransferAssets } = useWalletContext();
+  const { navigate } = useBrowser();
+
   const clearPreviousData = () => {
     console.log('do clear previous data');
     // make sure no storage left
@@ -22,6 +25,28 @@ export default function useTools() {
     clearStorageWithCredentials();
   };
 
+  const goGuideAction = (id: number) => {
+    switch (id) {
+      case 0:
+        showClaimAssets();
+        break;
+      case 1:
+        showTransferAssets();
+        break;
+      case 2:
+        navigate('/security');
+        break;
+      case 3:
+        navigate(`/apps?appUrl=${encodeURIComponent('https://app.uniswap.org')}`);
+        break;
+      case 4:
+        navigate(`/apps?appUrl=${encodeURIComponent('https://staging.aave.com')}`);
+        break;
+      case 5:
+        navigate(`/recover`);
+        break;
+    }
+  };
 
   const formatGuardianFile = (walletAddress: string, guardiansList: GuardianItem[] = []) => {
     // remove id
@@ -109,5 +134,6 @@ export default function useTools() {
     generateJsonName,
     doCopy,
     clearPreviousData,
+    goGuideAction,
   };
 }

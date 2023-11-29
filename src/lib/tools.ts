@@ -358,9 +358,9 @@ export const getIconMapping = (name: string) => {
     case 'transfer erc20':
       return IconSend;
     case 'transfer eth':
-      return IconSend;
+    return IconSend;
     case 'mint':
-    case 'mintToken':
+    case 'minttoken':
       return IconMint;
     case 'approve':
       return IconApprove;

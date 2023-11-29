@@ -3,7 +3,7 @@ import HomeCard from '../HomeCard';
 import Button from '@/components/Button';
 import { ethers } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import IconScan from '@/assets/icons/scan.svg';
+import IconClaim from '@/assets/icons/claim.svg';
 import IconShare from '@/assets/icons/share.svg';
 import { useCredentialStore } from '@/store/credential';
 import useConfig from '@/hooks/useConfig';
@@ -18,7 +18,7 @@ const Btn = ({ children, ...restProps }: any) => {
 };
 
 export default function Balance() {
-  const { showTransferAssets } = useWalletContext();
+  const { showTransferAssets, showClaimAssets } = useWalletContext();
   const { walletName } = useCredentialStore();
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
@@ -50,12 +50,8 @@ export default function Balance() {
         <Text fontWeight={'600'}>Past day</Text>
       </Flex> */}
       <Flex gap="2" align={'center'} pos="absolute" right="4" bottom="3" display={{ base: 'none', lg: 'flex' }}>
-        <Btn
-          onClick={() => {
-            showTransferAssets(ethers.ZeroAddress, 'receive');
-          }}
-        >
-          <Image src={IconScan} />
+        <Btn onClick={showClaimAssets}>
+          <Image src={IconClaim} />
         </Btn>
         <Btn as={Link} href={`${scanUrl}/address/${selectedAddress}`} target="_blank">
           <Image src={IconShare} />

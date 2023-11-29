@@ -8,35 +8,12 @@ import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
 import { useAddressStore } from '@/store/address';
 import { findMissingNumbers } from '@/lib/tools';
+import useTools from '@/hooks/useTools';
 
 export default function Guidance() {
-  const { showClaimAssets, showTransferAssets } = useWalletContext();
-  const { navigate } = useBrowser();
   const { slotInfo } = useGuardianStore();
   const { setFinishedSteps, finishedSteps } = useAddressStore();
-
-  const onClick = (id: number) => {
-    switch (id) {
-      case 0:
-        showClaimAssets();
-        break;
-      case 1:
-        showTransferAssets();
-        break;
-      case 2:
-        navigate('/security');
-        break;
-      case 3:
-        navigate(`/apps?appUrl=${encodeURIComponent('https://app.uniswap.org')}`);
-        break;
-      case 4:
-        navigate(`/apps?appUrl=${encodeURIComponent('https://staging.aave.com')}`);
-        break;
-      case 5:
-        navigate(`/recover`);
-        break;
-    }
-  };
+  const { goGuideAction } = useTools();
 
   const checkSteps = async () => {
     const res = await api.operation.finishStep({
@@ -51,9 +28,9 @@ export default function Guidance() {
     checkSteps();
   }, []);
 
-  const missingSteps = findMissingNumbers([0,1,2,3,4,5], finishedSteps);
+  const missingSteps = findMissingNumbers([0, 1, 2, 3, 4, 5], finishedSteps);
 
-  if(!missingSteps.length){
+  if (!missingSteps.length) {
     return;
   }
 
@@ -74,7 +51,9 @@ export default function Guidance() {
         px="6"
         py="10px"
         fontWeight={'800'}
-        onClick={() => onClick(currentStep.id)}
+        onClick={() => {
+          goGuideAction(currentStep.id);
+        }}
         bg="#6A52EF"
         color="white"
         _hover={{ bg: '#6A52EF', color: 'white' }}
