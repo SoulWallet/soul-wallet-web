@@ -38,6 +38,10 @@ export default function useForm(props: any) {
     setValues({ ...values, [fieldName]: value });
   };
 
+    const onChangeValues = (newValues: any) => {
+    setValues({ ...values, ...newValues });
+  };
+
   const onBlur = (fieldName: string) => (value: any) => {
     if (!!values[fieldName]) {
       setShowErrors({ ...showErrors, [fieldName]: true });
@@ -85,5 +89,6 @@ export default function useForm(props: any) {
     addFields,
     removeFields,
     clearFields,
+    onChangeValues
   };
 }

@@ -172,6 +172,7 @@ const GuardianInput = ({
   onBlur,
   handleSubmit,
   removeGuardian,
+  onChangeValues,
   i
 }: any) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -203,6 +204,7 @@ const GuardianInput = ({
 
   const resolveName = async (ensName: any) => {
     try {
+      setResolvedAddress('')
       const ethersProvider = new ethers.JsonRpcProvider('https://goerli.infura.io/v3/997ec38ed1ff4c818b45a09f14546530');
       const address = await ethersProvider.resolveName(`${ensName}.eth`);
       console.log('address', address)
@@ -242,10 +244,9 @@ const GuardianInput = ({
   const submitENSName = (name: any) => {
     console.log('submitENSName', resolvedAddress)
     setIsOpen(false)
-    onChange(`name_${id}`)(name)
-
-    setTimeout(() => {
-      onChange(`address_${id}`)(resolvedAddress)
+    onChangeValues({
+      [`name_${id}`]: name,
+      [`address_${id}`]: resolvedAddress,
     })
   }
 
@@ -352,6 +353,7 @@ export default function Edit({
   keepPrivate,
   setKeepPrivate,
   confirmButton,
+  onChangeValues,
   formWidth
 }: any) {
   return (
@@ -381,6 +383,7 @@ export default function Edit({
                   onBlur={onBlur}
                   handleSubmit={handleSubmit}
                   removeGuardian={removeGuardian}
+                  onChangeValues={onChangeValues}
                   i={i}
                 />
               ))}

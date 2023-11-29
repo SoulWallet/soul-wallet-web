@@ -284,7 +284,7 @@ export default function SetGuardians({ changeStep }: any) {
   const { showConfirmPayment } = useWalletContext();
   const createdGuardiansInfo = useRef<any>()
 
-  const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
+  const { values, errors, invalid, onChange, onChangeValues, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
     validate,
     initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardianNames)
@@ -667,6 +667,7 @@ export default function SetGuardians({ changeStep }: any) {
           guardiansList={guardiansList}
           values={values}
           onChange={onChange}
+          onChangeValues={onChangeValues}
           onBlur={onBlur}
           showErrors={showErrors}
           errors={errors}

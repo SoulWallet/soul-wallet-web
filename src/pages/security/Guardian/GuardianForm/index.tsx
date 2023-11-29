@@ -201,7 +201,7 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
     validate,
   });
 
-  const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields } = useForm({
+  const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields, onChangeValues } = useForm({
     fields,
     validate,
     initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardianNames)
@@ -554,6 +554,7 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
         guardiansList={guardiansList}
         values={values}
         onChange={onChange}
+        onChangeValues={onChangeValues}
         onBlur={onBlur}
         showErrors={showErrors}
         errors={errors}
