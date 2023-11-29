@@ -73,16 +73,22 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
 
   return (
     <div ref={ref}>
-      <TxModal visible={visible} width={{ base: '90%', lg: '500px' }} onClose={onClose} title="Claim test token">
+      <TxModal
+        visible={visible}
+        width={{ base: '90%', lg: '360px' }}
+        onClose={onClose}
+        bodyStyle={{ py: '9', px: '6' }}
+        title="Claim test token"
+      >
         <Box textAlign="center">
-          <Text fontSize={'16px'} fontWeight={'600'} mt="8" color="#000">
+          <Text fontSize={'16px'} fontWeight={'600'} color="#000">
             Each wallet address can claim test tokens
             <br /> (0.002 ETH and 10 USDC) twice per day.
           </Text>
           <Button loading={loading} mt="6" mx="auto" py="3" px="4" onClick={doClaim} gap="2" display={'flex'}>
             <Image src={IconDollar} />
             <Text fontSize={'18px'} fontWeight={'800'} color="#fff">
-              Receive test token
+              Claim
             </Text>
           </Button>
         </Box>

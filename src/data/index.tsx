@@ -81,6 +81,7 @@ export const guideList = [
     title: 'Begin with Tokens!',
     desc: `Grab some test tokens to explore the features and capabilities we offer.`,
     buttonText: 'Claim',
+    buttonTextFull: 'Claim',
     statusText: `Claim test tokens`,
   },
   {
@@ -88,6 +89,7 @@ export const guideList = [
     title: 'Make Your First Move!',
     desc: `Experience the ease of transactions. Send tokens to another address.`,
     buttonText: 'Send',
+    buttonTextFull: 'Send',
     statusText: 'Send tokens',
   },
   {
@@ -95,6 +97,7 @@ export const guideList = [
     title: 'Guard Your Wallet!',
     desc: `Adjust your guardian settings for enhanced security.`,
     buttonText: 'Edit',
+    buttonTextFull: 'Edit Guardians',
     statusText: 'Change guardians',
   },
   {
@@ -102,6 +105,7 @@ export const guideList = [
     title: 'Trade with Ease!',
     desc: `Dive into the world of Dapps and DeFi. Execute a token swap on Uniswap with your wallet.`,
     buttonText: 'Swap',
+    buttonTextFull: 'Open Uniswap',
     statusText: 'Execute a token swap on Uniswap',
   },
   {
@@ -109,6 +113,7 @@ export const guideList = [
     title: 'Grow Your Tokens!',
     desc: `Deposit tokens into Aave and start earning interest.`,
     buttonText: 'Earn',
+    buttonTextFull: 'Open Aave',
     statusText: 'Deposit tokens into the Aave protocol',
   },
   {
@@ -116,6 +121,7 @@ export const guideList = [
     title: 'Recover With Ease!',
     desc: `Checkout “Lost your wallet?” Our guided wallet recovery process ensures you’re never locked out of your funds.`,
     buttonText: 'Recover',
+    buttonTextFull: 'Recover',
     statusText: 'Recover the wallet',
   },
 ];

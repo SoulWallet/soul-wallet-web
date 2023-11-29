@@ -1,17 +1,20 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
-import { useToast, Text, Image, Box, Flex, Divider } from '@chakra-ui/react';
+import { Text, Image, Flex, Divider } from '@chakra-ui/react';
 import TxModal from '../TxModal';
 import IconUnchecked from '@/assets/icons/unchecked.svg';
 import IconChecked from '@/assets/icons/checked.svg';
 import api from '@/lib/api';
+import useTools from '@/hooks/useTools';
 import { useGuardianStore } from '@/store/guardian';
 import { guideList } from '@/data';
 import { useAddressStore } from '@/store/address';
+import Button from '../Button';
 
 const TestGuideModal = (_: unknown, ref: Ref<any>) => {
   const { slotInfo } = useGuardianStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
+  const { goGuideAction } = useTools();
   const { setFinishedSteps, finishedSteps } = useAddressStore();
 
   const getStepInfo = async () => {
@@ -58,11 +61,26 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
           {guideList.map((item, idx: number) => (
             <React.Fragment key={idx}>
               {idx ? <Divider my="3" /> : ''}
-              <Flex gap="2">
-                <Image src={finishedSteps.includes(idx) ? IconChecked : IconUnchecked} w="5" />
+              <Flex gap="2" justify={'space-between'}>
                 <Text fontWeight={'800'} fontSize={'16px'}>
                   {idx + 1}. {item.statusText}
                 </Text>
+                {finishedSteps.includes(idx) ? (
+                  <Image src={IconChecked} w="5" />
+                ) : (
+                  <Button
+                    py="2px"
+                    px="12px"
+                    fontSize={'12px'}
+                    fontWeight={800}
+                    onClick={() => {
+                      goGuideAction(item.id);
+                      onClose();
+                    }}
+                  >
+                    {item.buttonTextFull}
+                  </Button>
+                )}
               </Flex>
             </React.Fragment>
           ))}
