@@ -171,6 +171,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const getFinalUserOp = async (txns: any, payTokenAddress: string) => {
     try {
       const isActivated = await checkActivated();
+      console.log('is Activated?', isActivated);
       if (isActivated) {
         // if activated, get userOp directly
         return await getUserOp(txns, payTokenAddress);
@@ -407,7 +408,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         mx="auto"
         onClick={onConfirm}
         loading={signing}
-        disabled={(loadingFee || !balanceEnough) && !useSponsor}
+        disabled={(loadingFee || !balanceEnough) && (!sponsor || !useSponsor)}
         bg="#6A52EF"
         color="white"
         _hover={{ bg: '#6A52EF', color: 'white' }}

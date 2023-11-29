@@ -82,10 +82,11 @@ export const WalletContextProvider = ({ children }: any) => {
     const res = getIsActivated(selectedAddress, selectedChainId);
     if (!res) {
       const contractCode = await ethersProvider.getCode(selectedAddress);
-      console.log('check code result', res);
+      console.log('check code result', contractCode);
       // is already activated
       if (contractCode !== '0x') {
         toggleActivatedChain(selectedAddress, selectedChainId, true);
+        return true;
       }
     }
     return res;
