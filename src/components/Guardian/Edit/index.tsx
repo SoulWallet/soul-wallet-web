@@ -275,11 +275,13 @@ const GuardianInput = ({
         if (activeENSNameRef.current === ensName) setResolvedAddress(address)
       } else {
         if (activeENSNameRef.current === ensName) setResolvedAddress('')
+        if (activeENSNameRef.current === ensName) setSearchAddress('')
       }
 
       if (activeENSNameRef.current === ensName) setIsLoading(false)
     } catch (error: any) {
       if (activeENSNameRef.current === ensName) setResolvedAddress('')
+      if (activeENSNameRef.current === ensName) setSearchAddress('')
       if (activeENSNameRef.current === ensName) setIsLoading(false)
       console.log('error', error.message)
     }
@@ -396,16 +398,20 @@ const GuardianInput = ({
           {() => (
             <Box maxWidth="100%" overflow="auto">
               <MenuList background="white" maxWidth="100%">
-                <MenuItem maxWidth="100%" position="relative" onClick={() => submitENSName(searchAddress)}>
-                  <Box
-                    as="span"
-                    background={`linear-gradient(to right, ${generateSeededColor(searchAddress)}, ${generateSeededColor(searchAddress, 1)})`}
-                    width="20px"
-                    height="20px"
-                    borderRadius="20px"
-                    marginRight="10px"
-                  />
-                  {searchAddress}{resolvedAddress && !isLoading && ` (${toShortAddress(resolvedAddress)})`}
+                <MenuItem maxWidth="100%" position="relative" onClick={searchAddress ? (() => submitENSName(searchAddress)) : (() => {})}>
+                  {!!searchAddress && (
+                    <Box
+                      as="span"
+                      background={`linear-gradient(to right, ${generateSeededColor(searchAddress)}, ${generateSeededColor(searchAddress, 1)})`}
+                      width="20px"
+                      height="20px"
+                      borderRadius="20px"
+                      marginRight="10px"
+                    />
+                  )}
+                  {!!searchAddress && <Box as="span" fontWeight="bold" marginRight="4px">{searchAddress}</Box>}
+                  {resolvedAddress && !isLoading && `(${toShortAddress(resolvedAddress)})`}
+                  {!resolvedAddress && !isLoading && <Box as="span" color="#898989">{`No ENS found`}</Box>}
                   <Box
                     position="absolute"
                     top="0"
