@@ -37,6 +37,8 @@ import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GreySection from '@/components/GreySection'
 import Backup from '@/components/Guardian/Backup';
+import { toShortAddress } from '@/lib/tools';
+import IconLoading from '@/assets/loading.svg';
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -162,6 +164,51 @@ const isGuardiansListFilled = (list: any) => {
   return isFilled
 }
 
+const extractENSAddress = (address: any) => {
+  if (!address) return
+
+  if (address.startsWith('0x')) {
+    return
+  } else if (ethers.isAddress(address)) {
+    return null
+  } else if (isENSAddress(address)) {
+    return address
+  } else if (address.indexOf('.') === -1) {
+    return `${address}.eth`
+  } else {
+    return address
+  }
+}
+
+function stringToSeed(str: any) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash;
+}
+
+function SeededRandom(seed: any) {
+  return function() {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  };
+}
+
+function generateSeededColor(strSeed: any, offset: any = 0) {
+  const seed = stringToSeed(strSeed) + offset;
+  const random = SeededRandom(seed);
+  const min = 150;  // Adjusted minimum RGB value
+  const max = 255; // Adjusted maximum RGB value
+  const range = max - min;
+  const red = Math.floor(random() * range + min);
+  const green = Math.floor(random() * range + min);
+  const blue = Math.floor(random() * range + min);
+  return "rgb(" + red + "," + green + "," + blue + ")";
+}
+
 const GuardianInput = ({
   id,
   values,
@@ -176,7 +223,10 @@ const GuardianInput = ({
   i
 }: any) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isImported, setIsImported] = useState(false)
   const [searchText, setSearchText] = useState('')
+  const [searchAddress, setSearchAddress] = useState('')
   const [resolvedAddress, setResolvedAddress] = useState('')
   // const { ethersProvider } = useWalletContext();
   const rightInputRef = useRef()
@@ -184,13 +234,23 @@ const GuardianInput = ({
 
   const rightOnChange = (id: any, value: any) => {
     onChange(`address_${id}`)(value)
-    setIsOpen(true)
     setSearchText(value)
+
+    if (extractENSAddress(value)) {
+      setIsOpen(true)
+    } else {
+      setIsOpen(false)
+    }
   }
 
   const rightOnFocus = (id: any, value: any) => {
-    setIsOpen(true)
     setSearchText(value)
+
+    if (extractENSAddress(value)) {
+      setIsOpen(true)
+    } else {
+      setIsOpen(false)
+    }
   }
 
   const rightOnBlur = (id: any, value: any) => {
@@ -204,26 +264,45 @@ const GuardianInput = ({
 
   const resolveName = async (ensName: any) => {
     try {
+      setIsLoading(true)
       setResolvedAddress('')
       const ethersProvider = new ethers.JsonRpcProvider('https://goerli.infura.io/v3/997ec38ed1ff4c818b45a09f14546530');
-      const address = await ethersProvider.resolveName(`${ensName}.eth`);
+      const address = await ethersProvider.resolveName(ensName);
       console.log('address', address)
 
       if (address) {
         setResolvedAddress(address)
+        console.log('resolvedAddress', address)
+        setIsImported(true)
         console.log(`The address of ${ensName} is ${address}`);
       } else {
         setResolvedAddress('')
+        setIsImported(false)
       }
+      setIsLoading(false)
     } catch (error: any) {
       setResolvedAddress('')
+      setIsLoading(false)
+      setIsImported(false)
       console.log('error', error.message)
     }
   }
 
   useEffect(() => {
+    if (searchAddress) {
+      resolveName(searchAddress)
+    }
+  }, [searchAddress])
+
+  useEffect(() => {
     if (searchText) {
-      resolveName(searchText)
+      const searchAddress = extractENSAddress(searchText)
+
+      if (searchAddress) {
+        setSearchAddress(searchAddress)
+      } else {
+        setIsOpen(false)
+      }
     }
   }, [searchText])
 
@@ -320,7 +399,30 @@ const GuardianInput = ({
           {() => (
             <Box maxWidth="100%" overflow="auto">
               <MenuList background="white" maxWidth="100%">
-                <MenuItem maxWidth="100%" onClick={() => submitENSName(`${searchText}.eth`)}>{searchText}.eth{resolvedAddress && ` (${resolvedAddress})`}</MenuItem>
+                <MenuItem maxWidth="100%" position="relative" onClick={() => submitENSName(searchAddress)}>
+                  <Box
+                    as="span"
+                    background={`linear-gradient(to right, ${generateSeededColor(searchAddress)}, ${generateSeededColor(searchAddress, 1)})`}
+                    width="20px"
+                    height="20px"
+                    borderRadius="20px"
+                    marginRight="10px"
+                  />
+                  {searchAddress}{resolvedAddress && !isLoading && ` (${toShortAddress(resolvedAddress)})`}
+                  <Box
+                    position="absolute"
+                    top="0"
+                    right="0"
+                    width="40px"
+                    height="100%"
+                    as="span"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    {!!isLoading && <Image width="20px" src={IconLoading} />}
+                  </Box>
+                </MenuItem>
               </MenuList>
             </Box>
           )}
