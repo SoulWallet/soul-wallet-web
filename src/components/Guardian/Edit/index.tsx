@@ -230,6 +230,7 @@ const GuardianInput = ({
   const [resolvedAddress, setResolvedAddress] = useState('')
   // const { ethersProvider } = useWalletContext();
   const rightInputRef = useRef()
+  const activeENSNameRef = useRef()
   const menuRef = useRef()
 
   const rightOnChange = (id: any, value: any) => {
@@ -264,26 +265,22 @@ const GuardianInput = ({
 
   const resolveName = async (ensName: any) => {
     try {
+      activeENSNameRef.current = ensName
       setIsLoading(true)
       setResolvedAddress('')
       const ethersProvider = new ethers.JsonRpcProvider('https://goerli.infura.io/v3/997ec38ed1ff4c818b45a09f14546530');
       const address = await ethersProvider.resolveName(ensName);
-      console.log('address', address)
 
       if (address) {
-        setResolvedAddress(address)
-        console.log('resolvedAddress', address)
-        setIsImported(true)
-        console.log(`The address of ${ensName} is ${address}`);
+        if (activeENSNameRef.current === ensName) setResolvedAddress(address)
       } else {
-        setResolvedAddress('')
-        setIsImported(false)
+        if (activeENSNameRef.current === ensName) setResolvedAddress('')
       }
-      setIsLoading(false)
+
+      if (activeENSNameRef.current === ensName) setIsLoading(false)
     } catch (error: any) {
-      setResolvedAddress('')
-      setIsLoading(false)
-      setIsImported(false)
+      if (activeENSNameRef.current === ensName) setResolvedAddress('')
+      if (activeENSNameRef.current === ensName) setIsLoading(false)
       console.log('error', error.message)
     }
   }
