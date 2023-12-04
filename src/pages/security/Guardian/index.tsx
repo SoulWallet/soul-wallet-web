@@ -60,9 +60,10 @@ export default function Guardian({ setActiveSection }: any) {
   const [status, setStatus] = useState<string>('intro');
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { guardiansInfo, updateGuardiansInfo, editingGuardiansInfo, getEditingGuardiansInfo, slotInfo, } = useGuardianStore();
+  const [isPending, setIsPending] = useState<boolean>(editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash);
   const intervalRef = useRef<any>()
 
-  const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash
+  // const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash
 
   const startManage = () => {
     setStatus('managing')
@@ -162,9 +163,40 @@ export default function Guardian({ setActiveSection }: any) {
       startBackup()
       setIsLoaded(true)
     } else {
-      getGuardianInfo(true)
+      if (isPending) {
+        startGuardianInterval().then(() => {
+          setIsPending(false)
+          startManage()
+        })
+      } else {
+        getGuardianInfo(true)
+      }
     }
   }, [])
+
+  if (isPending) {
+    return (
+      <Box width="100%" height="100vh">
+        <Box height="102px">
+          <Header />
+        </Box>
+        <Box width="100%" height="calc(100% - 102px)">
+          <Box padding="32px 39px">
+            <Heading1>Passkey and Guardian Settings</Heading1>
+            <Box display="flex" width="100%">
+              <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
+                Guardian
+              </Heading2>
+              <Heading2 fontSize="18px" color="#898989" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
+                Passkey
+              </Heading2>
+            </Box>
+            <Heading1 textAlign="center">Pending...</Heading1>
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
 
   if (!isLoaded) {
     return (
