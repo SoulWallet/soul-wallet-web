@@ -167,9 +167,7 @@ const isGuardiansListFilled = (list: any) => {
 const extractENSAddress = (address: any) => {
   if (!address) return
 
-  if (address.startsWith('0x')) {
-    return
-  } else if (ethers.isAddress(address)) {
+  if (ethers.isAddress(address)) {
     return null
   } else if (isENSAddress(address)) {
     return address
@@ -392,13 +390,12 @@ const GuardianInput = ({
       >
         <Menu
           isOpen={isOpen}
-          // closeOnBlur
           isLazy
         >
           {() => (
             <Box maxWidth="100%" overflow="auto">
               <MenuList background="white" maxWidth="100%">
-                <MenuItem maxWidth="100%" position="relative" onClick={searchAddress ? (() => submitENSName(searchAddress)) : (() => {})}>
+                <MenuItem maxWidth="100%" position="relative" onClick={(!isLoading && searchAddress) ? (() => submitENSName(searchAddress)) : (() => {})}>
                   {!!searchAddress && (
                     <Box
                       as="span"
