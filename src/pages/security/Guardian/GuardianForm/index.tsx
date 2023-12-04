@@ -38,8 +38,8 @@ import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GreySection from '@/components/GreySection'
 import Backup from '@/components/Guardian/Backup';
 import Edit from '@/components/Guardian/Edit';
+import DoubleCheckModal from '@/components/Guardian/Confirm'
 import GuardianModal from '../GuardianModal'
-import DoubleCheckModal from '../DoubleCheckModal'
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -493,6 +493,32 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
     }
   }
 
+  const getGuardiansDetails = () => {
+    const guardiansList = guardianIds
+      .map((id) => {
+        const addressKey = `address_${id}`;
+        const nameKey = `name_${id}`;
+        let address = values[addressKey];
+
+        if (address && address.length) {
+          return { address, name: values[nameKey] };
+        }
+
+        return null;
+      })
+      .filter((i) => !!i);
+
+    const guardianAddresses = guardiansList.map((item: any) => item.address);
+    const guardianNames = guardiansList.map((item: any) => item.name);
+    const threshold = amountForm.values.amount || 0;
+
+    return {
+      guardians: guardianAddresses,
+      guardianNames,
+      threshold,
+    }
+  }
+
   const goBack = () => {
     setStatus('editing');
   };
@@ -588,7 +614,12 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
         }
       />
       <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <DoubleCheckModal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)} onSubmit={keepPrivate ? () => { setIsConfirmOpen(false); setStatus('backuping'); } : () => handleSubmit()} />
+      <DoubleCheckModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onSubmit={keepPrivate ? () => { setIsConfirmOpen(false); setStatus('backuping'); } : () => handleSubmit()}
+        getGuardiansDetails={getGuardiansDetails}
+      />
     </Fragment>
   )
 }

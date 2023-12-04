@@ -50,7 +50,7 @@ import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
 import GreySection from '@/components/GreySection'
 import List from '@/components/Guardian/List'
-import DoubleCheckModal from '../DoubleCheckModal'
+// import DoubleCheckModal from '../DoubleCheckModal'
 import GuardianModal from '../GuardianModal'
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
@@ -280,7 +280,6 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
         </Box>
       )}
       <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      <DoubleCheckModal isOpen={isConfirmOpen} onClose={() => setIsConfirmOpen(false)} onSubmit={handleCancel} />
     </Fragment>
   )
 }

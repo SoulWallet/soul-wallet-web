@@ -61,6 +61,7 @@ import { defaultGuardianSafePeriod } from '@/config';
 import GreySection from '@/components/GreySection'
 import Backup from '@/components/Guardian/Backup';
 import Edit from '@/components/Guardian/Edit';
+import DoubleCheckModal from '@/components/Guardian/Confirm'
 
 function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
   return (
@@ -252,6 +253,7 @@ export default function SetGuardians({ changeStep }: any) {
   const { calcWalletAddress } = useSdk();
   const [status, setStatus] = useState<string>('intro');
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const [isSkipOpen, setIsSkipOpen] = useState(false)
   const [showAdvance, setShowAdvance] = useState(false)
   const [keepPrivate, setKeepPrivate] = useState(false)
@@ -600,6 +602,32 @@ export default function SetGuardians({ changeStep }: any) {
     return guardiansInfo
   };
 
+  const getGuardiansDetails = () => {
+    const guardiansList = guardianIds
+      .map((id) => {
+        const addressKey = `address_${id}`;
+        const nameKey = `name_${id}`;
+        let address = values[addressKey];
+
+        if (address && address.length) {
+          return { address, name: values[nameKey] };
+        }
+
+        return null;
+      })
+      .filter((i) => !!i);
+
+    const guardianAddresses = guardiansList.map((item: any) => item.address);
+    const guardianNames = guardiansList.map((item: any) => item.name);
+    const threshold = amountForm.values.amount || 0;
+
+    return {
+      guardians: guardianAddresses,
+      guardianNames,
+      threshold,
+    }
+  }
+
   if (status === 'backuping') {
     return (
       <FullscreenContainer>
@@ -687,7 +715,7 @@ export default function SetGuardians({ changeStep }: any) {
           formWidth={{ base: "100%", md: "760px" }}
           confirmButton={
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="36px">
-              <Button _styles={{ width: '320px', marginBottom: '12px' }} disabled={loading || disabled} loading={loading} onClick={keepPrivate ? () => startBackup() : () => handleSubmit()}>
+              <Button _styles={{ width: '320px', marginBottom: '12px' }} disabled={loading || disabled} loading={loading} onClick={() => setIsConfirmOpen(true)}>
                 Confirm
               </Button>
               <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
@@ -698,6 +726,14 @@ export default function SetGuardians({ changeStep }: any) {
         />
         <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} skipping={skipping} />
+        <DoubleCheckModal
+          isOpen={isConfirmOpen}
+          disabled={disabled}
+          loading={loading}
+          onClose={() => setIsConfirmOpen(false)}
+          onSubmit={keepPrivate ? () => { setIsConfirmOpen(false); startBackup() } : () => handleSubmit()}
+          getGuardiansDetails={getGuardiansDetails}
+        />
       </FullscreenContainer>
     )
   }
