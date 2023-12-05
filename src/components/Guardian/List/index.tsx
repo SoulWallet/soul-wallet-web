@@ -263,7 +263,7 @@ export default function GuardianList({
           }
           rightPart={
             <Box display="flex" alignItems="center">
-              <Box width="72px" height="40px" background={(guardiansInfo.keepPrivate) ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" transition="all 0.2s ease" paddingLeft={(guardiansInfo.keepPrivate) ? '37px' : '5px'}>
+              <Box width="72px" minWidth="72px" height="40px" background={(guardiansInfo.keepPrivate) ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" transition="all 0.2s ease" paddingLeft={(guardiansInfo.keepPrivate) ? '37px' : '5px'}>
                 <Box width="30px" height="30px" background="white" borderRadius="30px" />
               </Box>
               <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>

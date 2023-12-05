@@ -37,6 +37,8 @@ import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GreySection from '@/components/GreySection'
 import Backup from '@/components/Guardian/Backup';
+import { toShortAddress } from '@/lib/tools';
+import IconLoading from '@/assets/loading.svg';
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -162,6 +164,274 @@ const isGuardiansListFilled = (list: any) => {
   return isFilled
 }
 
+const extractENSAddress = (address: any) => {
+  if (!address) return
+
+  if (ethers.isAddress(address)) {
+    return null
+  } else if (isENSAddress(address)) {
+    return address
+  } else if (address.indexOf('.') === -1) {
+    return `${address}.eth`
+  } else {
+    return address
+  }
+}
+
+function stringToSeed(str: any) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash;
+}
+
+function SeededRandom(seed: any) {
+  return function() {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  };
+}
+
+function generateSeededColor(strSeed: any, offset: any = 0) {
+  const seed = stringToSeed(strSeed) + offset;
+  const random = SeededRandom(seed);
+  const min = 150;  // Adjusted minimum RGB value
+  const max = 255; // Adjusted maximum RGB value
+  const range = max - min;
+  const red = Math.floor(random() * range + min);
+  const green = Math.floor(random() * range + min);
+  const blue = Math.floor(random() * range + min);
+  return "rgb(" + red + "," + green + "," + blue + ")";
+}
+
+const GuardianInput = ({
+  id,
+  values,
+  showErrors,
+  errors,
+  guardianIds,
+  onChange,
+  onBlur,
+  handleSubmit,
+  removeGuardian,
+  onChangeValues,
+  i
+}: any) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isImported, setIsImported] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  const [searchAddress, setSearchAddress] = useState('')
+  const [resolvedAddress, setResolvedAddress] = useState('')
+  // const { ethersProvider } = useWalletContext();
+  const rightInputRef = useRef()
+  const activeENSNameRef = useRef()
+  const menuRef = useRef()
+
+  const rightOnChange = (id: any, value: any) => {
+    onChange(`address_${id}`)(value)
+    setSearchText(value)
+
+    if (extractENSAddress(value)) {
+      setIsOpen(true)
+    } else {
+      setIsOpen(false)
+    }
+  }
+
+  const rightOnFocus = (id: any, value: any) => {
+    setSearchText(value)
+
+    if (extractENSAddress(value)) {
+      setIsOpen(true)
+    } else {
+      setIsOpen(false)
+    }
+  }
+
+  const rightOnBlur = (id: any, value: any) => {
+    onBlur(`address_${id}`)
+    // setIsOpen(false)
+  }
+
+  const setRightInput = (value: any) => {
+    rightInputRef.current = value
+  }
+
+  const resolveName = async (ensName: any) => {
+    try {
+      activeENSNameRef.current = ensName
+      setIsLoading(true)
+      setResolvedAddress('')
+      const ethersProvider = new ethers.JsonRpcProvider('https://goerli.infura.io/v3/997ec38ed1ff4c818b45a09f14546530');
+      const address = await ethersProvider.resolveName(ensName);
+
+      if (address) {
+        if (activeENSNameRef.current === ensName) setResolvedAddress(address)
+      } else {
+        if (activeENSNameRef.current === ensName) setResolvedAddress('')
+        if (activeENSNameRef.current === ensName) setSearchAddress('')
+      }
+
+      if (activeENSNameRef.current === ensName) setIsLoading(false)
+    } catch (error: any) {
+      if (activeENSNameRef.current === ensName) setResolvedAddress('')
+      if (activeENSNameRef.current === ensName) setSearchAddress('')
+      if (activeENSNameRef.current === ensName) setIsLoading(false)
+      console.log('error', error.message)
+    }
+  }
+
+  useEffect(() => {
+    if (searchAddress) {
+      resolveName(searchAddress)
+    }
+  }, [searchAddress])
+
+  useEffect(() => {
+    if (searchText) {
+      const searchAddress = extractENSAddress(searchText)
+
+      if (searchAddress) {
+        setSearchAddress(searchAddress)
+      } else {
+        setIsOpen(false)
+      }
+    }
+  }, [searchText])
+
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (rightInputRef.current && !(rightInputRef.current as any).contains(event.target) && menuRef.current && !(menuRef.current as any).contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const submitENSName = (name: any) => {
+    console.log('submitENSName', resolvedAddress)
+    setIsOpen(false)
+    onChangeValues({
+      [`name_${id}`]: name,
+      [`address_${id}`]: resolvedAddress,
+    })
+  }
+
+  return (
+    <Box position="relative" key={id} width="100%">
+      <DoubleFormInput
+        rightPlaceholder={`Guardian address ${i + 1}`}
+        rightValue={values[`address_${id}`]}
+        rightOnChange={(value: any) => rightOnChange(id, value)}
+        rightOnFocus={(value: any,) => rightOnFocus(id, value)}
+        rightOnBlur={(value: any) => rightOnBlur(id, value)}
+        setRightInput={setRightInput}
+        rightErrorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
+        _rightInputStyles={{
+          fontFamily: 'Martian',
+          fontWeight: 600,
+          fontSize: '14px',
+        }}
+        _rightContainerStyles={{ width: '70%', zIndex: 0 }}
+        leftAutoFocus={id === guardianIds[0]}
+        leftPlaceholder="Name"
+        leftValue={values[`name_${id}`]}
+        leftOnChange={onChange(`name_${id}`)}
+        leftOnBlur={onBlur(`name_${id}`)}
+        leftErrorMsg={showErrors[`name_${id}`] && errors[`name_${id}`]}
+        leftComponent={
+          <Text color="#898989" fontWeight="600">
+            eth:
+          </Text>
+        }
+        _leftContainerStyles={{ width: '30%' }}
+        onEnter={handleSubmit}
+        _styles={{ width: '100%', fontSize: '16px' }}
+      />
+      {i > 0 && (
+        <Box
+          onClick={() => removeGuardian(id)}
+          position="absolute"
+          width="40px"
+          right={{ base: '-28px', md: '-40px' }}
+          top="0"
+          height="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          cursor="pointer"
+        >
+          <Icon src={MinusIcon} />
+        </Box>
+      )}
+      <Box
+        position="absolute"
+        width="70%"
+        top="50px"
+        left="30%"
+        right="0"
+        ref={(menuRef as any)}
+        sx={{
+          div: {
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 'auto'
+          }
+        }}
+      >
+        <Menu
+          isOpen={isOpen}
+          isLazy
+        >
+          {() => (
+            <Box maxWidth="100%" overflow="auto">
+              <MenuList background="white" maxWidth="100%">
+                <MenuItem maxWidth="100%" position="relative" onClick={(!isLoading && searchAddress) ? (() => submitENSName(searchAddress)) : (() => {})}>
+                  {!!searchAddress && (
+                    <Box
+                      as="span"
+                      background={`linear-gradient(to right, ${generateSeededColor(searchAddress)}, ${generateSeededColor(searchAddress, 1)})`}
+                      width="20px"
+                      height="20px"
+                      borderRadius="20px"
+                      marginRight="10px"
+                    />
+                  )}
+                  {!!searchAddress && <Box as="span" fontWeight="bold" marginRight="4px">{searchAddress}</Box>}
+                  {resolvedAddress && !isLoading && `(${toShortAddress(resolvedAddress)})`}
+                  {!resolvedAddress && !isLoading && <Box as="span" color="#898989">{`No ENS found`}</Box>}
+                  <Box
+                    position="absolute"
+                    top="0"
+                    right="0"
+                    width="40px"
+                    height="100%"
+                    as="span"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    {!!isLoading && <Image width="20px" src={IconLoading} />}
+                  </Box>
+                </MenuItem>
+              </MenuList>
+            </Box>
+          )}
+        </Menu>
+      </Box>
+    </Box>
+  )
+}
+
 export default function Edit({
   description,
   guardianIds,
@@ -185,6 +455,7 @@ export default function Edit({
   keepPrivate,
   setKeepPrivate,
   confirmButton,
+  onChangeValues,
   formWidth
 }: any) {
   return (
@@ -200,54 +471,23 @@ export default function Edit({
               alignItems="flex-start"
               justifyContent="center"
               gap="12px"
+              position="relative"
               width={formWidth || '100%'}
             >
               {guardianIds.map((id: any, i: number) => (
-                <Box position="relative" key={id} width="100%">
-                  <DoubleFormInput
-                    rightPlaceholder={`Guardian address ${i + 1}`}
-                    rightValue={values[`address_${id}`]}
-                    rightOnChange={onChange(`address_${id}`)}
-                    rightOnBlur={onBlur(`address_${id}`)}
-                    rightErrorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
-                    _rightInputStyles={{
-                      fontFamily: 'Martian',
-                      fontWeight: 600,
-                      fontSize: '14px',
-                    }}
-                    _rightContainerStyles={{ width: '70%' }}
-                    leftAutoFocus={id === guardianIds[0]}
-                    leftPlaceholder="Name"
-                    leftValue={values[`name_${id}`]}
-                    leftOnChange={onChange(`name_${id}`)}
-                    leftOnBlur={onBlur(`name_${id}`)}
-                    leftErrorMsg={showErrors[`name_${id}`] && errors[`name_${id}`]}
-                    leftComponent={
-                      <Text color="#898989" fontWeight="600">
-                        eth:
-                      </Text>
-                    }
-                    _leftContainerStyles={{ width: '30%' }}
-                    onEnter={handleSubmit}
-                    _styles={{ width: '100%', fontSize: '16px' }}
-                  />
-                  {i > 0 && (
-                    <Box
-                      onClick={() => removeGuardian(id)}
-                      position="absolute"
-                      width="40px"
-                      right={{ base: '-28px', md: '-40px' }}
-                      top="0"
-                      height="100%"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      cursor="pointer"
-                    >
-                      <Icon src={MinusIcon} />
-                    </Box>
-                  )}
-                </Box>
+                <GuardianInput
+                  id={id}
+                  values={values}
+                  showErrors={showErrors}
+                  errors={errors}
+                  guardianIds={guardianIds}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  handleSubmit={handleSubmit}
+                  removeGuardian={removeGuardian}
+                  onChangeValues={onChangeValues}
+                  i={i}
+                />
               ))}
               <TextButton onClick={() => addGuardian()} color="#EC588D" _hover={{ color: '#EC588D' }} padding="2px">
                 <PlusIcon color="#EC588D" />
@@ -345,7 +585,7 @@ export default function Edit({
           }
           rightPart={
             <Box display="flex" alignItems="center">
-              <Box width="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
+              <Box width="72px" minWidth="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
                 <Box width="30px" height="30px" background="white" borderRadius="30px" />
               </Box>
               <TextBody marginLeft="20px">Backup guardians in the next step for easy recovery.</TextBody>
