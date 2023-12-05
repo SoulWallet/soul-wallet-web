@@ -36,6 +36,7 @@ import { useCredentialStore } from '@/store/credential';
 import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GreySection from '@/components/GreySection'
+import config from '@/config';
 import Backup from '@/components/Guardian/Backup';
 import { toShortAddress } from '@/lib/tools';
 import IconLoading from '@/assets/loading.svg';
@@ -266,7 +267,7 @@ const GuardianInput = ({
       activeENSNameRef.current = ensName
       setIsLoading(true)
       setResolvedAddress('')
-      const ethersProvider = new ethers.JsonRpcProvider('https://goerli.infura.io/v3/997ec38ed1ff4c818b45a09f14546530');
+      const ethersProvider = new ethers.JsonRpcProvider(`https://goerli.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18`);
       const address = await ethersProvider.resolveName(ensName);
 
       if (address) {
