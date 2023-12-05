@@ -267,7 +267,7 @@ const GuardianInput = ({
       activeENSNameRef.current = ensName
       setIsLoading(true)
       setResolvedAddress('')
-      const ethersProvider = new ethers.JsonRpcProvider(`https://goerli.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18`);
+      const ethersProvider = new ethers.JsonRpcProvider(`https://mainnet.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18`);
       const address = await ethersProvider.resolveName(ensName);
 
       if (address) {
