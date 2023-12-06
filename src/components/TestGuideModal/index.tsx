@@ -5,13 +5,13 @@ import IconUnchecked from '@/assets/icons/unchecked.svg';
 import IconChecked from '@/assets/icons/checked.svg';
 import api from '@/lib/api';
 import useTools from '@/hooks/useTools';
-import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { guideList } from '@/data';
 import { useSettingStore } from '@/store/setting';
 import Button from '../Button';
 
 const TestGuideModal = (_: unknown, ref: Ref<any>) => {
-  const { slotInfo } = useGuardianStore();
+  const { slotInfo } = useSlotStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const { goGuideAction } = useTools();

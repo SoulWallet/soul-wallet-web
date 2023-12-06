@@ -6,14 +6,14 @@ import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import IconDollar from '@/assets/icons/dollar-white.svg';
-import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { useSettingStore } from '@/store/setting';
 
 const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [claimableCount, setClaimableCount] = useState(0);
-  const { slotInfo } = useGuardianStore();
+  const { slotInfo } = useSlotStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const { selectedAddress} = useAddressStore();

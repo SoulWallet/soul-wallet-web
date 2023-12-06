@@ -21,7 +21,7 @@ import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
 import useTools from '@/hooks/useTools';
-import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { bundlerErrMapping } from '@/config';
 
 export default function SignTransaction({ onSuccess, txns, sendToAddress }: any) {
@@ -47,7 +47,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { selectedChainId } = useChainStore();
   const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
   const { setFinishedSteps } = useSettingStore();
-  const { slotInfo } = useGuardianStore();
+  const { slotInfo } = useSlotStore();
   // todo, set false as default
   const [useSponsor, setUseSponsor] = useState(true);
   const { getPrefund } = useQuery();

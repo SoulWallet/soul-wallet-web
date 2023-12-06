@@ -23,6 +23,7 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import { useAddressStore } from '@/store/address';
 import useKeystore from '@/hooks/useKeystore';
 import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import GuardianIntro from './GuardianIntro'
 import GuardianList from './GuardianList'
 import GuardianForm from './GuardianForm'
@@ -59,7 +60,8 @@ export default function Guardian({ setActiveSection }: any) {
   const { getActiveGuardianHash } = useKeystore();
   const [status, setStatus] = useState<string>('intro');
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const { guardiansInfo, updateGuardiansInfo, editingGuardiansInfo, getEditingGuardiansInfo, slotInfo, } = useGuardianStore();
+  const { guardiansInfo, updateGuardiansInfo, editingGuardiansInfo, getEditingGuardiansInfo } = useGuardianStore();
+  const { slotInfo } = useSlotStore()
   const [isPending, setIsPending] = useState<boolean>(editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash);
   const intervalRef = useRef<any>()
 

@@ -27,6 +27,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useAddressStore } from '@/store/address';
 import { nanoid } from 'nanoid';
 import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';
 import { L1KeyStore } from '@soulwallet/sdk';
@@ -181,7 +182,8 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
-  const { slotInfo, setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { slotInfo } = useSlotStore()
   const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
   const { chainConfig } = useConfig();
   const [pending, setPending] = useState(false);

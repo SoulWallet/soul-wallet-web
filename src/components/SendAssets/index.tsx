@@ -8,7 +8,7 @@ import { useBalanceStore } from '@/store/balance';
 import AmountInput from './comp/AmountInput';
 import { AddressInput, AddressInputReadonly } from './comp/AddressInput';
 import api from '@/lib/api';
-import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
 
@@ -23,7 +23,7 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const { setFinishedSteps} = useSettingStore();
   const [sendToken, setSendToken] = useState(tokenAddress);
   const [receiverAddress, setReceiverAddress] = useState<string>('');
-  const { slotInfo } = useGuardianStore();
+  const { slotInfo } = useSlotStore();
   const toast = useToast();
 
   const selectedToken = getTokenBalance(sendToken);

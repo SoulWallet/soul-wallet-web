@@ -30,6 +30,7 @@ import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
 import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { ethers } from 'ethers';
 import { L1KeyStore } from '@soulwallet/sdk';
 import useSdk from '@/hooks/useSdk';
@@ -247,7 +248,8 @@ export default function SetGuardians({ changeStep }: any) {
   const { addCredential, credentials, setSelectedCredentialId, walletName, } = useCredentialStore();
   const [isConfirming, setIsConfirming] = useState(false);
   const { saveAddressName } = useSettingStore();
-  const { slotInfo, setSlotInfo, setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { slotInfo, setSlotInfo } = useSlotStore()
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
   const [status, setStatus] = useState<string>('intro');

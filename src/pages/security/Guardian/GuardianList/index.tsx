@@ -39,6 +39,7 @@ import OpenScanIcon from '@/components/Icons/OpenScan';
 import QuestionIcon from '@/components/Icons/Question';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { nanoid } from 'nanoid';
 import { L1KeyStore } from '@soulwallet/sdk';
 import { useCredentialStore } from '@/store/credential';
@@ -154,7 +155,8 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   const { payTask } = useTransaction();
   const { doCopy } = useTools();
 
-  const { guardiansInfo, editingGuardiansInfo, slotInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { guardiansInfo, editingGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
+  const { slotInfo } = useSlotStore()
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
     guardianNames: [],

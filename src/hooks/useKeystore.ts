@@ -1,5 +1,5 @@
 import { KeyStoreTypedDataType, L1KeyStore } from '@soulwallet/sdk';
-import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import useConfig from './useConfig';
 import { ethers } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
@@ -7,7 +7,7 @@ import { defaultGuardianSafePeriod } from '@/config';
 
 export default function useKeystore() {
   const { chainConfig } = useConfig();
-  const { getSlotInfo } = useGuardianStore();
+  const { getSlotInfo } = useSlotStore();
   const { showSignMessage } = useWalletContext();
   const slotInfo = getSlotInfo();
   const slot = slotInfo.slot;
