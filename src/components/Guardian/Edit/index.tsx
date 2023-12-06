@@ -207,7 +207,7 @@ function generateSeededColor(strSeed: any, offset: any = 0) {
   return "rgb(" + red + "," + green + "," + blue + ")";
 }
 
-async function isENSExpiration(name, provider) {
+async function isENSExpiration(name: any, provider: any) {
   try {
     const ensRegistry = new ethers.Contract(
       '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
