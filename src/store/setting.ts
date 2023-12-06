@@ -14,6 +14,7 @@ export interface ISettingStore {
   addressName: Map<string, string>;
   saveAddressName: (address: string, name: string) => void;
   removeAddressName: (address: string) => void;
+  getAddressName: (address: string) => string;
 }
 
 const createSettingSlice = immer<ISettingStore>((set, get) => ({
@@ -29,6 +30,10 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
     set((state) => {
       state.finishedSteps = steps;
     });
+  },
+  getAddressName: (address) => {
+    const state:any = useSettingStore.getState();
+    return state.addressName.get(address, '')
   },
   saveAddressName: (address, name) => {
     set((state) => {

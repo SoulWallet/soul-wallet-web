@@ -138,21 +138,21 @@ const getDefaultGuardianIds = (count: number) => {
   return ids;
 };
 
-const getInitialValues = (ids: string[], guardians: string[], guardianNames: string[]) => {
-  const idCount = ids.length;
-  const guardianCount = guardians.length;
-  const count = idCount > guardianCount ? idCount : guardianCount;
-  const values: any = {};
+// const getInitialValues = (ids: string[], guardians: string[], guardianNames: string[]) => {
+//   const idCount = ids.length;
+//   const guardianCount = guardians.length;
+//   const count = idCount > guardianCount ? idCount : guardianCount;
+//   const values: any = {};
 
-  for (let i = 0; i < count; i++) {
-    if (ids[i]) {
-      values[`address_${ids[i]}`] = guardians[i];
-      values[`name_${ids[i]}`] = guardianNames[i];
-    }
-  }
+//   for (let i = 0; i < count; i++) {
+//     if (ids[i]) {
+//       values[`address_${ids[i]}`] = guardians[i];
+//       values[`name_${ids[i]}`] = guardianNames[i];
+//     }
+//   }
 
-  return values;
-};
+//   return values;
+// };
 
 const isGuardiansListFilled = (list: any) => {
   if (!list.length) return false

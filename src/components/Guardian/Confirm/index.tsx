@@ -22,9 +22,11 @@ import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import Button from '@/components/web/Button';
 import TextButton from '@/components/web/TextButton';
 import WarningIcon from '@/components/Icons/Warning';
+import { useSettingStore } from '@/store/setting';
 
 export default function ConfirmModal({ isOpen, onClose, onSubmit, loading, disabled, getGuardiansDetails }: any) {
   const { guardians, guardianNames, threshold } = getGuardiansDetails()
+  const { getAddressName } = useSettingStore();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -58,7 +60,7 @@ export default function ConfirmModal({ isOpen, onClose, onSubmit, loading, disab
               <Fragment key={address}>
                 <Box display="flex" flexDirection="column" alignItems="flex-start" justifyContent="center" padding="20px">
                   <TextBody fontSize="14px" fontWeight="800">
-                    Guardian {i + 1}: {guardianNames[i] || 'no name'}
+                    Guardian {i + 1}: {getAddressName(address) || 'no name'}
                   </TextBody>
                   <TextBody fontSize="16px" fontWeight="500" wordBreak="break-all">
                     {address}
