@@ -208,6 +208,40 @@ function generateSeededColor(strSeed: any, offset: any = 0) {
   return "rgb(" + red + "," + green + "," + blue + ")";
 }
 
+async function isENSExpiration(name, provider) {
+  try {
+    const ensRegistry = new ethers.Contract(
+      '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
+      [
+        'function nameExpires(uint256 id) external view returns(uint)',
+        'function available(uint256 id) public view returns(bool)'
+      ],
+      provider
+    );
+
+    // Compute the namehash for the ENS name
+    const resolver = await provider.getResolver(name);
+
+    if (resolver) {
+      const namehash = ethers.namehash(name);
+      const expiresTimestamp = await ensRegistry.nameExpires(namehash);
+      console.log('expiresTimestamp', namehash, expiresTimestamp)
+      // await ethers.EnsResolver.fromName(name)
+
+      if (expiresTimestamp !== 0n) {
+        const expiresDate = new Date(Number(expiresTimestamp) * 1000);
+        const now = new Date();
+        return now > expiresDate;
+      }
+    }
+
+    return false
+  } catch (error: any) {
+    console.log('error', error);
+    return false
+  }
+}
+
 const GuardianInput = ({
   id,
   values,
@@ -267,21 +301,28 @@ const GuardianInput = ({
       activeENSNameRef.current = ensName
       setIsLoading(true)
       setResolvedAddress('')
-      const ethersProvider = new ethers.JsonRpcProvider(`https://goerli.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18`);
+      const ethersProvider = new ethers.JsonRpcProvider('https://mainnet.infura.io/v3/36edb4e805524ba696b5b83b3e23ad18');
       const address = await ethersProvider.resolveName(ensName);
+      const isExpired = await isENSExpiration(ensName, ethersProvider);
+      console.log('address', address, isExpired)
 
-      if (address) {
-        if (activeENSNameRef.current === ensName) setResolvedAddress(address)
-      } else {
-        if (activeENSNameRef.current === ensName) setResolvedAddress('')
-        if (activeENSNameRef.current === ensName) setSearchAddress('')
+      if (activeENSNameRef.current === ensName) {
+        if (address && !isExpired) {
+          setResolvedAddress(address)
+        } else {
+          setResolvedAddress('')
+          setSearchAddress('')
+        }
+
+        setIsLoading(false)
+      }
+    } catch (error: any) {
+      if (activeENSNameRef.current === ensName) {
+        setResolvedAddress('')
+        setSearchAddress('')
+        setIsLoading(false)
       }
 
-      if (activeENSNameRef.current === ensName) setIsLoading(false)
-    } catch (error: any) {
-      if (activeENSNameRef.current === ensName) setResolvedAddress('')
-      if (activeENSNameRef.current === ensName) setSearchAddress('')
-      if (activeENSNameRef.current === ensName) setIsLoading(false)
       console.log('error', error.message)
     }
   }
