@@ -22,8 +22,7 @@ import {
 import { Image } from '@chakra-ui/react';
 import IconAccountMore from '@/assets/icons/account-more.svg';
 import IconAccountMoreGreen from '@/assets/icons/account-more-green.svg';
-import ImgNotActived from '@/assets/not-activated.svg';
-import { copyText } from '@/lib/tools';
+// import ImgNotActived from '@/assets/not-activated.svg';
 import useBrowser from '@/hooks/useBrowser';
 import IconChevronLeft from '@/assets/icons/chevron-left.svg';
 import { useAddressStore } from '@/store/address';
@@ -192,13 +191,13 @@ const AccountItem = ({ item, selected, onClick }: any) => {
         <Text fontFamily={'Martian'} fontSize={'10px'} fontWeight={'600'} mb="18px">
           {item.address.slice(0, 4)}...{item.address.slice(-4)}
         </Text>
-        {isActivated ? (
+        {/* {isActivated ? (
           <Text fontWeight={'800'} fontSize={'14px'} lineHeight={'1'}>
             {item.balance}
           </Text>
         ) : (
           <Image src={ImgNotActived} />
-        )}
+        )} */}
       </GridItem>
 
       <EditNameModal isOpen={isOpen} onClose={onClose} item={item} />
