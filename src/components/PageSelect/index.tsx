@@ -7,30 +7,32 @@ import ActivityIcon from '@/components/Icons/Activity';
 import LogoutIcon from '@/components/Icons/Logout';
 import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
-import { toCapitalize } from '@/lib/tools'
+import { toCapitalize } from '@/lib/tools';
 import storage from '@/lib/storage';
+import useTools from '@/hooks/useTools';
 
 const getPageIcon = (type: string) => {
   if (type === 'asset') {
-    return <AssetIcon />
+    return <AssetIcon />;
   } else if (type === 'activity') {
-    return <ActivityIcon />
+    return <ActivityIcon />;
   } else if (type === 'apps') {
-    return <AppsIcon />
+    return <AppsIcon />;
   } else if (type === 'security') {
-    return <SecurityIcon />
-  } else if(type === 'logout') {
-    return <LogoutIcon />
+    return <SecurityIcon />;
+  } else if (type === 'logout') {
+    return <LogoutIcon />;
   }
-}
+};
 
 export default function PageSelect() {
   const { navigate } = useBrowser();
+  const { clearLogData } = useTools();
 
-  const doLogout = () =>{
-    storage.clear();
-    location.href = '/launch'
-  }
+  const doLogout = () => {
+    clearLogData();
+    navigate('/launch');
+  };
 
   return (
     <Menu>
@@ -41,12 +43,20 @@ export default function PageSelect() {
               <MenuIcon />
             </Flex>
           </MenuButton>
-          <MenuList width="264px" display="flex" paddingTop="0px" paddingBottom="20px" paddingRight="20px" flexWrap="wrap" boxSizing="border-box">
+          <MenuList
+            width="264px"
+            display="flex"
+            paddingTop="0px"
+            paddingBottom="20px"
+            paddingRight="20px"
+            flexWrap="wrap"
+            boxSizing="border-box"
+          >
             {['asset', 'activity', 'apps', 'security', 'logout'].map((item: any, idx: number) => {
               return (
                 <MenuItem
                   key={item}
-                  onClick={() => item === 'logout' ? doLogout() : navigate(`/${item}`)}
+                  onClick={() => (item === 'logout' ? doLogout() : navigate(`/${item}`))}
                   width="60px"
                   height="60px"
                   borderRadius="16px"

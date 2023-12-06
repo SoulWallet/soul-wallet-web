@@ -40,7 +40,6 @@ export default function SetWalletName({ changeStep }: any) {
   const [loading, setLoading] = useState(false);
   const { register } = usePassKey();
   const { setWalletName, } = useCredentialStore();
-  const { clearPreviousData } = useTools();
   const toast = useToast();
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
     fields: ['name'],
@@ -61,7 +60,6 @@ export default function SetWalletName({ changeStep }: any) {
 
   const handleNext = async () => {
     try {
-      // clearPreviousData();
       setLoading(true);
       const walletName = values.name || 'Wallet_1';
       setWalletName(walletName)

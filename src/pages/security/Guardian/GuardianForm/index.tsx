@@ -40,6 +40,7 @@ import Backup from '@/components/Guardian/Backup';
 import Edit from '@/components/Guardian/Edit';
 import DoubleCheckModal from '@/components/Guardian/Confirm'
 import GuardianModal from '../GuardianModal'
+import { useSettingStore } from '@/store/setting';
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -174,7 +175,7 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
     threshold: 0
   }
   const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
-  const { setFinishedSteps } = useAddressStore();
+  const { setFinishedSteps } = useSettingStore();
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));

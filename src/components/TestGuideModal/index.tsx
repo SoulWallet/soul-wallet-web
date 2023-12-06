@@ -7,7 +7,7 @@ import api from '@/lib/api';
 import useTools from '@/hooks/useTools';
 import { useGuardianStore } from '@/store/guardian';
 import { guideList } from '@/data';
-import { useAddressStore } from '@/store/address';
+import { useSettingStore } from '@/store/setting';
 import Button from '../Button';
 
 const TestGuideModal = (_: unknown, ref: Ref<any>) => {
@@ -15,7 +15,7 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const { goGuideAction } = useTools();
-  const { setFinishedSteps, finishedSteps } = useAddressStore();
+  const { setFinishedSteps, finishedSteps } = useSettingStore();
 
   const getStepInfo = async () => {
     const res = await api.operation.finishStep({

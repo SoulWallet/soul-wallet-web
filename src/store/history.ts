@@ -7,6 +7,7 @@ import { ActivityStatusEn } from '@/pages/wallet/comp/Activity/comp/ActivityItem
 export interface IHistoryStore {
   historyList: any[];
   fetchHistory: (address: string, chainId: string[], ethersProvider: any) => void;
+  clearHistory: () => void;
 }
 
 export const fetchHistoryApi = async (address: string, chainId: string[], ethersProvider: any) => {
@@ -43,6 +44,11 @@ export const useHistoryStore = create<IHistoryStore>()(
         const res = await fetchHistoryApi(address, chainId, ethersProvider);
         set({ historyList: res.data.ops });
       },
+      clearHistory: () => {
+        set({
+          historyList: []
+        })
+      }
     }),
     {
       name: 'history-storage',

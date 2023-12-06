@@ -33,6 +33,7 @@ import { useCredentialStore } from '@/store/credential';
 import usePassKey from '@/hooks/usePasskey';
 import { L1KeyStore } from '@soulwallet/sdk';
 import { useAddressStore } from '@/store/address';
+import { useSettingStore } from '@/store/setting';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
@@ -137,7 +138,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
-  const { setFinishedSteps } = useAddressStore();
+  const { setFinishedSteps } = useSettingStore();
   const {
     recoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,

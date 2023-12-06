@@ -10,6 +10,7 @@ import { AddressInput, AddressInputReadonly } from './comp/AddressInput';
 import api from '@/lib/api';
 import { useGuardianStore } from '@/store/guardian';
 import { useAddressStore } from '@/store/address';
+import { useSettingStore } from '@/store/setting';
 
 interface ISendAssets {
   tokenAddress: string;
@@ -19,7 +20,7 @@ interface ISendAssets {
 export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const [amount, setAmount] = useState<string>('');
   const { getTokenBalance } = useBalanceStore();
-  const { setFinishedSteps, finishedSteps } = useAddressStore();
+  const { setFinishedSteps} = useSettingStore();
   const [sendToken, setSendToken] = useState(tokenAddress);
   const [receiverAddress, setReceiverAddress] = useState<string>('');
   const { slotInfo } = useGuardianStore();

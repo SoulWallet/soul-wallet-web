@@ -39,6 +39,7 @@ const defaultEthBalance: ITokenBalanceItem = {
 export interface IBalanceStore {
   tokenBalance: ITokenBalanceItem[];
   nftBalance: INftBalanceItem[];
+  clearBalance: () => void;
   getTokenBalance: (tokenAddress: string) => any;
   fetchTokenBalance: (address: string, chainId: string, paymasterTokens: string[]) => void;
   getNftBalance: (tokenAddress: string) => any;
@@ -80,6 +81,9 @@ export const useBalanceStore = create<IBalanceStore>()(
       nftBalance: [],
       getTokenBalance: (tokenAddress: string) => {
         return get().tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress === tokenAddress)[0];
+      },
+      clearBalance: () => {
+        set({ tokenBalance: [defaultEthBalance], nftBalance: [] });
       },
       fetchTokenBalance: async (address: string, chainId: string, paymasterTokens: string[]) => {
         const res = await api.balance.token({

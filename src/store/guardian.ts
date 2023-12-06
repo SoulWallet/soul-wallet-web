@@ -3,7 +3,6 @@
  * temporary store user's input
  * Please refer to GLOBAL store for permanent use
  */
-import { GuardianItem } from '@/lib/type';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 import { create } from 'zustand';

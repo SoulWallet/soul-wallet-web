@@ -7,22 +7,32 @@ import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
 import useBrowser from './useBrowser';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import { clearStorageWithCredentials } from '@/lib/tools';
 import { useGuardianStore } from '@/store/guardian';
+import { useBalanceStore } from '@/store/balance';
+import { useHistoryStore } from '@/store/history';
+import { useChainStore } from '@/store/chain';
+import { useSlotStore } from '@/store/slot';
 
 export default function useTools() {
   const toast = useToast();
-
+  const { clearCredentials } = useCredentialStore();
+  const { clearAddresses } = useAddressStore();
+  const { clearGuardianInfo } = useGuardianStore();
+  const { clearBalance } = useBalanceStore();
+  const { clearHistory } = useHistoryStore();
+  const { clearChainStore } = useChainStore();
+  const {clearSlotStore} = useSlotStore();
   const { showClaimAssets, showTransferAssets } = useWalletContext();
   const { navigate } = useBrowser();
 
-  const clearPreviousData = () => {
-    console.log('do clear previous data');
-    // make sure no storage left
-    // clearCredentials();
-    // clearAddresses();
-    // clearGuardianInfo();
-    clearStorageWithCredentials();
+  const clearLogData = () => {
+    clearAddresses();
+    clearBalance();
+    clearChainStore();
+    clearCredentials();
+    clearGuardianInfo();
+    clearHistory();
+    clearSlotStore();
   };
 
   const goGuideAction = (id: number) => {
@@ -133,7 +143,7 @@ export default function useTools() {
     generateQrCode,
     generateJsonName,
     doCopy,
-    clearPreviousData,
+    clearLogData,
     goGuideAction,
   };
 }

@@ -22,6 +22,7 @@ interface IChainStore {
   getChainItem: (chainId: string) => any;
   setSelectedChainId: (chainId: string) => void;
   updateChainItem: (chainId: string, chainItem: Partial<IChainItem>) => void;
+  clearChainStore: () => void;
 }
 
 const getIndexByChainId = (chainList: IChainItem[], chainId: string) => {
@@ -53,6 +54,12 @@ const createChainSlice = immer<IChainStore>((set, get) => ({
         ...chainItem,
       };
       state.chainList[index] = itemToSet;
+    });
+  },
+  clearChainStore: () => {
+    set({
+      selectedChainId: config.chainList[0].chainIdHex,
+      chainList: config.chainList,
     });
   },
 }));

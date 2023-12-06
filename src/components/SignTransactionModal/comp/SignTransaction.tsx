@@ -19,6 +19,7 @@ import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
+import { useSettingStore } from '@/store/setting';
 import useTools from '@/hooks/useTools';
 import { useGuardianStore } from '@/store/guardian';
 import { bundlerErrMapping } from '@/config';
@@ -43,7 +44,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [activeOperation, setActiveOperation] = useState<UserOperation>();
   const [sponsor, setSponsor] = useState<any>(null);
   const { selectedChainId } = useChainStore();
-  const { toggleActivatedChain, addressList, selectedAddress, setFinishedSteps } = useAddressStore();
+  const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
+  const { setFinishedSteps } = useSettingStore();
   const { slotInfo } = useGuardianStore();
   // todo, set false as default
   const [useSponsor, setUseSponsor] = useState(true);

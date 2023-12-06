@@ -23,8 +23,7 @@ export interface IAddressStore {
   getIsActivated: (address: string, chainId: string) => boolean;
   getSelectedAddressItem: () => IAddressItem;
   clearAddressList: () => void;
-  setFinishedSteps: (steps: number[]) => void;
-  finishedSteps: number[];
+
 }
 
 export const getIndexByAddress = (addressList: IAddressItem[], address: string) => {
@@ -35,7 +34,6 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
   selectedAddress: '',
   walletName: '',
   addressList: [],
-  finishedSteps: [],
   getSelectedAddressItem: () => {
     const index = getIndexByAddress(get().addressList, get().selectedAddress);
     return get().addressList[index];
@@ -51,17 +49,11 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
       state.selectedAddress = addressList[0].address;
     });
   },
-  setFinishedSteps: (steps: number[]) => {
-    set((state) => {
-      state.finishedSteps = steps;
-    });
-  },
+
   clearAddresses: () =>{
     set(state=>{
-      console.log('ready to clear')
       state.addressList = [];
       state.selectedAddress = '';
-      state.finishedSteps = [];
     })
   },
   addAddressItem: (addressItem: IAddressItem) => {

@@ -52,6 +52,7 @@ import GreySection from '@/components/GreySection'
 import List from '@/components/Guardian/List'
 // import DoubleCheckModal from '../DoubleCheckModal'
 import GuardianModal from '../GuardianModal'
+import { useSettingStore } from '@/store/setting';
 
 const defaultGuardianIds = [nextRandomId(), nextRandomId(), nextRandomId()];
 
@@ -148,7 +149,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   const { credentials } = useCredentialStore();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const { chainConfig } = useConfig();
-  const { setFinishedSteps } = useAddressStore();
+  const { setFinishedSteps } = useSettingStore();
   const { showConfirmPayment } = useWalletContext();
   const { payTask } = useTransaction();
   const { doCopy } = useTools();

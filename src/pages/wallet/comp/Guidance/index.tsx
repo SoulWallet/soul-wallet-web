@@ -9,10 +9,11 @@ import { useGuardianStore } from '@/store/guardian';
 import { useAddressStore } from '@/store/address';
 import { findMissingNumbers } from '@/lib/tools';
 import useTools from '@/hooks/useTools';
+import { useSettingStore } from '@/store/setting';
 
 export default function Guidance() {
   const { slotInfo } = useGuardianStore();
-  const { setFinishedSteps, finishedSteps } = useAddressStore();
+  const { setFinishedSteps, finishedSteps } = useSettingStore();
   const { goGuideAction } = useTools();
 
   const checkSteps = async () => {

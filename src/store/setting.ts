@@ -1,3 +1,7 @@
+/**
+ * Stores in this file should always persist
+ */
+
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
@@ -5,13 +9,37 @@ import { persist } from 'zustand/middleware';
 export interface ISettingStore {
   ignoreWebauthnOverride: boolean;
   setIgnoreWebauthnOverride: (val: boolean) => void;
+  setFinishedSteps: (steps: number[]) => void;
+  finishedSteps: number[];
+  addressName: Map<string, string>;
+  saveAddressName: (address: string, name: string) => void;
+  removeAddressName: (address: string) => void;
 }
 
 const createSettingSlice = immer<ISettingStore>((set, get) => ({
+  finishedSteps: [],
+  addressName: new Map(),
   ignoreWebauthnOverride: false,
   setIgnoreWebauthnOverride: (val: boolean) => {
     set({
       ignoreWebauthnOverride: val,
+    });
+  },
+  setFinishedSteps: (steps: number[]) => {
+    set((state) => {
+      state.finishedSteps = steps;
+    });
+  },
+  saveAddressName: (address, name) => {
+    set((state) => {
+      state.addressName = new Map(state.addressName).set(address, name);
+    });
+  },
+  removeAddressName: (address) => {
+    set((state) => {
+      const newMap = new Map(state.addressName);
+      newMap.delete(address);
+      state.addressName = newMap;
     });
   },
 }));

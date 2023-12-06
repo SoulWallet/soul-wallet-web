@@ -5,7 +5,7 @@ import { create } from 'zustand';
 export interface SlotStore {
   slotInfo: any;
   setSlotInfo: (value: any) => void;
-  clearSlotInfo: () => void;
+  clearSlotStore: () => void;
   updateSlotInfo: (value: any) => void;
   getSlotInfo: () => any;
 }
@@ -19,7 +19,7 @@ const createSlotSlice = immer<SlotStore>((set, get) => ({
       ...value
     }
   }),
-  clearSlotInfo: () => set({
+  clearSlotStore: () => set({
     slotInfo: {},
   }),
   getSlotInfo: () => get().slotInfo,

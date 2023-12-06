@@ -28,7 +28,7 @@ const validate = (values: any) => {
 
 export default function SetWalletName({ changeStep }: any) {
   const [loading, setLoading] = useState(false);
-  const {clearPreviousData} = useTools();
+  // const {clearLogData} = useTools();
   const { register } = usePassKey();
   const { addCredential, setWalletName, } = useCredentialStore();
   const toast = useToast();
@@ -39,7 +39,7 @@ export default function SetWalletName({ changeStep }: any) {
 
   const handleNext = async () => {
     try {
-      clearPreviousData();
+      // clearLogData();
       setLoading(true);
       // resetWallet();
       const walletName = values.name || 'Wallet_1';

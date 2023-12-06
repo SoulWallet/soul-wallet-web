@@ -7,6 +7,7 @@ import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import IconDollar from '@/assets/icons/dollar-white.svg';
 import { useGuardianStore } from '@/store/guardian';
+import { useSettingStore } from '@/store/setting';
 
 const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const toast = useToast();
@@ -15,7 +16,8 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const { slotInfo } = useGuardianStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
-  const { selectedAddress, setFinishedSteps } = useAddressStore();
+  const { selectedAddress} = useAddressStore();
+  const { setFinishedSteps } = useSettingStore();
   const { selectedChainId } = useChainStore();
 
   useImperativeHandle(ref, () => ({
