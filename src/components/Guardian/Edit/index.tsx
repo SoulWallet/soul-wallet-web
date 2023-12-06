@@ -40,6 +40,7 @@ import config from '@/config';
 import Backup from '@/components/Guardian/Backup';
 import { toShortAddress } from '@/lib/tools';
 import IconLoading from '@/assets/loading.svg';
+import { ensContractAddress } from '@/config'
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -211,11 +212,8 @@ function generateSeededColor(strSeed: any, offset: any = 0) {
 async function isENSExpiration(name: any, provider: any) {
   try {
     const ensRegistry = new ethers.Contract(
-      '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
-      [
-        'function nameExpires(uint256 id) external view returns(uint)',
-        'function available(uint256 id) public view returns(bool)'
-      ],
+      ensContractAddress,
+      ['function nameExpires(uint256 id) external view returns(uint)'],
       provider
     );
 
@@ -223,10 +221,10 @@ async function isENSExpiration(name: any, provider: any) {
     const resolver = await provider.getResolver(name);
 
     if (resolver) {
-      const namehash = ethers.namehash(name);
-      const expiresTimestamp = await ensRegistry.nameExpires(namehash);
-      console.log('expiresTimestamp', namehash, expiresTimestamp)
-      // await ethers.EnsResolver.fromName(name)
+      const nameLabel = name.endsWith('.eth') ? name.split('.')[0] : name
+      const nameId = ethers.id(nameLabel);
+      const expiresTimestamp = await ensRegistry.nameExpires(nameId);
+      console.log('expiresTimestamp', expiresTimestamp, nameLabel, nameId)
 
       if (expiresTimestamp !== 0n) {
         const expiresDate = new Date(Number(expiresTimestamp) * 1000);
