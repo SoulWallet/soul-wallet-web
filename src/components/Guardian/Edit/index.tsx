@@ -299,7 +299,7 @@ const GuardianInput = ({
       activeENSNameRef.current = ensName
       setIsLoading(true)
       setResolvedAddress('')
-      const ethersProvider = new ethers.JsonRpcProvider(`'https://mainnet.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`);
+      const ethersProvider = new ethers.JsonRpcProvider(`https://mainnet.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`);
       const address = await ethersProvider.resolveName(ensName);
       const isExpired = await isENSExpiration(ensName, ethersProvider);
       console.log('address', address, isExpired)
