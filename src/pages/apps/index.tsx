@@ -1,27 +1,39 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, useToast } from '@chakra-ui/react';
 import Header from '@/components/Header';
 import useDapp from '@/hooks/useDapp';
-import { useQuery } from '@/hooks/useBrowser';
+import useBrowser, { useQuery } from '@/hooks/useBrowser';
 import { useAddressStore } from '@/store/address';
-import useConfig from '@/hooks/useConfig';
+import { dappList } from '@/data';
 import { useChainStore } from '@/store/chain';
+import AlertModal from '@/components/AlertModal';
 
 export default function Apps() {
-  const iframeRef = useRef<any>()
+  const iframeRef = useRef<any>();
   const toast = useToast();
+  const [alertVisible, setAlertVisible] = useState(false);
   const { handleRequest, makeResponse, makeError } = useDapp();
+  const { navigate } = useBrowser();
   const { selectedAddress } = useAddressStore();
   const { selectedChainId } = useChainStore();
-  const query = useQuery()
-  const appUrl = query.get('appUrl')
+  const query = useQuery();
+  const appUrl = query.get('appUrl');
 
-  const onLoad = () => {
+  const onLoad = () => {};
 
-  }
+  const checkAppUrl = () => {
+    setAlertVisible(!dappList.some((item) => item.url === appUrl));
+  };
 
   useEffect(() => {
-    const listner =  async (msg: any) => {
+    if (!appUrl) {
+      return;
+    }
+    checkAppUrl();
+  }, [appUrl]);
+
+  useEffect(() => {
+    const listner = async (msg: any) => {
       const request = msg.data;
       if (!request.id) return;
 
@@ -45,22 +57,23 @@ export default function Apps() {
           iframeRef.current.contentWindow.postMessage(errorResponse, msg.origin);
         }
       }
-    }
+    };
 
     window.addEventListener('message', listner);
 
     return () => {
-      window.removeEventListener('message', listner)
-    }
-  }, [])
+      window.removeEventListener('message', listner);
+    };
+  }, []);
 
   useEffect(() => {
     if (iframeRef.current) {
       iframeRef.current.src = (iframeRef.current.src || '') + '';
     }
-  }, [selectedChainId, selectedAddress])
+  }, [selectedChainId, selectedAddress]);
 
-  const IFRAME_SANDBOX_ALLOWED_FEATURES = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock'
+  const IFRAME_SANDBOX_ALLOWED_FEATURES =
+    'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock';
 
   return (
     <Box width="100%" height="100vh">
@@ -81,6 +94,16 @@ export default function Apps() {
           />
         )}
       </Box>
+      {alertVisible && (
+        <AlertModal
+          text="Alert: You're about to visit a non-whitelisted link. Do you wish to continue accessing this link?"
+          onConfirm={() => setAlertVisible(false)}
+          onCancel={() => {
+            setAlertVisible(false);
+            navigate('/');
+          }}
+        />
+      )}
     </Box>
-  )
+  );
 }
