@@ -12,22 +12,23 @@ import useSdk from '@/hooks/useSdk';
 import IconCopy from '@/assets/copy.svg';
 import { PlusSquareIcon } from '@chakra-ui/icons';
 import useTools from '@/hooks/useTools';
+import { useSettingStore } from '@/store/setting';
 
 const CreateAccount = () => {
   const [creating, setCreating] = useState(false);
   const { calcWalletAddress } = useSdk();
   const { addressList, addAddressItem } = useAddressStore();
+  const { saveAddressName } = useSettingStore();
 
   const doCreate = async () => {
     setCreating(true);
     const newIndex = addressList.length;
     const newAddress = await calcWalletAddress(newIndex);
     addAddressItem({
-      title: `Account ${newIndex + 1}`,
       address: newAddress,
       activatedChains: [],
-      // allowedOrigins: [],
     });
+    saveAddressName(newAddress, `Account ${newIndex + 1}`)
     setCreating(false);
   };
 
@@ -69,6 +70,7 @@ export function AccountSelectFull({ ...restProps }) {
 export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ...restProps }: any) {
   const { navigate } = useBrowser();
   const { selectedAddressItem } = useConfig();
+  const {getAddressName } = useSettingStore();
   const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
 
   if (!selectedAddress) {
@@ -94,8 +96,8 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
               onClick={() => navigate('/accounts')}
               {...restProps}
             >
-              {isInModal && selectedAddressItem && <Text>{selectedAddressItem.title} ({toShortAddress(selectedAddressItem.address, 4, 6)})</Text>}
-              {!isInModal && labelType === 'title' && selectedAddressItem && <Text>{selectedAddressItem.title}</Text>}
+              {isInModal && selectedAddressItem && <Text>{getAddressName(selectedAddress)} ({toShortAddress(selectedAddress, 4, 6)})</Text>}
+              {!isInModal && labelType === 'title' && selectedAddressItem && <Text>{getAddressName(selectedAddress)}</Text>}
               {!isInModal && labelType === 'address' && selectedAddressItem && (
                 <Text>{toShortAddress(selectedAddressItem.address, 4, 6)}</Text>
               )}
@@ -114,7 +116,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                         <AddressIcon address={item.address} width={24} />
                         <Box>
                           <Text mb="1" fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
-                            {item.title}
+                            {getAddressName(item.address)}
                           </Text>
                           <Text fontSize={'12px'} data-testid={`text-accountname-${idx}`} lineHeight={1}>
                             {toShortAddress(item.address, 4, 6)}

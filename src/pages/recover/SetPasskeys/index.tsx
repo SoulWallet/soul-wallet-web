@@ -128,8 +128,8 @@ export default function SetPasskeys({ changeStep }: any) {
 
   const createInitialWallet = async () => {
     const newAddress = await calcWalletAddress(0);
-    const walletName = `Account 1`;
-    setAddressList([{ title: walletName, address: newAddress, activatedChains: [],}]);
+    // const walletName = `Account 1`;
+    setAddressList([{ address: newAddress, activatedChains: [],}]);
     setEditingGuardiansInfo({});
   };
 

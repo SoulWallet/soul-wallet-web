@@ -13,6 +13,7 @@ import { toShortAddress, getChainInfo } from '@/lib/tools';
 import useBrowser from '@/hooks/useBrowser';
 import ErrorModal from '@/components/ErrorModal';
 import config from '@/config';
+import { useSettingStore } from '@/store/setting';
 
 const ChainAvatar = ({ avatar }: any) => (
   <Flex align="center" justify={'center'} bg="#fff" rounded="full" w="72px" h="72px">
@@ -24,7 +25,8 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
   const { selectedAddressItem } = useConfig();
   const { selectedChainId, setSelectedChainId } = useChainStore();
   const { addressList, setSelectedAddress } = useAddressStore();
-  const { title, address } = selectedAddressItem;
+  const { getAddressName } = useSettingStore();
+  const { address } = selectedAddressItem;
   const [errorType, setErrorType] = useState(0);
   const { navigate } = useBrowser();
 
@@ -80,7 +82,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
       </Box>
       <InfoWrap>
         <InfoItem>
-          <Text>{title}:</Text>
+          <Text>{getAddressName(address)}:</Text>
           <Text>
             <Menu placement="bottom-end">
               <MenuButton>
@@ -105,7 +107,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
                         onClick={() => setSelectedAddress(item.address)}
                       >
                         <Flex gap="3" align="center">
-                          <Text fontWeight={'800'}>{item.title}</Text>
+                          <Text fontWeight={'800'}>{getAddressName(item.address)}</Text>
                           <Text fontSize={'12px'} color="#898989">
                             {toShortAddress(item.address, 6, 4)}
                           </Text>
@@ -114,7 +116,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
                       </Flex>
                     ) : (
                       <Flex gap="3" align="center" color="#cececf" w="100%" h="100%">
-                        <Text fontWeight={'800'}>{item.title}</Text>
+                        <Text fontWeight={'800'}>{getAddressName(item.address)}</Text>
                         <Text fontSize={'12px'}>{toShortAddress(item.address, 6, 4)}</Text>
                       </Flex>
                     )}

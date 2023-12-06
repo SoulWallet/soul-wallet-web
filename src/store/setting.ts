@@ -11,6 +11,7 @@ export interface ISettingStore {
   setIgnoreWebauthnOverride: (val: boolean) => void;
   setFinishedSteps: (steps: number[]) => void;
   finishedSteps: number[];
+  // 1. guardian address -> name 2. slot address -> name
   addressName: Map<string, string>;
   saveAddressName: (address: string, name: string) => void;
   removeAddressName: (address: string) => void;
@@ -32,8 +33,10 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
     });
   },
   getAddressName: (address) => {
-    const state:any = useSettingStore.getState();
-    return state.addressName.get(address, '')
+    // const s = get();
+    // console.log('sssss', s);
+    return ''
+    return get().addressName.get(address) || '';
   },
   saveAddressName: (address, name) => {
     set((state) => {

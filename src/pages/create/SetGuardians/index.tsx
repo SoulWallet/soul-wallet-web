@@ -62,6 +62,7 @@ import GreySection from '@/components/GreySection'
 import Backup from '@/components/Guardian/Backup';
 import Edit from '@/components/Guardian/Edit';
 import DoubleCheckModal from '@/components/Guardian/Confirm'
+import { useSettingStore } from '@/store/setting';
 
 function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
   return (
@@ -242,12 +243,10 @@ const isGuardiansListFilled = (list: any) => {
 }
 
 export default function SetGuardians({ changeStep }: any) {
-  const { navigate } = useBrowser();
-  const { register } = usePassKey();
   const { chainConfig } = useConfig();
-  const { addCredential, credentials, changeCredentialName, setSelectedCredentialId, walletName, } = useCredentialStore();
-  const [isCreating, setIsCreating] = useState(false);
+  const { addCredential, credentials, setSelectedCredentialId, walletName, } = useCredentialStore();
   const [isConfirming, setIsConfirming] = useState(false);
+  const { saveAddressName } = useSettingStore();
   const { slotInfo, setSlotInfo, setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
@@ -275,15 +274,13 @@ export default function SetGuardians({ changeStep }: any) {
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
-  const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
+  const { calcGuardianHash } = useKeystore();
   const [isDone, setIsDone] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
   const [skipping, setSkipping] = useState(false);
   const { generateJsonName, downloadJsonFile } = useTools()
-  const { sendErc20, payTask } = useTransaction();
-  const { showConfirmPayment } = useWalletContext();
   const createdGuardiansInfo = useRef<any>()
 
   const { values, errors, invalid, onChange, onChangeValues, onBlur, showErrors, addFields, removeFields } = useForm({
@@ -525,28 +522,28 @@ export default function SetGuardians({ changeStep }: any) {
     setStatus('editing')
   }
 
-  const createWallet = async () => {
-    try {
-      setIsCreating(true);
-      const credentialKey = await register(walletName);
-      addCredential(credentialKey);
-      setIsCreating(false);
-      // navigate('/create');
-    } catch (error: any) {
-      console.log('ERR', error)
-      console.log('error', error);
-      setIsCreating(false);
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-    }
-  }
+  // const createWallet = async () => {
+  //   try {
+  //     setIsCreating(true);
+  //     const credentialKey = await register(walletName);
+  //     addCredential(credentialKey);
+  //     setIsCreating(false);
+  //     // navigate('/create');
+  //   } catch (error: any) {
+  //     console.log('ERR', error)
+  //     console.log('error', error);
+  //     setIsCreating(false);
+  //     toast({
+  //       title: error.message,
+  //       status: 'error',
+  //     });
+  //   }
+  // }
 
   const createInitialWallet = async () => {
     const newAddress = await calcWalletAddress(0);
-    const walletName = `Account 1`;
-    setAddressList([{ title: walletName, address: newAddress, activatedChains: []}]);
+    setAddressList([{address: newAddress, activatedChains: []}]);
+    saveAddressName(newAddress, walletName);
     setEditingGuardiansInfo({});
     setSelectedCredentialId(credentials[0].id)
   };
@@ -599,6 +596,7 @@ export default function SetGuardians({ changeStep }: any) {
     setSlotInfo(slotInfo)
     createdGuardiansInfo.current = guardiansInfo
     console.log('createSlotInfo', slotInfo, walletInfo, guardiansInfo, result)
+    saveAddressName(slotInfo.slot, walletName);
     return guardiansInfo
   };
 

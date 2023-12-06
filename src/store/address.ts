@@ -3,7 +3,6 @@ import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 
 export interface IAddressItem {
-  title: string;
   address: string;
   activatedChains: string[];
   // allowedOrigins: string[];
@@ -32,7 +31,6 @@ export const getIndexByAddress = (addressList: IAddressItem[], address: string) 
 
 const createAddressSlice = immer<IAddressStore>((set, get) => ({
   selectedAddress: '',
-  walletName: '',
   addressList: [],
   getSelectedAddressItem: () => {
     const index = getIndexByAddress(get().addressList, get().selectedAddress);

@@ -15,6 +15,7 @@ import { useCredentialStore } from '@/store/credential';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { useSettingStore } from '@/store/setting';
 
 export default function useWallet() {
   const { sign } = usePasskey();
@@ -33,6 +34,7 @@ export default function useWallet() {
   const { setCredentials, getSelectedCredential } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
+  const {saveAddressName } = useSettingStore();
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
@@ -177,11 +179,13 @@ export default function useWallet() {
     const newAddress = await calcWalletAddress(0);
     setAddressList([
       {
-        title: `Account 1`,
         address: newAddress,
         activatedChains: [],
       },
     ]);
+
+    saveAddressName(newAddress, 'Account 1')
+
     // IMPORTANT TODO, get wallet name from credential storage
     // set credentials
     const credentialKey = {
@@ -220,12 +224,13 @@ export default function useWallet() {
 
     setAddressList([
       {
-        title: `Account 1`,
         address: newAddress,
         // TODO, check activate status
         activatedChains: [],
       },
     ]);
+
+    saveAddressName(newAddress, 'Account 1')
 
     setCredentials(recoveringGuardiansInfo.credentials);
     // set goerli if no selected chainId
@@ -254,12 +259,10 @@ export default function useWallet() {
     if (addressList.length === 0) {
       for (let [index, item] of Object.entries(res.addresses)) {
         addAddressItem({
-          title: `Account ${index + 1}`,
           address: item as any,
           activatedChains: [],
         });
       }
-      console.log('to set selected address: ', res.addresses);
     }
 
     // check if should replace key

@@ -32,6 +32,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [signing, setSigning] = useState<boolean>(false);
   const { checkActivated, ethersProvider } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
+  const { getAddressName } = useSettingStore();
   const [prechecked, setPrechecked] = useState(false);
   const [totalMsgValue, setTotalMsgValue] = useState('');
   // const [prefundCalculated, setPrefundCalculated] = useState(false);
@@ -338,7 +339,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             <InfoItem>
               <Text>From</Text>
               <Text>
-                {selectedAddressItem.title}({toShortAddress(selectedAddress)})
+                {getAddressName(selectedAddress)}({toShortAddress(selectedAddress)})
               </Text>
             </InfoItem>
             <InfoItem>

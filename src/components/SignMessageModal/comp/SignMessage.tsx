@@ -8,6 +8,7 @@ import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { ethers } from 'ethers';
 import { TypedDataEncoder } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
+import { useSettingStore } from '@/store/setting';
 
 const getHash = (message: string) => {
   return ethers.hashMessage(message);
@@ -21,6 +22,7 @@ const getTypedHash = (typedData: any) => {
 
 export default function SignMessage({ messageToSign, onSign, signType }: any) {
   const { selectedAddressItem } = useConfig();
+  const { getAddressName } = useSettingStore();
   const { signRawHash, signWithPasskey } = useWallet();
   const [isActivated, setIsActivated] = useState(false);
   const { checkActivated } = useWalletContext();
@@ -81,7 +83,7 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
           <InfoItem>
             <Text>From</Text>
             <Text>
-              {selectedAddressItem.title}({toShortAddress(selectedAddressItem.address)})
+              {getAddressName(selectedAddressItem.address)}({toShortAddress(selectedAddressItem.address)})
             </Text>
           </InfoItem>
         </InfoWrap>

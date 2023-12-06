@@ -8,6 +8,7 @@ import IconShare from '@/assets/icons/share.svg';
 import { useCredentialStore } from '@/store/credential';
 import useConfig from '@/hooks/useConfig';
 import { useAddressStore } from '@/store/address';
+import useTools from '@/hooks/useTools';
 
 const Btn = ({ children, ...restProps }: any) => {
   return (
@@ -19,10 +20,12 @@ const Btn = ({ children, ...restProps }: any) => {
 
 export default function Balance() {
   const { showTransferAssets, showClaimAssets } = useWalletContext();
-  const { walletName } = useCredentialStore();
+  const { getWalletName } = useTools();
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
   const { scanUrl } = chainConfig;
+
+  const walletName = getWalletName();
 
   return (
     <HomeCard

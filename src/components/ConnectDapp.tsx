@@ -7,6 +7,7 @@ import useConfig from '@/hooks/useConfig';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import config from '@/config';
 import { AccountSelect } from './AccountSelect';
+import { useSettingStore } from '@/store/setting';
 
 enum SecurityLevel {
   High = 'High',
@@ -35,7 +36,8 @@ const DappAvatar = ({ avatar }: any) => (
 
 export default function ConnectDapp({ msgId }: any) {
   const { selectedAddressItem, selectedChainItem } = useConfig();
-  const { title, address } = selectedAddressItem;
+  const { address } = selectedAddressItem;
+  const { getAddressName } = useSettingStore();
   const origin = document.referrer;
   const onConfirm = async (address: string) => {
     // do auth first
@@ -99,7 +101,7 @@ export default function ConnectDapp({ msgId }: any) {
           <Text color={getSecurityColor(SecurityLevel.High)}>{SecurityLevel.High}</Text>
         </InfoItem> */}
         <InfoItem>
-          <Text>{title}:</Text>
+          <Text>{getAddressName(address)}:</Text>
           <AccountSelect labelType="address" rounded="full" />
         </InfoItem>
       </InfoWrap>

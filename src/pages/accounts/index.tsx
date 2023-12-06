@@ -33,16 +33,16 @@ import IconCopy from '@/assets/icons/copy.svg';
 import useSdk from '@/hooks/useSdk';
 import { useChainStore } from '@/store/chain';
 import useTools from '@/hooks/useTools';
+import { useSettingStore } from '@/store/setting';
 
 const EditNameModal = ({ isOpen, onClose, item }: any) => {
   const toast = useToast();
   const [newTitle, setNewTitle] = useState('');
   const { updateAddressItem } = useAddressStore();
+  const {saveAddressName} = useSettingStore();
 
   const doChangeName = () => {
-    updateAddressItem(item.address, {
-      title: newTitle,
-    });
+    saveAddressName(item.address, newTitle)
     toast({
       title: 'Account name updated',
       status: 'success',
@@ -104,7 +104,6 @@ const EditNameModal = ({ isOpen, onClose, item }: any) => {
 };
 
 const AccountItem = ({ item, selected, onClick }: any) => {
-  const toast = useToast();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { getIsActivated } = useAddressStore();
   const { selectedChainId } = useChainStore();
@@ -234,6 +233,7 @@ const AccountsNavbar = ({ onAdd, onBack, adding }: any) => {
 export default function Accounts() {
   const { calcWalletAddress } = useSdk();
   const { navigate } = useBrowser();
+  const { saveAddressName } = useSettingStore();
 
   const [adding, setAdding] = useState(false);
   const { addressList, selectedAddress, addAddressItem, setSelectedAddress } = useAddressStore();
@@ -243,11 +243,10 @@ export default function Accounts() {
     const newIndex = addressList.length;
     const newAddress = await calcWalletAddress(newIndex);
     addAddressItem({
-      title: `Account ${newIndex + 1}`,
       address: newAddress,
       activatedChains: [],
-      // allowedOrigins: [],
     });
+    saveAddressName(newAddress, `Account ${newIndex + 1}`)
     setAdding(false);
   };
 

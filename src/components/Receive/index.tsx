@@ -10,15 +10,17 @@ import { useChainStore } from '@/store/chain';
 import useConfig from '@/hooks/useConfig';
 import IconPen from '@/assets/icons/pen.svg';
 import IconShare from '@/assets/icons/share.svg';
+import { useSettingStore } from '@/store/setting';
 
 export default function Receive() {
   const toast = useToast();
-  const { selectedAddress, updateAddressItem } = useAddressStore();
+  const { selectedAddress } = useAddressStore();
+  const { getAddressName, saveAddressName } = useSettingStore()
   const { chainList } = useChainStore();
   const { selectedAddressItem, chainConfig } = useConfig();
   const { scanUrl, scanName } = chainConfig;
   const [editing, setEditing] = useState(false);
-  const [editingName, setEditingName] = useState(selectedAddressItem.title);
+  const [editingName, setEditingName] = useState(getAddressName(selectedAddress));
 
   const doCopy = () => {
     copyText(selectedAddress);
@@ -29,7 +31,7 @@ export default function Receive() {
   };
 
   const doEdit = () => {
-    updateAddressItem(selectedAddress, { title: editingName });
+    saveAddressName(selectedAddress, editingName)
     setEditing(false);
   };
 
@@ -40,7 +42,7 @@ export default function Receive() {
           <Input value={editingName} onChange={(e) => setEditingName(e.target.value)} />
         ) : (
           <Text fontWeight={'800'} fontSize={'20px'} textAlign={'center'}>
-            {selectedAddressItem.title}
+            {getAddressName(selectedAddress)}
           </Text>
         )}
 

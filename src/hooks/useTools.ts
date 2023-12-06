@@ -12,6 +12,7 @@ import { useBalanceStore } from '@/store/balance';
 import { useHistoryStore } from '@/store/history';
 import { useChainStore } from '@/store/chain';
 import { useSlotStore } from '@/store/slot';
+import { useSettingStore } from '@/store/setting';
 
 export default function useTools() {
   const toast = useToast();
@@ -21,9 +22,14 @@ export default function useTools() {
   const { clearBalance } = useBalanceStore();
   const { clearHistory } = useHistoryStore();
   const { clearChainStore } = useChainStore();
-  const {clearSlotStore} = useSlotStore();
+  const { clearSlotStore, slotInfo } = useSlotStore();
+  const { getAddressName } = useSettingStore();
   const { showClaimAssets, showTransferAssets } = useWalletContext();
   const { navigate } = useBrowser();
+
+  const getWalletName = () => {
+    return getAddressName(slotInfo.slot);
+  };
 
   const clearLogData = () => {
     clearAddresses();
@@ -145,5 +151,6 @@ export default function useTools() {
     doCopy,
     clearLogData,
     goGuideAction,
+    getWalletName,
   };
 }
