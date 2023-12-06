@@ -13,6 +13,7 @@ import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
 import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { ethers } from 'ethers';
 import { L1KeyStore } from '@soulwallet/sdk';
 import { toHex } from '@/lib/tools';
@@ -29,12 +30,12 @@ export default function SetPasskeys({ changeStep }: any) {
   const [isConfirming, setIsConfirming] = useState(false);
   const { calcGuardianHash } = useKeystore();
   const {
-    updateSlotInfo,
     setEditingGuardiansInfo,
     recoveringGuardiansInfo,
     getRecoveringGuardiansInfo,
     updateRecoveringGuardiansInfo
   } = useGuardianStore();
+  const { updateSlotInfo } = useSlotStore()
   const { walletName } = useCredentialStore();
   const { setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();

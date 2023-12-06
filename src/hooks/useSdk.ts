@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { L1KeyStore, SoulWallet } from '@soulwallet/sdk';
 import { useChainStore } from '@/store/chain';
-import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 
 export default function useSdk() {
   const { getSelectedChainItem, selectedChainId } = useChainStore();
-  const { getSlotInfo } = useGuardianStore();
+  const { getSlotInfo } = useSlotStore();
   const selectedChainItem = getSelectedChainItem();
 
   const soulWallet = useMemo(() => {

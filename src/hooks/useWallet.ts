@@ -3,6 +3,7 @@ import useSdk from './useSdk';
 import useQuery from './useQuery';
 import { ABI_SoulWallet } from '@soulwallet/abi';
 import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { addPaymasterAndData } from '@/lib/tools';
 import Erc20ABI from '../contract/abi/ERC20.json';
 import { L1KeyStore, UserOperation } from '@soulwallet/sdk';
@@ -23,13 +24,12 @@ export default function useWallet() {
   const { chainConfig } = useConfig();
   const { ethersProvider } = useWalletContext();
   const {
-    slotInfo,
-    setSlotInfo,
     updateGuardiansInfo,
     recoveringGuardiansInfo,
     updateRecoveringGuardiansInfo,
     setRecoveringGuardiansInfo,
   } = useGuardianStore();
+  const { slotInfo, setSlotInfo } = useSlotStore()
   const { updateChainItem, setSelectedChainId, selectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useCredentialStore();
   const { soulWallet, calcWalletAddress } = useSdk();

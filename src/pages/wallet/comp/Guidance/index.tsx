@@ -5,14 +5,14 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { guideList } from '@/data';
 import useBrowser from '@/hooks/useBrowser';
 import api from '@/lib/api';
-import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
 import { useAddressStore } from '@/store/address';
 import { findMissingNumbers } from '@/lib/tools';
 import useTools from '@/hooks/useTools';
 import { useSettingStore } from '@/store/setting';
 
 export default function Guidance() {
-  const { slotInfo } = useGuardianStore();
+  const { slotInfo } = useSlotStore();
   const { setFinishedSteps, finishedSteps } = useSettingStore();
   const { goGuideAction } = useTools();
 
