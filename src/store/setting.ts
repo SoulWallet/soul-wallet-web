@@ -39,9 +39,8 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
     return get().addressName.get(address) || '';
   },
   saveAddressName: (address, name) => {
-    return
     set((state) => {
-      state.addressName = new Map(state.addressName).set(address, name);
+      state.addressName = new Map(get().addressName).set(address, name);
     });
   },
   removeAddressName: (address) => {

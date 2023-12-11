@@ -86,8 +86,8 @@ export default function SetPasskeys({ changeStep }: any) {
 
     const result = await api.guardian.backupSlot(walletInfo)
     setSlotInfo(slotInfo)
-    console.log('createSlotInfo', slotInfo, walletInfo, result)
-    // saveAddressName(slotInfo.slot, walletName);
+    console.log('createSlotInfo', slotInfo, slotInfo.slot, walletInfo, result)
+    saveAddressName(slotInfo.slot, walletName);
   };
 
   const createInitialWallet = async () => {
