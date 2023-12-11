@@ -18,6 +18,7 @@ import { useAddressStore } from '@/store/address';
 import TextButton from '@/components/web/TextButton';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import Backup from '@/components/Guardian/Backup';
+import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
 
 const validate = (values: any) => {
@@ -40,6 +41,8 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
   const toast = useToast()
+  const { chainConfig } = useConfig();
+  const keystore = chainConfig.contracts.l1Keystore;
   const emailForm = useForm({
     fields: ['email'],
     validate,
@@ -48,7 +51,7 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
   const handleBackupGuardians = async () => {
     try {
       setLoading(true);
-      await api.guardian.backupGuardians(guardiansInfo);
+      await api.guardian.backupGuardians({ ...guardiansInfo, keystore });
       setLoading(false);
       setIsDone(true)
       updateGuardiansInfo({
@@ -82,7 +85,8 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
       await api.guardian.emailBackupGuardians({
         email: emailForm.values.email,
         filename,
-        ...guardiansInfo
+        ...guardiansInfo,
+        keystore
       });
       setSending(false);
       emailForm.clearFields(['email'])
@@ -106,7 +110,7 @@ export default function GuardianBackup({ startManage, cancelBackup }: any) {
   const handleDownloadGuardians = async () => {
     try {
       setDownloading(true);
-      await downloadJsonFile(guardiansInfo);
+      await downloadJsonFile({ ...guardiansInfo, keystore });
       setDownloading(false);
       setIsDone(true)
       updateGuardiansInfo({

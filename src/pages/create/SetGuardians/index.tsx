@@ -622,7 +622,7 @@ export default function SetGuardians({ changeStep }: any) {
           }
           confirmButton={
             <Button
-              onClick={() => changeStep(3)}
+              onClick={() => changeStep(2)}
               disabled={!isDone}
               _styles={{ width: '320px', marginTop: '60px' }}
             >
@@ -690,7 +690,7 @@ export default function SetGuardians({ changeStep }: any) {
               <Button _styles={{ width: '320px', marginBottom: '12px' }} disabled={loading || disabled} loading={loading} onClick={() => setIsConfirmOpen(true)}>
                 Confirm
               </Button>
-              <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
+              <TextButton loading={isConfirming} disabled={isConfirming} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
                 Later
               </TextButton>
             </Box>
@@ -795,7 +795,7 @@ export default function SetGuardians({ changeStep }: any) {
         <Button onClick={startEdit} _styles={{ width: '320px', marginBottom: '12px' }}>
           Set up now
         </Button>
-        <TextButton loading={isConfirming} disabled={isConfirming || !credentials.length} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
+        <TextButton loading={isConfirming} disabled={isConfirming} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
           Later
         </TextButton>
       </Box>
