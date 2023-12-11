@@ -318,16 +318,16 @@ export default function SetGuardians({ changeStep }: any) {
   const doSkip = async () => {
     try {
       setSkipping(true);
-      await createInitialSlotInfo({
+      await createInitialGurdianInfo({
         guardians: [],
         guardianNames: [],
         threshold: 0
       })
-      await createInitialWallet()
+      // await createInitialWallet()
       setIsDone(true)
       setSkipping(false);
       setIsSkipOpen(false)
-      changeStep(3)
+      changeStep(2)
     } catch (error: any) {
       console.log('error', error.message)
       setSkipping(false);
@@ -360,12 +360,12 @@ export default function SetGuardians({ changeStep }: any) {
         const guardianNames = guardiansList.map((item: any) => item.name);
         const threshold = amountForm.values.amount || 0;
 
-        guardiansInfo = await createInitialSlotInfo({
+        guardiansInfo = await createInitialGurdianInfo({
           guardians: guardianAddresses,
           guardianNames,
           threshold
         })
-        await createInitialWallet()
+        // await createInitialWallet()
       }
 
       const filename = generateJsonName('guardian');
@@ -419,12 +419,12 @@ export default function SetGuardians({ changeStep }: any) {
         const guardianNames = guardiansList.map((item: any) => item.name);
         const threshold = amountForm.values.amount || 0;
 
-        guardiansInfo = await createInitialSlotInfo({
+        guardiansInfo = await createInitialGurdianInfo({
           guardians: guardianAddresses,
           guardianNames,
           threshold
         })
-        await createInitialWallet()
+        // await createInitialWallet()
       }
 
       await downloadJsonFile(guardiansInfo);
@@ -469,16 +469,16 @@ export default function SetGuardians({ changeStep }: any) {
       const guardianNames = guardiansList.map((item: any) => item.name);
       const threshold = amountForm.values.amount || 0;
 
-      const guardiansInfo = await createInitialSlotInfo({
+      const guardiansInfo = await createInitialGurdianInfo({
         guardians: guardianAddresses,
         guardianNames,
         threshold
       })
       await api.guardian.backupGuardians(guardiansInfo);
-      await createInitialWallet()
+      // await createInitialWallet()
       setIsDone(true)
       setLoading(false);
-      changeStep(3);
+      changeStep(2);
     } catch (error: any) {
       console.log('error', error.message)
       setLoading(false);
@@ -542,47 +542,21 @@ export default function SetGuardians({ changeStep }: any) {
   //   }
   // }
 
-  const createInitialWallet = async () => {
-    const newAddress = await calcWalletAddress(0);
-    setAddressList([{address: newAddress, activatedChains: []}]);
-    saveAddressName(newAddress, walletName);
-    setEditingGuardiansInfo({});
-    setSelectedCredentialId(credentials[0].id)
-  };
+  /* const createInitialWallet = async () => {
+   *   const newAddress = await calcWalletAddress(0);
+   *   setAddressList([{address: newAddress, activatedChains: []}]);
+   *   saveAddressName(newAddress, walletName);
+   *   setEditingGuardiansInfo({});
+   *   setSelectedCredentialId(credentials[0].id)
+   * }; */
 
-  const createInitialSlotInfo = async ({ guardians, guardianNames, threshold }: any) => {
+  const createInitialGurdianInfo = async ({ guardians, guardianNames, threshold }: any) => {
     const keystore = chainConfig.contracts.l1Keystore;
-    const initialKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
     const initialGuardianHash = calcGuardianHash(guardians, threshold);
     const salt = ethers.ZeroHash;
-    let initialGuardianSafePeriod = toHex(defaultGuardianSafePeriod);
-    const initialKeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
-    const initialKeyHash = L1KeyStore.getKeyHash(initialKeysAddress);
-    const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
-
-    const slotInfo = {
-      initialKeys,
-      initialGuardianHash,
-      initialGuardianSafePeriod,
-      initialKeysAddress,
-      initialKeyHash,
-      slot
-    };
-
-    const walletInfo = {
-      keystore,
-      slot,
-      slotInitInfo: {
-        initialKeyHash,
-        initialGuardianHash,
-        initialGuardianSafePeriod
-      },
-      initialKeys: initialKeysAddress
-    };
 
     const guardiansInfo = {
       keystore,
-      slot,
       guardianHash: initialGuardianHash,
       guardianNames,
       guardianDetails: {
@@ -593,12 +567,10 @@ export default function SetGuardians({ changeStep }: any) {
       keepPrivate
     };
 
-    const result = await api.guardian.backupSlot(walletInfo)
     setGuardiansInfo(guardiansInfo)
-    setSlotInfo(slotInfo)
     createdGuardiansInfo.current = guardiansInfo
-    console.log('createSlotInfo', slotInfo, walletInfo, guardiansInfo, result)
-    saveAddressName(slotInfo.slot, walletName);
+    console.log('createGuardianInfo', guardiansInfo)
+    // saveAddressName(slotInfo.slot, walletName);
     return guardiansInfo
   };
 
@@ -643,7 +615,7 @@ export default function SetGuardians({ changeStep }: any) {
                 backgroundColor="#1E1E1E"
                 foregroundColor="white"
                 count={3}
-                activeIndex={2}
+                activeIndex={1}
                 marginTop="24px"
               />
             </Box>
@@ -671,7 +643,7 @@ export default function SetGuardians({ changeStep }: any) {
               backgroundColor="#1E1E1E"
               foregroundColor="white"
               count={3}
-              activeIndex={2}
+              activeIndex={1}
               marginTop="24px"
             />
           </Box>
@@ -746,7 +718,7 @@ export default function SetGuardians({ changeStep }: any) {
             backgroundColor="#1E1E1E"
             foregroundColor="white"
             count={3}
-            activeIndex={2}
+            activeIndex={1}
             marginTop="24px"
           />
         </Box>

@@ -39,15 +39,13 @@ export default function SetWalletName({ changeStep }: any) {
 
   const handleNext = async () => {
     try {
-      // clearLogData();
-      setLoading(true);
-      // resetWallet();
+      // setLoading(true);
       const walletName = values.name || 'Wallet_1';
       setWalletName(walletName)
       const credentialName = walletName;
-      const credentialKey = await register(credentialName);
-      addCredential(credentialKey);
-      setLoading(false);
+      // const credentialKey = await register(credentialName);
+      // addCredential(credentialKey);
+      // setLoading(false);
 
       changeStep(1)
     } catch (e: any) {

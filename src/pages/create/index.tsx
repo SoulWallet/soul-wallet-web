@@ -22,9 +22,9 @@ export default function Create() {
   if (step === 0) {
     return (<SetWalletName changeStep={changeStep} />)
   } else if (step === 1) {
-    return (<SetPasskeys changeStep={changeStep} />)
-  } else if (step === 2) {
     return (<SetGuardians changeStep={changeStep} />)
+  } else if (step === 2) {
+    return (<SetPasskeys changeStep={changeStep} />)
   } else {
     return (<CreateSuccess />)
   }
