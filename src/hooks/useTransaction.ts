@@ -59,6 +59,7 @@ export default function useTransaction() {
     try {
       const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
 
+      // todo, add noncekey and noncevalue
       const userOpRet = await soulWallet.fromTransaction(maxFeePerGas, maxPriorityFeePerGas, selectedAddress, txns);
 
       if (userOpRet.isErr()) {

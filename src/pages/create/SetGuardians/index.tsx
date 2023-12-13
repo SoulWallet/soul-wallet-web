@@ -250,8 +250,6 @@ export default function SetGuardians({ changeStep }: any) {
   const { saveAddressName } = useSettingStore();
   const { setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { slotInfo, setSlotInfo } = useSlotStore()
-  const { setSelectedAddress, setAddressList } = useAddressStore();
-  const { calcWalletAddress } = useSdk();
   const [status, setStatus] = useState<string>('intro');
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)

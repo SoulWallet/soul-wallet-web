@@ -12,7 +12,7 @@ export interface ISettingStore {
   setFinishedSteps: (steps: number[]) => void;
   finishedSteps: number[];
   // 1. guardian address -> name 2. slot address -> name
-  addressName: Map<string, string>;
+  addressName: { [address: string]: string };
   saveAddressName: (address: string, name: string) => void;
   removeAddressName: (address: string) => void;
   getAddressName: (address: string) => string;
@@ -20,7 +20,7 @@ export interface ISettingStore {
 
 const createSettingSlice = immer<ISettingStore>((set, get) => ({
   finishedSteps: [],
-  addressName: new Map(),
+  addressName: {},
   ignoreWebauthnOverride: false,
   setIgnoreWebauthnOverride: (val: boolean) => {
     set({
@@ -33,21 +33,26 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
     });
   },
   getAddressName: (address) => {
-    // const s = get();
-    // console.log('sssss', s);
-    return ''
-    return get().addressName.get(address) || '';
+    return get().addressName[address] || '';
   },
   saveAddressName: (address, name) => {
-    set((state) => {
-      state.addressName.set(address, name);
-    });
+    set((state) => ({
+      addressName: {
+        ...state.addressName,
+        [address]: name,
+      },
+    }));
   },
   removeAddressName: (address) => {
     set((state) => {
-      const newMap = new Map(state.addressName);
-      newMap.delete(address);
-      state.addressName = newMap;
+      const newState = {
+        ...state.addressName,
+      };
+      delete newState[address];
+      return {
+        addressName: newState,
+      };
+      // state.addressName = newState;
     });
   },
 }));
@@ -55,5 +60,6 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
 export const useSettingStore = create<ISettingStore>()(
   persist((...set) => ({ ...createSettingSlice(...set) }), {
     name: 'setting-storage',
+    version: 3,
   }),
 );

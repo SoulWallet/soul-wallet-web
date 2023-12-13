@@ -21,6 +21,7 @@ import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';
 import api from '@/lib/api';
 import { defaultGuardianSafePeriod } from '@/config';
+import { useSettingStore } from '@/store/setting';
 
 export default function SetPasskeys({ changeStep }: any) {
   const { navigate } = useBrowser();
@@ -36,6 +37,7 @@ export default function SetPasskeys({ changeStep }: any) {
     updateRecoveringGuardiansInfo
   } = useGuardianStore();
   const { updateSlotInfo } = useSlotStore()
+  const { saveAddressName } = useSettingStore();
   const { walletName } = useCredentialStore();
   const { setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
@@ -131,6 +133,7 @@ export default function SetPasskeys({ changeStep }: any) {
     const newAddress = await calcWalletAddress(0);
     // const walletName = `Account 1`;
     setAddressList([{ address: newAddress, activatedChains: [],}]);
+    saveAddressName(newAddress, 'Account 1');
     setEditingGuardiansInfo({});
   };
 

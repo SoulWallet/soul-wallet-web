@@ -7,7 +7,7 @@ import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
 import { SignkeyType } from '@soulwallet/sdk';
-import { addPaymasterAndData } from '@/lib/tools';
+import { addPaymasterAndData, printUserOp } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useCredentialStore } from '@/store/credential';
 import { useToast } from '@chakra-ui/react';
@@ -103,6 +103,9 @@ export default function useQuery() {
     if (!signerKeyType) {
       throw new Error('algorithm not supported');
     }
+
+    console.log('Estimate UserOP:')
+    printUserOp(userOp);
 
     // get gas limit
     const gasLimit = await soulWallet.estimateUserOperationGas(userOp, signerKeyType);
