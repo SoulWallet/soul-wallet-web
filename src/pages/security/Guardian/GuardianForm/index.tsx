@@ -176,7 +176,7 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
     threshold: 0
   }
   const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
-  const { setFinishedSteps } = useSettingStore();
+  const { setFinishedSteps, saveAddressName } = useSettingStore();
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
@@ -318,6 +318,13 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
       console.log('handleSubmit1111', res1, res2, res3);
       // setGuardiansInfo(guardiansInfo)
       setEditingGuardiansInfo(guardiansInfo)
+
+      for (let i = 0; i < guardianAddresses.length; i++) {
+        const address = guardianAddresses[i]
+        const name = guardianNames[i]
+        saveAddressName(address, name);
+      }
+
       setPending(true)
       await startGuardianInterval()
       cancelEdit()

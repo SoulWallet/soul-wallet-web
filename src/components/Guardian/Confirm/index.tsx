@@ -60,7 +60,7 @@ export default function ConfirmModal({ isOpen, onClose, onSubmit, loading, disab
               <Fragment key={address}>
                 <Box display="flex" flexDirection="column" alignItems="flex-start" justifyContent="center" padding="20px">
                   <TextBody fontSize="14px" fontWeight="800">
-                    Guardian {i + 1}: {getAddressName(address) || 'no name'}
+                    Guardian {i + 1}: {guardianNames[i] || 'no name'}
                   </TextBody>
                   <TextBody fontSize="16px" fontWeight="500" wordBreak="break-all">
                     {address}
