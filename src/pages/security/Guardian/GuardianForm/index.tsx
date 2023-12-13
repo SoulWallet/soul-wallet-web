@@ -168,6 +168,7 @@ const isGuardiansListFilled = (list: any) => {
 }
 
 export default function GuardianForm({ cancelEdit, startBackup, startGuardianInterval }: any) {
+  const { getAddressName, setFinishedSteps, saveAddressName } = useSettingStore();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
@@ -175,8 +176,7 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
     guardians: [],
     threshold: 0
   }
-  const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
-  const { setFinishedSteps, saveAddressName } = useSettingStore();
+  const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
@@ -322,7 +322,7 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
       for (let i = 0; i < guardianAddresses.length; i++) {
         const address = guardianAddresses[i]
         const name = guardianNames[i]
-        saveAddressName(address, name);
+        if (address) saveAddressName(address.toLowerCase(), name);
       }
 
       setPending(true)

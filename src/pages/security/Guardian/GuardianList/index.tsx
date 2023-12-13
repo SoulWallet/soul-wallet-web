@@ -150,7 +150,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   const { credentials } = useCredentialStore();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const { chainConfig } = useConfig();
-  const { setFinishedSteps } = useSettingStore();
+  const { setFinishedSteps, getAddressName, addressName } = useSettingStore();
   const { showConfirmPayment } = useWalletContext();
   const { payTask } = useTransaction();
   const { doCopy } = useTools();
@@ -163,7 +163,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
     threshold: 0
   }
 
-  const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
+  const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
 
   const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
     return {
@@ -183,7 +183,8 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
 
   if (isPending) {
     pendingGuardianDetails = (editingGuardiansInfo && editingGuardiansInfo.guardianDetails)
-    pendingGuardianNames = (editingGuardiansInfo && editingGuardiansInfo.guardianNames)
+    pendingGuardianNames = (editingGuardiansInfo && editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianDetails.guardians && editingGuardiansInfo.guardianDetails.map((address: any) => getAddressName(address)))
+
     pendingGuardianList = pendingGuardianDetails.guardians.map((guardian: any, i: number) => {
       return {
         address: guardian,

@@ -544,7 +544,7 @@ export default function SetGuardians({ changeStep }: any) {
     for (let i = 0; i < guardians.length; i++) {
       const address = guardians[i]
       const name = guardianNames[i]
-      saveAddressName(address, name);
+      if (address) saveAddressName(address.toLowerCase(), name);
     }
 
     return guardiansInfo
