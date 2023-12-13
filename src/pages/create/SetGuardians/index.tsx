@@ -121,28 +121,6 @@ function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
 
 const defaultGuardianIds = [nextRandomId()];
 
-const getNumberArray = (count: number) => {
-  const arr = [];
-
-  for (let i = 1; i <= count; i++) {
-    arr.push(i);
-  }
-
-  return arr;
-};
-
-const toHex = (num: any) => {
-  let hexStr = num.toString(16);
-
-  if (hexStr.length % 2 === 1) {
-    hexStr = '0' + hexStr;
-  }
-
-  hexStr = '0x' + hexStr;
-
-  return hexStr;
-};
-
 const getRecommandCount = (c: number) => {
   if (!c) {
     return 0;
@@ -162,11 +140,6 @@ const getFieldsByGuardianIds = (ids: any) => {
   }
 
   return fields;
-};
-
-const isENSAddress = (address: string) => {
-  const ensRegex = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/;
-  return ensRegex.test(address);
 };
 
 const validate = (values: any) => {
@@ -247,7 +220,7 @@ export default function SetGuardians({ changeStep }: any) {
   const { chainConfig } = useConfig();
   const { addCredential, credentials, setSelectedCredentialId, walletName, } = useCredentialStore();
   const [isConfirming, setIsConfirming] = useState(false);
-  const { saveAddressName } = useSettingStore();
+  const { saveAddressName, getAddressName } = useSettingStore();
   const { setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
   const { slotInfo, setSlotInfo } = useSlotStore()
   const [status, setStatus] = useState<string>('intro');
@@ -567,8 +540,13 @@ export default function SetGuardians({ changeStep }: any) {
 
     setGuardiansInfo(guardiansInfo)
     createdGuardiansInfo.current = guardiansInfo
-    console.log('createGuardianInfo', guardiansInfo)
-    // saveAddressName(slotInfo.slot, walletName);
+
+    for (let i = 0; i < guardians.length; i++) {
+      const address = guardians[i]
+      const name = guardianNames[i]
+      saveAddressName(address, name);
+    }
+
     return guardiansInfo
   };
 
