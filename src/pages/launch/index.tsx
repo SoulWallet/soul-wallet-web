@@ -117,14 +117,14 @@ const SignCard = () => {
   const createWallet = async () => {
     try {
       // make sure storage is clear
-      storage.clear();
-      location.href = '/create';
+      // storage.clear();
+      // location.href = '/create';
 
       // IMPORTANT TODO, for dApp as well
-      // navigate({
-      //   pathname: '/create',
-      //   search: location.search,
-      // });
+      navigate({
+        pathname: '/create',
+        search: location.search,
+      });
     } catch (error: any) {
       console.log('error', error);
       setIsCreating(false);

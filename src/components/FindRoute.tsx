@@ -10,11 +10,13 @@ import { useGuardianStore } from '@/store/guardian';
 import storage from '@/lib/storage';
 import { useLocation } from 'react-router-dom';
 import { storeVersion } from '@/config';
+import useTools from '@/hooks/useTools';
 
 export default function FindRoute({ children }: any) {
   const { navigate } = useBrowser();
   const location = useLocation();
   const { addressList, selectedAddress } = useAddressStore();
+  const { clearLogData } = useTools();
 
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
@@ -23,16 +25,11 @@ export default function FindRoute({ children }: any) {
     const isLaunchPage = location.pathname.includes('launch');
 
     if (storeVersion !== storageVersion) {
-      // when upgrade, clear all for now
-      console.log('Ready to clear storage');
-      storage.clear();
       storage.setItem('storeVersion', storeVersion);
-      window.location.href = '/launch';
+      clearLogData();
+      navigate('/launch');
     }
 
-    // if (guardiansInfo && guardiansInfo.requireBackup) {
-    //   navigate('/security');
-    // } else
     if ((!addressList.length || !selectedAddress) && !isRecoverPage && !isCreatePage) {
       navigate({
         pathname: '/launch',
