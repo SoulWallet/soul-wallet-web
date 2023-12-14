@@ -63,6 +63,6 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
 export const useSettingStore = create<ISettingStore>()(
   persist((...set) => ({ ...createSettingSlice(...set) }), {
     name: 'setting-storage',
-    version: 3,
+    version: 4,
   }),
 );
