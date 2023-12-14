@@ -23,13 +23,11 @@ export default function FindRoute({ children }: any) {
     const isLaunchPage = location.pathname.includes('launch');
 
     if (storeVersion !== storageVersion) {
-      if (storageVersion) {
-        // when upgrade, clear all for now
-        console.log('Ready to clear storage')
-        storage.clear();
-        window.location.href = '/launch'
-      }
+      // when upgrade, clear all for now
+      console.log('Ready to clear storage');
+      storage.clear();
       storage.setItem('storeVersion', storeVersion);
+      window.location.href = '/launch';
     }
 
     // if (guardiansInfo && guardiansInfo.requireBackup) {
