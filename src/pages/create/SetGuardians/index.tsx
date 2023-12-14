@@ -240,7 +240,7 @@ export default function SetGuardians({ changeStep }: any) {
     guardians: [],
     threshold: 0
   }
-  const guardianNames = []
+  const guardianNames:any = []
 
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
