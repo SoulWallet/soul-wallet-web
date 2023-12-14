@@ -28,7 +28,7 @@ const CreateAccount = () => {
       address: newAddress,
       activatedChains: [],
     });
-    saveAddressName(newAddress, `Account ${newIndex + 1}`)
+    saveAddressName(newAddress, `Account ${newIndex + 1}`, true);
     setCreating(false);
   };
 

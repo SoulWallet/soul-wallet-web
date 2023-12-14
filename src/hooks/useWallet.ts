@@ -184,7 +184,7 @@ export default function useWallet() {
       },
     ]);
 
-    saveAddressName(newAddress, 'Account 1')
+    saveAddressName(newAddress, 'Account 1', true);
 
     // IMPORTANT TODO, get wallet name from credential storage
     // set credentials
@@ -230,7 +230,7 @@ export default function useWallet() {
       },
     ]);
 
-    saveAddressName(newAddress, 'Account 1')
+    saveAddressName(newAddress, 'Account 1', true);
 
     setCredentials(recoveringGuardiansInfo.credentials);
     // set goerli if no selected chainId

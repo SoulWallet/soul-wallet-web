@@ -38,10 +38,10 @@ const EditNameModal = ({ isOpen, onClose, item }: any) => {
   const toast = useToast();
   const [newTitle, setNewTitle] = useState('');
   const { updateAddressItem } = useAddressStore();
-  const {saveAddressName} = useSettingStore();
+  const { saveAddressName } = useSettingStore();
 
   const doChangeName = () => {
-    saveAddressName(item.address, newTitle)
+    saveAddressName(item.address, newTitle);
     toast({
       title: 'Account name updated',
       status: 'success',
@@ -134,18 +134,18 @@ const AccountItem = ({ item, selected, onClick }: any) => {
           selected
             ? { border: '2px solid #000000CC' }
             : isActivated
-            ? {
-                border: '1px solid',
-                borderImageSource:
-                  'linear-gradient(113.16deg, rgba(244, 255, 176, 0.8) 2.41%, rgba(182, 255, 108, 0.8) 76.58%)',
-                borderImageSlice: 1,
-                borderImageWidth: '1',
-                borderImageOutset: 0,
-                borderImageRepeat: 'stretch',
-              }
-            : {
-                border: '1px solid #00000033',
-              }
+              ? {
+                  border: '1px solid',
+                  borderImageSource:
+                    'linear-gradient(113.16deg, rgba(244, 255, 176, 0.8) 2.41%, rgba(182, 255, 108, 0.8) 76.58%)',
+                  borderImageSlice: 1,
+                  borderImageWidth: '1',
+                  borderImageOutset: 0,
+                  borderImageRepeat: 'stretch',
+                }
+              : {
+                  border: '1px solid #00000033',
+                }
         }
         boxShadow={'0px 4px 8px 0px #0000001F'}
         bg={
@@ -245,7 +245,7 @@ export default function Accounts() {
       address: newAddress,
       activatedChains: [],
     });
-    saveAddressName(newAddress, `Account ${newIndex + 1}`)
+    saveAddressName(newAddress, `Account ${newIndex + 1}`, true);
     setAdding(false);
   };
 

@@ -13,7 +13,7 @@ export interface ISettingStore {
   finishedSteps: number[];
   // 1. guardian address -> name 2. slot address -> name
   addressName: { [address: string]: string };
-  saveAddressName: (address: string, name: string) => void;
+  saveAddressName: (address: string, name: string, checkExists?: boolean) => void;
   removeAddressName: (address: string) => void;
   getAddressName: (address: string) => string;
 }
@@ -35,7 +35,10 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
   getAddressName: (address) => {
     return get().addressName[address] || '';
   },
-  saveAddressName: (address, name) => {
+  saveAddressName: (address, name, checkExists = false) => {
+    if(checkExists && get().addressName[address]){
+      return;
+    }
     set((state) => ({
       addressName: {
         ...state.addressName,
