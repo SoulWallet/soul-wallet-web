@@ -10,10 +10,11 @@ const DappItem = ({ item }: any) => {
   return (
     <GridItem
       as={Link}
-      to={`/apps?appUrl=${encodeURIComponent(item.url)}`}
+      to={item.isExternal ? item.url : `/apps?appUrl=${encodeURIComponent(item.url)}`}
+      target={item.isExternal ? '_blank' : '_self'}
       px="5"
       py="4"
-      bg="#fafafa"
+      bg="#f5f5f5"
       _hover={{ bg: '#ebebeb' }}
       transition={'all .3s'}
       rounded="20px"
@@ -26,10 +27,19 @@ const DappItem = ({ item }: any) => {
       </Flex>
       <Image src={item.icon} h="52px" mb="1" />
       <Flex gap="5" align={'center'} mb="1">
-        <Text fontWeight={'700'} fontSize={'16px'}>
+        <Text fontWeight={'700'} fontSize={'18px'}>
           {item.title}
         </Text>
-        <Text fontSize={'12px'} color="#fff" py="1" px="2" bg="#1c1c1e" rounded={'5px'}>
+        <Text
+          fontSize={'12px'}
+          bg="#fff"
+          py="1"
+          px="2"
+          color="#000"
+          fontWeight={'600'}
+          fontFamily={'Martian'}
+          rounded={'5px'}
+        >
           {item.category}
         </Text>
       </Flex>

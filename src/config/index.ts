@@ -81,7 +81,7 @@ export default {
     {
       icon: IconGithub,
       iconActivated: IconGithubActivated,
-      link: 'https://github.com/proofofsoulprotocol',
+      link: 'https://github.com/SoulWallet',
     },
   ],
   magicValue: '0x1626ba7e',

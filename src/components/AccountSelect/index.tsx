@@ -21,6 +21,9 @@ const CreateAccount = () => {
   const { saveAddressName } = useSettingStore();
 
   const doCreate = async () => {
+    if(creating){
+      return
+    }
     setCreating(true);
     const newIndex = addressList.length;
     const newAddress = await calcWalletAddress(newIndex);
