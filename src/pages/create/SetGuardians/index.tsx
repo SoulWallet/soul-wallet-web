@@ -235,12 +235,12 @@ export default function SetGuardians({ changeStep }: any) {
     validate,
   });
 
-  const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
-  const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
+  const { guardiansInfo, updateGuardiansInfo, clearGuardianInfo } = useGuardianStore();
+  const guardianDetails = {
     guardians: [],
     threshold: 0
   }
-  const guardianNames = (guardiansInfo && guardiansInfo.guardianNames) || []
+  const guardianNames = []
 
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
@@ -575,6 +575,12 @@ export default function SetGuardians({ changeStep }: any) {
       threshold,
     }
   }
+
+  useEffect(() => {
+    if (status === 'editing') {
+      // clearGuardianInfo()
+    }
+  }, [status])
 
   if (status === 'backuping') {
     return (

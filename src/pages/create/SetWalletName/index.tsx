@@ -96,7 +96,7 @@ export default function SetWalletName({ changeStep }: any) {
           loading={loading}
           disabled={loading}
         >
-          Continue with passkey
+          Continue
         </Button>
         <TextBody textAlign="center" marginTop="100px" color="#898989" fontSize="16px" fontWeight="600">Please note: Not all browsers support passkey functionality. For optimal performance, we recommend using Chrome or Safari.</TextBody>
       </Box>
