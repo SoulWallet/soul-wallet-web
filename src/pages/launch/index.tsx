@@ -11,7 +11,6 @@ import {
   Link,
   Popover,
   PopoverTrigger,
-  PopoverContent,
 } from '@chakra-ui/react';
 import api from '@/lib/api';
 import TextBody from '@/components/web/TextBody';
@@ -30,8 +29,6 @@ import packageJson from '../../../package.json';
 import useWallet from '@/hooks/useWallet';
 import { Link as RLink } from 'react-router-dom';
 import { faqList, featureList } from '@/data';
-import { useCredentialStore } from '@/store/credential';
-import { useAddressStore } from '@/store/address';
 
 const SignCard = () => {
   const { authenticate } = usePassKey();
@@ -119,10 +116,6 @@ const SignCard = () => {
 
   const createWallet = async () => {
     try {
-      /* resetWallet();
-       * setIsCreating(true);
-       * const credentialKey = await register(credentialName);
-       * setIsCreating(false); */
       // make sure storage is clear
       storage.clear();
       location.href = '/create';
