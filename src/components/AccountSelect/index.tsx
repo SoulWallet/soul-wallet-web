@@ -130,8 +130,8 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                 </React.Fragment>
               );
             })}
-            <MenuDivider />
-            <CreateAccount />
+            {/* <MenuDivider />
+            <CreateAccount /> */}
             {/* <DestroyAccount /> */}
           </MenuList>
         </>
