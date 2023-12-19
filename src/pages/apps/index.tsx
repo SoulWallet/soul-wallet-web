@@ -7,6 +7,7 @@ import { useAddressStore } from '@/store/address';
 import { dappList } from '@/data';
 import { useChainStore } from '@/store/chain';
 import AlertModal from '@/components/AlertModal';
+import DappList from '@/components/DappList';
 
 export default function Apps() {
   const iframeRef = useRef<any>();
@@ -74,6 +75,19 @@ export default function Apps() {
 
   const IFRAME_SANDBOX_ALLOWED_FEATURES =
     'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads allow-orientation-lock';
+
+  if (!appUrl) {
+    return (
+      <Box width="100%" height="100vh">
+        <Box height="72px">
+          <Header />
+        </Box>
+        <Box width="100%" padding="20px">
+          <DappList />
+        </Box>
+      </Box>
+    )
+  }
 
   return (
     <Box width="100%" height="100vh">
