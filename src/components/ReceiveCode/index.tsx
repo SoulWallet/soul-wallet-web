@@ -32,10 +32,10 @@ export default function ReceiveCode({ address, showFullAddress, imgWidth = '90px
     <Box textAlign={'center'}>
       <Image src={imgSrc} mx="auto" display={'block'} w={imgWidth} />
       {showFullAddress ? (
-        <Text fontFamily={'Martian'} mt="2" px="10" fontWeight={'600'} fontSize={'14px'}>
+        <Box fontFamily={'Martian'} mt="2" px="10" fontWeight={'600'} fontSize={'14px'}>
           <Text display="inline-block">{address.slice(0, 21)}</Text>
           <Text display="inline-block">{address.slice(-21)}</Text>
-        </Text>
+        </Box>
       ) : (
         <Flex align="center" gap="1" justify={'center'}>
           <Text fontFamily={'Martian'} fontWeight={'600'} fontSize={'14px'}>

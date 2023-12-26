@@ -10,23 +10,16 @@ import { useChainStore } from '@/store/chain';
 import useConfig from '@/hooks/useConfig';
 import IconPen from '@/assets/icons/pen.svg';
 import IconShare from '@/assets/icons/share.svg';
+import useTools from '@/hooks/useTools';
 
 export default function Receive() {
-  const toast = useToast();
   const { selectedAddress, updateAddressItem } = useAddressStore();
   const { chainList } = useChainStore();
   const { selectedAddressItem, chainConfig } = useConfig();
+  const { doCopy } = useTools();
   const { scanUrl, scanName } = chainConfig;
   const [editing, setEditing] = useState(false);
   const [editingName, setEditingName] = useState(selectedAddressItem.title);
-
-  const doCopy = () => {
-    copyText(selectedAddress);
-    toast({
-      title: 'Copied',
-      status: 'success',
-    });
-  };
 
   const doEdit = () => {
     updateAddressItem(selectedAddress, { title: editingName });
@@ -69,7 +62,7 @@ export default function Receive() {
         </InfoItem>
       </InfoWrap>
 
-      <Button w="full" onClick={doCopy} fontSize="20px" py="4" fontWeight={'800'} mt="4">
+      <Button w="full" onClick={() => doCopy(selectedAddress)} fontSize="20px" py="4" fontWeight={'800'} mt="4">
         Copy address
       </Button>
 

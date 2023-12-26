@@ -71,12 +71,16 @@ export function clearStorageWithCredentials() {
 }
 
 export function copyText(value: string) {
-  const copied = document.createElement('input');
-  copied.setAttribute('value', value);
-  document.body.appendChild(copied);
-  copied.select();
-  document.execCommand('copy');
-  document.body.removeChild(copied);
+  if(navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(value);
+  }else{
+    const copied = document.createElement('input');
+    copied.setAttribute('value', value);
+    document.body.appendChild(copied);
+    copied.select();
+    document.execCommand('copy');
+    document.body.removeChild(copied);
+  }
 }
 
 export const validateEmail = (email?: string) => {

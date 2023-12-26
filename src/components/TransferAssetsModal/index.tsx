@@ -12,6 +12,8 @@ import {
 import Receive from '../Receive';
 import SendAssets from '../SendAssets';
 import { ethers } from 'ethers';
+import useTools from '@/hooks/useTools';
+
 const tabs = [
   {
     text: 'Send',
@@ -26,6 +28,7 @@ function TransferAssetsModal(_: any, ref: Ref<any>) {
   const [visible, setVisible] = useState(false);
   const [tokenAddress, setTokenAddress] = useState('');
   const [promiseInfo, setPromiseInfo] = useState<any>({});
+  const { doCopy } = useTools();
 
   const onClose = async () => {
     setVisible(false);
