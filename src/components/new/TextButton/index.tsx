@@ -83,7 +83,7 @@ export default function Button({
       {...moreProps}
       {...restProps}
       onClick={onClick}
-      _hover={_hover}
+      _hover={_hover || { background: 'transparent' }}
       _disabled={{ opacity: '0.7', cursor: 'not-allowed' }}
       isDisabled={disabled}
       bg="brand.black"

@@ -9,13 +9,11 @@ import DappList from '@/components/DappList';
 import Footer from '@/components/Footer';
 import { AccountSelectFull } from '@/components/AccountSelect';
 import Guidance from './comp/Guidance';
-import TextButton from '@/components/new/TextButton';
 
 export default function Wallet() {
   return (
     <Box color="#000">
       <Header />
-      <TextButton>hello</TextButton>
       <AppContainer minH="calc(100vh - 100px)">
         <Grid templateColumns={{base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)'}} gap={{base: 4, lg: 6}} mb="12">
           <GridItem>
