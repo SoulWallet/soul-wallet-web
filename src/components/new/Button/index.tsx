@@ -5,7 +5,7 @@ import IconLoading from '@/assets/loading.gif';
 import BlackIconLoading from '@/assets/loading.svg';
 import { Box } from '@chakra-ui/react';
 
-const getStyles = (type: string = 'xl', theme: string = 'dark') => {
+const getStyles = (type: string = 'xl', theme: string = 'dark', themeColor: any) => {
   const baseStyles = theme === 'dark' ? {
     background: '#000000',
     color: 'white',
@@ -14,7 +14,7 @@ const getStyles = (type: string = 'xl', theme: string = 'dark') => {
   } : {
     background: 'white',
     color: 'black',
-    border: '1px solid #000000',
+    border: `1px solid ${themeColor || '#D0D5DD'}`,
     boxShadow: '0px 1px 2px 0px rgba(208, 213, 221, 0.05)'
   }
 
@@ -71,6 +71,7 @@ export default function Button({
   LeftIcon,
   _hover,
   loadingColor,
+  themeColor,
   ...restProps
 }: any) {
   const doClick = () => {
@@ -90,14 +91,14 @@ export default function Button({
   return (
     <CButton
       {...moreProps}
-      {...restProps}
       onClick={onClick}
       _hover={_hover || (theme === 'dark' ? { background: 'black' } : { background: 'white' })}
       _disabled={{ opacity: '0.7', cursor: 'not-allowed' }}
       isDisabled={disabled}
       bg="brand.black"
-      {...getStyles(type, theme)}
+      {...getStyles(type, theme, themeColor)}
       {..._styles}
+      {...restProps}
     >
       {loading && loadingColor !== 'dark' && <Image height="20px" width="20px" marginRight="8px" src={IconLoading} />}
       {loading && loadingColor === 'dark' && <Image height="20px" width="20px" marginRight="8px" src={BlackIconLoading} />}

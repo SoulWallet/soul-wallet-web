@@ -23,6 +23,7 @@ export default function FindRoute({ children }: any) {
     const isRecoverPage = location.pathname.includes('recover');
     const isCreatePage = location.pathname.includes('create');
     const isLaunchPage = location.pathname.includes('launch');
+    const isAuthPage = location.pathname.includes('auth');
 
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
@@ -30,7 +31,7 @@ export default function FindRoute({ children }: any) {
       navigate('/launch');
     }
 
-    if ((!addressList.length || !selectedAddress) && !isRecoverPage && !isCreatePage) {
+    if ((!addressList.length || !selectedAddress) && !isRecoverPage && !isCreatePage && !isAuthPage) {
       navigate({
         pathname: '/launch',
         search: location.search,
