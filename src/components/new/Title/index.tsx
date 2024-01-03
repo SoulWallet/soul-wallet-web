@@ -11,7 +11,7 @@ const getStyles = (type: string = 't1') => {
   } else if (type === 't2') {
     return {
       fontSize: '16px',
-      fontWeight: 'bold'
+      fontWeight: 'normal'
     }
   } else if (type === 't3') {
     return {

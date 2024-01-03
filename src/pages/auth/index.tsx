@@ -27,13 +27,48 @@ import AccountIcon from '@/components/Icons/Intro/Account'
 import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
 import SetPasskey from './SetPasskey'
+import LoginModal from './LoginModal'
+import RegisterModal from './RegisterModal'
+import SelectAccountModal from './SelectAccountModal'
 
 export default function Auth() {
   const [step, setStep] = useState(0)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false)
+  const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false)
 
   const nextStep = useCallback(() => {
     setStep(step + 1)
   }, [step])
+
+  const openLogin = useCallback(() => {
+    setIsLoginOpen(true)
+  }, [])
+
+  const closeLogin = useCallback(() => {
+    setIsLoginOpen(false)
+  }, [])
+
+  const openRegister = useCallback(() => {
+    setIsRegisterOpen(true)
+  }, [])
+
+  const closeRegister = useCallback(() => {
+    setIsRegisterOpen(false)
+  }, [])
+
+  const openSelectAccount = useCallback(() => {
+    setIsSelectAccountOpen(true)
+  }, [])
+
+  const closeSelectAccount = useCallback(() => {
+    setIsSelectAccountOpen(false)
+  }, [])
+
+  const startLogin = useCallback(() => {
+    setIsLoginOpen(false)
+    setIsSelectAccountOpen(true)
+  }, [])
 
   if (step === 1) {
     return (
@@ -146,7 +181,7 @@ export default function Auth() {
                   _hover={{
                     background: "#FF2E79"
                   }}
-                  onClick={nextStep}
+                  onClick={openRegister}
                 >
                   Create account
                 </Button>
@@ -154,6 +189,7 @@ export default function Auth() {
                   width="100%"
                   theme="light"
                   marginBottom="48px"
+                  onClick={openLogin}
                 >
                   Login
                 </Button>
@@ -178,6 +214,9 @@ export default function Auth() {
             <Box padding="10px"><GithubIcon /></Box>
           </Box>
         </Box>
+        <LoginModal isOpen={isLoginOpen} onClose={closeLogin} startLogin={startLogin} />
+        <RegisterModal isOpen={isRegisterOpen} onClose={closeRegister} />
+        <SelectAccountModal isOpen={isSelectAccountOpen} onClose={closeSelectAccount} />
       </Box>
     </Box>
   )
