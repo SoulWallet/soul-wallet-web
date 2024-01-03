@@ -9,9 +9,11 @@ import Button from './Button';
 import { useSettingStore } from '@/store/setting';
 
 export default function EnvCheck({ children }: any) {
-  const { ignoreWebauthnOverride, setIgnoreWebauthnOverride } = useSettingStore();
+  const { ignoreWebauthnOverride, setIgnoreWebauthnOverride, ignoreDeviceSupport, setIgnoreDeviceSupport } =
+    useSettingStore();
   const [isWebauthnNative, setIsWebauthnNative] = useState(true);
   const [isFirefox, setIsFirefox] = useState(false);
+  const [isDeviceSupported, setIsDeviceSupported] = useState(false);
   const checkNativeMethod = async () => {
     setIsWebauthnNative(isNativeMethod(window.navigator.credentials.create));
   };
@@ -20,9 +22,14 @@ export default function EnvCheck({ children }: any) {
     setIsFirefox(navigator.userAgent.indexOf('Firefox') !== -1);
   };
 
+  const checkDeviceSupported = () => {
+    setIsDeviceSupported(typeof navigator.credentials.create !== 'function');
+  };
+
   useEffect(() => {
     checkNativeMethod();
     checkIsFirefox();
+    checkDeviceSupported();
   }, []);
 
   return (
@@ -49,6 +56,22 @@ export default function EnvCheck({ children }: any) {
             <AlertIcon />
             <AlertTitle>Your are using firefox which is not supported yet.</AlertTitle>
           </Flex>
+        </Alert>
+      )}
+      {!isDeviceSupported && !ignoreDeviceSupport && (
+        <Alert status="warning" justifyContent={'space-between'}>
+          <Flex>
+            <AlertIcon />
+            <AlertTitle>Your current device doesn't support passkey, please try mobile devices.</AlertTitle>
+          </Flex>
+          <Button
+            py="2"
+            onClick={() => {
+              setIgnoreDeviceSupport(true);
+            }}
+          >
+            Got it
+          </Button>
         </Alert>
       )}
       {children}
