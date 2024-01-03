@@ -13,7 +13,7 @@ export default function EnvCheck({ children }: any) {
     useSettingStore();
   const [isWebauthnNative, setIsWebauthnNative] = useState(true);
   const [isFirefox, setIsFirefox] = useState(false);
-  const [isDeviceSupported, setIsDeviceSupported] = useState(false);
+  const [isDeviceSupported, setIsDeviceSupported] = useState(true);
   const checkNativeMethod = async () => {
     setIsWebauthnNative(isNativeMethod(window.navigator.credentials.create));
   };
@@ -23,7 +23,7 @@ export default function EnvCheck({ children }: any) {
   };
 
   const checkDeviceSupported = () => {
-    setIsDeviceSupported(typeof navigator.credentials.create !== 'function');
+    setIsDeviceSupported(typeof navigator.credentials.create === 'function');
   };
 
   useEffect(() => {
