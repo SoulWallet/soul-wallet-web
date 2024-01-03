@@ -49,7 +49,7 @@ export default function Balance() {
         </Text>
         <Text fontWeight={'600'}>Past day</Text>
       </Flex> */}
-      <Flex gap="2" align={'center'} pos="absolute" right="4" bottom="3" display={{ base: 'none', lg: 'flex' }}>
+      <Flex gap="2" align={'center'} pos="absolute" right={{ base: '6', lg: 4 }} bottom={{ base: '85px', lg: 3 }}>
         <Btn onClick={showClaimAssets}>
           <Image src={IconClaim} />
         </Btn>
