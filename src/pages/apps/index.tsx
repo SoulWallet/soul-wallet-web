@@ -34,6 +34,9 @@ export default function Apps() {
           iframeRef.current.contentWindow.postMessage(response, msg.origin);
         }
       } catch (error: any) {
+        if(error === 'User reject'){
+          return
+        }
         const errorResponse = makeError(request.id, error.message);
         console.log('safe message error', errorResponse);
         toast({
