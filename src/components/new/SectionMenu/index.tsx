@@ -17,7 +17,6 @@ export function SectionMenuItem({ children, isActive, ...restProps }: any) {
   return (
     <Box
       fontFamily="Nunito"
-      color="black"
       fontWeight="800"
       fontSize="20px"
       marginRight="24px"

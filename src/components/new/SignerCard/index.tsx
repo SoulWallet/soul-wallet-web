@@ -65,6 +65,7 @@ export default function SignerCard({
         fontWeight="500"
         fontSize="12px"
         color="black"
+        marginTop="10px"
       >
         {time}
       </Box>
