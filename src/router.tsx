@@ -9,6 +9,7 @@ import Launch from '@/pages/launch';
 import Asset from '@/pages/asset';
 import Activity from '@/pages/activity';
 import Security from '@/pages/security';
+import NewSecurity from '@/pages/security_new';
 import Auth from '@/pages/auth';
 
 export const router = createBrowserRouter([
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       { path: 'recover', element: <Recover /> },
       { path: 'popup', element: <Popup />},
       { path: 'security', element: <Security /> },
+      { path: 'new_security', element: <NewSecurity /> },
       { path: 'auth', element: <Auth /> },
     ],
   },
