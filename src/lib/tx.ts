@@ -1,4 +1,4 @@
-import { SoulWallet, Bundler } from '@soulwallet/sdk';
+import { SoulWallet, Bundler } from '@soulwallet_test/sdk';
 import { printUserOp } from '@/lib/tools';
 
 let soulWallet: any = null;
@@ -12,6 +12,7 @@ export const initSoulWallet = (chainConfig: any) => {
     chainConfig.provider,
     chainConfig.bundlerUrl,
     chainConfig.contracts.soulWalletFactory,
+    chainConfig.contracts.defaultValidator,
     chainConfig.contracts.defaultCallbackHandler,
     chainConfig.contracts.keyStoreModuleProxy,
     chainConfig.contracts.securityControlModule,

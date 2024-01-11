@@ -6,7 +6,7 @@ import useWalletContext from '../context/hooks/useWalletContext';
 import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
-import { SignkeyType } from '@soulwallet/sdk';
+import { SignkeyType } from '@soulwallet_test/sdk';
 import { addPaymasterAndData, printUserOp } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useCredentialStore } from '@/store/credential';
@@ -93,12 +93,13 @@ export default function useQuery() {
       userOp.paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
     }
 
+    // TODO, consider EOA
     const signerKeyType =
       selectedCredential.algorithm === 'ES256'
         ? SignkeyType.P256
         : selectedCredential.algorithm === 'RS256'
         ? SignkeyType.RS256
-        : null;
+        : SignkeyType.EOA;
 
     if (!signerKeyType) {
       throw new Error('algorithm not supported');
@@ -108,7 +109,7 @@ export default function useQuery() {
     printUserOp(userOp);
 
     // get gas limit
-    const gasLimit = await soulWallet.estimateUserOperationGas(userOp, signerKeyType);
+    const gasLimit = await soulWallet.estimateUserOperationGas(chainConfig.contracts.defaultValidator, userOp, signerKeyType);
 
     if (gasLimit.isErr()) {
       throw new Error(gasLimit.ERR.message);

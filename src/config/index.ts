@@ -7,9 +7,9 @@ import IconGithubActivated from '@/assets/socials/github-activated.svg';
 import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
 import IconEth from '@/assets/chains/eth.svg';
-import ArbConfig from './chains/arb-goerli';
-import OpConfig from './chains/op-goerli';
-import GoerliConfig from './chains/goerli';
+import ArbConfig from './chains/arb-sepolia';
+import OpConfig from './chains/op-sepolia';
+import BaseConfig from './chains/sepolia';
 
 export const chainIdMapping = {
   1: 'ETH Mainnet',
@@ -89,5 +89,5 @@ export default {
   soulScanURL: `${import.meta.env.VITE_SCAN_URL}/opapi`,
   officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
   /* @vite-ignore */
-  chainList: [ArbConfig, OpConfig, GoerliConfig],
+  chainList: [ArbConfig, OpConfig, BaseConfig],
 };

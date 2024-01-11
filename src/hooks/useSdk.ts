@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { L1KeyStore, SoulWallet } from '@soulwallet/sdk';
+import { L1KeyStore, SoulWallet } from '@soulwallet_test/sdk';
 import { useChainStore } from '@/store/chain';
 import { useSlotStore } from '@/store/slot';
 
@@ -13,6 +13,7 @@ export default function useSdk() {
       selectedChainItem.provider,
       selectedChainItem.bundlerUrl,
       selectedChainItem.contracts.soulWalletFactory,
+      selectedChainItem.contracts.defaultValidator,
       selectedChainItem.contracts.defaultCallbackHandler,
       selectedChainItem.contracts.keyStoreModuleProxy,
       selectedChainItem.contracts.securityControlModule,

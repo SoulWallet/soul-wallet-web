@@ -32,7 +32,7 @@ import useKeystore from '@/hooks/useKeystore';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { ethers } from 'ethers';
-import { L1KeyStore } from '@soulwallet/sdk';
+import { L1KeyStore } from '@soulwallet_test/sdk';
 import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';
 import WarningIcon from '@/components/Icons/Warning';

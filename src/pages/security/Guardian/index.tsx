@@ -19,7 +19,7 @@ import RoundButton from '@/components/web/Button';
 import PlusIcon from '@/components/Icons/Plus';
 import SuccessIcon from '@/components/Icons/Success';
 import api from '@/lib/api';
-import { L1KeyStore } from '@soulwallet/sdk';
+import { L1KeyStore } from '@soulwallet_test/sdk';
 import { useAddressStore } from '@/store/address';
 import useKeystore from '@/hooks/useKeystore';
 import { useGuardianStore } from '@/store/guardian';

@@ -30,7 +30,7 @@ import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';
-import { L1KeyStore } from '@soulwallet/sdk';
+import { L1KeyStore } from '@soulwallet_test/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 import { useCredentialStore } from '@/store/credential';

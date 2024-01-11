@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '@/config';
-import { UserOperation } from '@soulwallet/sdk';
+import { UserOperation } from '@soulwallet_test/sdk';
 
 const axio = axios.create({
   baseURL: config.backendURL,

@@ -1,4 +1,4 @@
-import { KeyStoreTypedDataType, L1KeyStore } from '@soulwallet/sdk';
+import { KeyStoreTypedDataType, L1KeyStore } from '@soulwallet_test/sdk';
 import { useSlotStore } from '@/store/slot';
 import useConfig from './useConfig';
 import { ethers } from 'ethers';
@@ -49,7 +49,7 @@ export default function useKeystore() {
     if (res.isErr()) {
       return {
         guardianHash: null,
-        activeGuardianHash: null,
+      activeGuardianHash: null,
         guardianActivateAt: null,
         pendingGuardianHash: null,
       };

@@ -40,7 +40,7 @@ import QuestionIcon from '@/components/Icons/Question';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useGuardianStore } from '@/store/guardian';
 import { nanoid } from 'nanoid';
-import { L1KeyStore } from '@soulwallet/sdk';
+import { L1KeyStore } from '@soulwallet_test/sdk';
 import { useCredentialStore } from '@/store/credential';
 import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';
