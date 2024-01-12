@@ -21,7 +21,8 @@
     "@safe-global/safe-apps-sdk": "^8.1.0",
     "@soulwallet_test/abi": "^0.1.5",
     "@soulwallet_test/decoder": "^0.1.6",
-    "@soulwallet_test/sdk": "^0.1.17",
+    "@soulwallet_test/sdk": "^0.1.18",
+    "@tanstack/react-query": "^5.17.9",
     "@types/node": "20.6.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -37,6 +38,8 @@
     "react-dom": "^18.2.0",
     "react-jazzicon": "^1.0.4",
     "react-router-dom": "^6.16.0",
+    "viem": "2.x",
+    "wagmi": "^2.1.2",
     "zustand": "^4.4.1"
   },
   "devDependencies": {

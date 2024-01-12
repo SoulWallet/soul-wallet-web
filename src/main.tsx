@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { router } from './router.tsx';
 import { RouterProvider } from 'react-router-dom';
 import { enableMapSet } from 'immer'
+import './global.css'
 
 enableMapSet();
 

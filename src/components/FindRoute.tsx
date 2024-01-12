@@ -2,17 +2,16 @@
  * Find the correct route to go
  */
 
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import useBrowser from '../hooks/useBrowser';
 import { Box } from '@chakra-ui/react';
 import { useAddressStore } from '@/store/address';
-import { useGuardianStore } from '@/store/guardian';
 import storage from '@/lib/storage';
 import { useLocation } from 'react-router-dom';
 import { storeVersion } from '@/config';
 import useTools from '@/hooks/useTools';
 
-export default function FindRoute({ children }: any) {
+export default function FindRoute({ children }: {children: ReactNode}) {
   const { navigate } = useBrowser();
   const location = useLocation();
   const { addressList, selectedAddress } = useAddressStore();

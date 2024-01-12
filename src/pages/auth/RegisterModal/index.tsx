@@ -1,21 +1,6 @@
-import React, {
-  useState,
-  useRef,
-  useImperativeHandle,
-  useCallback,
-  useEffect,
-  Fragment
-} from 'react'
 import {
   Box,
-  Text,
   Image,
-  useToast,
-  Select,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -23,20 +8,38 @@ import {
   ModalCloseButton,
   ModalBody
 } from '@chakra-ui/react'
+import { Connector, useConnect } from 'wagmi'
 import TextBody from '@/components/new/TextBody'
 import Title from '@/components/new/Title'
-import ArrowRightIcon from '@/components/Icons/ArrowRight'
+// import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
 import Button from '@/components/new/Button'
 import MetamaskIcon from '@/assets/wallets/metamask.png'
-import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
-import CoinbaseIcon from '@/assets/wallets/coinbase.png'
-import BinanceIcon from '@/assets/wallets/binance.png'
+// import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
+// import CoinbaseIcon from '@/assets/wallets/coinbase.png'
+// import BinanceIcon from '@/assets/wallets/binance.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
-import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
+import InjectedIcon from '@/assets/wallets/injected.svg'
+import UnknownIcon from '@/assets/wallets/unknown.svg'
+// import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
+
+const getWalletIcon = (walletId: string) => {
+  switch (walletId) {
+    case 'injected':
+      return InjectedIcon;
+    case 'walletConnect':
+      return WalletConnectIcon;
+    case 'io.metamask':
+      return MetamaskIcon;
+    default:
+      return UnknownIcon;
+  }
+}
 
 export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
+  const { connectors, connect } = useConnect();
+  console.log('connectors', connectors)
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -65,7 +68,7 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
                 Already have a wallet? Connect here!
               </Title>
               <Box width="100%" display="flex" flexWrap="wrap">
-                <Box
+                {connectors.map((connector: Connector) =>   <Box
                   display="flex"
                   alignItems="center"
                   border="1px solid rgba(0, 0, 0, 0.1)"
@@ -74,6 +77,8 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
                   marginRight="16px"
                   marginBottom="24px"
                   width="45%"
+                  cursor={"pointer"}
+                  onClick={() => connect({connector})}
                 >
                   <Box
                     width="48px"
@@ -85,11 +90,11 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Image src={MetamaskIcon} width="32px" height="32px" />
+                    <Image src={getWalletIcon(connector.id)} width="32px" height="32px" />
                   </Box>
-                  <TextBody>MetaMask</TextBody>
-                </Box>
-                <Box
+                  <TextBody>{connector.name}</TextBody>
+                </Box>)}
+                {/* <Box
                   display="flex"
                   alignItems="center"
                   border="1px solid rgba(0, 0, 0, 0.1)"
@@ -208,7 +213,7 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
                     <Image src={XDEFIIcon} width="32px" height="32px" />
                   </Box>
                   <TextBody>XDEFI Wallet</TextBody>
-                </Box>
+                </Box> */}
               </Box>
             </Box>
             <Box
