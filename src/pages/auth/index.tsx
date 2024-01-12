@@ -32,7 +32,7 @@ import RegisterModal from './RegisterModal'
 import SelectAccountModal from './SelectAccountModal'
 
 export default function Auth() {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(0)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isRegisterOpen, setIsRegisterOpen] = useState(false)
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false)

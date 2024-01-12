@@ -40,7 +40,7 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent background="#ededed" maxW="840px" borderRadius="20px">
+      <ModalContent background="white" maxW="840px" borderRadius="20px">
         <ModalHeader
           display="flex"
           justifyContent="flex-start"
@@ -55,7 +55,6 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
         <ModalCloseButton top="14px" />
         <ModalBody overflow="auto" padding="20px 32px">
           <Box
-            background="#ededed"
             height="100%"
             roundedBottom="20px"
             display="flex"
@@ -219,7 +218,7 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
               position="relative"
             >
               <Box width="1px" height="100%" background="rgba(0, 0, 0, 0.1)" position="absolute" />
-              <TextBody fontWeight="normal" height="80px" width="20px" display="flex" alignItems="center" justifyContent="center" background="#ededed" zIndex="1">
+              <TextBody fontWeight="normal" height="80px" width="20px" display="flex" alignItems="center" justifyContent="center" background="white" zIndex="1">
                 or
               </TextBody>
             </Box>
