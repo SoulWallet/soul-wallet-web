@@ -15,7 +15,7 @@ export default {
   l1Provider: `https://goerli.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`,
   scanUrl: 'https://goerli-optimism.etherscan.io',
   scanName: 'Etherscan',
-  bundlerUrl: 'https://opt-sepolia.g.alchemy.com/v2/ZmRd7VX5OIG8JoJy5OsvgApPe46NnmaJ',
+  bundlerUrl: `https://opt-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY_OP_SEPOLIA}`,
   maxCostMultiplier: 120,
   chainId: 11155420,
   chainIdHex: `0x${(11155420).toString(16)}`,
