@@ -17,6 +17,7 @@ import IconLogo from '@/assets/logo-all-v3.svg';
 import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
+import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import Button from '@/components/new/Button'
 import PlusIcon from '@/components/Icons/Plus';
@@ -176,9 +177,9 @@ export default function SetPasskey() {
             flexDirection="column"
           >
             <Heading marginBottom="18px" type="h3">
-              Add passkey as <Box as="span" borderBottom="1px solid black" borderStyle="dotted">signer</Box> <Box as="span" color="#FF2E79">for free</Box>?
+              Sign with <Box as="span" borderBottom="1px solid black" borderStyle="dotted">passkey</Box>
             </Heading>
-            <TextBody>Your first time set up is gas free, don’t miss it.</TextBody>
+            <TextBody fontWeight="600">Turn your own device into hardware wallet! Add passkey now <Box as="span" color="#FF2E79">for free</Box>!</TextBody>
             <Box
               marginBottom="90px"
               background="#F7F7F7"
@@ -188,23 +189,46 @@ export default function SetPasskey() {
               width="700px"
               maxWidth="100%"
             >
-              <Heading type="h4" marginBottom="8px">
-                What is passkey signer?
+              <Heading type="h4" marginBottom="18px">
+                Why sign with passkey?
               </Heading>
-              <TextBody type="t2">
-                Sign transaction with passkey saved on your device. Safer, but twice more expensive on L2!
-              </TextBody>
-              <TextBody type="t2" color="#797979" marginBottom="18px">
-                *If you're an Apple user, you can even sync your passkey across all devices end to end encrypted via icloud keychain.
-              </TextBody>
-              <Button
-                width="275px"
-                maxWidth="100%"
-                theme="light"
-              >
-                <Box marginRight="8px"><PlusIcon color="black" /></Box>
-                Add Passkey
-              </Button>
+              <Box width="100%" display="flex" marginBottom="18px">
+                <Box width="50%">
+                  <Title marginBottom="5px">👍🏻 Advantage:</Title>
+                  <Box paddingLeft="20px">
+                    <TextBody type="t2">
+                      Much more secure. Resistant to phishing.
+                    </TextBody>
+                    <TextBody type="t2">
+                      Easier to use. Login and sign faster with your face/touch ID.
+                    </TextBody>
+                    <TextBody type="t2">
+                      Sync end-to-end encrypted across Apple devices via iCloud keychain.
+                    </TextBody>
+                  </Box>
+                </Box>
+                <Box width="50%">
+                  <Title marginBottom="5px">👍🏻 Disadvantage:</Title>
+                  <Box paddingLeft="20px">
+                    <TextBody type="t2">
+                      {`More expensive. It cost $0.7 more to send an ERC-20 token on L2 comparing sign with EOA ($0.86 vs. $0.16).`}
+                    </TextBody>
+                    <TextBody type="t2">
+                      {`Bound with our website. Your passkey only works with our website (also save you from scam sites).`}
+                    </TextBody>
+                  </Box>
+                </Box>
+              </Box>
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <Button
+                  width="275px"
+                  maxWidth="100%"
+                  theme="light"
+                >
+                  <Box marginRight="8px"><PlusIcon color="black" /></Box>
+                  Add Passkey
+                </Button>
+              </Box>
             </Box>
             <Box>
               <Button

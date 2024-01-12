@@ -100,13 +100,14 @@ export default function Auth() {
           padding="0"
           overflow="hidden"
           flexDirection={{ base: "column", md: "row" }}
+          background="#FFFFFF"
         >
           <Box
             width={{ base: "100%", md: "50%" }}
             height="100%"
             padding="100px 60px"
           >
-            <Heading marginBottom="40px">
+            <Heading marginBottom="40px" fontSize="40px">
               Your smart wallet for Ethereum L2s
             </Heading>
             <Box marginBottom="90px">
@@ -143,7 +144,7 @@ export default function Auth() {
                 </Box>
               </Box>
             </Box>
-            <TextBody fontWeight="500" color="#818181">
+            <TextBody fontWeight="700" color="#818181">
               For more info, check out <Box as="a" color="#FF2E79">{`FAQs >`}</Box>
             </TextBody>
           </Box>
