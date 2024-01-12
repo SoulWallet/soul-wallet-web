@@ -224,7 +224,8 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
               </TextBody>
             </Box>
             <Box width="calc(40%)" display="flex" alignItems="center" justifyContent="center" flexDirection="column" paddingLeft="25px" position="relative">
-              <Title type="t2" fontWeight="500" marginBottom="25px">Fresh to Ethereum? Try this!</Title>
+              <Title type="t2" fontWeight="500">Fresh to Ethereum? Try this!</Title>
+              <Title type="t2" fontWeight="500" color="rgba(0, 0, 0, 0.4)" marginBottom="25px">(Or wanna try something better)</Title>
               <Button
                 width="100%"
                 theme="dark"
