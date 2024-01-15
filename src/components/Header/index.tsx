@@ -20,7 +20,7 @@ export default function Header() {
       align="center"
       justify={'space-between'}
     >
-      <Link to="/wallet">
+      <Link to="/dashboard">
         <Image src={IconLogo} h="44px" />
       </Link>
       <Flex align={'center'} gap="2" marginLeft="auto">

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import scanApi from '@/lib/scanApi';
 import { decodeCalldata } from '@/lib/tools';
-import { ActivityStatusEn } from '@/pages/wallet/comp/Activity/comp/ActivityItem';
+import { ActivityStatusEn } from '@/pages/dashboard/comp/Activity/comp/ActivityItem';
 
 export interface IHistoryStore {
   historyList: any[];

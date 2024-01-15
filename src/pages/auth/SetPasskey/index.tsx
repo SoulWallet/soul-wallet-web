@@ -41,7 +41,7 @@ export default function SetPasskey() {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
         <Box height="58px" padding="10px 20px">
-          <Link to="/wallet">
+          <Link to="/dashboard">
             <Image src={IconLogo} h="44px" />
           </Link>
         </Box>
@@ -145,7 +145,7 @@ export default function SetPasskey() {
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
-        <Link to="/wallet">
+        <Link to="/dashboard">
           <Image src={IconLogo} h="44px" />
         </Link>
       </Box>

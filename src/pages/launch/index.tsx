@@ -88,7 +88,7 @@ const SignCard = () => {
           // redirect to popup
           navigate({ pathname: '/popup', search: location.href });
         } else {
-          navigate('/wallet');
+          navigate('/dashboard');
         }
       } else {
         // failed to login

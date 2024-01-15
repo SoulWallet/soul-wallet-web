@@ -139,7 +139,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
           onClose={() => {}}
           okText="Back"
           onOk={() => {
-            navigate('/wallet');
+            navigate('/dashboard');
           }}
         />
       )}

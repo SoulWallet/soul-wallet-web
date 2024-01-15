@@ -4,18 +4,11 @@ import config from '@/config';
 
 export default function Footer() {
   return (
-    <Flex
-      justify={'flex-end'}
-      align={'center'}
-      mt="16"
-      py="6"
-      gap="4"
-      fontSize={'12px'}
-      fontWeight={'300'}
-      fontFamily={'Martian'}
-    >
-      <Text>Alpha Test {packageJson.version}</Text>
-      <Flex gap="2" align={'center'}>
+    <Flex flexDir={'column'} gap="2" fontSize={'12px'} fontWeight={'400'}>
+      <Text color={'rgba(0,0,0,.5)'} whiteSpace={'nowrap'}>
+        Version: Alpha {packageJson.version}
+      </Text>
+      <Flex gap="3" align={'center'}>
         {config.socials.map((item, idx) => (
           <Link
             href={item.link}
@@ -30,8 +23,8 @@ export default function Footer() {
               },
             }}
           >
-            <Image src={item.icon} className="icon" />
-            <Image src={item.iconActivated} display={'none'} className="icon-activated" />
+            <Image w="5" src={item.icon} className="icon" />
+            <Image w="5" src={item.iconActivated} display={'none'} className="icon-activated" />
           </Link>
         ))}
       </Flex>

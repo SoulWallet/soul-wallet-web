@@ -30,14 +30,15 @@ export default function FindRoute({ children }: {children: ReactNode}) {
       navigate('/launch');
     }
 
-    if ((!addressList.length || !selectedAddress) && !isRecoverPage && !isCreatePage && !isAuthPage) {
+    // skip address check for now, need to be checked in temp
+    if (false && (!addressList.length || !selectedAddress) && !isRecoverPage && !isCreatePage && !isAuthPage) {
       navigate({
         pathname: '/launch',
         search: location.search,
       });
     } else if (isLaunchPage && addressList.length && selectedAddress) {
       navigate({
-        pathname: '/wallet',
+        pathname: '/dashboard',
       });
     }
   };

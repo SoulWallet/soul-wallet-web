@@ -38,7 +38,19 @@ export default function Guidance() {
   const currentStep = guideList[missingSteps[0]];
 
   return (
-    <Flex px="6" h="120px" gap="6" bg="#fff" rounded="20px" align={'center'} justify={'space-between'}>
+    <Flex
+      px="6"
+      h="160px"
+      gap="6"
+      mt="-16px"
+      bg="#fff"
+      w="380px"
+      border="1px solid #EAECF0"
+      boxShadow={'0px 4px 60px 0px rgba(44, 53, 131, 0.08)'}
+      rounded="20px"
+      align={'center'}
+      justify={'space-between'}
+    >
       <Flex flexDir={'column'} gap="1">
         <Text fontSize={'18px'} fontWeight={'800'} lineHeight={'24px'}>
           {currentStep.title}

@@ -8,7 +8,7 @@ import Pooling from './components/Pooling';
 import EnvCheck from './components/EnvCheck';
 import WagmiContext from './components/WagmiContext';
 
-export default function Layout() {
+export default function Wrapper() {
   return (
     <ChakraProvider theme={Theme} toastOptions={{ defaultOptions: { duration: 1000, position: 'top-right' } }}>
       <Fonts />

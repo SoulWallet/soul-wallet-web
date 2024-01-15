@@ -30,11 +30,12 @@ const theme = extendTheme({
     brand: {
       red: '#EC588D',
       redDarken: '#d8507f',
-      black: '#1E1E1E',
+      black: '#000',
+      white: '#fff',
       green: '#29510A',
       greenDarken: '#1b3507',
       gray: "#898989",
-      purple: "#6A52EF",
+      purple: "#7F56D9",
     },
   },
   breakpoints: {

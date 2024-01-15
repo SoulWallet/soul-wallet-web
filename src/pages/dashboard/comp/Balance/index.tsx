@@ -28,16 +28,7 @@ export default function Balance() {
   const walletName = getWalletName();
 
   return (
-    <HomeCard
-      title={'Balance'}
-      titleProps={{ display: { base: 'none', lg: 'block' } }}
-      external={<></>}
-      mt={{ base: '10px', lg: 'unset' }}
-      px="8"
-      overflow="none"
-      contentHeight="160px"
-      pos="relative"
-    >
+    <Box w="400px" zIndex={"20"} pt="14px" px="30px" pb="20px" rounded="20px" border="1px solid #EAECF0" bg="brand.white" boxShadow="0px 4px 30px 0px rgba(0, 0, 0, 0.05)">
       {walletName && (
         <Text color="#000" fontSize={'16px'} fontWeight={'600'} mb="4" fontFamily={'Martian'}>
           {walletName}
@@ -46,13 +37,8 @@ export default function Balance() {
       <Text mt={{ base: 4, lg: 'unset' }} fontSize={'48px'} fontWeight={'800'} lineHeight={'1'}>
         $0
       </Text>
-      {/* <Flex fontSize={'16px'} gap="1">
-        <Text color="#10c003" fontWeight={'700'}>
-          + $0 (0%)
-        </Text>
-        <Text fontWeight={'600'}>Past day</Text>
-      </Flex> */}
-      <Flex gap="2" align={'center'} pos="absolute" right="4" bottom="3" display={{ base: 'none', lg: 'flex' }}>
+
+      <Flex gap="2" align={'center'} right="4" bottom="3" display={{ base: 'none', lg: 'flex' }}>
         <Btn onClick={showClaimAssets}>
           <Image src={IconClaim} />
         </Btn>
@@ -61,7 +47,7 @@ export default function Balance() {
         </Btn>
       </Flex>
 
-      <Flex gap="2" mt="6" mb="2" align={'center'} display={{ base: 'flex', lg: 'none' }}>
+      <Flex gap="2" mt="6" mb="2" align={'center'}>
         <Button
           flex="1"
           py="3"
@@ -81,6 +67,6 @@ export default function Balance() {
           Send
         </Button>
       </Flex>
-    </HomeCard>
+    </Box>
   );
 }

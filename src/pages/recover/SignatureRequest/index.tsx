@@ -122,11 +122,11 @@ const SignatureRequest = ({ changeStep }: any) => {
   };
 
   const replaceWallet = async () => {
-    navigate('/wallet');
+    navigate('/dashboard');
   };
 
   const openWallet = async () => {
-    navigate('/wallet');
+    navigate('/dashboard');
   };
 
   if (!loaded && false) {

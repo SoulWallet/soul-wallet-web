@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import IconLink from '@/assets/icons/link.svg';
 import IconBookmark from '@/assets/icons/bookmark.svg';
 import IconPlus from '@/assets/icons/dapp-plus.svg';
-import HomeCard from '@/pages/wallet/comp/HomeCard';
+import HomeCard from '@/pages/dashboard/comp/HomeCard';
 
 const DappItem = ({ item }: any) => {
   return (
@@ -70,7 +70,7 @@ const AddDappItem = () => (
 
 export default function DappList() {
   return (
-    <HomeCard title="Apps">
+    <HomeCard title="Featured Dapps">
       <Grid
         templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
         rounded="20px"

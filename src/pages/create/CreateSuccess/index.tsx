@@ -135,7 +135,7 @@ export default function SetWalletName({ changeStep }: any) {
   const toast = useToast();
 
   const handleNext = async () => {
-    navigate('/wallet');
+    navigate('/dashboard');
   };
 
   return (

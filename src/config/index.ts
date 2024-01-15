@@ -1,9 +1,11 @@
 import IconTwitter from '@/assets/socials/twitter.svg';
 import IconTelegram from '@/assets/socials/telegram.svg';
 import IconGithub from '@/assets/socials/github.svg';
+import IconLinkedin from '@/assets/socials/linkedin.svg';
 import IconTwitterActivated from '@/assets/socials/twitter-activated.svg';
 import IconTelegramActivated from '@/assets/socials/telegram-activated.svg';
 import IconGithubActivated from '@/assets/socials/github-activated.svg';
+import IconLinkedinActivated from '@/assets/socials/linkedin-activated.svg';
 import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
 import IconEth from '@/assets/chains/eth.svg';
@@ -82,6 +84,11 @@ export default {
       icon: IconGithub,
       iconActivated: IconGithubActivated,
       link: 'https://github.com/SoulWallet',
+    },
+    {
+      icon: IconLinkedin,
+      iconActivated: IconLinkedinActivated,
+      link: 'https://www.linkedin.com/company/soul-wallet/',
     },
   ],
   magicValue: '0x1626ba7e',

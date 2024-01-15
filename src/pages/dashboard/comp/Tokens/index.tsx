@@ -15,7 +15,7 @@ export default function Tokens() {
   };
 
   return (
-    <HomeCard title={'Tokens'} external={<ExternalLink title="View all" to="/asset" />} contentHeight="290px">
+    <HomeCard title={'Assets'} external={<ExternalLink title="View all" to="/asset" />} contentHeight="290px">
       {tokenBalance.map((item: ITokenBalanceItem, idx: number) => (
         <React.Fragment key={idx}>
           {idx !== 0 && <Divider my="10px" />}

@@ -3,7 +3,7 @@ import { Box, Flex, Text, Divider, Image, Link } from '@chakra-ui/react';
 import BN from 'bignumber.js';
 import { numToFixed } from '@/lib/tools';
 import { toShortAddress, getIconMapping } from '@/lib/tools';
-import { IActivityItem } from '@/pages/wallet/comp/Activity/comp/ActivityItem';
+import { IActivityItem } from '@/pages/dashboard/comp/Activity/comp/ActivityItem';
 import { fetchHistoryApi } from '@/store/history';
 import { useAddressStore } from '@/store/address';
 import IconLoading from '@/assets/loading.svg';

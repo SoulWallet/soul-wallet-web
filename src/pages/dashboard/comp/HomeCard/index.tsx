@@ -22,9 +22,7 @@ export default function HomeCard({ title, external, contentHeight, titleProps, c
       </Flex>
       <Box
         h={{ lg: contentHeight }}
-        bg="#fff"
         rounded="20px"
-        p={{ base: 3, lg: 6 }}
         fontSize={'14px'}
         lineHeight={'1'}
         {...restProps}

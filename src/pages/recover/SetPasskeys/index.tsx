@@ -155,7 +155,7 @@ export default function SetPasskeys({ changeStep }: any) {
       await createInitialSlotInfo()
       await createInitialWallet()
       setIsConfirming(false)
-      navigate('/wallet')
+      navigate('/dashboard')
     } catch (error: any) {
       setIsConfirming(false)
       console.log('error', error)
