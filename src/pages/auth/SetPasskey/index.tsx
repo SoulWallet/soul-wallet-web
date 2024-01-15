@@ -1,15 +1,15 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import useBrowser from '@/hooks/useBrowser';
 import {
   Box,
   Text,
   Image,
-  useToast,
   Grid,
   GridItem,
   Flex,
   Popover,
   PopoverTrigger,
+  useToast
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -29,15 +29,62 @@ import PasskeyIcon from '@/components/Icons/Intro/Passkey'
 import AccountIcon from '@/components/Icons/Intro/Account'
 import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
+import usePassKey from '@/hooks/usePasskey';
+import { useCredentialStore } from '@/store/credential';
+import { useTempStore } from '@/store/temp';
 
 export default function SetPasskey() {
   const [added, setAdded] = useState(false)
+  const { createInfo, updateCreateInfo } = useTempStore()
+  const { register } = usePassKey()
+  const toast = useToast();
+  const {
+    addCredential,
+    credentials,
+    changeCredentialName,
+    walletName,
+    setSelectedCredentialId,
+  } = useCredentialStore();
+  const [isCreating, setIsCreating] = useState(false);
+  const { navigate } = useBrowser();
+  console.log('create', credentials)
 
   const addPasskey = useCallback(() => {
     setAdded(true)
   }, [])
 
-  if (added) {
+  const createWallet = async () => {
+    try {
+      setIsCreating(true);
+      const credentialKey = await register('');
+      addCredential(credentialKey);
+      setIsCreating(false);
+    } catch (error: any) {
+      console.log('ERR', error)
+      console.log('error', error);
+      setIsCreating(false);
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }
+
+  const skip = useCallback(() => {
+    navigate(`/dashboard`);
+  }, [])
+
+  const next = useCallback(() => {
+    navigate(`/dashboard`);
+  }, [])
+
+  useEffect(() => {
+    updateCreateInfo({
+      credentials
+    })
+  }, [credentials])
+
+  if (credentials && credentials.length) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
         <Box height="58px" padding="10px 20px">
@@ -95,34 +142,48 @@ export default function SetPasskey() {
                   *If you're an Apple user, you can even sync your passkey across all devices end to end encrypted via icloud keychain.
                 </TextBody>
                 <Box display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" mb="4">
-                  <Box background="white" borderRadius="16px" padding="16px" width="100%" marginBottom="4px">
-                    <Box display="flex" alignItems="center">
-                      <Box width="50px" height="50px" background="#efefef" borderRadius="50px" marginRight="16px" display="flex" alignItems="center" justifyContent="center"><ComputerIcon /></Box>
-                      <Box>
-                        <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="800">
-                          Chrome on Mac
-                        </Text>
-                        <Text color="rgb(51, 51, 51)" fontSize="14px">
-                          Created on: 12/14/2023 12:12:09
-                        </Text>
+                  {credentials.map((passKey: any) =>
+                    <Box background="white" borderRadius="16px" padding="16px" width="100%" marginBottom="4px">
+                      <Box display="flex" alignItems="center">
+                        <Box width="50px" height="50px" background="#efefef" borderRadius="50px" marginRight="16px" display="flex" alignItems="center" justifyContent="center"><ComputerIcon /></Box>
+                        <Box>
+                          <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="800">
+                            {passKey.name}
+                          </Text>
+                          <Text color="rgb(51, 51, 51)" fontSize="14px">
+                            Created on: 12/14/2023 12:12:09
+                          </Text>
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  )}
                 </Box>
-                <Button
-                  width="275px"
-                  maxWidth="100%"
-                  theme="light"
+                <Box
+                  width="100%"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
                 >
-                  <Box marginRight="8px"><PlusIcon color="black" /></Box>
-                  Add Another Passkey
-                </Button>
+                  <Button
+                    width="275px"
+                    maxWidth="100%"
+                    theme="light"
+                    disabled={isCreating}
+                    loading={isCreating}
+                    onClick={createWallet}
+                    margin="0 auto"
+                  >
+                    <Box marginRight="8px"><PlusIcon color="black" /></Box>
+                    Add Another Passkey
+                  </Button>
+                </Box>
               </Box>
               <Box>
                 <Button
                   width="80px"
                   theme="light"
                   marginRight="18px"
+                  onClik={skip}
                 >
                   Skip
                 </Button>
@@ -224,6 +285,9 @@ export default function SetPasskey() {
                   width="275px"
                   maxWidth="100%"
                   theme="light"
+                  disabled={isCreating}
+                  loading={isCreating}
+                  onClick={createWallet}
                 >
                   <Box marginRight="8px"><PlusIcon color="black" /></Box>
                   Add Passkey
@@ -242,7 +306,8 @@ export default function SetPasskey() {
                 width="115px"
                 maxWidth="100%"
                 theme="dark"
-                onClick={addPasskey}
+                onClick={next}
+                disabled={isCreating || !credentials.length}
               >
                 Continue
               </Button>

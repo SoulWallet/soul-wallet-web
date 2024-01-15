@@ -93,7 +93,7 @@ export default function Button({
       {...moreProps}
       onClick={onClick}
       _hover={_hover || (theme === 'dark' ? { background: 'black' } : { background: 'white' })}
-      _disabled={{ opacity: '0.7', cursor: 'not-allowed' }}
+      _disabled={{ opacity: '0.6', cursor: 'not-allowed' }}
       isDisabled={disabled}
       bg="brand.black"
       {...getStyles(type, theme, themeColor)}
