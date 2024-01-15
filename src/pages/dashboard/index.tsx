@@ -16,7 +16,7 @@ export default function Dashboard() {
     <DashboardLayout>
       <Flex gap="50px" h="100%">
         <Flex h="100%" flexDir={'column'} justify={'center'} align={'center'}>
-          <AccountSelectFull display={{ base: 'flex', lg: 'none' }} w="100%" />
+          {/* <AccountSelectFull display={{ base: 'flex', lg: 'none' }} w="100%" /> */}
           <Balance />
           <Guidance />
         </Flex>

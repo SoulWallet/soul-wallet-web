@@ -1,10 +1,13 @@
 import { Box, Flex, Image, Button, Text } from '@chakra-ui/react';
 import { sidebarLinks } from '@/config/constants';
 import { Link, useLocation } from 'react-router-dom';
+import useWalletContext from '@/context/hooks/useWalletContext';
 import Footer from '../Footer';
 
 export default function Sidebar() {
   const location = useLocation();
+  const { showTransferAssets, showClaimAssets } = useWalletContext();
+
   const pathname = location.pathname;
 
   return (

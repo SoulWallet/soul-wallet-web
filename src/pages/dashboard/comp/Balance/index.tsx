@@ -3,23 +3,18 @@ import HomeCard from '../HomeCard';
 import Button from '@/components/Button';
 import { ethers } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import IconClaim from '@/assets/icons/claim.svg';
-import IconShare from '@/assets/icons/share.svg';
-import { useCredentialStore } from '@/store/credential';
+import IconSend from '@/assets/icons/wallet/send.svg';
+import IconReceive from '@/assets/icons/wallet/receive.svg';
+import IconSwap from '@/assets/icons/wallet/swap.svg';
+import IconView from '@/assets/icons/wallet/view.svg';
+import IconEdit from '@/assets/icons/edit.svg';
 import useConfig from '@/hooks/useConfig';
 import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
-
-const Btn = ({ children, ...restProps }: any) => {
-  return (
-    <Box p="10px" bg="#f2f2f2" cursor={'pointer'} rounded="full" {...restProps}>
-      {children}
-    </Box>
-  );
-};
+import AddressIcon from '@/components/AddressIcon';
 
 export default function Balance() {
-  const { showTransferAssets, showClaimAssets } = useWalletContext();
+  const { showTransferAssets } = useWalletContext();
   const { getWalletName } = useTools();
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
@@ -27,45 +22,78 @@ export default function Balance() {
 
   const walletName = getWalletName();
 
+  const actions = [
+    {
+      title: 'Send',
+      icon: IconSend,
+      onClick: () => {
+        showTransferAssets(ethers.ZeroAddress, 'send');
+      },
+    },
+    {
+      title: 'Receive',
+      icon: IconReceive,
+      onClick: () => {
+        showTransferAssets(ethers.ZeroAddress, 'receive');
+      },
+    },
+    {
+      title: 'Swap',
+      icon: IconSwap,
+      onClick: () => {},
+    },
+    {
+      title: 'View',
+      icon: IconView,
+      onClick: () => {
+        window.open(`${scanUrl}/address/${selectedAddress}`, '_blank');
+      },
+    },
+  ];
+
   return (
-    <Box w="400px" zIndex={"20"} pt="14px" px="30px" pb="20px" rounded="20px" border="1px solid #EAECF0" bg="brand.white" boxShadow="0px 4px 30px 0px rgba(0, 0, 0, 0.05)">
-      {walletName && (
+    <Box
+      w="400px"
+      zIndex={'20'}
+      pt="14px"
+      px="30px"
+      pb="20px"
+      rounded="20px"
+      border="1px solid #EAECF0"
+      bg="brand.white"
+      boxShadow="0px 4px 30px 0px rgba(0, 0, 0, 0.05)"
+    >
+      {/* {walletName && (
         <Text color="#000" fontSize={'16px'} fontWeight={'600'} mb="4" fontFamily={'Martian'}>
           {walletName}
         </Text>
-      )}
-      <Text mt={{ base: 4, lg: 'unset' }} fontSize={'48px'} fontWeight={'800'} lineHeight={'1'}>
-        $0
-      </Text>
-
-      <Flex gap="2" align={'center'} right="4" bottom="3" display={{ base: 'none', lg: 'flex' }}>
-        <Btn onClick={showClaimAssets}>
-          <Image src={IconClaim} />
-        </Btn>
-        <Btn as={Link} href={`${scanUrl}/address/${selectedAddress}`} target="_blank">
-          <Image src={IconShare} />
-        </Btn>
+      )} */}
+      <Flex align={'center'}>
+        <AddressIcon address="12345" width={32} />
+        <Box w="2" />
+        <Text fontWeight={'800'} fontSize={'18px'}>
+          Wallet_1
+        </Text>
+        <Box w="1" />
+        <Image src={IconEdit} w="5" cursor={'pointer'} />
       </Flex>
-
-      <Flex gap="2" mt="6" mb="2" align={'center'}>
-        <Button
-          flex="1"
-          py="3"
-          onClick={() => {
-            showTransferAssets(ethers.ZeroAddress, 'receive');
-          }}
-        >
-          Receive
-        </Button>
-        <Button
-          flex="1"
-          py="3"
-          onClick={() => {
-            showTransferAssets(ethers.ZeroAddress, 'send');
-          }}
-        >
-          Send
-        </Button>
+      <Flex align={'center'} mt="24px" mb="20px" gap="2px">
+        <Text fontWeight={'700'} fontSize={'24px'} lineHeight={'1'}>
+          $
+        </Text>
+        <Text fontWeight={'800'} fontSize={'72px'} lineHeight={'1'}>
+          0
+        </Text>
+      </Flex>
+      <Flex gap="6" align={'center'}>
+        {actions.map((item, index) => (
+          <Box key={index} cursor={'pointer'} textAlign={'center'} onClick={item.onClick}>
+            <Image src={item.icon} mb="2px" w="8" mx="auto" />
+            <Text fontSize={'12px'} fontWeight={'600'} lineHeight={'1.25'} color="#5b606d">
+              {item.title}
+            </Text>
+          </Box>
+        ))}
       </Flex>
     </Box>
   );
