@@ -71,17 +71,22 @@ export default function SetPasskey() {
   }
 
   const skip = useCallback(() => {
+    console.log('skip')
     navigate(`/dashboard`);
   }, [])
 
   const next = useCallback(() => {
+    updateCreateInfo({
+      credentials
+    })
+
     navigate(`/dashboard`);
   }, [])
 
   useEffect(() => {
-    updateCreateInfo({
-      credentials
-    })
+    /* updateCreateInfo({
+     *   credentials
+     * }) */
   }, [credentials])
 
   if (credentials && credentials.length) {
@@ -183,7 +188,7 @@ export default function SetPasskey() {
                   width="80px"
                   theme="light"
                   marginRight="18px"
-                  onClik={skip}
+                  onClick={skip}
                 >
                   Skip
                 </Button>
@@ -191,7 +196,7 @@ export default function SetPasskey() {
                   width="115px"
                   maxWidth="100%"
                   theme="dark"
-                  onClick={addPasskey}
+                  onClick={next}
                 >
                   Continue
                 </Button>
@@ -299,6 +304,7 @@ export default function SetPasskey() {
                 width="80px"
                 theme="light"
                 marginRight="18px"
+                onClick={skip}
               >
                 Skip
               </Button>
