@@ -8,7 +8,7 @@ import AppContainer from '@/components/AppContainer';
 import DappList from '@/components/DappList';
 import Footer from '@/components/Footer';
 import { AccountSelectFull } from '@/components/AccountSelect';
-import Guidance from './comp/Guidance';
+import SetGuardianHint from './comp/SetGuardianHint';
 import DashboardLayout from '@/components/Layouts/DashboardLayout';
 
 export default function Dashboard() {
@@ -18,7 +18,7 @@ export default function Dashboard() {
         <Flex h="100%" flexDir={'column'} justify={'center'} align={'center'}>
           {/* <AccountSelectFull display={{ base: 'flex', lg: 'none' }} w="100%" /> */}
           <Balance />
-          <Guidance />
+          <SetGuardianHint />
         </Flex>
         <Box h="100%" bg="brand.white" py="30px" px="64px" borderLeft={'1px solid #EAECF0'}>
           <Tokens />
