@@ -81,7 +81,7 @@ export default function SetPasskey() {
     })
 
     navigate(`/dashboard`);
-  }, [])
+  }, [credentials])
 
   useEffect(() => {
     /* updateCreateInfo({

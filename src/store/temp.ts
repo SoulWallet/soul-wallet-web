@@ -18,7 +18,7 @@ const createStagingSlice = immer<any>((set, get) => ({
 
 export const useTempStore = create<any>()(
   persist((...set) => ({ ...createStagingSlice(...set) }), {
-    name: 'staging-storage',
+    name: 'temp-storage',
     version: 3,
   }),
 );
