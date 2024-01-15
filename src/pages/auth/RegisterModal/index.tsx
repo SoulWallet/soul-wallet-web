@@ -50,7 +50,7 @@ export default function RegisterModal({ isOpen, onClose, startLogin }: any) {
           gap="5"
           fontWeight="800"
           textAlign="center"
-          borderBottom="1px solid #d7d7d7"
+          // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
           Create a Soul wallet
