@@ -6,19 +6,19 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 
-export interface ITempStore {
-    creatingGuardiansInfo: any;
-    creatingCredentialsInfo: any;
-}
-
-const createStagingSlice = immer<ITempStore>((set, get) => ({
-    creatingGuardiansInfo: {},
-    creatingCredentialsInfo: {},
+const createStagingSlice = immer<any>((set, get) => ({
+  createInfo: {},
+  updateCreateInfo: (value: any) => set({
+    createInfo: {
+      ...get().createInfo,
+      ...value
+    }
+  }),
 }));
 
-export const useTempStore = create<ITempStore>()(
+export const useTempStore = create<any>()(
   persist((...set) => ({ ...createStagingSlice(...set) }), {
-    name: 'staging-storage',
+    name: 'temp-storage',
     version: 3,
   }),
 );

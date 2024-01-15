@@ -26,6 +26,9 @@ import PasskeyIcon from '@/components/Icons/Intro/Passkey'
 import AccountIcon from '@/components/Icons/Intro/Account'
 import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
+import { useAccount } from 'wagmi'
+import { useConnect } from 'wagmi'
+import { useTempStore } from '@/store/temp';
 import SetPasskey from './SetPasskey'
 import LoginModal from './LoginModal'
 import RegisterModal from './RegisterModal'
@@ -33,9 +36,17 @@ import SelectAccountModal from './SelectAccountModal'
 
 export default function Auth() {
   const [step, setStep] = useState(0)
+  const [authMethod, setAuthMethod] = useState('eoa')
   const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isConnectAtive, setIsConnectAtive] = useState(false)
+  const [activeConnector, setActiveConnector] = useState()
   const [isRegisterOpen, setIsRegisterOpen] = useState(false)
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false)
+  const { connect } = useConnect()
+  const { createInfo, updateCreateInfo } = useTempStore()
+  const account = useAccount()
+  const { address, isConnected, isConnecting } = account
+  console.log('address', account, isConnecting, createInfo)
 
   const nextStep = useCallback(() => {
     setStep(step + 1)
@@ -70,7 +81,33 @@ export default function Auth() {
     setIsSelectAccountOpen(true)
   }, [])
 
-  if (step === 1) {
+  const connectEOA = useCallback(async (connector: any) => {
+    setIsConnectAtive(true)
+    connect({ connector })
+    setActiveConnector(connector)
+  }, [])
+
+  const startAuthWithPasskey = useCallback(() => {
+    setIsConnectAtive(true)
+    setAuthMethod('passkey')
+    closeRegister()
+  }, [])
+
+  const startAuthWithEOA = useCallback((address: any) => {
+    setIsConnectAtive(true)
+    setAuthMethod('eoa')
+    closeRegister()
+    updateCreateInfo({
+      eoaAddress: address
+    })
+    setStep(1)
+  }, [])
+
+  const jumpToHome = useCallback(() => {
+
+  }, [])
+
+  if (step === 1 || authMethod === 'passkey') {
     return (
       <SetPasskey />
     )
@@ -215,9 +252,28 @@ export default function Auth() {
             <Box padding="10px"><GithubIcon /></Box>
           </Box>
         </Box>
-        <LoginModal isOpen={isLoginOpen} onClose={closeLogin} startLogin={startLogin} />
-        <RegisterModal isOpen={isRegisterOpen} onClose={closeRegister} />
-        <SelectAccountModal isOpen={isSelectAccountOpen} onClose={closeSelectAccount} />
+        <LoginModal
+          isOpen={isLoginOpen}
+          onClose={closeLogin}
+          startLogin={startLogin}
+          isConnecting={isConnecting}
+        />
+        <RegisterModal
+          isOpen={isRegisterOpen}
+          onClose={closeRegister}
+          connectEOA={connectEOA}
+          isConnecting={isConnecting}
+          isConnected={isConnected}
+          isConnectAtive={isConnectAtive}
+          startAuthWithPasskey={startAuthWithPasskey}
+          startAuthWithEOA={startAuthWithEOA}
+          activeConnector={activeConnector}
+          address={address}
+        />
+        <SelectAccountModal
+          isOpen={isSelectAccountOpen}
+          onClose={closeSelectAccount}
+        />
       </Box>
     </Box>
   )

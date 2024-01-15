@@ -36,7 +36,7 @@ import BinanceIcon from '@/assets/wallets/binance.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
 import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
 
-export default function LoginModal({ isOpen, onClose, startLogin }: any) {
+export default function LoginModal({ isOpen, onClose, startLogin, isConnecting }: any) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
