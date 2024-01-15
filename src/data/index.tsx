@@ -1,5 +1,5 @@
-import IconUniswap from '@/assets/dapps/uniswap.png';
-import IconAave from '@/assets/dapps/aave.png';
+import IconUniswap from '@/assets/dapps/uniswap.svg';
+import IconAave from '@/assets/dapps/aave.svg';
 import IconLucky from '@/assets/dapps/lucky.png';
 import IconFeature0 from '@/assets/icons/features/0.svg';
 import IconFeature1 from '@/assets/icons/features/1.svg';
@@ -23,26 +23,26 @@ export const dappList = [
     desc: 'Earn interest, borrow assets, and build applications',
     isExternal: false,
   },
-  {
-    icon: IconLucky,
-    title: 'Lucky coin',
-    category: 'DeFi',
-    url: 'https://lucky-alpha.soulwallet.io',
-    desc: 'Get 3 free mint per day for free, earn your Lucky coin here!',
-    isExternal: true,
-  },
-  ...(import.meta.env.VITE_BRANCH === 'alpha'
-  ? [
-      {
-        icon: IconLucky,
-        title: 'Lucky coin',
-        category: 'DeFi',
-        url: 'https://lucky-alpha.soulwallet.io',
-        desc: 'Get 3 free mint per day for free, earn your Lucky coin here!',
-        isExternal: true,
-      },
-    ]
-  : []),
+  // {
+  //   icon: IconLucky,
+  //   title: 'Lucky coin',
+  //   category: 'DeFi',
+  //   url: 'https://lucky-alpha.soulwallet.io',
+  //   desc: 'Get 3 free mint per day for free, earn your Lucky coin here!',
+  //   isExternal: true,
+  // },
+  // ...(import.meta.env.VITE_BRANCH === 'alpha'
+  // ? [
+  //     {
+  //       icon: IconLucky,
+  //       title: 'Lucky coin',
+  //       category: 'DeFi',
+  //       url: 'https://lucky-alpha.soulwallet.io',
+  //       desc: 'Get 3 free mint per day for free, earn your Lucky coin here!',
+  //       isExternal: true,
+  //     },
+  //   ]
+  // : []),
   // {
   //   icon: IconDefault,
   //   title: 'Local Dapp',

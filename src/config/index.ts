@@ -6,9 +6,12 @@ import IconTwitterActivated from '@/assets/socials/twitter-activated.svg';
 import IconTelegramActivated from '@/assets/socials/telegram-activated.svg';
 import IconGithubActivated from '@/assets/socials/github-activated.svg';
 import IconLinkedinActivated from '@/assets/socials/linkedin-activated.svg';
-import IconOp from '@/assets/chains/op.svg';
-import IconArb from '@/assets/chains/arb.svg';
-import IconEth from '@/assets/chains/eth.svg';
+// import IconOp from '@/assets/chains/op.svg';
+// import IconArb from '@/assets/chains/arb.svg';
+// import IconEth from '@/assets/chains/eth.svg';
+import IconEthSquare from '@/assets/chains/eth-square.svg';
+import IconOpSquare from '@/assets/chains/op-square.svg';
+import IconArbSquare from '@/assets/chains/arb-square.svg';
 import ArbConfig from './chains/arb-sepolia';
 import OpConfig from './chains/op-sepolia';
 import BaseConfig from './chains/sepolia';
@@ -27,27 +30,27 @@ export const chainIdMapping = {
 // get all chainId mapping, especially for switch chain.
 export const chainMapping = {
   '0x1': {
-    icon: IconEth,
+    icon: IconEthSquare,
     name: 'Ethereum',
   },
   '0x5': {
-    icon: IconEth,
+    icon: IconEthSquare,
     name: 'Goerli',
   },
   '0xa': {
-    icon: IconOp,
+    icon: IconOpSquare,
     name: 'Optimism',
   },
   '0x1a4': {
-    icon: IconOp,
+    icon: IconOpSquare,
     name: 'Optimism Goerli',
   },
   '0xa4b1': {
-    icon: IconArb,
+    icon: IconArbSquare,
     name: 'Arbitrum',
   },
   '0x66eed': {
-    icon: IconArb,
+    icon: IconArbSquare,
     name: 'Arbitrum Goerli',
   },
 };

@@ -31,6 +31,7 @@ export default function FindRoute({ children }: {children: ReactNode}) {
     }
 
     // skip address check for now, need to be checked in temp
+    // mock alert
     if (false && (!addressList.length || !selectedAddress) && !isRecoverPage && !isCreatePage && !isAuthPage) {
       navigate({
         pathname: '/launch',

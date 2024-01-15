@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, Box, useToast } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
@@ -21,8 +21,8 @@ const CreateAccount = () => {
   const { saveAddressName } = useSettingStore();
 
   const doCreate = async () => {
-    if(creating){
-      return
+    if (creating) {
+      return;
     }
     setCreating(true);
     const newIndex = addressList.length;
@@ -48,10 +48,10 @@ const CreateAccount = () => {
 export function AccountSelectFull({ ...restProps }) {
   const { selectedAddress } = useAddressStore();
   const { doCopy } = useTools();
- 
+
   return (
     <Flex align={'center'} gap="2px" {...restProps}>
-      <AccountSelect pl={{base: "3", lg: "4"}} wrapperProps={{ w: { base: '50%', lg: 'unset' } }} />
+      <AccountSelect pl={{ base: '3', lg: '4' }} wrapperProps={{ w: { base: '50%', lg: 'unset' } }} />
       <Flex
         w={{ base: '50%', lg: 'unset' }}
         gap="1"
@@ -61,9 +61,9 @@ export function AccountSelectFull({ ...restProps }) {
         roundedRight={'full'}
         bg={{ base: '#fff', lg: '#f2f2f2' }}
       >
-        <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
+        {/* <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
           {toShortAddress(selectedAddress, 5, 4)}
-        </Text>
+        </Text> */}
         <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy(selectedAddress)} />
       </Flex>
     </Flex>
@@ -72,14 +72,22 @@ export function AccountSelectFull({ ...restProps }) {
 
 export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ...restProps }: any) {
   const { navigate } = useBrowser();
-  const { selectedAddressItem } = useConfig();
-  const {getAddressName } = useSettingStore();
-  const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
+  const { selectedAddressItem, selectedChainItem } = useConfig();
+  const { getAddressName } = useSettingStore();
+  const { addressList, setAddressList, selectedAddress, setSelectedAddress } = useAddressStore();
 
-  if (!selectedAddress) {
-    return;
-  }
-
+  useEffect(() => {
+    setAddressList([
+      {
+        address: '0x1277d149314bB96292ec2B135D5caa5AB02Fb2D6',
+        activatedChains: [],
+      },
+      {
+        address: '0x1277d149314bB96292ec2B135D5caa5AB02Fb2D4',
+        activatedChains: [],
+      },
+    ]);
+  }, []);
   return (
     <Menu>
       {({ isOpen }) => (
@@ -87,22 +95,30 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
           <MenuButton data-testid="btn-account-select" {...wrapperProps}>
             <Flex
               align="center"
-              gap="2px"
               px="3"
               py="10px"
               h="40px"
               bg={isInModal ? 'transparent' : { base: '#fff', lg: '#f2f2f2' }}
-              fontWeight={'800'}
               roundedLeft={'full'}
               cursor={'pointer'}
               _hover={{ color: 'brand.red' }}
               onClick={() => navigate('/accounts')}
               {...restProps}
             >
-              {isInModal && selectedAddressItem && <Text>{getAddressName(selectedAddress)} ({toShortAddress(selectedAddress, 4, 6)})</Text>}
-              {!isInModal && labelType === 'title' && selectedAddressItem && <Text>{getAddressName(selectedAddress)}</Text>}
-              {!isInModal && labelType === 'address' && selectedAddressItem && (
-                <Text>{toShortAddress(selectedAddressItem.address, 4, 6)}</Text>
+              {isInModal && selectedAddressItem && (
+                <Text>
+                  {getAddressName(selectedAddress)} ({toShortAddress(selectedAddress, 4, 6)})
+                </Text>
+              )}
+              {!isInModal && selectedAddressItem && (
+                <Flex mr="1" align={'center'}>
+                  <Image w="5" h="5" src={selectedChainItem.icon} />
+                  <Text ml="2" fontWeight={'700'}>
+                    {selectedChainItem.chainName}
+                  </Text>
+                  &nbsp;
+                  <Text fontWeight={'600'}>({toShortAddress(selectedAddressItem.address, 5, 5)})</Text>
+                </Flex>
               )}
               <Image src={IconCheveronRight} w="20px" h="20px" transform={isOpen ? 'rotate(90deg)' : 'none'} />
             </Flex>
@@ -132,8 +148,8 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                 </React.Fragment>
               );
             })}
-            <MenuDivider />
-            <CreateAccount />
+            {/* <MenuDivider />
+            <CreateAccount /> */}
             {/* <DestroyAccount /> */}
           </MenuList>
         </>

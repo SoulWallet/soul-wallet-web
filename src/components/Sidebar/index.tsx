@@ -6,11 +6,10 @@ import IconGuide from '@/assets/icons/guide.svg';
 import IconClaim from '@/assets/icons/claim.svg';
 import IconFeedback from '@/assets/icons/feedback.svg';
 import Footer from '../Footer';
-import { ReactNode } from 'react';
 import { guideList } from '@/data';
 import { useSettingStore } from '@/store/setting';
 
-const ExtraLink = ({ children, ...restProps }: { children: ReactNode } & FlexProps) => {
+const ExtraLink = ({ children, ...restProps }: FlexProps) => {
   return (
     <Flex whiteSpace={'nowrap'} align={'center'} pos={'relative'} gap="2" cursor={'pointer'} {...restProps}>
       {children}
@@ -21,7 +20,7 @@ const ExtraLink = ({ children, ...restProps }: { children: ReactNode } & FlexPro
 export default function Sidebar() {
   const location = useLocation();
   const { finishedSteps } = useSettingStore();
-  const { showTransferAssets, showClaimAssets, showTestGuide } = useWalletContext();
+  const { showClaimAssets, showTestGuide } = useWalletContext();
 
   const pathname = location.pathname;
 
@@ -67,8 +66,10 @@ export default function Sidebar() {
           </ExtraLink>
           <ExtraLink onClick={() => showClaimAssets()}>
             <Image src={IconClaim} />
-            <Text>Claim test tokens</Text>
-            <Box bg="#ff2e79" w="6px" h="6px" rounded={'full'} pos="absolute" right={'-8px'} top="2px" />
+            <Box pos={'relative'}>
+              <Text>Claim test tokens</Text>
+              <Box bg="#ff2e79" w="6px" h="6px" rounded={'full'} pos="absolute" right={'-8px'} top="2px" />
+            </Box>
           </ExtraLink>
           <ExtraLink>
             <Image src={IconFeedback} />

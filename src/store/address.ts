@@ -22,13 +22,13 @@ export interface IAddressStore {
   getIsActivated: (address: string, chainId: string) => boolean;
   getSelectedAddressItem: () => IAddressItem;
   clearAddressList: () => void;
-
 }
 
 export const getIndexByAddress = (addressList: IAddressItem[], address: string) => {
   return addressList.findIndex((item: IAddressItem) => item.address.toLowerCase() === address.toLowerCase());
 };
 
+// mock alert!
 const createAddressSlice = immer<IAddressStore>((set, get) => ({
   selectedAddress: '',
   addressList: [],
@@ -48,11 +48,11 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
     });
   },
 
-  clearAddresses: () =>{
-    set(state=>{
+  clearAddresses: () => {
+    set((state) => {
       state.addressList = [];
       state.selectedAddress = '';
-    })
+    });
   },
   addAddressItem: (addressItem: IAddressItem) => {
     set((state) => {
