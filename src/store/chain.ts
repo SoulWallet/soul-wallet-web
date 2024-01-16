@@ -13,6 +13,7 @@ interface IChainItem {
   provider: string;
   bundlerUrl: string;
   recovering: boolean;
+  addressPrefix: string;
 }
 
 interface IChainStore {

@@ -15,15 +15,15 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       <Flex gap="50px" h="100%">
-        <Flex h="100%" flexDir={'column'} justify={'center'} align={'center'}>
+        <Flex w="40%" h="100%" flexDir={'column'} justify={'center'} align={'center'}>
           {/* <AccountSelectFull display={{ base: 'flex', lg: 'none' }} w="100%" /> */}
           <Balance />
           <SetGuardianHint />
         </Flex>
-        <Box h="100%" bg="brand.white" py="30px" px="64px" borderLeft={'1px solid #EAECF0'}>
-          <Tokens />
+        <Flex flexDir={'column'} w="60%" h="100%" bg="brand.white" py="30px" px="64px" borderLeft={'1px solid #EAECF0'}>
+          <Tokens  />
           <DappList />
-        </Box>
+        </Flex>
       </Flex>
 
       {/* <Activity />

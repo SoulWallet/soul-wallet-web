@@ -8,19 +8,19 @@ import IconFeature3 from '@/assets/icons/features/3.svg';
 
 export const dappList = [
   {
-    icon: IconUniswap,
-    title: 'Uniswap',
-    category: 'DeFi',
-    url: 'https://app.uniswap.org',
-    desc: 'Swap or provide liquidity on the Uniswap protocol',
-    isExternal: false,
-  },
-  {
     icon: IconAave,
     title: 'AAVE',
     category: 'DeFi',
     url: 'https://staging.aave.com',
     desc: 'Earn interest, borrow assets, and build applications',
+    isExternal: false,
+  },
+  {
+    icon: IconUniswap,
+    title: 'Uniswap',
+    category: 'DeFi',
+    url: 'https://app.uniswap.org',
+    desc: 'Swap or provide liquidity on the Uniswap protocol',
     isExternal: false,
   },
   // {

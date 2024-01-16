@@ -5,16 +5,16 @@ import { guideList } from '@/data';
 import api from '@/lib/api';
 import ImgArrowUp from '@/assets/icons/arrow-up.svg';
 import { useSlotStore } from '@/store/slot';
-import { useAddressStore } from '@/store/address';
-import { findMissingNumbers } from '@/lib/tools';
+// import { useAddressStore } from '@/store/address';
+// import { findMissingNumbers } from '@/lib/tools';
 import useTools from '@/hooks/useTools';
 import { useSettingStore } from '@/store/setting';
 
 export default function SetGuardianHint() {
   const { slotInfo } = useSlotStore();
-  const { setFinishedSteps, finishedSteps } = useSettingStore();
+  const { setFinishedSteps } = useSettingStore();
   const { goGuideAction } = useTools();
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(true);
 
   const checkSteps = async () => {
     const res = await api.operation.finishStep({
@@ -28,6 +28,10 @@ export default function SetGuardianHint() {
   useEffect(() => {
     checkSteps();
   }, []);
+
+  if(slotInfo.initialGuardianHash){
+    return
+  }
 
   return (
     <Box

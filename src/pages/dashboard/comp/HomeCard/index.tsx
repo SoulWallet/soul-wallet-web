@@ -1,35 +1,32 @@
 import { Flex, Text, Box, Image } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import IconChevronRight from '@/assets/icons/chevron-right.svg';
+// import IconChevronRight from '@/assets/icons/chevron-right.svg';
 
 export const ExternalLink = ({ title, to }: any) => {
   return (
-    <Flex as={Link} to={to} gap="1">
-      <Text fontWeight={'800'}>{title}</Text>
-      <Image w="5" src={IconChevronRight} />
+    <Flex as={Link} to={to}>
+      <Text color="#5B606D" fontWeight={'600'}>
+        {title}
+      </Text>
+      {/* <Image w="5" src={IconChevronRight} /> */}
     </Flex>
   );
 };
 
-export default function HomeCard({ title, external, contentHeight, titleProps, children, ...restProps }: any) {
+export default function HomeCard({ title, external, h, titleProps, children, ...restProps }: any) {
   return (
-    <Box>
-      <Flex align="center" justify={'space-between'} mb="4px">
-        <Text fontSize={{ base: '24px', lg: '32px' }} fontWeight={'800'} color="#000" {...titleProps}>
+    <Box h={h}>
+      <Flex align="center" justify={'space-between'}>
+        <Text fontSize={{ base: '20px', lg: '28px' }} fontWeight={'800'} color="brand.black" {...titleProps}>
           {title}
         </Text>
         {external}
       </Flex>
-      <Box
-        h={{ lg: contentHeight }}
-        rounded="20px"
-        fontSize={'14px'}
-        lineHeight={'1'}
-        {...restProps}
-      >
-        <Box overflowY={'auto'} h="100%" w="100%">
-          {children}
-        </Box>
+      <Box h="1px" bg="rgba(0,0,0,.5)" opacity={0.2} mt="4" />
+      <Box {...restProps} pos="relative" pt="30px">
+        {/* <Box overflowY={'auto'} h="100%" w="100%"> */}
+        {children}
+        {/* </Box> */}
       </Box>
     </Box>
   );

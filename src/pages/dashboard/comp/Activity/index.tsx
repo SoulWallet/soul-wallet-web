@@ -16,7 +16,7 @@ export default function Activity() {
   const { historyList } = useHistoryStore();
 
   return (
-    <HomeCard title={'Activity'} external={<ExternalLink title="View all" to="/activity" />} contentHeight="290px">
+    <HomeCard title={'Activity'} external={<ExternalLink title="View all" to="/activity" />}>
       {!historyList ||
         (historyList.length === 0 && (
           <>

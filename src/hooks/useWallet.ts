@@ -17,6 +17,7 @@ import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useSettingStore } from '@/store/setting';
+import { useTempStore } from '@/store/temp';
 
 interface Execution {
   to: string;
@@ -34,9 +35,37 @@ export default function useWallet() {
   const { slotInfo, setSlotInfo } = useSlotStore();
   const { updateChainItem, setSelectedChainId, selectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useCredentialStore();
-  const { soulWallet, calcWalletAddress } = useSdk();
+  const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
   const { saveAddressName } = useSettingStore();
+  const { createInfo } = useTempStore();
+
+  const createWallet = async() => {
+    // retrieve info from temp store
+    const { credentials, eoaAddress, initialGuardianHash, initialGuardianSafePeriod} = createInfo;
+
+    const credentialKeys = credentials.map((item: any) => item.publicKey);
+    const initialKeys = [...credentialKeys, ...[eoaAddress]].filter((item) => item);
+
+    const initialKeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
+    const initialKeyHash = L1KeyStore.getKeyHash(initialKeysAddress);
+
+    const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
+
+    setSlotInfo({
+      initialKeys,
+      initialKeyHash,
+      initialKeysAddress,
+      slot,
+      initialGuardianHash,
+      initialGuardianSafePeriod,
+    });
+
+    const addresses = await calcWalletAddressAllChains(0);
+
+    console.log('addresss', addresses)
+
+  }
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
@@ -228,6 +257,8 @@ export default function useWallet() {
     setCredentials([credentialKey]);
   };
 
+
+
   const retrieveSlotInfo = (initInfo: any) => {
     // set slot info
     const initialKeysAddress = L1KeyStore.initialKeysToAddress(initInfo.initialKeys);
@@ -323,6 +354,7 @@ export default function useWallet() {
   };
 
   return {
+    createWallet,
     addPaymasterAndData,
     getActivateOp,
     getSetGuardianCalldata,

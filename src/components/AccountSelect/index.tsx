@@ -76,19 +76,19 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
   const { getAddressName } = useSettingStore();
   const { addressList, setAddressList, selectedAddress, setSelectedAddress } = useAddressStore();
 
-  useEffect(() => {
-    setAddressList([
-      {
-        address: '0x1277d149314bB96292ec2B135D5caa5AB02Fb2D6',
-        activatedChains: [],
-      },
-      {
-        address: '0x1277d149314bB96292ec2B135D5caa5AB02Fb2D4',
-        activatedChains: [],
-      },
-    ]);
-  }, []);
-  return (
+  // useEffect(() => {
+  //   setAddressList([
+  //     {
+  //       address: '0x1277d149314bB96292ec2B135D5caa5AB02Fb2D6',
+  //       activatedChains: [],
+  //     },
+  //     {
+  //       address: '0x1277d149314bB96292ec2B135D5caa5AB02Fb2D4',
+  //       activatedChains: [],
+  //     },
+  //   ]);
+  // }, []);
+  return selectedAddressItem ? (
     <Menu>
       {({ isOpen }) => (
         <>
@@ -110,7 +110,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                   {getAddressName(selectedAddress)} ({toShortAddress(selectedAddress, 4, 6)})
                 </Text>
               )}
-              {!isInModal && selectedAddressItem && (
+              {!isInModal && (
                 <Flex mr="1" align={'center'}>
                   <Image w="5" h="5" src={selectedChainItem.icon} />
                   <Text ml="2" fontWeight={'700'}>
@@ -155,5 +155,24 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
         </>
       )}
     </Menu>
+  ) : (
+    <Flex
+      align="center"
+      px="3"
+      py="10px"
+      h="40px"
+      bg={isInModal ? 'transparent' : { base: '#fff', lg: '#f2f2f2' }}
+      roundedLeft={'full'}
+      {...restProps}
+    >
+      <Flex mr="1" align={'center'}>
+        <Image w="5" h="5" src={selectedChainItem.icon} />
+        <Text ml="2" fontWeight={'700'}>
+          {selectedChainItem.chainName}
+        </Text>
+        &nbsp;
+        <Text fontWeight={'600'}>(******)</Text>
+      </Flex>
+    </Flex>
   );
 }

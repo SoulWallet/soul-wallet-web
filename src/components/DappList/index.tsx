@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 // import IconLink from '@/assets/icons/link.svg';
 // import IconBookmark from '@/assets/icons/bookmark.svg';
 // import IconPlus from '@/assets/icons/dapp-plus.svg';
+import { ExternalLink } from '@/pages/dashboard/comp/HomeCard';
 import HomeCard from '@/pages/dashboard/comp/HomeCard';
 
 const DappItem = ({ item }: any) => {
@@ -58,7 +59,7 @@ const DappItem = ({ item }: any) => {
 
 export default function DappList() {
   return (
-    <HomeCard title="Featured Dapps">
+    <HomeCard h="210px" title="Featured Dapps" external={<ExternalLink title="View more" to="/dapps" />}>
       <Grid
         templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}
         rowGap={'24px'}

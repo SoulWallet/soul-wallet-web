@@ -10,12 +10,14 @@ import storage from '@/lib/storage';
 import { useLocation } from 'react-router-dom';
 import { storeVersion } from '@/config';
 import useTools from '@/hooks/useTools';
+import { useTempStore } from '@/store/temp';
 
-export default function FindRoute({ children }: {children: ReactNode}) {
+export default function FindRoute({ children }: { children: ReactNode }) {
   const { navigate } = useBrowser();
   const location = useLocation();
   const { addressList, selectedAddress } = useAddressStore();
   const { clearLogData } = useTools();
+  const { createInfo } = useTempStore();
 
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
@@ -30,11 +32,16 @@ export default function FindRoute({ children }: {children: ReactNode}) {
       navigate('/launch');
     }
 
-    // skip address check for now, need to be checked in temp
-    // mock alert
-    if (false && (!addressList.length || !selectedAddress) && !isRecoverPage && !isCreatePage && !isAuthPage) {
+    if (
+      !createInfo.eoaAddress &&
+      !createInfo.credentials.length &&
+      !selectedAddress &&
+      !isRecoverPage &&
+      !isCreatePage &&
+      !isAuthPage
+    ) {
       navigate({
-        pathname: '/launch',
+        pathname: '/auth',
         search: location.search,
       });
     } else if (isLaunchPage && addressList.length && selectedAddress) {

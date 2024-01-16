@@ -8,7 +8,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Header />
       <Flex minH="calc(100vh - 72px)" gap="50px">
         <Sidebar />
-        <Box>{children}</Box>
+        <Box w="100%">{children}</Box>
       </Flex>
     </Box>
   );

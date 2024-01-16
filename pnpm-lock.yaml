@@ -30,14 +30,14 @@ dependencies:
     specifier: ^8.1.0
     version: 8.1.0(typescript@5.3.3)
   '@soulwallet_test/abi':
-    specifier: ^0.1.5
-    version: 0.1.5
-  '@soulwallet_test/decoder':
     specifier: ^0.1.6
     version: 0.1.6
+  '@soulwallet_test/decoder':
+    specifier: ^0.1.7
+    version: 0.1.7
   '@soulwallet_test/sdk':
-    specifier: ^0.1.18
-    version: 0.1.18
+    specifier: ^0.1.19
+    version: 0.1.19
   '@tanstack/react-query':
     specifier: ^5.17.9
     version: 5.17.10(react@18.2.0)
@@ -3579,6 +3579,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: false
     optional: true
@@ -3588,6 +3589,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: false
     optional: true
@@ -3597,6 +3599,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     dev: false
     optional: true
@@ -3606,6 +3609,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: false
     optional: true
@@ -3615,6 +3619,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     dev: false
     optional: true
@@ -4161,8 +4166,8 @@ packages:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
     dev: false
 
-  /@soulwallet_test/abi@0.1.5:
-    resolution: {integrity: sha512-IQWVu9E1eDnvl1IxJyjLr2iv3yFdmgK+d3ML/VOch0DaHU9MbE9J8vW63OIWtmCnxkEg73VfoBa92tk60abqNg==}
+  /@soulwallet_test/abi@0.1.6:
+    resolution: {integrity: sha512-qLy0WGF5kJ8z35CEgkl1ak401rnGjn+YYB7n7JnQqWdaRV3S7pdfXFP2HA5aDpcA34uQ+XzQZ8X6peomQhE0cQ==}
     dev: false
 
   /@soulwallet_test/assets@0.1.5:
@@ -4171,10 +4176,10 @@ packages:
       '@soulwallet_test/result': 0.1.3
     dev: false
 
-  /@soulwallet_test/decoder@0.1.6:
-    resolution: {integrity: sha512-cd3imjbuNBUHGw82VUIGeXPzpYQEWnGtJIzEjNsNT4fT6gQ7SFVhuurPXEdhf3yHF+pTBEDkQ1M+qVtF3gq3Cw==}
+  /@soulwallet_test/decoder@0.1.7:
+    resolution: {integrity: sha512-AYFnwxvrBFap5DTgP84BFEkptIWI/XgfEU8w+V5aPkVew+GtFiEzjk0KwflozhQ4XUfT+CiLbZHb6NZv5SmEiQ==}
     dependencies:
-      '@soulwallet_test/abi': 0.1.5
+      '@soulwallet_test/abi': 0.1.6
       '@soulwallet_test/assets': 0.1.5
       '@soulwallet_test/result': 0.1.3
       ethers: 6.10.0
@@ -4187,10 +4192,10 @@ packages:
     resolution: {integrity: sha512-4fs9CTcs8QcvoPmh+p25eGn30qVyVoKTwBVIRfQfZWjSKMeKJgthldRufgO8BAVYmAhZhCSpTowJL5qoP4Jkfw==}
     dev: false
 
-  /@soulwallet_test/sdk@0.1.18:
-    resolution: {integrity: sha512-myh5pkCgb35+nCMN038wsjwMXCWsC7yZ3I48eIw6JcJtHRVs79JkmPE11o9V+xAaZN/uHoLZgxTwfWPs7UEI5Q==}
+  /@soulwallet_test/sdk@0.1.19:
+    resolution: {integrity: sha512-DyTHWZHEnKokc9JT0B6kpjmfOCZqHyzE9YBGAIjXcdNdGrTVNCXjUOZANJWFFubchCsEEm9O7ifLLaXPLuBp0Q==}
     dependencies:
-      '@soulwallet_test/abi': 0.1.5
+      '@soulwallet_test/abi': 0.1.6
       '@soulwallet_test/result': 0.1.3
       ethers: 6.10.0
     transitivePeerDependencies:
@@ -4346,6 +4351,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: true
     optional: true
@@ -4355,6 +4361,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     dev: true
     optional: true
@@ -4364,6 +4371,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     dev: true
     optional: true
@@ -4373,6 +4381,7 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     dev: true
     optional: true
