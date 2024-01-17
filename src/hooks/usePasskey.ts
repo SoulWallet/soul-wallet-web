@@ -6,8 +6,6 @@ import {
   uint8ArrayToHexString,
   parseBase64url,
   arrayBufferToHex,
-  hexToUint8Array,
-  stringToUint8Array,
 } from '@/lib/tools';
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
@@ -135,7 +133,7 @@ export default function usePasskey() {
     return credentialKey;
   };
 
-  const sign = async (credential: any, userOpHash: string) => {
+  const signByPasskey = async (credential: any, userOpHash: string) => {
     const userOpHashForBytes = userOpHash.startsWith('0x') ? userOpHash.substr(2) : userOpHash;
 
     var byteArray = new Uint8Array(32);
@@ -224,7 +222,7 @@ export default function usePasskey() {
   return {
     decodeDER,
     register,
-    sign,
+    signByPasskey,
     authenticate,
   };
 }

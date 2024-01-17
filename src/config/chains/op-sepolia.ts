@@ -4,7 +4,6 @@
 
 import IconOp from '@/assets/chains/op.svg';
 import IconOpFaded from '@/assets/chains/op-faded.svg';
-import IconOpSquare from '@/assets/chains/op-square.svg';
 import { keystoreContracts } from './common';
 
 export default {
@@ -16,7 +15,7 @@ export default {
   l1Provider: `https://goerli.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`,
   scanUrl: 'https://goerli-optimism.etherscan.io',
   scanName: 'Etherscan',
-  bundlerUrl: `https://opt-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY_OP_SEPOLIA}`,
+  bundlerUrl: `https://api-dev.soulwallet.io/bundler/op-sepolia/rpc`,
   maxCostMultiplier: 120,
   chainId: 11155420,
   chainIdHex: `0x${(11155420).toString(16)}`,

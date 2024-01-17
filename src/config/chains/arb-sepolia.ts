@@ -17,7 +17,7 @@ export default {
   l1Provider: `https://goerli.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`,
   scanUrl: 'https://sepolia.arbiscan.io',
   scanName: 'Arbiscan',
-  bundlerUrl: `https://arb-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY_SEPOLIA}`,
+  bundlerUrl: `https://api-dev.soulwallet.io/bundler/arb-sepolia/rpc`,
   maxCostMultiplier: 120,
   chainId: 421614,
   chainIdHex: `0x${(421614).toString(16)}`,

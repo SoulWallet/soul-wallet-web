@@ -26,13 +26,13 @@ export default function useQuery() {
 
   const getGasPrice = async () => {
     // if it's in the fixed price list, set fixed
-    if (chainConfig.chainId === 421613 || chainConfig.chainId === 42161) {
-      return {
-        maxFeePerGas: `0x${ethers.parseUnits(chainConfig.defaultMaxFee, 'gwei').toString(16)}`,
-        maxPriorityFeePerGas: `0x${ethers.parseUnits(chainConfig.defaultMaxPriorityFee, 'gwei').toString(16)}`,
-      };
-    }
-
+    // if (chainConfig.chainId === 421613 || chainConfig.chainId === 42161) {
+    //   return {
+    //     maxFeePerGas: `0x${ethers.parseUnits(chainConfig.defaultMaxFee, 'gwei').toString(16)}`,
+    //     maxPriorityFeePerGas: `0x${ethers.parseUnits(chainConfig.defaultMaxPriorityFee, 'gwei').toString(16)}`,
+    //   };
+    // }
+    // TODO, get gas price from market
     const feeData = await ethersProvider.getFeeData();
     if (chainConfig.support1559) {
       return {

@@ -16,11 +16,11 @@ import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import { useSettingStore } from '@/store/setting';
 import { useTempStore } from '@/store/temp';
+import { useSignTypedData, useWalletClient } from 'wagmi';
 
 export default function useWallet() {
-  const { sign } = usePasskey();
+  const { signByPasskey } = usePasskey();
   const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
   const { ethersProvider } = useWalletContext();
@@ -160,7 +160,7 @@ export default function useWallet() {
 
   const getPasskeySignature = async (packedHash: string, validationData: string) => {
     const selectedCredential: any = getSelectedCredential();
-    const signatureData: any = await sign(selectedCredential, packedHash);
+    const signatureData: any = await signByPasskey(selectedCredential, packedHash);
 
     console.log('packUserOp256Signature params:', signatureData, validationData);
     const packedSignatureRet =
@@ -210,9 +210,9 @@ export default function useWallet() {
     const packedUserOpHash = packedUserOpHashRet.OK;
 
     if(selectedKeyType=== SignkeyType.EOA){
-      userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
-    }else if(selectedKeyType=== SignkeyType.P256 || selectedKeyType=== SignkeyType.RS256){
       userOp.signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
+    }else if(selectedKeyType=== SignkeyType.P256 || selectedKeyType=== SignkeyType.RS256){
+      userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
     }else{
       console.error('No sign key type selected');
     }

@@ -101,6 +101,7 @@ export default function Guardian() {
         display="flex"
         flexDirection="column"
         padding="0 40px"
+        pt="6"
       >
         <SectionMenu>
           <SectionMenuItem

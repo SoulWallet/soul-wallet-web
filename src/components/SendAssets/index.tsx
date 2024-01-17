@@ -27,6 +27,7 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const toast = useToast();
 
   const selectedToken = getTokenBalance(sendToken);
+
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
 
   const { sendErc20, sendEth } = useTransaction();

@@ -21,10 +21,12 @@ import TextBody from '@/components/new/TextBody'
 import DropDownIcon from '@/components/Icons/DropDown';
 import useBrowser from '@/hooks/useBrowser';
 import DashboardLayout from '@/components/Layouts/DashboardLayout';
+import { useSignerStore } from '@/store/signer';
 
 export default function Signer() {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('signer');
+  const { eoa, credentials, signerId } = useSignerStore();
 
   const [keepPrivate, setKeepPrivate] = useState<any>(false);
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
@@ -101,6 +103,7 @@ export default function Signer() {
         display="flex"
         flexDirection="column"
         padding="0 40px"
+        pt="6"
       >
         <SectionMenu>
           <SectionMenuItem
@@ -134,23 +137,24 @@ export default function Signer() {
                 </Box>
               </Box>
               <Box paddingTop="14px" display="flex">
-                <SignerCard
+                {eoa && <SignerCard
                   name="Wallet (...dS123)"
-                  address="0xAAAA12345678E25FDa5f8a56B8e267fDaB6dS123"
+                  address={eoa}
                   time="Added on 2023-12-14"
                   marginRight="18px"
-                  isDefault="true"
+                  isDefault={signerId === eoa}
                   cursor="pointer"
                   onClick={openSetDefaultModal}
-                />
-                <SignerCard
+                />}
+                {credentials.map((item:any) => <SignerCard
                   name="Passkey_1"
-                  address="Wallet_1-2023-12-28-11:12:13"
+                  address={item.publicKey}
                   device="Chrome profile"
                   time="Added on 2023-12-14 "
                   cursor="pointer"
+                  isDefault={signerId === item.id}
                   onClick={openSetDefaultModal}
-                />
+                />)}
               </Box>
             </Fragment>
           )}
