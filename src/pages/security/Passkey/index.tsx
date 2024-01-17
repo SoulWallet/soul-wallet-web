@@ -19,7 +19,7 @@ import TextButton from '@/components/web/TextButton';
 import RoundButton from '@/components/web/Button';
 import PlusIcon from '@/components/Icons/Plus';
 import SuccessIcon from "@/components/Icons/Success";
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import GreySection from '@/components/GreySection'
 
 function SyncPasskeModal({ isOpen, onClose }: any) {
@@ -171,7 +171,7 @@ function ManagePasskeyNetworkFeeModal({ isOpen, onClose }: any) {
 }
 
 export default function Passkey({ setActiveSection }: any) {
-  const { credentials, changeCredentialName } = useCredentialStore();
+  const { credentials, changeCredentialName } = useSignerStore();
   const [isEditing, setIsEditing] = useState<boolean>();
   const [isManagingNetworkFee, setIsManagingNetworkFee] = useState<boolean>();
   const [isSyncing, setIsSyncing] = useState<boolean>();

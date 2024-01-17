@@ -42,7 +42,7 @@ import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { nanoid } from 'nanoid';
 import { L1KeyStore } from '@soulwallet_test/sdk';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';
 import useTransaction from '@/hooks/useTransaction';
@@ -147,7 +147,7 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
   const [showAdvance, setShowAdvance] = useState(false)
   const [showAdvance2, setShowAdvance2] = useState(false)
   const [loading, setLoading] = useState(false);
-  const { credentials } = useCredentialStore();
+  const { credentials } = useSignerStore();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const { chainConfig } = useConfig();
   const { setFinishedSteps, getAddressName, addressName } = useSettingStore();

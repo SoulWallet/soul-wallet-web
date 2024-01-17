@@ -3,7 +3,7 @@ import QRCode from 'qrcode';
 import { GuardianItem } from '@/lib/type';
 import { copyText } from '@/lib/tools';
 import { useToast } from '@chakra-ui/react';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import useBrowser from './useBrowser';
 import useWalletContext from '@/context/hooks/useWalletContext';
@@ -16,7 +16,7 @@ import { useSettingStore } from '@/store/setting';
 
 export default function useTools() {
   const toast = useToast();
-  const { clearCredentials } = useCredentialStore();
+  const { clearCredentials } = useSignerStore();
   const { clearAddresses } = useAddressStore();
   const { clearGuardianInfo } = useGuardianStore();
   const { clearBalance } = useBalanceStore();

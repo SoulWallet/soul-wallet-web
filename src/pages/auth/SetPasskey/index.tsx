@@ -30,7 +30,7 @@ import AccountIcon from '@/components/Icons/Intro/Account'
 import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 
 export default function SetPasskey() {
@@ -44,7 +44,7 @@ export default function SetPasskey() {
     changeCredentialName,
     walletName,
     setSelectedCredentialId,
-  } = useCredentialStore();
+  } = useSignerStore();
   const [isCreating, setIsCreating] = useState(false);
   const { navigate } = useBrowser();
   console.log('create', credentials)

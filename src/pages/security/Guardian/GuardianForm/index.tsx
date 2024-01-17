@@ -33,7 +33,7 @@ import useConfig from '@/hooks/useConfig';
 import { L1KeyStore } from '@soulwallet_test/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GreySection from '@/components/GreySection'
@@ -190,7 +190,7 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
   const [loading, setLoading] = useState(false);
   const { sendErc20, payTask } = useTransaction();
   const { showConfirmPayment } = useWalletContext();
-  const { credentials } = useCredentialStore();
+  const { credentials } = useSignerStore();
   const [showAdvance, setShowAdvance] = useState(false)
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
   const [status, setStatus] = useState<string>('editing');

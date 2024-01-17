@@ -21,7 +21,7 @@ import api from '@/lib/api';
 import config from '@/config';
 import useBrowser from '@/hooks/useBrowser';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import Steps from '@/components/web/Steps';
 
 const getProgressPercent = (startTime: any, endTime: any) => {

@@ -8,13 +8,13 @@ import { useHistoryStore } from '@/store/history';
 import { useBalanceStore } from '@/store/balance';
 import useConfig from '@/hooks/useConfig';
 import { useChainStore } from '@/store/chain';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import useWalletContext from '@/context/hooks/useWalletContext';
 export default function Pooling() {
   const { ethersProvider } = useWalletContext();
   const { selectedAddress } = useAddressStore();
   const { fetchHistory } = useHistoryStore();
-  const {setSelectedCredentialId, selectedCredentialId,} = useCredentialStore();
+  const {setSelectedCredentialId, selectedCredentialId,} = useSignerStore();
   const { selectedChainItem } = useConfig();
   const { selectedChainId } = useChainStore();
   const { fetchTokenBalance } = useBalanceStore();

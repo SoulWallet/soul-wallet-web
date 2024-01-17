@@ -29,7 +29,6 @@ export const getIndexByAddress = (addressList: IAddressItem[], address: string) 
   return addressList.findIndex((item: IAddressItem) => item.address.toLowerCase() === address.toLowerCase());
 };
 
-// mock alert!
 const createAddressSlice = immer<IAddressStore>((set, get) => ({
   selectedAddress: '',
   addressList: [],

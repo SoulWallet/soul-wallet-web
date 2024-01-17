@@ -8,7 +8,7 @@ import TextButton from '@/components/web/TextButton';
 import Steps from '@/components/web/Steps';
 import PassKeyList from '@/components/web/PassKeyList';
 import usePassKey from '@/hooks/usePasskey';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
@@ -37,7 +37,7 @@ export default function SetPasskeys({ changeStep }: any) {
   } = useGuardianStore();
   const { updateSlotInfo } = useSlotStore()
   const { saveAddressName } = useSettingStore();
-  const { walletName } = useCredentialStore();
+  const { walletName } = useSignerStore();
   const { setAddressList } = useAddressStore();
   const { calcWalletAddress } = useSdk();
   const toast = useToast();

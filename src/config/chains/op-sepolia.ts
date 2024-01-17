@@ -4,6 +4,7 @@
 
 import IconOp from '@/assets/chains/op.svg';
 import IconOpFaded from '@/assets/chains/op-faded.svg';
+import IconOpSquare from '@/assets/chains/op-square.svg';
 import { keystoreContracts } from './common';
 
 export default {

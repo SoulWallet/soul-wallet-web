@@ -7,7 +7,7 @@ import Button from '@/components/web/Button';
 import Steps from '@/components/web/Steps';
 import PassKeyList from '@/components/web/PassKeyList';
 import usePassKey from '@/hooks/usePasskey';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import WarningIcon from '@/components/Icons/Warning';
 import SecureIcon from '@/components/Icons/Secure';
 import useConfig from '@/hooks/useConfig';
@@ -41,7 +41,7 @@ export default function SetPasskeys({ changeStep }: any) {
     changeCredentialName,
     walletName,
     setSelectedCredentialId,
-  } = useCredentialStore();
+  } = useSignerStore();
   const [isCreating, setIsCreating] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const toast = useToast();

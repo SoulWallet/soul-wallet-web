@@ -32,7 +32,7 @@ import useConfig from '@/hooks/useConfig';
 import { L1KeyStore } from '@soulwallet_test/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import useTools from '@/hooks/useTools';
 import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
 import GreySection from '@/components/GreySection'

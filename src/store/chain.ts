@@ -9,6 +9,7 @@ interface IChainItem {
   chainIdHex: string;
   chainName: string;
   icon: any;
+  iconSquare?: any;
   contracts: any;
   provider: string;
   bundlerUrl: string;

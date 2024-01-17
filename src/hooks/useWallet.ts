@@ -6,24 +6,18 @@ import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { addPaymasterAndData } from '@/lib/tools';
 import Erc20ABI from '../contract/abi/ERC20.json';
-import { L1KeyStore, UserOperation } from '@soulwallet_test/sdk';
+import { L1KeyStore, SignkeyType, UserOperation } from '@soulwallet_test/sdk';
 import { executeTransaction } from '@/lib/tx';
 import BN from 'bignumber.js';
 import useConfig from './useConfig';
 import api from '@/lib/api';
 import usePasskey from './usePasskey';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useSettingStore } from '@/store/setting';
 import { useTempStore } from '@/store/temp';
-
-interface Execution {
-  to: string;
-  value: string;
-  data: string;
-}
 
 export default function useWallet() {
   const { sign } = usePasskey();
@@ -34,15 +28,15 @@ export default function useWallet() {
     useGuardianStore();
   const { slotInfo, setSlotInfo } = useSlotStore();
   const { updateChainItem, setSelectedChainId, selectedChainId } = useChainStore();
-  const { setCredentials, getSelectedCredential } = useCredentialStore();
+  const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
-  const { saveAddressName } = useSettingStore();
   const { createInfo } = useTempStore();
+  const { setSignerId, getSelectedKeyType, } = useSignerStore();
 
-  const createWallet = async() => {
+  const createWallet = async () => {
     // retrieve info from temp store
-    const { credentials, eoaAddress, initialGuardianHash, initialGuardianSafePeriod} = createInfo;
+    const { credentials, eoaAddress, initialGuardianHash, initialGuardianSafePeriod } = createInfo;
 
     const credentialKeys = credentials.map((item: any) => item.publicKey);
     const initialKeys = [...credentialKeys, ...[eoaAddress]].filter((item) => item);
@@ -65,9 +59,14 @@ export default function useWallet() {
 
     setAddressList(addresses);
 
-    console.log('addresss', addresses)
+    if(credentialKeys[0]){
+      setSignerId(credentialKeys[0])
+    }else if(eoaAddress){
+      setSignerId(eoaAddress);
+    }
 
-  }
+    console.log('addresss', addresses);
+  };
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
     console.log('extraTxs', extraTxs);
@@ -103,11 +102,7 @@ export default function useWallet() {
 
     const finalValues = [...new Array(approveTos.length).fill('0x0'), ...extraTxs.map((tx: any) => tx.value || '0x0')];
 
-    const executions: Execution[] = finalTos.map((to, index) => ({
-      to,
-      value: finalValues[index],
-      data: finalCalldatas[index],
-    }));
+    const executions: string[][] = finalTos.map((to, index) => [to, finalValues[index], finalCalldatas[index]]);
 
     userOp.callData = soulAbi.encodeFunctionData('executeBatch((address,uint256,bytes)[])', [executions]);
 
@@ -196,6 +191,7 @@ export default function useWallet() {
   };
 
   const signAndSend = async (userOp: UserOperation, payToken?: string) => {
+    const selectedKeyType = getSelectedKeyType();
     // checkpaymaster
     if (payToken && payToken !== ethers.ZeroAddress && userOp.paymasterAndData === '0x') {
       const paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
@@ -214,7 +210,13 @@ export default function useWallet() {
     }
     const packedUserOpHash = packedUserOpHashRet.OK;
 
-    userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
+    if(selectedKeyType=== SignkeyType.EOA){
+      userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
+    }else if(selectedKeyType=== SignkeyType.P256 || selectedKeyType=== SignkeyType.RS256){
+      userOp.signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
+    }else{
+      console.error('No sign key type selected');
+    }
 
     return await executeTransaction(userOp, chainConfig);
   };
@@ -258,8 +260,6 @@ export default function useWallet() {
 
     setCredentials([credentialKey]);
   };
-
-
 
   const retrieveSlotInfo = (initInfo: any) => {
     // set slot info

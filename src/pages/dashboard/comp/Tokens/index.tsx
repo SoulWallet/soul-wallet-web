@@ -14,13 +14,14 @@ import { ethers } from 'ethers';
 import { defaultGuardianSafePeriod } from '@/config';
 import useKeystore from '@/hooks/useKeystore';
 import ReceiveCode from '@/components/ReceiveCode';
+import { useAddressStore } from '@/store/address';
 
 const SetGuardianHint = () => {
   const { createWallet } = useWallet();
   const { updateCreateInfo } = useTempStore();
   const [creating, setCreating] = useState(false);
   const skipSetupGuardian = async () => {
-    setCreating(true)
+    setCreating(true);
     // generate wallet address
     updateCreateInfo({
       initialGuardianHash: ethers.ZeroHash,
@@ -40,7 +41,7 @@ const SetGuardianHint = () => {
       pb="164px"
       top="0"
       right={'0'}
-      zIndex={"10"}
+      zIndex={'10'}
       left={0}
       // bottom={0}
     >
@@ -79,6 +80,7 @@ const SetGuardianHint = () => {
 };
 
 const DepositHint = () => {
+  const { selectedAddress } = useAddressStore();
   return (
     <Box>
       <Text fontWeight={'600'} lineHeight={1.5} textAlign={'center'} mb="4">
@@ -86,8 +88,7 @@ const DepositHint = () => {
         <br />
         Get your first deposit with your wallet address
       </Text>
-      {/** mock alert */}
-      <ReceiveCode address={'0xFDF7AC7Be34f2882734b1e6A8f39656D6B14691C'} imgWidth="100px" showFullAddress={true} mb="6" />
+      <ReceiveCode address={selectedAddress} imgWidth="100px" showFullAddress={true} mb="6" />
     </Box>
   );
 };
@@ -127,8 +128,7 @@ export default function Tokens() {
 
   return (
     <HomeCard title={'Assets'} pos="relative" external={<ExternalLink title="View more" to="/asset" />} h="100%">
-      {slotInfo.initialGuardianHash && <SetGuardianHint />}
-
+      {!slotInfo.initialGuardianHash && <SetGuardianHint />}
       {isTokenBalanceEmpty ? <DepositHint /> : <TokenBalanceTable />}
     </HomeCard>
   );

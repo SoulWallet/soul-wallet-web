@@ -7,7 +7,7 @@ import Button from '@/components/web/Button';
 import TextButton from '@/components/web/TextButton';
 import Steps from '@/components/web/Steps';
 import usePassKey from '@/hooks/usePasskey';
-import { useCredentialStore } from '@/store/credential';
+import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
@@ -39,7 +39,7 @@ export default function SetWalletName({ changeStep }: any) {
   const { navigate } = useBrowser();
   const [loading, setLoading] = useState(false);
   const { register } = usePassKey();
-  const { setWalletName, } = useCredentialStore();
+  const { setWalletName, } = useSignerStore();
   const toast = useToast();
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
     fields: ['name'],
