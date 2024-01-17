@@ -36,7 +36,7 @@ import BinanceIcon from '@/assets/wallets/binance.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
 import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
 
-export default function ChooseSignerTypeModal({ isOpen, onClose, startWalletConnect }: any) {
+export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConnect }: any) {
   const selectWalletExtension = useCallback(() => {
     onClose()
     startWalletConnect()
@@ -56,7 +56,7 @@ export default function ChooseSignerTypeModal({ isOpen, onClose, startWalletConn
           gap="5"
           fontWeight="800"
           textAlign="center"
-          borderBottom="1px solid #d7d7d7"
+          // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
           Choose a signer type

@@ -8,8 +8,8 @@ import Apps from '@/pages/apps';
 import Launch from '@/pages/launch';
 import Asset from '@/pages/asset';
 import Activity from '@/pages/activity';
-import Security from '@/pages/security';
-import NewSecurity from '@/pages/security_new';
+import Signer from '@/pages/security_new/Signer';
+import Guardian from '@/pages/security_new/Guardian';
 import Auth from '@/pages/auth';
 
 export const router = createBrowserRouter([
@@ -26,8 +26,9 @@ export const router = createBrowserRouter([
       { path: 'create', element: <Create /> },
       { path: 'recover', element: <Recover /> },
       { path: 'popup', element: <Popup />},
-      { path: 'security', element: <Security /> },
-      { path: 'new_security', element: <NewSecurity /> },
+      { path: 'security', element: <Signer /> },
+      { path: 'security/signer', element: <Signer /> },
+      { path: 'security/guardian', element: <Guardian /> },
       { path: 'auth', element: <Auth /> },
     ],
   },
