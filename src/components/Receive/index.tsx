@@ -15,7 +15,7 @@ import { useSettingStore } from '@/store/setting';
 export default function Receive() {
   const toast = useToast();
   const { selectedAddress } = useAddressStore();
-  const { getAddressName, saveAddressName } = useSettingStore()
+  const { getAddressName, saveAddressName } = useSettingStore();
   const { chainList } = useChainStore();
   const { selectedAddressItem, chainConfig } = useConfig();
   const { scanUrl, scanName } = chainConfig;
@@ -31,13 +31,13 @@ export default function Receive() {
   };
 
   const doEdit = () => {
-    saveAddressName(selectedAddress, editingName)
+    saveAddressName(selectedAddress, editingName);
     setEditing(false);
   };
 
   return (
-    <Box w="320px" mx="auto">
-      <Flex gap="2" mb="3" align={'center'} justify={'center'}>
+    <Box mx="auto">
+      {/* <Flex gap="2" mb="3" align={'center'} justify={'center'}>
         {editing ? (
           <Input value={editingName} onChange={(e) => setEditingName(e.target.value)} />
         ) : (
@@ -53,12 +53,10 @@ export default function Receive() {
         ) : (
           <Image cursor={'pointer'} src={IconPen} onClick={() => setEditing(true)} />
         )}
-      </Flex>
+      </Flex> */}
 
-      <Box bg="#ededed" rounded="20px" p="4" mb="14px" py="6" textAlign={'center'} mx="auto">
-        <ReceiveCode address={selectedAddress} imgWidth="160px" showFullAddress={true} />
-      </Box>
-      <InfoWrap gap="3">
+      <ReceiveCode address={selectedAddress} imgWidth="160px" showFullAddress={true} />
+      {/* <InfoWrap gap="3">
         <InfoItem>
           <Text>Supported Networks:</Text>
           <Flex align="center" gap="2px">
@@ -69,9 +67,9 @@ export default function Receive() {
             ))}
           </Flex>
         </InfoItem>
-      </InfoWrap>
+      </InfoWrap> */}
 
-      <Button w="full" onClick={doCopy} fontSize="20px" py="4" fontWeight={'800'} mt="4">
+      {/* <Button w="full" onClick={doCopy} fontSize="20px" py="4" fontWeight={'800'} mt="4">
         Copy address
       </Button>
 
@@ -89,7 +87,7 @@ export default function Receive() {
           {scanName}
         </Text>
         <Image src={IconShare} />
-      </Flex>
+      </Flex> */}
     </Box>
   );
 }

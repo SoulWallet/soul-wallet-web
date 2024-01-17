@@ -1,5 +1,6 @@
-import { Flex, Text, Tooltip } from '@chakra-ui/react';
+import { Flex, Text, Tooltip, Box } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
+import { useMemo, memo } from 'react';
 
 export const TruncateString = ({ str, num }: any) => {
   if (str.length > num) {
@@ -17,40 +18,48 @@ interface IListItem {
   idx: number;
   icon: any;
   title: string;
-  titleDesc: string;
+  // titleDesc: string;
   amount: string;
-  amountDesc: string;
+  // amountDesc: string;
   onClick?: () => void;
 }
 
-export default function ListItem({ icon, title, titleDesc, onClick, amount, amountDesc, idx }: IListItem) {
+export default function ListItem({ icon, title, onClick, amount, idx }: IListItem) {
   return (
     <Flex
       onClick={onClick}
       justify={'space-between'}
       align={'center'}
-      // py="3"
       cursor={'pointer'}
       pt={idx === 0 ? '0px' : ''}
       transition={'all'}
-      _hover={{ transform: 'scale(0.99)' }}
     >
-      <Flex gap="3" align={'center'}>
-        <Image src={icon} w="38px" h="38px" />
-        <Flex flexDir={'column'} gap="1">
-          <Text fontWeight={'800'} textTransform={'capitalize'}>
+      <Flex w="33%" gap="2" align={'center'}>
+        {/* <ImageIcon src={icon} /> */}
+        <Image src={icon} w="32px" h="32px" />
+        <Box lineHeight={'1.25'}>
+          <Text fontWeight={'800'} mb="2px" textTransform={'capitalize'}>
             {title}
           </Text>
-          <Text fontWeight={'600'}>{titleDesc}</Text>
-        </Flex>
+          <Text fontSize={'12px'}>$2309.12</Text>
+        </Box>
       </Flex>
-      <Flex gap="1" align="center">
-        <Text display="span" fontWeight={'800'}>
+
+      <Box w="33%" lineHeight={'1.25'} textAlign={'right'} pr="64px">
+        <Text fontWeight={'800'} mb="2px" textTransform={'capitalize'}>
           {amount}
         </Text>
-        <Flex display="span" fontWeight={'600'} color="#898989">
+        <Text fontSize={'12px'}>$2309.12</Text>
+      </Box>
+
+      <Flex w="33%" gap="3" align="center">
+        <Box bg="#d9d9d9" rounded={'8px'} overflow={'hidden'} h="6px" pos="relative" w="150px">
+          <Box bg="brand.red" pos="absolute" h="6px" w="40%" />
+        </Box>
+        <Text fontSize={'12px'}>40%</Text>
+        {/* <Flex display="span" fontWeight={'600'} color="#898989">
           <TruncateString str={amountDesc} num={6} />
-        </Flex>
+        </Flex> */}
       </Flex>
     </Flex>
   );

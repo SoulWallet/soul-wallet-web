@@ -10,7 +10,7 @@ import { useChainStore } from '@/store/chain';
 import IconLoading from '@/assets/loading.svg';
 
 export default function TokensTable({ activeChains }: any) {
-  const { showTransferAssets } = useWalletContext();
+  const { showSend } = useWalletContext();
   const [loading, setLoading] = useState(false);
   const { selectedAddress } = useAddressStore();
   const { setSelectedChainId } = useChainStore();
@@ -43,7 +43,7 @@ export default function TokensTable({ activeChains }: any) {
   const showTransfer = (tokenAddress: string, chainIdHex: string) => {
     // IMPORTANT TODO, change to this chain id
     setSelectedChainId(chainIdHex);
-    showTransferAssets(tokenAddress);
+    showSend(tokenAddress);
   };
 
   return (

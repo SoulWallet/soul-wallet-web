@@ -14,7 +14,7 @@ import useTools from '@/hooks/useTools';
 import AddressIcon from '@/components/AddressIcon';
 
 export default function Balance() {
-  const { showTransferAssets } = useWalletContext();
+  const { showSend, showReceive } = useWalletContext();
   const { getWalletName } = useTools();
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
@@ -27,14 +27,14 @@ export default function Balance() {
       title: 'Send',
       icon: IconSend,
       onClick: () => {
-        showTransferAssets(ethers.ZeroAddress, 'send');
+        showSend(ethers.ZeroAddress, 'send');
       },
     },
     {
       title: 'Receive',
       icon: IconReceive,
       onClick: () => {
-        showTransferAssets(ethers.ZeroAddress, 'receive');
+        showReceive();
       },
     },
     {

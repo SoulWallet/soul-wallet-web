@@ -93,35 +93,33 @@ const DepositHint = () => {
   );
 };
 
+const TokenBalanceTable = ({ tokenBalance, showSendAssets }: any) => {
+  return (
+    <Flex gap="6" flexDir={'column'}>
+      {tokenBalance.map((item: ITokenBalanceItem, idx: number) => (
+        <React.Fragment key={idx}>
+          <ListItem
+            key={idx}
+            idx={idx}
+            icon={item.logoURI}
+            title={item.name || 'Unknown'}
+            amount={item.tokenBalanceFormatted}
+            // amountDesc={item.symbol}
+            onClick={() => showSendAssets(item.contractAddress)}
+          />
+        </React.Fragment>
+      ))}
+    </Flex>
+  );
+};
+
 export default function Tokens() {
-  const { showTransferAssets } = useWalletContext();
+  const { showSend } = useWalletContext();
   const { tokenBalance } = useBalanceStore();
   const { slotInfo } = useSlotStore();
 
-  const showTransfer = (tokenAddress: string) => {
-    showTransferAssets(tokenAddress);
-  };
-
-  const TokenBalanceTable = () => {
-    return (
-      <>
-        {tokenBalance.map((item: ITokenBalanceItem, idx: number) => (
-          <React.Fragment key={idx}>
-            {idx !== 0 && <Divider my="10px" />}
-            <ListItem
-              key={idx}
-              idx={idx}
-              icon={item.logoURI}
-              title={item.name || 'Unknown'}
-              titleDesc={'Token'}
-              amount={item.tokenBalanceFormatted}
-              amountDesc={item.symbol}
-              onClick={() => showTransfer(item.contractAddress)}
-            />
-          </React.Fragment>
-        ))}
-      </>
-    );
+  const showSendAssets = (tokenAddress: string) => {
+    showSend(tokenAddress);
   };
 
   const isTokenBalanceEmpty = tokenBalance.every((item) => item.tokenBalance === '0');
@@ -129,7 +127,11 @@ export default function Tokens() {
   return (
     <HomeCard title={'Assets'} pos="relative" external={<ExternalLink title="View more" to="/asset" />} h="100%">
       {!slotInfo.initialGuardianHash && <SetGuardianHint />}
-      {isTokenBalanceEmpty ? <DepositHint /> : <TokenBalanceTable />}
+      {isTokenBalanceEmpty ? (
+        <DepositHint />
+      ) : (
+        <TokenBalanceTable tokenBalance={tokenBalance} showSendAssets={showSendAssets} />
+      )}
     </HomeCard>
   );
 }

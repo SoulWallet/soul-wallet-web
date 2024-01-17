@@ -24,7 +24,7 @@ export default function useTools() {
   const { clearChainStore } = useChainStore();
   const { clearSlotStore, slotInfo } = useSlotStore();
   const { getAddressName } = useSettingStore();
-  const { showClaimAssets, showTransferAssets } = useWalletContext();
+  const { showClaimAssets, showSend, } = useWalletContext();
   const { navigate } = useBrowser();
 
   const getWalletName = () => {
@@ -47,7 +47,7 @@ export default function useTools() {
         showClaimAssets();
         break;
       case 1:
-        showTransferAssets();
+        showSend();
         break;
       case 2:
         navigate('/security');

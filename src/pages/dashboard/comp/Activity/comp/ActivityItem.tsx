@@ -30,9 +30,9 @@ export default function ActivityItem({ item, scanUrl }: any) {
         idx={item.idx}
         icon={getIconMapping(item.functionName)}
         title={item.functionName}
-        titleDesc={new Date(item.timestamp * 1000).toLocaleString()}
+        // titleDesc={new Date(item.timestamp * 1000).toLocaleString()}
         amount={item.actualGasCost ? `${numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH` : ''}
-        amountDesc={item && item.to ? `to ${toShortAddress(item.to || '')} ` : ''}
+        // amountDesc={item && item.to ? `to ${toShortAddress(item.to || '')} ` : ''}
       />
     </a>
   );

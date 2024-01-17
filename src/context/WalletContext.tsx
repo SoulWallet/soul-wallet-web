@@ -5,7 +5,8 @@ import ConfirmPaymentModal from '@/components/ConfirmPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import ClaimAssetsModal from '@/components/ClaimAssetsModal';
 import TestGuideModal from '@/components/TestGuideModal';
-import TransferAssetsModal from '@/components/TransferAssetsModal';
+import SendModal from '@/components/SendModal';
+import ReceiveModal from '@/components/ReceiveModal';
 import useConfig from '@/hooks/useConfig';
 import { useGuardianStore } from '@/store/guardian';
 import { useChainStore } from '@/store/chain';
@@ -23,7 +24,8 @@ interface IWalletContext {
   showClaimAssets: () => Promise<void>;
   showTestGuide: () => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
-  showTransferAssets: (tokenAddress?: string, transferType?:string) => Promise<void>;
+  showReceive: () => Promise<void>;
+  showSend: (tokenAddress?: string, transferType?:string) => Promise<void>;
   checkActivated: () => Promise<boolean | undefined>;
 }
 
@@ -32,7 +34,8 @@ export const WalletContext = createContext<IWalletContext>({
   showSignTransaction: async () => {},
   showConfirmPayment: async () => {},
   showSignMessage: async () => {},
-  showTransferAssets: async () => {},
+  showReceive: async () => {},
+  showSend: async () => {},
   showClaimAssets: async () => {},
   showTestGuide: async () => {},
   checkActivated: async () => false,
@@ -49,7 +52,8 @@ export const WalletContextProvider = ({ children }: any) => {
   const signTransactionModal = useRef<any>();
   const confirmPaymentModal = useRef<any>();
   const signMessageModal = useRef<any>();
-  const transferAssetsModal = useRef<any>();
+  const receiveModal = useRef<any>();
+  const sendModal = useRef<any>();
   const claimAssetsModal = useRef<any>();
   const testGuideModal = useRef<any>();
   
@@ -110,8 +114,12 @@ export const WalletContextProvider = ({ children }: any) => {
     return await signMessageModal.current.show(messageToSign, origin);
   };
 
-  const showTransferAssets = async (tokenAddress?: string, transferType?: string) => {
-    return await transferAssetsModal.current.show(tokenAddress, transferType);
+  const showReceive = async () => {
+    return await receiveModal.current.show();
+  };
+
+  const showSend = async (tokenAddress?: string, transferType?: string) => {
+    return await sendModal.current.show(tokenAddress, transferType);
   };
 
   const showClaimAssets = async () => {
@@ -137,7 +145,8 @@ export const WalletContextProvider = ({ children }: any) => {
         showSignTransaction,
         showSignMessage,
         showConfirmPayment,
-        showTransferAssets,
+        showReceive,
+        showSend,
         showClaimAssets,
         showTestGuide,
         checkActivated,
@@ -149,7 +158,8 @@ export const WalletContextProvider = ({ children }: any) => {
       <ConfirmPaymentModal ref={confirmPaymentModal} />
       <SignMessageModal ref={signMessageModal} />
       <ClaimAssetsModal ref={claimAssetsModal} />
-      <TransferAssetsModal ref={transferAssetsModal} />
+      <ReceiveModal ref={receiveModal} />
+      <SendModal ref={sendModal} />
       <TestGuideModal ref={testGuideModal} />
     </WalletContext.Provider>
   );

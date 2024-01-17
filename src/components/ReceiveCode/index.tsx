@@ -41,10 +41,15 @@ export default function ReceiveCode({ address, showFullAddress, imgWidth = '90px
           <Text display="inline-block">{address.slice(-21)}</Text>
         </Text>
       ) : ( */}
-      <Text fontWeight={'700'}>{chainConfig.addressPrefix}</Text>
-      <Text fontWeight={'500'} mb="2">
-        {address.slice(0, 22)}<br/>{address.slice(-20)}
-      </Text>
+      <Box fontSize={'14px'} mb="2">
+        <Text fontWeight={'700'}>{chainConfig.addressPrefix}</Text>
+        <Text fontWeight={'500'}>
+          {address.slice(0, 22)}
+          <br />
+          {address.slice(-20)}
+        </Text>
+      </Box>
+
       <Button type="white" py="10px" px="15px" display={'block'} mx="auto" onClick={() => doCopy(address)} mb="14px">
         Copy address
       </Button>
