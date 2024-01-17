@@ -78,7 +78,7 @@ export default function SetWalletName({ changeStep }: any) {
   };
 
   const goBack = () => {
-    navigate('/launch');
+    navigate('/auth');
   };
 
   const onStepChange = () => {

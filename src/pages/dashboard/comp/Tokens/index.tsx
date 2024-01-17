@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom';
 import useWallet from '@/hooks/useWallet';
 import { useTempStore } from '@/store/temp';
 import { ethers } from 'ethers';
-import config from '@/config';
 import { defaultGuardianSafePeriod } from '@/config';
 import useKeystore from '@/hooks/useKeystore';
 import ReceiveCode from '@/components/ReceiveCode';
@@ -19,13 +18,8 @@ import ReceiveCode from '@/components/ReceiveCode';
 const SetGuardianHint = () => {
   const { createWallet } = useWallet();
   const { updateCreateInfo } = useTempStore();
-  const { calcGuardianHash } = useKeystore();
   const skipSetupGuardian = async () => {
     // generate wallet address
-
-    const initialGuardianHash = calcGuardianHash([], 0);
-
-    console.log('1111', initialGuardianHash, ethers.ZeroHash);
     updateCreateInfo({
       initialGuardianHash: ethers.ZeroHash,
       initialGuardianSafePeriod: defaultGuardianSafePeriod,
@@ -40,9 +34,10 @@ const SetGuardianHint = () => {
       backdropFilter={'blur(32px)'}
       pos="absolute"
       pt="64px"
-      pb="64px"
+      pb="164px"
       top="0"
       right={'0'}
+      zIndex={"10"}
       left={0}
       // bottom={0}
     >

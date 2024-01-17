@@ -37,7 +37,7 @@ export default function Recover() {
 
   const changeStep = (i: number) => {
     if (i === -1) {
-      navigate('/launch');
+      navigate('/auth');
     } else {
       setStep(i)
     }

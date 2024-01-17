@@ -31,7 +31,7 @@ export default function PageSelect() {
 
   const doLogout = () => {
     clearLogData();
-    navigate('/launch');
+    navigate('/auth');
   };
 
   return (

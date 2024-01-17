@@ -16,7 +16,7 @@ export default function Header() {
 
   const doLogout = () => {
     clearLogData();
-    navigate('/launch');
+    navigate('/auth');
   };
 
   return (

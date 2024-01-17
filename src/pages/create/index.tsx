@@ -13,7 +13,7 @@ export default function Create() {
     console.log('changeStep', i)
 
     if (i === -1) {
-      navigate('/launch');
+      navigate('/auth');
     } else {
       setStep(i)
     }

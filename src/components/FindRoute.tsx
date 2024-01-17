@@ -29,7 +29,7 @@ export default function FindRoute({ children }: { children: ReactNode }) {
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
       clearLogData();
-      navigate('/launch');
+      navigate('/auth');
     }
 
     if (

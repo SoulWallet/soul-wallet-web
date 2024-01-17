@@ -119,7 +119,7 @@ export default function Recover({ changeStep }: any) {
   };
 
   const goBack = () => {
-    navigate('/launch');
+    navigate('/auth');
   };
 
   const onStepChange = () => {
