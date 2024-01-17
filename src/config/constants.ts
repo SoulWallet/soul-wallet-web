@@ -36,7 +36,7 @@ export const sidebarLinks = [
   },
   {
     title: 'Settings',
-    href: "/settings",
+    href: "/security/signer",
     icon: IconSettings,
     iconActive: IconSettingsActive,
   },

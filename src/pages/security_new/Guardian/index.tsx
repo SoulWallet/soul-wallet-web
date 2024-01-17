@@ -20,6 +20,7 @@ import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import DropDownIcon from '@/components/Icons/DropDown';
 import useBrowser from '@/hooks/useBrowser';
+import DashboardLayout from '@/components/Layouts/DashboardLayout';
 
 export default function Guardian() {
   const { navigate } = useBrowser();
@@ -91,10 +92,11 @@ export default function Guardian() {
   }, [])
 
   return (
-    <Box width="100%" height="100vh">
-      <Box height="102px">
+    <DashboardLayout>
+    {/* <Box width="100%" height="100vh"> */}
+      {/* <Box height="102px">
         <Header />
-      </Box>
+      </Box> */}
       <Box
         display="flex"
         flexDirection="column"
@@ -270,6 +272,7 @@ export default function Guardian() {
         isOpen={isWalletConnectOpen}
         onClose={closeWalletConnectModal}
       />
-    </Box>
+    {/* </Box> */}
+    </DashboardLayout>
   );
 }

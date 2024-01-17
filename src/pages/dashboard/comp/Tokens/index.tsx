@@ -38,7 +38,7 @@ const SetGuardianHint = () => {
       backdropFilter={'blur(32px)'}
       pos="absolute"
       pt="100px"
-      pb="164px"
+      pb="90px"
       top="0"
       right={'0'}
       zIndex={'10'}
@@ -55,7 +55,7 @@ const SetGuardianHint = () => {
           . Effective immediately!
         </Text>
         <Flex gap="2" flexDir={'column'} align={'center'}>
-          <Link to="/new_security">
+          <Link to="/security/guardian">
             <Button py="13px" w="152px">
               Setup guardians
             </Button>
