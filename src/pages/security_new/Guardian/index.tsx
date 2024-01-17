@@ -19,9 +19,11 @@ import HistoryIcon from '@/components/Icons/History';
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import DropDownIcon from '@/components/Icons/DropDown';
+import useBrowser from '@/hooks/useBrowser';
 
-export default function Security() {
-  const [activeSection, setActiveSection] = useState<string>('signer');
+export default function Guardian() {
+  const { navigate } = useBrowser();
+  const [activeSection, setActiveSection] = useState<string>('guardian');
 
   const [keepPrivate, setKeepPrivate] = useState<any>(false);
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
@@ -101,55 +103,18 @@ export default function Security() {
         <SectionMenu>
           <SectionMenuItem
             isActive={activeSection == 'signer'}
-            onClick={() => setActiveSection('signer')}
+            onClick={() => navigate('/security/signer')}
           >
             Signer
           </SectionMenuItem>
           <SectionMenuItem
             isActive={activeSection == 'guardian'}
-            onClick={() => setActiveSection('guardian')}
+            onClick={() => navigate('/security/guardian')}
           >
             Guardian
           </SectionMenuItem>
         </SectionMenu>
         <RoundSection marginTop="10px" background="white">
-          {activeSection === 'signer' && (
-            <Fragment>
-              <Box
-                fontFamily="Nunito"
-                fontWeight="700"
-                fontSize="18px"
-                display="flex"
-              >
-                <Box>My Signers</Box>
-                <Box marginLeft="auto">
-                  <Button type="mid" onClick={openChooseSignerModal}>
-                    <Box marginRight="6px"><PlusIcon color="white" /></Box>
-                    Add signer
-                  </Button>
-                </Box>
-              </Box>
-              <Box paddingTop="14px" display="flex">
-                <SignerCard
-                  name="Wallet (...dS123)"
-                  address="0xAAAA12345678E25FDa5f8a56B8e267fDaB6dS123"
-                  time="Added on 2023-12-14"
-                  marginRight="18px"
-                  isDefault="true"
-                  cursor="pointer"
-                  onClick={openSetDefaultModal}
-                />
-                <SignerCard
-                  name="Passkey_1"
-                  address="Wallet_1-2023-12-28-11:12:13"
-                  device="Chrome profile"
-                  time="Added on 2023-12-14 "
-                  cursor="pointer"
-                  onClick={openSetDefaultModal}
-                />
-              </Box>
-            </Fragment>
-          )}
           {activeSection === 'guardian' && (
             <Fragment>
               <Box
