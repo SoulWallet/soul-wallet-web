@@ -43,15 +43,6 @@ export default function SelectGuardianTypeModal({
   setIsSelectGuardianOpen,
   setIsEditGuardianOpen
 }: any) {
-  const selectWalletExtension = useCallback(() => {
-    onClose()
-    startWalletConnect()
-  }, [])
-
-  const selectPasskey = useCallback(() => {
-    onClose()
-  }, [])
-
   const startIntroGuardian = useCallback(() => {
     console.log('startIntroGuardian')
     setIsSelectGuardianOpen(false)

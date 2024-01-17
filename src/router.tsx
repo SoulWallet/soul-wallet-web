@@ -8,8 +8,8 @@ import Apps from '@/pages/apps';
 import Launch from '@/pages/launch';
 import Asset from '@/pages/asset';
 import Activity from '@/pages/activity';
-import Signer from '@/pages/security_new/signer';
-import Guardian from '@/pages/security_new/guardian';
+import Signer from '@/pages/security_new/Signer';
+import Guardian from '@/pages/security_new/Guardian';
 import Auth from '@/pages/auth';
 
 export const router = createBrowserRouter([

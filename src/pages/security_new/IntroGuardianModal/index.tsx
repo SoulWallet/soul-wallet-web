@@ -47,15 +47,6 @@ export default function IntroGuardianModal({
   const [showQuestion2, setShowQuestion2] = useState(false)
   const [showQuestion3, setShowQuestion3] = useState(false)
 
-  const selectWalletExtension = useCallback(() => {
-    onClose()
-    startWalletConnect()
-  }, [])
-
-  const selectPasskey = useCallback(() => {
-    onClose()
-  }, [])
-
   const startIntroGuardian = useCallback(() => {
     console.log('startIntroGuardian')
     setIsSelectGuardianOpen(false)

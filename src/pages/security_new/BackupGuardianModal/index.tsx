@@ -45,15 +45,6 @@ export default function EditGuardianModal({
   startIntroGuardian,
   startEditGuardian
 }: any) {
-  const selectWalletExtension = useCallback(() => {
-    onClose()
-    startWalletConnect()
-  }, [])
-
-  const selectPasskey = useCallback(() => {
-    onClose()
-  }, [])
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

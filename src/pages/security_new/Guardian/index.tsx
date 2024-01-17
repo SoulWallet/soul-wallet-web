@@ -126,7 +126,7 @@ export default function Guardian() {
                 <Box>Guardian List</Box>
                 <Box marginLeft="auto">
                   <TextButton type="mid" onClick={openBackupGuardianModal}>
-                    <Box marginRight="6px"><HistoryIcon color="white" /></Box>
+                    <Box marginRight="6px"><HistoryIcon /></Box>
                     Back up list
                   </TextButton>
                   <Button type="mid" onClick={openSelectGuardianModal}>
