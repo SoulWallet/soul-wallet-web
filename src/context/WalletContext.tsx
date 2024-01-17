@@ -24,7 +24,7 @@ interface IWalletContext {
   showTestGuide: () => Promise<void>;
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
   showTransferAssets: (tokenAddress?: string, transferType?:string) => Promise<void>;
-  checkActivated: () => Promise<boolean>;
+  checkActivated: () => Promise<boolean | undefined>;
 }
 
 export const WalletContext = createContext<IWalletContext>({

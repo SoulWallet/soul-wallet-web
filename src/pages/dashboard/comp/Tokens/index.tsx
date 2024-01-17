@@ -18,7 +18,9 @@ import ReceiveCode from '@/components/ReceiveCode';
 const SetGuardianHint = () => {
   const { createWallet } = useWallet();
   const { updateCreateInfo } = useTempStore();
+  const [creating, setCreating] = useState(false);
   const skipSetupGuardian = async () => {
+    setCreating(true)
     // generate wallet address
     updateCreateInfo({
       initialGuardianHash: ethers.ZeroHash,
@@ -26,6 +28,7 @@ const SetGuardianHint = () => {
     });
 
     await createWallet();
+    setCreating(false);
   };
   return (
     <Flex
@@ -33,7 +36,7 @@ const SetGuardianHint = () => {
       justify={'center'}
       backdropFilter={'blur(32px)'}
       pos="absolute"
-      pt="64px"
+      pt="100px"
       pb="164px"
       top="0"
       right={'0'}
@@ -64,6 +67,7 @@ const SetGuardianHint = () => {
             bg="brand.white"
             _hover={{ bg: '#eee' }}
             border="1px solid #D0D5DD"
+            // loading={creating}
             onClick={skipSetupGuardian}
           >
             Later
@@ -123,7 +127,7 @@ export default function Tokens() {
 
   return (
     <HomeCard title={'Assets'} pos="relative" external={<ExternalLink title="View more" to="/asset" />} h="100%">
-      {!slotInfo.initialGuardianHash && <SetGuardianHint />}
+      {slotInfo.initialGuardianHash && <SetGuardianHint />}
 
       {isTokenBalanceEmpty ? <DepositHint /> : <TokenBalanceTable />}
     </HomeCard>

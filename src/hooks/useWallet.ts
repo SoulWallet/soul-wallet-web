@@ -63,6 +63,8 @@ export default function useWallet() {
 
     const addresses = await calcWalletAddressAllChains(0);
 
+    setAddressList(addresses);
+
     console.log('addresss', addresses)
 
   }
@@ -234,15 +236,15 @@ export default function useWallet() {
     // set init info
     retrieveSlotInfo(initInfo);
     // calc first address
-    const newAddress = await calcWalletAddress(0);
-    setAddressList([
-      {
-        address: newAddress,
-        activatedChains: [],
-      },
-    ]);
+    // const newAddress = await calcWalletAddress(0);
+    // setAddressList([
+    //   {
+    //     address: newAddress,
+    //     activatedChains: [],
+    //   },
+    // ]);
 
-    saveAddressName(newAddress, 'Account 1', true);
+    // saveAddressName(newAddress, 'Account 1', true);
 
     // IMPORTANT TODO, get wallet name from credential storage
     // set credentials
@@ -280,17 +282,17 @@ export default function useWallet() {
       ...recoveringGuardiansInfo,
       initialKeys: recoveringGuardiansInfo.initialKeysAddress,
     });
-    const newAddress = await calcWalletAddress(0);
+    // const newAddress = await calcWalletAddress(0);
 
-    setAddressList([
-      {
-        address: newAddress,
-        // TODO, check activate status
-        activatedChains: [],
-      },
-    ]);
+    // setAddressList([
+    //   {
+    //     address: newAddress,
+    //     // TODO, check activate status
+    //     activatedChains: [],
+    //   },
+    // ]);
 
-    saveAddressName(newAddress, 'Account 1', true);
+    // saveAddressName(newAddress, 'Account 1', true);
 
     setCredentials(recoveringGuardiansInfo.credentials);
     // set goerli if no selected chainId
@@ -317,12 +319,12 @@ export default function useWallet() {
     });
     const { addressList } = useAddressStore.getState();
     if (addressList.length === 0) {
-      for (let [index, item] of Object.entries(res.addresses)) {
-        addAddressItem({
-          address: item as any,
-          activatedChains: [],
-        });
-      }
+      // for (let [index, item] of Object.entries(res.addresses)) {
+      //   addAddressItem({
+      //     address: item as any,
+      //     activatedChains: [],
+      //   });
+      // }
     }
 
     // check if should replace key

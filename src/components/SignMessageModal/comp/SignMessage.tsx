@@ -54,7 +54,7 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
   };
 
   const checkIsActivated = async () => {
-    setIsActivated(await checkActivated());
+    // setIsActivated(await checkActivated());
   };
 
   useEffect(() => {

@@ -97,7 +97,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
                 <Text fontWeight={'800'} lineHeight={'1.25'} mb="3" color="#000">
                   Select an activated account on this network to continue
                 </Text>
-                {addressList.map((item) => (
+                {/* {addressList.map((item) => (
                   <MenuItem key={item.address} px="0" py="3" borderTop={'1px solid #e6e6e6'}>
                     {item.activatedChains.includes(targetChainId) ? (
                       <Flex
@@ -121,7 +121,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
                       </Flex>
                     )}
                   </MenuItem>
-                ))}
+                ))} */}
               </MenuList>
             </Menu>
           </Text>

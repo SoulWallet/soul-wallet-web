@@ -5,7 +5,7 @@ import IconChecked from '@/assets/icons/checked.svg';
 import IconLoading from '@/assets/loading.gif';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
-import { useAddressStore } from '@/store/address';
+import { IAddressItem, useAddressStore } from '@/store/address';
 import { toShortAddress } from '@/lib/tools';
 import AddressIcon from '../AddressIcon';
 import useSdk from '@/hooks/useSdk';
@@ -13,27 +13,12 @@ import IconCopy from '@/assets/copy.svg';
 import { PlusSquareIcon } from '@chakra-ui/icons';
 import useTools from '@/hooks/useTools';
 import { useSettingStore } from '@/store/setting';
+import { useChainStore } from '@/store/chain';
 
 const CreateAccount = () => {
   const [creating, setCreating] = useState(false);
-  const { calcWalletAddress } = useSdk();
-  const { addressList, addAddressItem } = useAddressStore();
-  const { saveAddressName } = useSettingStore();
 
-  const doCreate = async () => {
-    if (creating) {
-      return;
-    }
-    setCreating(true);
-    const newIndex = addressList.length;
-    const newAddress = await calcWalletAddress(newIndex);
-    addAddressItem({
-      address: newAddress,
-      activatedChains: [],
-    });
-    saveAddressName(newAddress, `Account ${newIndex + 1}`, true);
-    setCreating(false);
-  };
+  const doCreate = async () => {};
 
   return (
     <MenuItem onClick={doCreate} as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
@@ -73,21 +58,17 @@ export function AccountSelectFull({ ...restProps }) {
 export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ...restProps }: any) {
   const { navigate } = useBrowser();
   const { selectedAddressItem, selectedChainItem } = useConfig();
-  const { getAddressName } = useSettingStore();
-  const { addressList, setAddressList, selectedAddress, setSelectedAddress } = useAddressStore();
 
-  // useEffect(() => {
-  //   setAddressList([
-  //     {
-  //       address: '0x1277d149314bB96292ec2B135D5caa5AB02Fb2D6',
-  //       activatedChains: [],
-  //     },
-  //     {
-  //       address: '0x1277d149314bB96292ec2B135D5caa5AB02Fb2D4',
-  //       activatedChains: [],
-  //     },
-  //   ]);
-  // }, []);
+  const { getAddressName } = useSettingStore();
+  const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
+  const { getChainItem, setSelectedChainId } = useChainStore();
+
+  const onAddressChange = (item: IAddressItem) => {
+    console.log('change addr', item);
+    setSelectedAddress(item.address);
+    setSelectedChainId(item.chainIdHex);
+  };
+
   return selectedAddressItem ? (
     <Menu>
       {({ isOpen }) => (
@@ -124,21 +105,23 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
             </Flex>
           </MenuButton>
 
-          <MenuList w="200px">
+          <MenuList w="230px" zIndex={'200'}>
             {addressList.map((item: any, idx: number) => {
+              const chainInfo = getChainItem(item.chainIdHex);
               return (
                 <React.Fragment key={idx}>
-                  {idx ? <MenuDivider /> : ''}
-                  <MenuItem key={item.address} onClick={() => setSelectedAddress(item.address)}>
+                  {/* {idx ? <MenuDivider /> : ''} */}
+                  <MenuItem key={item.address} onClick={() => onAddressChange(item)}>
                     <Flex w="100%" align={'center'} justify={'space-between'}>
-                      <Flex align={'center'} gap="2">
-                        <AddressIcon address={item.address} width={24} />
+                      <Flex align={'center'} gap="3">
+                        <Image src={chainInfo.icon} w="8" h="8" />
+                        {/* <AddressIcon address={item.address} width={24} /> */}
                         <Box>
-                          <Text mb="1" fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
-                            {getAddressName(item.address)}
+                          <Text fontSize={'16px'} fontWeight={'700'} lineHeight={1.25}>
+                            {chainInfo.chainName}
                           </Text>
-                          <Text fontSize={'12px'} data-testid={`text-accountname-${idx}`} lineHeight={1}>
-                            {toShortAddress(item.address, 4, 6)}
+                          <Text fontSize={'12px'} data-testid={`text-accountname-${idx}`} lineHeight={1.6}>
+                            {toShortAddress(item.address, 5, 5)}
                           </Text>
                         </Box>
                       </Flex>

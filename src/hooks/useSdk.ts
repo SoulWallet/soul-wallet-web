@@ -31,7 +31,7 @@ export default function useSdk() {
    * @param threshold, initial guardian threshold
    * @returns
    */
-  const calcWalletAddress = async (index: number, chainIdHex?: string) => {
+  const calcWalletAddress = async (index: number, chainIdHex: string) => {
     const {initialKeys, initialGuardianHash, initialGuardianSafePeriod } = getSlotInfo();
 
     console.log(1111)
@@ -43,8 +43,10 @@ export default function useSdk() {
       chainIdHex,
     );
 
-    console.log('aaaaa', wAddress);
-    return wAddress.OK;
+    return {
+      address: wAddress.OK,
+      chainIdHex,
+    }
   };
 
   /**

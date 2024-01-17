@@ -4,7 +4,8 @@ import { persist } from 'zustand/middleware';
 
 export interface IAddressItem {
   address: string;
-  activatedChains: string[];
+  chainIdHex:string;
+  activated?: boolean;
   // allowedOrigins: string[];
 }
 
@@ -19,7 +20,7 @@ export interface IAddressStore {
   deleteAddress: (address: string) => void;
   // toggleAllowedOrigin: (address: string, origin: string, isAdd?: boolean) => void;
   toggleActivatedChain: (address: string, chainId: string, isAdd?: boolean) => void;
-  getIsActivated: (address: string, chainId: string) => boolean;
+  getIsActivated: (address: string, chainId: string) => boolean | undefined;
   getSelectedAddressItem: () => IAddressItem;
   clearAddressList: () => void;
 }
@@ -70,10 +71,10 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
       state.addressList[index] = itemToSet;
     });
   },
-  getIsActivated: (address, chainId) => {
+  getIsActivated: (address) => {
     const index = getIndexByAddress(get().addressList, address);
     const addressInfo = get().addressList[index];
-    return addressInfo && addressInfo.activatedChains.includes(chainId);
+    return addressInfo && addressInfo.activated;
   },
   deleteAddress: (address: string) => {
     set((state: IAddressStore) => {
@@ -94,12 +95,12 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
   // IMPORTANT TODO, need to do some onchain check as well
   toggleActivatedChain: (address, chainId, isAdd = true) => {
     set((state: IAddressStore) => {
-      const index = getIndexByAddress(state.addressList, address);
-      if (isAdd) {
-        state.addressList[index].activatedChains.push(chainId);
-      } else {
-        state.addressList[index].activatedChains.splice(index, 1);
-      }
+      // const index = getIndexByAddress(state.addressList, address);
+      // if (isAdd) {
+      //   state.addressList[index].activatedChains.push(chainId);
+      // } else {
+      //   state.addressList[index].activatedChains.splice(index, 1);
+      // }
     });
   },
   clearAddressList: () => {

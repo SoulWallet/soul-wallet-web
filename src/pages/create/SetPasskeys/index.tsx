@@ -91,9 +91,9 @@ export default function SetPasskeys({ changeStep }: any) {
   };
 
   const createInitialWallet = async () => {
-    const newAddress = await calcWalletAddress(0);
-    setAddressList([{ address: newAddress, activatedChains: [] }]);
-    saveAddressName(newAddress, 'Account 1', true);
+    // const newAddress = await calcWalletAddress(0);
+    // setAddressList([{ address: newAddress, activatedChains: [] }]);
+    // saveAddressName(newAddress, 'Account 1', true);
     setEditingGuardiansInfo({});
     setSelectedCredentialId(credentials[0].id)
   };
