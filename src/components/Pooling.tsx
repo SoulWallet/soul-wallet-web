@@ -14,7 +14,6 @@ export default function Pooling() {
   const { ethersProvider } = useWalletContext();
   const { selectedAddress } = useAddressStore();
   const { fetchHistory } = useHistoryStore();
-  const {setSelectedCredentialId, selectedCredentialId,} = useSignerStore();
   const { selectedChainItem } = useConfig();
   const { selectedChainId } = useChainStore();
   const { fetchTokenBalance } = useBalanceStore();
@@ -22,7 +21,7 @@ export default function Pooling() {
   useEffect(() => {
     const { chainIdHex, paymasterTokens } = selectedChainItem;
 
-    if (!selectedAddress || !selectedChainId || !selectedCredentialId) {
+    if (!selectedAddress || !selectedChainId) {
       return;
     }
 

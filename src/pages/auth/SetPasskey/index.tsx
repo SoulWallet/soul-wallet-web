@@ -41,9 +41,6 @@ export default function SetPasskey() {
   const {
     addCredential,
     credentials,
-    changeCredentialName,
-    walletName,
-    setSelectedCredentialId,
   } = useSignerStore();
   const [isCreating, setIsCreating] = useState(false);
   const { navigate } = useBrowser();

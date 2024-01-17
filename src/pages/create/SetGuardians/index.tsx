@@ -218,7 +218,6 @@ const isGuardiansListFilled = (list: any) => {
 
 export default function SetGuardians({ changeStep }: any) {
   const { chainConfig } = useConfig();
-  const { addCredential, credentials, setSelectedCredentialId, walletName, } = useSignerStore();
   const [isConfirming, setIsConfirming] = useState(false);
   const { saveAddressName, getAddressName } = useSettingStore();
   const { setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
@@ -518,7 +517,6 @@ export default function SetGuardians({ changeStep }: any) {
    *   setAddressList([{address: newAddress, activatedChains: []}]);
    *   saveAddressName(newAddress, walletName);
    *   setEditingGuardiansInfo({});
-   *   setSelectedCredentialId(credentials[0].id)
    * }; */
 
   const createInitialGurdianInfo = async ({ guardians, guardianNames, threshold }: any) => {

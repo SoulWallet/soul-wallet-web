@@ -15,7 +15,6 @@ export default function useQuery() {
   const { ethersProvider } = useWalletContext();
   const { soulWallet } = useSdk();
   const { chainConfig } = useConfig();
-  const { getTokenBalance } = useBalanceStore();
   const { getSelectedKeyType } = useSignerStore();
 
   const getEthPrice = async () => {

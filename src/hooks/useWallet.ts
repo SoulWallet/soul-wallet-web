@@ -31,12 +31,11 @@ export default function useWallet() {
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
-  const { createInfo } = useTempStore();
   const { setSignerId, getSelectedKeyType, } = useSignerStore();
 
   const createWallet = async () => {
     // retrieve info from temp store
-    const { credentials, eoaAddress, initialGuardianHash, initialGuardianSafePeriod } = createInfo;
+    const { credentials, eoaAddress, initialGuardianHash, initialGuardianSafePeriod } = useTempStore.getState().createInfo;
 
     const credentialKeys = credentials.map((item: any) => item.publicKey);
     const initialKeys = [...credentialKeys, ...[eoaAddress]].filter((item) => item);
@@ -59,8 +58,8 @@ export default function useWallet() {
 
     setAddressList(addresses);
 
-    if(credentialKeys[0]){
-      setSignerId(credentialKeys[0])
+    if(credentials.length>0){
+      setSignerId(credentials[0].id)
     }else if(eoaAddress){
       setSignerId(eoaAddress);
     }

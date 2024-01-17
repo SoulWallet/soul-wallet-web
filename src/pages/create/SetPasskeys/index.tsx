@@ -40,7 +40,7 @@ export default function SetPasskeys({ changeStep }: any) {
     credentials,
     changeCredentialName,
     walletName,
-    setSelectedCredentialId,
+    // setSelectedCredentialId,
   } = useSignerStore();
   const [isCreating, setIsCreating] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
@@ -95,7 +95,7 @@ export default function SetPasskeys({ changeStep }: any) {
     // setAddressList([{ address: newAddress, activatedChains: [] }]);
     // saveAddressName(newAddress, 'Account 1', true);
     setEditingGuardiansInfo({});
-    setSelectedCredentialId(credentials[0].id)
+    // setSelectedCredentialId(credentials[0].id)
   };
 
   const createWallet = async () => {

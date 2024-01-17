@@ -7,8 +7,6 @@ export interface ISignerStore {
   signerId: string;
   setSignerId: (signerId: string) => void;
   eoa: string;
-  selectedCredentialId: string;
-  setSelectedCredentialId: (credentialId: string) => void;
   walletName: string;
   setWalletName: (name: string) => void;
   credentials: any;
@@ -37,21 +35,15 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
     if (get().signerId === get().eoa) {
       return SignkeyType.EOA;
     } else {
-      const index = getIndexByCredentialId(get().credentials, get().selectedCredentialId);
+      const index = getIndexByCredentialId(get().credentials, get().signerId);
       const algorithm = get().credentials[index].algorithm;
       return algorithm === 'ES256' ? SignkeyType.P256 : SignkeyType.RS256;
     }
   },
-  selectedCredentialId: '',
   walletName: '',
   setWalletName: (name: string) => {
     set({
       walletName: name,
-    });
-  },
-  setSelectedCredentialId: (credentialId: string) => {
-    set((state) => {
-      state.selectedCredentialId = credentialId;
     });
   },
   addCredential: (credential: any) => {
@@ -63,7 +55,7 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
     set((state) => {
       state.credentials = credentials;
       // set the first one as default
-      state.selectedCredentialId = credentials[0].id;
+      state.signerId = credentials[0].id;
     });
   },
   clearCredentials: () => {
@@ -72,7 +64,7 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
     });
   },
   getSelectedCredential: () => {
-    const index = getIndexByCredentialId(get().credentials, get().selectedCredentialId);
+    const index = getIndexByCredentialId(get().credentials, get().signerId);
     return get().credentials[index];
   },
   changeCredentialName: (credentialId: string, name: string) => {
