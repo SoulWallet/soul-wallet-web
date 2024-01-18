@@ -5,6 +5,7 @@ import ConfirmPaymentModal from '@/components/ConfirmPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import ClaimAssetsModal from '@/components/ClaimAssetsModal';
 import TestGuideModal from '@/components/TestGuideModal';
+import FeedbackModal from '@/components/FeedbackModal';
 import SendModal from '@/components/SendModal';
 import ReceiveModal from '@/components/ReceiveModal';
 import useConfig from '@/hooks/useConfig';
@@ -26,6 +27,7 @@ interface IWalletContext {
   showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
   showReceive: () => Promise<void>;
   showSend: (tokenAddress?: string, transferType?:string) => Promise<void>;
+  showFeedback: () => Promise<void>;
   checkActivated: () => Promise<boolean | undefined>;
 }
 
@@ -37,6 +39,7 @@ export const WalletContext = createContext<IWalletContext>({
   showReceive: async () => {},
   showSend: async () => {},
   showClaimAssets: async () => {},
+  showFeedback: async () => {},
   showTestGuide: async () => {},
   checkActivated: async () => false,
 });
@@ -56,6 +59,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const sendModal = useRef<any>();
   const claimAssetsModal = useRef<any>();
   const testGuideModal = useRef<any>();
+  const feedbackModal = useRef<any>();
   
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
@@ -130,6 +134,10 @@ export const WalletContextProvider = ({ children }: any) => {
     return await testGuideModal.current.show();
   };
 
+  const showFeedback = async () => {
+    return await feedbackModal.current.show();
+  };
+
   // if address on chain is not activated, check again
   useEffect(() => {
     if (!selectedAddress || !selectedChainId) {
@@ -149,6 +157,7 @@ export const WalletContextProvider = ({ children }: any) => {
         showSend,
         showClaimAssets,
         showTestGuide,
+        showFeedback,
         checkActivated,
       }}
     >
@@ -161,6 +170,7 @@ export const WalletContextProvider = ({ children }: any) => {
       <ReceiveModal ref={receiveModal} />
       <SendModal ref={sendModal} />
       <TestGuideModal ref={testGuideModal} />
+      <FeedbackModal ref={feedbackModal} />
     </WalletContext.Provider>
   );
 };

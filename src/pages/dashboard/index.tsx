@@ -1,10 +1,7 @@
-import Header from '@/components/Header';
 import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 import Tokens from './comp/Tokens';
 import Activity from './comp/Activity';
 import Balance from './comp/Balance';
-import Feedback from './comp/Feedback';
-import AppContainer from '@/components/AppContainer';
 import DappList from '@/components/DappList';
 import SetGuardianHint from './comp/SetGuardianHint';
 import DashboardLayout from '@/components/Layouts/DashboardLayout';
@@ -24,8 +21,6 @@ export default function Dashboard() {
           <DappList />
         </Flex>
       </Flex>
-
-          {/*<Feedback /> */}
     </DashboardLayout>
   );
 }

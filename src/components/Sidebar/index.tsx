@@ -8,6 +8,7 @@ import IconFeedback from '@/assets/icons/feedback.svg';
 import Footer from '../Footer';
 import { guideList } from '@/data';
 import { useSettingStore } from '@/store/setting';
+import FeedbackModal from '../FeedbackModal';
 
 const ExtraLink = ({ children, ...restProps }: FlexProps) => {
   return (
@@ -20,8 +21,7 @@ const ExtraLink = ({ children, ...restProps }: FlexProps) => {
 export default function Sidebar() {
   const location = useLocation();
   const { finishedSteps } = useSettingStore();
-  const { showClaimAssets, showTestGuide } = useWalletContext();
-
+  const { showClaimAssets, showTestGuide, showFeedback, } = useWalletContext();
   const pathname = location.pathname;
 
   return (
@@ -71,7 +71,7 @@ export default function Sidebar() {
               <Box bg="#ff2e79" w="6px" h="6px" rounded={'full'} pos="absolute" right={'-8px'} top="2px" />
             </Box>
           </ExtraLink>
-          <ExtraLink>
+          <ExtraLink onClick={() => showFeedback()}>
             <Image src={IconFeedback} />
             <Text>Feedback</Text>
           </ExtraLink>
