@@ -34,7 +34,6 @@ export default function useWallet() {
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
-  const {setWalletName} = useTools();
   const { clearCreateInfo } = useTempStore();
 
   const createWallet = async ({

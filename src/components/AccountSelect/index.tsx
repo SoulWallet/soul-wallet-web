@@ -118,6 +118,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                         {/* <AddressIcon address={item.address} width={24} /> */}
                         <Box>
                           <Text fontSize={'16px'} fontWeight={'700'} lineHeight={1.25}>
+                            {chainInfo.chainName}
                           </Text>
                           <Text fontSize={'12px'} data-testid={`text-accountname-${idx}`} lineHeight={1.6}>
                             {toShortAddress(item.address, 5, 5)}
