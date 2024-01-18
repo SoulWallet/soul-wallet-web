@@ -32,6 +32,7 @@ const SetGuardianHint = () => {
     updateCreateInfo(noGuardian);
     await createWallet(noGuardian);
     setCreating(false);
+    console.log('done skip')
   };
   return (
     <Flex

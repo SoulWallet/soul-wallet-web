@@ -53,7 +53,7 @@ export default function SetPasskey() {
   const createWallet = async () => {
     try {
       setIsCreating(true);
-      const credentialKey = await register('');
+      const credentialKey = await register();
       addCredential(credentialKey);
       setIsCreating(false);
     } catch (error: any) {

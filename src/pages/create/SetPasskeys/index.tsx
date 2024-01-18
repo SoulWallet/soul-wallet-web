@@ -39,7 +39,6 @@ export default function SetPasskeys({ changeStep }: any) {
     addCredential,
     credentials,
     changeCredentialName,
-    walletName,
     // setSelectedCredentialId,
   } = useSignerStore();
   const [isCreating, setIsCreating] = useState(false);
@@ -52,6 +51,8 @@ export default function SetPasskeys({ changeStep }: any) {
   const { calcWalletAddress } = useSdk();
   const { setSelectedAddress, setAddressList } = useAddressStore();
   const { setSlotInfo } = useSlotStore()
+
+  const walletName = '';
 
   const createInitialSlotInfo = async () => {
     const keystore = chainConfig.contracts.l1Keystore;
@@ -101,7 +102,7 @@ export default function SetPasskeys({ changeStep }: any) {
   const createWallet = async () => {
     try {
       setIsCreating(true);
-      const credentialKey = await register(walletName);
+      const credentialKey = await register();
       addCredential(credentialKey);
       setIsCreating(false);
     } catch (error: any) {

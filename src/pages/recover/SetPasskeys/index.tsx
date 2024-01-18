@@ -36,10 +36,6 @@ export default function SetPasskeys({ changeStep }: any) {
     updateRecoveringGuardiansInfo
   } = useGuardianStore();
   const { updateSlotInfo } = useSlotStore()
-  const { saveAddressName } = useSettingStore();
-  const { walletName } = useSignerStore();
-  const { setAddressList } = useAddressStore();
-  const { calcWalletAddress } = useSdk();
   const toast = useToast();
   const credentials = recoveringGuardiansInfo.credentials || []
 
@@ -68,8 +64,8 @@ export default function SetPasskeys({ changeStep }: any) {
   const createWallet = async () => {
     try {
       setIsCreating(true);
-      const credentials = getRecoveringGuardiansInfo().credentials || []
-      const credentialKey = await register(walletName);
+      // const credentials = getRecoveringGuardiansInfo().credentials || []
+      const credentialKey = await register();
       addCredential(credentialKey)
       setIsCreating(false);
       // navigate('/create');
