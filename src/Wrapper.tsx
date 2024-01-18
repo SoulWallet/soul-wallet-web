@@ -13,14 +13,14 @@ export default function Wrapper() {
     <ChakraProvider theme={Theme} toastOptions={{ defaultOptions: { duration: 1000, position: 'top-right' } }}>
       <Fonts />
       <EnvCheck>
-        <FindRoute>
-          <WalletContextProvider>
-            <WagmiContext>
+        <WagmiContext>
+          <FindRoute>
+            <WalletContextProvider>
               <Outlet />
               <Pooling />
-            </WagmiContext>
-          </WalletContextProvider>
-        </FindRoute>
+            </WalletContextProvider>
+          </FindRoute>
+        </WagmiContext>
       </EnvCheck>
     </ChakraProvider>
   );

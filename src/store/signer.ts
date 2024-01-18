@@ -7,6 +7,7 @@ export interface ISignerStore {
   signerId: string;
   setSignerId: (signerId: string) => void;
   eoa: string;
+  setEoa: (eoa: string) => void;
   walletName: string;
   setWalletName: (name: string) => void;
   credentials: any;
@@ -30,6 +31,12 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
     });
   },
   eoa: '',
+  setEoa: (eoa: string) => {
+    set({
+      eoa,
+      signerId: eoa,
+    });
+  },
   credentials: [],
   getSelectedKeyType: () => {
     if (get().signerId === get().eoa) {

@@ -122,7 +122,7 @@ export default function Tokens() {
     showSend(tokenAddress);
   };
 
-  const isTokenBalanceEmpty = tokenBalance.every((item) => item.tokenBalance === '0');
+  const isTokenBalanceEmpty = tokenBalance.every((item) => !Number(item.tokenBalance));
 
   return (
     <HomeCard title={'Assets'} pos="relative" external={<ExternalLink title="View more" to="/asset" />} h="100%">

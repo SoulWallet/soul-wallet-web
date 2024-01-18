@@ -8,7 +8,6 @@ import { useChainStore } from '@/store/chain';
 import ActivityTable from './comp/ActivityTable';
 import { Tabs } from '../asset';
 
-
 const tabList = [
   {
     title: 'All',
@@ -20,11 +19,10 @@ const tabList = [
   // },
 ];
 
-export default function Activity({}) {
+export default function Activity() {
   const [activeTab, setActiveTab] = useState(0);
   const { chainList } = useChainStore();
   const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
-
 
   return (
     <Box color="#000">

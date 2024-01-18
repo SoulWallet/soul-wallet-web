@@ -12,18 +12,19 @@ import BN from 'bignumber.js';
 import useConfig from './useConfig';
 import api from '@/lib/api';
 import usePasskey from './usePasskey';
+import { useSignMessage } from 'wagmi';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
-import { useSignTypedData, useWalletClient } from 'wagmi';
 
 export default function useWallet() {
   const { signByPasskey } = usePasskey();
   const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
   const { ethersProvider } = useWalletContext();
+  const { signMessageAsync } = useSignMessage();
   const { updateGuardiansInfo, recoveringGuardiansInfo, updateRecoveringGuardiansInfo, setRecoveringGuardiansInfo } =
     useGuardianStore();
   const { slotInfo, setSlotInfo } = useSlotStore();
@@ -31,11 +32,16 @@ export default function useWallet() {
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
-  const { setSignerId, getSelectedKeyType, } = useSignerStore();
+  const { setSignerId, getSelectedKeyType, setEoa } = useSignerStore();
 
   const createWallet = async () => {
     // retrieve info from temp store
-    const { credentials, eoaAddress, initialGuardianHash, initialGuardianSafePeriod } = useTempStore.getState().createInfo;
+    const {
+      credentials = [],
+      eoaAddress,
+      initialGuardianHash,
+      initialGuardianSafePeriod,
+    } = useTempStore.getState().createInfo;
 
     const credentialKeys = credentials.map((item: any) => item.publicKey);
     const initialKeys = [...credentialKeys, ...[eoaAddress]].filter((item) => item);
@@ -58,13 +64,16 @@ export default function useWallet() {
 
     setAddressList(addresses);
 
-    if(credentials.length>0){
-      setSignerId(credentials[0].id)
-    }else if(eoaAddress){
-      setSignerId(eoaAddress);
+    // IMPORTANT TODO, initialize data
+    if (eoaAddress) {
+      // setSignerId(eoaAddress)
+      setEoa(eoaAddress);
+    } else if (credentials.length > 0) {
+      // setSignerId(credentials[0].id);
+      setCredentials(credentials);
     }
-
     console.log('addresss', addresses);
+    // mock alert, TODO, create temp data
   };
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
@@ -135,9 +144,11 @@ export default function useWallet() {
     return soulAbi.encodeFunctionData('setGuardian(bytes32,bytes32,bytes32)', [slot, guardianHash, keySignature]);
   };
 
-  const getEoaSignature = async (packedHash: string, validationData: string) => {
+  const getEoaSignature = async (packedHash: any, validationData: string) => {
     // const signatureData: any = await signWithEoa();
-    const signatureData: any = '123';
+    const signatureData: any = await signMessageAsync({ message: {
+      raw: packedHash,
+    } });
 
     console.log('packUserEoaSignature params:', signatureData, validationData);
 
@@ -209,11 +220,11 @@ export default function useWallet() {
     }
     const packedUserOpHash = packedUserOpHashRet.OK;
 
-    if(selectedKeyType=== SignkeyType.EOA){
+    if (selectedKeyType === SignkeyType.EOA) {
       userOp.signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
-    }else if(selectedKeyType=== SignkeyType.P256 || selectedKeyType=== SignkeyType.RS256){
+    } else if (selectedKeyType === SignkeyType.P256 || selectedKeyType === SignkeyType.RS256) {
       userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
-    }else{
+    } else {
       console.error('No sign key type selected');
     }
 
