@@ -1,7 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
 import { Text, Image, Flex, Divider } from '@chakra-ui/react';
-import TxModal from '../TxModal';
-import IconUnchecked from '@/assets/icons/unchecked.svg';
+import Modal from '../Modal';
 import IconChecked from '@/assets/icons/checked.svg';
 import api from '@/lib/api';
 import useTools from '@/hooks/useTools';
@@ -46,22 +45,11 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
 
   return (
     <div ref={ref}>
-      <TxModal
-        bodyStyle={{
-          pt: { base: 4 },
-          pb: { base: 4 },
-          px: { base: 4 },
-        }}
-        visible={visible}
-        width={{ base: '90%', lg: '500px' }}
-        onClose={onClose}
-        title="Check list for your test"
-      >
+      <Modal title="Check list for your test" visible={visible} width={{ lg: '500px' }} onClose={onClose}>
         <Flex flexDir="column">
           {guideList.map((item, idx: number) => (
             <React.Fragment key={idx}>
-              {idx ? <Divider my="3" /> : ''}
-              <Flex gap="2" justify={'space-between'}>
+              <Flex pb="4" pt={idx ? 4 : 0} justify={'space-between'}>
                 <Text fontWeight={'800'} fontSize={'16px'}>
                   {idx + 1}. {item.statusText}
                 </Text>
@@ -85,7 +73,7 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
             </React.Fragment>
           ))}
         </Flex>
-      </TxModal>
+      </Modal>
     </div>
   );
 };
