@@ -16,28 +16,9 @@ import Title from '@/components/new/Title'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
 import Button from '@/components/new/Button'
-import MetamaskIcon from '@/assets/wallets/metamask.png'
-// import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
-// import CoinbaseIcon from '@/assets/wallets/coinbase.png'
-// import BinanceIcon from '@/assets/wallets/binance.png'
-import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
-import InjectedIcon from '@/assets/wallets/injected.svg'
-import UnknownIcon from '@/assets/wallets/unknown.svg'
+import { supportedEoas } from '@/config'
 import SuccessIcon from "@/components/Icons/Success";
-// import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
-
-const getWalletIcon = (walletId: string) => {
-  switch (walletId) {
-    case 'injected':
-      return InjectedIcon;
-    case 'walletConnect':
-      return WalletConnectIcon;
-    case 'io.metamask':
-      return MetamaskIcon;
-    default:
-      return UnknownIcon;
-  }
-}
+import { getWalletIcon } from '@/lib/tools'
 
 export default function RegisterModal({
   isOpen,
@@ -189,7 +170,7 @@ export default function RegisterModal({
               )}
               {!(isConnecting && isConnectAtive) && (
                 <Box width="100%" display="flex" flexWrap="wrap">
-                  {connectors.map((connector: Connector) =>
+                  {connectors.filter(item => supportedEoas.includes(item.id)).map((connector: Connector) =>
                     <Box
                       key={connector.uid}
                       display="flex"

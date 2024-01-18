@@ -16,6 +16,10 @@ import IconContract from '@/assets/activities/contract.svg';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
+import MetamaskIcon from '@/assets/wallets/metamask.png'
+import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
+import InjectedIcon from '@/assets/wallets/injected.svg'
+import UnknownIcon from '@/assets/wallets/unknown.svg'
 
 export const getChainIcon = (chainIdHex: string) => {
   switch (chainIdHex) {
@@ -29,6 +33,19 @@ export const getChainIcon = (chainIdHex: string) => {
       return '';
   }
 };
+
+export const getWalletIcon = (walletId: string) => {
+  switch (walletId) {
+    case 'injected':
+      return InjectedIcon;
+    case 'walletConnect':
+      return WalletConnectIcon;
+    case 'io.metamask':
+      return MetamaskIcon;
+    default:
+      return UnknownIcon;
+  }
+}
 
 export function parseBase64url(base64url: string) {
   base64url = base64url.replace(/\-/g, '+').replace(/_/g, '/');
