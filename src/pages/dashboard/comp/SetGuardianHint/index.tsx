@@ -4,6 +4,7 @@ import Button from '@/components/Button';
 import { guideList } from '@/data';
 import api from '@/lib/api';
 import ImgArrowUp from '@/assets/icons/arrow-up.svg';
+import { findMissingNumbers } from '@/lib/tools';
 import { useSlotStore } from '@/store/slot';
 // import { useAddressStore } from '@/store/address';
 // import { findMissingNumbers } from '@/lib/tools';
@@ -12,8 +13,9 @@ import { useSettingStore } from '@/store/setting';
 
 export default function SetGuardianHint() {
   const { slotInfo } = useSlotStore();
-  const { setFinishedSteps } = useSettingStore();
+  const { setFinishedSteps, finishedSteps } = useSettingStore();
   const { goGuideAction } = useTools();
+  // todo, should remmeber this
   const [opened, setOpened] = useState(true);
 
   const checkSteps = async () => {
@@ -29,8 +31,12 @@ export default function SetGuardianHint() {
     checkSteps();
   }, []);
 
-  if(slotInfo.initialGuardianHash){
-    return
+  const missingSteps = findMissingNumbers([0, 1, 2, 3, 4, 5], finishedSteps);
+
+  const currentStep = guideList[missingSteps[0]];
+
+  if (!missingSteps.length) {
+    return;
   }
 
   return (
@@ -50,11 +56,11 @@ export default function SetGuardianHint() {
       {opened && (
         <>
           <Text fontSize={'18px'} fontWeight={'800'} lineHeight={'1.25'} mt="7" mb="3">
-            Free guardians setup for social recovery
+          {currentStep.title}
           </Text>
           <Flex align={'center'} justify={'space-between'} gap="8">
             <Text fontSize={'12px'} lineHeight={'1.5'}>
-              Your funds will be safe even if you lost all your devices.
+            {currentStep.desc}
             </Text>
             <Button
               boxSizing="content-box"
@@ -63,13 +69,13 @@ export default function SetGuardianHint() {
               fontWeight={'700'}
               fontSize={'12px'}
               onClick={() => {
-                goGuideAction(2);
+                goGuideAction(currentStep.id);
               }}
               bg="brand.black"
               color="white"
               _hover={{ bg: 'brand.purple', color: 'white' }}
             >
-              Setup now
+               {currentStep.buttonText}
             </Button>
           </Flex>
         </>

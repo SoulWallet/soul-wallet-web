@@ -22,18 +22,18 @@ export default function Receive() {
   const [editing, setEditing] = useState(false);
   const [editingName, setEditingName] = useState(getAddressName(selectedAddress));
 
-  const doCopy = () => {
-    copyText(selectedAddress);
-    toast({
-      title: 'Copied',
-      status: 'success',
-    });
-  };
+  // const doCopy = () => {
+  //   copyText(selectedAddress);
+  //   toast({
+  //     title: 'Copied',
+  //     status: 'success',
+  //   });
+  // };
 
-  const doEdit = () => {
-    saveAddressName(selectedAddress, editingName);
-    setEditing(false);
-  };
+  // const doEdit = () => {
+  //   saveAddressName(selectedAddress, editingName);
+  //   setEditing(false);
+  // };
 
   return (
     <Box mx="auto">

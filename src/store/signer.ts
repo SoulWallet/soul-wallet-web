@@ -8,8 +8,7 @@ export interface ISignerStore {
   setSignerId: (signerId: string) => void;
   eoas: string[];
   setEoas: (eoas: string[]) => void;
-  walletName: string;
-  setWalletName: (name: string) => void;
+
   credentials: any;
   getSelectedKeyType: () => SignkeyType;
   getSelectedCredential: () => void;
@@ -47,12 +46,6 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
       const algorithm = get().credentials[index].algorithm;
       return algorithm === 'ES256' ? SignkeyType.P256 : SignkeyType.RS256;
     }
-  },
-  walletName: '',
-  setWalletName: (name: string) => {
-    set({
-      walletName: name,
-    });
   },
   addCredential: (credential: any) => {
     set((state) => {

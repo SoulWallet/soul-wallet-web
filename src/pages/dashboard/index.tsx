@@ -6,8 +6,6 @@ import Balance from './comp/Balance';
 import Feedback from './comp/Feedback';
 import AppContainer from '@/components/AppContainer';
 import DappList from '@/components/DappList';
-import Footer from '@/components/Footer';
-import { AccountSelectFull } from '@/components/AccountSelect';
 import SetGuardianHint from './comp/SetGuardianHint';
 import DashboardLayout from '@/components/Layouts/DashboardLayout';
 
@@ -19,6 +17,7 @@ export default function Dashboard() {
           {/* <AccountSelectFull display={{ base: 'flex', lg: 'none' }} w="100%" /> */}
           <Balance />
           <SetGuardianHint />
+          <Activity />
         </Flex>
         <Flex flexDir={'column'} w="60%" h="100%" bg="brand.white" py="30px" px="64px" borderLeft={'1px solid #EAECF0'}>
           <Tokens  />
@@ -26,8 +25,7 @@ export default function Dashboard() {
         </Flex>
       </Flex>
 
-      {/* <Activity />
-          <Feedback /> */}
+          {/*<Feedback /> */}
     </DashboardLayout>
   );
 }

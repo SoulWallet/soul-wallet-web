@@ -23,13 +23,17 @@ export default function useTools() {
   const { clearHistory } = useHistoryStore();
   const { clearChainStore } = useChainStore();
   const { clearSlotStore, slotInfo } = useSlotStore();
-  const { getAddressName } = useSettingStore();
+  const { getAddressName,saveAddressName } = useSettingStore();
   const { showClaimAssets, showSend, } = useWalletContext();
   const { navigate } = useBrowser();
 
   const getWalletName = () => {
     return getAddressName(slotInfo.slot);
   };
+
+  const setWalletName = (name: string) => {
+    saveAddressName(slotInfo.slot, name);
+  }
 
   const clearLogData = () => {
     clearAddresses();
@@ -152,5 +156,6 @@ export default function useTools() {
     clearLogData,
     goGuideAction,
     getWalletName,
+    setWalletName,
   };
 }

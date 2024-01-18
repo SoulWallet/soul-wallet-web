@@ -1,7 +1,6 @@
-import { Box, Flex, Text, useToast, Image, Link } from '@chakra-ui/react';
-import HomeCard from '../HomeCard';
-import Button from '@/components/Button';
+import { Box, Flex, Text, useToast, Image, Link, Input } from '@chakra-ui/react';
 import { ethers } from 'ethers';
+import { useState } from 'react';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import IconSend from '@/assets/icons/wallet/send.svg';
 import IconReceive from '@/assets/icons/wallet/receive.svg';
@@ -12,15 +11,65 @@ import useConfig from '@/hooks/useConfig';
 import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
 import AddressIcon from '@/components/AddressIcon';
+import Modal from '@/components/Modal';
+import Button from '@/components/Button';
+
+export const EditNameModal = ({
+  defaultValue,
+  onCancel,
+  onConfirm,
+}: {
+  defaultValue: string;
+  onCancel: () => void;
+  onConfirm: (name: string) => void;
+}) => {
+  const [name, setName] = useState(defaultValue);
+
+  return (
+    <Modal visible={true} width={{ lg: '516px' }} hideClose={true}>
+      <Text fontSize="20px" fontWeight={'800'} lineHeight={'1.2'} mb="14px">
+        Edit wallet name
+      </Text>
+      <Input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter wallet name"
+        mb="9"
+        rounded="12px"
+      />
+      <Flex justify={'flex-end'} gap="3">
+        <Button onClick={onCancel} type="white" py="10px" px="6">
+          Cancel
+        </Button>
+        <Button
+          onClick={() => {
+            onConfirm(name);
+            onCancel();
+          }}
+          type="black"
+          py="10px"
+          px="6"
+        >
+          Save
+        </Button>
+      </Flex>
+    </Modal>
+  );
+};
 
 export default function Balance() {
   const { showSend, showReceive } = useWalletContext();
-  const { getWalletName } = useTools();
+  const [editNameModalVisible, setEditNameModalVisible] = useState(false);
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
+  const { getWalletName, setWalletName } = useTools();
   const { scanUrl } = chainConfig;
 
   const walletName = getWalletName();
+
+  const changeWalletName = (name: string) => {
+    setWalletName(name);
+  };
 
   const actions = [
     {
@@ -72,10 +121,11 @@ export default function Balance() {
         <AddressIcon address="12345" width={32} />
         <Box w="2" />
         <Text fontWeight={'800'} fontSize={'18px'}>
-          Wallet_1
+          {/** Show wallet name, otherwise default name */}
+          {walletName || 'Wallet'}
         </Text>
         <Box w="1" />
-        <Image src={IconEdit} w="5" cursor={'pointer'} />
+        <Image src={IconEdit} w="5" cursor={'pointer'} onClick={() => setEditNameModalVisible(true)} />
       </Flex>
       <Flex align={'center'} mt="24px" mb="20px" gap="2px">
         <Text fontWeight={'700'} fontSize={'24px'} lineHeight={'1'}>
@@ -95,6 +145,13 @@ export default function Balance() {
           </Box>
         ))}
       </Flex>
+      {editNameModalVisible && (
+        <EditNameModal
+          defaultValue={walletName}
+          onConfirm={changeWalletName}
+          onCancel={() => setEditNameModalVisible(false)}
+        />
+      )}
     </Box>
   );
 }

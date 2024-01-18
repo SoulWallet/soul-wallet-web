@@ -13,6 +13,8 @@ export interface ISettingStore {
   finishedSteps: number[];
   // 1. guardian address -> name 2. slot address -> name
   addressName: { [address: string]: string };
+  // signer id -> wallet address mapping
+  idAddress: {[id: string]: string };
   saveAddressName: (address: string, name: string, checkExists?: boolean) => void;
   removeAddressName: (address: string) => void;
   getAddressName: (address: string) => string;
@@ -21,6 +23,7 @@ export interface ISettingStore {
 const createSettingSlice = immer<ISettingStore>((set, get) => ({
   finishedSteps: [],
   addressName: {},
+  idAddress: {},
   ignoreWebauthnOverride: false,
   setIgnoreWebauthnOverride: (val: boolean) => {
     set({

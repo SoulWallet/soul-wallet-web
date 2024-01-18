@@ -18,6 +18,7 @@ import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
+import useTools from './useTools';
 
 export default function useWallet() {
   const { signByPasskey } = usePasskey();
@@ -33,6 +34,7 @@ export default function useWallet() {
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
   const { setSignerId, getSelectedKeyType, setEoas } = useSignerStore();
+  const {setWalletName} = useTools();
   const { clearCreateInfo } = useTempStore();
 
   const createWallet = async ({
