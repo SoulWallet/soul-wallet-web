@@ -33,14 +33,19 @@ export default function useWallet() {
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
   const { setSignerId, getSelectedKeyType, setEoas } = useSignerStore();
+  const { clearCreateInfo } = useTempStore();
 
-  const createWallet = async () => {
+  const createWallet = async ({
+    initialGuardianHash,
+    initialGuardianSafePeriod,
+  }: {
+    initialGuardianHash: string;
+    initialGuardianSafePeriod: number;
+  }) => {
     // retrieve info from temp store
     const {
       credentials = [],
       eoaAddress = [],
-      initialGuardianHash,
-      initialGuardianSafePeriod,
     } = useTempStore.getState().createInfo;
 
     const credentialKeys = credentials.map((item: any) => item.publicKey);
@@ -72,8 +77,7 @@ export default function useWallet() {
       // setSignerId(credentials[0].id);
       setCredentials(credentials);
     }
-    console.log('addresss', addresses);
-    // mock alert, TODO, create temp data
+    clearCreateInfo();
   };
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
@@ -146,9 +150,11 @@ export default function useWallet() {
 
   const getEoaSignature = async (packedHash: any, validationData: string) => {
     // const signatureData: any = await signWithEoa();
-    const signatureData: any = await signMessageAsync({ message: {
-      raw: packedHash,
-    } });
+    const signatureData: any = await signMessageAsync({
+      message: {
+        raw: packedHash,
+      },
+    });
 
     console.log('packUserEoaSignature params:', signatureData, validationData);
 

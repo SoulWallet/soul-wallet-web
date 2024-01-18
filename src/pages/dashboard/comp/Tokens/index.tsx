@@ -12,7 +12,7 @@ import useWallet from '@/hooks/useWallet';
 import { useTempStore } from '@/store/temp';
 import { ethers } from 'ethers';
 import { defaultGuardianSafePeriod } from '@/config';
-import useKeystore from '@/hooks/useKeystore';
+import { SkipModal } from '@/pages/create/SetGuardians';
 import ReceiveCode from '@/components/ReceiveCode';
 import { useAddressStore } from '@/store/address';
 
@@ -20,22 +20,24 @@ const SetGuardianHint = () => {
   const { createWallet } = useWallet();
   const { updateCreateInfo } = useTempStore();
   const [creating, setCreating] = useState(false);
+  const [isSkipOpen, setIsSkipOpen] = useState(false);
   const skipSetupGuardian = async () => {
+    console.log('skipSetupGuardian')
     setCreating(true);
     // generate wallet address
-    updateCreateInfo({
+    const noGuardian = {
       initialGuardianHash: ethers.ZeroHash,
       initialGuardianSafePeriod: defaultGuardianSafePeriod,
-    });
-
-    await createWallet();
+    };
+    updateCreateInfo(noGuardian);
+    await createWallet(noGuardian);
     setCreating(false);
   };
   return (
     <Flex
       align={'center'}
       justify={'center'}
-      backdropFilter={'blur(32px)'}
+      backdropFilter={'blur(12px)'}
       pos="absolute"
       pt="100px"
       pb="90px"
@@ -69,12 +71,19 @@ const SetGuardianHint = () => {
             _hover={{ bg: '#eee' }}
             border="1px solid #D0D5DD"
             // loading={creating}
-            onClick={skipSetupGuardian}
+            onClick={() => setIsSkipOpen(true)}
           >
             Later
           </Button>
         </Flex>
       </Box>
+
+      <SkipModal
+        isOpen={isSkipOpen}
+        onClose={() => setIsSkipOpen(false)}
+        doSkip={skipSetupGuardian}
+        skipping={creating}
+      />
     </Flex>
   );
 };

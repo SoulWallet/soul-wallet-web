@@ -49,8 +49,6 @@ export default function RoundButton({
 
   return (
     <Button
-      {...moreProps}
-      {...restProps}
       onClick={onClick}
       borderRadius="16px"
       height="50px"
@@ -61,6 +59,8 @@ export default function RoundButton({
       isDisabled={disabled}
       bg="brand.black"
       color="white"
+      {...moreProps}
+      {...restProps}
       {..._styles}
     >
       {loading && loadingColor !== 'dark' && <Image height="20px" width="20px" marginRight="8px" src={IconLoading} />}

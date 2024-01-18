@@ -26,6 +26,9 @@ const createStagingSlice = immer<any>((set, get) => ({
       }
     }
   }),
+  clearCreateInfo: () => set({
+    createInfo: {},
+  }),
 }));
 
 export const useTempStore = create<any>()(

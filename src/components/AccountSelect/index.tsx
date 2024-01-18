@@ -93,7 +93,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
               )}
               {!isInModal && (
                 <Flex mr="1" align={'center'}>
-                  {/* <Image w="5" h="5" src={selectedChainItem.icon} /> */}
+                  <Image w="5" h="5" src={selectedChainItem.iconSquare} />
                   <Text ml="2" fontWeight={'700'}>
                     {selectedChainItem.chainName}
                   </Text>
@@ -114,7 +114,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                   <MenuItem key={item.address} onClick={() => onAddressChange(item)}>
                     <Flex w="100%" align={'center'} justify={'space-between'}>
                       <Flex align={'center'} gap="3">
-                        {/* <Image src={chainInfo.icon} w="8" h="8" /> */}
+                        <Image src={chainInfo.iconSquare} w="8" h="8" />
                         {/* <AddressIcon address={item.address} width={24} /> */}
                         <Box>
                           <Text fontSize={'16px'} fontWeight={'700'} lineHeight={1.25}>

@@ -1,84 +1,44 @@
-import React, { useState, useEffect, useRef, Fragment } from 'react';
+import React, { useState, useEffect, useRef, Fragment,} from 'react';
 import FullscreenContainer from '@/components/FullscreenContainer';
-import {
-  Box,
-  Text,
-  Image,
-  useToast,
-  Select,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
-  Tooltip,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody
-} from '@chakra-ui/react';
+import { Box, Text, useToast, Modal, ModalOverlay, ModalContent, Flex, } from '@chakra-ui/react';
 import Heading1 from '@/components/web/Heading1';
 import TextBody from '@/components/web/TextBody';
-import Button from '@/components/web/Button';
+// import Button from '@/components/web/Button';
+import Button from '@/components/Button';
 import TextButton from '@/components/web/TextButton';
 import Steps from '@/components/web/Steps';
-import PassKeyList from '@/components/web/PassKeyList';
-import usePassKey from '@/hooks/usePasskey';
-import { useSignerStore } from '@/store/signer';
-import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { ethers } from 'ethers';
-import { L1KeyStore } from '@soulwallet_test/sdk';
-import useSdk from '@/hooks/useSdk';
-import { useAddressStore } from '@/store/address';
 import WarningIcon from '@/components/Icons/Warning';
-import SecureIcon from '@/components/Icons/Secure';
-import ArrowDownIcon from '@/components/Icons/ArrowDown';
 import api from '@/lib/api';
-import MinusIcon from '@/assets/icons/minus.svg';
-import IconButton from '@/components/web/IconButton';
-import SendIcon from '@/components/Icons/Send';
-import FormInput from '@/components/web/Form/FormInput';
-import DoubleFormInput from '@/components/web/Form/DoubleFormInput';
-import useWallet from '@/hooks/useWallet';
 import useForm from '@/hooks/useForm';
-import BN from 'bignumber.js'
-import Icon from '@/components/Icon';
 import { nextRandomId } from '@/lib/tools';
-import DropDownIcon from '@/components/Icons/DropDown';
-import PlusIcon from '@/components/Icons/Plus';
-import QuestionIcon from '@/components/Icons/Question';
-import DownloadIcon from '@/components/Icons/Download';
-import useWalletContext from '@/context/hooks/useWalletContext';
-import { nanoid } from 'nanoid';
-import useTransaction from '@/hooks/useTransaction';
-import GuardianModal from '@/pages/security/Guardian/GuardianModal'
+
+import GuardianModal from '@/pages/security/Guardian/GuardianModal';
 import useTools from '@/hooks/useTools';
-import { defaultGuardianSafePeriod } from '@/config';
-import GreySection from '@/components/GreySection'
 import Backup from '@/components/Guardian/Backup';
 import Edit from '@/components/Guardian/Edit';
-import DoubleCheckModal from '@/components/Guardian/Confirm'
+import DoubleCheckModal from '@/components/Guardian/Confirm';
 import { useSettingStore } from '@/store/setting';
 
-function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
+export function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
+  const [understood, setUnderstood] = useState(false);
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent bg="#ededed"  maxW={{base: "360px", md: "480px"}} display="flex" alignItems="center" justifyContent="flex-start" padding="30px" overflow="auto">
+      <ModalContent
+        maxW={{ base: '360px', md: '440px' }}
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-start"
+        padding="30px"
+        overflow="auto"
+      >
         <Box width="320px">
-          <Box
-            width="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            padding="20px"
-            paddingTop="10px"
-          >
+          <Box width="100%" display="flex" alignItems="center" justifyContent="center" padding="20px" paddingTop="10px">
             <WarningIcon />
           </Box>
           <Box marginBottom="16px">
@@ -89,11 +49,12 @@ function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
             </Box>
             <Box maxWidth="100%">
               <TextBody fontSize="14px" fontWeight="500">
-                Guardians are required to recover your wallet. You will need to pay a network fee when setting up your guardians after wallet creation.
+                Guardians are required to recover your wallet. You will need to pay a network fee when setting up your
+                guardians after wallet creation.
               </TextBody>
             </Box>
           </Box>
-          <Box marginBottom="16px">
+          <Box marginBottom="6">
             <Box display="flex" alignItems="center" justifyContent="flex-start">
               <TextBody fontSize="16px" fontWeight="800">
                 Can I change my guardians in the future?
@@ -105,18 +66,31 @@ function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
               </TextBody>
             </Box>
           </Box>
-          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="20px">
-            <Button onClick={onClose} _styles={{ width: '320px', marginBottom: '12px' }}>
+          <Flex align={'center'} gap="1" cursor="pointer" onClick={() => setUnderstood(prev => !prev)}>
+            <Box w="4" h="4" bg="#000" rounded="4px">
+            </Box>
+           <Text fontSize={"14px"} fontWeight={"500"}>
+              I understand, do it anyway!
+           </Text>
+          </Flex>
+          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="6">
+            <Button mb="5" disabled={!understood} loading={skipping} onClick={doSkip} w="100%" fontWeight={"700"} fontSize={"18px"} height="48px" rounded="full">
+              Confirm
+            </Button>
+            <Text fontSize={'18px'} fontWeight={'700'} onClick={onClose} cursor={'pointer'}>
+              Back
+            </Text>
+            {/* <Button  _styles={{ width: '320px', marginBottom: '12px' }}>
               Set up now
             </Button>
             <TextButton loading={skipping} disabled={skipping} onClick={doSkip} _styles={{ width: '320px', maxWidth: '320px', padding: '0 20px', whiteSpace: 'break-spaces' }}>
               {skipping ? 'Skipping...' : 'I understand the risks, skip for now'}
-            </TextButton>
+            </TextButton> */}
           </Box>
         </Box>
       </ModalContent>
     </Modal>
-  )
+  );
 }
 
 const defaultGuardianIds = [nextRandomId()];
@@ -205,29 +179,29 @@ const getInitialValues = (ids: string[], guardians: string[], guardianNames: str
 };
 
 const isGuardiansListFilled = (list: any) => {
-  if (!list.length) return false
+  if (!list.length) return false;
 
-  let isFilled = true
+  let isFilled = true;
 
   for (const item of list) {
-    isFilled = isFilled && item
+    isFilled = isFilled && item;
   }
 
-  return isFilled
-}
+  return isFilled;
+};
 
 export default function SetGuardians({ changeStep }: any) {
   const { chainConfig } = useConfig();
   const [isConfirming, setIsConfirming] = useState(false);
   const { saveAddressName, getAddressName } = useSettingStore();
   const { setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
-  const { slotInfo, setSlotInfo } = useSlotStore()
+  const { slotInfo, setSlotInfo } = useSlotStore();
   const [status, setStatus] = useState<string>('intro');
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-  const [isSkipOpen, setIsSkipOpen] = useState(false)
-  const [showAdvance, setShowAdvance] = useState(false)
-  const [keepPrivate, setKeepPrivate] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isSkipOpen, setIsSkipOpen] = useState(false);
+  const [showAdvance, setShowAdvance] = useState(false);
+  const [keepPrivate, setKeepPrivate] = useState(false);
   const toast = useToast();
   const emailForm = useForm({
     fields: ['email'],
@@ -237,11 +211,13 @@ export default function SetGuardians({ changeStep }: any) {
   const { guardiansInfo, updateGuardiansInfo, clearGuardianInfo } = useGuardianStore();
   const guardianDetails = {
     guardians: [],
-    threshold: 0
-  }
-  const guardianNames:any = []
+    threshold: 0,
+  };
+  const guardianNames: any = [];
 
-  const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
+  const defaultGuardianIds = getDefaultGuardianIds(
+    (guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1,
+  );
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
@@ -252,13 +228,13 @@ export default function SetGuardians({ changeStep }: any) {
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
   const [skipping, setSkipping] = useState(false);
-  const { generateJsonName, downloadJsonFile } = useTools()
-  const createdGuardiansInfo = useRef<any>()
+  const { generateJsonName, downloadJsonFile } = useTools();
+  const createdGuardiansInfo = useRef<any>();
 
   const { values, errors, invalid, onChange, onChangeValues, onBlur, showErrors, addFields, removeFields } = useForm({
     fields,
     validate,
-    initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardianNames)
+    initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardianNames),
   });
 
   const amountForm = useForm({
@@ -270,13 +246,14 @@ export default function SetGuardians({ changeStep }: any) {
     },
   });
 
-  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading || !isGuardiansListFilled(guardiansList);
+  const disabled =
+    invalid || !guardiansList.length || amountForm.invalid || loading || !isGuardiansListFilled(guardiansList);
 
   useEffect(() => {
     setGuardiansList(
       Object.keys(values)
-            .filter((key) => key.indexOf('address') === 0)
-            .map((key) => values[key]) as any
+        .filter((key) => key.indexOf('address') === 0)
+        .map((key) => values[key]) as any,
       // .filter((address) => !!String(address).trim().length) as any,
     );
   }, [values]);
@@ -291,26 +268,26 @@ export default function SetGuardians({ changeStep }: any) {
       await createInitialGurdianInfo({
         guardians: [],
         guardianNames: [],
-        threshold: 0
-      })
+        threshold: 0,
+      });
       // await createInitialWallet()
-      setIsDone(true)
+      setIsDone(true);
       setSkipping(false);
-      setIsSkipOpen(false)
-      changeStep(2)
+      setIsSkipOpen(false);
+      changeStep(2);
     } catch (error: any) {
-      console.log('error', error.message)
+      console.log('error', error.message);
       setSkipping(false);
     }
-  }
+  };
 
   const handleEmailBackupGuardians = async () => {
     try {
       setSending(true);
-      let guardiansInfo
+      let guardiansInfo;
 
       if (createdGuardiansInfo.current) {
-        guardiansInfo = createdGuardiansInfo.current
+        guardiansInfo = createdGuardiansInfo.current;
       } else {
         const guardiansList = guardianIds
           .map((id) => {
@@ -333,8 +310,8 @@ export default function SetGuardians({ changeStep }: any) {
         guardiansInfo = await createInitialGurdianInfo({
           guardians: guardianAddresses,
           guardianNames,
-          threshold
-        })
+          threshold,
+        });
         // await createInitialWallet()
       }
 
@@ -342,14 +319,14 @@ export default function SetGuardians({ changeStep }: any) {
       await api.guardian.emailBackupGuardians({
         email: emailForm.values.email,
         filename,
-        ...guardiansInfo
+        ...guardiansInfo,
       });
       setSending(false);
-      emailForm.clearFields(['email'])
-      setIsDone(true)
+      emailForm.clearFields(['email']);
+      setIsDone(true);
       updateGuardiansInfo({
-        requireBackup: false
-      })
+        requireBackup: false,
+      });
       toast({
         title: 'Email Backup Success!',
         status: 'success',
@@ -361,15 +338,15 @@ export default function SetGuardians({ changeStep }: any) {
         status: 'error',
       });
     }
-  }
+  };
 
   const handleDownloadGuardians = async () => {
     try {
       setDownloading(true);
-      let guardiansInfo
+      let guardiansInfo;
 
       if (createdGuardiansInfo.current) {
-        guardiansInfo = createdGuardiansInfo.current
+        guardiansInfo = createdGuardiansInfo.current;
       } else {
         const guardiansList = guardianIds
           .map((id) => {
@@ -392,17 +369,17 @@ export default function SetGuardians({ changeStep }: any) {
         guardiansInfo = await createInitialGurdianInfo({
           guardians: guardianAddresses,
           guardianNames,
-          threshold
-        })
+          threshold,
+        });
         // await createInitialWallet()
       }
 
       await downloadJsonFile(guardiansInfo);
       setDownloading(false);
-      setIsDone(true)
+      setIsDone(true);
       updateGuardiansInfo({
-        requireBackup: false
-      })
+        requireBackup: false,
+      });
       toast({
         title: 'Email Backup Success!',
         status: 'success',
@@ -414,7 +391,7 @@ export default function SetGuardians({ changeStep }: any) {
         status: 'error',
       });
     }
-  }
+  };
 
   const handleSubmit = async () => {
     if (disabled) return;
@@ -442,15 +419,15 @@ export default function SetGuardians({ changeStep }: any) {
       const guardiansInfo = await createInitialGurdianInfo({
         guardians: guardianAddresses,
         guardianNames,
-        threshold
-      })
+        threshold,
+      });
       await api.guardian.backupGuardians(guardiansInfo);
       // await createInitialWallet()
-      setIsDone(true)
+      setIsDone(true);
       setLoading(false);
       changeStep(2);
     } catch (error: any) {
-      console.log('error', error.message)
+      console.log('error', error.message);
       setLoading(false);
     }
   };
@@ -484,15 +461,15 @@ export default function SetGuardians({ changeStep }: any) {
     }
   }, [amountData.guardiansCount, amountForm.values.amount]);
 
-  const hasGuardians = guardianDetails && guardianDetails.guardians && !!guardianDetails.guardians.length
+  const hasGuardians = guardianDetails && guardianDetails.guardians && !!guardianDetails.guardians.length;
 
   const startBackup = () => {
-    setStatus('backuping')
-  }
+    setStatus('backuping');
+  };
 
   const startEdit = () => {
-    setStatus('editing')
-  }
+    setStatus('editing');
+  };
 
   // const createWallet = async () => {
   //   try {
@@ -533,19 +510,19 @@ export default function SetGuardians({ changeStep }: any) {
         threshold,
         salt,
       },
-      keepPrivate
+      keepPrivate,
     };
 
-    setGuardiansInfo(guardiansInfo)
-    createdGuardiansInfo.current = guardiansInfo
+    setGuardiansInfo(guardiansInfo);
+    createdGuardiansInfo.current = guardiansInfo;
 
     for (let i = 0; i < guardians.length; i++) {
-      const address = guardians[i]
-      const name = guardianNames[i]
+      const address = guardians[i];
+      const name = guardianNames[i];
       if (address) saveAddressName(address.toLowerCase(), name);
     }
 
-    return guardiansInfo
+    return guardiansInfo;
   };
 
   const getGuardiansDetails = () => {
@@ -571,14 +548,14 @@ export default function SetGuardians({ changeStep }: any) {
       guardians: guardianAddresses,
       guardianNames,
       threshold,
-    }
-  }
+    };
+  };
 
   useEffect(() => {
     if (status === 'editing') {
       // clearGuardianInfo()
     }
-  }, [status])
+  }, [status]);
 
   if (status === 'backuping') {
     return (
@@ -591,43 +568,43 @@ export default function SetGuardians({ changeStep }: any) {
           emailForm={emailForm}
           step={
             <Box marginBottom="12px">
-              <Steps
-                backgroundColor="#1E1E1E"
-                foregroundColor="white"
-                count={3}
-                activeIndex={1}
-                marginTop="24px"
-              />
+              <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={3} activeIndex={1} marginTop="24px" />
             </Box>
           }
           confirmButton={
-            <Button
-              onClick={() => changeStep(2)}
-              disabled={!isDone}
-              _styles={{ width: '320px', marginTop: '60px' }}
-            >
+            <Button onClick={() => changeStep(2)} disabled={!isDone} _styles={{ width: '320px', marginTop: '60px' }}>
               Continue
             </Button>
           }
         />
       </FullscreenContainer>
-    )
+    );
   }
 
   if (status === 'editing') {
     return (
       <FullscreenContainer padding="16px">
-        <Box width="100%" maxWidth="1200px" display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="0 auto">
+        <Box
+          width="100%"
+          maxWidth="1200px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          margin="0 auto"
+        >
           <Box marginBottom="12px">
-            <Steps
-              backgroundColor="#1E1E1E"
-              foregroundColor="white"
-              count={3}
-              activeIndex={1}
-              marginTop="24px"
-            />
+            <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={3} activeIndex={1} marginTop="24px" />
           </Box>
-          <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginBottom="20px" margin="0 auto" textAlign="center">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="column"
+            marginBottom="20px"
+            margin="0 auto"
+            textAlign="center"
+          >
             <Heading1>Setup guardians for social recovery</Heading1>
           </Box>
         </Box>
@@ -635,9 +612,15 @@ export default function SetGuardians({ changeStep }: any) {
           description={
             <Fragment>
               <Heading1>Guardian</Heading1>
-              <TextBody fontSize="18px" marginBottom="20px">Please enter Ethereum wallet address to set up guardians.</TextBody>
+              <TextBody fontSize="18px" marginBottom="20px">
+                Please enter Ethereum wallet address to set up guardians.
+              </TextBody>
               <Box>
-                <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => setIsModalOpen(true)}>
+                <TextButton
+                  _styles={{ padding: '0', color: '#EC588D' }}
+                  _hover={{ color: '#EC588D' }}
+                  onClick={() => setIsModalOpen(true)}
+                >
                   Learn more
                 </TextButton>
               </Box>
@@ -664,13 +647,23 @@ export default function SetGuardians({ changeStep }: any) {
           selectAmount={selectAmount}
           keepPrivate={keepPrivate}
           setKeepPrivate={setKeepPrivate}
-          formWidth={{ base: "100%", md: "760px" }}
+          formWidth={{ base: '100%', md: '760px' }}
           confirmButton={
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="36px">
-              <Button _styles={{ width: '320px', marginBottom: '12px' }} disabled={loading || disabled} loading={loading} onClick={() => setIsConfirmOpen(true)}>
+              <Button
+                _styles={{ width: '320px', marginBottom: '12px' }}
+                disabled={loading || disabled}
+                loading={loading}
+                onClick={() => setIsConfirmOpen(true)}
+              >
                 Confirm
               </Button>
-              <TextButton loading={isConfirming} disabled={isConfirming} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
+              <TextButton
+                loading={isConfirming}
+                disabled={isConfirming}
+                onClick={() => setIsSkipOpen(true)}
+                _styles={{ width: '320px' }}
+              >
                 Later
               </TextButton>
             </Box>
@@ -683,24 +676,34 @@ export default function SetGuardians({ changeStep }: any) {
           disabled={disabled}
           loading={loading}
           onClose={() => setIsConfirmOpen(false)}
-          onSubmit={keepPrivate ? () => { setIsConfirmOpen(false); startBackup() } : () => handleSubmit()}
+          onSubmit={
+            keepPrivate
+              ? () => {
+                  setIsConfirmOpen(false);
+                  startBackup();
+                }
+              : () => handleSubmit()
+          }
           getGuardiansDetails={getGuardiansDetails}
         />
       </FullscreenContainer>
-    )
+    );
   }
 
   return (
     <FullscreenContainer padding="16px">
-      <Box width="100%" maxWidth="1200px" display="flex" flexDirection="column" alignItems="center" justifyContent="center" margin="0 auto" textAlign="center">
+      <Box
+        width="100%"
+        maxWidth="1200px"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        margin="0 auto"
+        textAlign="center"
+      >
         <Box marginBottom="12px">
-          <Steps
-            backgroundColor="#1E1E1E"
-            foregroundColor="white"
-            count={3}
-            activeIndex={1}
-            marginTop="24px"
-          />
+          <Steps backgroundColor="#1E1E1E" foregroundColor="white" count={3} activeIndex={1} marginTop="24px" />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
           <Heading1>Setup guardians for social recovery</Heading1>
@@ -760,14 +763,11 @@ export default function SetGuardians({ changeStep }: any) {
           </Box>
         }
         rightPart={
-          <Box
-            as="video"
-            width="760px"
-            aspectRatio="auto"
-            borderRadius="24px"
-            controls
-          >
-            <source src="https://static-assets.soulwallet.io/videos/guardians-and-recovery-intro.webm" type="video/webm" />
+          <Box as="video" width="760px" aspectRatio="auto" borderRadius="24px" controls>
+            <source
+              src="https://static-assets.soulwallet.io/videos/guardians-and-recovery-intro.webm"
+              type="video/webm"
+            />
           </Box>
         }
       />
@@ -775,7 +775,12 @@ export default function SetGuardians({ changeStep }: any) {
         <Button onClick={startEdit} _styles={{ width: '320px', marginBottom: '12px' }}>
           Set up now
         </Button>
-        <TextButton loading={isConfirming} disabled={isConfirming} onClick={() => setIsSkipOpen(true)} _styles={{ width: '320px' }}>
+        <TextButton
+          loading={isConfirming}
+          disabled={isConfirming}
+          onClick={() => setIsSkipOpen(true)}
+          _styles={{ width: '320px' }}
+        >
           Later
         </TextButton>
       </Box>

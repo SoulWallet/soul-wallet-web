@@ -4,11 +4,14 @@
 
 import IconOp from '@/assets/chains/op.svg';
 import IconOpFaded from '@/assets/chains/op-faded.svg';
+import IconOpSquare from '@/assets/chains/op-square.svg';
+
 import { keystoreContracts } from './common';
 
 export default {
   icon: IconOp,
   iconFaded: IconOpFaded,
+  iconSquare: IconOpSquare,
   cardBg: 'radial-gradient(52.03% 100% at 100% 100%, #FF9595 0%, #E2FC89 100%)',
   cardBgUnactivated: 'radial-gradient(52.03% 100% at 100% 100%, #FF9595 0%, #D7D7D7 100%)',
   provider: `https://sepolia.optimism.io`,

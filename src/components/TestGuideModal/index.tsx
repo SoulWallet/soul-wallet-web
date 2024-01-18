@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
 import { Text, Image, Flex, Divider } from '@chakra-ui/react';
 import Modal from '../Modal';
-import IconChecked from '@/assets/icons/checked.svg';
+import IconChecked from '@/assets/icons/checked-green.svg';
 import api from '@/lib/api';
 import useTools from '@/hooks/useTools';
 import { useSlotStore } from '@/store/slot';
