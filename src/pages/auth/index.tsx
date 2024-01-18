@@ -98,7 +98,7 @@ export default function Auth() {
     setAuthMethod('eoa')
     closeRegister()
     updateCreateInfo({
-      eoaAddress: address
+      eoaAddress: [address]
     })
     setStep(1)
   }, [])

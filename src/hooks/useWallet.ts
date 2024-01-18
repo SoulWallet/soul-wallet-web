@@ -32,19 +32,19 @@ export default function useWallet() {
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
-  const { setSignerId, getSelectedKeyType, setEoa } = useSignerStore();
+  const { setSignerId, getSelectedKeyType, setEoas } = useSignerStore();
 
   const createWallet = async () => {
     // retrieve info from temp store
     const {
       credentials = [],
-      eoaAddress,
+      eoaAddress = [],
       initialGuardianHash,
       initialGuardianSafePeriod,
     } = useTempStore.getState().createInfo;
 
     const credentialKeys = credentials.map((item: any) => item.publicKey);
-    const initialKeys = [...credentialKeys, ...[eoaAddress]].filter((item) => item);
+    const initialKeys = [...credentialKeys, ...eoaAddress].filter((item) => item);
 
     const initialKeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
     const initialKeyHash = L1KeyStore.getKeyHash(initialKeysAddress);
@@ -64,10 +64,10 @@ export default function useWallet() {
 
     setAddressList(addresses);
 
-    // IMPORTANT TODO, initialize data
-    if (eoaAddress) {
+    // IMPORTANT TODO, initialize data, eoa address
+    if (eoaAddress && eoaAddress.length > 0) {
       // setSignerId(eoaAddress)
-      setEoa(eoaAddress);
+      setEoas([eoaAddress]);
     } else if (credentials.length > 0) {
       // setSignerId(credentials[0].id);
       setCredentials(credentials);

@@ -26,7 +26,7 @@ import { useSignerStore } from '@/store/signer';
 export default function Signer() {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('signer');
-  const { eoa, credentials, signerId } = useSignerStore();
+  const { eoas, credentials, signerId } = useSignerStore();
 
   const [keepPrivate, setKeepPrivate] = useState<any>(false);
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
@@ -137,17 +137,17 @@ export default function Signer() {
                 </Box>
               </Box>
               <Box paddingTop="14px" display="flex">
-                {eoa && (
+                {eoas.map(item => (
                   <SignerCard
                     name="Wallet (...dS123)"
-                    address={eoa}
+                    address={item}
                     time="Added on 2023-12-14"
                     marginRight="18px"
-                    isDefault={signerId === eoa}
+                    isDefault={signerId === item}
                     cursor="pointer"
                     onClick={openSetDefaultModal}
                   />
-                )}
+                )) }
                 {credentials.map((item:any) =>
                   <SignerCard
                     name="Passkey_1"

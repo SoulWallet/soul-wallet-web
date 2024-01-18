@@ -6,8 +6,8 @@ import { SignkeyType } from '@soulwallet_test/sdk';
 export interface ISignerStore {
   signerId: string;
   setSignerId: (signerId: string) => void;
-  eoa: string;
-  setEoa: (eoa: string) => void;
+  eoas: string[];
+  setEoas: (eoas: string[]) => void;
   walletName: string;
   setWalletName: (name: string) => void;
   credentials: any;
@@ -24,22 +24,23 @@ export const getIndexByCredentialId = (credentials: any, id: string) => {
 };
 
 const createCredentialSlice = immer<ISignerStore>((set, get) => ({
+  // eoa address, credential id
   signerId: '',
   setSignerId: (signerId: string) => {
     set({
       signerId,
     });
   },
-  eoa: '',
-  setEoa: (eoa: string) => {
+  eoas: [],
+  setEoas: (eoa: string[]) => {
     set({
-      eoa,
-      signerId: eoa,
+      eoas: eoa,
+      signerId: eoa[0],
     });
   },
   credentials: [],
   getSelectedKeyType: () => {
-    if (get().signerId === get().eoa) {
+    if (get().eoas.includes(get().signerId)) {
       return SignkeyType.EOA;
     } else {
       const index = getIndexByCredentialId(get().credentials, get().signerId);
