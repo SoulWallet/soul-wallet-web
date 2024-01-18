@@ -16,7 +16,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const { slotInfo } = useSlotStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
-  const { selectedAddress} = useAddressStore();
+  const { selectedAddress } = useAddressStore();
   const { setFinishedSteps } = useSettingStore();
   const { selectedChainId } = useChainStore();
 
@@ -57,7 +57,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
       });
       if (res.code === 200) {
         toast({
-          title: 'Claimed',
+          title: 'Test token claimed successfully',
           status: 'success',
         });
         const res = await api.operation.finishStep({
@@ -94,32 +94,37 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
     <div ref={ref}>
       <TxModal
         visible={visible}
-        width={{ base: '90%', lg: '360px' }}
+        width={{ base: '90%', lg: '404px' }}
         onClose={onClose}
-        bodyStyle={{ py: '9', px: '6' }}
-        title="Claim test token"
+        bodyStyle={{ py: '9', px: '42px' }}
       >
         <Box textAlign="center">
-          <Text fontSize={'16px'} fontWeight={'600'} color="#000">
+          <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" />
+          <Text fontSize={'20px'} mb="2" fontWeight={'800'} lineHeight={'1.6'} letterSpacing={'-0.4px'}>
+            Claim test tokens
+          </Text>
+          <Text fontSize={'14px'} fontWeight={'600'} mb="18px">
             Each wallet address can claim test tokens
             <br /> (0.002 ETH and 10 USDC) twice per day.
           </Text>
           <Button
             loading={loading}
-            disabled={!claimableCount}
-            mt="6"
-            mx="auto"
-            py="3"
-            px="4"
+            disabled={true || !claimableCount}
+            py="16px"
             onClick={doClaim}
+            fontSize={'18px'}
+            lineHeight={'1'}
+            fontWeight={'700'}
+            color="#fff"
             gap="2"
-            display={'flex'}
+            mb="6"
+            w="100%"
           >
-            <Image src={IconDollar} />
-            <Text fontSize={'18px'} fontWeight={'800'} color="#fff">
-              Claim
-            </Text>
+            Claim
           </Button>
+          <Text fontSize={'18px'} onClick={onClose} cursor={'pointer'} fontWeight={'700'}>
+            Cancel
+          </Text>
         </Box>
       </TxModal>
     </div>

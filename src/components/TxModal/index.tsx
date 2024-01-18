@@ -6,10 +6,12 @@ export default function TxModal({ title, visible, onClose, children, width, body
       <Modal isOpen={true} onClose={onClose}>
         <ModalOverlay />
         <ModalContent overflowY={'auto'} maxW={width || { base: '90%', lg: '640px' }}>
-          <ModalHeader fontWeight={'800'} textAlign={'center'} borderBottom={'1px solid #d7d7d7'}>
-            {title}
-          </ModalHeader>
-          <ModalCloseButton top="14px" />
+          {title && (
+            <ModalHeader fontWeight={'800'} textAlign={'center'} borderBottom={'1px solid #d7d7d7'}>
+              {title}
+              <ModalCloseButton top="14px" />
+            </ModalHeader>
+          )}
           <ModalBody pb={{ base: 4, lg: 12 }} px={{ base: 3, lg: 12 }} {...bodyStyle}>
             {children}
           </ModalBody>
