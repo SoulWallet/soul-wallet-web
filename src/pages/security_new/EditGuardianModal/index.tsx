@@ -36,13 +36,22 @@ import CoinbaseIcon from '@/assets/wallets/coinbase.png'
 import BinanceIcon from '@/assets/wallets/binance.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
 import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
+import EditGuardianForm from '../EditGuardianForm'
 
 export default function EditGuardianModal({
   isOpen,
   onClose,
   startIntroGuardian,
-  startEditGuardian
+  startEditGuardian,
+  onConfirm,
+  setIsEditGuardianOpen,
+  setIsSelectGuardianOpen
 }: any) {
+  const onBack = () => {
+    setIsEditGuardianOpen(false)
+    setIsSelectGuardianOpen(true)
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -59,42 +68,8 @@ export default function EditGuardianModal({
               <TextBody fontWeight="500" marginBottom="31px">
                 Use wallet address from yourself or friends & family. Fully decentralized
               </TextBody>
-              <Box marginTop="14px">
-                <Box display="flex">
-                  <Box marginRight="16px" width="240px">
-                    <Input
-                      type="text"
-                      placeholder={'Guardian name (optional)'}
-                      borderRadius="16px"
-                      paddingRight="24px"
-                      height="48px"
-                      width="100%"
-                      borderColor="#E4E4E4"
-                    />
-                  </Box>
-                  <Box width="calc(100% - 240px)">
-                    <Input
-                      type="text"
-                      placeholder={'ENS or Ethereum wallet address'}
-                      borderRadius="16px"
-                      paddingRight="24px"
-                      height="48px"
-                      width="100%"
-                      borderColor="#E4E4E4"
-                    />
-                  </Box>
-                </Box>
-              </Box>
-              <Box marginTop="8px">
-                <Box fontWeight="800" fontFamily="14px" color="#FF2E79" cursor="pointer">
-                  + Add another guardian
-                </Box>
-              </Box>
-              <Box marginTop="30px" display="flex" justifyContent="flex-end">
-                <Box>
-                  <Button theme="light" padding="0 14px" marginRight="16px">Back</Button>
-                  <Button>Confirm</Button>
-                </Box>
+              <Box>
+                <EditGuardianForm onConfirm={onConfirm} onBack={onBack} />
               </Box>
             </Box>
           </Box>

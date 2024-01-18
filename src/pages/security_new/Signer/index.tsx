@@ -95,10 +95,10 @@ export default function Signer() {
 
   return (
     <DashboardLayout>
-    {/* <Box width="100%" height="100vh"> */}
+      {/* <Box width="100%" height="100vh"> */}
       {/* <Box height="102px">
-        <Header />
-      </Box> */}
+          <Header />
+          </Box> */}
       <Box
         display="flex"
         flexDirection="column"
@@ -137,24 +137,29 @@ export default function Signer() {
                 </Box>
               </Box>
               <Box paddingTop="14px" display="flex">
-                {eoa && <SignerCard
-                  name="Wallet (...dS123)"
-                  address={eoa}
-                  time="Added on 2023-12-14"
-                  marginRight="18px"
-                  isDefault={signerId === eoa}
-                  cursor="pointer"
-                  onClick={openSetDefaultModal}
-                />}
-                {credentials.map((item:any) => <SignerCard
-                  name="Passkey_1"
-                  address={item.publicKey}
-                  device="Chrome profile"
-                  time="Added on 2023-12-14 "
-                  cursor="pointer"
-                  isDefault={signerId === item.id}
-                  onClick={openSetDefaultModal}
-                />)}
+                {eoa && (
+                  <SignerCard
+                    name="Wallet (...dS123)"
+                    address={eoa}
+                    time="Added on 2023-12-14"
+                    marginRight="18px"
+                    isDefault={signerId === eoa}
+                    cursor="pointer"
+                    onClick={openSetDefaultModal}
+                  />
+                )}
+                {credentials.map((item:any) =>
+                  <SignerCard
+                    name="Passkey_1"
+                    address={item.publicKey}
+                    device="Chrome profile"
+                    time="Added on 2023-12-14 "
+                    cursor="pointer"
+                    marginRight="18px"
+                    isDefault={signerId === item.id}
+                    onClick={openSetDefaultModal}
+                  />
+                )}
               </Box>
             </Fragment>
           )}
@@ -192,7 +197,7 @@ export default function Signer() {
         isOpen={isWalletConnectOpen}
         onClose={closeWalletConnectModal}
       />
-    {/* </Box> */}
+      {/* </Box> */}
     </DashboardLayout>
   );
 }
