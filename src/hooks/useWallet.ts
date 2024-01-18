@@ -33,7 +33,7 @@ export default function useWallet() {
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
-  const { setSignerId, getSelectedKeyType, setEoas } = useSignerStore();
+  const { getSelectedKeyType, setEoas } = useSignerStore();
   const {setWalletName} = useTools();
   const { clearCreateInfo } = useTempStore();
 
@@ -73,10 +73,8 @@ export default function useWallet() {
 
     // IMPORTANT TODO, initialize data, eoa address
     if (eoaAddress && eoaAddress.length > 0) {
-      // setSignerId(eoaAddress)
-      setEoas([eoaAddress]);
+      setEoas(eoaAddress);
     } else if (credentials.length > 0) {
-      // setSignerId(credentials[0].id);
       setCredentials(credentials);
     }
     clearCreateInfo();
@@ -227,6 +225,8 @@ export default function useWallet() {
       throw new Error(packedUserOpHashRet.ERR.message);
     }
     const packedUserOpHash = packedUserOpHashRet.OK;
+
+    console.log('selected key type', selectedKeyType)
 
     if (selectedKeyType === SignkeyType.EOA) {
       userOp.signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);

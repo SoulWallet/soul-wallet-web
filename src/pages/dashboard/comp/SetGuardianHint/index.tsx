@@ -13,11 +13,9 @@ import { useSettingStore } from '@/store/setting';
 
 export default function SetGuardianHint() {
   const { slotInfo } = useSlotStore();
-  const { setFinishedSteps, finishedSteps } = useSettingStore();
+  const { setFinishedSteps, finishedSteps, collapseGuidance, setCollapseGuidance, } = useSettingStore();
   const { goGuideAction } = useTools();
   // todo, should remmeber this
-  const [opened, setOpened] = useState(true);
-
   const checkSteps = async () => {
     const res = await api.operation.finishStep({
       slot: slotInfo.slot,
@@ -53,7 +51,7 @@ export default function SetGuardianHint() {
       roundedBottomLeft={'20px'}
       roundedBottomRight={'20px'}
     >
-      {opened && (
+      {!collapseGuidance && (
         <>
           <Text fontSize={'18px'} fontWeight={'800'} lineHeight={'1.25'} mt="7" mb="3">
           {currentStep.title}
@@ -80,11 +78,11 @@ export default function SetGuardianHint() {
           </Flex>
         </>
       )}
-      <Box textAlign={'center'} cursor={'pointer'} onClick={() => setOpened((prev) => !prev)}>
+      <Box textAlign={'center'} cursor={'pointer'} onClick={() => setCollapseGuidance(!collapseGuidance)}>
         <Image
           src={ImgArrowUp}
-          transform={opened ? 'rotate(0deg)' : 'rotate(180deg)'}
-          mt={opened ? 3 : 2}
+          transform={collapseGuidance ? 'rotate(180deg)' : 'rotate(0deg)'}
+          mt={collapseGuidance ? 2 : 3}
           mx="auto"
           display={'block'}
         />

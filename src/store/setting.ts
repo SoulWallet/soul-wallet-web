@@ -7,6 +7,8 @@ import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 
 export interface ISettingStore {
+  collapseGuidance: boolean;
+  setCollapseGuidance: (val: boolean) => void;
   ignoreWebauthnOverride: boolean;
   setIgnoreWebauthnOverride: (val: boolean) => void;
   setFinishedSteps: (steps: number[]) => void;
@@ -21,13 +23,19 @@ export interface ISettingStore {
 }
 
 const createSettingSlice = immer<ISettingStore>((set, get) => ({
+  collapseGuidance: false,
+  ignoreWebauthnOverride: false,
   finishedSteps: [],
   addressName: {},
   idAddress: {},
-  ignoreWebauthnOverride: false,
   setIgnoreWebauthnOverride: (val: boolean) => {
     set({
       ignoreWebauthnOverride: val,
+    });
+  },
+  setCollapseGuidance: (val: boolean) => {
+    set({
+      collapseGuidance: val,
     });
   },
   setFinishedSteps: (steps: number[]) => {
