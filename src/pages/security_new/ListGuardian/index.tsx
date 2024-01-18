@@ -24,11 +24,8 @@ import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
-import EditGuardian from '../EditGuardian'
-import CreateGuardian from '../CreateGuardian'
-import ListGuardian from '../ListGuardian'
 
-export default function Guardian() {
+export default function EditGuardian() {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('guardian');
   const [keepPrivate, setKeepPrivate] = useState<any>(false);
@@ -40,7 +37,6 @@ export default function Guardian() {
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
   const [isEditing, setIsEditing] = useState<any>(false);
-  const [isCreating, setIsCreating] = useState<any>(false);
 
   const [editingGuardianDetails, setEditingGuardianDetails] = useState<any>({
     guardians: [],
@@ -150,33 +146,143 @@ export default function Guardian() {
   }, [editingGuardianDetails])
 
   return (
-    <DashboardLayout>
+    <Fragment>
+      <RoundSection marginTop="10px" background="white">
+        <Fragment>
+          <Box
+            fontFamily="Nunito"
+            fontWeight="700"
+            fontSize="18px"
+            display="flex"
+          >
+            <Box>Guardian List</Box>
+            {!!guardianList.length && (
+              <Box marginLeft="auto">
+                <TextButton type="mid" onClick={openBackupGuardianModal}>
+                  <Box marginRight="6px"><HistoryIcon /></Box>
+                  Back up list
+                </TextButton>
+                <Button type="mid" onClick={openSelectGuardianModal}>
+                  <Box marginRight="6px"><PlusIcon color="white" /></Box>
+                  Add Guardian
+                </Button>
+              </Box>
+            )}
+          </Box>
+          {!guardianList.length && (
+            <Box width="100%" display="flex" alignItems="center" justifyContent="center">
+              <Box display="flex" flexDirection="column" alignItems="center"  justifyContent="center">
+                <Box width="85px" height="85px" background="#D9D9D9" borderRadius="85px" />
+                <Box fontWeight="600" fontSize="14px" marginTop="10px">You currently have no guardians</Box>
+              </Box>
+            </Box>
+          )}
+          <Box borderTop="1px solid #F0F0F0" marginTop="30px" paddingTop="20px">
+            <Title
+              fontFamily="Nunito"
+              fontWeight="700"
+              fontSize="18px"
+              display="flex"
+            >
+              Recovery settings
+            </Title>
+            {!guardianList.length && (
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <Box fontWeight="600" fontSize="14px" marginTop="20px" marginBottom="20px">Setup recovery threshold after added guardians</Box>
+              </Box>
+            )}
+            {!!guardianList.length && (
+              <Fragment>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  marginTop="10px"
+                >
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="700"
+                    fontSize="14px"
+                    marginRight="6px"
+                  >
+                    Threshold:
+                  </Box>
+                  <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
+                    <Box>Wallet recovery requires</Box>
+                    <Box width="80px" margin="0 10px">
+                      <Menu>
+                        <MenuButton
+                          px={2}
+                          py={2}
+                          width="80px"
+                          transition="all 0.2s"
+                          borderRadius="16px"
+                          borderWidth="1px"
+                          padding="12px"
+                          background="white"
+                          _hover={{
+                            borderColor: '#3182ce',
+                            boxShadow: '0 0 0 1px #3182ce',
+                          }}
+                          _expanded={{
+                            borderColor: '#3182ce',
+                            boxShadow: '0 0 0 1px #3182ce',
+                          }}
+                        >
+                          <Box display="flex" alignItems="center" justifyContent="space-between">
+                            {editingGuardianDetails.threshold}
+                            <DropDownIcon />
+                          </Box>
+                        </MenuButton>
+                        <MenuList>
+                          {(new Array(editingGuardianDetails.threshold || 1)).fill(1).map((i: any) =>
+                            <MenuItem>
+                              {i}
+                            </MenuItem>
+                          )}
+                        </MenuList>
+                      </Menu>
+                    </Box>
+                    <Box>{`out of ${editingGuardianDetails.guardians.length} guardian(s) confirmation.`}</Box>
+                  </TextBody>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  marginTop="10px"
+                >
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="700"
+                    fontSize="14px"
+                    marginRight="6px"
+                  >
+                    Advanced:
+                  </Box>
+                  <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
+                    <Box marginRight="10px">Keep guardians private</Box>
+                    <Box width="72px" minWidth="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
+                      <Box width="30px" height="30px" background="white" borderRadius="30px" />
+                    </Box>
+                  </TextBody>
+                </Box>
+              </Fragment>
+            )}
+          </Box>
+        </Fragment>
+      </RoundSection>
       <Box
+        width="100%"
+        padding="20px"
         display="flex"
-        flexDirection="column"
-        padding="0 40px"
-        pt="6"
+        alignItems="center"
+        justifyContent="center"
       >
-        <SectionMenu>
-          <SectionMenuItem
-            isActive={activeSection == 'signer'}
-            onClick={() => navigate('/security/signer')}
-          >
-            Signer
-          </SectionMenuItem>
-          <SectionMenuItem
-            isActive={activeSection == 'guardian'}
-            onClick={() => navigate('/security/guardian')}
-          >
-            Guardian
-          </SectionMenuItem>
-        </SectionMenu>
-        {!!isCreating && (
-          <CreateGuardian />
-        )}
-        {!isCreating && (
-          <ListGuardian />
-        )}
+        <Button type="mid" onClick={startAddGuardian}>
+          <Box marginRight="6px"><PlusIcon color="white" /></Box>
+          Add Guardian
+        </Button>
       </Box>
       <SetSignerModal
         isOpen={isSetDefaultOpen}
@@ -213,7 +319,6 @@ export default function Guardian() {
         isOpen={isWalletConnectOpen}
         onClose={closeWalletConnectModal}
       />
-      {/* </Box> */}
-    </DashboardLayout>
-  );
+    </Fragment>
+  )
 }
