@@ -24,6 +24,10 @@ export const chainIdMapping = {
   128: 'HECO Mainnet',
   97: 'BSC Testnet',
   420: 'Optimism Goerli',
+  42161: 'Arbitrum',
+  11155111: 'Sepolia',
+  11155420: 'Optimism Sepolia',
+  421614: 'Arbitrum Sepolia',
   421613: 'Arbitrum Goerli',
 };
 
@@ -37,6 +41,10 @@ export const chainMapping = {
     icon: IconEthSquare,
     name: 'Goerli',
   },
+  '0xaa36a7': {
+    icon: IconEthSquare,
+    name: 'Sepolia',
+  },
   '0xa': {
     icon: IconOpSquare,
     name: 'Optimism',
@@ -45,6 +53,10 @@ export const chainMapping = {
     icon: IconOpSquare,
     name: 'Optimism Goerli',
   },
+  '0xaa37dc': {
+    icon: IconOpSquare,
+    name: 'Optimism Sepolia',
+  },
   '0xa4b1': {
     icon: IconArbSquare,
     name: 'Arbitrum',
@@ -52,6 +64,10 @@ export const chainMapping = {
   '0x66eed': {
     icon: IconArbSquare,
     name: 'Arbitrum Goerli',
+  },
+  '0x66eee': {
+    icon: IconArbSquare,
+    name: 'Arbitrum Sepolia',
   },
 };
 // This is an important store switch which will clear all users' data
@@ -69,7 +85,7 @@ export const bundlerErrMapping: { [key: string]: string } = {
 
 export const ensContractAddress = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 
-export const supportedEoas = ['injected', 'walletConnect']
+export const supportedEoas = ['injected', 'walletConnect'];
 
 export default {
   homepage: 'https://www.soulwallet.io',

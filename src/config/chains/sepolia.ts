@@ -7,6 +7,8 @@ import IconEthFaded from '@/assets/chains/eth-faded.svg';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import { keystoreContracts } from './common';
 
+const chainId = 11155111
+
 export default {
   icon: IconEth,
   iconFaded: IconEthFaded,
@@ -19,8 +21,8 @@ export default {
   scanName: 'Etherscan',
   bundlerUrl: `https://api-dev.soulwallet.io/bundler/eth-sepolia/rpc`,
   maxCostMultiplier: 110,
-  chainId: 5,
-  chainIdHex: `0x${(5).toString(16)}`,
+  chainId,
+  chainIdHex: `0x${(chainId).toString(16)}`,
   defaultMaxFee: '1700000000',
   defaultMaxPriorityFee: '1500000000',
   chainName: 'Sepolia',

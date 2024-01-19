@@ -11,7 +11,7 @@ import IconSend from '@/assets/activities/send.svg';
 import IconMint from '@/assets/activities/mint.svg';
 import IconApprove from '@/assets/activities/approve.svg';
 import IconTrade from '@/assets/activities/trade.svg';
-import IconReceive from '@/assets/activities/receive.svg';
+// import IconReceive from '@/assets/activities/receive.svg';
 import IconContract from '@/assets/activities/contract.svg';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
