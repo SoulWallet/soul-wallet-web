@@ -20,6 +20,7 @@ import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
 import useTools from './useTools';
+import { useSettingStore } from '@/store/setting';
 
 export default function useWallet() {
   const { signByPasskey } = usePasskey();
@@ -33,8 +34,9 @@ export default function useWallet() {
   const { updateChainItem, setSelectedChainId, selectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
-  const { selectedAddress, addAddressItem, setSelectedAddress, setAddressList } = useAddressStore();
+  const { selectedAddress, setAddressList } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
+  const { setSignerIdAddress } = useSettingStore();
   const { clearCreateInfo } = useTempStore();
 
   const createWallet = async ({
@@ -77,11 +79,23 @@ export default function useWallet() {
       initialKeys: initialKeysAddress,
     });
 
-    console.log('after public backup slot')
+    console.log('after public backup slot');
 
     const addresses = await calcWalletAddressAllChains(0);
 
     setAddressList(addresses);
+
+    // save signer id to address mapping
+    const chainIdAddress = addresses.reduce((obj, item) => {
+      return {
+        ...obj,
+        [item.chainIdHex]: item.address,
+      };
+    }, {});
+
+    initialKeys.forEach((item) => {
+      setSignerIdAddress(item, chainIdAddress);
+    });
 
     // IMPORTANT TODO, initialize data, eoa address
     if (eoaAddress && eoaAddress.length > 0) {

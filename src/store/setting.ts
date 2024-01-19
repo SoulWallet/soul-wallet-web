@@ -6,6 +6,14 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 
+interface IChainIdAddress{
+  [chainIdHex: string]: string;
+}
+
+interface ISignerIdAddress {
+  [id: string]: IChainIdAddress
+}
+
 export interface ISettingStore {
   collapseGuidance: boolean;
   setCollapseGuidance: (val: boolean) => void;
@@ -16,7 +24,8 @@ export interface ISettingStore {
   // 1. guardian address -> name 2. slot address -> name
   addressName: { [address: string]: string };
   // signer id -> wallet address mapping
-  idAddress: {[id: string]: string };
+  signerIdAddress: ISignerIdAddress;
+  setSignerIdAddress: (signerId: string, chainIdAddress: IChainIdAddress) => void;
   saveAddressName: (address: string, name: string, checkExists?: boolean) => void;
   removeAddressName: (address: string) => void;
   getAddressName: (address: string) => string;
@@ -27,7 +36,12 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
   ignoreWebauthnOverride: false,
   finishedSteps: [],
   addressName: {},
-  idAddress: {},
+  signerIdAddress: {},
+  setSignerIdAddress: (signerId: string, chainIdAddress: IChainIdAddress) => {
+    set((state) => {
+      state.signerIdAddress[signerId] = chainIdAddress;
+    });
+  },
   setIgnoreWebauthnOverride: (val: boolean) => {
     set({
       ignoreWebauthnOverride: val,

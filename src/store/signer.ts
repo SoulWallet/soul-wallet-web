@@ -81,6 +81,6 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
 
 export const useSignerStore = create<ISignerStore>()(
   persist((...set) => ({ ...createCredentialSlice(...set) }), {
-    name: 'credential-storage',
+    name: 'signer-storage',
   }),
 );
