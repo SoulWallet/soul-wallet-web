@@ -55,7 +55,9 @@ export default function Auth() {
   const { signerIdAddress } = useSettingStore();
   const { authenticate } = usePassKey();
   const [isLoging, setIsLoging] = useState(false)
-  console.log('signerIdAddress', signerIdAddress, address)
+  const activeSignerId = loginInfo.signerId
+  const activeLoginAccount = signerIdAddress[loginInfo.signerId]
+  console.log('signerIdAddress', signerIdAddress, activeSignerId, activeLoginAccount)
 
   const openLogin = useCallback(() => {
     setIsLoginOpen(true)
@@ -139,6 +141,9 @@ export default function Auth() {
   const startLoginWithEOA = useCallback((connector: any) => {
     connect({ connector })
     setLoginMethod('eoa')
+    updateLoginInfo({
+      signerId: address
+    })
     closeLogin()
     openSelectAccount()
   }, [address])
@@ -343,6 +348,7 @@ export default function Auth() {
           isOpen={isSelectAccountOpen}
           onClose={closeSelectAccount}
           startImportAccount={startImportAccount}
+          activeLoginAccount={activeLoginAccount}
         />
         <ImportAccountModal
           isOpen={isImportAccountOpen}
