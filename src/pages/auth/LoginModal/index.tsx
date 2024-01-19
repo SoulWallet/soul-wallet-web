@@ -40,7 +40,7 @@ import { Connector, useConnect } from 'wagmi'
 import WalletOption from '@/components/new/WalletOption'
 import { getWalletIcon } from '@/lib/tools'
 
-export default function LoginModal({ isOpen, onClose, startLogin, isConnecting, connectEOA }: any) {
+export default function LoginModal({ isOpen, onClose, startLogin, isConnecting, connectEOA, checkLocalWallets }: any) {
   const { connectors } = useConnect();
 
   return (
@@ -99,6 +99,7 @@ export default function LoginModal({ isOpen, onClose, startLogin, isConnecting, 
                 theme="dark"
                 color="white"
                 marginBottom="49px"
+                // onClick={checkLocalWallets}
                 onClick={startLogin}
               >
                 <Box marginRight="10px"><PasskeyIcon /></Box>

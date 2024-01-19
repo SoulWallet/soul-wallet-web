@@ -30,13 +30,14 @@ import { useAccount } from 'wagmi'
 import { useConnect } from 'wagmi'
 import { useTempStore } from '@/store/temp';
 import SetPasskey from './SetPasskey'
+import ImportAccount from './ImportAccount'
 import LoginModal from './LoginModal'
 import RegisterModal from './RegisterModal'
 import SelectAccountModal from './SelectAccountModal'
 import ImportAccountModal from './ImportAccountModal'
 
 export default function Auth() {
-  const [step, setStep] = useState(0)
+  const [stepType, setStepType] = useState('auth')
   const [authMethod, setAuthMethod] = useState('eoa')
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isConnectAtive, setIsConnectAtive] = useState(false)
@@ -49,10 +50,6 @@ export default function Auth() {
   const account = useAccount()
   const { address, isConnected, isConnecting } = account
   console.log('address', account, isConnecting, createInfo)
-
-  const nextStep = useCallback(() => {
-    setStep(step + 1)
-  }, [step])
 
   const openLogin = useCallback(() => {
     setIsLoginOpen(true)
@@ -110,7 +107,7 @@ export default function Auth() {
     updateCreateInfo({
       eoaAddress: [address]
     })
-    setStep(1)
+    setStepType('setPassKey')
   }, [])
 
   const startImportAccount = useCallback(() => {
@@ -118,11 +115,22 @@ export default function Auth() {
     setIsImportAccountOpen(true)
   }, [])
 
+  const checkLocalWallets = useCallback(() => {
+    setIsLoginOpen(false)
+    setStepType('importAccount')
+  }, [])
+
   const jumpToHome = useCallback(() => {
 
   }, [])
 
-  if (step === 1 || authMethod === 'passkey') {
+  if (stepType === 'importAccount') {
+    return (
+      <ImportAccount />
+    )
+  }
+
+  if (stepType === 'setPassKey' || authMethod === 'passkey') {
     return (
       <SetPasskey />
     )
@@ -275,6 +283,7 @@ export default function Auth() {
           isConnecting={isConnecting}
           isConnected={isConnected}
           isConnectAtive={isConnectAtive}
+          checkLocalWallets={checkLocalWallets}
         />
         <RegisterModal
           isOpen={isRegisterOpen}

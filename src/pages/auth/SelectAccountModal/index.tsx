@@ -28,6 +28,10 @@ import Title from '@/components/new/Title'
 import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import ImportIcon from '@/components/Icons/Auth/Import'
 import Button from '@/components/new/Button'
+import { getChainInfo } from '@/lib/tools';
+import IconOp from '@/assets/chains/op.svg';
+import IconArb from '@/assets/chains/arb.svg';
+import IconEth from '@/assets/chains/eth.svg';
 
 export default function SelectAccountModal({ isOpen, onClose, startImportAccount }: any) {
   return (
@@ -59,12 +63,40 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
               </Title>
               <Box width="100%" display="flex" flexWrap="wrap">
                 <Box border="1px solid rgba(0, 0, 0, 0.1)" borderRadius="12px" padding="24px" width="100%" marginBottom="24px">
-                  <Title fontSize="18px">Wallet _1</Title>
-                  <TextBody fontWeight="normal">0x6B5Ccc28B2BC216D0d95eE5448DAbE2d29bb5Aa2</TextBody>
+                  <Title fontSize="18px">Account _1</Title>
+                  <Box display="flex" marginTop="18px">
+                    <Box marginRight="11px" borderBottom="2px solid black" paddingBottom="10px" cursor="pointer">
+                      <Image width="22px" height="22px" src={IconEth} borderRadius="100%" />
+                    </Box>
+                    <Box marginRight="11px" opacity="0.5" cursor="pointer">
+                      <Image width="22px" height="22px" src={IconArb} borderRadius="100%" />
+                    </Box>
+                    <Box marginRight="11px" opacity="0.5" cursor="pointer">
+                      <Image width="22px" height="22px" src={IconOp} borderRadius="100%" />
+                    </Box>
+                  </Box>
+                  <Box background="rgba(236, 236, 236, 0.3)" borderRadius="12px" padding="14px" marginTop="14px">
+                    <TextBody fontWeight="normal">ETH Address: 0xAAAA12345678E25FDa5f8a56B8e267fDaB6dS123</TextBody>
+                    <TextBody fontWeight="normal">Balance ≈ 0.88 ETH</TextBody>
+                  </Box>
                 </Box>
                 <Box border="1px solid rgba(0, 0, 0, 0.1)" borderRadius="12px" padding="24px" width="100%" marginBottom="24px">
-                  <Title fontSize="18px">Wallet _2</Title>
-                  <TextBody fontWeight="normal">0x6B5Ccc28B2BC216D0d95eE5448DAbE2d29bb5Aa2</TextBody>
+                  <Title fontSize="18px">Account _2</Title>
+                  <Box display="flex" marginTop="18px">
+                    <Box marginRight="11px" borderBottom="2px solid black" paddingBottom="10px" cursor="pointer">
+                      <Image width="22px" height="22px" src={IconEth} borderRadius="100%" />
+                    </Box>
+                    <Box marginRight="11px" opacity="0.5" cursor="pointer">
+                      <Image width="22px" height="22px" src={IconArb} borderRadius="100%" />
+                    </Box>
+                    <Box marginRight="11px" opacity="0.5" cursor="pointer">
+                      <Image width="22px" height="22px" src={IconOp} borderRadius="100%" />
+                    </Box>
+                  </Box>
+                  <Box background="rgba(236, 236, 236, 0.3)" borderRadius="12px" padding="14px" marginTop="14px">
+                    <TextBody fontWeight="normal">ETH Address: 0xAAAA12345678E25FDa5f8a56B8e267fDaB6dS123</TextBody>
+                    <TextBody fontWeight="normal">Balance ≈ 0.88 ETH</TextBody>
+                  </Box>
                 </Box>
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between" marginBottom="10px">
