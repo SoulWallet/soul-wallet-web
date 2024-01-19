@@ -51,7 +51,10 @@ export default function useWallet() {
     const keystore = chainConfig.contracts.l1Keystore;
 
     const credentialKeys = credentials.map((item: any) => item.publicKey);
+    const credentialIds = credentials.map((item: any) => item.credentialId);
     const initialKeys = [...credentialKeys, ...eoaAddress].filter((item) => item);
+
+    const initialSignerIds = [...credentialIds, ...eoaAddress].filter((item) => item);
 
     const initialKeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
     const initialKeyHash = L1KeyStore.getKeyHash(initialKeysAddress);
@@ -93,7 +96,7 @@ export default function useWallet() {
       };
     }, {});
 
-    initialKeys.forEach((item) => {
+    initialSignerIds.forEach((item) => {
       setSignerIdAddress(item, chainIdAddress);
     });
 

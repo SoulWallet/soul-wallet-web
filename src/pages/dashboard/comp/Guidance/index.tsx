@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import Button from '@/components/Button';
-import useWalletContext from '@/context/hooks/useWalletContext';
 import { guideList } from '@/data';
-import useBrowser from '@/hooks/useBrowser';
 import api from '@/lib/api';
 import { useSlotStore } from '@/store/slot';
-import { useAddressStore } from '@/store/address';
 import { findMissingNumbers } from '@/lib/tools';
 import useTools from '@/hooks/useTools';
 import { useSettingStore } from '@/store/setting';
@@ -63,13 +60,11 @@ export default function Guidance() {
         boxSizing="content-box"
         px="6"
         py="10px"
-        fontWeight={'800'}
+        fontSize={"12px"}
+        fontWeight={'700'}
         onClick={() => {
           goGuideAction(currentStep.id);
         }}
-        bg="#6A52EF"
-        color="white"
-        _hover={{ bg: '#6A52EF', color: 'white' }}
       >
         {currentStep.buttonText}
       </Button>
