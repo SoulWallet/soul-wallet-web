@@ -22,6 +22,10 @@ import { useTempStore } from '@/store/temp';
 import useTools from './useTools';
 import { useSettingStore } from '@/store/setting';
 
+interface ICredential{
+  id: string;
+}
+
 export default function useWallet() {
   const { signByPasskey } = usePasskey();
   const { set1559Fee } = useQuery();
@@ -33,7 +37,7 @@ export default function useWallet() {
   const { slotInfo, setSlotInfo } = useSlotStore();
   const { updateChainItem, setSelectedChainId, selectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useSignerStore();
-  const { soulWallet, calcWalletAddress, calcWalletAddressAllChains } = useSdk();
+  const { soulWallet, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, setAddressList } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
   const { setSignerIdAddress } = useSettingStore();

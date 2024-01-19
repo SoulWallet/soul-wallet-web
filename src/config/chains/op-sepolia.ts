@@ -8,6 +8,8 @@ import IconOpSquare from '@/assets/chains/op-square.svg';
 
 import { keystoreContracts } from './common';
 
+const chainId = 11155420;
+
 export default {
   icon: IconOp,
   iconFaded: IconOpFaded,
@@ -20,8 +22,8 @@ export default {
   scanName: 'Etherscan',
   bundlerUrl: `https://api-dev.soulwallet.io/bundler/op-sepolia/rpc`,
   maxCostMultiplier: 120,
-  chainId: 11155420,
-  chainIdHex: `0x${(11155420).toString(16)}`,
+  chainId,
+  chainIdHex: `0x${(chainId).toString(16)}`,
   defaultMaxFee: '0.135',
   defaultMaxPriorityFee: '0',
   chainName: 'Optimism Sepolia',
