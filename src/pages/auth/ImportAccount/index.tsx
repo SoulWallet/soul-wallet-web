@@ -32,9 +32,11 @@ import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
+import { ethers } from 'ethers';
 import { useTempStore } from '@/store/temp';
 
-export default function ImportAccount() {
+export default function ImportAccount({ importWallet, isImporting }: any) {
+  const [address, setAddress] = useState('')
   const [added, setAdded] = useState(false)
   const { createInfo, updateCreateInfo } = useTempStore()
   const { register } = usePassKey()
@@ -71,6 +73,12 @@ export default function ImportAccount() {
   const skip = useCallback(() => {
     console.log('skip')
     navigate(`/dashboard`);
+  }, [])
+
+  const onAddressChange = useCallback((e: any) => {
+    const address = e.target.value
+    console.log('address', address)
+    setAddress(address)
   }, [])
 
   const next = useCallback(() => {
@@ -130,7 +138,7 @@ export default function ImportAccount() {
               padding="30px"
             >
               <Box width="100%" maxWidth="548px" display="flex" marginBottom="10px" flexDirection="column">
-                <Input height="44px" borderRadius="12px" placeholder="Enter wallet address" />
+                <Input height="44px" borderRadius="12px" placeholder="Enter wallet address" value={address} onChange={onAddressChange} />
                 <Box fontSize="14px" fontWeight="400" display="flex" alignItems="center" marginTop="10px" padding="0 10px">
                   Forgot address? Try <Box fontSize="14px" color="#FF2E79" fontWeight="700" marginLeft="6px" cursor="pointer">Social Recovery</Box>
                 </Box>
@@ -141,6 +149,9 @@ export default function ImportAccount() {
                 theme="dark"
                 color="white"
                 padding="0 20px"
+                disabled={!ethers.isAddress(address) || isImporting}
+                onClick={() => importWallet(address)}
+                loading={isImporting}
               >
                 Go to my wallet
               </Button>

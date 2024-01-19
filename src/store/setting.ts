@@ -25,6 +25,7 @@ export interface ISettingStore {
   addressName: { [address: string]: string };
   // signer id -> wallet address mapping
   signerIdAddress: ISignerIdAddress;
+  getSignerIdAddress: () => any;
   setSignerIdAddress: (signerId: string, chainIdAddress: IChainIdAddress) => void;
   saveAddressName: (address: string, name: string, checkExists?: boolean) => void;
   removeAddressName: (address: string) => void;
@@ -37,6 +38,9 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
   finishedSteps: [],
   addressName: {},
   signerIdAddress: {},
+  getSignerIdAddress: () => {
+    return get().signerIdAddress;
+  },
   setSignerIdAddress: (signerId: string, chainIdAddress: IChainIdAddress) => {
     set((state) => {
       state.signerIdAddress[signerId] = chainIdAddress;

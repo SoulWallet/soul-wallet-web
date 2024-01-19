@@ -56,7 +56,7 @@ export default function Auth() {
   const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo } = useTempStore()
   const account = useAccount()
   const { address, isConnected, isConnecting } = account
-  const { signerIdAddress } = useSettingStore();
+  const { signerIdAddress, getSignerIdAddress } = useSettingStore();
   const { authenticate } = usePassKey();
   const [isLoging, setIsLoging] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
@@ -142,7 +142,13 @@ export default function Auth() {
       })
       setIsLoging(false)
       closeLogin()
-      openSelectAccount()
+      const signerIdAddress = getSignerIdAddress()
+
+      if (signerIdAddress[credentialId]) {
+        openSelectAccount()
+      } else {
+        setStepType('importAccount')
+      }
     } catch (error: any) {
       console.log('error', error.message)
       setIsLoging(false)
@@ -156,7 +162,14 @@ export default function Auth() {
       signerId: address
     })
     closeLogin()
-    openSelectAccount()
+
+    const signerIdAddress = getSignerIdAddress()
+
+    if (signerIdAddress[address as any]) {
+      openSelectAccount()
+    } else {
+      setStepType('importAccount')
+    }
   }, [address])
 
   const startImportAccount = useCallback(() => {
@@ -164,7 +177,7 @@ export default function Auth() {
     setIsImportAccountOpen(true)
   }, [])
 
-  const importWallet = useCallback(async (address) => {
+  const importWallet = useCallback(async (address: string) => {
     setIsImporting(true)
     const slotInitInfo = (
       await api.guardian.getSlotInfo({
@@ -213,7 +226,7 @@ export default function Auth() {
 
   if (stepType === 'importAccount') {
     return (
-      <ImportAccount />
+      <ImportAccount importWallet={importWallet} isImporting={isImporting} />
     )
   }
 
@@ -397,6 +410,8 @@ export default function Auth() {
         <ImportAccountModal
           isOpen={isImportAccountOpen}
           onClose={closeImportAccount}
+          importWallet={importWallet}
+          isImporting={isImporting}
         />
       </Box>
     </Box>
