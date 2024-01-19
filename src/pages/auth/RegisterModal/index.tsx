@@ -18,6 +18,7 @@ import QuestionIcon from '@/components/Icons/Auth/Question'
 import Button from '@/components/new/Button'
 import { supportedEoas } from '@/config'
 import SuccessIcon from "@/components/Icons/Success";
+import WalletOption from '@/components/new/WalletOption'
 import { getWalletIcon } from '@/lib/tools'
 
 export default function RegisterModal({
@@ -171,153 +172,13 @@ export default function RegisterModal({
               {!(isConnecting && isConnectAtive) && (
                 <Box width="100%" display="flex" flexWrap="wrap">
                   {connectors.filter(item => supportedEoas.includes(item.id)).map((connector: Connector) =>
-                    <Box
+                    <WalletOption
                       key={connector.uid}
-                      display="flex"
-                      alignItems="center"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      padding="16px"
-                      marginRight="16px"
-                      marginBottom="24px"
-                      width="45%"
-                      cursor={"pointer"}
+                      icon={getWalletIcon(connector.id)}
+                      name={connector.name}
                       onClick={() => connectEOA(connector)}
-                    >
-                      <Box
-                        width="48px"
-                        height="48px"
-                        border="1px solid rgba(0, 0, 0, 0.1)"
-                        borderRadius="12px"
-                        marginRight="12px"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Image src={getWalletIcon(connector.id)} width="32px" height="32px" />
-                      </Box>
-                      <TextBody>{connector.name}</TextBody>
-                    </Box>)}
-                  {/* <Box
-                      display="flex"
-                      alignItems="center"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      padding="16px"
-                      marginRight="16px"
-                      marginBottom="24px"
-                      width="45%"
-                      >
-                      <Box
-                      width="48px"
-                      height="48px"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      marginRight="12px"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      >
-                      <Image src={OKXWalletIcon} width="32px" height="32px" />
-                      </Box>
-                      <TextBody>OKX Wallet</TextBody>
-                      </Box>
-                      <Box
-                      display="flex"
-                      alignItems="center"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      padding="16px"
-                      marginRight="16px"
-                      marginBottom="24px"
-                      width="45%"
-                      >
-                      <Box
-                      width="48px"
-                      height="48px"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      marginRight="12px"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      >
-                      <Image src={CoinbaseIcon} width="32px" height="32px" />
-                      </Box>
-                      <TextBody>Coinbase Wallet</TextBody>
-                      </Box>
-                      <Box
-                      display="flex"
-                      alignItems="center"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      padding="16px"
-                      marginRight="16px"
-                      marginBottom="24px"
-                      width="45%"
-                      >
-                      <Box
-                      width="48px"
-                      height="48px"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      marginRight="12px"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      >
-                      <Image src={BinanceIcon} width="32px" height="32px" />
-                      </Box>
-                      <TextBody>Binance Wallet</TextBody>
-                      </Box>
-                      <Box
-                      display="flex"
-                      alignItems="center"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      padding="16px"
-                      marginRight="16px"
-                      marginBottom="24px"
-                      width="45%"
-                      >
-                      <Box
-                      width="48px"
-                      height="48px"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      marginRight="12px"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      >
-                      <Image src={WalletConnectIcon} width="32px" height="32px" />
-                      </Box>
-                      <TextBody>Wallet Connect</TextBody>
-                      </Box>
-                      <Box
-                      display="flex"
-                      alignItems="center"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      padding="16px"
-                      marginRight="16px"
-                      marginBottom="24px"
-                      width="45%"
-                      >
-                      <Box
-                      width="48px"
-                      height="48px"
-                      border="1px solid rgba(0, 0, 0, 0.1)"
-                      borderRadius="12px"
-                      marginRight="12px"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      >
-                      <Image src={XDEFIIcon} width="32px" height="32px" />
-                      </Box>
-                      <TextBody>XDEFI Wallet</TextBody>
-                      </Box> */}
+                    />
+                  )}
                 </Box>
               )}
             </Box>

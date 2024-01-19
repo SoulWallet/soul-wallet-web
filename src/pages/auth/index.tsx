@@ -256,7 +256,10 @@ export default function Auth() {
           isOpen={isLoginOpen}
           onClose={closeLogin}
           startLogin={startLogin}
+          connectEOA={connectEOA}
           isConnecting={isConnecting}
+          isConnected={isConnected}
+          isConnectAtive={isConnectAtive}
         />
         <RegisterModal
           isOpen={isRegisterOpen}

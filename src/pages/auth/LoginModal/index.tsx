@@ -35,8 +35,14 @@ import CoinbaseIcon from '@/assets/wallets/coinbase.png'
 import BinanceIcon from '@/assets/wallets/binance.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
 import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
+import { supportedEoas } from '@/config'
+import { Connector, useConnect } from 'wagmi'
+import WalletOption from '@/components/new/WalletOption'
+import { getWalletIcon } from '@/lib/tools'
 
-export default function LoginModal({ isOpen, onClose, startLogin, isConnecting }: any) {
+export default function LoginModal({ isOpen, onClose, startLogin, isConnecting, connectEOA }: any) {
+  const { connectors } = useConnect();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -64,150 +70,14 @@ export default function LoginModal({ isOpen, onClose, startLogin, isConnecting }
                 Login with Web3 wallet
               </Title>
               <Box width="100%" display="flex" flexWrap="wrap">
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  border="1px solid rgba(0, 0, 0, 0.1)"
-                  borderRadius="12px"
-                  padding="16px"
-                  marginRight="16px"
-                  marginBottom="24px"
-                  width="45%"
-                >
-                  <Box
-                    width="48px"
-                    height="48px"
-                    border="1px solid rgba(0, 0, 0, 0.1)"
-                    borderRadius="12px"
-                    marginRight="12px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image src={MetamaskIcon} width="32px" height="32px" />
-                  </Box>
-                  <TextBody>MetaMask</TextBody>
-                </Box>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  border="1px solid rgba(0, 0, 0, 0.1)"
-                  borderRadius="12px"
-                  padding="16px"
-                  marginRight="16px"
-                  marginBottom="24px"
-                  width="45%"
-                >
-                  <Box
-                    width="48px"
-                    height="48px"
-                    border="1px solid rgba(0, 0, 0, 0.1)"
-                    borderRadius="12px"
-                    marginRight="12px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image src={OKXWalletIcon} width="32px" height="32px" />
-                  </Box>
-                  <TextBody>OKX Wallet</TextBody>
-                </Box>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  border="1px solid rgba(0, 0, 0, 0.1)"
-                  borderRadius="12px"
-                  padding="16px"
-                  marginRight="16px"
-                  marginBottom="24px"
-                  width="45%"
-                >
-                  <Box
-                    width="48px"
-                    height="48px"
-                    border="1px solid rgba(0, 0, 0, 0.1)"
-                    borderRadius="12px"
-                    marginRight="12px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image src={CoinbaseIcon} width="32px" height="32px" />
-                  </Box>
-                  <TextBody>Coinbase Wallet</TextBody>
-                </Box>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  border="1px solid rgba(0, 0, 0, 0.1)"
-                  borderRadius="12px"
-                  padding="16px"
-                  marginRight="16px"
-                  marginBottom="24px"
-                  width="45%"
-                >
-                  <Box
-                    width="48px"
-                    height="48px"
-                    border="1px solid rgba(0, 0, 0, 0.1)"
-                    borderRadius="12px"
-                    marginRight="12px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image src={BinanceIcon} width="32px" height="32px" />
-                  </Box>
-                  <TextBody>Binance Wallet</TextBody>
-                </Box>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  border="1px solid rgba(0, 0, 0, 0.1)"
-                  borderRadius="12px"
-                  padding="16px"
-                  marginRight="16px"
-                  marginBottom="24px"
-                  width="45%"
-                >
-                  <Box
-                    width="48px"
-                    height="48px"
-                    border="1px solid rgba(0, 0, 0, 0.1)"
-                    borderRadius="12px"
-                    marginRight="12px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image src={WalletConnectIcon} width="32px" height="32px" />
-                  </Box>
-                  <TextBody>Wallet Connect</TextBody>
-                </Box>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  border="1px solid rgba(0, 0, 0, 0.1)"
-                  borderRadius="12px"
-                  padding="16px"
-                  marginRight="16px"
-                  marginBottom="24px"
-                  width="45%"
-                >
-                  <Box
-                    width="48px"
-                    height="48px"
-                    border="1px solid rgba(0, 0, 0, 0.1)"
-                    borderRadius="12px"
-                    marginRight="12px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <Image src={XDEFIIcon} width="32px" height="32px" />
-                  </Box>
-                  <TextBody>XDEFI Wallet</TextBody>
-                </Box>
+                {connectors.filter(item => supportedEoas.includes(item.id)).map((connector: Connector) =>
+                  <WalletOption
+                    key={connector.uid}
+                    icon={getWalletIcon(connector.id)}
+                    name={connector.name}
+                    onClick={() => connectEOA(connector)}
+                  />
+                )}
               </Box>
             </Box>
             <Box
