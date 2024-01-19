@@ -71,7 +71,7 @@ export const chainMapping = {
   },
 };
 // This is an important store switch which will clear all users' data
-export const storeVersion = '14';
+export const storeVersion = '15';
 
 export const defaultGuardianSafePeriod = 1;
 
