@@ -162,7 +162,14 @@ export default function Auth() {
       signerId: address
     })
     closeLogin()
-    openSelectAccount()
+
+    const signerIdAddress = getSignerIdAddress()
+
+    if (signerIdAddress[address as any]) {
+      openSelectAccount()
+    } else {
+      setStepType('importAccount')
+    }
   }, [address])
 
   const startImportAccount = useCallback(() => {
