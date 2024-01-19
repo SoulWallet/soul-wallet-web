@@ -34,7 +34,7 @@ const SignCard = () => {
   const { authenticate } = usePassKey();
   const { navigate } = useBrowser();
   const toast = useToast();
-  const { retrieveForNewDevice } = useWallet();
+  const { initializeWithPasskey } = useWallet();
   const [isAuthing, setIsAuthing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -78,7 +78,7 @@ const SignCard = () => {
         //   publicKey = publicKeys['1'];
         // }
 
-        await retrieveForNewDevice(slotInitInfo, { ...credential, publicKey });
+        await initializeWithPasskey(slotInitInfo, { ...credential, publicKey });
 
         toast({
           title: 'Logged in',
