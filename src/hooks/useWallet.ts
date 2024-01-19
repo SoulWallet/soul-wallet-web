@@ -12,6 +12,7 @@ import BN from 'bignumber.js';
 import useConfig from './useConfig';
 import api from '@/lib/api';
 import usePasskey from './usePasskey';
+import { toHex } from '@/lib/tools';
 import { useSignMessage } from 'wagmi';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
@@ -44,10 +45,8 @@ export default function useWallet() {
     initialGuardianSafePeriod: number;
   }) => {
     // retrieve info from temp store
-    const {
-      credentials = [],
-      eoaAddress = [],
-    } = useTempStore.getState().createInfo;
+    const { credentials = [], eoaAddress = [] } = useTempStore.getState().createInfo;
+    const keystore = chainConfig.contracts.l1Keystore;
 
     const credentialKeys = credentials.map((item: any) => item.publicKey);
     const initialKeys = [...credentialKeys, ...eoaAddress].filter((item) => item);
@@ -63,8 +62,22 @@ export default function useWallet() {
       initialKeysAddress,
       slot,
       initialGuardianHash,
-      initialGuardianSafePeriod,
+      initialGuardianSafePeriod: toHex(initialGuardianSafePeriod),
     });
+
+    // save slot info to api
+    await api.guardian.backupSlot({
+      keystore,
+      slot,
+      slotInitInfo: {
+        initialKeyHash,
+        initialGuardianHash,
+        initialGuardianSafePeriod: toHex(initialGuardianSafePeriod),
+      },
+      initialKeys: initialKeysAddress,
+    });
+
+    console.log('after public backup slot')
 
     const addresses = await calcWalletAddressAllChains(0);
 
@@ -76,6 +89,7 @@ export default function useWallet() {
     } else if (credentials.length > 0) {
       setCredentials(credentials);
     }
+
     clearCreateInfo();
   };
 
@@ -225,7 +239,7 @@ export default function useWallet() {
     }
     const packedUserOpHash = packedUserOpHashRet.OK;
 
-    console.log('selected key type', selectedKeyType)
+    console.log('selected key type', selectedKeyType);
 
     if (selectedKeyType === SignkeyType.EOA) {
       userOp.signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
