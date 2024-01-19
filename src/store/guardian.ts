@@ -76,5 +76,6 @@ export const createGuardianStore = (initProps?: any) =>
 export const useGuardianStore = create<GuardianStore>()(
   persist((...set) => ({ ...createGuardianSlice(...set) }), {
     name: 'guardian-storage',
+    version: 5,
   }),
 );

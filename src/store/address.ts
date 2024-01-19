@@ -112,5 +112,6 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
 export const useAddressStore = create<IAddressStore>()(
   persist((...set) => ({ ...createAddressSlice(...set) }), {
     name: 'address-storage',
+    version: 5,
   }),
 );
