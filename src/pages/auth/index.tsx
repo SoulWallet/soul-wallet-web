@@ -35,6 +35,7 @@ import usePassKey from '@/hooks/usePasskey';
 import api from '@/lib/api';
 import useWallet from '@/hooks/useWallet';
 import useSdk from '@/hooks/useSdk';
+import { useSignerStore } from '@/store/signer';
 import SetPasskey from './SetPasskey'
 import ImportAccount from './ImportAccount'
 import LoginModal from './LoginModal'
@@ -53,7 +54,7 @@ export default function Auth() {
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false)
   const [isImportAccountOpen, setIsImportAccountOpen] = useState(false)
   const { connect } = useConnect()
-  const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo } = useTempStore()
+  const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo, getLoginInfo } = useTempStore()
   const account = useAccount()
   const { address, isConnected, isConnecting } = account
   const { signerIdAddress, getSignerIdAddress } = useSettingStore();
@@ -66,6 +67,7 @@ export default function Auth() {
   const { setSignerIdAddress } = useSettingStore();
   const toast = useToast();
   const { navigate } = useBrowser();
+  const { setCredentials, setEoas } = useSignerStore();
   const activeSignerId = loginInfo.signerId
   const activeLoginAccount = signerIdAddress[loginInfo.signerId]
   console.log('signerIdAddress', signerIdAddress, activeSignerId, activeLoginAccount)
@@ -138,7 +140,9 @@ export default function Auth() {
       const { publicKey, credential } = await authenticate();
       const { credentialId } = credential
       updateLoginInfo({
-        signerId: credentialId
+        signerId: credentialId,
+        method: 'passkey',
+        credential
       })
       setIsLoging(false)
       closeLogin()
@@ -159,7 +163,9 @@ export default function Auth() {
     connect({ connector })
     setLoginMethod('eoa')
     updateLoginInfo({
-      signerId: address
+      signerId: address,
+      method: 'eoa',
+      eoaAddress: address
     })
     closeLogin()
 
@@ -203,6 +209,15 @@ export default function Auth() {
      *   setSignerIdAddress(item, chainIdAddress);
      * });
      */
+    const loginInfo = getLoginInfo()
+
+    if (loginInfo.method === 'eoa') {
+      setEoas([loginInfo.eoaAddress]);
+    } else {
+      setCredentials([loginInfo.credential]);
+    }
+
+    console.log('loginInfo', loginInfo)
     setIsImporting(false)
     toast({
       title: 'Logged in',
@@ -219,7 +234,9 @@ export default function Auth() {
   useEffect(() => {
     if (isConnected && address) {
       updateLoginInfo({
-        signerId: address
+        signerId: address,
+        method: 'eoa',
+        eoaAddress: address
       })
     }
   }, [isConnected, address])

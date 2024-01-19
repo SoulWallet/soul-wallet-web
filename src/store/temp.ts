@@ -31,6 +31,9 @@ const createStagingSlice = immer<any>((set, get) => ({
   }),
 
   loginInfo: {},
+  getLoginInfo: () => {
+    return get().loginInfo
+  },
   updateLoginInfo: (value: any) => set({
     loginInfo: {
       ...get().loginInfo,
