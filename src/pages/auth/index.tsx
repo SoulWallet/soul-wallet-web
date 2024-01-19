@@ -29,8 +29,12 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import { useAccount } from 'wagmi'
 import { useConnect } from 'wagmi'
 import { useTempStore } from '@/store/temp';
+import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
 import usePassKey from '@/hooks/usePasskey';
+import api from '@/lib/api';
+import useWallet from '@/hooks/useWallet';
+import useSdk from '@/hooks/useSdk';
 import SetPasskey from './SetPasskey'
 import ImportAccount from './ImportAccount'
 import LoginModal from './LoginModal'
@@ -55,6 +59,13 @@ export default function Auth() {
   const { signerIdAddress } = useSettingStore();
   const { authenticate } = usePassKey();
   const [isLoging, setIsLoging] = useState(false)
+  const [isImporting, setIsImporting] = useState(false)
+  const { retrieveSlotInfo } = useWallet();
+  const { setAddressList } = useAddressStore();
+  const { calcWalletAddressAllChains } = useSdk();
+  const { setSignerIdAddress } = useSettingStore();
+  const toast = useToast();
+  const { navigate } = useBrowser();
   const activeSignerId = loginInfo.signerId
   const activeLoginAccount = signerIdAddress[loginInfo.signerId]
   console.log('signerIdAddress', signerIdAddress, activeSignerId, activeLoginAccount)
@@ -153,9 +164,39 @@ export default function Auth() {
     setIsImportAccountOpen(true)
   }, [])
 
-  const checkLocalWallets = useCallback(() => {
-    setIsLoginOpen(false)
-    setStepType('importAccount')
+  const importWallet = useCallback(async (address) => {
+    setIsImporting(true)
+    const slotInitInfo = (
+      await api.guardian.getSlotInfo({
+        walletAddress: address,
+      })
+    ).data
+
+    retrieveSlotInfo(slotInitInfo)
+
+    const addresses = await calcWalletAddressAllChains(0);
+    console.log('addresses', addresses)
+    setAddressList(addresses);
+
+    // save signer id to address mapping
+    /* const chainIdAddress = addresses.reduce((obj, item) => {
+     *   return {
+     *     ...obj,
+     *     [item.chainIdHex]: item.address,
+     *   };
+     * }, {});
+
+     * initialSignerIds.forEach((item) => {
+     *   setSignerIdAddress(item, chainIdAddress);
+     * });
+     */
+    setIsImporting(false)
+    toast({
+      title: 'Logged in',
+      status: 'success',
+    })
+    setIsSelectAccountOpen(false)
+    navigate('/dashboard')
   }, [])
 
   const jumpToHome = useCallback(() => {
@@ -331,6 +372,7 @@ export default function Auth() {
           startLoginWithEOA={startLoginWithEOA}
           startLoginWithPasskey={startLoginWithPasskey}
           isLoging={isLoging}
+
         />
         <RegisterModal
           isOpen={isRegisterOpen}
@@ -349,6 +391,8 @@ export default function Auth() {
           onClose={closeSelectAccount}
           startImportAccount={startImportAccount}
           activeLoginAccount={activeLoginAccount}
+          importWallet={importWallet}
+          isImporting={isImporting}
         />
         <ImportAccountModal
           isOpen={isImportAccountOpen}

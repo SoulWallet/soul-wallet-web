@@ -33,8 +33,9 @@ import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
 import IconEth from '@/assets/chains/eth.svg';
 
-export default function SelectAccountModal({ isOpen, onClose, startImportAccount, activeLoginAccount }: any) {
+export default function SelectAccountModal({ isOpen, onClose, startImportAccount, activeLoginAccount, importWallet, isImporting }: any) {
   const [selectedAddress, setSelectedAddress] = useState()
+  const chainId = '0xaa36a7'
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -64,7 +65,7 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
                 Multiple wallets found under this signer, please select to login
               </Title>
               <Box width="100%" display="flex" flexWrap="wrap">
-                <Box borderRadius="12px" padding="24px" width="100%" marginBottom="24px" border={activeLoginAccount['0x5'] === selectedAddress ? '2px solid black' : `1px solid rgba(0, 0, 0, 0.1)`} onClick={() => setSelectedAddress(activeLoginAccount['0x5'])}>
+                <Box borderRadius="12px" padding="24px" width="100%" marginBottom="24px" border={(activeLoginAccount && activeLoginAccount[chainId] === selectedAddress) ? '2px solid black' : `1px solid rgba(0, 0, 0, 0.1)`} onClick={() => setSelectedAddress(activeLoginAccount && activeLoginAccount[chainId])}>
                   <Title fontSize="18px">Account _1</Title>
                   {!!activeLoginAccount && (
                     <Fragment>
@@ -80,7 +81,7 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
                         </Box>
                       </Box>
                       <Box background="rgba(236, 236, 236, 0.3)" borderRadius="12px" padding="14px" marginTop="14px">
-                        <TextBody fontWeight="normal">ETH Address: {activeLoginAccount['0x5']}</TextBody>
+                        <TextBody fontWeight="normal">ETH Address: {activeLoginAccount[chainId]}</TextBody>
                         <TextBody fontWeight="normal">Balance ≈ 0.88 ETH</TextBody>
                       </Box>
                     </Fragment>
@@ -104,7 +105,9 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
                   theme="dark"
                   color="white"
                   padding="0 20px"
-                  disabled={!selectedAddress}
+                  disabled={!selectedAddress || !!isImporting}
+                  isLoading={isImporting}
+                  onClick={() => importWallet(activeLoginAccount[chainId])}
                 >
                   Go to my wallet
                 </Button>
