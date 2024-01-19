@@ -1,7 +1,7 @@
 import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 import Tokens from './comp/Tokens';
 import Activity from './comp/Activity';
-import Balance from './comp/Balance';
+import WalletCard from './comp/WalletCard';
 import DappList from '@/components/DappList';
 import SetGuardianHint from './comp/SetGuardianHint';
 import DashboardLayout from '@/components/Layouts/DashboardLayout';
@@ -12,7 +12,7 @@ export default function Dashboard() {
       <Flex gap="50px" h="100%">
         <Flex w="40%" h="100%" flexDir={'column'} justify={'center'} align={'center'}>
           {/* <AccountSelectFull display={{ base: 'flex', lg: 'none' }} w="100%" /> */}
-          <Balance />
+          <WalletCard />
           <SetGuardianHint />
           <Activity />
         </Flex>

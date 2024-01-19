@@ -35,7 +35,7 @@ export default function ActivityItem({ item, scanUrl }: any) {
       <Flex gap="3" align={'center'}>
         <Image src={getIconMapping(item.functionName)} w="32px" h="32px" />
         <Box>
-          <Flex align={'center'} gap="2" mb="1" maxW={"60%"}>
+          <Flex align={'center'} gap="2" mb="1" maxW={"90%"}>
             <Text fontSize={'14px'} fontWeight={'800'}>
               {item.functionName}
             </Text>

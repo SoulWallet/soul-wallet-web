@@ -287,7 +287,10 @@ export default function useWallet() {
     return signature;
   };
 
-  const retrieveForNewDevice = async (initInfo: any, credential: any) => {
+  const initializeWithEoa = async (initInfo: any, eoaAddress: string) => {
+  }
+
+  const initializeWithPasskey = async (initInfo: any, credential: any) => {
     // set init info
     retrieveSlotInfo(initInfo);
     // calc first address
@@ -416,7 +419,7 @@ export default function useWallet() {
     signAndSend,
     signRawHash,
     signWithPasskey,
-    retrieveForNewDevice,
+    initializeWithPasskey,
     retrieveSlotInfo,
     boostAfterRecovered,
     checkRecoverStatus,

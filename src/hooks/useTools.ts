@@ -16,7 +16,7 @@ import { useSettingStore } from '@/store/setting';
 
 export default function useTools() {
   const toast = useToast();
-  const { clearCredentials } = useSignerStore();
+  const {  } = useSignerStore();
   const { clearAddresses } = useAddressStore();
   const { clearGuardianInfo } = useGuardianStore();
   const { clearBalance } = useBalanceStore();
@@ -39,7 +39,7 @@ export default function useTools() {
     clearAddresses();
     clearBalance();
     clearChainStore();
-    clearCredentials();
+    clearSigners();
     clearGuardianInfo();
     clearHistory();
     clearSlotStore();

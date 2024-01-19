@@ -42,7 +42,7 @@ export default function SetGuardianHint() {
       px="6"
       // h="160px"
       pb="2px"
-      w="380px"
+      w={{base: "380px", "2xl" :"400px"}}
       // mt="-16px"
       mt="-2"
       bg="#fff"

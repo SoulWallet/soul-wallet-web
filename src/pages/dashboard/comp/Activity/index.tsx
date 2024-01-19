@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react';
 import ActivityItem from './comp/ActivityItem';
-import { Image, Divider, Text, Box, Link } from '@chakra-ui/react';
+import { Text, Box, Link } from '@chakra-ui/react';
 import useConfig from '@/hooks/useConfig';
 import { useHistoryStore } from '@/store/history';
 import Button from '@/components/Button';
 import { Link as RLink } from 'react-router-dom';
 
 export default function Activity() {
-  const [loading, setLoading] = useState(false);
-  // IMPORTANT TODO: MOVE history list to store
-  // const [historyList, setHistoryList] = useState<any>([]);
   const { chainConfig } = useConfig();
   const { historyList } = useHistoryStore();
 
@@ -18,7 +14,7 @@ export default function Activity() {
   }
 
   return (
-    <Box mt="40px">
+    <Box mt="40px" w="380px">
       <Text fontWeight="800" fontSize={'18px'} lineHeight={'1.25'} mb="22px">
         Recent Transactions
       </Text>

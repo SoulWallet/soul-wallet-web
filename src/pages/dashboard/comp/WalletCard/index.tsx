@@ -61,7 +61,7 @@ export const EditNameModal = ({
   );
 };
 
-export default function Balance() {
+export default function WalletCard() {
   const { showSend, showReceive } = useWalletContext();
   const [hoverIndex, setHoverIndex] = useState(-1);
   const [editNameModalVisible, setEditNameModalVisible] = useState(false);
@@ -111,7 +111,7 @@ export default function Balance() {
 
   return (
     <Box
-      w="400px"
+      w={{ base: '400px', '2xl': '460px' }}
       zIndex={'20'}
       pt="14px"
       px="30px"

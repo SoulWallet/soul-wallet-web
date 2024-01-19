@@ -15,6 +15,7 @@ export interface ISignerStore {
   setCredentials: (credentials: any) => void;
   changeCredentialName: (credentialId: string, name: string) => void;
   clearCredentials: () => void;
+  clearSigners: () => void;
 }
 
 export const getIndexByCredentialId = (credentials: any, id: string) => {
@@ -64,6 +65,13 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
     set((state) => {
       state.credentials = [];
     });
+  },
+  clearSigners: () => {
+    set(state => {
+      state.credentials = [];
+      state.eoas = [];
+      state.signerId = '';
+    })
   },
   getSelectedCredential: () => {
     const index = getIndexByCredentialId(get().credentials, get().signerId);
