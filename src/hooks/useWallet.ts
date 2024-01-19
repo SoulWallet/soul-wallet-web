@@ -22,7 +22,7 @@ import { useTempStore } from '@/store/temp';
 import useTools from './useTools';
 import { useSettingStore } from '@/store/setting';
 
-interface ICredential{
+interface ICredential {
   id: string;
 }
 

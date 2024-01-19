@@ -8,32 +8,15 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useSlotStore } from '@/store/slot';
 import Button from '@/components/Button';
 import { Link } from 'react-router-dom';
-import useWallet from '@/hooks/useWallet';
-import { useTempStore } from '@/store/temp';
-import { ethers } from 'ethers';
-import { defaultGuardianSafePeriod } from '@/config';
 import { SkipModal } from '@/pages/create/SetGuardians';
 import ReceiveCode from '@/components/ReceiveCode';
 import { useAddressStore } from '@/store/address';
 
-const SetGuardianHint = () => {
-  const { createWallet } = useWallet();
-  const { updateCreateInfo } = useTempStore();
-  const [creating, setCreating] = useState(false);
-  const [isSkipOpen, setIsSkipOpen] = useState(false);
-  const skipSetupGuardian = async () => {
-    console.log('skipSetupGuardian')
-    setCreating(true);
-    // generate wallet address
-    const noGuardian = {
-      initialGuardianHash: ethers.ZeroHash,
-      initialGuardianSafePeriod: defaultGuardianSafePeriod,
-    };
-    updateCreateInfo(noGuardian);
-    await createWallet(noGuardian);
-    setCreating(false);
-    console.log('done skip')
-  };
+const SetGuardianHint = ({
+  onShowSkip
+}: {
+  onShowSkip: () => void;
+}) => {
   return (
     <Flex
       align={'center'}
@@ -41,7 +24,7 @@ const SetGuardianHint = () => {
       backdropFilter={'blur(12px)'}
       pos="absolute"
       pt="100px"
-      pb="90px"
+      pb="100px"
       top="0"
       right={'0'}
       zIndex={'10'}
@@ -72,19 +55,12 @@ const SetGuardianHint = () => {
             _hover={{ bg: '#eee' }}
             border="1px solid #D0D5DD"
             // loading={creating}
-            onClick={() => setIsSkipOpen(true)}
+            onClick={onShowSkip}
           >
             Later
           </Button>
         </Flex>
       </Box>
-
-      <SkipModal
-        isOpen={isSkipOpen}
-        onClose={() => setIsSkipOpen(false)}
-        doSkip={skipSetupGuardian}
-        skipping={creating}
-      />
     </Flex>
   );
 };
@@ -127,6 +103,7 @@ export default function Tokens() {
   const { showSend } = useWalletContext();
   const { tokenBalance } = useBalanceStore();
   const { slotInfo } = useSlotStore();
+  const [isSkipOpen, setIsSkipOpen] = useState(false);
 
   const showSendAssets = (tokenAddress: string) => {
     showSend(tokenAddress);
@@ -136,12 +113,13 @@ export default function Tokens() {
 
   return (
     <HomeCard title={'Assets'} pos="relative" external={<ExternalLink title="View more" to="/asset" />} h="100%">
-      {!slotInfo.initialGuardianHash && <SetGuardianHint />}
+      {(!slotInfo.initialGuardianHash || isSkipOpen) && <SetGuardianHint onShowSkip={() => setIsSkipOpen(true)} />}
       {isTokenBalanceEmpty ? (
         <DepositHint />
       ) : (
         <TokenBalanceTable tokenBalance={tokenBalance} showSendAssets={showSendAssets} />
       )}
+      <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} />
     </HomeCard>
   );
 }
