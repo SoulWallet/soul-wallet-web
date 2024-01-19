@@ -21,23 +21,27 @@ export const sidebarLinks = [
     href: "/assets",
     icon: IconAssets,
     iconActive: IconAssetsActive,
+    isComing: true,
   },
   {
     title: 'Activity',
     href: "/activity",
     icon: IconActivity,
     iconActive: IconActivityActive,
+    isComing: true,
   },
   {
     title: 'Dapps',
     href: "/dapps",
     icon: IconDapps,
     iconActive: IconDappsActive,
+    isComing: true,
   },
   {
     title: 'Settings',
     href: "/security/signer",
     icon: IconSettings,
     iconActive: IconSettingsActive,
+    isComing: false,
   },
 ];

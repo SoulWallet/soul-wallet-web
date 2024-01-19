@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Button, Text, FlexProps } from '@chakra-ui/react';
+import { Box, Flex, Image, Button, Text, FlexProps, Tooltip } from '@chakra-ui/react';
 import { sidebarLinks } from '@/config/constants';
 import { Link, useLocation } from 'react-router-dom';
 import useWalletContext from '@/context/hooks/useWalletContext';
@@ -8,7 +8,6 @@ import IconFeedback from '@/assets/icons/feedback.svg';
 import Footer from '../Footer';
 import { guideList } from '@/data';
 import { useSettingStore } from '@/store/setting';
-import FeedbackModal from '../FeedbackModal';
 
 const ExtraLink = ({ children, ...restProps }: FlexProps) => {
   return (
@@ -21,7 +20,7 @@ const ExtraLink = ({ children, ...restProps }: FlexProps) => {
 export default function Sidebar() {
   const location = useLocation();
   const { finishedSteps } = useSettingStore();
-  const { showClaimAssets, showTestGuide, showFeedback, } = useWalletContext();
+  const { showClaimAssets, showTestGuide, showFeedback } = useWalletContext();
   const pathname = location.pathname;
 
   return (
@@ -30,17 +29,19 @@ export default function Sidebar() {
         {sidebarLinks.map((link, index) => {
           const isActive = link.href === pathname;
           return (
-            <Flex as={Link} to={link.href} gap="2" align={'center'} cursor={'pointer'}>
-              <Image w="6" src={isActive ? link.iconActive : link.icon} />
-              <Text
-                fontWeight={isActive ? '700' : '600'}
-                color={isActive ? 'brand.purple' : 'brand.black'}
-                fontSize={'16px'}
-                className="title"
-              >
-                {link.title}
-              </Text>
-            </Flex>
+            <Tooltip label={link.isComing ? 'Coming Soon' : null}>
+              <Flex {...(link.isComing ? {} : { as: Link, to: link.href, cursor: 'pointer' })} gap="2" align={'center'}>
+                <Image w="6" src={isActive ? link.iconActive : link.icon} />
+                <Text
+                  fontWeight={isActive ? '700' : '600'}
+                  color={isActive ? 'brand.purple' : 'brand.black'}
+                  fontSize={'16px'}
+                  className="title"
+                >
+                  {link.title}
+                </Text>
+              </Flex>
+            </Tooltip>
           );
         })}
       </Flex>

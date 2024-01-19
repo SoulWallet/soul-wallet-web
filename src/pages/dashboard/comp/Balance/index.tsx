@@ -6,6 +6,10 @@ import IconSend from '@/assets/icons/wallet/send.svg';
 import IconReceive from '@/assets/icons/wallet/receive.svg';
 import IconSwap from '@/assets/icons/wallet/swap.svg';
 import IconView from '@/assets/icons/wallet/view.svg';
+import IconSendActive from '@/assets/icons/wallet/send-active.svg';
+import IconReceiveActive from '@/assets/icons/wallet/receive-active.svg';
+import IconSwapActive from '@/assets/icons/wallet/swap-active.svg';
+import IconViewActive from '@/assets/icons/wallet/view-active.svg';
 import IconEdit from '@/assets/icons/edit.svg';
 import useConfig from '@/hooks/useConfig';
 import { useAddressStore } from '@/store/address';
@@ -59,6 +63,7 @@ export const EditNameModal = ({
 
 export default function Balance() {
   const { showSend, showReceive } = useWalletContext();
+  const [hoverIndex, setHoverIndex] = useState(-1);
   const [editNameModalVisible, setEditNameModalVisible] = useState(false);
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
@@ -75,6 +80,7 @@ export default function Balance() {
     {
       title: 'Send',
       icon: IconSend,
+      iconActive: IconSendActive,
       onClick: () => {
         showSend(ethers.ZeroAddress, 'send');
       },
@@ -82,6 +88,7 @@ export default function Balance() {
     {
       title: 'Receive',
       icon: IconReceive,
+      iconActive: IconReceiveActive,
       onClick: () => {
         showReceive();
       },
@@ -89,11 +96,13 @@ export default function Balance() {
     {
       title: 'Swap',
       icon: IconSwap,
+      iconActive: IconSwapActive,
       onClick: () => {},
     },
     {
       title: 'View',
       icon: IconView,
+      iconActive: IconViewActive,
       onClick: () => {
         window.open(`${scanUrl}/address/${selectedAddress}`, '_blank');
       },
@@ -112,13 +121,8 @@ export default function Balance() {
       bg="brand.white"
       boxShadow="0px 4px 30px 0px rgba(0, 0, 0, 0.05)"
     >
-      {/* {walletName && (
-        <Text color="#000" fontSize={'16px'} fontWeight={'600'} mb="4" fontFamily={'Martian'}>
-          {walletName}
-        </Text>
-      )} */}
       <Flex align={'center'}>
-        <AddressIcon address="12345" width={32} />
+        <AddressIcon address={selectedAddress} width={32} />
         <Box w="2" />
         <Text fontWeight={'800'} fontSize={'18px'}>
           {/** Show wallet name, otherwise default name */}
@@ -137,8 +141,15 @@ export default function Balance() {
       </Flex>
       <Flex gap="6" align={'center'}>
         {actions.map((item, index) => (
-          <Box key={index} cursor={'pointer'} textAlign={'center'} onClick={item.onClick}>
-            <Image src={item.icon} mb="2px" w="8" mx="auto" />
+          <Box
+            key={index}
+            cursor={'pointer'}
+            textAlign={'center'}
+            onClick={item.onClick}
+            onMouseEnter={() => setHoverIndex(index)}
+            onMouseLeave={() => setHoverIndex(-1)}
+          >
+            <Image src={hoverIndex === index ? item.iconActive : item.icon} mb="2px" w="8" mx="auto" />
             <Text fontSize={'12px'} fontWeight={'600'} lineHeight={'1.25'} color="#5b606d">
               {item.title}
             </Text>

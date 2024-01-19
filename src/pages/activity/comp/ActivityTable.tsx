@@ -35,9 +35,9 @@ const ActivityItem = ({ item }: any) => {
       <Flex flex="1">
         {item.actualGasCost ? `${numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH` : ''}
       </Flex>
-      <Flex flex="1">
+      {/* <Flex flex="1">
         <Text>{item && item.to ? `To ${toShortAddress(item.to || '')} ` : ''}</Text>
-      </Flex>
+      </Flex> */}
     </Link>
   );
 };
