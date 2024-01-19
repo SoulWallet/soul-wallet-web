@@ -15,6 +15,7 @@ export interface ISignerStore {
   setCredentials: (credentials: any) => void;
   changeCredentialName: (credentialId: string, name: string) => void;
   clearCredentials: () => void;
+  clearSigners: () => void;
 }
 
 export const getIndexByCredentialId = (credentials: any, id: string) => {
