@@ -37,6 +37,7 @@ export default function Signer() {
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
 
+  console.log('s', signerId)
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true);
   }, []);
@@ -125,7 +126,7 @@ export default function Signer() {
               <Box paddingTop="14px" display="flex">
                 {eoas.map((item) => (
                   <SignerCard
-                    name={`${toShortAddress(item, 4, 4)}`}
+                    name={`EOA: ${toShortAddress(item, 4, 4)}`}
                     address={item}
                     time="Added on 2023-12-14"
                     marginRight="18px"
@@ -141,19 +142,20 @@ export default function Signer() {
                       : {})}
                   />
                 ))}
+               
                 {credentials.map((item: any, index: number) => (
                   <SignerCard
                     name={`Passkey_${index + 1}`}
-                    address={item.publicKey}
+                    address={item.id}
                     device="Chrome profile"
                     time="Added on 2023-12-14 "
                     cursor="pointer"
                     marginRight="18px"
                     isDefault={signerId === item.id}
-                    {...(signerId !== item
+                    {...(signerId !== item.id
                       ? {
                           onClick: () => {
-                            setSignerIdToSet(item);
+                            setSignerIdToSet(item.id);
                             openSetDefaultModal();
                           },
                         }
