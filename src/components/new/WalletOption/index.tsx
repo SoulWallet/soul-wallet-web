@@ -3,7 +3,7 @@ import { Text, Button, Image } from '@chakra-ui/react';
 import TextBody from '@/components/new/TextBody'
 import { Box } from '@chakra-ui/react';
 
-export default function WalletOption({ name, icon, onClick }: { name: string, icon: any, onClick?: () => {} }) {
+export default function WalletOption({ name, icon, onClick }: { name: string, icon: any, onClick?: () => void }) {
   return (
     <Box
       display="flex"

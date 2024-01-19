@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import useBrowser from '@/hooks/useBrowser';
 import {
   Box,
@@ -29,6 +29,8 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import { useAccount } from 'wagmi'
 import { useConnect } from 'wagmi'
 import { useTempStore } from '@/store/temp';
+import { useSettingStore } from '@/store/setting';
+import usePassKey from '@/hooks/usePasskey';
 import SetPasskey from './SetPasskey'
 import ImportAccount from './ImportAccount'
 import LoginModal from './LoginModal'
@@ -38,7 +40,8 @@ import ImportAccountModal from './ImportAccountModal'
 
 export default function Auth() {
   const [stepType, setStepType] = useState('auth')
-  const [authMethod, setAuthMethod] = useState('eoa')
+  const [registerMethod, setRegisterMethod] = useState('eoa')
+  const [loginMethod, setLoginMethod] = useState('eoa')
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isConnectAtive, setIsConnectAtive] = useState(false)
   const [activeConnector, setActiveConnector] = useState()
@@ -46,10 +49,13 @@ export default function Auth() {
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false)
   const [isImportAccountOpen, setIsImportAccountOpen] = useState(false)
   const { connect } = useConnect()
-  const { createInfo, updateCreateInfo } = useTempStore()
+  const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo } = useTempStore()
   const account = useAccount()
   const { address, isConnected, isConnecting } = account
-  console.log('address', account, isConnecting, createInfo)
+  const { signerIdAddress } = useSettingStore();
+  const { authenticate } = usePassKey();
+  const [isLoging, setIsLoging] = useState(false)
+  console.log('signerIdAddress', signerIdAddress, address)
 
   const openLogin = useCallback(() => {
     setIsLoginOpen(true)
@@ -89,26 +95,53 @@ export default function Auth() {
   }, [])
 
   const connectEOA = useCallback(async (connector: any) => {
+    console.log('connectEOA', connector)
     setIsConnectAtive(true)
     connect({ connector })
     setActiveConnector(connector)
   }, [])
 
-  const startAuthWithPasskey = useCallback(() => {
+  const startRegisterWithPasskey = useCallback(() => {
     setIsConnectAtive(true)
-    setAuthMethod('passkey')
+    setRegisterMethod('passkey')
     closeRegister()
   }, [])
 
-  const startAuthWithEOA = useCallback((address: any) => {
+  const startRegisterWithEOA = useCallback((address: any) => {
     setIsConnectAtive(true)
-    setAuthMethod('eoa')
+    setRegisterMethod('eoa')
     closeRegister()
     updateCreateInfo({
       eoaAddress: [address]
     })
     setStepType('setPassKey')
   }, [])
+
+  const startLoginWithPasskey = useCallback(async () => {
+    try {
+      setLoginMethod('passkey')
+      setIsLoging(true)
+      // closeLogin()
+      const { publicKey, credential } = await authenticate();
+      const { credentialId } = credential
+      updateLoginInfo({
+        signerId: credentialId
+      })
+      setIsLoging(false)
+      closeLogin()
+      openSelectAccount()
+    } catch (error: any) {
+      console.log('error', error.message)
+      setIsLoging(false)
+    }
+  }, [])
+
+  const startLoginWithEOA = useCallback((connector: any) => {
+    connect({ connector })
+    setLoginMethod('eoa')
+    closeLogin()
+    openSelectAccount()
+  }, [address])
 
   const startImportAccount = useCallback(() => {
     setIsSelectAccountOpen(false)
@@ -124,13 +157,21 @@ export default function Auth() {
 
   }, [])
 
+  useEffect(() => {
+    if (isConnected && address) {
+      updateLoginInfo({
+        signerId: address
+      })
+    }
+  }, [isConnected, address])
+
   if (stepType === 'importAccount') {
     return (
       <ImportAccount />
     )
   }
 
-  if (stepType === 'setPassKey' || authMethod === 'passkey') {
+  if (stepType === 'setPassKey' || registerMethod === 'passkey') {
     return (
       <SetPasskey />
     )
@@ -282,8 +323,9 @@ export default function Auth() {
           connectEOA={connectEOA}
           isConnecting={isConnecting}
           isConnected={isConnected}
-          isConnectAtive={isConnectAtive}
-          checkLocalWallets={checkLocalWallets}
+          startLoginWithEOA={startLoginWithEOA}
+          startLoginWithPasskey={startLoginWithPasskey}
+          isLoging={isLoging}
         />
         <RegisterModal
           isOpen={isRegisterOpen}
@@ -292,8 +334,8 @@ export default function Auth() {
           isConnecting={isConnecting}
           isConnected={isConnected}
           isConnectAtive={isConnectAtive}
-          startAuthWithPasskey={startAuthWithPasskey}
-          startAuthWithEOA={startAuthWithEOA}
+          startRegisterWithPasskey={startRegisterWithPasskey}
+          startRegisterWithEOA={startRegisterWithEOA}
           activeConnector={activeConnector}
           address={address}
         />

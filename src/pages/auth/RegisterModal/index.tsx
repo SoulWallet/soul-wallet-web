@@ -29,10 +29,10 @@ export default function RegisterModal({
   isConnecting,
   isConnected,
   isConnectAtive,
-  startAuthWithPasskey,
+  startRegisterWithPasskey,
   activeConnector,
   address,
-  startAuthWithEOA
+  startRegisterWithEOA
 }: any) {
   const { connectors } = useConnect();
 
@@ -100,7 +100,7 @@ export default function RegisterModal({
                   theme="dark"
                   color="white"
                   marginBottom="49px"
-                  onClick={() => startAuthWithEOA(address)}
+                  onClick={() => startRegisterWithEOA(address)}
                   padding="0 20px"
                   type="mid"
                 >
@@ -203,7 +203,7 @@ export default function RegisterModal({
                   theme="dark"
                   color="white"
                   marginBottom="49px"
-                  onClick={startAuthWithPasskey}
+                  onClick={startRegisterWithPasskey}
                   disabled={isConnecting}
                   padding="0 20px"
                 >

@@ -40,7 +40,13 @@ import { Connector, useConnect } from 'wagmi'
 import WalletOption from '@/components/new/WalletOption'
 import { getWalletIcon } from '@/lib/tools'
 
-export default function LoginModal({ isOpen, onClose, startLogin, isConnecting, connectEOA, checkLocalWallets }: any) {
+export default function LoginModal({
+  isOpen,
+  onClose,
+  startLoginWithEOA,
+  startLoginWithPasskey,
+  isLoging
+}: any) {
   const { connectors } = useConnect();
 
   return (
@@ -53,7 +59,6 @@ export default function LoginModal({ isOpen, onClose, startLogin, isConnecting, 
           gap="5"
           fontWeight="800"
           textAlign="center"
-          // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
           Login to Soul Wallet
@@ -75,7 +80,9 @@ export default function LoginModal({ isOpen, onClose, startLogin, isConnecting, 
                     key={connector.uid}
                     icon={getWalletIcon(connector.id)}
                     name={connector.name}
-                    onClick={() => connectEOA(connector)}
+                    onClick={() => {
+                      startLoginWithEOA(connector)
+                    }}
                   />
                 )}
               </Box>
@@ -99,8 +106,9 @@ export default function LoginModal({ isOpen, onClose, startLogin, isConnecting, 
                 theme="dark"
                 color="white"
                 marginBottom="49px"
-                // onClick={checkLocalWallets}
-                onClick={startLogin}
+                onClick={startLoginWithPasskey}
+                disabled={isLoging}
+                loading={isLoging}
               >
                 <Box marginRight="10px"><PasskeyIcon /></Box>
                 Login with passkey
