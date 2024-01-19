@@ -19,18 +19,19 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalCloseButton,
   ModalBody
 } from '@chakra-ui/react'
-import TextBody from '@/components/new/TextBody'
-import Title from '@/components/new/Title'
-import ArrowRightIcon from '@/components/Icons/ArrowRight'
-import ImportIcon from '@/components/Icons/Auth/Import'
+
 import Button from '@/components/new/Button'
 import WarningIcon from '@/components/Icons/Warning';
+import { useSignerStore } from '@/store/signer'
 
-export default function SetSingerModal({ isOpen, onClose }: any) {
+export default function SetSingerModal({ isOpen, signerIdToSet, onClose }: any) {
+  const { setSignerId } = useSignerStore();
+  const doSet = () => {
+    setSignerId(signerIdToSet);
+    onClose();
+  }
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -85,7 +86,7 @@ export default function SetSingerModal({ isOpen, onClose }: any) {
                   height="40px"
                   fontSize="16px"
                   theme="dark"
-                  onClick={onClose}
+                  onClick={doSet}
                 >
                   Confirm
                 </Button>
