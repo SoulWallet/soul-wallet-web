@@ -170,7 +170,7 @@ export default function Auth() {
     setIsImportAccountOpen(true)
   }, [])
 
-  const importWallet = useCallback(async (address) => {
+  const importWallet = useCallback(async (address: string) => {
     setIsImporting(true)
     const slotInitInfo = (
       await api.guardian.getSlotInfo({

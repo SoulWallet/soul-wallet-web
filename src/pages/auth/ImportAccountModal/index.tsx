@@ -34,7 +34,7 @@ import { ethers } from 'ethers';
 export default function ImportAccountModal({ isOpen, onClose, importWallet, isImporting }: any) {
   const [address, setAddress] = useState('')
 
-  const onAddressChange = useCallback((e) => {
+  const onAddressChange = useCallback((e: any) => {
     const address = e.target.value
     console.log('address', address)
     setAddress(address)

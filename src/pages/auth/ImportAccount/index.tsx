@@ -75,7 +75,7 @@ export default function ImportAccount({ importWallet, isImporting }: any) {
     navigate(`/dashboard`);
   }, [])
 
-  const onAddressChange = useCallback((e) => {
+  const onAddressChange = useCallback((e: any) => {
     const address = e.target.value
     console.log('address', address)
     setAddress(address)
