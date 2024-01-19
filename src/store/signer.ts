@@ -65,6 +65,13 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
       state.credentials = [];
     });
   },
+  clearSigners: () => {
+    set(state => {
+      state.credentials = [];
+      state.eoas = [];
+      state.signerId = '';
+    })
+  },
   getSelectedCredential: () => {
     const index = getIndexByCredentialId(get().credentials, get().signerId);
     return get().credentials[index];
