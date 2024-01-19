@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
 import ListItem from '@/components/ListItem';
-import useTools from '@/hooks/useTools';
+import { Image, Link, Flex, Text, Box } from '@chakra-ui/react';
 import { numToFixed } from '@/lib/tools';
 import BN from 'bignumber.js';
 import { toShortAddress, getIconMapping } from '@/lib/tools';
+import IconEth from '@/assets/chains/eth.svg';
 
 export enum ActivityStatusEn {
   Success,
@@ -25,15 +25,37 @@ export default function ActivityItem({ item, scanUrl }: any) {
   }
 
   return (
-    <a href={`${scanUrl}/tx/${item.trxHash}`} target="_blank">
-      <ListItem
-        idx={item.idx}
-        icon={getIconMapping(item.functionName)}
-        title={item.functionName}
+    <Link
+      display={'flex'}
+      justifyContent={'space-between'}
+      alignItems={'center'}
+      href={`${scanUrl}/tx/${item.trxHash}`}
+      target="_blank"
+    >
+      <Flex gap="3" align={'center'}>
+        <Image src={getIconMapping(item.functionName)} w="32px" h="32px" />
+        <Box>
+          <Flex align={'center'} gap="2" mb="1" maxW={"60%"}>
+            <Text fontSize={'14px'} fontWeight={'800'}>
+              {item.functionName}
+            </Text>
+          </Flex>
+          {/* <Text fontSize={'12px'} color="#5b606d">
+            To: {item.to ? toShortAddress(item.to) : ''}
+          </Text> */}
+        </Box>
+      </Flex>
+      <Flex gap="2">
+        <Text fontSize={'16px'} fontWeight={'700'}>
+          {item.actualGasCost ? `${numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH` : ''}
+        </Text>
+        <Image src={IconEth} />
+      </Flex>
+      {/* <ListItem
         // titleDesc={new Date(item.timestamp * 1000).toLocaleString()}
         amount={item.actualGasCost ? `${numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH` : ''}
         // amountDesc={item && item.to ? `to ${toShortAddress(item.to || '')} ` : ''}
-      />
-    </a>
+      /> */}
+    </Link>
   );
 }
