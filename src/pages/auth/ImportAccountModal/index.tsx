@@ -21,7 +21,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
+  Input
 } from '@chakra-ui/react'
 import TextBody from '@/components/new/TextBody'
 import Title from '@/components/new/Title'
@@ -29,7 +30,7 @@ import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import ImportIcon from '@/components/Icons/Auth/Import'
 import Button from '@/components/new/Button'
 
-export default function SelectAccountModal({ isOpen, onClose, startImportAccount }: any) {
+export default function ImportAccountModal({ isOpen, onClose }: any) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -40,10 +41,9 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
           gap="5"
           fontWeight="800"
           textAlign="center"
-          // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
-          Select a Soulwallet account
+          Import account
         </ModalHeader>
         <ModalCloseButton top="14px" />
         <ModalBody overflow="auto" padding="20px 32px">
@@ -54,32 +54,13 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
             display="flex"
           >
             <Box width="100%">
-              <Title type="t2" marginBottom="20px" fontWeight="500">
-                Multiple wallets found under this signer, please select to login
-              </Title>
-              <Box width="100%" display="flex" flexWrap="wrap">
-                <Box border="1px solid rgba(0, 0, 0, 0.1)" borderRadius="12px" padding="24px" width="100%" marginBottom="24px">
-                  <Title fontSize="18px">Wallet _1</Title>
-                  <TextBody fontWeight="normal">0x6B5Ccc28B2BC216D0d95eE5448DAbE2d29bb5Aa2</TextBody>
-                </Box>
-                <Box border="1px solid rgba(0, 0, 0, 0.1)" borderRadius="12px" padding="24px" width="100%" marginBottom="24px">
-                  <Title fontSize="18px">Wallet _2</Title>
-                  <TextBody fontWeight="normal">0x6B5Ccc28B2BC216D0d95eE5448DAbE2d29bb5Aa2</TextBody>
-                </Box>
+              <Box width="100%" display="flex" marginBottom="30px">
+                <Input height="44px" borderRadius="12px" />
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between" marginBottom="10px">
-                <TextBody
-                  fontSize="18px"
-                  display="flex"
-                  alignItems="center"
-                  onClick={startImportAccount}
-                  cursor="pointer"
-                >
-                  <Box marginRight="5px">
-                    <ImportIcon />
-                  </Box>
-                  Import account
-                </TextBody>
+                <Box fontSize="14px" fontWeight="400" display="flex" alignItems="center">
+                  Forgot address? Try <Box fontSize="14px" color="#FF2E79" fontWeight="700" marginLeft="6px" cursor="pointer">Social Recovery</Box>
+                </Box>
                 <Button
                   theme="dark"
                   color="white"

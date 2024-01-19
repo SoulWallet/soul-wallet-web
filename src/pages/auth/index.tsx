@@ -33,6 +33,7 @@ import SetPasskey from './SetPasskey'
 import LoginModal from './LoginModal'
 import RegisterModal from './RegisterModal'
 import SelectAccountModal from './SelectAccountModal'
+import ImportAccountModal from './ImportAccountModal'
 
 export default function Auth() {
   const [step, setStep] = useState(0)
@@ -42,6 +43,7 @@ export default function Auth() {
   const [activeConnector, setActiveConnector] = useState()
   const [isRegisterOpen, setIsRegisterOpen] = useState(false)
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false)
+  const [isImportAccountOpen, setIsImportAccountOpen] = useState(false)
   const { connect } = useConnect()
   const { createInfo, updateCreateInfo } = useTempStore()
   const account = useAccount()
@@ -76,6 +78,14 @@ export default function Auth() {
     setIsSelectAccountOpen(false)
   }, [])
 
+  const openImportAccount = useCallback(() => {
+    setIsImportAccountOpen(true)
+  }, [])
+
+  const closeImportAccount = useCallback(() => {
+    setIsImportAccountOpen(false)
+  }, [])
+
   const startLogin = useCallback(() => {
     setIsLoginOpen(false)
     setIsSelectAccountOpen(true)
@@ -101,6 +111,11 @@ export default function Auth() {
       eoaAddress: [address]
     })
     setStep(1)
+  }, [])
+
+  const startImportAccount = useCallback(() => {
+    setIsSelectAccountOpen(false)
+    setIsImportAccountOpen(true)
   }, [])
 
   const jumpToHome = useCallback(() => {
@@ -276,6 +291,11 @@ export default function Auth() {
         <SelectAccountModal
           isOpen={isSelectAccountOpen}
           onClose={closeSelectAccount}
+          startImportAccount={startImportAccount}
+        />
+        <ImportAccountModal
+          isOpen={isImportAccountOpen}
+          onClose={closeImportAccount}
         />
       </Box>
     </Box>
