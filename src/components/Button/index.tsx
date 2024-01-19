@@ -64,6 +64,7 @@ export default function Button({
       rounded={'30px'}
       lineHeight={'1'}
       isDisabled={disabled || !canSign}
+      gap="2"
       {...styles}
       {...moreProps}
       {...restProps}

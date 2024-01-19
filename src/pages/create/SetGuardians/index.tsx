@@ -25,9 +25,31 @@ import Backup from '@/components/Guardian/Backup';
 import Edit from '@/components/Guardian/Edit';
 import DoubleCheckModal from '@/components/Guardian/Confirm';
 import { useSettingStore } from '@/store/setting';
+import useWallet from '@/hooks/useWallet';
+import { defaultGuardianSafePeriod } from '@/config';
+import { useTempStore } from '@/store/temp';
 
-export function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
+export function SkipModal({ isOpen, onClose }: any) {
+  const { createWallet } = useWallet();
+  const { updateCreateInfo } = useTempStore();
   const [understood, setUnderstood] = useState(false);
+  const [creating, setCreating] = useState(false);
+
+  const doSkip = async () => {
+    console.log('skipSetupGuardian')
+    setCreating(true);
+    // generate wallet address
+    const noGuardian = {
+      initialGuardianHash: ethers.ZeroHash,
+      initialGuardianSafePeriod: defaultGuardianSafePeriod,
+    };
+    updateCreateInfo(noGuardian);
+    await createWallet(noGuardian);
+    setCreating(false);
+
+    onClose();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -75,7 +97,7 @@ export function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
             </Text>
           </Flex>
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop="6">
-            <Button mb="5" disabled={!understood} loading={skipping} onClick={doSkip} w="100%" fontWeight={"700"} fontSize={"18px"} height="48px" rounded="full">
+            <Button mb="5" disabled={!understood} loading={creating} onClick={doSkip} w="100%" fontWeight={"700"} fontSize={"18px"} height="48px" rounded="full">
               Confirm
             </Button>
             <Text fontSize={'18px'} fontWeight={'700'} onClick={onClose} cursor={'pointer'}>
@@ -93,8 +115,6 @@ export function SkipModal({ isOpen, onClose, doSkip, skipping }: any) {
     </Modal>
   );
 }
-
-const defaultGuardianIds = [nextRandomId()];
 
 const getRecommandCount = (c: number) => {
   if (!c) {
@@ -671,7 +691,7 @@ export default function SetGuardians({ changeStep }: any) {
           }
         />
         <GuardianModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-        <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} skipping={skipping} />
+        {/* <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} doSkip={doSkip} skipping={skipping} /> */}
         <DoubleCheckModal
           isOpen={isConfirmOpen}
           disabled={disabled}
