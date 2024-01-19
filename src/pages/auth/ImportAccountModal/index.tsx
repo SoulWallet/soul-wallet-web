@@ -29,8 +29,17 @@ import Title from '@/components/new/Title'
 import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import ImportIcon from '@/components/Icons/Auth/Import'
 import Button from '@/components/new/Button'
+import { ethers } from 'ethers';
 
-export default function ImportAccountModal({ isOpen, onClose }: any) {
+export default function ImportAccountModal({ isOpen, onClose, importWallet, isImporting }: any) {
+  const [address, setAddress] = useState('')
+
+  const onAddressChange = useCallback((e) => {
+    const address = e.target.value
+    console.log('address', address)
+    setAddress(address)
+  }, [])
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -55,7 +64,7 @@ export default function ImportAccountModal({ isOpen, onClose }: any) {
           >
             <Box width="100%">
               <Box width="100%" display="flex" marginBottom="30px">
-                <Input height="44px" borderRadius="12px" />
+                <Input height="44px" borderRadius="12px" value={address} onChange={onAddressChange} />
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between" marginBottom="10px">
                 <Box fontSize="14px" fontWeight="400" display="flex" alignItems="center">
@@ -65,6 +74,9 @@ export default function ImportAccountModal({ isOpen, onClose }: any) {
                   theme="dark"
                   color="white"
                   padding="0 20px"
+                  disabled={!ethers.isAddress(address) || isImporting}
+                  onClick={() => importWallet(address)}
+                  loading={isImporting}
                 >
                   Go to my wallet
                 </Button>

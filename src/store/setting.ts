@@ -37,6 +37,9 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
   finishedSteps: [],
   addressName: {},
   signerIdAddress: {},
+  getSignerIdAddress: () => {
+    return get().signerIdAddress;
+  },
   setSignerIdAddress: (signerId: string, chainIdAddress: IChainIdAddress) => {
     set((state) => {
       state.signerIdAddress[signerId] = chainIdAddress;
