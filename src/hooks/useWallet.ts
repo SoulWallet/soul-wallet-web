@@ -51,7 +51,8 @@ export default function useWallet() {
     const keystore = chainConfig.contracts.l1Keystore;
 
     const credentialKeys = credentials.map((item: any) => item.publicKey);
-    const credentialIds = credentials.map((item: any) => item.credentialId);
+    const credentialIds = credentials.map((item: any) => item.id);
+
     const initialKeys = [...credentialKeys, ...eoaAddress].filter((item) => item);
 
     const initialSignerIds = [...credentialIds, ...eoaAddress].filter((item) => item);
