@@ -39,10 +39,8 @@ export default function ImportAccount({ importWallet, isImporting }: any) {
   const [address, setAddress] = useState('')
   const [added, setAdded] = useState(false)
   const { createInfo, updateCreateInfo } = useTempStore()
-  const { register } = usePassKey()
   const toast = useToast();
   const {
-    addCredential,
     credentials,
   } = useSignerStore();
   const [isCreating, setIsCreating] = useState(false);
@@ -53,22 +51,22 @@ export default function ImportAccount({ importWallet, isImporting }: any) {
     setAdded(true)
   }, [])
 
-  const createWallet = async () => {
-    try {
-      setIsCreating(true);
-      const credentialKey = await register();
-      addCredential(credentialKey);
-      setIsCreating(false);
-    } catch (error: any) {
-      console.log('ERR', error)
-      console.log('error', error);
-      setIsCreating(false);
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-    }
-  }
+  // const createWallet = async () => {
+  //   try {
+  //     setIsCreating(true);
+  //     const credentialKey = await register();
+  //     addCredential(credentialKey);
+  //     setIsCreating(false);
+  //   } catch (error: any) {
+  //     console.log('ERR', error)
+  //     console.log('error', error);
+  //     setIsCreating(false);
+  //     toast({
+  //       title: error.message,
+  //       status: 'error',
+  //     });
+  //   }
+  // }
 
   const skip = useCallback(() => {
     console.log('skip')

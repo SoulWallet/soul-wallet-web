@@ -28,8 +28,6 @@ const validate = (values: any) => {
 
 export default function SetWalletName({ changeStep }: any) {
   const [loading, setLoading] = useState(false);
-  // const {clearLogData} = useTools();
-  // const { addCredential, setWalletName, } = useSignerStore();
   const toast = useToast();
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
     fields: ['name'],
@@ -43,7 +41,6 @@ export default function SetWalletName({ changeStep }: any) {
       // setWalletName(walletName)
       // const credentialName = walletName;
       // const credentialKey = await register(credentialName);
-      // addCredential(credentialKey);
       // setLoading(false);
 
       changeStep(1)

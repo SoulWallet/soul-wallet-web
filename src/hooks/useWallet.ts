@@ -105,11 +105,12 @@ export default function useWallet() {
       setSignerIdAddress(item, chainIdAddress);
     });
 
-    // IMPORTANT TODO, initialize data, eoa address
+
+    if (credentials.length > 0) {
+      setCredentials(credentials);
+    }
     if (eoaAddress && eoaAddress.length > 0) {
       setEoas(eoaAddress);
-    } else if (credentials.length > 0) {
-      setCredentials(credentials);
     }
 
     clearCreateInfo();
@@ -287,8 +288,7 @@ export default function useWallet() {
     return signature;
   };
 
-  const initializeWithEoa = async (initInfo: any, eoaAddress: string) => {
-  }
+  const initializeWithEoa = async (initInfo: any, eoaAddress: string) => {};
 
   const initializeWithPasskey = async (initInfo: any, credential: any) => {
     // set init info
