@@ -44,6 +44,28 @@ const createStagingSlice = immer<any>((set, get) => ({
     loginInfo: {},
     createInfo: {},
   }),
+  guardianInfo: {},
+  getEditingGuardiansInfo: () => {
+    return get().guardianInfo && get().guardianInfo.editingGuardiansInfo
+  },
+  setEditingGuardiansInfo: (value: any) => set({
+    guardianInfo: {
+      ...get().guardianInfo,
+      editingGuardiansInfo: value
+    }
+  }),
+  updateEditingGuardiansInfo: (value: any) => set({
+    guardianInfo: {
+      ...get().guardianInfo,
+      editingGuardiansInfo: {
+        ...(get().guardianInfo || {}),
+        ...value
+      }
+    }
+  }),
+  clearGuardianInfo: () => set({
+    guardianInfo: {},
+  }),
 }));
 
 export const useTempStore = create<any>()(

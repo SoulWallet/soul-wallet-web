@@ -25,37 +25,12 @@ import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
 
-export default function EditGuardian() {
-  const { navigate } = useBrowser();
-  const [activeSection, setActiveSection] = useState<string>('guardian');
-  const [keepPrivate, setKeepPrivate] = useState<any>(false);
-  const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
-  const [isChooseSignerOpen, setIsChooseSignerOpen] = useState<any>(false);
-  const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
-  const [isIntroGuardianOpen, setIsIntroGuardianOpen] = useState<any>(false);
-  const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
-  const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
-  const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
-  const [isEditing, setIsEditing] = useState<any>(false);
-
-  const [editingGuardianDetails, setEditingGuardianDetails] = useState<any>({
-    guardians: [],
-    guardianNames: [],
-    threshold: 0
-  });
-
+export default function EditGuardian({ cancelEdit, onEditGuardianConfirm }: any) {
   const { getAddressName } = useSettingStore();
-
-  const tempStore = useTempStore();
-  const guardianStore = useGuardianStore();
-  const guardiansInfo = tempStore.createInfo.isCreated ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()
-  const updateGuardiansInfo = tempStore.createInfo.isCreated ? guardianStore.updateGuardiansInfo : tempStore.updateCreatingGuardianInfo
-
-  const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
-    guardians: [],
-    guardianNames: [],
-    threshold: 0
-  }
+  const { getEditingGuardiansInfo } = useTempStore();
+  const guardiansInfo = getEditingGuardiansInfo();
+  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
+  const guardianDetails = guardiansInfo.guardianDetails
 
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
 
@@ -66,84 +41,9 @@ export default function EditGuardian() {
     }
   })
 
-  const openSetDefaultModal = useCallback(() => {
-    setIsSetDefaultOpen(true)
+  const handleConfirm = useCallback((addresses: any, names: any) => {
+    console.log('handleConfirm', addresses, names)
   }, [])
-
-  const closeSetDefaultModal = useCallback(() => {
-    setIsSetDefaultOpen(false)
-  }, [])
-
-  const openChooseSignerModal = useCallback(() => {
-    setIsChooseSignerOpen(true)
-  }, [])
-
-  const closeChooseSignerModal = useCallback(() => {
-    setIsChooseSignerOpen(false)
-  }, [])
-
-  const openWalletConnectModal = useCallback(() => {
-    setIsWalletConnectOpen(true)
-  }, [])
-
-  const closeWalletConnectModal = useCallback(() => {
-    setIsWalletConnectOpen(false)
-  }, [])
-
-  const openSelectGuardianModal = useCallback(() => {
-    setIsSelectGuardianOpen(true)
-  }, [])
-
-  const closeSelectGuardianModal = useCallback(() => {
-    setIsSelectGuardianOpen(false)
-  }, [])
-
-  const openIntroGuardianModal = useCallback(() => {
-    setIsIntroGuardianOpen(true)
-  }, [])
-
-  const closeIntroGuardianModal = useCallback(() => {
-    setIsIntroGuardianOpen(false)
-  }, [])
-
-  const openEditGuardianModal = useCallback(() => {
-    setIsEditGuardianOpen(true)
-  }, [])
-
-  const closeEditGuardianModal = useCallback(() => {
-    setIsEditGuardianOpen(false)
-  }, [])
-
-  const openBackupGuardianModal = useCallback(() => {
-    setIsBackupGuardianOpen(true)
-  }, [])
-
-  const closeBackupGuardianModal = useCallback(() => {
-    setIsBackupGuardianOpen(false)
-  }, [])
-
-  const startAddGuardian = useCallback(() => {
-    openSelectGuardianModal()
-  }, [])
-
-  const startEditing = useCallback(() => {
-    setIsEditing(true)
-  }, [])
-
-  const endEditing = useCallback(() => {
-    setIsEditing(false)
-  }, [])
-
-  const onGuardianListConfirm = useCallback((addresses: any, names: any) => {
-    setIsEditGuardianOpen(false)
-    startEditing()
-
-    setEditingGuardianDetails({
-      guardians: addresses,
-      guardianNames: names,
-      threshold: editingGuardianDetails.threshold || 0
-    })
-  }, [editingGuardianDetails])
 
   return (
     <Fragment>
@@ -158,11 +58,11 @@ export default function EditGuardian() {
             <Box>Guardian List</Box>
             {!!guardianList.length && (
               <Box marginLeft="auto">
-                <TextButton type="mid" onClick={openBackupGuardianModal}>
+                <TextButton type="mid" onClick={() => {}}>
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>
-                <Button type="mid" onClick={openSelectGuardianModal}>
+                <Button type="mid" onClick={() => {}}>
                   <Box marginRight="6px"><PlusIcon color="white" /></Box>
                   Add Guardian
                 </Button>
@@ -175,17 +75,16 @@ export default function EditGuardian() {
             alignItems="center"
             justifyContent="flex-start"
           >
-            {editingGuardianDetails && editingGuardianDetails.guardians && (
+            {guardianDetails && guardianDetails.guardians && (
               <Fragment>
-                {editingGuardianDetails.guardians.map((address: any, i: any) =>
+                {guardianDetails.guardians.map((address: any, i: any) =>
                   <GuardianCard
                     key={i}
-                    name={editingGuardianDetails.guardianNames[i] || 'No Name'}
+                    name={guardianDetails.guardianNames[i] || 'No Name'}
                     address={address}
                     time="Added on 2023-12-14 "
                     marginRight="18px"
                     cursor="pointer"
-                    onClick={openSetDefaultModal}
                   />
                 )}
               </Fragment>
@@ -238,12 +137,12 @@ export default function EditGuardian() {
                         }}
                       >
                         <Box display="flex" alignItems="center" justifyContent="space-between">
-                          {editingGuardianDetails.threshold}
+                          {guardianDetails.threshold}
                           <DropDownIcon />
                         </Box>
                       </MenuButton>
                       <MenuList>
-                        {(new Array(editingGuardianDetails.threshold || 1)).fill(1).map((i: any) =>
+                        {(new Array(guardianDetails.threshold || 1)).fill(1).map((i: any) =>
                           <MenuItem>
                             {i}
                           </MenuItem>
@@ -251,7 +150,7 @@ export default function EditGuardian() {
                       </MenuList>
                     </Menu>
                   </Box>
-                  <Box>{`out of ${editingGuardianDetails.guardians.length} guardian(s) confirmation.`}</Box>
+                  <Box>{`out of ${guardianDetails.guardians.length} guardian(s) confirmation.`}</Box>
                 </TextBody>
               </Box>
               <Box
@@ -286,48 +185,13 @@ export default function EditGuardian() {
         alignItems="center"
         justifyContent="center"
       >
-        <Button type="mid" theme="light" padding="0 20px" marginRight="16px" onClick={() => setIsEditing(false)}>
+        <Button type="mid" theme="light" padding="0 20px" marginRight="16px" onClick={() => {}}>
           Cancel
         </Button>
         <Button type="mid" onClick={() => {}}>
           Continue to sign
         </Button>
       </Box>
-      <SetSignerModal
-        isOpen={isSetDefaultOpen}
-        onClose={closeSetDefaultModal}
-      />
-      <SelectSignerTypeModal
-        isOpen={isChooseSignerOpen}
-        onClose={closeChooseSignerModal}
-        startWalletConnect={openWalletConnectModal}
-      />
-      <SelectGuardianTypeModal
-        isOpen={isSelectGuardianOpen}
-        onClose={closeSelectGuardianModal}
-        setIsIntroGuardianOpen={setIsIntroGuardianOpen}
-        setIsSelectGuardianOpen={setIsSelectGuardianOpen}
-        setIsEditGuardianOpen={setIsEditGuardianOpen}
-      />
-      <IntroGuardianModal
-        isOpen={isIntroGuardianOpen}
-        onClose={closeIntroGuardianModal}
-      />
-      <EditGuardianModal
-        isOpen={isEditGuardianOpen}
-        onClose={closeEditGuardianModal}
-        setIsSelectGuardianOpen={setIsSelectGuardianOpen}
-        setIsEditGuardianOpen={setIsEditGuardianOpen}
-        onConfirm={onGuardianListConfirm}
-      />
-      <BackupGuardianModal
-        isOpen={isBackupGuardianOpen}
-        onClose={closeBackupGuardianModal}
-      />
-      <WalletConnectModal
-        isOpen={isWalletConnectOpen}
-        onClose={closeWalletConnectModal}
-      />
     </Fragment>
   )
 }

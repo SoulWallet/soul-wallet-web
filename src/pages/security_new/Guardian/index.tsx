@@ -25,8 +25,17 @@ import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
 import EditGuardian from '../EditGuardian'
-import CreateGuardian from '../CreateGuardian'
 import ListGuardian from '../ListGuardian'
+
+const defaultGuardianDetails = {
+  guardians: [],
+  guardianNames: [],
+  threshold: 0
+}
+
+const defaultGuardianInfo = {
+  guardianDetails: defaultGuardianDetails
+}
 
 export default function Guardian() {
   const { navigate } = useBrowser();
@@ -39,27 +48,15 @@ export default function Guardian() {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
+
   const [isEditing, setIsEditing] = useState<any>(false);
-  const [isCreating, setIsCreating] = useState<any>(false);
-
-  const [editingGuardianDetails, setEditingGuardianDetails] = useState<any>({
-    guardians: [],
-    guardianNames: [],
-    threshold: 0
-  });
-
   const { getAddressName } = useSettingStore();
 
   const tempStore = useTempStore();
   const guardianStore = useGuardianStore();
-  const guardiansInfo = tempStore.createInfo.isCreated ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()
-  const updateGuardiansInfo = tempStore.createInfo.isCreated ? guardianStore.updateGuardiansInfo : tempStore.updateCreatingGuardianInfo
-
-  const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
-    guardians: [],
-    guardianNames: [],
-    threshold: 0
-  }
+  const guardiansInfo = (tempStore.createInfo.isCreated ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
+  const guardianDetails = guardiansInfo.guardianDetails
+  const [editingGuardianDetails, setEditingGuardianDetails] = useState<any>(guardianDetails);
 
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
 
@@ -130,24 +127,16 @@ export default function Guardian() {
     openSelectGuardianModal()
   }, [])
 
-  const startEditing = useCallback(() => {
-    setIsEditing(true)
-  }, [])
-
-  const endEditing = useCallback(() => {
-    setIsEditing(false)
-  }, [])
-
-  const onGuardianListConfirm = useCallback((addresses: any, names: any) => {
+  const onEditGuardianConfirm = useCallback((addresses: any, names: any, threshold: any) => {
     setIsEditGuardianOpen(false)
-    startEditing()
+    setIsEditing(true)
 
     setEditingGuardianDetails({
       guardians: addresses,
       guardianNames: names,
-      threshold: editingGuardianDetails.threshold || 0
+      threshold
     })
-  }, [editingGuardianDetails])
+  }, [])
 
   return (
     <DashboardLayout>
@@ -171,10 +160,10 @@ export default function Guardian() {
             Guardian
           </SectionMenuItem>
         </SectionMenu>
-        {!!isCreating && (
-          <CreateGuardian />
+        {!!isEditing && (
+          <EditGuardian />
         )}
-        {!isCreating && (
+        {!isEditing && (
           <ListGuardian />
         )}
       </Box>
@@ -203,7 +192,7 @@ export default function Guardian() {
         onClose={closeEditGuardianModal}
         setIsSelectGuardianOpen={setIsSelectGuardianOpen}
         setIsEditGuardianOpen={setIsEditGuardianOpen}
-        onConfirm={onGuardianListConfirm}
+        onConfirm={onEditGuardianConfirm}
       />
       <BackupGuardianModal
         isOpen={isBackupGuardianOpen}
