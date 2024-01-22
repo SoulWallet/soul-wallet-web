@@ -71,9 +71,12 @@ export const chainMapping = {
   },
 };
 // This is an important store switch which will clear all users' data
-export const storeVersion = '13';
+export const storeVersion = '15';
 
 export const defaultGuardianSafePeriod = 1;
+
+// height of header
+export const headerHeight = 60
 
 export const bundlerErrMapping: { [key: string]: string } = {
   'AA23 reverted (or OOG)': 'Operation Failed: Check signature or verificationGasLimit too small.',

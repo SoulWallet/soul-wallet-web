@@ -50,7 +50,7 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
           {guideList.map((item, idx: number) => (
             <React.Fragment key={idx}>
               <Flex pb="4" pt={idx ? 4 : 0} justify={'space-between'}>
-                <Text fontWeight={'800'} fontSize={'16px'}>
+                <Text fontWeight={'600'} fontSize={'16px'}>
                   {idx + 1}. {item.statusText}
                 </Text>
                 {finishedSteps.includes(idx) ? (

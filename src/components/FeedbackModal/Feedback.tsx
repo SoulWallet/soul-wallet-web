@@ -1,20 +1,13 @@
 import { useState } from 'react';
-import { Textarea, Image, Text, Box, useToast, Input as CInput, Flex } from '@chakra-ui/react';
+import { Textarea, Image, Text, Box, useToast, Flex } from '@chakra-ui/react';
 import IconPlus from '@/assets/icons/dapp-plus.svg';
+import Input from '@/components/Input';
 import api from '@/lib/api';
 import Button from '@/components/Button';
 import Uploader from '@/components/Uploader';
 import { useAddressStore } from '@/store/address';
 
-const Input = ({ ...restProps }: any) => {
-  return <CInput bg="#f5f5f5" rounded="20px" border="none" py="4" {...restProps} />;
-};
-
-export default function Feedback({
-  onCancel
-}: {
-  onCancel: () => void
-}) {
+export default function Feedback({ onCancel }: { onCancel: () => void }) {
   const [value, setValue] = useState('');
   const [fileList, setFileList] = useState<any>([]);
   const [contact, setContact] = useState('');
@@ -71,7 +64,7 @@ export default function Feedback({
         boxShadow={'none !important'}
         border="none"
         _placeholder={{ color: 'brand.gray' }}
-        bg="#f5f5f5"
+        bg="#f9f9f9"
         h="140px"
         rounded="16px"
         py="3"
@@ -142,6 +135,10 @@ export default function Feedback({
         h="52px"
         placeholder="Your contact (optional)"
         value={contact}
+        bg="#f9f9f9"
+        rounded="20px"
+        border="none !important"
+        py="4"
         onChange={(e: any) => setContact(e.target.value)}
       />
 

@@ -34,27 +34,23 @@ import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 
 export default function SetPasskey() {
-  const [added, setAdded] = useState(false)
   const { createInfo, updateCreateInfo } = useTempStore()
+  const [credentials, setCredentials] = useState<any>([])
   const { register } = usePassKey()
   const toast = useToast();
   const {
     addCredential,
-    credentials,
   } = useSignerStore();
   const [isCreating, setIsCreating] = useState(false);
   const { navigate } = useBrowser();
   console.log('create', credentials)
 
-  const addPasskey = useCallback(() => {
-    setAdded(true)
-  }, [])
-
   const createWallet = async () => {
     try {
       setIsCreating(true);
       const credentialKey = await register();
-      addCredential(credentialKey);
+      // addCredential(credentialKey);
+      setCredentials([...credentials, credentialKey])
       setIsCreating(false);
     } catch (error: any) {
       console.log('ERR', error)
@@ -271,7 +267,7 @@ export default function SetPasskey() {
                   </Box>
                 </Box>
                 <Box width="50%">
-                  <Title marginBottom="5px">👍🏻 Disadvantage:</Title>
+                  <Title marginBottom="5px">👎🏻 Disadvantage:</Title>
                   <Box paddingLeft="20px">
                     <TextBody type="t2">
                       {`More expensive. It cost $0.7 more to send an ERC-20 token on L2 comparing sign with EOA ($0.86 vs. $0.16).`}

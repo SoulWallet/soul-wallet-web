@@ -14,7 +14,6 @@ export interface ISignerStore {
   addCredential: (credential: any) => void;
   setCredentials: (credentials: any) => void;
   changeCredentialName: (credentialId: string, name: string) => void;
-  clearCredentials: () => void;
   clearSigners: () => void;
 }
 
@@ -59,11 +58,6 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
       state.credentials = credentials;
       // set the first one as default
       state.signerId = credentials[0].id;
-    });
-  },
-  clearCredentials: () => {
-    set((state) => {
-      state.credentials = [];
     });
   },
   clearSigners: () => {

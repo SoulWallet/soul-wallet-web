@@ -59,7 +59,7 @@ const DappItem = ({ item }: any) => {
 
 export default function DappList() {
   return (
-    <HomeCard h="210px" title="Featured Dapps" external={<ExternalLink title="View more" to="/dapps" />}>
+    <HomeCard h="210px" wrapperZIndex="50" title="Featured Dapps" external={<ExternalLink title="View more" to="/dapps" />}>
       <Grid
         templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}
         rowGap={'24px'}

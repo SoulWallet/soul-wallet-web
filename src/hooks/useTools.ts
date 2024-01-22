@@ -13,6 +13,7 @@ import { useHistoryStore } from '@/store/history';
 import { useChainStore } from '@/store/chain';
 import { useSlotStore } from '@/store/slot';
 import { useSettingStore } from '@/store/setting';
+import { useTempStore } from '@/store/temp';
 
 export default function useTools() {
   const toast = useToast();
@@ -23,6 +24,7 @@ export default function useTools() {
   const { clearHistory } = useHistoryStore();
   const { clearChainStore } = useChainStore();
   const { clearSlotStore, slotInfo } = useSlotStore();
+  const { clearTempStore } = useTempStore();
   const { getAddressName,saveAddressName } = useSettingStore();
   const { showClaimAssets, showSend, } = useWalletContext();
   const { navigate } = useBrowser();
@@ -43,6 +45,7 @@ export default function useTools() {
     clearGuardianInfo();
     clearHistory();
     clearSlotStore();
+    clearTempStore();
   };
 
   const goGuideAction = (id: number) => {

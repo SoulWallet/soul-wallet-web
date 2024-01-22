@@ -104,7 +104,7 @@ export default function RegisterModal({
                   padding="0 20px"
                   type="mid"
                 >
-                  Continue to setup
+                  Continue
                 </Button>
               </Box>
             </Box>

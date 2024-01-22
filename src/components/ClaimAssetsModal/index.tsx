@@ -109,7 +109,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
           </Text>
           <Button
             loading={loading}
-            disabled={true || !claimableCount}
+            disabled={!claimableCount}
             py="16px"
             onClick={doClaim}
             fontSize={'18px'}

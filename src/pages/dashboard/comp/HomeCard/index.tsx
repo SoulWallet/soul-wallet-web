@@ -13,9 +13,9 @@ export const ExternalLink = ({ title, to }: any) => {
   );
 };
 
-export default function HomeCard({ title, external, h, titleProps, children, ...restProps }: any) {
+export default function HomeCard({ title, external, h, wrapperZIndex, titleProps, children, ...restProps }: any) {
   return (
-    <Box h={h}>
+    <Box h={h} zIndex={wrapperZIndex}>
       <Flex align="center" justify={'space-between'}>
         <Text fontSize={{ base: '20px', lg: '28px' }} fontWeight={'800'} color="brand.black" {...titleProps}>
           {title}
