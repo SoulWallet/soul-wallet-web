@@ -1,5 +1,6 @@
-import { Box, Flex, Text, useToast, Image, Link, Input } from '@chakra-ui/react';
+import { Box, Flex, Text, Image } from '@chakra-ui/react';
 import { ethers } from 'ethers';
+import Input from '@/components/Input';
 import { useState } from 'react';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import IconSend from '@/assets/icons/wallet/send.svg';
@@ -39,7 +40,6 @@ export const EditNameModal = ({
         onChange={(e) => setName(e.target.value)}
         placeholder="Enter wallet name"
         mb="9"
-        rounded="12px"
       />
       <Flex justify={'flex-end'} gap="3">
         <Button onClick={onCancel} type="white" py="10px" px="6">

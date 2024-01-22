@@ -267,7 +267,7 @@ export default function SetPasskey() {
                   </Box>
                 </Box>
                 <Box width="50%">
-                  <Title marginBottom="5px">👍🏻 Disadvantage:</Title>
+                  <Title marginBottom="5px">👎🏻 Disadvantage:</Title>
                   <Box paddingLeft="20px">
                     <TextBody type="t2">
                       {`More expensive. It cost $0.7 more to send an ERC-20 token on L2 comparing sign with EOA ($0.86 vs. $0.16).`}

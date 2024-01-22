@@ -13,7 +13,7 @@ export default function Modal({ title, visible, onClose, width, hideClose, child
     visible && (
       <CModal isOpen={visible} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxW={{ base: '90%', lg: '640px', ...width }} rounded="20px">
+        <ModalContent maxW={{ base: '90%', lg: '640px', ...width }}>
           <ModalHeader px="8" py="5">
             <Text fontWeight={'700'} fontSize={'20px'}>
               {title}

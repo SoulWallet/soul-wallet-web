@@ -7,6 +7,7 @@ import { useAddressStore } from '@/store/address';
 import { dappList } from '@/data';
 import { useChainStore } from '@/store/chain';
 import AlertModal from '@/components/AlertModal';
+import { headerHeight } from '@/config';
 import DappList from '@/components/DappList';
 
 export default function Apps() {
@@ -94,7 +95,7 @@ export default function Apps() {
       <Box height="72px">
         <Header />
       </Box>
-      <Box width="100%" height="calc(100% - 72px)">
+      <Box width="100%" height={`calc(100vh - ${headerHeight}px)`}>
         {appUrl && (
           <iframe
             id={`iframe-${appUrl}`}

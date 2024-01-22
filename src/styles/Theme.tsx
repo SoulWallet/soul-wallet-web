@@ -1,8 +1,11 @@
 import { extendTheme, defineStyleConfig } from '@chakra-ui/react';
 
-const tooltipTheme = defineStyleConfig({
-  // baseStyle: {
-  // },
+const inputTheme = defineStyleConfig({
+  baseStyle: {
+    field: {
+      borderRadius: '12px',
+    },
+  },
 });
 
 const menuTheme = defineStyleConfig({
@@ -16,6 +19,15 @@ const menuTheme = defineStyleConfig({
       my: 1,
       borderColor: '#E6E6E6',
       mx: 3,
+    },
+  },
+});
+
+const modalTheme = defineStyleConfig({
+  baseStyle: {
+    dialog: {
+      borderRadius: '20px',
+      bg: 'brand.white',
     },
   },
 });
@@ -34,8 +46,8 @@ const theme = extendTheme({
       white: '#fff',
       green: '#29510A',
       greenDarken: '#1b3507',
-      gray: "#898989",
-      purple: "#7F56D9",
+      gray: '#898989',
+      purple: '#7F56D9',
     },
   },
   breakpoints: {
@@ -45,15 +57,9 @@ const theme = extendTheme({
     xl: '1200px',
   },
   components: {
-    Tooltip: tooltipTheme,
     Menu: menuTheme,
-    Modal: {
-      baseStyle: {
-        dialog: {
-          maxHeight: 'calc(100vh - 50px)',
-        },
-      },
-    },
+    Input: inputTheme,
+    Modal: modalTheme,
     Switch: {
       baseStyle: {
         thumb: {

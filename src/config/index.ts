@@ -75,6 +75,9 @@ export const storeVersion = '15';
 
 export const defaultGuardianSafePeriod = 1;
 
+// height of header
+export const headerHeight = 60
+
 export const bundlerErrMapping: { [key: string]: string } = {
   'AA23 reverted (or OOG)': 'Operation Failed: Check signature or verificationGasLimit too small.',
   "AA21 didn't pay prefund": 'Not enough ETH balance in your wallet',

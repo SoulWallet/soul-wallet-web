@@ -46,9 +46,6 @@ export function AccountSelectFull({ ...restProps }) {
         roundedRight={'full'}
         bg={{ base: '#fff', lg: '#f2f2f2' }}
       >
-        {/* <Text fontSize={'12px'} fontFamily={'Martian'} fontWeight={'600'}>
-          {toShortAddress(selectedAddress, 5, 4)}
-        </Text> */}
         <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy(selectedAddress)} />
       </Flex>
     </Flex>

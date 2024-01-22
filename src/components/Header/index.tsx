@@ -9,6 +9,7 @@ import { AccountSelectFull } from '../AccountSelect';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useBrowser from '@/hooks/useBrowser';
 import useTools from '@/hooks/useTools';
+import { headerHeight } from '@/config';
 
 export default function Header() {
   const { navigate } = useBrowser();
@@ -22,7 +23,7 @@ export default function Header() {
   return (
     <Flex
       as="header"
-      h="72px"
+      h={`${headerHeight}px`}
       px={{ base: '4', lg: '8' }}
       bg="#fff"
       borderBottom={'1px solid #e6e6e6'}
