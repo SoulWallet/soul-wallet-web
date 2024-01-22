@@ -53,19 +53,9 @@ export default function Guardian() {
   const { getAddressName } = useSettingStore();
 
   const tempStore = useTempStore();
+  const { setEditingGuardiansInfo } = tempStore;
   const guardianStore = useGuardianStore();
   const guardiansInfo = (tempStore.createInfo.isCreated ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
-  const guardianDetails = guardiansInfo.guardianDetails
-  const [editingGuardianDetails, setEditingGuardianDetails] = useState<any>(guardianDetails);
-
-  const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
-
-  const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
-    return {
-      address: guardian,
-      name: guardianNames[i]
-    }
-  })
 
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true)
@@ -124,17 +114,31 @@ export default function Guardian() {
   }, [])
 
   const startAddGuardian = useCallback(() => {
-    openSelectGuardianModal()
-  }, [])
+    if (!isEditing) {
+      setEditingGuardiansInfo(guardiansInfo)
+    }
+
+    setIsSelectGuardianOpen(true)
+  }, [isEditing, guardiansInfo])
+
+  const startEditGuardian = useCallback(() => {
+    if (!isEditing) {
+      setEditingGuardiansInfo(guardiansInfo)
+    }
+
+    setIsEditGuardianOpen(true)
+  }, [isEditing, guardiansInfo])
 
   const onEditGuardianConfirm = useCallback((addresses: any, names: any, threshold: any) => {
     setIsEditGuardianOpen(false)
     setIsEditing(true)
 
-    setEditingGuardianDetails({
-      guardians: addresses,
-      guardianNames: names,
-      threshold
+    setEditingGuardiansInfo({
+      guardianDetails: {
+        guardians: addresses,
+        guardianNames: names,
+        threshold: threshold || 0
+      }
     })
   }, [])
 
@@ -161,10 +165,15 @@ export default function Guardian() {
           </SectionMenuItem>
         </SectionMenu>
         {!!isEditing && (
-          <EditGuardian />
+          <EditGuardian
+            startEditGuardian={startEditGuardian}
+          />
         )}
         {!isEditing && (
-          <ListGuardian />
+          <ListGuardian
+            openEditGuardianModal={openEditGuardianModal}
+            startAddGuardian={startAddGuardian}
+          />
         )}
       </Box>
       <SetSignerModal

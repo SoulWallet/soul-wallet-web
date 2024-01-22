@@ -1,4 +1,4 @@
-import { useState, useCallback, Fragment } from 'react';
+import { useState, useCallback, Fragment, useEffect } from 'react';
 import Header from '@/components/Header';
 import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection'
@@ -24,12 +24,66 @@ import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
+import useForm from '@/hooks/useForm';
+import { nanoid } from 'nanoid';
 
-export default function EditGuardian({ cancelEdit, onEditGuardianConfirm }: any) {
+const getRecommandCount = (c: number) => {
+  if (!c) {
+    return 0;
+  }
+
+  return Math.ceil(c / 2);
+};
+
+const getNumberArray = (count: number) => {
+  const arr = [];
+
+  for (let i = 1; i <= count; i++) {
+    arr.push(i);
+  }
+
+  return arr;
+};
+
+const amountValidate = (values: any, props: any) => {
+  const errors: any = {};
+
+  if (
+    !values.amount ||
+    !Number.isInteger(Number(values.amount)) ||
+    Number(values.amount) < 1 ||
+    Number(values.amount) > Number(props.guardiansCount)
+  ) {
+    errors.amount = 'Invalid Amount';
+  }
+
+  return errors;
+};
+
+export default function EditGuardian({
+  cancelEdit,
+  onEditGuardianConfirm,
+  startEditGuardian
+}: any) {
   const { getAddressName } = useSettingStore();
   const { getEditingGuardiansInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
+  const [amountData, setAmountData] = useState<any>({});
+
+  const amountForm = useForm({
+    fields: ['amount'],
+    validate: amountValidate,
+    restProps: amountData,
+    initialValues: {
+      amount: getRecommandCount(amountData.guardiansCount),
+    },
+  });
+
+  const selectAmount = (amount: any) => () => {
+    amountForm.onChange('amount')(amount);
+  };
+
   const guardianDetails = guardiansInfo.guardianDetails
 
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
@@ -40,6 +94,12 @@ export default function EditGuardian({ cancelEdit, onEditGuardianConfirm }: any)
       name: guardianNames[i]
     }
   })
+
+  /* useEffect(() => {
+   *   setAmountData({ guardiansCount: guardianList.length });
+   * }, [guardianList]);
+   */
+  console.log('guardianList', guardianList)
 
   const handleConfirm = useCallback((addresses: any, names: any) => {
     console.log('handleConfirm', addresses, names)
@@ -62,7 +122,7 @@ export default function EditGuardian({ cancelEdit, onEditGuardianConfirm }: any)
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>
-                <Button type="mid" onClick={() => {}}>
+                <Button type="mid" onClick={startEditGuardian}>
                   <Box marginRight="6px"><PlusIcon color="white" /></Box>
                   Add Guardian
                 </Button>
@@ -137,20 +197,26 @@ export default function EditGuardian({ cancelEdit, onEditGuardianConfirm }: any)
                         }}
                       >
                         <Box display="flex" alignItems="center" justifyContent="space-between">
-                          {guardianDetails.threshold}
+                          {amountForm.values.amount}
                           <DropDownIcon />
                         </Box>
                       </MenuButton>
                       <MenuList>
-                        {(new Array(guardianDetails.threshold || 1)).fill(1).map((i: any) =>
-                          <MenuItem>
-                            {i}
+                        {!amountData.guardiansCount && (
+                          <MenuItem key={nanoid(4)} onClick={selectAmount(0)}>
+                            0
                           </MenuItem>
                         )}
+                        {!!amountData.guardiansCount &&
+                         getNumberArray(guardianList.length || 0).map((i: any) => (
+                           <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
+                             {i}
+                           </MenuItem>
+                        ))}
                       </MenuList>
                     </Menu>
                   </Box>
-                  <Box>{`out of ${guardianDetails.guardians.length} guardian(s) confirmation.`}</Box>
+                  <Box>{`out of ${guardianList.length || 0} guardian(s) confirmation.`}</Box>
                 </TextBody>
               </Box>
               <Box
