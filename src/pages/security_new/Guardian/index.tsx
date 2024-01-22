@@ -55,7 +55,7 @@ export default function Guardian() {
   const tempStore = useTempStore();
   const { setEditingGuardiansInfo } = tempStore;
   const guardianStore = useGuardianStore();
-  const guardiansInfo = (tempStore.createInfo.isCreated ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
+  const guardiansInfo = (!tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
 
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true)
@@ -122,11 +122,16 @@ export default function Guardian() {
   }, [isEditing, guardiansInfo])
 
   const startEditGuardian = useCallback(() => {
+    console.log('guardiansInfo kkkk', guardiansInfo)
     if (!isEditing) {
       setEditingGuardiansInfo(guardiansInfo)
     }
 
     setIsEditGuardianOpen(true)
+  }, [isEditing, guardiansInfo])
+
+  const cancelEditGuardian = useCallback(() => {
+    setIsEditing(false)
   }, [isEditing, guardiansInfo])
 
   const onEditGuardianConfirm = useCallback((addresses: any, names: any, threshold: any) => {
@@ -167,12 +172,14 @@ export default function Guardian() {
         {!!isEditing && (
           <EditGuardian
             startEditGuardian={startEditGuardian}
+            cancelEditGuardian={cancelEditGuardian}
           />
         )}
         {!isEditing && (
           <ListGuardian
             openEditGuardianModal={openEditGuardianModal}
-            startAddGuardian={startAddGuardian}
+            startEditGuardian={startEditGuardian}
+            cancelEditGuardian={cancelEditGuardian}
           />
         )}
       </Box>

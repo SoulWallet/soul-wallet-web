@@ -25,13 +25,12 @@ import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
 
-export default function EditGuardian({
+export default function ListGuardian({
   openEditGuardianModal,
-  startAddGuardian
+  startEditGuardian,
 }: any) {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('guardian');
-  const [keepPrivate, setKeepPrivate] = useState<any>(false);
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
   const [isChooseSignerOpen, setIsChooseSignerOpen] = useState<any>(false);
   const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
@@ -51,8 +50,9 @@ export default function EditGuardian({
 
   const tempStore = useTempStore();
   const guardianStore = useGuardianStore();
-  const guardiansInfo = tempStore.createInfo.isCreated ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()
-  const updateGuardiansInfo = tempStore.createInfo.isCreated ? guardianStore.updateGuardiansInfo : tempStore.updateCreatingGuardianInfo
+  const guardiansInfo = !tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()
+  const updateGuardiansInfo = !tempStore.createInfo.creatingGuardianInfo ? guardianStore.updateGuardiansInfo : tempStore.updateCreatingGuardianInfo
+  const keepPrivate = guardiansInfo.keepPrivate
 
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
@@ -68,6 +68,7 @@ export default function EditGuardian({
       name: guardianNames[i]
     }
   })
+  console.log('guardiansInfo', guardiansInfo, guardianDetails, guardianList)
 
   const onGuardianListConfirm = useCallback((addresses: any, names: any) => {
     setIsEditGuardianOpen(false)
@@ -97,7 +98,7 @@ export default function EditGuardian({
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>
-                <Button type="mid" onClick={() => {}}>
+                <Button type="mid" onClick={startEditGuardian}>
                   <Box marginRight="6px"><PlusIcon color="white" /></Box>
                   Add Guardian
                 </Button>
@@ -110,6 +111,29 @@ export default function EditGuardian({
                 <Box width="85px" height="85px" background="#D9D9D9" borderRadius="85px" />
                 <Box fontWeight="600" fontSize="14px" marginTop="10px">You currently have no guardians</Box>
               </Box>
+            </Box>
+          )}
+          {!!guardianList.length && (
+            <Box
+              paddingTop="14px"
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-start"
+            >
+              {guardianDetails && guardianDetails.guardians && (
+                <Fragment>
+                  {guardianDetails.guardians.map((address: any, i: any) =>
+                    <GuardianCard
+                      key={i}
+                      name={guardianNames[i] || 'No Name'}
+                      address={address}
+                      time="Added on 2023-12-14 "
+                      marginRight="18px"
+                      cursor="pointer"
+                    />
+                  )}
+                </Fragment>
+              )}
             </Box>
           )}
           <Box borderTop="1px solid #F0F0F0" marginTop="30px" paddingTop="20px">
@@ -145,40 +169,27 @@ export default function EditGuardian({
                   <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
                     <Box>Wallet recovery requires</Box>
                     <Box width="80px" margin="0 10px">
-                      <Menu>
-                        <MenuButton
-                          px={2}
-                          py={2}
-                          width="80px"
-                          transition="all 0.2s"
-                          borderRadius="16px"
-                          borderWidth="1px"
-                          padding="12px"
-                          background="white"
-                          _hover={{
-                            borderColor: '#3182ce',
-                            boxShadow: '0 0 0 1px #3182ce',
-                          }}
-                          _expanded={{
-                            borderColor: '#3182ce',
-                            boxShadow: '0 0 0 1px #3182ce',
-                          }}
-                        >
-                          <Box display="flex" alignItems="center" justifyContent="space-between">
-                            {editingGuardianDetails.threshold}
-                            <DropDownIcon />
-                          </Box>
-                        </MenuButton>
-                        <MenuList>
-                          {(new Array(editingGuardianDetails.threshold || 1)).fill(1).map((i: any) =>
-                            <MenuItem>
-                              {i}
-                            </MenuItem>
-                          )}
-                        </MenuList>
-                      </Menu>
+                      <Box
+                        px={2}
+                        py={2}
+                        width="80px"
+                        transition="all 0.2s"
+                        borderRadius="16px"
+                        borderWidth="1px"
+                        padding="12px"
+                        background="white"
+                        _expanded={{
+                          borderColor: '#3182ce',
+                          boxShadow: '0 0 0 1px #3182ce',
+                        }}
+                      >
+                        <Box display="flex" alignItems="center" justifyContent="space-between">
+                          {guardianDetails.threshold || 0}
+                          <DropDownIcon />
+                        </Box>
+                      </Box>
                     </Box>
-                    <Box>{`out of ${editingGuardianDetails.guardians.length} guardian(s) confirmation.`}</Box>
+                    <Box>{`out of ${guardianDetails.guardians.length} guardian(s) confirmation.`}</Box>
                   </TextBody>
                 </Box>
                 <Box
@@ -197,7 +208,7 @@ export default function EditGuardian({
                   </Box>
                   <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
                     <Box marginRight="10px">Keep guardians private</Box>
-                    <Box width="72px" minWidth="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
+                    <Box width="72px" minWidth="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
                       <Box width="30px" height="30px" background="white" borderRadius="30px" />
                     </Box>
                   </TextBody>
@@ -214,7 +225,7 @@ export default function EditGuardian({
         alignItems="center"
         justifyContent="center"
       >
-        <Button type="mid" onClick={startAddGuardian}>
+        <Button type="mid" onClick={startEditGuardian}>
           <Box marginRight="6px"><PlusIcon color="white" /></Box>
           Add Guardian
         </Button>

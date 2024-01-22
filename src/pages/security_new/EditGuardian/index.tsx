@@ -22,10 +22,17 @@ import DropDownIcon from '@/components/Icons/DropDown';
 import useBrowser from '@/hooks/useBrowser';
 import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import { useTempStore } from '@/store/temp';
-import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
 import useForm from '@/hooks/useForm';
+import useKeystore from '@/hooks/useKeystore';
+import { defaultGuardianSafePeriod } from '@/config';
 import { nanoid } from 'nanoid';
+import useConfig from '@/hooks/useConfig';
+import useWallet from '@/hooks/useWallet';
+import { ethers } from 'ethers';
+import { useGuardianStore } from '@/store/guardian';
+import { useSlotStore } from '@/store/slot';
+import api from '@/lib/api';
 
 const getRecommandCount = (c: number) => {
   if (!c) {
@@ -63,13 +70,33 @@ const amountValidate = (values: any, props: any) => {
 export default function EditGuardian({
   cancelEdit,
   onEditGuardianConfirm,
-  startEditGuardian
+  startEditGuardian,
+  cancelEditGuardian
 }: any) {
   const { getAddressName } = useSettingStore();
-  const { getEditingGuardiansInfo } = useTempStore();
+  const { getEditingGuardiansInfo, clearCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
+  const { calcGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
-  const [amountData, setAmountData] = useState<any>({});
+  const { createWallet } = useWallet();
+  const [isCreating, setIsCreating] = useState(false);
+  const { chainConfig } = useConfig();
+  const guardianStore = useGuardianStore();
+  const { slotInfo } = useSlotStore();
+  const { navigate } = useBrowser();
+
+  const guardianDetails = guardiansInfo.guardianDetails
+
+  const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
+
+  const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
+    return {
+      address: guardian,
+      name: guardianNames[i]
+    }
+  })
+
+  const [amountData, setAmountData] = useState<any>({ guardiansCount: guardianList.length });
 
   const amountForm = useForm({
     fields: ['amount'],
@@ -84,17 +111,6 @@ export default function EditGuardian({
     amountForm.onChange('amount')(amount);
   };
 
-  const guardianDetails = guardiansInfo.guardianDetails
-
-  const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
-
-  const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
-    return {
-      address: guardian,
-      name: guardianNames[i]
-    }
-  })
-
   /* useEffect(() => {
    *   setAmountData({ guardiansCount: guardianList.length });
    * }, [guardianList]);
@@ -104,6 +120,47 @@ export default function EditGuardian({
   const handleConfirm = useCallback((addresses: any, names: any) => {
     console.log('handleConfirm', addresses, names)
   }, [])
+
+  const next = useCallback(async () => {
+    const initialGuardianHash = slotInfo && slotInfo.initialGuardianHash
+
+    if (!initialGuardianHash) {
+      setIsCreating(true)
+      const guardianAddresses = guardianList.map((item: any) => item.address);
+      const guardianNames = guardianList.map((item: any) => item.name);
+      const threshold = amountForm.values.amount || 0;
+      const keystore = chainConfig.contracts.l1Keystore;
+      const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
+      const salt = ethers.ZeroHash;
+
+      const guardiansInfo = {
+        keystore,
+        guardianHash: newGuardianHash,
+        guardianNames,
+        guardianDetails: {
+          guardians: guardianAddresses,
+          threshold: Number(threshold),
+          salt,
+        },
+        requireBackup: true,
+        keepPrivate
+      };
+
+      const initialGuardianSafePeriod = defaultGuardianSafePeriod
+      await createWallet({
+        initialGuardianHash: newGuardianHash,
+        initialGuardianSafePeriod
+      })
+
+      // guardianStore()
+      await api.guardian.backupGuardians(guardiansInfo);
+      guardianStore.setGuardiansInfo(guardiansInfo)
+
+      setIsCreating(false)
+      clearCreateInfo()
+      navigate(`/dashboard`);
+    }
+  }, [guardianList, keepPrivate, slotInfo])
 
   return (
     <Fragment>
@@ -251,10 +308,10 @@ export default function EditGuardian({
         alignItems="center"
         justifyContent="center"
       >
-        <Button type="mid" theme="light" padding="0 20px" marginRight="16px" onClick={() => {}}>
+        <Button type="mid" theme="light" padding="0 20px" marginRight="16px" onClick={cancelEditGuardian}>
           Cancel
         </Button>
-        <Button type="mid" onClick={() => {}}>
+        <Button type="mid" onClick={next} isLoading={isCreating} disabled={isCreating}>
           Continue to sign
         </Button>
       </Box>

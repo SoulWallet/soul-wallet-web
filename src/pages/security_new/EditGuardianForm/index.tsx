@@ -185,10 +185,12 @@ export default function GuardianForm({
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const tempStore = useTempStore()
   const { getEditingGuardiansInfo } = tempStore;
-  console.log('tempStore', tempStore, getEditingGuardiansInfo())
-  const guardiansInfo = getEditingGuardiansInfo() || defaultGuardianInfo;
-
-  const guardianDetails = guardiansInfo.guardianDetails
+  const guardiansInfo = getEditingGuardiansInfo();
+  const guardianDetails = guardiansInfo.guardianDetails || {
+    guardians: [],
+    threshold: 0
+  }
+  console.log('guardianDetails kkk', guardiansInfo, guardianDetails)
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
