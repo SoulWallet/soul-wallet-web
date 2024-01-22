@@ -25,7 +25,10 @@ import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
 
-export default function EditGuardian() {
+export default function EditGuardian({
+  openEditGuardianModal,
+  startAddGuardian
+}: any) {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('guardian');
   const [keepPrivate, setKeepPrivate] = useState<any>(false);
@@ -66,77 +69,9 @@ export default function EditGuardian() {
     }
   })
 
-  const openSetDefaultModal = useCallback(() => {
-    setIsSetDefaultOpen(true)
-  }, [])
-
-  const closeSetDefaultModal = useCallback(() => {
-    setIsSetDefaultOpen(false)
-  }, [])
-
-  const openChooseSignerModal = useCallback(() => {
-    setIsChooseSignerOpen(true)
-  }, [])
-
-  const closeChooseSignerModal = useCallback(() => {
-    setIsChooseSignerOpen(false)
-  }, [])
-
-  const openWalletConnectModal = useCallback(() => {
-    setIsWalletConnectOpen(true)
-  }, [])
-
-  const closeWalletConnectModal = useCallback(() => {
-    setIsWalletConnectOpen(false)
-  }, [])
-
-  const openSelectGuardianModal = useCallback(() => {
-    setIsSelectGuardianOpen(true)
-  }, [])
-
-  const closeSelectGuardianModal = useCallback(() => {
-    setIsSelectGuardianOpen(false)
-  }, [])
-
-  const openIntroGuardianModal = useCallback(() => {
-    setIsIntroGuardianOpen(true)
-  }, [])
-
-  const closeIntroGuardianModal = useCallback(() => {
-    setIsIntroGuardianOpen(false)
-  }, [])
-
-  const openEditGuardianModal = useCallback(() => {
-    setIsEditGuardianOpen(true)
-  }, [])
-
-  const closeEditGuardianModal = useCallback(() => {
-    setIsEditGuardianOpen(false)
-  }, [])
-
-  const openBackupGuardianModal = useCallback(() => {
-    setIsBackupGuardianOpen(true)
-  }, [])
-
-  const closeBackupGuardianModal = useCallback(() => {
-    setIsBackupGuardianOpen(false)
-  }, [])
-
-  const startAddGuardian = useCallback(() => {
-    openSelectGuardianModal()
-  }, [])
-
-  const startEditing = useCallback(() => {
-    setIsEditing(true)
-  }, [])
-
-  const endEditing = useCallback(() => {
-    setIsEditing(false)
-  }, [])
-
   const onGuardianListConfirm = useCallback((addresses: any, names: any) => {
     setIsEditGuardianOpen(false)
-    startEditing()
+    // startEditing()
 
     setEditingGuardianDetails({
       guardians: addresses,
@@ -158,11 +93,11 @@ export default function EditGuardian() {
             <Box>Guardian List</Box>
             {!!guardianList.length && (
               <Box marginLeft="auto">
-                <TextButton type="mid" onClick={openBackupGuardianModal}>
+                <TextButton type="mid" onClick={() => {}}>
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>
-                <Button type="mid" onClick={openSelectGuardianModal}>
+                <Button type="mid" onClick={() => {}}>
                   <Box marginRight="6px"><PlusIcon color="white" /></Box>
                   Add Guardian
                 </Button>
@@ -284,41 +219,6 @@ export default function EditGuardian() {
           Add Guardian
         </Button>
       </Box>
-      <SetSignerModal
-        isOpen={isSetDefaultOpen}
-        onClose={closeSetDefaultModal}
-      />
-      <SelectSignerTypeModal
-        isOpen={isChooseSignerOpen}
-        onClose={closeChooseSignerModal}
-        startWalletConnect={openWalletConnectModal}
-      />
-      <SelectGuardianTypeModal
-        isOpen={isSelectGuardianOpen}
-        onClose={closeSelectGuardianModal}
-        setIsIntroGuardianOpen={setIsIntroGuardianOpen}
-        setIsSelectGuardianOpen={setIsSelectGuardianOpen}
-        setIsEditGuardianOpen={setIsEditGuardianOpen}
-      />
-      <IntroGuardianModal
-        isOpen={isIntroGuardianOpen}
-        onClose={closeIntroGuardianModal}
-      />
-      <EditGuardianModal
-        isOpen={isEditGuardianOpen}
-        onClose={closeEditGuardianModal}
-        setIsSelectGuardianOpen={setIsSelectGuardianOpen}
-        setIsEditGuardianOpen={setIsEditGuardianOpen}
-        onConfirm={onGuardianListConfirm}
-      />
-      <BackupGuardianModal
-        isOpen={isBackupGuardianOpen}
-        onClose={closeBackupGuardianModal}
-      />
-      <WalletConnectModal
-        isOpen={isWalletConnectOpen}
-        onClose={closeWalletConnectModal}
-      />
     </Fragment>
   )
 }

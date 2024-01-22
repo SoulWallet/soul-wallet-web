@@ -52,6 +52,11 @@ export default function EditGuardianModal({
     setIsSelectGuardianOpen(true)
   }
 
+  const onConfirmLocal = (addresses: any, names: any) => {
+    console.log('onConfirm kkk', onConfirm)
+    if (onConfirm) onConfirm(addresses, names)
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -69,7 +74,7 @@ export default function EditGuardianModal({
                 Use wallet address from yourself or friends & family. Fully decentralized
               </TextBody>
               <Box>
-                <EditGuardianForm onConfirm={onConfirm} onBack={onBack} />
+                <EditGuardianForm onConfirm={onConfirmLocal} onBack={onBack} />
               </Box>
             </Box>
           </Box>
