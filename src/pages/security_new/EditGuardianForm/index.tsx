@@ -40,6 +40,7 @@ import GreySection from '@/components/GreySection'
 import Backup from '@/components/Guardian/Backup';
 import Edit from './Edit';
 import { useSettingStore } from '@/store/setting';
+import { useTempStore } from '@/store/temp';
 
 const defaultGuardianIds = [nextRandomId()];
 
@@ -165,6 +166,13 @@ const isGuardiansListFilled = (list: any) => {
   return isFilled
 }
 
+const defaultGuardianInfo = {
+  guardianDetails: {
+    guardians: [],
+    threshold: 0
+  }
+}
+
 export default function GuardianForm({
   cancelEdit,
   startBackup,
@@ -175,11 +183,12 @@ export default function GuardianForm({
   const { getAddressName, setFinishedSteps, saveAddressName } = useSettingStore();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-  const { guardiansInfo, updateGuardiansInfo } = useGuardianStore();
-  const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
-    guardians: [],
-    threshold: 0
-  }
+  const tempStore = useTempStore()
+  const { getEditingGuardiansInfo } = tempStore;
+  console.log('tempStore', tempStore, getEditingGuardiansInfo())
+  const guardiansInfo = getEditingGuardiansInfo() || defaultGuardianInfo;
+
+  const guardianDetails = guardiansInfo.guardianDetails
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
@@ -452,9 +461,9 @@ export default function GuardianForm({
       setSending(false);
       emailForm.clearFields(['email'])
       setIsDone(true)
-      updateGuardiansInfo({
-        requireBackup: false
-      })
+      /* updateGuardiansInfo({
+       *   requireBackup: false
+       * }) */
       toast({
         title: 'Email Backup Success!',
         status: 'success',
@@ -509,9 +518,9 @@ export default function GuardianForm({
       await downloadJsonFile(guardiansInfo);
       setDownloading(false);
       setIsDone(true)
-      updateGuardiansInfo({
-        requireBackup: false
-      })
+      /* updateGuardiansInfo({
+       *   requireBackup: false
+       * }) */
       toast({
         title: 'Email Backup Success!',
         status: 'success',
