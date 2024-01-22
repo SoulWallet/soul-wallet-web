@@ -15,10 +15,11 @@ export const sidebarLinks = [
     href: "/dashboard",
     icon: IconDashboard,
     iconActive: IconDashboardActive,
+    isComing: false,
   },
   {
     title: 'Assets',
-    href: "/assets",
+    href: "/asset",
     icon: IconAssets,
     iconActive: IconAssetsActive,
     isComing: true,
