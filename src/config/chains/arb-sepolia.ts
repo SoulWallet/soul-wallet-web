@@ -1,5 +1,5 @@
 /**
- * Arbitrum Goerli
+ * Arbitrum Sepolia
  */
 
 import IconArb from '@/assets/chains/arb.svg';
@@ -16,7 +16,7 @@ export default {
   cardBg: 'radial-gradient(52.03% 100.00% at 100.00% 100.00%, #73DDFF 0%, #E2FC89 100%)',
   cardBgUnactivated: 'radial-gradient(52.03% 100.00% at 100.00% 100.00%, #73DDFF 0%, #D7D7D7 100%)',
   provider: 'https://sepolia-rollup.arbitrum.io/rpc',
-  l1Provider: `https://goerli.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`,
+  l1Provider: `https://sepolia.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`,
   scanUrl: 'https://sepolia.arbiscan.io',
   scanName: 'Arbiscan',
   bundlerUrl: `https://api-dev.soulwallet.io/bundler/arb-sepolia/rpc`,

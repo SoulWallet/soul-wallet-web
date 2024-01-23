@@ -185,13 +185,8 @@ export default function useWallet() {
   };
 
   const getEoaSignature = async (packedHash: any, validationData: string) => {
-    // const signatureData: any = await signWithEoa();
-    const signatureData: any = await signMessageAsync({
-      message: {
-        raw: packedHash,
-      },
-    });
-
+    const signatureData: any = await signWithEoa(packedHash);
+  
     console.log('packUserEoaSignature params:', signatureData, validationData);
 
     const packedSignatureRet = await soulWallet.packUserOpEOASignature(
@@ -287,6 +282,14 @@ export default function useWallet() {
     const signature = await getPasskeySignature(packedHashRet.OK.packedHash, packedHashRet.OK.validationData);
     return signature;
   };
+
+  const signWithEoa = async (hash: any) => {
+    return await signMessageAsync({
+      message: {
+        raw: hash,
+      },
+    });
+  }
 
   const initializeWithEoa = async (initInfo: any, eoaAddress: string) => {};
 
@@ -419,6 +422,7 @@ export default function useWallet() {
     signAndSend,
     signRawHash,
     signWithPasskey,
+    signWithEoa,
     initializeWithPasskey,
     retrieveSlotInfo,
     boostAfterRecovered,

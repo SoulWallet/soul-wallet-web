@@ -23,7 +23,7 @@ const getTypedHash = (typedData: any) => {
 export default function SignMessage({ messageToSign, onSign, signType }: any) {
   const { selectedAddressItem } = useConfig();
   const { getAddressName } = useSettingStore();
-  const { signRawHash, signWithPasskey } = useWallet();
+  const { signRawHash, signWithPasskey, signWithEoa } = useWallet();
   const [isActivated, setIsActivated] = useState(false);
   const { checkActivated } = useWalletContext();
   const origin = document.referrer;
@@ -41,7 +41,10 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
       } else if (signType === 'passkey') {
         signHash = getTypedHash(messageToSign);
         // IMPORTANT TODO, remove 0x00 from passkey signature
-        signature = (await signWithPasskey(signHash)).replace('0x00', '0x');
+        signature = await signWithPasskey(signHash);
+      } else if (signType === 'eoa') {
+        signHash = getTypedHash(messageToSign);
+        signature = await signWithEoa(signHash);
       } else {
         throw new Error('signType not supported');
       }
@@ -61,7 +64,7 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
     checkIsActivated();
   }, []);
 
-  const shouldDisable = signType !== 'passkey' && !isActivated;
+  const shouldDisable = signType !== 'passkey' && signType !== 'eoa' && !isActivated;
 
   return (
     <>
@@ -77,7 +80,7 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
 
       <Flex flexDir={'column'} gap="5" mt="6">
         <Box bg="#f2f2f2" py="3" px="4" rounded="20px" fontWeight={'800'} maxH="160px" overflowY={'auto'}>
-          {signType === 'typedData' || signType === 'passkey' ? JSON.stringify(messageToSign) : messageToSign}
+          {signType === 'typedData' || signType === 'passkey' || signType === 'eoa' ? JSON.stringify(messageToSign) : messageToSign}
         </Box>
         <InfoWrap color="#646464" fontSize="12px">
           <InfoItem>

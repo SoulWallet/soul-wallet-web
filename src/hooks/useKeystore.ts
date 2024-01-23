@@ -1,18 +1,23 @@
-import { KeyStoreTypedDataType, L1KeyStore } from '@soulwallet_test/sdk';
+import { KeyStoreTypedDataType, L1KeyStore, SignkeyType } from '@soulwallet_test/sdk';
 import { useSlotStore } from '@/store/slot';
 import useConfig from './useConfig';
+import { useMemo } from 'react';
 import { ethers } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { defaultGuardianSafePeriod } from '@/config';
+import { useSignerStore } from '@/store/signer';
 
 export default function useKeystore() {
   const { chainConfig } = useConfig();
   const { getSlotInfo } = useSlotStore();
   const { showSignMessage } = useWalletContext();
+  const { getSelectedKeyType } = useSignerStore();
   const slotInfo = getSlotInfo();
   const slot = slotInfo.slot;
 
-  const keystore = new L1KeyStore(chainConfig.l1Provider, chainConfig.contracts.l1Keystore);
+  const keystore = useMemo(() => {
+    return new L1KeyStore(chainConfig.l1Provider, chainConfig.contracts.l1Keystore);
+  }, [chainConfig.l1Provider, chainConfig.contracts.l1Keystore]);
 
   /**
    * Calculate guardian hash
@@ -42,14 +47,14 @@ export default function useKeystore() {
   };
 
   const getActiveGuardianHash = async (slotInitInfo: any) => {
-    const { initialKeyHash, initialGuardianHash, initialGuardianSafePeriod, } = slotInitInfo;
+    const { initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
     const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
     const now = Math.floor(Date.now() / 1000);
     const res = await getKeyStoreInfo(slot);
     if (res.isErr()) {
       return {
         guardianHash: null,
-      activeGuardianHash: null,
+        activeGuardianHash: null,
         guardianActivateAt: null,
         pendingGuardianHash: null,
       };
@@ -84,7 +89,9 @@ export default function useKeystore() {
     }
     const { domain, types, value } = ret.OK;
 
-    const keySignature = await showSignMessage({ domain, types, value }, 'passkey');
+    const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
+
+    const keySignature = await showSignMessage({ domain, types, value }, signType);
 
     return {
       slot,
@@ -101,7 +108,9 @@ export default function useKeystore() {
     }
     const { domain, types, value } = ret.OK;
 
-    const keySignature = await showSignMessage({ domain, types, value }, 'passkey');
+    const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
+
+    const keySignature = await showSignMessage({ domain, types, value }, signType);
 
     return {
       slot,

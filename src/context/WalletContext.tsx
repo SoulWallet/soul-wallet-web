@@ -25,7 +25,7 @@ interface IWalletContext {
   showConfirmPayment: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
   showClaimAssets: () => Promise<void>;
   showTestGuide: () => Promise<void>;
-  showSignMessage: (messageToSign: any, origin?: string) => Promise<void>;
+  showSignMessage: (messageToSign: any, signType?: string) => Promise<void>;
   showReceive: () => Promise<void>;
   showSend: (tokenAddress?: string, transferType?:string) => Promise<void>;
   showFeedback: () => Promise<void>;
@@ -118,8 +118,8 @@ export const WalletContextProvider = ({ children }: any) => {
     return await confirmPaymentModal.current.show(fee, origin, sendTo);
   };
 
-  const showSignMessage = async (messageToSign: string, origin?: string) => {
-    return await signMessageModal.current.show(messageToSign, origin);
+  const showSignMessage = async (messageToSign: string,signType?: string) => {
+    return await signMessageModal.current.show(messageToSign,signType);
   };
 
   const showReceive = async () => {
