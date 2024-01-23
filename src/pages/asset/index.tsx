@@ -60,7 +60,7 @@ export default function Asset() {
               </Text>
             </Flex>
           </Box>
-          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
+          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} border='1px solid #818181' />
         </Flex>
 
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />

@@ -73,9 +73,18 @@ export default function ActivityTable({ activeChains }: any) {
         </Text>
       )}
       {!list.length && (
-        <>
-          {loading ? <Image src={IconLoading} display={'block'} w="50px" h="50px" /> : <Text>No Activity</Text>}
-        </>
+        <Flex py="120px" flexDir={'column'} justify={'center'} align={'center'}>
+          {loading ? (
+            <Image src={IconLoading} display={'block'} w="50px" h="50px" />
+          ) : (
+            <>
+              <Box mb="2" rounded="full" w="12" h="12" bg="#D9D9D9" opacity={0.23} />
+              <Text color="#7F7F7F" fontWeight={'500'} fontSize={'12px'}>
+                You don't have any activities yet
+              </Text>
+            </>
+          )}
+        </Flex>
       )}
       {activeChains.length && list.length
         ? list.map((item: IActivityItem, idx) => (
