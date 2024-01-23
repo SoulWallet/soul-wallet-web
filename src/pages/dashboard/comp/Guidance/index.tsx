@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Image } from '@chakra-ui/react';
 import Button from '@/components/Button';
-import { guideList } from '@/data';
+import { guideList, guideListOfSetGuardian } from '@/data';
 import api from '@/lib/api';
 import ImgArrowUp from '@/assets/icons/arrow-up.svg';
 import { findMissingNumbers } from '@/lib/tools';
@@ -14,7 +14,7 @@ import { useSettingStore } from '@/store/setting';
 export default function Guidance() {
   const { slotInfo } = useSlotStore();
   const { setFinishedSteps, finishedSteps, collapseGuidance, setCollapseGuidance, } = useSettingStore();
-  const { goGuideAction } = useTools();
+  const { goGuideAction, checkInitialized } = useTools();
   // todo, should remmeber this
   const checkSteps = async () => {
     const res = await api.operation.finishStep({
@@ -31,7 +31,8 @@ export default function Guidance() {
 
   const missingSteps = findMissingNumbers([0, 1, 2, 3, 4, 5], finishedSteps);
 
-  const currentStep = guideList[missingSteps[0]];
+  // check if initialized
+  const currentStep = checkInitialized() ? guideList[missingSteps[0]] : guideListOfSetGuardian[0];
 
   if (!missingSteps.length) {
     return;

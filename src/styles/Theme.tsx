@@ -8,6 +8,14 @@ const inputTheme = defineStyleConfig({
   },
 });
 
+const linkTheme = defineStyleConfig({
+  baseStyle: {
+    _focusVisible: {
+      boxShadow: 'none',
+    },
+  },
+});
+
 const menuTheme = defineStyleConfig({
   baseStyle: {
     list: {
@@ -60,6 +68,7 @@ const theme = extendTheme({
     Menu: menuTheme,
     Input: inputTheme,
     Modal: modalTheme,
+    Link: linkTheme,
     Switch: {
       baseStyle: {
         thumb: {

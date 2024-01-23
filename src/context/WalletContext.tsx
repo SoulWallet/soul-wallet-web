@@ -8,6 +8,7 @@ import TestGuideModal from '@/components/TestGuideModal';
 import FeedbackModal from '@/components/FeedbackModal';
 import SendModal from '@/components/SendModal';
 import ReceiveModal from '@/components/ReceiveModal';
+import SetGuardianHintModal from '@/components/SetGuardianHintModal';
 import useConfig from '@/hooks/useConfig';
 import { useGuardianStore } from '@/store/guardian';
 import { useChainStore } from '@/store/chain';
@@ -28,6 +29,7 @@ interface IWalletContext {
   showReceive: () => Promise<void>;
   showSend: (tokenAddress?: string, transferType?:string) => Promise<void>;
   showFeedback: () => Promise<void>;
+  showSetGuardianHintModal: () => Promise<void>;
   checkActivated: () => Promise<boolean | undefined>;
 }
 
@@ -42,6 +44,7 @@ export const WalletContext = createContext<IWalletContext>({
   showFeedback: async () => {},
   showTestGuide: async () => {},
   checkActivated: async () => false,
+  showSetGuardianHintModal: async () => {},
 });
 
 export const WalletContextProvider = ({ children }: any) => {
@@ -60,6 +63,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const claimAssetsModal = useRef<any>();
   const testGuideModal = useRef<any>();
   const feedbackModal = useRef<any>();
+  const setGuardianHintModal = useRef<any>();
   
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
@@ -138,6 +142,10 @@ export const WalletContextProvider = ({ children }: any) => {
     return await feedbackModal.current.show();
   };
 
+  const showSetGuardianHintModal = async () => {
+    return await setGuardianHintModal.current.show();
+  };
+
   // if address on chain is not activated, check again
   useEffect(() => {
     if (!selectedAddress || !selectedChainId) {
@@ -159,6 +167,7 @@ export const WalletContextProvider = ({ children }: any) => {
         showTestGuide,
         showFeedback,
         checkActivated,
+        showSetGuardianHintModal,
       }}
     >
       {children}
@@ -171,6 +180,7 @@ export const WalletContextProvider = ({ children }: any) => {
       <SendModal ref={sendModal} />
       <TestGuideModal ref={testGuideModal} />
       <FeedbackModal ref={feedbackModal} />
+      <SetGuardianHintModal ref={setGuardianHintModal} />
     </WalletContext.Provider>
   );
 };

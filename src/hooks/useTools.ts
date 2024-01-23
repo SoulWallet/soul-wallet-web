@@ -17,6 +17,7 @@ import { useTempStore } from '@/store/temp';
 
 export default function useTools() {
   const toast = useToast();
+  const { showSetGuardianHintModal } = useWalletContext();
   const { clearSigners } = useSignerStore();
   const { clearAddresses } = useAddressStore();
   const { clearGuardianInfo } = useGuardianStore();
@@ -25,9 +26,19 @@ export default function useTools() {
   const { clearChainStore } = useChainStore();
   const { clearSlotStore, slotInfo } = useSlotStore();
   const { clearTempStore } = useTempStore();
-  const { getAddressName,saveAddressName } = useSettingStore();
-  const { showClaimAssets, showSend, } = useWalletContext();
+  const { getAddressName, saveAddressName } = useSettingStore();
+  const { showClaimAssets, showSend } = useWalletContext();
   const { navigate } = useBrowser();
+
+  const checkInitialized = (showHintModal = false) => {
+    if (!slotInfo.initialGuardianHash) {
+      if (showHintModal) {
+        showSetGuardianHintModal();
+      }
+      return false;
+    }
+    return true;
+  };
 
   const getWalletName = () => {
     return getAddressName(slotInfo.slot);
@@ -35,7 +46,7 @@ export default function useTools() {
 
   const setWalletName = (name: string) => {
     saveAddressName(slotInfo.slot, name);
-  }
+  };
 
   const clearLogData = () => {
     clearAddresses();
@@ -160,5 +171,6 @@ export default function useTools() {
     goGuideAction,
     getWalletName,
     setWalletName,
+    checkInitialized,
   };
 }

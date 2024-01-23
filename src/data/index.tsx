@@ -148,3 +148,14 @@ export const guideList = [
     statusText: 'Recover the wallet',
   },
 ];
+
+export const guideListOfSetGuardian = [
+  {
+    id: 2,
+    title: 'Free guardians setup for social recovery',
+    desc: `Your funds will be safe even if you lost all your devices.`,
+    buttonText: 'Setup now',
+    buttonTextFull: 'Setup now',
+    statusText: 'Change guardians',
+  },
+];

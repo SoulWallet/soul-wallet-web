@@ -12,12 +12,13 @@ import IconSwapActive from '@/assets/icons/wallet/swap-active.svg';
 import IconViewActive from '@/assets/icons/wallet/view-active.svg';
 import useConfig from '@/hooks/useConfig';
 import { useAddressStore } from '@/store/address';
-import useTools from '@/hooks/useTools';
 import AvatarWithName from '@/components/AvatarWithName';
+import useTools from '@/hooks/useTools';
 
 export default function WalletCard() {
-  const { showSend, showReceive } = useWalletContext();
+  const { showSend, showReceive, showSetGuardianHintModal } = useWalletContext();
   const [hoverIndex, setHoverIndex] = useState(-1);
+  const { checkInitialized } = useTools();
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
   const { scanUrl } = chainConfig;
@@ -82,7 +83,7 @@ export default function WalletCard() {
             key={index}
             cursor={'pointer'}
             textAlign={'center'}
-            onClick={item.onClick}
+            onClick={() => checkInitialized(true) ? item.onClick() : undefined}
             onMouseEnter={() => setHoverIndex(index)}
             onMouseLeave={() => setHoverIndex(-1)}
           >
