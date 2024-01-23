@@ -173,7 +173,7 @@ export default function EditGuardian({
         setIsCreating(false)
         clearCreateInfo()
         navigate(`/dashboard`);
-      } catch (error) {
+      } catch (error: any) {
         console.log('error', error.message)
       }
     } else {
