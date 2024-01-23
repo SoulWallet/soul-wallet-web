@@ -3,10 +3,12 @@ import Header from '@/components/Header';
 import { Box, Flex, Text, Table, Tr, Thead, Tbody, Th, Td, Image, GridItem, Grid } from '@chakra-ui/react';
 import AppContainer from '@/components/AppContainer';
 import Footer from '@/components/Footer';
+import AvatarWithName from '@/components/AvatarWithName';
 import ChainSelectMultiple from '@/components/ChainSelectMultiple';
 import { useChainStore } from '@/store/chain';
 import TokensTable from './comp/TokensTable';
 import NftsTable from './comp/NftsTable';
+import DashboardLayout from '@/components/Layouts/DashboardLayout';
 
 const tabList = [
   {
@@ -21,15 +23,13 @@ const tabList = [
 
 export const Tabs = ({ tabList, activeTab, onChange }: any) => {
   return (
-    <Flex userSelect={"none"}>
+    <Flex userSelect={'none'} gap="10" px="6">
       {tabList.map((item: any, idx: number) => {
         return (
           <Text
             key={idx}
-            color={activeTab === idx ? 'brand.red' : 'brand.gray'}
-            mr="4"
             cursor={'pointer'}
-            fontWeight={'800'}
+            fontWeight={activeTab === idx ? '800' : '400'}
             lineHeight={'1'}
             fontSize={'18px'}
             onClick={() => onChange(idx)}
@@ -48,22 +48,29 @@ export default function Asset() {
   const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
 
   return (
-    <Box color="#000">
-      <Header />
-      <AppContainer minH="calc(100vh - 100px)">
-        <Text fontWeight="800" fontSize="32px" mb="9">
-          Asset
-        </Text>
+    <DashboardLayout>
+      <Box pr="48px">
+        <Flex rounded="20px" p="6" bg="brand.white" mt="24px" mb="30px" justify={'space-between'}>
+          <Box>
+            <AvatarWithName editable={false} />
+            <Flex mt="14px" gap="2px" fontWeight={'700'} align={'center'}>
+              <Text fontSize={'24px'}>$</Text>
+              <Text fontSize={'48px'} lineHeight={'1'}>
+                0
+              </Text>
+            </Flex>
+          </Box>
+          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
+        </Flex>
+
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
         <Flex gap="5" mt="3" alignItems={'flex-start'}>
           <Box w="100%" rounded="20px" bg="#fff" p="8">
             {activeTab === 0 && <TokensTable activeChains={activeChains} />}
             {activeTab === 1 && <NftsTable />}
           </Box>
-          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
         </Flex>
-        <Footer />
-      </AppContainer>
-    </Box>
+      </Box>
+    </DashboardLayout>
   );
 }

@@ -42,24 +42,35 @@ export default function ChainSelectMultiple({ activeChains, onChange }: any) {
   };
 
   return (
-    <Flex
-      w="262px"
-      flex="0 0 262px"
-      flexDir={'column'}
-      rounded="16px"
-      userSelect={'none'}
-      bg="#fff"
-      boxShadow={'0px 4px 4px 0px rgba(0, 0, 0, 0.25)'}
-      py="1"
-      px="10px"
-    >
-      <MenuLine
-        onClick={toggleCheckAll}
-        icon={IconAllNetwork}
-        title={'All networks'}
-        checked={activeChains.length === chainList.length}
-      />
-      {chainList.map((item: any, idx: number) => {
+    <Flex w="262px" flex="0 0 262px" flexDir={'column'} rounded="16px" userSelect={'none'} bg="#fff" py="1" px="10px">
+      <Menu>
+        <MenuButton>
+          <MenuLine
+            onClick={toggleCheckAll}
+            icon={IconAllNetwork}
+            title={'All networks'}
+            checked={activeChains.length === chainList.length}
+            border="1px solid #818181"
+            py="10px"
+            px="16px"
+            rounded="100px"
+          />
+        </MenuButton>
+        <MenuList>
+          {chainList.map((item: any, idx: number) => {
+            return (
+              <React.Fragment key={idx}>
+                {idx ? <Divider /> : ''}
+                <Box key={item.chainIdHex} onClick={() => toggleActiveChains(item.chainIdHex)}>
+                  <MenuLine icon={item.icon} title={item.chainName} checked={activeChains.includes(item.chainIdHex)} />
+                </Box>
+              </React.Fragment>
+            );
+          })}
+        </MenuList>
+      </Menu>
+
+      {/* {chainList.map((item: any, idx: number) => {
         return (
           <React.Fragment key={idx}>
             {idx ? <Divider /> : ''}
@@ -68,7 +79,7 @@ export default function ChainSelectMultiple({ activeChains, onChange }: any) {
             </Box>
           </React.Fragment>
         );
-      })}
+      })} */}
     </Flex>
   );
 }
