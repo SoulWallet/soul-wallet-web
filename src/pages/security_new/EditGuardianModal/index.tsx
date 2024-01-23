@@ -53,7 +53,6 @@ export default function EditGuardianModal({
   }
 
   const onConfirmLocal = (addresses: any, names: any) => {
-    console.log('onConfirm kkk', onConfirm)
     if (onConfirm) onConfirm(addresses, names)
   }
 
