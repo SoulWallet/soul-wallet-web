@@ -57,7 +57,7 @@ export default function useTools() {
         showSend();
         break;
       case 2:
-        navigate('/security');
+        navigate('/security/guardian');
         break;
       case 3:
         navigate(`/apps?appUrl=${encodeURIComponent('https://app.uniswap.org')}`);

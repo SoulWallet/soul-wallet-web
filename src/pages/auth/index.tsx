@@ -282,7 +282,8 @@ export default function Auth() {
           <Box
             width={{ base: "100%", md: "50%" }}
             height="100%"
-            padding="100px 60px"
+            p="60px"
+            pt="100px"
           >
             <Heading marginBottom="40px" fontSize="40px">
               Your smart wallet for Ethereum L2s
