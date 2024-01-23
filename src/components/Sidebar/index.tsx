@@ -8,6 +8,7 @@ import IconFeedback from '@/assets/icons/feedback.svg';
 import Footer from '../Footer';
 import { guideList } from '@/data';
 import { useSettingStore } from '@/store/setting';
+import useTools from '@/hooks/useTools';
 
 const ExtraLink = ({ children, ...restProps }: FlexProps) => {
   return (

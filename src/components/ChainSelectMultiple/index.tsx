@@ -11,7 +11,7 @@ const MenuLine = ({ icon, title, checked, isMenu, ...restProps }: any) => {
   return (
     <Flex w="100%" gap="2" align={'center'} justify={'space-between'} py="2" cursor={'pointer'} {...restProps}>
       <Flex align={'center'} gap="2">
-        <Image src={icon} w="8" h="8" />
+        <Image src={icon} w="5" h="5" />
         <Text data-testid={`text-chainname-${title}`} fontWeight={'700'}>
           {title}
         </Text>
@@ -21,11 +21,7 @@ const MenuLine = ({ icon, title, checked, isMenu, ...restProps }: any) => {
   );
 };
 
-export default function ChainSelectMultiple({
-  activeChains,
-  onChange,
-  ...restProps
-}: any) {
+export default function ChainSelectMultiple({ activeChains, onChange, ...restProps }: any) {
   const { chainList } = useChainStore();
 
   const toggleCheckAll = () => {
@@ -69,7 +65,11 @@ export default function ChainSelectMultiple({
               <React.Fragment key={idx}>
                 {idx ? <Divider /> : ''}
                 <Box key={item.chainIdHex} onClick={() => toggleActiveChains(item.chainIdHex)}>
-                  <MenuLine icon={item.iconSquare} title={item.chainName} checked={activeChains.includes(item.chainIdHex)} />
+                  <MenuLine
+                    icon={item.iconSquare}
+                    title={item.chainName}
+                    checked={activeChains.includes(item.chainIdHex)}
+                  />
                 </Box>
               </React.Fragment>
             );

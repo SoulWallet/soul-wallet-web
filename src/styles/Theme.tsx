@@ -10,6 +10,10 @@ const inputTheme = defineStyleConfig({
 
 const linkTheme = defineStyleConfig({
   baseStyle: {
+    _hover:{
+      textDecoration: 'none',
+
+    },
     _focusVisible: {
       boxShadow: 'none',
     },
