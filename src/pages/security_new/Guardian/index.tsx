@@ -50,7 +50,7 @@ export default function Guardian() {
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
 
   const [isEditing, setIsEditing] = useState<any>(false);
-  const { getAddressName } = useSettingStore();
+  const { getAddressName, saveAddressName } = useSettingStore();
 
   const tempStore = useTempStore();
   const { setEditingGuardiansInfo } = tempStore;
@@ -138,10 +138,16 @@ export default function Guardian() {
     setIsEditGuardianOpen(false)
     setIsEditing(true)
 
+    for (let i = 0; i < addresses.length; i++) {
+      const address = addresses[i]
+      const name = names[i]
+      if (address) saveAddressName(address.toLowerCase(), name);
+    }
+
     setEditingGuardiansInfo({
+      guardianNames: names,
       guardianDetails: {
         guardians: addresses,
-        guardianNames: names,
         threshold: threshold || 0
       }
     })

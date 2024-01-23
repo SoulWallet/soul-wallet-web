@@ -100,7 +100,7 @@ export default function ListGuardian({
                 </TextButton>
                 <Button type="mid" onClick={startEditGuardian}>
                   <Box marginRight="6px"><PlusIcon color="white" /></Box>
-                  Add Guardian
+                  Edit Guardian
                 </Button>
               </Box>
             )}

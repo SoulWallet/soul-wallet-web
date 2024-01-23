@@ -73,7 +73,7 @@ export default function EditGuardian({
   startEditGuardian,
   cancelEditGuardian
 }: any) {
-  const { getAddressName } = useSettingStore();
+  const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, clearCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
   const { calcGuardianHash } = useKeystore();
@@ -156,6 +156,12 @@ export default function EditGuardian({
       await api.guardian.backupGuardians(guardiansInfo);
       guardianStore.setGuardiansInfo(guardiansInfo)
 
+      for (let i = 0; i < guardianAddresses.length; i++) {
+        const address = guardianAddresses[i]
+        const name = guardianNames[i]
+        if (address) saveAddressName(address.toLowerCase(), name);
+      }
+
       setIsCreating(false)
       clearCreateInfo()
       navigate(`/dashboard`);
@@ -181,7 +187,7 @@ export default function EditGuardian({
                 </TextButton>
                 <Button type="mid" onClick={startEditGuardian}>
                   <Box marginRight="6px"><PlusIcon color="white" /></Box>
-                  Add Guardian
+                  Edit Guardian
                 </Button>
               </Box>
             )}
@@ -197,7 +203,7 @@ export default function EditGuardian({
                 {guardianDetails.guardians.map((address: any, i: any) =>
                   <GuardianCard
                     key={i}
-                    name={guardianDetails.guardianNames[i] || 'No Name'}
+                    name={guardianNames[i] || 'No Name'}
                     address={address}
                     time="Added on 2023-12-14 "
                     marginRight="18px"
@@ -312,7 +318,7 @@ export default function EditGuardian({
           Cancel
         </Button>
         <Button type="mid" onClick={next} isLoading={isCreating} disabled={isCreating}>
-          Continue to sign
+          Continue
         </Button>
       </Box>
     </Fragment>
