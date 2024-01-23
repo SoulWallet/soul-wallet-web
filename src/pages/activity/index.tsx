@@ -1,46 +1,100 @@
 import { useState } from 'react';
-import Header from '@/components/Header';
-import { Box, Flex, Text } from '@chakra-ui/react';
-import AppContainer from '@/components/AppContainer';
-import Footer from '@/components/Footer';
+import { Box, Flex, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import ChainSelectMultiple from '@/components/ChainSelectMultiple';
 import { useChainStore } from '@/store/chain';
 import ActivityTable from './comp/ActivityTable';
-import { Tabs } from '../asset';
+import DashboardLayout from '@/components/Layouts/DashboardLayout';
+import IconChevronDown from '@/assets/icons/chevron-down-black.svg';
 
-const tabList = [
+const statusList = [
   {
-    title: 'All',
+    title: 'All status',
     key: 'all',
   },
-  // {
-  //   title: 'Pending',
-  //   key: 'pending',
-  // },
+  {
+    title: 'Pending',
+    key: 'pending',
+  },
+  {
+    title: 'Failed',
+    key: 'failed',
+  },
 ];
 
+const typesList = [
+  {
+    title: 'All types',
+    key: 'all',
+  },
+  {
+    title: 'Send',
+    key: 'send',
+  },
+  {
+    title: 'Receive',
+    key: 'receive',
+  },
+  {
+    title: 'Trade',
+    key: 'trade',
+  },
+  {
+    title: 'Approve',
+    key: 'approve',
+  },
+  {
+    title: 'Execute',
+    key: 'execute',
+  },
+  {
+    title: 'Mint',
+    key: 'mint',
+  },
+];
+
+const FilterMenu = ({ active, list }: any) => {
+  return (
+    <Menu>
+      <MenuButton>
+        <Flex alignItems={'center'} gap="2">
+          <Text fontWeight={"700"}>{list.filter((item: any) => item.key === active)[0].title}</Text>
+          <Image src={IconChevronDown} />
+        </Flex>
+      </MenuButton>
+      <MenuList>
+        {list.map((item: any, idx: number) => {
+          return <MenuItem key={idx}>{item.title}</MenuItem>;
+        })}
+      </MenuList>
+    </Menu>
+  );
+};
+
 export default function Activity() {
-  const [activeTab, setActiveTab] = useState(0);
   const { chainList } = useChainStore();
   const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
+  const [activeStatus, setActiveStatus] = useState(statusList[0].key);
+  const [activeTypes, setActiveTypes] = useState(typesList[0].key);
 
   return (
-    <Box color="#000">
-      <Header />
-      <AppContainer minH="calc(100vh - 100px)">
+    <DashboardLayout>
+      <Box pr="48px" pt="34px">
         <Text fontWeight="800" fontSize="32px" mb="9">
           Activity
         </Text>
-        <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
-        <Flex gap="5" mt="3" alignItems={'flex-start'}>
-          <Box w="100%" rounded="20px" bg="#fff" p="8">
-            {activeTab === 0 && <ActivityTable activeChains={activeChains} />}
-            {/* {activeTab === 1 && <ActivityTable />} */}
-          </Box>
+
+        <Flex px="6" justify={'space-between'}>
+          <Flex gap="8">
+            <FilterMenu active={activeStatus} list={statusList} />
+            <FilterMenu active={activeTypes} list={typesList} />
+          </Flex>
           <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
         </Flex>
-        <Footer />
-      </AppContainer>
-    </Box>
+
+        <Box rounded="20px" bg="#fff" p="8">
+          <ActivityTable activeChains={activeChains} />
+        </Box>
+      </Box>
+    </DashboardLayout>
   );
 }

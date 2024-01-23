@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text, Image } from '@chakra-ui/react';
 import Button from '@/components/Button';
-import { guideList } from '@/data';
+import { guideList, guideListOfSetGuardian } from '@/data';
 import api from '@/lib/api';
-import { useSlotStore } from '@/store/slot';
+import ImgArrowUp from '@/assets/icons/arrow-up.svg';
 import { findMissingNumbers } from '@/lib/tools';
+import { useSlotStore } from '@/store/slot';
+// import { useAddressStore } from '@/store/address';
+// import { findMissingNumbers } from '@/lib/tools';
 import useTools from '@/hooks/useTools';
 import { useSettingStore } from '@/store/setting';
 
 export default function Guidance() {
   const { slotInfo } = useSlotStore();
-  const { setFinishedSteps, finishedSteps } = useSettingStore();
-  const { goGuideAction } = useTools();
-
+  const { setFinishedSteps, finishedSteps, collapseGuidance, setCollapseGuidance, } = useSettingStore();
+  const { goGuideAction, checkInitialized } = useTools();
+  // todo, should remmeber this
   const checkSteps = async () => {
     const res = await api.operation.finishStep({
       slot: slotInfo.slot,
@@ -28,46 +31,61 @@ export default function Guidance() {
 
   const missingSteps = findMissingNumbers([0, 1, 2, 3, 4, 5], finishedSteps);
 
+  // check if initialized
+  const currentStep = checkInitialized() ? guideList[missingSteps[0]] : guideListOfSetGuardian[0];
+
   if (!missingSteps.length) {
     return;
   }
 
-  const currentStep = guideList[missingSteps[0]];
-
   return (
-    <Flex
+    <Box
       px="6"
-      h="160px"
-      gap="6"
-      mt="-16px"
+      pb="2px"
+      w={{base: "380px", "2xl" :"400px"}}
+      mt="-2"
       bg="#fff"
-      w="380px"
       border="1px solid #EAECF0"
       boxShadow={'0px 4px 60px 0px rgba(44, 53, 131, 0.08)'}
-      rounded="20px"
-      align={'center'}
-      justify={'space-between'}
+      roundedBottomLeft={'20px'}
+      roundedBottomRight={'20px'}
     >
-      <Flex flexDir={'column'} gap="1">
-        <Text fontSize={'18px'} fontWeight={'800'} lineHeight={'24px'}>
+      {!collapseGuidance && (
+        <>
+          <Text fontSize={'18px'} fontWeight={'800'} lineHeight={'1.25'} mt="7" mb="3">
           {currentStep.title}
-        </Text>
-        <Text fontWeight="600" lineHeight={'18px'}>
-          {currentStep.desc}
-        </Text>
-      </Flex>
-      <Button
-        boxSizing="content-box"
-        px="6"
-        py="10px"
-        fontSize={"12px"}
-        fontWeight={'700'}
-        onClick={() => {
-          goGuideAction(currentStep.id);
-        }}
-      >
-        {currentStep.buttonText}
-      </Button>
-    </Flex>
+          </Text>
+          <Flex align={'center'} justify={'space-between'} gap="8">
+            <Text fontSize={'12px'} lineHeight={'1.5'}>
+            {currentStep.desc}
+            </Text>
+            <Button
+              boxSizing="content-box"
+              px="5"
+              py="2"
+              fontWeight={'700'}
+              fontSize={'12px'}
+              onClick={() => {
+                goGuideAction(currentStep.id);
+              }}
+              bg="brand.black"
+              color="white"
+              _hover={{ bg: 'brand.purple', color: 'white' }}
+            >
+               {currentStep.buttonText}
+            </Button>
+          </Flex>
+        </>
+      )}
+      <Box textAlign={'center'} cursor={'pointer'} onClick={() => setCollapseGuidance(!collapseGuidance)}>
+        <Image
+          src={ImgArrowUp}
+          transform={collapseGuidance ? 'rotate(180deg)' : 'rotate(0deg)'}
+          mt={collapseGuidance ? 2 : 3}
+          mx="auto"
+          display={'block'}
+        />
+      </Box>
+    </Box>
   );
 }

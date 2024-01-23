@@ -4,11 +4,7 @@ import {
   Box,
   Text,
   Image,
-  Grid,
-  GridItem,
   Flex,
-  Popover,
-  PopoverTrigger,
   useToast
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
@@ -139,7 +135,7 @@ export default function SetPasskey() {
                 <TextBody type="t2" color="#797979" marginBottom="18px">
                   *If you're an Apple user, you can even sync your passkey across all devices end to end encrypted via icloud keychain.
                 </TextBody>
-                <Box display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" mb="4">
+                <Flex display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" gap="2">
                   {credentials.map((passKey: any) =>
                     <Box background="white" borderRadius="16px" padding="16px" width="100%" marginBottom="4px">
                       <Box display="flex" alignItems="center">
@@ -155,9 +151,10 @@ export default function SetPasskey() {
                       </Box>
                     </Box>
                   )}
-                </Box>
+                </Flex>
                 <Box
                   width="100%"
+                  mt="18px"
                   display="flex"
                   alignItems="center"
                   justifyContent="center"

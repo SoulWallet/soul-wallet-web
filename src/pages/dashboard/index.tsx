@@ -3,7 +3,7 @@ import Tokens from './comp/Tokens';
 import Activity from './comp/Activity';
 import WalletCard from './comp/WalletCard';
 import DappList from '@/components/DappList';
-import SetGuardianHint from './comp/SetGuardianHint';
+import Guidance from './comp/Guidance';
 import DashboardLayout from '@/components/Layouts/DashboardLayout';
 
 export default function Dashboard() {
@@ -13,7 +13,7 @@ export default function Dashboard() {
         <Flex w="40%" h="100%" flexDir={'column'} justify={'center'} align={'center'}>
           {/* <AccountSelectFull display={{ base: 'flex', lg: 'none' }} w="100%" /> */}
           <WalletCard />
-          <SetGuardianHint />
+          <Guidance />
           <Activity />
         </Flex>
         <Flex flexDir={'column'} w="60%" h="100%" bg="brand.white" py="30px" px="64px" borderLeft={'1px solid #EAECF0'}>

@@ -22,14 +22,14 @@ export const sidebarLinks = [
     href: "/asset",
     icon: IconAssets,
     iconActive: IconAssetsActive,
-    isComing: true,
+    isComing: false,
   },
   {
     title: 'Activity',
     href: "/activity",
     icon: IconActivity,
     iconActive: IconActivityActive,
-    isComing: true,
+    isComing: false,
   },
   {
     title: 'Dapps',
