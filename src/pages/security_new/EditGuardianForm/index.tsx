@@ -190,7 +190,6 @@ export default function GuardianForm({
     guardians: [],
     threshold: 0
   }
-  console.log('guardianDetails kkk', guardiansInfo, guardianDetails)
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);

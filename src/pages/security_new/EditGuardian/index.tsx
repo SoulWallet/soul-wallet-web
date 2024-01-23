@@ -32,6 +32,10 @@ import useWallet from '@/hooks/useWallet';
 import { ethers } from 'ethers';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
+import { useSignerStore } from '@/store/signer';
+import { L1KeyStore } from '@soulwallet_test/sdk';
+import useWalletContext from '@/context/hooks/useWalletContext';
+import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 
 const getRecommandCount = (c: number) => {
@@ -76,7 +80,7 @@ export default function EditGuardian({
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, clearCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
-  const { calcGuardianHash } = useKeystore();
+  const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
   const { createWallet } = useWallet();
   const [isCreating, setIsCreating] = useState(false);
@@ -84,6 +88,9 @@ export default function EditGuardian({
   const guardianStore = useGuardianStore();
   const { slotInfo } = useSlotStore();
   const { navigate } = useBrowser();
+  const { credentials } = useSignerStore();
+  const { showConfirmPayment } = useWalletContext();
+  const { sendErc20, payTask } = useTransaction();
 
   const guardianDetails = guardiansInfo.guardianDetails
 
@@ -125,6 +132,52 @@ export default function EditGuardian({
     const initialGuardianHash = slotInfo && slotInfo.initialGuardianHash
 
     if (!initialGuardianHash) {
+      try {
+        setIsCreating(true)
+        const guardianAddresses = guardianList.map((item: any) => item.address);
+        const guardianNames = guardianList.map((item: any) => item.name);
+        const threshold = amountForm.values.amount || 0;
+        const keystore = chainConfig.contracts.l1Keystore;
+        const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
+        const salt = ethers.ZeroHash;
+
+        const guardiansInfo = {
+          keystore,
+          guardianHash: newGuardianHash,
+          guardianNames,
+          guardianDetails: {
+            guardians: guardianAddresses,
+            threshold: Number(threshold),
+            salt,
+          },
+          requireBackup: true,
+          keepPrivate
+        };
+
+        const initialGuardianSafePeriod = defaultGuardianSafePeriod
+        await createWallet({
+          initialGuardianHash: newGuardianHash,
+          initialGuardianSafePeriod
+        })
+
+        // guardianStore()
+        await api.guardian.backupGuardians(guardiansInfo);
+        guardianStore.setGuardiansInfo(guardiansInfo)
+
+        for (let i = 0; i < guardianAddresses.length; i++) {
+          const address = guardianAddresses[i]
+          const name = guardianNames[i]
+          if (address) saveAddressName(address.toLowerCase(), name);
+        }
+
+        setIsCreating(false)
+        clearCreateInfo()
+        navigate(`/dashboard`);
+      } catch (error) {
+        console.log('error', error.message)
+      }
+    } else {
+      // try {
       setIsCreating(true)
       const guardianAddresses = guardianList.map((item: any) => item.address);
       const guardianNames = guardianList.map((item: any) => item.name);
@@ -146,25 +199,40 @@ export default function EditGuardian({
         keepPrivate
       };
 
-      const initialGuardianSafePeriod = defaultGuardianSafePeriod
-      await createWallet({
-        initialGuardianHash: newGuardianHash,
-        initialGuardianSafePeriod
+      // await api.guardian.backupGuardians(guardiansInfo);
+      const { initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
+      const currentKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
+      const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
+      console.log('currentKeys', currentKeys, initialKeys, newGuardianHash)
+
+      // const initialKeyHash = L1KeyStore.getKeyHash(initialKeys);
+
+      const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
+
+      const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
+      const parameters = [
+        initialKeyHash,
+        initialGuardianHash,
+        initialGuardianSafePeriod,
+        newGuardianHash,
+        rawKeys,
+        keySignature,
+      ]
+
+      const res1 = await api.guardian.createTask({
+        keystore,
+        functionName,
+        parameters
       })
 
-      // guardianStore()
-      await api.guardian.backupGuardians(guardiansInfo);
-      guardianStore.setGuardiansInfo(guardiansInfo)
-
-      for (let i = 0; i < guardianAddresses.length; i++) {
-        const address = guardianAddresses[i]
-        const name = guardianNames[i]
-        if (address) saveAddressName(address.toLowerCase(), name);
-      }
-
-      setIsCreating(false)
-      clearCreateInfo()
-      navigate(`/dashboard`);
+      const task = res1.data
+      const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
+      const res2 = await showConfirmPayment(task.estiamtedFee);
+      const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
+      console.log('handleSubmit1111', res1, res2, res3);
+      // } catch (error: any) {
+      // console.log('error', error.message)
+      // }
     }
   }, [guardianList, keepPrivate, slotInfo])
 
