@@ -72,6 +72,10 @@ export default function Auth() {
   const activeLoginAccount = signerIdAddress[loginInfo.signerId]
   console.log('signerIdAddress', signerIdAddress, activeSignerId, activeLoginAccount)
 
+  const openRecover = useCallback(() => {
+    navigate('/recover')
+  }, [])
+
   const openLogin = useCallback(() => {
     setIsLoginOpen(true)
   }, [])
@@ -372,7 +376,7 @@ export default function Auth() {
                 >
                   Login
                 </Button>
-                <TextBody>
+                <TextBody onClick={openRecover} cursor="pointer">
                   Lost access to your account?
                 </TextBody>
               </Box>

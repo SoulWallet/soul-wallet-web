@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Wrapper from './Wrapper';
 import Dashboard from '@/pages/dashboard';
 import Create from '@/pages/create';
-import Recover from '@/pages/recover';
+import Recover from '@/pages/new_recover';
 import Popup from '@/pages/popup';
 import Apps from '@/pages/apps';
 import Launch from '@/pages/launch';
