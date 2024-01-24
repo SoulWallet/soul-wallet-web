@@ -13,18 +13,14 @@ import useConfig from './useConfig';
 import api from '@/lib/api';
 import usePasskey from './usePasskey';
 import { toHex } from '@/lib/tools';
-import { useSignMessage } from 'wagmi';
+import { useSignMessage, useSignTypedData } from 'wagmi';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
-import useTools from './useTools';
 import { useSettingStore } from '@/store/setting';
-
-interface ICredential {
-  id: string;
-}
+import useKeystore from './useKeystore';
 
 export default function useWallet() {
   const { signByPasskey } = usePasskey();
@@ -42,6 +38,7 @@ export default function useWallet() {
   const { getSelectedKeyType, setEoas } = useSignerStore();
   const { setSignerIdAddress } = useSettingStore();
   const { clearCreateInfo } = useTempStore();
+  const {packKeystoreSignature} = useKeystore();
 
   const createWallet = async ({
     initialGuardianHash,
@@ -278,9 +275,8 @@ export default function useWallet() {
   };
 
   const signWithPasskey = async (hash: string) => {
-    const packedHashRet = await soulWallet.packRawHash(hash);
-    const signature = await getPasskeySignature(packedHashRet.OK.packedHash, packedHashRet.OK.validationData);
-    return signature;
+    const selectedCredential: any = getSelectedCredential();
+    return await signByPasskey(selectedCredential, hash);
   };
 
   const signWithEoa = async (hash: any) => {

@@ -25,7 +25,7 @@ interface IWalletContext {
   showConfirmPayment: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
   showClaimAssets: () => Promise<void>;
   showTestGuide: () => Promise<void>;
-  showSignMessage: (messageToSign: any, signType?: string) => Promise<void>;
+  showSignMessage: (messageToSign: any, signType?: string) => Promise<any>;
   showReceive: () => Promise<void>;
   showSend: (tokenAddress?: string, transferType?:string) => Promise<void>;
   showFeedback: () => Promise<void>;

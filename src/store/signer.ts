@@ -39,7 +39,6 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
   },
   credentials: [],
   getSelectedKeyType: () => {
-    console.log('ready to get signer type', get().signerId, get().eoas);
     if (get().eoas.includes(get().signerId)) {
       return SignkeyType.EOA;
     } else {

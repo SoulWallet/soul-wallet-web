@@ -6,12 +6,14 @@ import { ethers } from 'ethers';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { defaultGuardianSafePeriod } from '@/config';
 import { useSignerStore } from '@/store/signer';
+import { useVerifyTypedData } from 'wagmi';
 
 export default function useKeystore() {
   const { chainConfig } = useConfig();
   const { getSlotInfo } = useSlotStore();
   const { showSignMessage } = useWalletContext();
   const { getSelectedKeyType } = useSignerStore();
+
   const slotInfo = getSlotInfo();
   const slot = slotInfo.slot;
 
@@ -80,6 +82,26 @@ export default function useKeystore() {
     }
   };
 
+  const packKeystoreSignature = async (signature: any) => {
+    const signType = getSelectedKeyType();
+    let result;
+    if (signType === SignkeyType.EOA) {
+      result = await keystore.packKeystoreEOASignature(signature);
+    } else if (signType === SignkeyType.P256) {
+      result = await keystore.packKeystoreP256Signature(signature);
+    } else if (signType === SignkeyType.RS256) {
+      result = await keystore.packKeystoreRS256Signature(signature);
+    } else {
+      throw new Error('invalid sign type');
+    }
+
+    if (result.isErr()) {
+      throw new Error(result.ERR.message);
+    } else {
+      return result.OK;
+    }
+  };
+
   const getReplaceGuardianInfo = async (newGuardianHash: string) => {
     const slotInfo = getSlotInfo();
     const slot = slotInfo.slot;
@@ -87,11 +109,13 @@ export default function useKeystore() {
     if (ret.isErr()) {
       throw new Error(ret.ERR.message);
     }
-    const { domain, types, value } = ret.OK;
+    const { domain, types, message, primaryType } = ret.OK;
 
     const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
 
-    const keySignature = await showSignMessage({ domain, types, value }, signType);
+    const signature = await showSignMessage({ domain, types, message, primaryType }, signType);
+
+    const keySignature = await packKeystoreSignature(signature);
 
     return {
       slot,
@@ -106,11 +130,12 @@ export default function useKeystore() {
     if (ret.isErr()) {
       throw new Error(ret.ERR.message);
     }
-    const { domain, types, value } = ret.OK;
 
     const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
 
-    const keySignature = await showSignMessage({ domain, types, value }, signType);
+    const signature = await showSignMessage(ret.OK, signType);
+
+    const keySignature = await packKeystoreSignature(signature);
 
     return {
       slot,
@@ -126,5 +151,6 @@ export default function useKeystore() {
     getActiveGuardianHash,
     getReplaceGuardianInfo,
     getCancelSetGuardianInfo,
+    packKeystoreSignature,
   };
 }

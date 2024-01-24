@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Flex, Box, Text } from '@chakra-ui/react';
 import Button from '../../Button';
+import { useSignTypedData } from 'wagmi'
 import useWallet from '@/hooks/useWallet';
 import useConfig from '@/hooks/useConfig';
 import { toShortAddress } from '@/lib/tools';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
-import { ethers } from 'ethers';
-import { TypedDataEncoder } from 'ethers';
-import useWalletContext from '@/context/hooks/useWalletContext';
+import { TypedDataEncoder,ethers } from 'ethers';
 import { useSettingStore } from '@/store/setting';
 
 const getHash = (message: string) => {
@@ -22,10 +21,10 @@ const getTypedHash = (typedData: any) => {
 
 export default function SignMessage({ messageToSign, onSign, signType }: any) {
   const { selectedAddressItem } = useConfig();
+  const { signTypedDataAsync } = useSignTypedData();
   const { getAddressName } = useSettingStore();
-  const { signRawHash, signWithPasskey, signWithEoa } = useWallet();
+  const { signRawHash, signWithPasskey } = useWallet();
   const [isActivated, setIsActivated] = useState(false);
-  const { checkActivated } = useWalletContext();
   const origin = document.referrer;
 
   const onConfirm = async () => {
@@ -40,11 +39,11 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
         signature = await signRawHash(signHash);
       } else if (signType === 'passkey') {
         signHash = getTypedHash(messageToSign);
-        // IMPORTANT TODO, remove 0x00 from passkey signature
         signature = await signWithPasskey(signHash);
       } else if (signType === 'eoa') {
-        signHash = getTypedHash(messageToSign);
-        signature = await signWithEoa(signHash);
+        // signHash = getTypedHash(messageToSign);
+        // console.log('signHash of eoa: ', signHash)
+        signature = await signTypedDataAsync(messageToSign);
       } else {
         throw new Error('signType not supported');
       }
@@ -80,7 +79,9 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
 
       <Flex flexDir={'column'} gap="5" mt="6">
         <Box bg="#f2f2f2" py="3" px="4" rounded="20px" fontWeight={'800'} maxH="160px" overflowY={'auto'}>
-          {signType === 'typedData' || signType === 'passkey' || signType === 'eoa' ? JSON.stringify(messageToSign) : messageToSign}
+          {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
+            ? JSON.stringify(messageToSign)
+            : messageToSign}
         </Box>
         <InfoWrap color="#646464" fontSize="12px">
           <InfoItem>

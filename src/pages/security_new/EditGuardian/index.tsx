@@ -88,7 +88,7 @@ export default function EditGuardian({
   const guardianStore = useGuardianStore();
   const { slotInfo } = useSlotStore();
   const { navigate } = useBrowser();
-  const { credentials } = useSignerStore();
+  const { credentials, eoas, } = useSignerStore();
   const { showConfirmPayment } = useWalletContext();
   const { sendErc20, payTask } = useTransaction();
 
@@ -201,7 +201,10 @@ export default function EditGuardian({
 
       // await api.guardian.backupGuardians(guardiansInfo);
       const { initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
-      const currentKeys = await Promise.all(credentials.map((credential: any) => credential.publicKey))
+      const currentKeys = L1KeyStore.initialKeysToAddress([
+        ...credentials.map((credential: any) => credential.publicKey),
+        ...eoas,
+      ]);
       const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
       console.log('currentKeys', currentKeys, initialKeys, newGuardianHash)
 

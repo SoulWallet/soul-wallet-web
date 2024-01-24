@@ -6,7 +6,6 @@ import SignTransaction from '@/components/SignTransactionModal/comp/SignTransact
 import SignMessage from '@/components/SignMessageModal/comp/SignMessage';
 import SwitchChain from '@/components/SwitchChain';
 import { useAddressStore } from '@/store/address';
-import useConfig from '@/hooks/useConfig';
 import { useChainStore } from '@/store/chain';
 
 // when user has the created wallet
@@ -14,7 +13,6 @@ export default function Popup() {
   const { addressList, selectedAddress } = useAddressStore();
   const { getChainItem } = useChainStore();
   const [searchParams] = useSearchParams();
-  const { selectedChainItem } = useConfig();
 
   const action = searchParams.get('action');
   const id = searchParams.get('id');
