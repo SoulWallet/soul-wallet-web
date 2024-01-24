@@ -21,7 +21,7 @@ const getTypedHash = (typedData: any) => {
 
 export default function SignMessage({ messageToSign, onSign, signType }: any) {
   const { selectedAddressItem } = useConfig();
-  const { signTypedDataAsync } = useSignTypedData();
+  const { signTypedDataAsync, signTypedData } = useSignTypedData();
   const { getAddressName } = useSettingStore();
   const { signRawHash, signWithPasskey } = useWallet();
   const [isActivated, setIsActivated] = useState(false);

@@ -36,8 +36,8 @@ dependencies:
     specifier: ^0.1.7
     version: 0.1.7
   '@soulwallet_test/sdk':
-    specifier: ^0.1.22
-    version: 0.1.22
+    specifier: ^0.1.24
+    version: 0.1.24
   '@tanstack/react-query':
     specifier: ^5.17.9
     version: 5.17.19(react@18.2.0)
@@ -4205,8 +4205,8 @@ packages:
     resolution: {integrity: sha512-4fs9CTcs8QcvoPmh+p25eGn30qVyVoKTwBVIRfQfZWjSKMeKJgthldRufgO8BAVYmAhZhCSpTowJL5qoP4Jkfw==}
     dev: false
 
-  /@soulwallet_test/sdk@0.1.22:
-    resolution: {integrity: sha512-XBQnpDsc6GCFmVeKpbTMjSPZXW9k1pYHbzzzj7/m0FON6tAXkruZyNiEMMNEbF/oOHBvn7vdpje44SKefTPrYg==}
+  /@soulwallet_test/sdk@0.1.24:
+    resolution: {integrity: sha512-NbAB042fVu5vZiM55HdpMz3+IMERe8VYGqlhyfemz/gEd/SGm9YqBIboCchAmLNxDAW4tP0bAjiR4D8djet4DA==}
     dependencies:
       '@soulwallet_test/abi': 0.1.6
       '@soulwallet_test/result': 0.1.3
