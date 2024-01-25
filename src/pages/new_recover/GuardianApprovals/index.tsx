@@ -37,7 +37,8 @@ import EditGuardianModal from '@/pages/security_new/EditGuardianModal';
 import StepProgress from '../StepProgress'
 
 export default function AddSigner({ next }: any) {
-  const [isPrivate, setIsPrivate] = useState(true)
+  const [isPrivate, setIsPrivate] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
 
   const closeEditGuardianModal = useCallback(() => {
