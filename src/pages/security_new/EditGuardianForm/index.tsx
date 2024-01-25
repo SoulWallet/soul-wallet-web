@@ -178,7 +178,8 @@ export default function GuardianForm({
   startBackup,
   startGuardianInterval,
   onConfirm,
-  onBack
+  onBack,
+  canGoBack
 }: any) {
   const { getAddressName, setFinishedSteps, saveAddressName } = useSettingStore();
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -591,6 +592,7 @@ export default function GuardianForm({
       selectAmount={selectAmount}
       keepPrivate={keepPrivate}
       setKeepPrivate={setKeepPrivate}
+      canGoBack={canGoBack}
     />
   )
 }

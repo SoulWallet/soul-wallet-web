@@ -183,15 +183,6 @@ export default function AddSigner({ next }: any) {
                   </MenuItem>
                 </MenuList>
               </Menu>
-
-              {/* <Button
-                  width="275px"
-                  maxWidth="100%"
-                  theme="light"
-                  >
-                  <Box marginRight="8px"><PlusIcon color="black" /></Box>
-                  Add Passkey
-                  </Button> */}
             </Box>
             <Box width="100%" display="flex" alignItems="center" justifyContent="center" marginTop="100px">
               <Button

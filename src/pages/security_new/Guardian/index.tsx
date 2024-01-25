@@ -215,6 +215,7 @@ export default function Guardian() {
         setIsSelectGuardianOpen={setIsSelectGuardianOpen}
         setIsEditGuardianOpen={setIsEditGuardianOpen}
         onConfirm={onEditGuardianConfirm}
+        canGoBack={true}
       />
       <BackupGuardianModal
         isOpen={isBackupGuardianOpen}

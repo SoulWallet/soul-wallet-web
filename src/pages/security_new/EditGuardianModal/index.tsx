@@ -45,11 +45,12 @@ export default function EditGuardianModal({
   startEditGuardian,
   onConfirm,
   setIsEditGuardianOpen,
-  setIsSelectGuardianOpen
+  setIsSelectGuardianOpen,
+  canGoBack
 }: any) {
   const onBack = () => {
     setIsEditGuardianOpen(false)
-    setIsSelectGuardianOpen(true)
+    if (setIsSelectGuardianOpen) setIsSelectGuardianOpen(true)
   }
 
   const onConfirmLocal = (addresses: any, names: any) => {
@@ -73,7 +74,7 @@ export default function EditGuardianModal({
                 Use wallet address from yourself or friends & family. Fully decentralized
               </TextBody>
               <Box>
-                <EditGuardianForm onConfirm={onConfirmLocal} onBack={onBack} />
+                <EditGuardianForm onConfirm={onConfirmLocal} onBack={onBack} canGoBack={canGoBack || false} />
               </Box>
             </Box>
           </Box>

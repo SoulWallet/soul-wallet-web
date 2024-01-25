@@ -499,6 +499,7 @@ export default function Edit({
   formWidth,
   handleConfirm,
   handleBack,
+  canGoBack
 }: any) {
   return (
     <Fragment>
@@ -536,7 +537,7 @@ export default function Edit({
       </Box>
       <Box marginTop="30px" display="flex" justifyContent="flex-end">
         <Box>
-          <Button theme="light" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>
+          {canGoBack && <Button theme="light" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>}
           <Button onClick={handleConfirm} disabled={disabled} loading={loading}>Confirm</Button>
         </Box>
       </Box>
