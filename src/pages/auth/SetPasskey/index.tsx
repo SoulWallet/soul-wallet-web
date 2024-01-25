@@ -5,7 +5,8 @@ import {
   Text,
   Image,
   Flex,
-  useToast
+  useToast,
+  Tooltip
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -233,7 +234,8 @@ export default function SetPasskey() {
             flexDirection="column"
           >
             <Heading marginBottom="18px" type="h3">
-              Sign with <Box as="span" borderBottom="1px solid black" borderStyle="dotted">passkey</Box>
+              Sign with <Tooltip hasArrow bg='brand.black' label="A passkey is a FIDO credential stored on your computer or phone, and it is used to unlock your online accounts. The passkey makes signing in more secure.">
+              <Box as="span" borderBottom="1px solid black" borderStyle="dotted">passkey</Box></Tooltip> 
             </Heading>
             <TextBody fontWeight="600">Turn your own device into hardware wallet! Add passkey now <Box as="span" color="#FF2E79">for free</Box>!</TextBody>
             <Box

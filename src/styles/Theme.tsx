@@ -10,9 +10,8 @@ const inputTheme = defineStyleConfig({
 
 const linkTheme = defineStyleConfig({
   baseStyle: {
-    _hover:{
+    _hover: {
       textDecoration: 'none',
-
     },
     _focusVisible: {
       boxShadow: 'none',
@@ -41,6 +40,18 @@ const modalTheme = defineStyleConfig({
       borderRadius: '20px',
       bg: 'brand.white',
     },
+  },
+});
+
+const tooltipTheme = defineStyleConfig({
+  baseStyle: {
+    py: '3',
+    px: '4',
+    fontSize: '12px',
+    lineHeight: '16px',
+    borderRadius: '12px',
+    bg: 'brand.black',
+    color: 'brand.white',
   },
 });
 
@@ -73,6 +84,7 @@ const theme = extendTheme({
     Input: inputTheme,
     Modal: modalTheme,
     Link: linkTheme,
+    Tooltip: tooltipTheme,
     Switch: {
       baseStyle: {
         thumb: {

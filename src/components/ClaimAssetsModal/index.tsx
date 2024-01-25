@@ -76,7 +76,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
       console.log('claim result', res);
     } catch (err) {
       toast({
-        title: 'Reached claim limit',
+        title: 'Claim limit has been reached',
         status: 'error',
       });
     } finally {
