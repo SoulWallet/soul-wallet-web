@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Flex, Box, Text } from '@chakra-ui/react';
 import Button from '../../Button';
-import { useSignTypedData } from 'wagmi'
+import { useAccount, useSignTypedData, useSwitchChain } from 'wagmi';
 import useWallet from '@/hooks/useWallet';
 import useConfig from '@/hooks/useConfig';
 import { toShortAddress } from '@/lib/tools';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
-import { TypedDataEncoder,ethers } from 'ethers';
+import { TypedDataEncoder, ethers } from 'ethers';
 import { useSettingStore } from '@/store/setting';
 
 const getHash = (message: string) => {
@@ -25,6 +25,9 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
   const { getAddressName } = useSettingStore();
   const { signRawHash, signWithPasskey } = useWallet();
   const [isActivated, setIsActivated] = useState(false);
+  const [targetChainId, setTargetChainId] = useState<undefined | number>();
+  const { chainId } = useAccount();
+  const { switchChain } = useSwitchChain();
   const origin = document.referrer;
 
   const onConfirm = async () => {
@@ -54,6 +57,23 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
       throw new Error('Sign failed');
     }
   };
+
+  useEffect(() => {
+    if (signType !== 'eoa') {
+      return;
+    }
+
+    if (
+      messageToSign &&
+      messageToSign.domain &&
+      messageToSign.domain.chainId &&
+      messageToSign.domain.chainId != chainId
+    ) {
+      setTargetChainId(Number(messageToSign.domain.chainId));
+    } else {
+      setTargetChainId(undefined);
+    }
+  }, [chainId, messageToSign, signType]);
 
   const checkIsActivated = async () => {
     // setIsActivated(await checkActivated());
@@ -97,18 +117,31 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
           Please activate your wallet before signing message
         </Text>
       )}
-      <Button
-        checkCanSign
-        disabled={shouldDisable}
-        w="100%"
-        fontSize={'20px'}
-        py="4"
-        fontWeight={'800'}
-        mt="6"
-        onClick={onConfirm}
-      >
-        Confirm
-      </Button>
+      {targetChainId ? (
+        <Button
+          w="100%"
+          fontSize={'20px'}
+          py="4"
+          fontWeight={'800'}
+          mt="6"
+          onClick={() => switchChain({ chainId: targetChainId })}
+        >
+          Switch Chain
+        </Button>
+      ) : (
+        <Button
+          checkCanSign
+          disabled={shouldDisable}
+          w="100%"
+          fontSize={'20px'}
+          py="4"
+          fontWeight={'800'}
+          mt="6"
+          onClick={onConfirm}
+        >
+          Confirm
+        </Button>
+      )}
     </>
   );
 }

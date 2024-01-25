@@ -1,5 +1,5 @@
 import ActivityItem from './comp/ActivityItem';
-import { Text, Box, Link } from '@chakra-ui/react';
+import { Text, Box, Link, Flex } from '@chakra-ui/react';
 import useConfig from '@/hooks/useConfig';
 import { useHistoryStore } from '@/store/history';
 import Button from '@/components/Button';
@@ -18,9 +18,11 @@ export default function Activity() {
       <Text fontWeight="800" fontSize={'18px'} lineHeight={'1.25'} mb="22px">
         Recent Transactions
       </Text>
-      {historyList.slice(0, 3).map((item: any, idx: number) => (
-        <ActivityItem key={idx} idx={idx} item={item} scanUrl={chainConfig.scanUrl} />
-      ))}
+      <Flex gap="5" flexDir={"column"}>
+        {historyList.slice(0, 3).map((item: any, idx: number) => (
+          <ActivityItem key={idx} idx={idx} item={item} scanUrl={chainConfig.scanUrl} />
+        ))}
+      </Flex>
 
       {historyList.length > 3 && (
         <Link as={RLink} to="/activity">
