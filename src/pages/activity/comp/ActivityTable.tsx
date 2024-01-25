@@ -7,38 +7,50 @@ import { IActivityItem } from '@/pages/dashboard/comp/Activity/comp/ActivityItem
 import { fetchHistoryApi } from '@/store/history';
 import { useAddressStore } from '@/store/address';
 import IconLoading from '@/assets/loading.svg';
-import { getChainIcon } from '@/lib/tools';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useConfig from '@/hooks/useConfig';
+import { chainMapping } from '@/config';
+import IconExternal from '@/assets/icons/external.svg';
+import IconEth from '@/assets/tokens/eth.svg';
 
 const ActivityItem = ({ item }: any) => {
   const { chainConfig } = useConfig();
   const { scanUrl } = chainConfig;
   return (
-    <Link
-      display={'flex'}
-      href={`${scanUrl}/tx/${item.trxHash}`}
-      target="_blank"
-      justifyContent={'space-between'}
-      alignItems={'center'}
-      py="4"
-    >
-      <Flex flex="2" align={'center'} gap="2">
+    <Flex justifyContent={'space-between'} alignItems={'center'} py="5">
+      <Link display={'flex'} alignItems={'center'} target="_blank" href={`${scanUrl}/tx/${item.trxHash}`} gap="2">
         <Box pos={'relative'}>
           <Image src={getIconMapping(item.functionName)} />
-          <Image pos="absolute" right="-4px" bottom="-2px" src={getChainIcon(item.chainId)} w="15px" h="15px" />
         </Box>
-        <Text textTransform={'capitalize'} fontSize={'18px'} fontWeight={'800'}>
-          {item.functionName || 'Unknown'}
-        </Text>
+        <Box>
+          <Flex align={'center'} gap="1">
+            <Text textTransform={'capitalize'} fontSize={'16px'} fontWeight={'800'}>
+              {item.functionName || 'Unknown'}
+            </Text>
+            <Image src={IconExternal} />
+          </Flex>
+
+          <Text color="#898989">{new Date(item.timestamp * 1000).toLocaleString()}</Text>
+        </Box>
+      </Link>
+      <Flex w="12" h="12" bg="#f2f2f2" rounded={'full'} align={'center'} justify={'center'}>
+        <Image src={(chainMapping as any)[item.chainId].icon} />
       </Flex>
-      <Flex flex="1">
-        {item.actualGasCost ? `${numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH` : ''}
-      </Flex>
-      {/* <Flex flex="1">
-        <Text>{item && item.to ? `To ${toShortAddress(item.to || '')} ` : ''}</Text>
-      </Flex> */}
-    </Link>
+      {item.actualGasCost ? (
+        <Flex gap="2">
+          <Image src={IconEth} w="8" />
+          <Box>
+            <Text color="brand.black" fontWeight={'800'}>
+              -{numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH
+            </Text>
+            <Text color="#898989">$141.00</Text>
+          </Box>
+        </Flex>
+      ) : (
+        ''
+      )}
+      <Box>{item.sender && <Text color="brand.black">Sender: {toShortAddress(item.sender)}</Text>}</Box>
+    </Flex>
   );
 };
 
@@ -89,7 +101,7 @@ export default function ActivityTable({ activeChains }: any) {
       {activeChains.length && list.length
         ? list.map((item: IActivityItem, idx) => (
             <React.Fragment key={idx}>
-              <Divider />
+              {idx ? <Divider /> : ''}
               <ActivityItem key={idx} item={item} />
             </React.Fragment>
           ))

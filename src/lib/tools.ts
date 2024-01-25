@@ -13,26 +13,11 @@ import IconApprove from '@/assets/activities/approve.svg';
 import IconTrade from '@/assets/activities/trade.svg';
 // import IconReceive from '@/assets/activities/receive.svg';
 import IconContract from '@/assets/activities/contract.svg';
-import IconEthSquare from '@/assets/chains/eth-square.svg';
-import IconOpSquare from '@/assets/chains/op-square.svg';
-import IconArbSquare from '@/assets/chains/arb-square.svg';
+
 import MetamaskIcon from '@/assets/wallets/metamask.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
 import InjectedIcon from '@/assets/wallets/injected.svg'
 import UnknownIcon from '@/assets/wallets/unknown.svg'
-
-export const getChainIcon = (chainIdHex: string) => {
-  switch (chainIdHex) {
-    case '0x5':
-      return IconEthSquare;
-    case '0x66eed':
-      return IconArbSquare;
-    case '0x1a4':
-      return IconOpSquare;
-    default:
-      return '';
-  }
-};
 
 export const getWalletIcon = (walletId: string) => {
   switch (walletId) {

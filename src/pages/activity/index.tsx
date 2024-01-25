@@ -91,7 +91,7 @@ export default function Activity() {
           <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
         </Flex>
 
-        <Box rounded="20px" bg="#fff" p="8">
+        <Box rounded="20px" bg="#fff" py="6px" px="26px">
           <ActivityTable activeChains={activeChains} />
         </Box>
       </Box>
