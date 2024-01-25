@@ -111,6 +111,25 @@ export default function useKeystore() {
     }
     const { domain, types, message, primaryType } = ret.OK;
 
+    types['EIP712Domain'] = [
+      {
+        name: 'name',
+        type: 'string',
+      },
+      {
+        name: 'version',
+        type: 'string',
+      },
+      {
+        name: 'chainId',
+        type: 'uint256',
+      },
+      {
+        name: 'verifyingContract',
+        type: 'address',
+      },
+    ];
+
     const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
 
     const signature = await showSignMessage({ domain, types, message, primaryType }, signType);
@@ -133,7 +152,28 @@ export default function useKeystore() {
 
     const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
 
-    const signature = await showSignMessage(ret.OK, signType);
+    const { domain, types, message, primaryType } = ret.OK;
+
+    types['EIP712Domain'] = [
+      {
+        name: 'name',
+        type: 'string',
+      },
+      {
+        name: 'version',
+        type: 'string',
+      },
+      {
+        name: 'chainId',
+        type: 'uint256',
+      },
+      {
+        name: 'verifyingContract',
+        type: 'address',
+      },
+    ];
+
+    const signature = await showSignMessage({ domain, types, message, primaryType }, signType);
 
     const keySignature = await packKeystoreSignature(signature);
 
