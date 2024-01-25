@@ -40,7 +40,7 @@ export default function WalletConnectModal({ isOpen, onClose }: any) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent background="#ededed" maxW="476px" borderRadius="20px">
+      <ModalContent maxW="476px" borderRadius="20px">
         <ModalHeader
           display="flex"
           justifyContent="flex-start"

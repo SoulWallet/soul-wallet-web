@@ -270,8 +270,8 @@ export default function CreateGuardian() {
                 </Box>
                 <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
                   <Box marginRight="10px">Keep guardians private</Box>
-                  <Box width="72px" minWidth="72px" height="40px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="5px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '37px' : '5px'}>
-                    <Box width="30px" height="30px" background="white" borderRadius="30px" />
+                  <Box width="42px" minWidth="42px" height="24px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="2px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '20px' : '2px'}>
+                    <Box boxShadow={"0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)"} width="20px" height="20px" background="white" borderRadius="30px" />
                   </Box>
                 </TextBody>
               </Box>

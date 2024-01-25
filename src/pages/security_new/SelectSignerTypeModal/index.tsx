@@ -49,7 +49,7 @@ export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConn
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent background="#ededed" maxW="840px" borderRadius="20px">
+      <ModalContent maxW="840px" borderRadius="20px">
         <ModalHeader
           display="flex"
           justifyContent="flex-start"
@@ -64,7 +64,6 @@ export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConn
         <ModalCloseButton top="14px" />
         <ModalBody overflow="auto" padding="20px 32px">
           <Box
-            background="#ededed"
             height="100%"
             roundedBottom="20px"
             display="flex"
@@ -84,6 +83,7 @@ export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConn
                   onClick={selectWalletExtension}
                 >
                   <Box
+                    flexBasis={"0 0 60px"}
                     width="60px"
                     height="60px"
                     borderRadius="60px"
@@ -113,6 +113,7 @@ export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConn
                   <Box
                     width="60px"
                     height="60px"
+                    flex={"0 0 60px"}
                     borderRadius="60px"
                     marginRight="12px"
                     display="flex"

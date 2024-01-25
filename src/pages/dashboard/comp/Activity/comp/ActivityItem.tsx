@@ -46,7 +46,7 @@ export default function ActivityItem({ item, scanUrl }: any) {
         </Box>
       </Flex>
       <Flex gap="2">
-        <Text fontSize={'16px'} fontWeight={'700'}>
+        <Text fontSize={'16px'} textAlign={"right"} fontWeight={'700'}>
           {item.actualGasCost ? `${numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH` : ''}
         </Text>
         <Image src={IconEth} />
