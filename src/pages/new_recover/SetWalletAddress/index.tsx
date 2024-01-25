@@ -29,11 +29,110 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
+import useForm from '@/hooks/useForm';
+import FormInput from '@/components/new/FormInput'
+import { ethers } from 'ethers';
+import api from '@/lib/api';
+import useKeystore from '@/hooks/useKeystore';
 import StepProgress from '../StepProgress'
+
+const validate = (values: any) => {
+  const errors: any = {};
+  const { address } = values;
+
+  if (!ethers.isAddress(address)) {
+    errors.address = 'Invalid Address';
+  }
+
+  return errors;
+};
 
 export default function SetWalletAddress({ next }: any) {
   const toast = useToast();
   const { navigate } = useBrowser();
+  const { updateRecoverInfo } = useTempStore()
+  const [loading, setLoading] = useState(false);
+  const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
+    fields: ['address'],
+    validate,
+  });
+  const { getActiveGuardianHash } = useKeystore();
+  const disabled = loading || invalid;
+
+  const handleNext = async () => {
+    if (disabled) return;
+
+    try {
+      setLoading(true);
+      const walletAddress = values.address
+      const res1 = await api.guardian.getSlotInfo({ walletAddress });
+      if (!res1.data) {
+        setLoading(false);
+        toast({
+          title: 'No wallet found!',
+          status: 'error',
+        });
+        return
+      }
+
+      const info = res1.data
+      const {
+        initialKeys,
+        keystore,
+        slot,
+        slotInitInfo,
+        walletAddresses
+      } = info
+
+      const initialKeysAddress = initialKeys
+      const activeGuardianInfo = await getActiveGuardianHash(slotInitInfo)
+      let activeGuardianHash
+
+      if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+        activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+      } else {
+        activeGuardianHash = activeGuardianInfo.activeGuardianHash
+      }
+
+      const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
+      const data = res2.data;
+
+      if (!data) {
+        console.log('No guardians found!')
+
+        updateRecoverInfo({
+          slot,
+          slotInitInfo,
+          activeGuardianInfo,
+          initialKeysAddress,
+          walletAddresses
+        })
+      } else {
+        const guardianDetails = data.guardianDetails;
+        const guardianNames = data.guardianNames;
+
+        updateRecoverInfo({
+          slot,
+          slotInitInfo,
+          activeGuardianInfo,
+          guardianDetails,
+          initialKeysAddress,
+          guardianHash: activeGuardianHash,
+          guardianNames,
+          walletAddresses
+        })
+      }
+
+      setLoading(false);
+      next()
+    } catch (e: any) {
+      setLoading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  };
 
   const back = useCallback(() => {
     navigate(`/auth`);
@@ -82,7 +181,17 @@ export default function SetWalletAddress({ next }: any) {
               Enter any one of your wallet address on any chains, we'll be able to recover them all.
             </TextBody>
             <Box width="550px">
-              <Input placeholder="Enter ENS or wallet adderss" />
+              <FormInput
+                label=""
+                placeholder="Enter ENS or wallet adderss"
+                value={values.address}
+                onChange={onChange('address')}
+                onBlur={onBlur('address')}
+                errorMsg={showErrors.address && errors.address}
+                _styles={{  w: '100%'  }}
+                autoFocus={true}
+                onEnter={handleNext}
+              />
             </Box>
             <Box width="100%" display="flex" alignItems="center" justifyContent="center" marginTop="100px">
               <Button
@@ -95,11 +204,12 @@ export default function SetWalletAddress({ next }: any) {
                 Back
               </Button>
               <Button
-                width="80px"
-                maxWidth="100%"
+                minWidth="80px"
                 theme="dark"
                 type="mid"
-                onClick={next}
+                onClick={handleNext}
+                disabled={loading}
+                loading={loading}
               >
                 Next
               </Button>
