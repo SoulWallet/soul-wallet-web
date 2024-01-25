@@ -34,12 +34,16 @@ import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 import EditGuardianModal from '@/pages/security_new/EditGuardianModal';
+import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
+import config from '@/config';
 import StepProgress from '../StepProgress'
 
 export default function AddSigner({ next }: any) {
   const [isPrivate, setIsPrivate] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
+  const { recoverInfo } = useTempStore()
+  const { recoveryRecordID } = recoverInfo
+  const toast = useToast();
 
   const closeEditGuardianModal = useCallback(() => {
     setIsEditGuardianOpen(false)
@@ -47,8 +51,15 @@ export default function AddSigner({ next }: any) {
 
   const onEditGuardianConfirm = useCallback((addresses: any, names: any, threshold: any) => {
     setIsEditGuardianOpen(false)
-    setIsEditing(true)
   }, [])
+
+  const doCopy = () => {
+    copyText(`${config.officialWebUrl}/recover/${recoveryRecordID}`);
+    toast({
+      title: 'Copy success!',
+      status: 'success',
+    });
+  };
 
   if (isPrivate) {
     return (
@@ -198,7 +209,7 @@ export default function AddSigner({ next }: any) {
               Share this link with your guardians to sign:
             </TextBody>
             <Box marginBottom="10px" background="#F9F9F9" borderRadius="12px" padding="12px" fontSize="18px" fontWeight="700">
-              https://alpha.soulwallet.io/recovery-0xAAAA12345678E25FDa5f8a56B8e267fDaB6dS123
+              {`${config.officialWebUrl}/recover/${recoveryRecordID}`}
             </Box>
             <Box
               width="100%"
@@ -209,7 +220,7 @@ export default function AddSigner({ next }: any) {
               <Button
                 width="275px"
                 maxWidth="100%"
-                onClick={next}
+                onClick={doCopy}
               >
                 Share link with guardians
               </Button>

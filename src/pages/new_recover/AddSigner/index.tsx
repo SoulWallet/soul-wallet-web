@@ -33,22 +33,103 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
+import { useAccount, useConnect, useReconnect, useDisconnect } from 'wagmi'
+import useConfig from '@/hooks/useConfig';
+import api from '@/lib/api';
+import { L1KeyStore } from '@soulwallet_test/sdk';
+import ConnectWalletModal from '../ConnectWalletModal'
 import StepProgress from '../StepProgress'
 
 export default function AddSigner({ next }: any) {
-  const [signerList, setSignerList] = useState<any>([])
+  const [signers, setSigners] = useState<any>([])
+  const [credentials, setCredentials] = useState<any>([])
+  const [isCreating, setIsCreating] = useState<any>(false)
+  const [isConfirming, setIsConfirming] = useState<any>(false)
+  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
+  const [eoas, setEoas] = useState<any>([])
   const toast = useToast();
+  const { connect, connectAsync } = useConnect()
+  const { disconnect, disconnectAsync } = useDisconnect()
+  const { register } = usePassKey()
   const { navigate } = useBrowser();
+  const { updateRecoverInfo } = useTempStore()
+  const { chainConfig } = useConfig();
+  const { recoverInfo } = useTempStore()
 
   const back = useCallback(() => {
     navigate(`/auth`);
   }, [])
 
-  const addSigner = useCallback((type: any) => {
-    setSignerList([...signerList, { type }])
-  }, [signerList])
+  const addCredential = useCallback(async () => {
+    try {
+      const credential = await register();
+      setSigners([...signers, { type: 'passkey', signerId: credential.publicKey }])
+    } catch (error: any) {
 
-  console.log('signerList', signerList)
+    }
+  }, [signers])
+
+  const addEOA = useCallback(async (connector: any) => {
+    try {
+      await disconnectAsync()
+      const { accounts } = await connectAsync({ connector });
+      const eoa = accounts[0]
+      setSigners([...signers, { type: 'eoa', signerId: eoa }])
+      setIsConnectOpen(false)
+    } catch (error: any) {
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }, [eoas])
+
+  const handleNext = async () => {
+    updateRecoverInfo({
+      signers
+    })
+
+    const hasGuardians = recoverInfo.guardianDetails && recoverInfo.guardianDetails.guardians && !!recoverInfo.guardianDetails.guardians.length
+
+    try {
+      setIsConfirming(true)
+      const keystore = chainConfig.contracts.l1Keystore;
+      const initialKeys = signers.map((signer: any) => signer.signerId)
+      const newOwners = L1KeyStore.initialKeysToAddress(initialKeys)
+      const slot = recoverInfo.slot
+      const slotInitInfo = recoverInfo.slotInitInfo
+      const guardianDetails = recoverInfo.guardianDetails
+
+      const params = {
+        guardianDetails,
+        slot,
+        slotInitInfo,
+        keystore,
+        newOwners
+      }
+
+      const res1 = await api.guardian.createRecoverRecord(params)
+      const recoveryRecordID = res1.data.recoveryRecordID
+      const res2 = await api.guardian.getRecoverRecord({ recoveryRecordID })
+      const recoveryRecord = res2.data
+
+      updateRecoverInfo({
+        recoveryRecordID,
+        recoveryRecord,
+        enabled: false,
+      });
+
+      setIsConfirming(false)
+      next()
+    } catch (error: any) {
+      setIsConfirming(false);
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  };
+
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
@@ -92,18 +173,18 @@ export default function AddSigner({ next }: any) {
               Sign transactions on the using your preferred method, whether it's through an externally owned account (EOA) such as MetaMask or Ledger, or by creating a passkey.
             </TextBody>
             <Box marginBottom="10px">
-              {signerList.map((signer: any) => {
+              {signers.map((signer: any) => {
                 if (signer.type === 'eoa') {
                   return (
-                    <Box marginBottom="10px">
+                    <Box marginBottom="10px" key={signer.signerId}>
                       <Box width="550px">
-                        <Input placeholder="Enter ENS or wallet adderss" borderColor="#E4E4E4" />
+                        <Input placeholder="Enter ENS or wallet adderss" borderColor="#E4E4E4" value={signer.signerId} readOnly={true} />
                       </Box>
                     </Box>
                   )
                 } else {
                   return (
-                    <Box background="white" borderRadius="12px" padding="16px" width="100%" border="1px solid #E4E4E4" marginBottom="10px">
+                    <Box background="white" borderRadius="12px" padding="16px" width="100%" border="1px solid #E4E4E4" marginBottom="10px" key={signer.signerId}>
                       <Box display="flex" alignItems="center">
                         <Box width="50px" height="50px" background="#efefef" borderRadius="50px" marginRight="16px" display="flex" alignItems="center" justifyContent="center"><ComputerIcon /></Box>
                         <Box>
@@ -152,7 +233,7 @@ export default function AddSigner({ next }: any) {
                     fontSize="14px"
                     fontFamily="Nunito"
                     fontWeight="600"
-                    onClick={() => addSigner('eoa')}
+                    onClick={() => setIsConnectOpen(true)}
                     borderBottom="1px solid #D0D5DD"
                     height="48px"
                   >
@@ -169,7 +250,7 @@ export default function AddSigner({ next }: any) {
                     fontSize="14px"
                     fontFamily="Nunito"
                     fontWeight="600"
-                    onClick={() => addSigner('passkey')}
+                    onClick={() => addCredential()}
                     height="48px"
                   >
                     <Box
@@ -199,7 +280,9 @@ export default function AddSigner({ next }: any) {
                 maxWidth="100%"
                 theme="dark"
                 type="mid"
-                onClick={next}
+                onClick={handleNext}
+                disabled={isConfirming}
+                loading={isConfirming}
               >
                 Next
               </Button>
@@ -208,6 +291,7 @@ export default function AddSigner({ next }: any) {
         </RoundContainer>
         <StepProgress activeIndex={1} />
       </Box>
+      <ConnectWalletModal isOpen={isConnectOpen} addEOA={addEOA} onClose={() => setIsConnectOpen(false)} />
     </Box>
   )
 }
