@@ -73,9 +73,11 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
           <MenuButton data-testid="btn-account-select" {...wrapperProps}>
             <Flex
               align="center"
+              justify={'space-between'}
               px="3"
               py="10px"
               h="40px"
+              w="330px"
               bg={isInModal ? 'transparent' : { base: '#fff', lg: '#f2f2f2' }}
               roundedLeft={'full'}
               cursor={'pointer'}
@@ -83,26 +85,29 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
               onClick={() => navigate('/accounts')}
               {...restProps}
             >
-              {isInModal && selectedAddressItem && (
-                <Text>
-                  {getAddressName(selectedAddress)} ({toShortAddress(selectedAddress, 4, 6)})
-                </Text>
-              )}
-              {!isInModal && (
-                <Flex mr="1" align={'center'}>
-                  <Image w="5" h="5" src={selectedChainItem.iconSquare} />
-                  <Text ml="2" fontWeight={'700'}>
-                    {selectedChainItem.chainName}
+              <>
+                {isInModal && selectedAddressItem && (
+                  <Text>
+                    {getAddressName(selectedAddress)} ({toShortAddress(selectedAddress, 4, 6)})
                   </Text>
-                  &nbsp;
-                  <Text fontWeight={'600'}>({toShortAddress(selectedAddressItem.address, 5, 5)})</Text>
-                </Flex>
-              )}
+                )}
+                {!isInModal && (
+                  <Flex mr="1" align={'center'}>
+                    <Image w="5" h="5" src={selectedChainItem.iconSquare} />
+                    <Text ml="2" fontWeight={'700'}>
+                      {selectedChainItem.chainName}
+                    </Text>
+                    &nbsp;
+                    <Text fontWeight={'600'}>({toShortAddress(selectedAddressItem.address, 5, 5)})</Text>
+                  </Flex>
+                )}
+              </>
+
               <Image src={IconCheveronRight} w="20px" h="20px" transform={isOpen ? 'rotate(90deg)' : 'none'} />
             </Flex>
           </MenuButton>
 
-          <MenuList w="230px" zIndex={'200'}>
+          <MenuList w="330px" zIndex={'200'}>
             {addressList.map((item: any, idx: number) => {
               const chainInfo = getChainItem(item.chainIdHex);
               return (
