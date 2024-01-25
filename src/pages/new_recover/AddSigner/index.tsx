@@ -33,6 +33,7 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
+import StepProgress from '../StepProgress'
 
 export default function AddSigner({ next }: any) {
   const [signerList, setSignerList] = useState<any>([])
@@ -58,10 +59,9 @@ export default function AddSigner({ next }: any) {
       <Box
         padding="20px"
         display="flex"
-        alignItems="center"
-        justifyContent="flex-start"
+        alignItems="flex-start"
+        justifyContent="center"
         minHeight="calc(100% - 58px)"
-        flexDirection="column"
       >
         <RoundContainer
           width="1058px"
@@ -215,6 +215,7 @@ export default function AddSigner({ next }: any) {
             </Box>
           </Box>
         </RoundContainer>
+        <StepProgress activeIndex={1} />
       </Box>
     </Box>
   )

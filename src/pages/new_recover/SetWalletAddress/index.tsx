@@ -29,6 +29,7 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
+import StepProgress from '../StepProgress'
 
 export default function SetWalletAddress({ next }: any) {
   const toast = useToast();
@@ -48,10 +49,9 @@ export default function SetWalletAddress({ next }: any) {
       <Box
         padding="20px"
         display="flex"
-        alignItems="center"
-        justifyContent="flex-start"
+        alignItems="flex-start"
+        justifyContent="center"
         minHeight="calc(100% - 58px)"
-        flexDirection="column"
       >
         <RoundContainer
           width="1058px"
@@ -106,6 +106,7 @@ export default function SetWalletAddress({ next }: any) {
             </Box>
           </Box>
         </RoundContainer>
+        <StepProgress activeIndex={0} />
       </Box>
     </Box>
   )
