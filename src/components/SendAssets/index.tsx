@@ -86,13 +86,13 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
       <Flex flexDir={'column'} gap="5">
         <AddressInput
           label="To:"
-          placeholder="Enter wallet address"
+          placeholder="Enter ENS or wallet address"
           value={receiverAddress}
           onChange={(e: any) => setReceiverAddress(e.target.value)}
           onEnter={confirmAddress}
         />
         <AmountInput
-          label="Send:"
+          label="Amount:"
           sendToken={sendToken}
           amount={amount}
           onChange={setAmount}

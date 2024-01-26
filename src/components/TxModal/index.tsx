@@ -5,14 +5,14 @@ export default function TxModal({ title, visible, onClose, children, width, body
     visible && (
       <Modal isOpen={true} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent overflowY={'auto'} maxW={width || { base: '90%', lg: '640px' }}>
+        <ModalContent overflowY={'auto'} maxW={width || { base: '90%', lg: '624px' }}>
           {title && (
-            <ModalHeader fontWeight={'800'} textAlign={'center'} borderBottom={'1px solid #d7d7d7'}>
+            <ModalHeader px={{ base: 4, lg: 8}} py="22px" fontSize={"20px"} fontWeight={"700"}>
               {title}
               <ModalCloseButton top="14px" />
             </ModalHeader>
           )}
-          <ModalBody pb={{ base: 4, lg: 12 }} px={{ base: 3, lg: 12 }} {...bodyStyle}>
+          <ModalBody pb={{ base: 2, lg: 6 }} px={{ base: 4, lg: 8 }} {...bodyStyle}>
             {children}
           </ModalBody>
         </ModalContent>

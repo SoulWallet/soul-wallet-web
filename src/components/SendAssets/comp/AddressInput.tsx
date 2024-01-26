@@ -11,7 +11,7 @@ export function AddressInput({ label, placeholder, value, memo, onChange, disabl
 
   return (
     <Box>
-      <Text fontFamily={'Martian'} fontSize="12px" fontWeight={'500'} mb="1" px="4">
+      <Text  fontSize="12px" fontWeight={'700'} mb="2" lineHeight={"1"}>
         {label}
       </Text>
       <Flex
@@ -19,9 +19,8 @@ export function AddressInput({ label, placeholder, value, memo, onChange, disabl
         align="center"
         justify={'flex-start'}
         rounded="20px"
-        bg={'rgba(247, 247, 247, 0.74)'}
+        bg={'#f9f9f9'}
         py="3"
-        // px="4"
       >
         <Input
           value={value}
@@ -52,7 +51,7 @@ export function AddressInput({ label, placeholder, value, memo, onChange, disabl
 export function AddressInputReadonly({ label, value, memo, onEnter }: any) {
   return (
     <Box>
-      <Text fontFamily={'Martian'} fontSize="12px" fontWeight={'500'} mb="1" px="4">
+      <Text  fontSize="12px" fontWeight={'500'} mb="1" px="4">
         {label}
       </Text>
       <Flex gap="2" align="center" justify={'flex-start'} rounded="20px" bg="#fff" py="3" px="4">

@@ -27,7 +27,7 @@ export default {
   defaultMaxPriorityFee: '1500000000',
   chainName: 'Sepolia',
   chainToken: 'ETH',
-  addressPrefix: 'gor:',
+  addressPrefix: 'eth:',
   // fileName: "goerli",
   support1559: true,
   recovering: false,

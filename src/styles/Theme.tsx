@@ -67,10 +67,10 @@ const theme = extendTheme({
       redDarken: '#d8507f',
       black: '#000',
       white: '#fff',
-      green: '#29510A',
+      green: '#0CB700',
       greenDarken: '#1b3507',
       gray: '#898989',
-      purple: '#7F56D9',
+      purple: '#6A52EF',
     },
   },
   breakpoints: {

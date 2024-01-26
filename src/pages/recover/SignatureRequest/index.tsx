@@ -140,7 +140,7 @@ const SignatureRequest = ({ changeStep }: any) => {
         paddingBottom="20px"
       >
         <Box marginTop="32" marginBottom="2em">
-          <Text fontSize="xl" textAlign="center" fontWeight={'600'} fontFamily={'Martian'}>
+          <Text fontSize="xl" textAlign="center" fontWeight={'600'} >
             Loading...
           </Text>
         </Box>

@@ -15,12 +15,17 @@ const buttonStyles = {
     border: '1px solid #E0E0E0',
     _hover: { bg: '#f8f8f8' },
   },
+  purple: {
+    color: 'brand.purple',
+    bg: 'rgba(225, 220, 252, 0.80)',
+    _hover: { bg: 'rgba(225, 220, 252, 1)' },
+  },
 };
 
 interface IProps extends Omit<ButtonProps, 'type'> {
   children: React.ReactNode;
   onClick?: () => void;
-  type?: 'black' | 'white';
+  type?: keyof typeof buttonStyles;
   loading?: boolean;
   disabled?: boolean;
   checkCanSign?: boolean;

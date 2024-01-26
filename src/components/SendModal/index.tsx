@@ -38,13 +38,13 @@ function SendModal(_: any, ref: Ref<any>) {
     <Modal isOpen={visible} onClose={onClose}>
       <ModalOverlay />
       <ModalContent maxW={{ base: '90%', lg: '640px' }}>
-        <ModalHeader>
+        <ModalHeader px="8">
           <Text fontWeight={'700'} fontSize={'20px'}>
             Send
           </Text>
           <ModalCloseButton />
         </ModalHeader>
-        <ModalBody pb={{ base: 4, lg: 12 }} px={{ base: 3, lg: 12 }}>
+        <ModalBody pb={{ base: 4, lg: 12 }} px={{ base: 4, lg: 8 }}>
           <SendAssets tokenAddress={tokenAddress} onSent={onClose} />
         </ModalBody>
       </ModalContent>

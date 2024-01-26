@@ -4,7 +4,7 @@ import ConfirmPayment from './comp/ConfirmPayment';
 import TxModal from '../TxModal';
 
 export const InfoWrap = ({ children, ...restProps }: any) => (
-  <Flex fontSize="12px" fontWeight={'500'} px="4" gap="6" fontFamily={'Martian'} flexDir={'column'} {...restProps}>
+  <Flex fontSize="12px" fontWeight={'500'} px="4" gap="6"  flexDir={'column'} {...restProps}>
     {children}
   </Flex>
 );
