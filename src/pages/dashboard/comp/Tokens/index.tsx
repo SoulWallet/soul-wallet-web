@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ExternalLink } from '../HomeCard';
 import ListItem from '@/components/ListItem';
-import { Divider, Text, Box, Flex } from '@chakra-ui/react';
+import { Text, Box, Flex } from '@chakra-ui/react';
 import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
 import HomeCard from '../HomeCard';
 import useWalletContext from '@/context/hooks/useWalletContext';
