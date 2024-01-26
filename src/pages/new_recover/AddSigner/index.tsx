@@ -82,7 +82,7 @@ export default function AddSigner({ next }: any) {
         status: 'error',
       });
     }
-  }, [eoas])
+  }, [signers])
 
   const handleNext = async () => {
     updateRecoverInfo({
