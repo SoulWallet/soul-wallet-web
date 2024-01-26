@@ -56,7 +56,7 @@ const getProgressPercent = (startTime: any, endTime: any) => {
   return '0%';
 };
 
-const getWalletIcon = (chainId) => {
+const getWalletIcon = (chainId: any) => {
   if (chainId == '0xaa36a7') {
     return IconEthSquare
   } if (chainId == '0x66eee') {
@@ -78,6 +78,8 @@ export default function RecoverProgress() {
   const viewWallet = useCallback(() => {
     navigate(`/dashboard`);
   }, [])
+
+  const canViewWallet = chainRecoveryStatus.filter((item: any) => !!item.status).length > 0
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
@@ -161,6 +163,7 @@ export default function RecoverProgress() {
                 theme="dark"
                 type="mid"
                 onClick={viewWallet}
+                disabled={!canViewWallet}
               >
                 View in wallet
               </Button>

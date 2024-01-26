@@ -34,6 +34,8 @@ import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 import EditGuardianModal from '@/pages/security_new/EditGuardianModal';
+import CopyIcon from '@/components/Icons/Copy';
+import OpenScanIcon from '@/components/Icons/OpenScan';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
 import config from '@/config';
 import StepProgress from '../StepProgress'
@@ -42,7 +44,8 @@ export default function AddSigner({ next }: any) {
   const [isPrivate, setIsPrivate] = useState(false)
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
   const { recoverInfo } = useTempStore()
-  const { recoveryRecordID } = recoverInfo
+  const { recoveryRecordID, guardianDetails, recoveryRecord } = recoverInfo
+  const { guardianSignatures } = recoveryRecord
   const toast = useToast();
 
   const closeEditGuardianModal = useCallback(() => {
@@ -60,6 +63,26 @@ export default function AddSigner({ next }: any) {
       status: 'success',
     });
   };
+
+
+  const copyAddress = (address: string) => {
+    copyText(address);
+    toast({
+      title: 'Copy success!',
+      status: 'success',
+    });
+  };
+
+  const openScan = (address: string) => {
+    window.open(`https://sepolia.etherscan.io/address/${address}`, '_blank')
+  }
+
+  const signatures = (guardianDetails.guardians || []).map((item: any) => {
+    const isValid = (guardianSignatures || []).filter((sig: any) => sig.guardian === item && sig.valid).length === 1;
+    return { guardian: item, isValid };
+  });
+
+  console.log('signatures', signatures)
 
   if (isPrivate) {
     return (
@@ -235,90 +258,42 @@ export default function AddSigner({ next }: any) {
               justifyContent="flex-start"
               flexWrap="wrap"
             >
-              <Box
-                border="1px solid rgba(0, 0, 0, 0.10)"
-                borderRadius="12px"
-                padding="14px"
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-start"
-                minWidth="400px"
-                marginRight="20px"
-                marginBottom="14px"
-              >
-                <Box
-                  width="32px"
-                  height="32px"
-                  background="#D9D9D9"
-                  borderRadius="32px"
-                  marginRight="10px"
-                />
-                <Box fontSize="14px" fontWeight="700" fontFamily="Nunito">Helloworld.eth (0xAAA......dS123)</Box>
-                <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#848488" marginLeft="auto">Waiting</Box>
-              </Box>
-              <Box
-                border="1px solid rgba(0, 0, 0, 0.10)"
-                borderRadius="12px"
-                padding="14px"
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-start"
-                minWidth="400px"
-                marginRight="20px"
-                marginBottom="14px"
-              >
-                <Box
-                  width="32px"
-                  height="32px"
-                  background="#D9D9D9"
-                  borderRadius="32px"
-                  marginRight="10px"
-                />
-                <Box fontSize="14px" fontWeight="700" fontFamily="Nunito">Helloworld.eth (0xAAA......dS123)</Box>
-                <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#848488" marginLeft="auto">Waiting</Box>
-              </Box>
-              <Box
-                border="1px solid rgba(0, 0, 0, 0.10)"
-                borderRadius="12px"
-                padding="14px"
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-start"
-                minWidth="400px"
-                marginRight="20px"
-                marginBottom="14px"
-              >
-                <Box
-                  width="32px"
-                  height="32px"
-                  background="#D9D9D9"
-                  borderRadius="32px"
-                  marginRight="10px"
-                />
-                <Box fontSize="14px" fontWeight="700" fontFamily="Nunito">Helloworld.eth (0xAAA......dS123)</Box>
-                <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#848488" marginLeft="auto">Waiting</Box>
-              </Box>
-              <Box
-                border="1px solid rgba(0, 0, 0, 0.10)"
-                borderRadius="12px"
-                padding="14px"
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-start"
-                minWidth="400px"
-                marginRight="20px"
-                marginBottom="14px"
-              >
-                <Box
-                  width="32px"
-                  height="32px"
-                  background="#D9D9D9"
-                  borderRadius="32px"
-                  marginRight="10px"
-                />
-                <Box fontSize="14px" fontWeight="700" fontFamily="Nunito">Helloworld.eth (0xAAA......dS123)</Box>
-                <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#848488" marginLeft="auto">Waiting</Box>
-              </Box>
+              {signatures.map((item: any) => {
+                return (
+                  <Box
+                    border="1px solid rgba(0, 0, 0, 0.10)"
+                    borderRadius="12px"
+                    padding="14px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-start"
+                    minWidth="400px"
+                    marginRight="20px"
+                    marginBottom="14px"
+                  >
+                    <Box
+                      width="32px"
+                      height="32px"
+                      background="#D9D9D9"
+                      borderRadius="32px"
+                      marginRight="10px"
+                    />
+                    <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" display="flex">
+                      <Box>{toShortAddress(item.guardian)}</Box>
+                      <Box height="100%" display="flex" alignItems="center" justifyContent="center" padding="0 10px">
+                        <Box cursor="pointer" marginRight="4px" onClick={() => copyAddress(item.guardian)}><CopyIcon color="#898989" /></Box>
+                        <Box cursor="pointer" onClick={() => openScan(item.guardian)}><OpenScanIcon /></Box>
+                      </Box>
+                    </Box>
+                    {item.isValid && (
+                      <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#1CD20F" marginLeft="auto">Signed</Box>
+                    )}
+                    {!item.isValid && (
+                      <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#848488" marginLeft="auto">Waiting</Box>
+                    )}
+                  </Box>
+                )
+              })}
             </Box>
           </Box>
         </RoundContainer>
