@@ -33,9 +33,45 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
+import useTools from '@/hooks/useTools';
+import { ethers } from 'ethers';
+import BN from 'bignumber.js';
+import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
+import config from '@/config';
 import StepProgress from '../StepProgress'
 
 export default function PayRecoveryFee({ next }: any) {
+  const { recoverInfo, updateRecoverInfo } = useTempStore()
+  const { recoveryRecordID, estimatedFee  } = recoverInfo
+  const [imgSrc, setImgSrc] = useState<string>('');
+  const { generateQrCode } = useTools();
+  const toast = useToast();
+
+  const generateQR = async (text: string) => {
+    try {
+      setImgSrc(await generateQrCode(text));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const doCopy = () => {
+    copyText(`${config.officialWebUrl}/pay-recover/${recoveryRecordID}`);
+    toast({
+      title: 'Copy success!',
+      status: 'success',
+    });
+  };
+
+  const handlePay = async () => {
+    const url = `${config.officialWebUrl}/pay-recover/${recoveryRecordID}`;
+    window.open(url, '_blank');
+  };
+
+  useEffect(() => {
+    generateQR(`${config.officialWebUrl}/pay-recover/${recoveryRecordID}`);
+  }, []);
+
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
@@ -91,14 +127,16 @@ export default function PayRecoveryFee({ next }: any) {
               flexDirection="column"
               marginBottom="20px"
             >
-              <Box width="106px" height="106px" background="white" marginBottom="10px" />
+              <Box width="150px" height="150px">
+                <Image src={imgSrc} width="150px" height="150px" />
+              </Box>
               <Box width="100%" display="flex" fontSize="12px" alignItems="center" justifyContent="space-between" padding="10px 5px">
                 <Box>Network:</Box>
-                <Box color="#EC588D">Ethereum</Box>
+                <Box color="#EC588D">Sepolia</Box>
               </Box>
               <Box width="100%" display="flex" fontSize="12px" alignItems="center" justifyContent="space-between" padding="5px">
                 <Box>Network fee:</Box>
-                <Box>2.22 ETH ($ 6.08)</Box>
+                <Box>{ethers.formatEther(BN(estimatedFee || 0).toFixed())} ETH</Box>
               </Box>
             </Box>
             <Box
@@ -111,7 +149,7 @@ export default function PayRecoveryFee({ next }: any) {
                 width="275px"
                 maxWidth="100%"
                 marginBottom="14px"
-                onClick={next}
+                onClick={handlePay}
               >
                 Connect wallet and pay
               </Button>
@@ -119,6 +157,7 @@ export default function PayRecoveryFee({ next }: any) {
                 width="275px"
                 maxWidth="100%"
                 theme="light"
+                onClick={doCopy}
               >
                 Ask friend to pay
               </Button>

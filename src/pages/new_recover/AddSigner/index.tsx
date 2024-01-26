@@ -281,7 +281,7 @@ export default function AddSigner({ next }: any) {
                 theme="dark"
                 type="mid"
                 onClick={handleNext}
-                disabled={isConfirming}
+                disabled={isConfirming || !signers || !signers.length}
                 loading={isConfirming}
               >
                 Next

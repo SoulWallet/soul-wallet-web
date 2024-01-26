@@ -47,7 +47,7 @@ const validate = (values: any) => {
   return errors;
 };
 
-export default function SetWalletAddress({ next }: any) {
+export default function SetWalletAddress({ next, back }: any) {
   const toast = useToast();
   const { navigate } = useBrowser();
   const { updateRecoverInfo } = useTempStore()
@@ -134,10 +134,6 @@ export default function SetWalletAddress({ next }: any) {
     }
   };
 
-  const back = useCallback(() => {
-    navigate(`/auth`);
-  }, [])
-
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
@@ -208,7 +204,7 @@ export default function SetWalletAddress({ next }: any) {
                 theme="dark"
                 type="mid"
                 onClick={handleNext}
-                disabled={loading}
+                disabled={disabled}
                 loading={loading}
               >
                 Next
