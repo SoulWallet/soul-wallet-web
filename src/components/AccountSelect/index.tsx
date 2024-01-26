@@ -1,34 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider, Box, useToast } from '@chakra-ui/react';
+import React from 'react';
+import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, Box } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
-import IconLoading from '@/assets/loading.gif';
+// import IconLoading from '@/assets/loading.gif';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import { IAddressItem, useAddressStore } from '@/store/address';
 import { toShortAddress } from '@/lib/tools';
-import AddressIcon from '../AddressIcon';
-import useSdk from '@/hooks/useSdk';
 import IconCopy from '@/assets/copy.svg';
-import { PlusSquareIcon } from '@chakra-ui/icons';
+// import { PlusSquareIcon } from '@chakra-ui/icons';
 import useTools from '@/hooks/useTools';
 import { useSettingStore } from '@/store/setting';
 import { useChainStore } from '@/store/chain';
 
-const CreateAccount = () => {
-  const [creating, setCreating] = useState(false);
+// const CreateAccount = () => {
+//   const [creating, setCreating] = useState(false);
 
-  const doCreate = async () => {};
+//   const doCreate = async () => {};
 
-  return (
-    <MenuItem onClick={doCreate} as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
-      {creating ? <Image src={IconLoading} w="24px" /> : <PlusSquareIcon boxSize="6" />}
-      <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
-        Create account
-      </Text>
-    </MenuItem>
-  );
-};
+//   return (
+//     <MenuItem onClick={doCreate} as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
+//       {creating ? <Image src={IconLoading} w="24px" /> : <PlusSquareIcon boxSize="6" />}
+//       <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
+//         Create account
+//       </Text>
+//     </MenuItem>
+//   );
+// };
 
 export function AccountSelectFull({ ...restProps }) {
   const { selectedAddress } = useAddressStore();
