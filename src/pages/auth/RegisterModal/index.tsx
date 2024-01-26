@@ -175,7 +175,7 @@ export default function RegisterModal({
                     <WalletOption
                       key={connector.uid}
                       icon={getWalletIcon(connector.id)}
-                      name={connector.name}
+                      name={connector.id === 'injected' ? 'Browser Wallet' : connector.name}
                       onClick={() => connectEOA(connector)}
                     />
                   )}
