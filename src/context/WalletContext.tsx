@@ -11,6 +11,7 @@ import ReceiveModal from '@/components/ReceiveModal';
 import SetGuardianHintModal from '@/components/SetGuardianHintModal';
 import useConfig from '@/hooks/useConfig';
 import { useGuardianStore } from '@/store/guardian';
+import { useTempStore } from '@/store/temp';
 import { useChainStore } from '@/store/chain';
 import { useAddressStore } from '@/store/address';
 import useWallet from '@/hooks/useWallet';
@@ -51,8 +52,8 @@ export const WalletContextProvider = ({ children }: any) => {
   console.log('Render WalletContext');
   const { selectedChainItem } = useConfig();
   const { checkRecoverStatus } = useWallet();
-  const { recoveringGuardiansInfo } = useGuardianStore();
-  const recoveryRecordID = recoveringGuardiansInfo.recoveryRecordID;
+  const { recoverInfo } = useTempStore();
+  const recoveryRecordID = recoverInfo.recoveryRecordID;
   const { selectedChainId } = useChainStore();
   const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
   const signTransactionModal = useRef<any>();

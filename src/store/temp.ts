@@ -51,6 +51,9 @@ const createStagingSlice = immer<any>((set, get) => ({
       ...value
     }
   }),
+  setRecoverInfo: (value: any) => set({
+    recoverInfo: value
+  }),
 
   clearTempStore: () => set({
     loginInfo: {},
