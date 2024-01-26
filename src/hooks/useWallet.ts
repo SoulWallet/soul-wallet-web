@@ -37,7 +37,7 @@ export default function useWallet() {
   const { selectedAddress, setAddressList } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
   const { setSignerIdAddress } = useSettingStore();
-  const { clearCreateInfo, recoverInfo, setRecoverInfo } = useTempStore();
+    const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo } = useTempStore();
   const {packKeystoreSignature} = useKeystore();
 
   const createWallet = async ({
@@ -332,7 +332,6 @@ export default function useWallet() {
   };
 
   const boostAfterRecovered = async () => {
-    console.log('trigger bootstAfterRecovered');
     retrieveSlotInfo({
       ...recoverInfo,
       initialKeys: recoverInfo.initialKeysAddress,
@@ -353,7 +352,6 @@ export default function useWallet() {
       chainIdHex: item.chain_id
     }))
     setAddressList(addressList)
-    console.log('walletAddresses', addressList)
 
     setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey'));
     setEoas(recoverInfo.signers.filter((signer: any) => signer.type === 'eoa').map((signer: any) => signer.signerId));
@@ -370,14 +368,14 @@ export default function useWallet() {
       slot: recoverInfo.slot,
     });
 
-    updateRecoveringGuardiansInfo({
+    updateRecoverInfo({
       enabled: true,
     });
   };
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {
     const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
-    updateRecoveringGuardiansInfo({
+    updateRecoverInfo({
       recoveryRecord: res,
     });
     const { addressList } = useAddressStore.getState();
