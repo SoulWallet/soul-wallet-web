@@ -350,9 +350,10 @@ export default function useWallet() {
     // saveAddressName(newAddress, 'Account 1', true);
 
     setCredentials(recoveringGuardiansInfo.credentials);
+
     // set goerli if no selected chainId
     if (!selectedChainId) {
-      setSelectedChainId('0x5');
+      setSelectedChainId(import.meta.env.VITE_MAINNET_CHAIN_ID);
     }
 
     updateGuardiansInfo({
@@ -362,6 +363,7 @@ export default function useWallet() {
       keystore: recoveringGuardiansInfo.keystore,
       slot: recoveringGuardiansInfo.slot,
     });
+
     updateRecoveringGuardiansInfo({
       enabled: true,
     });
@@ -372,15 +374,15 @@ export default function useWallet() {
     updateRecoveringGuardiansInfo({
       recoveryRecord: res,
     });
-    const { addressList } = useAddressStore.getState();
-    if (addressList.length === 0) {
-      // for (let [index, item] of Object.entries(res.addresses)) {
-      //   addAddressItem({
-      //     address: item as any,
-      //     activatedChains: [],
-      //   });
-      // }
-    }
+    // const { addressList } = useAddressStore.getState();
+    // if (addressList.length === 0) {
+    //   for (let [index, item] of Object.entries(res.addresses)) {
+    //     addAddressItem({
+    //       address: item as any,
+    //       activatedChains: [],
+    //     });
+    //   }
+    // }
 
     // check if should replace key
     if (res.status >= 3) {
