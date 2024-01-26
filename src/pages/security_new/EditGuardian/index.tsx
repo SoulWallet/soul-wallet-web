@@ -233,6 +233,13 @@ export default function EditGuardian({
       const res2 = await showConfirmPayment(task.estiamtedFee);
       const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
       console.log('handleSubmit1111', res1, res2, res3);
+      guardianStore.setGuardiansInfo(guardiansInfo)
+
+      for (let i = 0; i < guardianAddresses.length; i++) {
+        const address = guardianAddresses[i]
+        const name = guardianNames[i]
+        if (address) saveAddressName(address.toLowerCase(), name);
+      }
       // } catch (error: any) {
       // console.log('error', error.message)
       // }
