@@ -20,7 +20,7 @@ export default function Modal({ title, visible, onClose, width, hideClose, child
             </Text>
           </ModalHeader>
           {!hideClose && <ModalCloseButton top="15px" />}
-          <ModalBody pt="0" pb={{ base: 4 }} px={{ base: 3, lg: 8 }}>
+          <ModalBody pt="0" pb={{ base: 4 }} px={{ base: 4, lg: 8 }}>
             {children}
           </ModalBody>
         </ModalContent>

@@ -70,7 +70,7 @@ const theme = extendTheme({
       green: '#29510A',
       greenDarken: '#1b3507',
       gray: '#898989',
-      purple: '#7F56D9',
+      purple: '#6A52EF',
     },
   },
   breakpoints: {
