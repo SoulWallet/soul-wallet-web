@@ -357,9 +357,9 @@ export default function useWallet() {
 
     setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey'));
     setEoas(recoverInfo.signers.filter((signer: any) => signer.type === 'eoa').map((signer: any) => signer.signerId));
-    // set goerli if no selected chainId
+    // set mainnet if no selected chainId
     if (!selectedChainId) {
-      setSelectedChainId('0xaa36a7');
+      setSelectedChainId(import.meta.env.VITE_MAINNET_CHAIN_ID);
     }
 
     updateGuardiansInfo({
@@ -369,6 +369,7 @@ export default function useWallet() {
       keystore: recoverInfo.keystore,
       slot: recoverInfo.slot,
     });
+
     updateRecoveringGuardiansInfo({
       enabled: true,
     });
