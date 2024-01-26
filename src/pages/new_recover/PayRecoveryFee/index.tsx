@@ -42,7 +42,8 @@ import StepProgress from '../StepProgress'
 
 export default function PayRecoveryFee({ next }: any) {
   const { recoverInfo, updateRecoverInfo } = useTempStore()
-  const { recoveryRecordID, estimatedFee  } = recoverInfo
+  const { recoveryRecordID, recoveryRecord  } = recoverInfo
+  const { estimatedFee } = recoveryRecord
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
   const toast = useToast();
@@ -71,6 +72,8 @@ export default function PayRecoveryFee({ next }: any) {
   useEffect(() => {
     generateQR(`${config.officialWebUrl}/pay-recover/${recoveryRecordID}`);
   }, []);
+
+  console.log('estimatedFee', estimatedFee)
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">

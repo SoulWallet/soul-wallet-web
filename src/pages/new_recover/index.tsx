@@ -75,6 +75,8 @@ export default function Recover() {
             setStep(3)
           } else if (status == 1) {
             setStep(4)
+          } else if (status >= 2) {
+            setStep(5)
           }
         } catch (error: any) {
           console.log('error', error.message)
@@ -93,6 +95,8 @@ export default function Recover() {
         setStep(3)
       } else if (status == 1) {
         setStep(4)
+      } else if (status >= 2) {
+        setStep(5)
       }
     }
   }, [])
