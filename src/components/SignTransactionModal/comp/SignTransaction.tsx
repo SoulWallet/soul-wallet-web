@@ -179,9 +179,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         // if activated, get userOp directly
         return await getUserOp(txns, payTokenAddress);
       } else {
-        const activateIndex = getIndexByAddress(addressList, selectedAddress);
+        // const activateIndex = getIndexByAddress(addressList, selectedAddress);
         // if not activated, prepend activate txns
-        return await getActivateOp(activateIndex, payToken, txns);
+        return await getActivateOp(0, payToken, txns);
       }
     } catch (err: any) {
       console.log('Get final userOp err:', err.message);

@@ -14,6 +14,7 @@ import useConfig from '@/hooks/useConfig';
 import { useAddressStore } from '@/store/address';
 import AvatarWithName from '@/components/AvatarWithName';
 import useTools from '@/hooks/useTools';
+import useSdk from '@/hooks/useSdk';
 
 export default function WalletCard() {
   const { showSend, showReceive, showSetGuardianHintModal } = useWalletContext();
@@ -22,6 +23,7 @@ export default function WalletCard() {
   const { selectedAddress } = useAddressStore();
   const { chainConfig } = useConfig();
   const { scanUrl } = chainConfig;
+  const { calcWalletAddressAllChains } = useSdk();
 
   const actions = [
     {
@@ -73,7 +75,7 @@ export default function WalletCard() {
         <Text fontWeight={'700'} fontSize={'24px'} lineHeight={'1'}>
           $
         </Text>
-        <Text fontWeight={'800'} fontSize={'72px'} lineHeight={'1'}>
+        <Text fontWeight={'800'} fontSize={'72px'} lineHeight={'1'} onClick={() => calcWalletAddressAllChains(0)}>
           0
         </Text>
       </Flex>

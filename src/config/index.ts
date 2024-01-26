@@ -120,5 +120,8 @@ export default {
   soulScanURL: `${import.meta.env.VITE_SCAN_URL}/opapi`,
   officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
   /* @vite-ignore */
-  chainList: [ArbConfig, OpConfig, BaseConfig],
+  chainList: [ArbConfig,
+    
+    // OpConfig,
+    BaseConfig],
 };
