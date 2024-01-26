@@ -68,7 +68,7 @@ export default function ListGuardian({
       name: guardianNames[i]
     }
   })
-  console.log('guardiansInfo', guardiansInfo, guardianDetails, guardianList)
+  console.log('guardiansInfo000', guardiansInfo)
 
   const onGuardianListConfirm = useCallback((addresses: any, names: any) => {
     setIsEditGuardianOpen(false)

@@ -55,6 +55,7 @@ export default function Guardian() {
   const tempStore = useTempStore();
   const { setEditingGuardiansInfo } = tempStore;
   const guardianStore = useGuardianStore();
+  console.log('guardianStore111', guardianStore)
   const guardiansInfo = (!tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
 
   const openSetDefaultModal = useCallback(() => {
