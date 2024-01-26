@@ -113,15 +113,27 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
               return (
                 <React.Fragment key={idx}>
                   {/* {idx ? <MenuDivider /> : ''} */}
-                  <MenuItem key={item.address} onClick={() => onAddressChange(item)}>
+                  <MenuItem
+                    key={item.address}
+                    {...(chainInfo.recovering ? { cursor: 'not-allowed', filter: 'grayscale(100%)' } : {})}
+                    onClick={() => (chainInfo.recovering ? '' : onAddressChange(item))}
+                  >
                     <Flex w="100%" align={'center'} justify={'space-between'}>
                       <Flex align={'center'} gap="3">
                         <Image src={chainInfo.iconSquare} w="8" h="8" />
                         {/* <AddressIcon address={item.address} width={24} /> */}
                         <Box>
-                          <Text fontSize={'16px'} fontWeight={'700'} lineHeight={1.25}>
-                            {chainInfo.chainName}
-                          </Text>
+                          <Flex gap="1" align={'center'}>
+                            <Text fontSize={'16px'} fontWeight={'700'} lineHeight={1.25}>
+                              {chainInfo.chainName}
+                            </Text>
+                            {chainInfo.recovering && (
+                              <Box px="1" rounded="4px" bg="rgba(0, 0, 0, 0.05)" fontSize={'10px'} fontWeight={'500'}>
+                                Recovering
+                              </Box>
+                            )}
+                          </Flex>
+
                           <Text fontSize={'12px'} data-testid={`text-accountname-${idx}`} lineHeight={1.6}>
                             {toShortAddress(item.address, 5, 5)}
                           </Text>
