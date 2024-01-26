@@ -63,7 +63,7 @@ const theme = extendTheme({
     appBg: '#F7F7F7',
     danger: '#E83D26',
     brand: {
-      red: '#EC588D',
+      red: '#FF2E79',
       redDarken: '#d8507f',
       black: '#000',
       white: '#fff',

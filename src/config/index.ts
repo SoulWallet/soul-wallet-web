@@ -76,7 +76,7 @@ export const storeVersion = '15';
 export const defaultGuardianSafePeriod = 1;
 
 // height of header
-export const headerHeight = 60
+export const headerHeight = 60;
 
 export const bundlerErrMapping: { [key: string]: string } = {
   'AA23 reverted (or OOG)': 'Operation Failed: Check signature or verificationGasLimit too small.',
@@ -120,8 +120,5 @@ export default {
   soulScanURL: `${import.meta.env.VITE_SCAN_URL}/opapi`,
   officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
   /* @vite-ignore */
-  chainList: [ArbConfig,
-    
-    // OpConfig,
-    BaseConfig],
+  chainList: [ArbConfig, OpConfig, BaseConfig],
 };
