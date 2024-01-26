@@ -355,7 +355,7 @@ export default function useWallet() {
     setAddressList(addressList)
     console.log('walletAddresses', addressList)
 
-    setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey').map((signer: any) => signer.signerId));
+    setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey'));
     setEoas(recoverInfo.signers.filter((signer: any) => signer.type === 'eoa').map((signer: any) => signer.signerId));
     // set goerli if no selected chainId
     if (!selectedChainId) {

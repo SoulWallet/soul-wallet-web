@@ -63,7 +63,7 @@ export default function AddSigner({ next }: any) {
   const addCredential = useCallback(async () => {
     try {
       const credential = await register();
-      setSigners([...signers, { type: 'passkey', signerId: credential.publicKey }])
+      setSigners([...signers, { type: 'passkey', signerId: credential.publicKey, ...credential }])
     } catch (error: any) {
 
     }
