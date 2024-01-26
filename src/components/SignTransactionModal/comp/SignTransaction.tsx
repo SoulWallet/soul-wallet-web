@@ -8,6 +8,8 @@ import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
 import { useState, useEffect } from 'react';
 import IconArrowDown from '@/assets/icons/arrow-down.svg';
+import IconChevronDown from '@/assets/icons/chevron-down-gray.svg';
+import IconQuestion from '@/assets/icons/question.svg';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
 import { useChainStore } from '@/store/chain';
@@ -56,11 +58,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
   const { getUserOp } = useTransaction();
-  const { doCopy } = useTools();
   const selectedToken = getTokenBalance(payToken);
   const [hintText, setHintText] = useState('');
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
   const origin = document.referrer;
+  const [showMore, setShowMore] = useState(false);
 
   const checkSponser = async (userOp: UserOperation) => {
     try {
@@ -276,6 +278,27 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   }, [requiredAmount, payToken]);
 
+  const LabelItem = ({ label, tooltip, chainVisible }: { label: string; tooltip?: string; chainVisible?: boolean }) => {
+    return (
+      <Flex gap="1">
+        <Text>{label}</Text>
+        {tooltip && (
+          <Tooltip label={tooltip}>
+            <Image src={IconQuestion} w="18px" h="18px" />
+          </Tooltip>
+        )}
+        {chainVisible && (
+          <>
+            <Text>·</Text>
+            <Box py="1" px="2" color="brand.black" rounded="full" lineHeight={'1'} bg="#f9f9f9">
+              {selectedChainItem.chainName}
+            </Box>
+          </>
+        )}
+      </Flex>
+    );
+  };
+
   return (
     <>
       <Flex flexDir={'column'}>
@@ -307,7 +330,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         </Flex>
         <Image src={IconArrowDown} mb="1" w="8" mx="auto" />
         <Box mb="1" w="300px" mx="auto" textAlign={'center'}>
-          <Box py="4" mb="2px" bg="#F9F9F9" roundedTop="20px" fontWeight={'700'}>
+          <Box py="3" mb="2px" bg="#F9F9F9" roundedTop="20px" fontWeight={'700'}>
             {toShortAddress(sendToAddress)}
           </Box>
           <Box py="1" bg="#F9F9F9" color="#818181" fontSize={'14px'} roundedBottom={'20px'}>
@@ -315,7 +338,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             {getAddressName(selectedAddress)}({toShortAddress(selectedAddress)})
           </Box>
         </Box>
-        <Box textAlign={'center'}>
+        <Box textAlign={'center'} mb="9">
           <Tooltip
             color="brand.green"
             bg="#EFFFEE"
@@ -328,7 +351,16 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               </Flex>
             }
           >
-            <Flex cursor={'default'} gap="6px" align={'center'} bg="#EFFFEE" py="1" px="2" rounded="full" display={'inline-flex'}>
+            <Flex
+              cursor={'default'}
+              gap="6px"
+              align={'center'}
+              bg="#EFFFEE"
+              py="1"
+              px="2"
+              rounded="full"
+              display={'inline-flex'}
+            >
               <Image src={IconChecked} w="4" />
               <Text color="brand.green" fontSize={'14px'} fontWeight={'600'}>
                 Low risk
@@ -336,6 +368,87 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             </Flex>
           </Tooltip>
         </Box>
+
+        <Flex flexDir={'column'} gap="3">
+          <Box>
+            <Flex gap="6" align={'center'}>
+              <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
+              <Flex
+                gap="1"
+                align={'center'}
+                onClick={() => setShowMore((prev) => !prev)}
+                cursor={'pointer'}
+                whiteSpace={'nowrap'}
+              >
+                <Text userSelect={'none'} color="#818181" fontSize={'14px'}>
+                  Show more
+                </Text>
+                <Image src={IconChevronDown} transform={showMore ? 'rotate(180deg)' : ''} />
+              </Flex>
+              <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
+            </Flex>
+          </Box>
+
+          {showMore && (
+            <InfoWrap color="#818181" fontSize="14px">
+              <InfoItem>
+                <LabelItem label="Gas" tooltip={'123'} chainVisible={true} />
+
+                <Flex gap="2" fontWeight={'500'}>
+                  {requiredAmount ? (
+                    <>
+                      <Text>{requiredAmount}</Text>
+                      <GasSelect
+                        gasToken={payToken}
+                        sponsor={sponsor}
+                        useSponsor={useSponsor}
+                        onChange={(val: string, isSponsor: boolean) => onPayTokenChange(val, isSponsor)}
+                      />
+                    </>
+                  ) : (
+                    <Image src={IconLoading} />
+                  )}
+                </Flex>
+              </InfoItem>
+              {useSponsor && requiredAmount && (
+                <InfoItem>
+                  <LabelItem label="Sponsor" tooltip={'123'} />
+                  <Text color="brand.red">-{requiredAmount} ETH</Text>
+                </InfoItem>
+              )}
+
+              <InfoItem color="#000" fontWeight="600">
+                <Text>Total</Text>
+                {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
+                {totalMsgValue && Number(totalMsgValue) && !useSponsor && requiredAmount ? ' + ' : ''}
+                {!useSponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
+                {!useSponsor &&
+                requiredAmount &&
+                decodedData &&
+                decodedData.length > 0 &&
+                decodedData.filter((item: any) => item.sendErc20Amount).length > 0
+                  ? ' + '
+                  : ''}
+                {decodedData &&
+                  decodedData.length > 0 &&
+                  decodedData
+                    .filter((item: any) => item.sendErc20Amount)
+                    .map((item: any) => item.sendErc20Amount)
+                    .join(' + ')}
+              </InfoItem>
+              {hintText && (
+                <InfoItem>
+                  <Text color="#f00">{hintText}</Text>
+                </InfoItem>
+              )}
+              {!balanceEnough && !useSponsor && (
+                <InfoItem>
+                  <Text color="#f00">Not enough balance</Text>
+                </InfoItem>
+              )}
+            </InfoWrap>
+          )}
+        </Flex>
 
         {/* {decodedData && decodedData.length > 1 && (
           <>
@@ -358,66 +471,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             <Divider borderColor={'#d7d7d7'} mb="3" />
           </>
         )} */}
-
-        <>
-          <InfoWrap color="#646464" fontSize="12px">
-            <InfoItem>
-              <Text>Network</Text>
-              <Text>{selectedChainItem.chainName}</Text>
-            </InfoItem>
-            <InfoItem>
-              <Text>Gas fee</Text>
-              <Flex gap="2" fontWeight={'500'}>
-                {requiredAmount ? (
-                  <>
-                    {useSponsor ? (
-                      <Text textDecoration={'line-through'}>{requiredAmount} ETH</Text>
-                    ) : (
-                      <Text>{requiredAmount}</Text>
-                    )}
-                    <GasSelect
-                      gasToken={payToken}
-                      sponsor={sponsor}
-                      useSponsor={useSponsor}
-                      onChange={(val: string, isSponsor: boolean) => onPayTokenChange(val, isSponsor)}
-                    />
-                  </>
-                ) : (
-                  <Image src={IconLoading} />
-                )}
-              </Flex>
-            </InfoItem>
-            <InfoItem color="#000" fontWeight="600">
-              <Text>Total</Text>
-              {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
-              {totalMsgValue && Number(totalMsgValue) && !useSponsor && requiredAmount ? ' + ' : ''}
-              {!useSponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
-              {!useSponsor &&
-              requiredAmount &&
-              decodedData &&
-              decodedData.length > 0 &&
-              decodedData.filter((item: any) => item.sendErc20Amount).length > 0
-                ? ' + '
-                : ''}
-              {decodedData &&
-                decodedData.length > 0 &&
-                decodedData
-                  .filter((item: any) => item.sendErc20Amount)
-                  .map((item: any) => item.sendErc20Amount)
-                  .join(' + ')}
-            </InfoItem>
-            {hintText && (
-              <InfoItem>
-                <Text color="#f00">{hintText}</Text>
-              </InfoItem>
-            )}
-            {!balanceEnough && !useSponsor && (
-              <InfoItem>
-                <Text color="#f00">Not enough balance</Text>
-              </InfoItem>
-            )}
-          </InfoWrap>
-        </>
       </Flex>
       <Button
         w="320px"
