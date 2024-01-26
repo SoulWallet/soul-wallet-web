@@ -131,7 +131,7 @@ export default function RecoverProgress() {
                 return (
                   <Box key={item.chainId} background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginRight="20px">
                     <Box>
-                      <Image src={getWalletIcon(item.chainId)} width="40px" />
+                      <Image src={getWalletIcon(item.chainId)} width="40px" height="40px" />
                     </Box>
                     <Box fontSize="16px" fontWeight="700">
                       {getNetwork(Number(item.chainId))}

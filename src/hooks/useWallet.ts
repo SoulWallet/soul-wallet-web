@@ -37,7 +37,7 @@ export default function useWallet() {
   const { selectedAddress, setAddressList } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
   const { setSignerIdAddress } = useSettingStore();
-  const { clearCreateInfo } = useTempStore();
+  const { clearCreateInfo, recoverInfo, setRecoverInfo } = useTempStore();
   const {packKeystoreSignature} = useKeystore();
 
   const createWallet = async ({
@@ -158,8 +158,8 @@ export default function useWallet() {
     for (let i = 0; i < extraTxs.length; i++) {
       // get gas from tx or onchain
       const gas = BN(extraTxs[i].gas).isGreaterThan(0)
-        ? BN(extraTxs[i].gas)
-        : await ethersProvider.estimateGas(extraTxs[i]);
+                ? BN(extraTxs[i].gas)
+                : await ethersProvider.estimateGas(extraTxs[i]);
       callGasLimit = callGasLimit.plus(gas);
     }
 
@@ -183,7 +183,7 @@ export default function useWallet() {
 
   const getEoaSignature = async (packedHash: any, validationData: string) => {
     const signatureData: any = await signWithEoa(packedHash);
-  
+    
     console.log('packUserEoaSignature params:', signatureData, validationData);
 
     const packedSignatureRet = await soulWallet.packUserOpEOASignature(
@@ -210,18 +210,18 @@ export default function useWallet() {
     console.log('packUserOp256Signature params:', signatureData, validationData);
     const packedSignatureRet =
       selectedCredential.algorithm === 'ES256'
-        ? await soulWallet.packUserOpP256Signature(
-            chainConfig.contracts.defaultValidator,
-            signatureData,
-            validationData,
-          )
-        : selectedCredential.algorithm === 'RS256'
-          ? await soulWallet.packUserOpRS256Signature(
-              chainConfig.contracts.defaultValidator,
-              signatureData,
-              validationData,
-            )
-          : null;
+      ? await soulWallet.packUserOpP256Signature(
+        chainConfig.contracts.defaultValidator,
+        signatureData,
+        validationData,
+      )
+      : selectedCredential.algorithm === 'RS256'
+      ? await soulWallet.packUserOpRS256Signature(
+        chainConfig.contracts.defaultValidator,
+        signatureData,
+        validationData,
+      )
+      : null;
 
     if (!packedSignatureRet) {
       throw new Error('algorithm not supported');
@@ -298,8 +298,8 @@ export default function useWallet() {
     //   {
     //     address: newAddress,
     //     activatedChains: [],
-    //   },
-    // ]);
+  //   },
+  // ]);
 
     // saveAddressName(newAddress, 'Account 1', true);
 
@@ -334,8 +334,8 @@ export default function useWallet() {
   const boostAfterRecovered = async () => {
     console.log('trigger bootstAfterRecovered');
     retrieveSlotInfo({
-      ...recoveringGuardiansInfo,
-      initialKeys: recoveringGuardiansInfo.initialKeysAddress,
+      ...recoverInfo,
+      initialKeys: recoverInfo.initialKeysAddress,
     });
     // const newAddress = await calcWalletAddress(0);
 
@@ -344,23 +344,30 @@ export default function useWallet() {
     //     address: newAddress,
     //     // TODO, check activate status
     //     activatedChains: [],
-    //   },
-    // ]);
+  //   },
+  // ]);
 
     // saveAddressName(newAddress, 'Account 1', true);
+    const addressList = recoverInfo.recoveryRecord.addresses.map((item: any) => ({
+      address: item.address,
+      chainIdHex: item.chain_id
+    }))
+    setAddressList(addressList)
+    console.log('walletAddresses', addressList)
 
-    setCredentials(recoveringGuardiansInfo.credentials);
+    setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey').map((signer: any) => signer.signerId));
+    setEoas(recoverInfo.signers.filter((signer: any) => signer.type === 'eoa').map((signer: any) => signer.signerId));
     // set goerli if no selected chainId
     if (!selectedChainId) {
-      setSelectedChainId('0x5');
+      setSelectedChainId('0xaa36a7');
     }
 
     updateGuardiansInfo({
-      guardianDetails: recoveringGuardiansInfo.guardianDetails,
-      guardianHash: recoveringGuardiansInfo.guardianHash,
-      guardianNames: recoveringGuardiansInfo.guardianNames,
-      keystore: recoveringGuardiansInfo.keystore,
-      slot: recoveringGuardiansInfo.slot,
+      guardianDetails: recoverInfo.guardianDetails,
+      guardianHash: recoverInfo.guardianHash,
+      guardianNames: recoverInfo.guardianNames,
+      keystore: recoverInfo.keystore,
+      slot: recoverInfo.slot,
     });
     updateRecoveringGuardiansInfo({
       enabled: true,
@@ -378,7 +385,7 @@ export default function useWallet() {
       //   addAddressItem({
       //     address: item as any,
       //     activatedChains: [],
-      //   });
+    //   });
       // }
     }
 
@@ -392,14 +399,14 @@ export default function useWallet() {
       // const currentCredentials = []
       // const onchainCredentials = res.newOwners;
       // if(onchainCredentials.include(stagingCredentials) && !onchainCredentials.include(currentCredentials) ){
-      if (!recoveringGuardiansInfo.enabled) {
+      if (!recoverInfo.enabled) {
         await boostAfterRecovered();
       }
     }
 
     // recover process finished
     if (res.status === 4) {
-      setRecoveringGuardiansInfo({});
+      setRecoverInfo({});
     }
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;
