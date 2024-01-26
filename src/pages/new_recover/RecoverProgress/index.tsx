@@ -32,12 +32,53 @@ import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
-import { useTempStore } from '@/store/temp';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
+import { useTempStore } from '@/store/temp';
+import CheckedIcon from '@/components/Icons/Checked';
+import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
+
+const getProgressPercent = (startTime: any, endTime: any) => {
+  if (startTime && endTime) {
+    const ct = Date.now();
+    const st = +new Date(startTime);
+    const et = +new Date(endTime);
+    console.log('getProgressPercent', `${((ct - st) / (et - st)) * 100}%`);
+
+    if (ct > et) {
+      return '100%';
+    } else if (ct > st && et > ct) {
+      return `${((ct - st) / (et - st)) * 100}%`;
+    }
+  }
+
+  return '0%';
+};
+
+const getWalletIcon = (chainId) => {
+  if (chainId == '0xaa36a7') {
+    return IconEthSquare
+  } if (chainId == '0x66eee') {
+    return IconArbSquare
+  } if (chainId == '0xaa37dc') {
+    return IconOpSquare
+  }
+
+  return IconEthSquare
+}
 
 export default function RecoverProgress() {
+  const { recoverInfo, updateRecoverInfo } = useTempStore()
+  const { recoveryRecordID, recoveryRecord  } = recoverInfo
+  const { addresses, statusData } = recoveryRecord
+  const { chainRecoveryStatus } = statusData
+  const { navigate } = useBrowser();
+
+  const viewWallet = useCallback(() => {
+    navigate(`/dashboard`);
+  }, [])
+
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
@@ -81,65 +122,37 @@ export default function RecoverProgress() {
               marginBottom="20px"
               color="rgba(0, 0, 0, 0.8)"
             >
-              Recovering for: 0xAAAA12345678E25FDa5f8a56B8e267fDaB6dS123
+              Recovering for: {addresses.map((item: any) => item.address).join(', ')}
             </TextBody>
             <Box marginBottom="20px" display="flex">
-              <Box background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginRight="20px">
-                <Box>
-                  <Image src={IconEthSquare} width="40px" />
-                </Box>
-                <Box fontSize="16px" fontWeight="700">
-                  Ethereum
-                </Box>
-                <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="20px" marginBottom="30px">
-                  <Box width="40%" height="100%" background="#0CB700" />
-                </Box>
-                <Box color="#0CB700" fontSize="16px" fontWeight="700">
-                  Recovered
-                </Box>
-              </Box>
-              <Box background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginRight="20px">
-                <Box>
-                  <Image src={IconEthSquare} width="40px" />
-                </Box>
-                <Box fontSize="16px" fontWeight="700">
-                  Goerli
-                </Box>
-                <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="20px" marginBottom="30px">
-                  <Box width="40%" height="100%" background="#0CB700" />
-                </Box>
-                <Box color="#0CB700" fontSize="16px" fontWeight="700">
-                  Recovered
-                </Box>
-              </Box>
-              <Box background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginRight="20px">
-                <Box>
-                  <Image src={IconArbSquare} width="40px" />
-                </Box>
-                <Box fontSize="16px" fontWeight="700">
-                  Arbitrum One
-                </Box>
-                <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="20px" marginBottom="30px">
-                  <Box width="40%" height="100%" background="#0CB700" />
-                </Box>
-                <Box color="#0CB700" fontSize="16px" fontWeight="700">
-                  Recovered
-                </Box>
-              </Box>
-              <Box background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-                <Box>
-                  <Image src={IconOpSquare} width="40px" />
-                </Box>
-                <Box fontSize="16px" fontWeight="700">
-                  Optimism
-                </Box>
-                <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="20px" marginBottom="30px">
-                  <Box width="40%" height="100%" background="#0CB700" />
-                </Box>
-                <Box color="#0CB700" fontSize="16px" fontWeight="700">
-                  Recovered
-                </Box>
-              </Box>
+              {chainRecoveryStatus.map((item: any) => {
+                return (
+                  <Box key={item.chainId} background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginRight="20px">
+                    <Box>
+                      <Image src={getWalletIcon(item.chainId)} width="40px" />
+                    </Box>
+                    <Box fontSize="16px" fontWeight="700">
+                      {getNetwork(Number(item.chainId))}
+                    </Box>
+                    <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="20px" marginBottom="30px">
+                      <Box width={getProgressPercent(item.startTime, item.expectFinishTime)} height="100%" background="#0CB700" />
+                    </Box>
+                    {item.status === 0 && (
+                      <Box fontSize="14px" fontWeight="bold" color="#848488" zIndex="2">
+                        Pending
+                      </Box>
+                    )}
+                    {item.status === 1 && (
+                      <Box color="#0CB700" fontSize="16px" fontWeight="700" display="flex" alignItems="center">
+                        <Text marginLeft="4px">
+                          <CheckedIcon />
+                        </Text>
+                        Recovered
+                      </Box>
+                    )}
+                  </Box>
+                )
+              })}
             </Box>
             <Box>
               <Button
@@ -147,7 +160,7 @@ export default function RecoverProgress() {
                 maxWidth="100%"
                 theme="dark"
                 type="mid"
-                onClick={() => {}}
+                onClick={viewWallet}
               >
                 View in wallet
               </Button>

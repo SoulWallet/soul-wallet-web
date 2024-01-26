@@ -30,6 +30,7 @@ import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 import SetWalletAddress from './SetWalletAddress'
 import AddSigner from './AddSigner'
+import api from '@/lib/api';
 import GuardianApprovals from './GuardianApprovals'
 import PayRecoveryFee from './PayRecoveryFee'
 import RecoverProgress from './RecoverProgress'
@@ -38,36 +39,89 @@ export default function Recover() {
   const [step, setStep] = useState(0)
   const toast = useToast();
   const { navigate } = useBrowser();
+  const { recoverInfo, updateRecoverInfo } = useTempStore()
+  const { recoveryRecordID, recoveryRecord } = recoverInfo
 
   const back = useCallback(() => {
-    navigate(`/auth`);
-  }, [])
+    console.log('step', step)
+    if (step === 0) {
+      navigate(`/auth`);
+    } else {
+      setStep(step - 1)
+    }
+  }, [step])
 
   const next = useCallback(() => {
     setStep(step + 1)
   }, [step])
+  console.log('recoveryRecordID', recoveryRecordID)
+
+  useEffect(() => {
+    if (recoveryRecordID) {
+      const interval = setInterval(async () => {
+        try {
+          console.log('recoveryRecordID', recoveryRecordID)
+          const res2 = await api.guardian.getRecoverRecord({ recoveryRecordID })
+          const recoveryRecord = res2.data
+
+          updateRecoverInfo({
+            recoveryRecord,
+            enabled: false,
+          });
+
+          const status = recoveryRecord.status
+
+          if (status == 0) {
+            setStep(3)
+          } else if (status == 1) {
+            setStep(4)
+          } else if (status >= 2) {
+            setStep(5)
+          }
+        } catch (error: any) {
+          console.log('error', error.message)
+        }
+      }, 5000)
+
+      return () => clearInterval(interval)
+    }
+  }, [recoveryRecordID])
+
+  useEffect(() => {
+    if (recoveryRecordID) {
+      const status = recoveryRecord.status
+
+      if (status == 0) {
+        setStep(3)
+      } else if (status == 1) {
+        setStep(4)
+      } else if (status >= 2) {
+        setStep(5)
+      }
+    }
+  }, [])
 
   if (step === 1) {
     return (
-      <SetWalletAddress next={next} />
+      <SetWalletAddress next={next} back={back} />
     )
   }
 
   if (step === 2) {
     return (
-      <AddSigner next={next} />
+      <AddSigner next={next} back={back}  />
     )
   }
 
   if (step === 3) {
     return (
-      <GuardianApprovals next={next} />
+      <GuardianApprovals next={next} back={back}  />
     )
   }
 
   if (step === 4) {
     return (
-      <PayRecoveryFee next={next} />
+      <PayRecoveryFee next={next}  />
     )
   }
 
