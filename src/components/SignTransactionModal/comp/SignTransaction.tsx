@@ -1,4 +1,4 @@
-import { Flex, Box, Text, useToast, Image, Divider } from '@chakra-ui/react';
+import { Flex, Box, Text, useToast, Image, Divider, Tooltip } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
 import IconCopy from '@/assets/copy.svg';
 import Button from '../../Button';
@@ -7,6 +7,7 @@ import BN from 'bignumber.js';
 import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
 import { useState, useEffect } from 'react';
+import IconArrowDown from '@/assets/icons/arrow-down.svg';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
 import { useChainStore } from '@/store/chain';
@@ -19,6 +20,7 @@ import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
+import IconChecked from '@/assets/icons/checked-green.svg';
 import { useSettingStore } from '@/store/setting';
 import useTools from '@/hooks/useTools';
 import { useSlotStore } from '@/store/slot';
@@ -276,36 +278,66 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   return (
     <>
-      <Flex flexDir={'column'} gap="5" mt="8">
-        <Flex flexDir={'column'} align={'center'} fontWeight={'800'} lineHeight={'1'}>
+      <Flex flexDir={'column'}>
+        <Flex flexDir={'column'} align={'center'} lineHeight={'1'}>
           {decodedData && (
-            <Box mb="18px" fontSize={'12px'} fontFamily={'Martian'}>
-              {decodedData.length === 1
+            <Flex flexDir={'column'} align={'center'} fontSize={'20px'} fontWeight={'800'}>
+              {decodedData.length > 0
                 ? decodedData.map((item: any, index: number) => (
-                    <Text my="2" textTransform="capitalize" key={index}>
-                      {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
-                      {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
-                    </Text>
+                    <Tooltip label={item.to ? `To: ${item.to}` : null}>
+                      <Text my="1" textTransform="capitalize" key={index}>
+                        {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
+                        {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
+                      </Text>
+                    </Tooltip>
                   ))
-                : decodedData.length > 1
-                  ? 'Batch transaction'
-                  : 'Send transaction'}
-            </Box>
+                : 'Send transaction'}
+            </Flex>
           )}
           {totalMsgValue && Number(totalMsgValue) > 0 && (
             <>
-              <Text fontSize={{ base: '20px', md: '24px', lg: '32px' }} mb="3" color="#000">
+              <Text mt="7" fontSize={{ base: '20px', md: '24px', lg: '30px' }} mb="3" fontWeight={'700'}>
                 {totalMsgValue} ETH
               </Text>
-              {/** TODO, change to real price */}
-              <Text color="brand.gray">${BN(totalMsgValue).times(1900).toFormat()}</Text>
+              <Text fontWeight={'600'} mb="6">
+                ≈${BN(totalMsgValue).times(1900).toFormat()}
+              </Text>
             </>
           )}
         </Flex>
+        <Image src={IconArrowDown} mb="1" w="8" mx="auto" />
+        <Box mb="1" w="300px" mx="auto" textAlign={'center'}>
+          <Box py="4" mb="2px" bg="#F9F9F9" roundedTop="20px" fontWeight={'700'}>
+            {toShortAddress(sendToAddress)}
+          </Box>
+          <Box py="1" bg="#F9F9F9" color="#818181" fontSize={'14px'} roundedBottom={'20px'}>
+            From {selectedChainItem.addressPrefix}
+            {getAddressName(selectedAddress)}({toShortAddress(selectedAddress)})
+          </Box>
+        </Box>
+        <Box textAlign={'center'}>
+          <Tooltip
+            color="brand.green"
+            bg="#EFFFEE"
+            label={
+              <Flex gap="2" align={'center'}>
+                <Image src={IconChecked} w="8" />
+                <Text color="brand.green" fontSize={'14px'} fontWeight={'600'}>
+                  Low risk: This dapp is listed by 3 and more communities.
+                </Text>
+              </Flex>
+            }
+          >
+            <Flex cursor={'default'} gap="6px" align={'center'} bg="#EFFFEE" py="1" px="2" rounded="full" display={'inline-flex'}>
+              <Image src={IconChecked} w="4" />
+              <Text color="brand.green" fontSize={'14px'} fontWeight={'600'}>
+                Low risk
+              </Text>
+            </Flex>
+          </Tooltip>
+        </Box>
 
-        <Divider borderColor={'#d7d7d7'} />
-
-        {decodedData && decodedData.length > 1 && (
+        {/* {decodedData && decodedData.length > 1 && (
           <>
             <InfoWrap color="#646464" fontSize="12px" gap="3">
               {decodedData.map((item: any, idx: number) => (
@@ -314,7 +346,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                     {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}{' '}
                     {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
                   </Text>
-                  {/** todo, change to send address **/}
                   {item.to && (
                     <Flex align={'center'} gap="1">
                       <Text>{toShortAddress(item.to)}</Text>
@@ -326,22 +357,10 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             </InfoWrap>
             <Divider borderColor={'#d7d7d7'} mb="3" />
           </>
-        )}
+        )} */}
 
         <>
           <InfoWrap color="#646464" fontSize="12px">
-            {sendToAddress && (
-              <InfoItem>
-                <Text>Send to</Text>
-                <Text>{sendToAddress}</Text>
-              </InfoItem>
-            )}
-            <InfoItem>
-              <Text>From</Text>
-              <Text>
-                {getAddressName(selectedAddress)}({toShortAddress(selectedAddress)})
-              </Text>
-            </InfoItem>
             <InfoItem>
               <Text>Network</Text>
               <Text>{selectedChainItem.chainName}</Text>
@@ -412,9 +431,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         onClick={onConfirm}
         loading={signing}
         disabled={(loadingFee || !balanceEnough) && (!sponsor || !useSponsor)}
-        bg="#6A52EF"
-        color="white"
-        _hover={{ bg: '#6A52EF', color: 'white' }}
         checkCanSign
       >
         Confirm

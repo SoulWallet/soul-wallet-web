@@ -36,7 +36,7 @@ export default function ReceiveCode({ address, showFullAddress, imgWidth = '90px
     <Box textAlign={'center'} fontSize={'12px'} {...restProps}>
       <Image src={imgSrc} mx="auto" display={'block'} w={imgWidth} mb="2" />
       {/* {showFullAddress ? (
-        <Text fontFamily={'Martian'} mt="2" px="10" fontWeight={'600'} fontSize={'14px'}>
+        <Text  mt="2" px="10" fontWeight={'600'} fontSize={'14px'}>
           <Text display="inline-block">{address.slice(0, 21)}</Text>
           <Text display="inline-block">{address.slice(-21)}</Text>
         </Text>

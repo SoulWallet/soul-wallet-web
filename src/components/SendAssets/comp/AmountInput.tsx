@@ -43,7 +43,7 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
 
   return (
     <Box>
-      <Text fontFamily={'Martian'} fontSize="12px" fontWeight={'700'} mb="2" lineHeight={'1'}>
+      <Text  fontSize="12px" fontWeight={'700'} mb="2" lineHeight={'1'}>
         {label}
       </Text>
       <Flex flexDir={'column'} pos={'relative'} gap="3" bg={'#f9f9f9'} rounded="20px">
@@ -78,7 +78,7 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
         <Box bg="#d7d7d7" h="1px" mx="4" />
         <Box px="4" pb="3">
           <Flex align={'center'} gap="1">
-            <Text fontSize={'20px'} color="rgba(0, 0, 0, 0.20)">
+            <Text fontSize={'20px'} color={amount ? "" : "rgba(0, 0, 0, 0.20)"}>
               $
             </Text>
             <Input
@@ -93,7 +93,6 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
               fontSize="48px"
               fontWeight={'800'}
               lineHeight={'1'}
-              color="#1e1e1e"
               variant={'unstyled'}
             />
           </Flex>

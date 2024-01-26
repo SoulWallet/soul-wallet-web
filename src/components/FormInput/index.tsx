@@ -16,7 +16,7 @@ export default forwardRef(
 
     return (
       <Box {...restProps}>
-        <Text fontFamily={'Martian'} fontSize="12px" fontWeight={'500'} mb="1" px="4">
+        <Text  fontSize="12px" fontWeight={'500'} mb="1" px="4">
           {label}
         </Text>
         <InputGroup rounded="20px" bg="#fff" py="3" px="4">

@@ -158,7 +158,7 @@ const SignCard = () => {
     >
       <Box textAlign={'center'}>
         <Logo direction="column" />
-        <Text mt="2" fontWeight={'600'} fontSize={'12px'} fontFamily={'Martian'}>
+        <Text mt="2" fontWeight={'600'} fontSize={'12px'} >
           Alpha Test {packageJson.version}
         </Text>
       </Box>
