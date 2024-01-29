@@ -8,7 +8,7 @@ import IconFeedback from '@/assets/icons/feedback.svg';
 import Footer from '../Footer';
 import { guideList } from '@/data';
 import { useSettingStore } from '@/store/setting';
-import useTools from '@/hooks/useTools';
+import { useState } from 'react';
 
 const ExtraLink = ({ children, ...restProps }: FlexProps) => {
   return (
@@ -22,16 +22,23 @@ export default function Sidebar() {
   const location = useLocation();
   const { finishedSteps } = useSettingStore();
   const { showClaimAssets, showTestGuide, showFeedback } = useWalletContext();
+  const [navHoverIndex, setNavHoverIndex] = useState(-1);
   const pathname = location.pathname;
 
   return (
     <Flex flexDir={'column'} justify={'space-between'} m="6" mr="0">
       <Flex flexDir={'column'} gap="28px">
         {sidebarLinks.map((link, index) => {
-          const isActive = link.href === pathname;
+          const isActive = link.href === pathname || index === navHoverIndex;
           return (
             <Tooltip label={link.isComing ? 'Coming Soon' : null}>
-              <Flex {...(link.isComing ? {} : { as: Link, to: link.href, cursor: 'pointer' })} gap="2" align={'center'}>
+              <Flex
+                onMouseEnter={() => setNavHoverIndex(index)}
+                onMouseLeave={() => setNavHoverIndex(-1)}
+                {...(link.isComing ? {} : { as: Link, to: link.href, cursor: 'pointer' })}
+                gap="2"
+                align={'center'}
+              >
                 <Image w="6" src={isActive ? link.iconActive : link.icon} />
                 <Text
                   fontWeight={isActive ? '700' : '600'}

@@ -13,13 +13,14 @@ const DappItem = ({ item }: any) => {
       as={Link}
       to={item.isExternal ? item.url : `/apps?appUrl=${encodeURIComponent(item.url)}`}
       target={item.isExternal ? '_blank' : '_self'}
-      _hover={{ bg: '#ebebeb' }}
+      _hover={{ bg: 'rgba(0, 0, 0, 0.05)' }}
       transition={'all .3s'}
       rounded="12px"
       cursor={'pointer'}
       pos={'relative'}
       display={'flex'}
       gap="3"
+      p="2"
       alignItems={'center'}
     >
       {/* <Flex gap="10px" pos="absolute" right="4" top="4">
@@ -59,7 +60,12 @@ const DappItem = ({ item }: any) => {
 
 export default function DappList() {
   return (
-    <HomeCard h="210px" wrapperZIndex="50" title="Featured Dapps" external={<ExternalLink title="View more" to="/dapps" />}>
+    <HomeCard
+      h="210px"
+      wrapperZIndex="50"
+      title="Featured Dapps"
+      external={<ExternalLink title="View more" to="/dapps" />}
+    >
       <Grid
         templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}
         rowGap={'24px'}
