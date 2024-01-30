@@ -114,10 +114,10 @@ export default function SetPasskey() {
               justifyContent="center"
               flexDirection="column"
             >
-              <Heading marginBottom="18px" type="h3">
+              <Heading marginBottom="6px" type="h3">
                 Passkey signer added!
               </Heading>
-              <TextBody>Having passkeys as signer makes it easier to sign transactions.</TextBody>
+              <TextBody fontWeight="600">Having passkeys as signer makes it easier to sign transactions.</TextBody>
               <Box
                 marginBottom="90px"
                 background="#F7F7F7"

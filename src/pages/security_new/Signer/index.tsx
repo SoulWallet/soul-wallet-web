@@ -95,11 +95,7 @@ export default function Signer() {
   }, []);
 
   return (
-    <DashboardLayout>
-      {/* <Box width="100%" height="100vh"> */}
-      {/* <Box height="102px">
-          <Header />
-          </Box> */}
+    <Fragment>
       <Box display="flex" flexDirection="column" padding="0 40px" pt="6">
         <SectionMenu>
           <SectionMenuItem isActive={activeSection == 'signer'} onClick={() => navigate('/security/signer')}>
@@ -142,7 +138,6 @@ export default function Signer() {
                       : {})}
                   />
                 ))}
-               
                 {credentials.map((item: any, index: number) => (
                   <SignerCard
                     name={`Passkey_${index + 1}`}
@@ -184,7 +179,6 @@ export default function Signer() {
       <EditGuardianModal isOpen={isEditGuardianOpen} onClose={closeEditGuardianModal} />
       <BackupGuardianModal isOpen={isBackupGuardianOpen} onClose={closeBackupGuardianModal} />
       <WalletConnectModal isOpen={isWalletConnectOpen} onClose={closeWalletConnectModal} />
-      {/* </Box> */}
-    </DashboardLayout>
+    </Fragment>
   );
 }

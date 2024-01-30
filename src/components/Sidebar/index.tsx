@@ -28,7 +28,7 @@ export default function Sidebar() {
     <Flex flexDir={'column'} justify={'space-between'} m="6" mr="0">
       <Flex flexDir={'column'} gap="28px">
         {sidebarLinks.map((link, index) => {
-          const isActive = link.href === pathname;
+          const isActive = link.href === pathname || pathname.indexOf(link.href) !== -1;
           return (
             <Tooltip label={link.isComing ? 'Coming Soon' : null}>
               <Flex {...(link.isComing ? {} : { as: Link, to: link.href, cursor: 'pointer' })} gap="2" align={'center'}>

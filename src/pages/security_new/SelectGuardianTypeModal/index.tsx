@@ -114,7 +114,6 @@ export default function SelectGuardianTypeModal({
                   padding="16px"
                   marginBottom="14px"
                   width="100%"
-                  cursor="pointer"
                 >
                   <Box
                     width="60px"
@@ -128,7 +127,10 @@ export default function SelectGuardianTypeModal({
                   >
                   </Box>
                   <Box>
-                    <TextBody fontSize="18px">Email</TextBody>
+                    <TextBody fontSize="18px" display="flex" alignItems="center">
+                      <Box>Email</Box>
+                      <Box as="span" fontSize="10px" fontWeight="500" color="black" background="rgba(0, 0, 0, 0.05)" borderRadius="4px" height="14px" padding="0 4px" marginLeft="10px">Comming soon</Box>
+                    </TextBody>
                     <TextBody type="t2">{`Use email address for wallet recovery. Powered by ZKemail.`}</TextBody>
                   </Box>
                 </Box>
