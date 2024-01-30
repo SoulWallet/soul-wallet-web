@@ -543,7 +543,6 @@ export default function Edit({
       </Box>
       <Box marginTop="30px" display="flex" justifyContent="flex-end">
         <Box>
-          {canGoBack && <Button theme="light" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>}
           <Button onClick={handleConfirm} disabled={disabled} loading={loading}>Confirm</Button>
         </Box>
       </Box>
