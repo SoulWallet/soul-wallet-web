@@ -40,7 +40,7 @@ export const sidebarLinks = [
   },
   {
     title: 'Settings',
-    href: "/security/signer",
+    href: "/security",
     icon: IconSettings,
     iconActive: IconSettingsActive,
     isComing: false,

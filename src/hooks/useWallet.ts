@@ -353,7 +353,8 @@ export default function useWallet() {
     }))
     setAddressList(addressList)
 
-    setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey'));
+    const credentials = recoverInfo.signers.filter((signer: any) => signer.type === 'passkey')
+    if (credentials.length) setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey'));
     setEoas(recoverInfo.signers.filter((signer: any) => signer.type === 'eoa').map((signer: any) => signer.signerId));
     // set mainnet if no selected chainId
     if (!selectedChainId) {

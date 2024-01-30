@@ -29,28 +29,28 @@ export default function Sidebar() {
     <Flex flexDir={'column'} justify={'space-between'} m="6" mr="0">
       <Flex flexDir={'column'} gap="28px">
         {sidebarLinks.map((link, index) => {
-          const isActive = link.href === pathname || index === navHoverIndex;
-          return (
-            <Tooltip label={link.isComing ? 'Coming Soon' : null}>
-              <Flex
-                onMouseEnter={() => setNavHoverIndex(index)}
-                onMouseLeave={() => setNavHoverIndex(-1)}
-                {...(link.isComing ? {} : { as: Link, to: link.href, cursor: 'pointer' })}
-                gap="2"
-                align={'center'}
-              >
-                <Image w="6" src={isActive ? link.iconActive : link.icon} />
-                <Text
-                  fontWeight={isActive ? '700' : '600'}
-                  color={isActive ? 'brand.purple' : 'brand.black'}
-                  fontSize={'16px'}
-                  className="title"
-                >
-                  {link.title}
-                </Text>
-              </Flex>
-            </Tooltip>
-          );
+        const isActive = link.href === pathname || pathname.indexOf(link.href) !== -1 || index === navHoverIndex;
+        return (
+        <Tooltip label={link.isComing ? 'Coming Soon' : null}>
+          <Flex
+            onMouseEnter={() => setNavHoverIndex(index)}
+            onMouseLeave={() => setNavHoverIndex(-1)}
+            {...(link.isComing ? {} : { as: Link, to: link.href, cursor: 'pointer' })}
+            gap="2"
+            align={'center'}
+          >
+            <Image w="6" src={isActive ? link.iconActive : link.icon} />
+            <Text
+              fontWeight={isActive ? '700' : '600'}
+              color={isActive ? 'brand.purple' : 'brand.black'}
+              fontSize={'16px'}
+              className="title"
+            >
+              {link.title}
+            </Text>
+          </Flex>
+        </Tooltip>
+        );
         })}
       </Flex>
 

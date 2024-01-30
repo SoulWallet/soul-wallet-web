@@ -26,8 +26,7 @@ import PasskeyIcon from '@/components/Icons/Intro/Passkey'
 import AccountIcon from '@/components/Icons/Intro/Account'
 import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
-import { useAccount } from 'wagmi'
-import { useConnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { useTempStore } from '@/store/temp';
 import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
@@ -54,6 +53,7 @@ export default function Auth() {
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false)
   const [isImportAccountOpen, setIsImportAccountOpen] = useState(false)
   const { connect } = useConnect()
+  const { disconnectAsync } = useDisconnect()
   const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo, getLoginInfo } = useTempStore()
   const account = useAccount()
   const { address, isConnected, isConnecting } = account
@@ -134,6 +134,15 @@ export default function Auth() {
       eoaAddress: [address]
     })
     setStepType('setPassKey')
+  }, [])
+
+  const disconnectEOA = useCallback(async () => {
+    await disconnectAsync()
+    setIsConnectAtive(false)
+    updateCreateInfo({
+      eoaAddress: []
+    })
+    // closeRegister()
   }, [])
 
   const startLoginWithPasskey = useCallback(async () => {
@@ -418,6 +427,7 @@ export default function Auth() {
           isConnectAtive={isConnectAtive}
           startRegisterWithPasskey={startRegisterWithPasskey}
           startRegisterWithEOA={startRegisterWithEOA}
+          disconnectEOA={disconnectEOA}
           activeConnector={activeConnector}
           address={address}
         />

@@ -380,6 +380,7 @@ const GuardianInput = ({
         _rightInputStyles={{
           fontWeight: 600,
           fontSize: '14px',
+          fontFamily: 'Nunito'
         }}
         _rightContainerStyles={{ width: 'calc(100% - 240px)', zIndex: 0 }}
         leftAutoFocus={id === guardianIds[0]}
@@ -394,6 +395,11 @@ const GuardianInput = ({
           </Text>
         }
         _leftContainerStyles={{ width: '240px' }}
+        _leftInputStyles={{
+          fontWeight: 600,
+          fontSize: '14px',
+          fontFamily: 'Nunito'
+        }}
         onEnter={handleSubmit}
         _styles={{ width: '100%', fontSize: '16px' }}
       />
@@ -434,7 +440,7 @@ const GuardianInput = ({
         >
           {() => (
             <Box maxWidth="100%" overflow="auto">
-              <MenuList background="white" maxWidth="100%">
+              <MenuList background="white" maxWidth="100%" boxShadow="0px 0px 20px 0px rgba(0, 0, 0, 0.2)">
                 <MenuItem maxWidth="100%" position="relative" onClick={(!isLoading && searchAddress) ? (() => submitENSName(searchAddress)) : (() => {})}>
                   {!!searchAddress && (
                     <Box

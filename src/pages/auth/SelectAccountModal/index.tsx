@@ -50,7 +50,7 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
           // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
-          Select a account
+          Select a wallet
         </ModalHeader>
         <ModalCloseButton top="14px" />
         <ModalBody overflow="auto" padding="20px 32px">
@@ -66,7 +66,7 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
               </Title>
               <Box width="100%" display="flex" flexWrap="wrap">
                 <Box borderRadius="12px" padding="24px" width="100%" marginBottom="24px" border={(activeLoginAccount && activeLoginAccount[chainId] === selectedAddress) ? '2px solid black' : `1px solid rgba(0, 0, 0, 0.1)`} onClick={() => setSelectedAddress(activeLoginAccount && activeLoginAccount[chainId])}>
-                  <Title fontSize="18px">Account _1</Title>
+                  <Title fontSize="18px">Wallet _1</Title>
                   {!!activeLoginAccount && (
                     <Fragment>
                       <Box display="flex" marginTop="18px">

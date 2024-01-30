@@ -32,7 +32,8 @@ export default function RegisterModal({
   startRegisterWithPasskey,
   activeConnector,
   address,
-  startRegisterWithEOA
+  startRegisterWithEOA,
+  disconnectEOA
 }: any) {
   const { connectors } = useConnect();
 
@@ -94,7 +95,19 @@ export default function RegisterModal({
                   {address}
                 </Box>
               </Box>
-              <Box marginTop="60px">
+              <Box marginTop="60px" display="flex">
+                <Button
+                  width="100%"
+                  theme="dark"
+                  color="white"
+                  marginBottom="49px"
+                  onClick={() => disconnectEOA()}
+                  padding="0 20px"
+                  marginRight="16px"
+                  type="mid"
+                >
+                  Disconnect
+                </Button>
                 <Button
                   width="100%"
                   theme="dark"

@@ -155,7 +155,7 @@ export default function Guardian() {
   }, [])
 
   return (
-    <DashboardLayout>
+    <Fragment>
       <Box
         display="flex"
         flexDirection="column"
@@ -226,7 +226,6 @@ export default function Guardian() {
         isOpen={isWalletConnectOpen}
         onClose={closeWalletConnectModal}
       />
-      {/* </Box> */}
-    </DashboardLayout>
+    </Fragment>
   );
 }
