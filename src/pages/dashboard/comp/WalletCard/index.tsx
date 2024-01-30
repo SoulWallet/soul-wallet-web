@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Image } from '@chakra-ui/react';
+import { Box, Flex, Text, Image, Tooltip } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import { useState } from 'react';
 import useWalletContext from '@/context/hooks/useWalletContext';
@@ -28,6 +28,7 @@ export default function WalletCard() {
       title: 'Send',
       icon: IconSend,
       iconActive: IconSendActive,
+      isComing: false,
       onClick: () => {
         showSend(ethers.ZeroAddress, 'send');
       },
@@ -36,6 +37,7 @@ export default function WalletCard() {
       title: 'Receive',
       icon: IconReceive,
       iconActive: IconReceiveActive,
+      isComing: false,
       onClick: () => {
         showReceive();
       },
@@ -44,12 +46,14 @@ export default function WalletCard() {
       title: 'Swap',
       icon: IconSwap,
       iconActive: IconSwapActive,
+      isComing: true,
       onClick: () => {},
     },
     {
       title: 'View',
       icon: IconView,
       iconActive: IconViewActive,
+      isComing: false,
       onClick: () => {
         window.open(`${scanUrl}/address/${selectedAddress}`, '_blank');
       },
@@ -79,19 +83,26 @@ export default function WalletCard() {
       </Flex>
       <Flex gap="6" align={'center'}>
         {actions.map((item, index) => (
-          <Box
-            key={index}
-            cursor={'pointer'}
-            textAlign={'center'}
-            onClick={() => checkInitialized(true) ? item.onClick() : undefined}
-            onMouseEnter={() => setHoverIndex(index)}
-            onMouseLeave={() => setHoverIndex(-1)}
-          >
-            <Image src={hoverIndex === index ? item.iconActive : item.icon} mb="2px" w="8" mx="auto" />
-            <Text fontSize={'12px'} fontWeight={'600'} lineHeight={'1.25'} color="#5b606d">
-              {item.title}
-            </Text>
-          </Box>
+          <Tooltip bg="#000" hasArrow key={index} label={item.isComing ? 'Coming soon' : null}>
+            <Box
+              cursor={'pointer'}
+              textAlign={'center'}
+              onMouseEnter={() => setHoverIndex(index)}
+              onMouseLeave={() => setHoverIndex(-1)}
+              {...(item.isComing
+                ? {}
+                : {
+                    onClick: () => {
+                      checkInitialized(true) ? item.onClick() : undefined;
+                    },
+                  })}
+            >
+              <Image src={hoverIndex === index ? item.iconActive : item.icon} mb="2px" w="8" mx="auto" />
+              <Text fontSize={'12px'} fontWeight={'600'} lineHeight={'1.25'} color="#5b606d">
+                {item.title}
+              </Text>
+            </Box>
+          </Tooltip>
         ))}
       </Flex>
     </Box>

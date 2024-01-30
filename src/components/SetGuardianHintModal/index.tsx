@@ -65,7 +65,13 @@ const SetGuardianHintModal = (_: unknown, ref: Ref<any>) => {
           </Text>
         </Box>
 
-        <SkipModal isOpen={isSkipOpen} onClose={() => setIsSkipOpen(false)} />
+        <SkipModal
+          isOpen={isSkipOpen}
+          onClose={() => {
+            setIsSkipOpen(false);
+            onClose();
+          }}
+        />
       </TxModal>
     </div>
   );
