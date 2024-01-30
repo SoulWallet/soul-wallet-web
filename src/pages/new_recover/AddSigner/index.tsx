@@ -36,7 +36,7 @@ import { useTempStore } from '@/store/temp';
 import { useAccount, useConnect, useReconnect, useDisconnect } from 'wagmi'
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
-import { L1KeyStore } from '@soulwallet_test/sdk';
+import { L1KeyStore } from '@soulwallet/sdk';
 import ConnectWalletModal from '../ConnectWalletModal'
 import StepProgress from '../StepProgress'
 

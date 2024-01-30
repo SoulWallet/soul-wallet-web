@@ -6,11 +6,11 @@ import { ethers } from 'ethers';
 import BN from 'bignumber.js';
 import Erc20ABI from '../contract/abi/ERC20.json';
 import { useAddressStore } from '@/store/address';
-import { Transaction } from '@soulwallet_test/sdk';
+import { Transaction } from '@soulwallet/sdk';
 import useQuery from './useQuery';
 import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import { ABI_ReceivePayment } from '@soulwallet_test/abi';
+import { ABI_ReceivePayment } from '@soulwallet/abi';
 
 export default function useTransaction() {
   const { showSignTransaction } = useWalletContext();

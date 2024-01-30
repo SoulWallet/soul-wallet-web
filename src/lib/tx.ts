@@ -1,4 +1,4 @@
-import { SoulWallet, Bundler } from '@soulwallet_test/sdk';
+import { SoulWallet, Bundler } from '@soulwallet/sdk';
 import { printUserOp } from '@/lib/tools';
 
 let soulWallet: any = null;

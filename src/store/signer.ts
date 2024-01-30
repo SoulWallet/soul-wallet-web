@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
-import { SignkeyType } from '@soulwallet_test/sdk';
+import { SignkeyType } from '@soulwallet/sdk';
 
 export interface ISignerStore {
   signerId: string;

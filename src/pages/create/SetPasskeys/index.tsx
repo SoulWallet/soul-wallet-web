@@ -12,7 +12,7 @@ import WarningIcon from '@/components/Icons/Warning';
 import SecureIcon from '@/components/Icons/Secure';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
-import { L1KeyStore } from '@soulwallet_test/sdk';
+import { L1KeyStore } from '@soulwallet/sdk';
 import api from '@/lib/api';
 import { useSettingStore } from '@/store/setting';
 import useSdk from '@/hooks/useSdk';

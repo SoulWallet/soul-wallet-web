@@ -1,12 +1,12 @@
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
 import useQuery from './useQuery';
-import { ABI_SoulWallet } from '@soulwallet_test/abi';
+import { ABI_SoulWallet } from '@soulwallet/abi';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { addPaymasterAndData } from '@/lib/tools';
 import Erc20ABI from '../contract/abi/ERC20.json';
-import { L1KeyStore, SignkeyType, UserOperation } from '@soulwallet_test/sdk';
+import { L1KeyStore, SignkeyType, UserOperation } from '@soulwallet/sdk';
 import { executeTransaction } from '@/lib/tx';
 import BN from 'bignumber.js';
 import useConfig from './useConfig';

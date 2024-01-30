@@ -14,7 +14,7 @@ import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
 import { useGuardianStore } from '@/store/guardian';
 import { ethers } from 'ethers';
-import { L1KeyStore } from '@soulwallet_test/sdk';
+import { L1KeyStore } from '@soulwallet/sdk';
 import { toHex } from '@/lib/tools';
 import useSdk from '@/hooks/useSdk';
 import { useAddressStore } from '@/store/address';

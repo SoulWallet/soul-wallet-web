@@ -33,7 +33,7 @@ import { ethers } from 'ethers';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { useSignerStore } from '@/store/signer';
-import { L1KeyStore } from '@soulwallet_test/sdk';
+import { L1KeyStore } from '@soulwallet/sdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';

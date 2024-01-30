@@ -10,7 +10,7 @@ import {
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
 import { AsnParser } from '@peculiar/asn1-schema';
-import { WebAuthN } from '@soulwallet_test/sdk';
+import { WebAuthN } from '@soulwallet/sdk';
 import { ethers } from 'ethers';
 
 const base64urlTobase64 = (base64url: string) => {

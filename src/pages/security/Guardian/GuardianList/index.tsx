@@ -41,7 +41,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { nanoid } from 'nanoid';
-import { L1KeyStore } from '@soulwallet_test/sdk';
+import { L1KeyStore } from '@soulwallet/sdk';
 import { useSignerStore } from '@/store/signer';
 import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';

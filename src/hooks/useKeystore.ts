@@ -1,4 +1,4 @@
-import { KeyStoreTypedDataType, L1KeyStore, SignkeyType } from '@soulwallet_test/sdk';
+import { KeyStoreTypedDataType, L1KeyStore, SignkeyType } from '@soulwallet/sdk';
 import { useSlotStore } from '@/store/slot';
 import useConfig from './useConfig';
 import { useMemo } from 'react';

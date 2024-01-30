@@ -29,7 +29,7 @@ import { nanoid } from 'nanoid';
 import { useGuardianStore } from '@/store/guardian';
 import useKeystore from '@/hooks/useKeystore';
 import useConfig from '@/hooks/useConfig';
-import { L1KeyStore } from '@soulwallet_test/sdk';
+import { L1KeyStore } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 import { useSignerStore } from '@/store/signer';

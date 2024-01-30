@@ -30,7 +30,7 @@ import config from '@/config';
 import useConfig from '@/hooks/useConfig';
 import { useSignerStore } from '@/store/signer';
 import usePassKey from '@/hooks/usePasskey';
-import { L1KeyStore } from '@soulwallet_test/sdk';
+import { L1KeyStore } from '@soulwallet/sdk';
 import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
 
