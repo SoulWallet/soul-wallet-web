@@ -1,8 +1,9 @@
 import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
-import { useToast, Text, Box, Link } from '@chakra-ui/react';
+import { useToast, Text, Box, Link, Image, } from '@chakra-ui/react';
 import Button from '../Button';
 import TxModal from '../TxModal';
 import { SkipModal } from '@/pages/create/SetGuardians';
+import IconLastStep from '@/assets/icons/last-step.svg';
 
 const SetGuardianHintModal = (_: unknown, ref: Ref<any>) => {
   const [isSkipOpen, setIsSkipOpen] = useState(false);
@@ -35,7 +36,8 @@ const SetGuardianHintModal = (_: unknown, ref: Ref<any>) => {
         bodyStyle={{ py: '9', px: '42px' }}
       >
         <Box textAlign="center">
-          <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" />
+          <Image mx="auto" src={IconLastStep} mb="18px" />
+          {/* <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" /> */}
           <Text fontSize={'20px'} mb="2" fontWeight={'800'} lineHeight={'1.6'} letterSpacing={'-0.4px'}>
             One last step
           </Text>

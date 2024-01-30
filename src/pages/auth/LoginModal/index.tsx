@@ -16,6 +16,7 @@ import {
   MenuList,
   MenuButton,
   MenuItem,
+  Tooltip,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -39,6 +40,7 @@ import { supportedEoas } from '@/config'
 import { Connector, useConnect } from 'wagmi'
 import WalletOption from '@/components/new/WalletOption'
 import { getWalletIcon } from '@/lib/tools'
+import { passkeyTooltipText } from '@/config/constants'
 
 export default function LoginModal({
   isOpen,
@@ -113,12 +115,14 @@ export default function LoginModal({
                 <Box marginRight="10px"><PasskeyIcon /></Box>
                 Login with passkey
               </Button>
+              <Tooltip hasArrow bg='brand.black' label={passkeyTooltipText}>
               <Box position="absolute" width="100%" bottom="16px" display="flex" alignItems="center" justifyContent="center">
                 <TextBody fontSize="14px" fontWeight="600" color="rgba(0, 0, 0, 0.6)" display="flex" alignItems="center">
                   What is passkey?
                   <Box as="span" marginLeft="5px"><QuestionIcon /></Box>
                 </TextBody>
               </Box>
+              </Tooltip>
             </Box>
           </Box>
         </ModalBody>

@@ -63,7 +63,7 @@ export default function TokensTable({ activeChains }: any) {
             Please select a chain
           </Text>
         )}
-        {loading && !balanceList.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
+        {loading && !balanceList.length && activeChains.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
         {activeChains.length && balanceList.length
           ? balanceList.map((item: any, idx: number) => {
               return (

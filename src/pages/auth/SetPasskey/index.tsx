@@ -29,6 +29,7 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
+import { passkeyTooltipText } from '@/config/constants';
 
 export default function SetPasskey() {
   const { createInfo, updateCreateInfo } = useTempStore()
@@ -234,7 +235,7 @@ export default function SetPasskey() {
             flexDirection="column"
           >
             <Heading marginBottom="18px" type="h3">
-              Sign with <Tooltip hasArrow bg='brand.black' label="A passkey is a FIDO credential stored on your computer or phone, and it is used to unlock your online accounts. The passkey makes signing in more secure.">
+              Sign with <Tooltip hasArrow bg='brand.black' label={passkeyTooltipText}>
               <Box as="span" borderBottom="1px solid black" borderStyle="dotted">passkey</Box></Tooltip> 
             </Heading>
             <TextBody fontWeight="600">Turn your own device into hardware wallet! Add passkey now <Box as="span" color="#FF2E79">for free</Box>!</TextBody>
