@@ -7,7 +7,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
+  Tooltip,
 } from '@chakra-ui/react'
 import { Connector, useConnect } from 'wagmi'
 import TextBody from '@/components/new/TextBody'
@@ -20,6 +21,7 @@ import { supportedEoas } from '@/config'
 import SuccessIcon from "@/components/Icons/Success";
 import WalletOption from '@/components/new/WalletOption'
 import { getWalletIcon } from '@/lib/tools'
+import { passkeyTooltipText } from '@/config/constants'
 
 export default function RegisterModal({
   isOpen,
@@ -224,13 +226,14 @@ export default function RegisterModal({
                   Create wallet with passkey
                 </Button>
               </Box>
-
+              <Tooltip hasArrow bg='brand.black' label={passkeyTooltipText}>
               <Box position="absolute" width="100%" bottom="16px" display="flex" alignItems="center" justifyContent="center">
                 <TextBody fontSize="14px" fontWeight="600" color="rgba(0, 0, 0, 0.6)" display="flex" alignItems="center">
                   What is passkey?
                   <Box as="span" marginLeft="5px"><QuestionIcon /></Box>
                 </TextBody>
               </Box>
+              </Tooltip>
             </Box>
           </Box>
         </ModalBody>

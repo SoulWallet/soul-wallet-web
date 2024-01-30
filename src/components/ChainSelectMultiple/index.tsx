@@ -45,12 +45,16 @@ export default function ChainSelectMultiple({ activeChains, onChange, ...restPro
 
   return (
     <Flex flexDir={'column'} rounded="16px" userSelect={'none'} py="1" px="10px">
-      <Menu>
+      <Menu placement="bottom-end">
         <MenuButton>
           <MenuLine
             onClick={toggleCheckAll}
             icon={IconAllNetwork}
-            title={'All networks'}
+            title={
+              chainList.length === activeChains.length
+                ? 'All networks'
+                : `${activeChains.length} network${activeChains.length > 1 ? 's' : ''}`
+            }
             checked={activeChains.length === chainList.length}
             isMenu={true}
             py="10px"

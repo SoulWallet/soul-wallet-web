@@ -55,7 +55,6 @@ export default function WalletConnectModal({ isOpen, onClose }: any) {
         <ModalCloseButton top="14px" />
         <ModalBody overflow="auto" padding="20px 32px">
           <Box
-            background="#ededed"
             height="100%"
             roundedBottom="20px"
             display="flex"

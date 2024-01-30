@@ -12,6 +12,8 @@ import useConfig from '@/hooks/useConfig';
 import { chainMapping } from '@/config';
 import IconExternal from '@/assets/icons/external.svg';
 import IconEth from '@/assets/tokens/eth.svg';
+import EmptyHint from '@/components/EmptyHint';
+import ActivityEmpty from '@/assets/icons/activity-empty.svg';
 
 const ActivityItem = ({ item }: any) => {
   const { chainConfig } = useConfig();
@@ -84,16 +86,13 @@ export default function ActivityTable({ activeChains }: any) {
           Please select a chain
         </Text>
       )}
-      {!list.length && (
+      {!list.length && activeChains.length && (
         <Flex py="120px" flexDir={'column'} justify={'center'} align={'center'}>
           {loading ? (
             <Image src={IconLoading} display={'block'} w="50px" h="50px" />
           ) : (
             <>
-              <Box mb="2" rounded="full" w="12" h="12" bg="#D9D9D9" opacity={0.23} />
-              <Text color="#7F7F7F" fontWeight={'500'} fontSize={'12px'}>
-                You don't have any activities yet
-              </Text>
+              <EmptyHint title="You don't have any activities yet" icon={ActivityEmpty} />
             </>
           )}
         </Flex>

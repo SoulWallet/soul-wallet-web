@@ -121,7 +121,7 @@ export default function ImportAccount({ importWallet, isImporting }: any) {
             flexDirection="column"
           >
             <Box height="100px" width="100px" borderRadius="100px" background="#E3E3E3" marginBottom="30px" />
-            <Heading marginBottom="18px" type="h3">
+            <Heading marginBottom="0" type="h3">
               No wallet found on this device
             </Heading>
             <TextBody fontWeight="600">To access your Soul wallet, please enter Soul wallet address</TextBody>

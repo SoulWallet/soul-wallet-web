@@ -29,7 +29,8 @@ export const Tabs = ({ tabList, activeTab, onChange }: any) => {
           <Text
             key={idx}
             cursor={'pointer'}
-            fontWeight={activeTab === idx ? '800' : '400'}
+            color={activeTab === idx ? 'brand.black' : '#898989'}
+            fontWeight={800}
             lineHeight={'1'}
             fontSize={'18px'}
             onClick={() => onChange(idx)}
@@ -60,7 +61,7 @@ export default function Asset() {
               </Text>
             </Flex>
           </Box>
-          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} border='1px solid #818181' />
+          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} border="1px solid #818181" />
         </Flex>
 
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
