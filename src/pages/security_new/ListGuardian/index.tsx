@@ -98,10 +98,6 @@ export default function ListGuardian({
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>
-                <Button type="mid" onClick={startEditGuardian}>
-                  <Box marginRight="6px"><PlusIcon color="white" /></Box>
-                  Edit Guardian
-                </Button>
               </Box>
             )}
           </Box>
@@ -209,8 +205,8 @@ export default function ListGuardian({
                   <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
                     <Box marginRight="10px">Keep guardians private</Box>
                     <Box width="42px" minWidth="42px" height="24px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="2px" cursor="pointer" transition="all 0.2s ease" paddingLeft={keepPrivate ? '20px' : '2px'}>
-                    <Box boxShadow={"0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)"} width="20px" height="20px" background="white" borderRadius="30px" />
-                  </Box>
+                      <Box boxShadow={"0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)"} width="20px" height="20px" background="white" borderRadius="30px" />
+                    </Box>
                   </TextBody>
                 </Box>
               </Fragment>
@@ -225,10 +221,17 @@ export default function ListGuardian({
         alignItems="center"
         justifyContent="center"
       >
-        <Button type="mid" onClick={startEditGuardian}>
-          <Box marginRight="6px"><PlusIcon color="white" /></Box>
-          Add Guardian
-        </Button>
+        {(!guardianList || !guardianList.length) && (
+          <Button type="mid" onClick={startEditGuardian}>
+            <Box marginRight="6px"><PlusIcon color="white" /></Box>
+            Add Guardian
+          </Button>
+        )}
+        {(!!guardianList && !!guardianList.length) && (
+          <Button type="mid" onClick={startEditGuardian}>
+            Edit
+          </Button>
+        )}
       </Box>
     </Fragment>
   )
