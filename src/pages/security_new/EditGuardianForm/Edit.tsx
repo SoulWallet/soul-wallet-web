@@ -287,8 +287,9 @@ const GuardianInput = ({
   }
 
   const rightOnBlur = (id: any, value: any) => {
-    onBlur(`address_${id}`)
-    // setIsOpen(false)
+    if (value) {
+      onBlur(`address_${id}`)(value)
+    }
   }
 
   const setRightInput = (value: any) => {
@@ -507,6 +508,7 @@ export default function Edit({
   handleBack,
   canGoBack
 }: any) {
+  console.log('canGoBack', canGoBack)
   return (
     <Fragment>
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -543,6 +545,7 @@ export default function Edit({
       </Box>
       <Box marginTop="30px" display="flex" justifyContent="flex-end">
         <Box>
+          {canGoBack && <Button theme="light" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>}
           <Button onClick={handleConfirm} disabled={disabled} loading={loading}>Confirm</Button>
         </Box>
       </Box>

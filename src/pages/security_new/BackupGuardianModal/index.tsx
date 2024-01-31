@@ -22,7 +22,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Input
+  Input,
 } from '@chakra-ui/react'
 import TextBody from '@/components/new/TextBody'
 import Title from '@/components/new/Title'
@@ -38,13 +38,152 @@ import CoinbaseIcon from '@/assets/wallets/coinbase.png'
 import BinanceIcon from '@/assets/wallets/binance.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
 import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
+import { useTempStore } from '@/store/temp';
+import { useSettingStore } from '@/store/setting';
+import useForm from '@/hooks/useForm';
+import useKeystore from '@/hooks/useKeystore';
+import api from '@/lib/api';
+import { ethers } from 'ethers';
+import useConfig from '@/hooks/useConfig';
+import useTools from '@/hooks/useTools';
+import FormInput from '@/components/new/FormInput';
 
-export default function EditGuardianModal({
+const validate = (values: any) => {
+  const errors: any = {};
+  const addressKeys = Object.keys(values).filter((key) => key.indexOf('address') === 0);
+  const nameKeys = Object.keys(values).filter((key) => key.indexOf('name') === 0);
+  const existedAddress = [];
+
+  for (const addressKey of addressKeys) {
+    const address = values[addressKey];
+
+    if (address && address.length && !ethers.isAddress(address)) {
+      errors[addressKey] = 'Invalid Address';
+    } else if (existedAddress.indexOf(address) !== -1) {
+      errors[addressKey] = 'Duplicated Address';
+    } else if (address && address.length) {
+      existedAddress.push(address);
+    }
+  }
+
+  return errors;
+};
+
+export default function BackupGuardianModal({
   isOpen,
   onClose,
   startIntroGuardian,
-  startEditGuardian
+  startEditGuardian,
 }: any) {
+  const { calcGuardianHash } = useKeystore();
+  const [downloading, setDownloading] = useState(false);
+  const [sending, setSending] = useState(false);
+  const { generateJsonName, downloadJsonFile } = useTools()
+  const { chainConfig } = useConfig();
+  const toast = useToast();
+  const emailForm = useForm({
+    fields: ['email'],
+    validate,
+  });
+  const { getAddressName, saveAddressName } = useSettingStore();
+  const { getEditingGuardiansInfo, updateEditingGuardiansInfo } = useTempStore();
+  const guardiansInfo = getEditingGuardiansInfo();
+  const guardianDetails = guardiansInfo.guardianDetails || {
+    guardians: [],
+    threshold: 0
+  }
+  console.log('guardianDetails', guardianDetails)
+  const threshold = guardianDetails.threshold || 0
+  const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
+  const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
+    return {
+      address: guardian,
+      name: guardianNames[i]
+    }
+  })
+
+  const handleDownloadGuardians = async () => {
+    try {
+      setDownloading(true);
+      const keystore = chainConfig.contracts.l1Keystore;
+      const guardianAddresses = guardianList.map((item: any) => item.address);
+      const guardianNames = guardianList.map((item: any) => item.name);
+      const guardianHash = calcGuardianHash(guardianAddresses, threshold);
+      const salt = ethers.ZeroHash;
+
+      const guardiansInfo = {
+        keystore,
+        guardianHash,
+        guardianNames,
+        guardianDetails: {
+          guardians: guardianAddresses,
+          threshold,
+          salt,
+        }
+      };
+
+      await downloadJsonFile(guardiansInfo);
+      setDownloading(false);
+      updateEditingGuardiansInfo({
+        requireBackup: false
+      })
+      toast({
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setDownloading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  }
+
+  const handleEmailBackupGuardians = async () => {
+    try {
+      setSending(true);
+      const keystore = chainConfig.contracts.l1Keystore;
+      const guardianAddresses = guardianList.map((item: any) => item.address);
+      const guardianNames = guardianList.map((item: any) => item.name);
+      const guardianHash = calcGuardianHash(guardianAddresses, threshold);
+      const salt = ethers.ZeroHash;
+
+      const guardiansInfo = {
+        keystore,
+        guardianHash,
+        guardianNames,
+        guardianDetails: {
+          guardians: guardianAddresses,
+          threshold,
+          salt,
+        }
+      };
+
+      const filename = generateJsonName('guardian');
+      await api.guardian.emailBackupGuardians({
+        email: emailForm.values.email,
+        filename,
+        ...guardiansInfo
+      });
+      setSending(false);
+      emailForm.clearFields(['email'])
+      updateEditingGuardiansInfo({
+        requireBackup: false
+      })
+      toast({
+        title: 'Email Backup Success!',
+        status: 'success',
+      });
+    } catch (e: any) {
+      setSending(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -64,6 +203,9 @@ export default function EditGuardianModal({
               <Box display="flex" marginTop="14px" flexDirection="column">
                 <Box width="100%">
                   <Button
+                    onClick={handleDownloadGuardians}
+                    disabled={downloading}
+                    loading={downloading}
                     width="100%"
                     borderRadius="20px"
                     backgroundColor="#6A52EF"
@@ -97,14 +239,20 @@ export default function EditGuardianModal({
                   </TextBody>
                 </Box>
                 <Box width="100%" marginTop="24px">
-                  <Input
-                    type="text"
-                    placeholder={'Send to Email'}
-                    borderRadius="16px"
-                    paddingRight="24px"
-                    height="48px"
-                    width="100%"
-                    borderColor="#E4E4E4"
+                  <FormInput
+                    label=""
+                    placeholder="Send to Email"
+                    value={emailForm.values.email}
+                    errorMsg={emailForm.showErrors.email && emailForm.errors.email}
+                    onChange={emailForm.onChange('email')}
+                    onBlur={emailForm.onBlur('email')}
+                    onEnter={handleEmailBackupGuardians}
+                    _styles={{
+                      width: '100%',
+                      height: '48px',
+                      borderRadius: '16px',
+                      paddingRight: '24px',
+                    }}
                   />
                 </Box>
                 <Box width="100%">
@@ -113,6 +261,9 @@ export default function EditGuardianModal({
                     borderRadius="20px"
                     backgroundColor="black"
                     marginTop="12px"
+                    onClick={handleEmailBackupGuardians}
+                    disabled={sending || !emailForm.values.email}
+                    loading={sending}
                   >
                     Send
                   </Button>
@@ -120,6 +271,7 @@ export default function EditGuardianModal({
                     width="100%"
                     borderRadius="20px"
                     backgroundColor="black"
+                    onClick={onClose}
                   >
                     <Box color="#898989">Cancel</Box>
                   </TextButton>

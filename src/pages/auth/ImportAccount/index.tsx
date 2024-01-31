@@ -34,6 +34,7 @@ import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { ethers } from 'ethers';
 import { useTempStore } from '@/store/temp';
+import NoWalletIcon from '@/assets/icons/no-wallet.svg'
 
 export default function ImportAccount({ importWallet, isImporting }: any) {
   const [address, setAddress] = useState('')
@@ -120,7 +121,9 @@ export default function ImportAccount({ importWallet, isImporting }: any) {
             justifyContent="center"
             flexDirection="column"
           >
-            <Box height="100px" width="100px" borderRadius="100px" background="#E3E3E3" marginBottom="30px" />
+            <Box height="100px" width="100px" borderRadius="100px" marginBottom="30px">
+              <Image width="100px" borderRadius="100px" src={NoWalletIcon} />
+            </Box>
             <Heading marginBottom="0" type="h3">
               No wallet found on this device
             </Heading>

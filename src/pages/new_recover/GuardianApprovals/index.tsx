@@ -159,8 +159,8 @@ export default function AddSigner({ next }: any) {
                 <Button
                   width="80px"
                   theme="light"
-                  marginRight="18px"
-                  type="mid"
+                  marginRight="12px"
+                  type="lg"
                   onClick={() => {}}
                 >
                   Back
@@ -169,7 +169,7 @@ export default function AddSigner({ next }: any) {
                   width="80px"
                   maxWidth="100%"
                   theme="dark"
-                  type="mid"
+                  type="lg"
                   onClick={next}
                 >
                   Next

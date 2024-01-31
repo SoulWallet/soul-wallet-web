@@ -193,8 +193,8 @@ export default function SetWalletAddress({ next, back }: any) {
               <Button
                 width="80px"
                 theme="light"
-                marginRight="18px"
-                type="mid"
+                marginRight="12px"
+                type="lg"
                 onClick={back}
               >
                 Back
@@ -202,7 +202,7 @@ export default function SetWalletAddress({ next, back }: any) {
               <Button
                 minWidth="80px"
                 theme="dark"
-                type="mid"
+                type="lg"
                 onClick={handleNext}
                 disabled={disabled}
                 loading={loading}

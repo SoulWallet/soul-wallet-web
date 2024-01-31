@@ -4,7 +4,7 @@ import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection'
 import SignerCard from '@/components/new/SignerCard'
 import GuardianCard from '@/components/new/GuardianCard'
-import { Box, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react'
+import { Box, Menu, MenuList, MenuButton, MenuItem, useToast } from '@chakra-ui/react'
 import SetSignerModal from '@/pages/security_new/SetSignerModal'
 import SelectSignerTypeModal from '@/pages/security_new/SelectSignerTypeModal'
 import SelectGuardianTypeModal from '@/pages/security_new/SelectGuardianTypeModal'
@@ -75,7 +75,8 @@ export default function EditGuardian({
   cancelEdit,
   onEditGuardianConfirm,
   startEditGuardian,
-  cancelEditGuardian
+  cancelEditGuardian,
+  openBackupGuardianModal
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, clearCreateInfo } = useTempStore();
@@ -91,8 +92,12 @@ export default function EditGuardian({
   const { credentials, eoas, } = useSignerStore();
   const { showConfirmPayment } = useWalletContext();
   const { sendErc20, payTask } = useTransaction();
+  const toast = useToast();
 
-  const guardianDetails = guardiansInfo.guardianDetails
+  const guardianDetails = guardiansInfo.guardianDetails || {
+    guardians: [],
+    threshold: 0
+  }
 
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
 
@@ -174,79 +179,89 @@ export default function EditGuardian({
         clearCreateInfo()
         navigate(`/dashboard`);
       } catch (error: any) {
+        setIsCreating(false)
+        toast({
+          status: 'error',
+          title: error.message,
+        });
         console.log('error', error.message)
       }
     } else {
-      // try {
-      setIsCreating(true)
-      const guardianAddresses = guardianList.map((item: any) => item.address);
-      const guardianNames = guardianList.map((item: any) => item.name);
-      const threshold = amountForm.values.amount || 0;
-      const keystore = chainConfig.contracts.l1Keystore;
-      const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
-      const salt = ethers.ZeroHash;
+      try {
+        setIsCreating(true)
+        const guardianAddresses = guardianList.map((item: any) => item.address);
+        const guardianNames = guardianList.map((item: any) => item.name);
+        const threshold = amountForm.values.amount || 0;
+        const keystore = chainConfig.contracts.l1Keystore;
+        const newGuardianHash = calcGuardianHash(guardianAddresses, threshold);
+        const salt = ethers.ZeroHash;
 
-      const guardiansInfo = {
-        keystore,
-        guardianHash: newGuardianHash,
-        guardianNames,
-        guardianDetails: {
-          guardians: guardianAddresses,
-          threshold: Number(threshold),
-          salt,
-        },
-        requireBackup: true,
-        keepPrivate
-      };
+        const guardiansInfo = {
+          keystore,
+          guardianHash: newGuardianHash,
+          guardianNames,
+          guardianDetails: {
+            guardians: guardianAddresses,
+            threshold: Number(threshold),
+            salt,
+          },
+          requireBackup: true,
+          keepPrivate
+        };
 
-      // await api.guardian.backupGuardians(guardiansInfo);
-      const { initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
-      const currentKeys = L1KeyStore.initialKeysToAddress([
-        ...credentials.map((credential: any) => credential.publicKey),
-        ...eoas,
-      ]);
-      const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
-      console.log('currentKeys', currentKeys, initialKeys, newGuardianHash)
+        // await api.guardian.backupGuardians(guardiansInfo);
+        const { initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
+        const currentKeys = L1KeyStore.initialKeysToAddress([
+          ...credentials.map((credential: any) => credential.publicKey),
+          ...eoas,
+        ]);
+        const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
+        console.log('currentKeys', currentKeys, initialKeys, newGuardianHash)
 
-      // const initialKeyHash = L1KeyStore.getKeyHash(initialKeys);
+        // const initialKeyHash = L1KeyStore.getKeyHash(initialKeys);
 
-      const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
+        const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
 
-      const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
-      const parameters = [
-        initialKeyHash,
-        initialGuardianHash,
-        initialGuardianSafePeriod,
-        newGuardianHash,
-        rawKeys,
-        keySignature,
-      ]
+        const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
+        const parameters = [
+          initialKeyHash,
+          initialGuardianHash,
+          initialGuardianSafePeriod,
+          newGuardianHash,
+          rawKeys,
+          keySignature,
+        ]
 
-      const res1 = await api.guardian.createTask({
-        keystore,
-        functionName,
-        parameters
-      })
+        const res1 = await api.guardian.createTask({
+          keystore,
+          functionName,
+          parameters
+        })
 
-      const task = res1.data
-      const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
-      const res2 = await showConfirmPayment(task.estiamtedFee);
-      const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
-      guardianStore.updateGuardiansInfo({
-        ...guardiansInfo
-      })
+        const task = res1.data
+        const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
+        const res2 = await showConfirmPayment(task.estiamtedFee);
+        const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
+        guardianStore.updateGuardiansInfo({
+          ...guardiansInfo
+        })
 
-      for (let i = 0; i < guardianAddresses.length; i++) {
-        const address = guardianAddresses[i]
-        const name = guardianNames[i]
-        if (address) saveAddressName(address.toLowerCase(), name);
+        for (let i = 0; i < guardianAddresses.length; i++) {
+          const address = guardianAddresses[i]
+          const name = guardianNames[i]
+          if (address) saveAddressName(address.toLowerCase(), name);
+        }
+        setIsCreating(false)
+        cancelEditGuardian()
+
+      } catch (error: any) {
+        setIsCreating(false)
+        toast({
+          status: 'error',
+          title: error.message,
+        });
+        console.log('error', error.message)
       }
-      setIsCreating(false)
-      cancelEditGuardian()
-
-      // } catch (error: any) {
-      // console.log('error', error.message)
-      // }
     }
   }, [guardianList, keepPrivate, slotInfo])
 
@@ -263,7 +278,7 @@ export default function EditGuardian({
             <Box>Guardian List</Box>
             {!!guardianList.length && (
               <Box marginLeft="auto">
-                <TextButton type="mid" onClick={() => {}}>
+                <TextButton type="mid" onClick={openBackupGuardianModal}>
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>

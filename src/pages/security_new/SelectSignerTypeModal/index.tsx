@@ -35,6 +35,8 @@ import CoinbaseIcon from '@/assets/wallets/coinbase.png'
 import BinanceIcon from '@/assets/wallets/binance.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
 import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
+import EOAGuardianIcon from '@/assets/icons/eoa-guardian.svg'
+import PasskeySignerIcon from '@/assets/icons/passkey-signer.svg'
 
 export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConnect }: any) {
   const selectWalletExtension = useCallback(() => {
@@ -91,8 +93,9 @@ export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConn
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    background="#D9D9D9"
+                    background="rgba(0, 0, 0, 0.05)"
                   >
+                    <Image src={EOAGuardianIcon} />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px">Wallet extension</TextBody>
@@ -119,8 +122,9 @@ export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConn
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    background="#D9D9D9"
+                    background="rgba(0, 0, 0, 0.05)"
                   >
+                    <Image src={PasskeySignerIcon} />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px">Passkey</TextBody>

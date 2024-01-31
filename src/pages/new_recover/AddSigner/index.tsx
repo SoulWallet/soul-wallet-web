@@ -30,6 +30,8 @@ import PasskeyIcon from '@/components/Icons/Intro/Passkey'
 import AccountIcon from '@/components/Icons/Intro/Account'
 import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
+import PasskeySignerIcon from '@/components/Icons/PasskeySigner'
+import EOASignerIcon from '@/components/Icons/EOASigner'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
@@ -240,10 +242,11 @@ export default function AddSigner({ next }: any) {
                     <Box
                       width="24px"
                       height="24px"
-                      background="#D9D9D9"
                       borderRadius="24px"
                       marginRight="10px"
-                    />
+                    >
+                      <EOASignerIcon />
+                    </Box>
                     <Box>EOA Wallet</Box>
                   </MenuItem>
                   <MenuItem
@@ -256,10 +259,11 @@ export default function AddSigner({ next }: any) {
                     <Box
                       width="24px"
                       height="24px"
-                      background="#D9D9D9"
                       borderRadius="24px"
                       marginRight="10px"
-                    />
+                    >
+                      <PasskeySignerIcon />
+                    </Box>
                     <Box>Passkey</Box>
                   </MenuItem>
                 </MenuList>
@@ -269,8 +273,8 @@ export default function AddSigner({ next }: any) {
               <Button
                 width="80px"
                 theme="light"
-                marginRight="18px"
-                type="mid"
+                marginRight="12px"
+                type="lg"
                 onClick={back}
               >
                 Back
@@ -279,7 +283,7 @@ export default function AddSigner({ next }: any) {
                 width="80px"
                 maxWidth="100%"
                 theme="dark"
-                type="mid"
+                type="lg"
                 onClick={handleNext}
                 disabled={isConfirming || !signers || !signers.length}
                 loading={isConfirming}

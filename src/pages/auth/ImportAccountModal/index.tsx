@@ -31,7 +31,7 @@ import ImportIcon from '@/components/Icons/Auth/Import'
 import Button from '@/components/new/Button'
 import { ethers } from 'ethers';
 
-export default function ImportAccountModal({ isOpen, onClose, importWallet, isImporting }: any) {
+export default function ImportAccountModal({ isOpen, onClose, importWallet, isImporting, openSelectAccount }: any) {
   const [address, setAddress] = useState('')
 
   const onAddressChange = useCallback((e: any) => {
@@ -70,16 +70,27 @@ export default function ImportAccountModal({ isOpen, onClose, importWallet, isIm
                 <Box fontSize="14px" fontWeight="400" display="flex" alignItems="center">
                   Forgot address? Try <Box fontSize="14px" color="#FF2E79" fontWeight="700" marginLeft="6px" cursor="pointer">Social Recovery</Box>
                 </Box>
-                <Button
-                  theme="dark"
-                  color="white"
-                  padding="0 20px"
-                  disabled={!ethers.isAddress(address) || isImporting}
-                  onClick={() => importWallet(address)}
-                  loading={isImporting}
-                >
-                  Go to my wallet
-                </Button>
+                <Box>
+                  <Button
+                    theme="dark"
+                    color="white"
+                    padding="0 20px"
+                    marginRight="14px"
+                    onClick={() => { onClose(); openSelectAccount(); }}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    theme="dark"
+                    color="white"
+                    padding="0 20px"
+                    disabled={!ethers.isAddress(address) || isImporting}
+                    onClick={() => importWallet(address)}
+                    loading={isImporting}
+                  >
+                    Go to my wallet
+                  </Button>
+                </Box>
               </Box>
             </Box>
           </Box>
