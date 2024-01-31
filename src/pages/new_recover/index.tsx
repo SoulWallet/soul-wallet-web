@@ -28,6 +28,7 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
+import RecoverWalletIcon from '@/assets/icons/recover-wallet.svg'
 import SetWalletAddress from './SetWalletAddress'
 import AddSigner from './AddSigner'
 import api from '@/lib/api';
@@ -170,7 +171,9 @@ export default function Recover() {
               borderRadius="120px"
               background="#D9D9D9"
               marginBottom="20px"
-            />
+            >
+              <Image src={RecoverWalletIcon} />
+            </Box>
             <Heading marginBottom="18px" type="h3">
               Recover my wallet
             </Heading>

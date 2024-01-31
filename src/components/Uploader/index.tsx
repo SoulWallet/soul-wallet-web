@@ -39,7 +39,7 @@ export default function Uploader({ onUploaded, children, ...restProps }: any) {
         });
       } else {
         toast({
-          title: 'error',
+          status: 'error',
           title: 'Failed to upload to server',
         });
       }
