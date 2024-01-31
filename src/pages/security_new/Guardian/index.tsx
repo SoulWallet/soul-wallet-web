@@ -48,6 +48,7 @@ export default function Guardian() {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
+  const [canBackToSelectGuardianType, setCanBackToSelectGuardianType] = useState<any>(false);
 
   const [isEditing, setIsEditing] = useState<any>(false);
   const { getAddressName, saveAddressName } = useSettingStore();
@@ -119,15 +120,16 @@ export default function Guardian() {
       setEditingGuardiansInfo(guardiansInfo)
     }
 
+    setCanBackToSelectGuardianType(true)
     setIsSelectGuardianOpen(true)
   }, [isEditing, guardiansInfo])
 
   const startEditGuardian = useCallback(() => {
-    console.log('guardiansInfo kkkk', guardiansInfo)
     if (!isEditing) {
       setEditingGuardiansInfo(guardiansInfo)
     }
 
+    setCanBackToSelectGuardianType(false)
     setIsEditGuardianOpen(true)
   }, [isEditing, guardiansInfo])
 
@@ -187,6 +189,7 @@ export default function Guardian() {
           <ListGuardian
             openEditGuardianModal={openEditGuardianModal}
             startEditGuardian={startEditGuardian}
+            startAddGuardian={startAddGuardian}
             cancelEditGuardian={cancelEditGuardian}
           />
         )}
@@ -217,7 +220,7 @@ export default function Guardian() {
         setIsSelectGuardianOpen={setIsSelectGuardianOpen}
         setIsEditGuardianOpen={setIsEditGuardianOpen}
         onConfirm={onEditGuardianConfirm}
-        canGoBack={true}
+        canGoBack={canBackToSelectGuardianType}
       />
       <BackupGuardianModal
         isOpen={isBackupGuardianOpen}

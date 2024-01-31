@@ -28,6 +28,7 @@ import { useSettingStore } from '@/store/setting';
 export default function ListGuardian({
   openEditGuardianModal,
   startEditGuardian,
+  startAddGuardian
 }: any) {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('guardian');
@@ -222,7 +223,7 @@ export default function ListGuardian({
         justifyContent="center"
       >
         {(!guardianList || !guardianList.length) && (
-          <Button type="mid" onClick={startEditGuardian}>
+          <Button type="mid" onClick={startAddGuardian}>
             <Box marginRight="6px"><PlusIcon color="white" /></Box>
             Add Guardian
           </Button>

@@ -28,6 +28,7 @@ import Title from '@/components/new/Title'
 import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
+import VideoIcon from '@/components/Icons/Video'
 import Button from '@/components/new/Button'
 import MetamaskIcon from '@/assets/wallets/metamask.png'
 import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
@@ -41,7 +42,7 @@ export default function SelectGuardianTypeModal({
   onClose,
   setIsIntroGuardianOpen,
   setIsSelectGuardianOpen,
-  setIsEditGuardianOpen
+  setIsEditGuardianOpen,
 }: any) {
   const startIntroGuardian = useCallback(() => {
     console.log('startIntroGuardian')
@@ -129,7 +130,7 @@ export default function SelectGuardianTypeModal({
                   <Box>
                     <TextBody fontSize="18px" display="flex" alignItems="center">
                       <Box>Email</Box>
-                      <Box as="span" fontSize="10px" fontWeight="500" color="black" background="rgba(0, 0, 0, 0.05)" borderRadius="4px" height="14px" padding="0 4px" marginLeft="10px">Comming soon</Box>
+                      <Box as="span" fontSize="10px" fontWeight="500" color="black" background="rgba(0, 0, 0, 0.05)" borderRadius="4px" height="14px" padding="0 4px" marginLeft="10px">Coming soon</Box>
                     </TextBody>
                     <TextBody type="t2">{`Use email address for wallet recovery. Powered by ZKemail.`}</TextBody>
                   </Box>
@@ -145,7 +146,8 @@ export default function SelectGuardianTypeModal({
                     cursor="pointer"
                     onClick={startIntroGuardian}
                   >
-                    What’s guardian?
+                    <Box marginRight="8px"><VideoIcon /></Box>
+                    <Box>What’s guardian?</Box>
                   </Box>
                   <Box>
                     <Button onClick={startEditGuardian}>

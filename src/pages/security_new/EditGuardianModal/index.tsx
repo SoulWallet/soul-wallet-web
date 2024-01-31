@@ -74,7 +74,7 @@ export default function EditGuardianModal({
                 Use wallet address from yourself or friends & family. Fully decentralized
               </TextBody>
               <Box>
-                <EditGuardianForm onConfirm={onConfirmLocal} onBack={onBack} canGoBack={false} />
+                <EditGuardianForm onConfirm={onConfirmLocal} onBack={onBack} canGoBack={canGoBack} />
               </Box>
             </Box>
           </Box>
