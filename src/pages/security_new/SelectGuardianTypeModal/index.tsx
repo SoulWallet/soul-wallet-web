@@ -36,6 +36,8 @@ import CoinbaseIcon from '@/assets/wallets/coinbase.png'
 import BinanceIcon from '@/assets/wallets/binance.png'
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
 import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
+import EOAGuardianIcon from '@/assets/icons/eoa-guardian.svg'
+import EmailGuardianIcon from '@/assets/icons/email-guardian.svg'
 
 export default function SelectGuardianTypeModal({
   isOpen,
@@ -99,8 +101,9 @@ export default function SelectGuardianTypeModal({
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    background="#D9D9D9"
+                    background="rgba(0, 0, 0, 0.05)"
                   >
+                    <Image src={EmailGuardianIcon} />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px">Ethereum wallet</TextBody>
@@ -124,8 +127,9 @@ export default function SelectGuardianTypeModal({
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    background="#D9D9D9"
+                    background="rgba(0, 0, 0, 0.05)"
                   >
+                    <Image src={EOAGuardianIcon} />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px" display="flex" alignItems="center">

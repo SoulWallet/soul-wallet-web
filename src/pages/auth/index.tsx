@@ -35,6 +35,7 @@ import api from '@/lib/api';
 import useWallet from '@/hooks/useWallet';
 import useSdk from '@/hooks/useSdk';
 import { useSignerStore } from '@/store/signer';
+import AuthImg from '@/assets/auth.svg'
 import SetPasskey from './SetPasskey'
 import ImportAccount from './ImportAccount'
 import LoginModal from './LoginModal'
@@ -354,7 +355,7 @@ export default function Auth() {
               justifyContent="center"
             >
               <Box marginBottom="40px">
-                <Image src={IntroImg} />
+                <Image src={AuthImg} />
               </Box>
               <Box
                 width="335px"
