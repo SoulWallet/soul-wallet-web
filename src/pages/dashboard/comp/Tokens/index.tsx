@@ -79,6 +79,13 @@ const DepositHint = () => {
   );
 };
 
+const lineColors = [
+  '#627EEA',
+  '#2775CA',
+  '#F5AC37',
+  '#1BB193',
+]
+
 const TokenBalanceTable = ({ tokenBalance, showSendAssets }: any) => {
   return (
     <Flex gap="6" flexDir={'column'}>
@@ -89,6 +96,7 @@ const TokenBalanceTable = ({ tokenBalance, showSendAssets }: any) => {
             idx={idx}
             icon={item.logoURI}
             title={item.name || 'Unknown'}
+            lineColor={lineColors[idx % lineColors.length]}
             amount={item.tokenBalanceFormatted}
             // amountDesc={item.symbol}
             onClick={() => showSendAssets(item.contractAddress)}

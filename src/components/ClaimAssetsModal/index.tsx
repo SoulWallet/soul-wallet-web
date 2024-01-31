@@ -5,8 +5,9 @@ import TxModal from '../TxModal';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
-import IconDollar from '@/assets/icons/dollar-white.svg';
 import { useSlotStore } from '@/store/slot';
+import IconClaimable from '@/assets/icons/claimable.svg';
+import IconUnclaimable from '@/assets/icons/unclaimable.svg';
 import { useSettingStore } from '@/store/setting';
 
 const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
@@ -99,9 +100,10 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
         bodyStyle={{ py: '9', px: '42px' }}
       >
         <Box textAlign="center">
-          <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" />
+          <Image src={claimableCount ? IconClaimable : IconUnclaimable} mx="auto" mb="18px" />
+          {/* <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" /> */}
           <Text fontSize={'20px'} mb="2" fontWeight={'800'} lineHeight={'1.6'} letterSpacing={'-0.4px'}>
-            Claim test tokens
+            {claimableCount ? 'Claim test tokens' : 'Claim limit has been reached'}
           </Text>
           <Text fontSize={'14px'} fontWeight={'600'} mb="18px">
             Each wallet address can claim test tokens

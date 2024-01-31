@@ -1,6 +1,7 @@
+import pickColorFromImage from '@/lib/tools';
 import { Flex, Text, Tooltip, Box } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
-import { useMemo, memo } from 'react';
+import { motion } from 'framer-motion';
 
 export const TruncateString = ({ str, num }: any) => {
   if (str.length > num) {
@@ -20,11 +21,12 @@ interface IListItem {
   title: string;
   // titleDesc: string;
   amount: string;
+  lineColor: string;
   // amountDesc: string;
   onClick?: () => void;
 }
 
-export default function ListItem({ icon, title, onClick, amount, idx }: IListItem) {
+export default function ListItem({ icon, title, onClick, amount, idx, lineColor }: IListItem) {
   return (
     <Flex
       onClick={onClick}
@@ -54,7 +56,14 @@ export default function ListItem({ icon, title, onClick, amount, idx }: IListIte
 
       <Flex w="33%" gap="3" align="center">
         <Box bg="#d9d9d9" rounded={'8px'} overflow={'hidden'} h="6px" pos="relative" w="150px">
-          <Box bg="brand.red" pos="absolute" h="6px" w="40%" />
+          <Box
+            as={motion.div}
+            bg={lineColor}
+            pos="absolute"
+            h="6px"
+            initial={{ width: '0' }}
+            animate={{ width: '40%' }}
+          />
         </Box>
         <Text fontSize={'12px'}>40%</Text>
         {/* <Flex display="span" fontWeight={'600'} color="#898989">

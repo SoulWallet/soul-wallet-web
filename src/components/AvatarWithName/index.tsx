@@ -46,7 +46,7 @@ export const EditNameModal = ({
 };
 
 export default function AvatarWithName({ editable = false }: { editable: boolean }) {
-  const { getWalletName, setWalletName } = useTools();
+  const { getWalletName, setWalletName, checkInitialized } = useTools();
   const [editNameModalVisible, setEditNameModalVisible] = useState(false);
   const walletName = getWalletName();
   const { selectedAddress } = useAddressStore();
@@ -63,7 +63,10 @@ export default function AvatarWithName({ editable = false }: { editable: boolean
             {walletName || 'Wallet'}
           </Text>
         </Flex>
-        {editable && <Image src={IconEdit} w="5" cursor={'pointer'} onClick={() => setEditNameModalVisible(true)} />}
+        {/** IMPORTANT TODO, checkInitialized() to var */}
+        {editable && checkInitialized() && (
+          <Image src={IconEdit} w="5" cursor={'pointer'} onClick={() => setEditNameModalVisible(true)} />
+        )}
       </Flex>
       {editNameModalVisible && (
         <EditNameModal

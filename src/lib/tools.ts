@@ -14,10 +14,10 @@ import IconTrade from '@/assets/activities/trade.svg';
 // import IconReceive from '@/assets/activities/receive.svg';
 import IconContract from '@/assets/activities/contract.svg';
 
-import MetamaskIcon from '@/assets/wallets/metamask.png'
-import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
-import InjectedIcon from '@/assets/wallets/injected.svg'
-import UnknownIcon from '@/assets/wallets/unknown.svg'
+import MetamaskIcon from '@/assets/wallets/metamask.png';
+import WalletConnectIcon from '@/assets/wallets/wallet-connect.png';
+import InjectedIcon from '@/assets/wallets/injected.svg';
+import UnknownIcon from '@/assets/wallets/unknown.svg';
 
 export const getWalletIcon = (walletId: string) => {
   switch (walletId) {
@@ -30,7 +30,7 @@ export const getWalletIcon = (walletId: string) => {
     default:
       return UnknownIcon;
   }
-}
+};
 
 export function parseBase64url(base64url: string) {
   base64url = base64url.replace(/\-/g, '+').replace(/_/g, '/');
@@ -347,7 +347,7 @@ export const getIconMapping = (name: string) => {
     case 'transfer erc20':
       return IconSend;
     case 'transfer eth':
-    return IconSend;
+      return IconSend;
     case 'mint':
     case 'minttoken':
       return IconMint;
