@@ -96,10 +96,7 @@ export default function ListGuardian({
             <Box>Guardian List</Box>
             {!!guardianList.length && (
               <Box marginLeft="auto">
-                <TextButton type="mid" onClick={() => {}}>
-                  <Box marginRight="6px"><HistoryIcon /></Box>
-                  Back up list
-                </TextButton>
+
               </Box>
             )}
           </Box>

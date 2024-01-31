@@ -73,7 +73,7 @@ const createStagingSlice = immer<any>((set, get) => ({
     guardianInfo: {
       ...get().guardianInfo,
       editingGuardiansInfo: {
-        ...(get().guardianInfo || {}),
+        ...(get().getEditingGuardiansInfo() || {}),
         ...value
       }
     }

@@ -94,7 +94,10 @@ export default function EditGuardian({
   const { sendErc20, payTask } = useTransaction();
   const toast = useToast();
 
-  const guardianDetails = guardiansInfo.guardianDetails
+  const guardianDetails = guardiansInfo.guardianDetails || {
+    guardians: [],
+    threshold: 0
+  }
 
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
 
