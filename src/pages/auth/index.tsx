@@ -443,6 +443,7 @@ export default function Auth() {
           isOpen={isImportAccountOpen}
           onClose={closeImportAccount}
           importWallet={importWallet}
+          openSelectAccount={openSelectAccount}
           isImporting={isImporting}
         />
       </Box>
