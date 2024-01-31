@@ -39,7 +39,7 @@ export default function Steps({
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                fontFamily="Martian"
+                
                 fontSize="12px"
                 boxSizing="border-box"
                 cursor={onStepChange && i < activeIndex ? 'pointer' : 'inherit'}
@@ -70,7 +70,7 @@ export default function Steps({
         display="flex"
         alignItems="center"
         justifyContent="center"
-        fontFamily="Martian"
+        
         fontSize="12px"
         boxSizing="border-box"
         background={count === activeIndex + 1 ? backgroundColor : ''}

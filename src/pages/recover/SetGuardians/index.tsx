@@ -460,7 +460,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
                       _inputStyles={
                       !!values[`address_${id}`]
                       ? {
-                        fontFamily: 'Martian',
+                        
                         fontWeight: 600,
                         fontSize: '14px',
                         height: '48px',

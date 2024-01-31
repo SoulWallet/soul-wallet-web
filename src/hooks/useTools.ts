@@ -17,7 +17,7 @@ import { useTempStore } from '@/store/temp';
 
 export default function useTools() {
   const toast = useToast();
-  const { showSetGuardianHintModal } = useWalletContext();
+  const { showSetGuardianHintModal, showLogout } = useWalletContext();
   const { clearSigners } = useSignerStore();
   const { clearAddresses } = useAddressStore();
   const { clearGuardianInfo } = useGuardianStore();
@@ -77,7 +77,7 @@ export default function useTools() {
         navigate(`/apps?appUrl=${encodeURIComponent('https://staging.aave.com')}`);
         break;
       case 5:
-        navigate(`/recover`);
+        showLogout('/recover');
         break;
     }
   };

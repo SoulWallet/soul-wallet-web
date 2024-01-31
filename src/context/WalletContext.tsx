@@ -4,13 +4,13 @@ import SignTransactionModal from '@/components/SignTransactionModal';
 import ConfirmPaymentModal from '@/components/ConfirmPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import ClaimAssetsModal from '@/components/ClaimAssetsModal';
+import LogoutModal from '@/components/LogoutModal';
 import TestGuideModal from '@/components/TestGuideModal';
 import FeedbackModal from '@/components/FeedbackModal';
 import SendModal from '@/components/SendModal';
 import ReceiveModal from '@/components/ReceiveModal';
 import SetGuardianHintModal from '@/components/SetGuardianHintModal';
 import useConfig from '@/hooks/useConfig';
-import { useGuardianStore } from '@/store/guardian';
 import { useTempStore } from '@/store/temp';
 import { useChainStore } from '@/store/chain';
 import { useAddressStore } from '@/store/address';
@@ -30,6 +30,7 @@ interface IWalletContext {
   showReceive: () => Promise<void>;
   showSend: (tokenAddress?: string, transferType?:string) => Promise<void>;
   showFeedback: () => Promise<void>;
+  showLogout: (_redirectUrl?: string) => Promise<void>;
   showSetGuardianHintModal: () => Promise<void>;
   checkActivated: () => Promise<boolean | undefined>;
 }
@@ -43,6 +44,7 @@ export const WalletContext = createContext<IWalletContext>({
   showSend: async () => {},
   showClaimAssets: async () => {},
   showFeedback: async () => {},
+  showLogout: async (_redirectUrl?: string) => {},
   showTestGuide: async () => {},
   checkActivated: async () => false,
   showSetGuardianHintModal: async () => {},
@@ -62,6 +64,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const receiveModal = useRef<any>();
   const sendModal = useRef<any>();
   const claimAssetsModal = useRef<any>();
+  const logoutModal = useRef<any>();
   const testGuideModal = useRef<any>();
   const feedbackModal = useRef<any>();
   const setGuardianHintModal = useRef<any>();
@@ -143,6 +146,10 @@ export const WalletContextProvider = ({ children }: any) => {
     return await feedbackModal.current.show();
   };
 
+  const showLogout = async (_redirectUrl:string) => {
+    return await logoutModal.current.show(_redirectUrl);
+  }
+
   const showSetGuardianHintModal = async () => {
     return await setGuardianHintModal.current.show();
   };
@@ -165,6 +172,7 @@ export const WalletContextProvider = ({ children }: any) => {
         showReceive,
         showSend,
         showClaimAssets,
+        showLogout,
         showTestGuide,
         showFeedback,
         checkActivated,
@@ -182,6 +190,7 @@ export const WalletContextProvider = ({ children }: any) => {
       <TestGuideModal ref={testGuideModal} />
       <FeedbackModal ref={feedbackModal} />
       <SetGuardianHintModal ref={setGuardianHintModal} />
+      <LogoutModal ref={logoutModal} />
     </WalletContext.Provider>
   );
 };

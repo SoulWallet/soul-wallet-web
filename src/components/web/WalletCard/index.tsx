@@ -31,12 +31,12 @@ export default function WalletCard({ statusText, titleText, steps }: any) {
             padding="0 10px"
             display="inline-block"
             fontWeight="600"
-            fontFamily="Martian"
+            
           >
             {statusText}
           </Box>
         </Box>
-        <Box width="100%" fontSize="16px" fontWeight="600" marginTop="10px" fontFamily="Martian">
+        <Box width="100%" fontSize="16px" fontWeight="600" marginTop="10px" >
           {titleText || 'YOUR SOUL WALLET!'}
         </Box>
         {steps && <Box width="100%">{steps}</Box>}

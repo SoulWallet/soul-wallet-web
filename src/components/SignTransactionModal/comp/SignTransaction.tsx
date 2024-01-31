@@ -338,8 +338,10 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             {getAddressName(selectedAddress)}({toShortAddress(selectedAddress)})
           </Box>
         </Box>
+            {/** Only show when interact with dapp */}
+
         <Box textAlign={'center'} mb="9">
-          <Tooltip
+          {/* <Tooltip
             color="brand.green"
             bg="#EFFFEE"
             label={
@@ -366,88 +368,85 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 Low risk
               </Text>
             </Flex>
-          </Tooltip>
+          </Tooltip> */}
+        </Box>
+
+        <Box mb="3">
+          <Flex gap="6" align={'center'}>
+            <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
+            <Flex
+              gap="1"
+              align={'center'}
+              onClick={() => setShowMore((prev) => !prev)}
+              cursor={'pointer'}
+              whiteSpace={'nowrap'}
+            >
+              <Text userSelect={'none'} color="#818181" fontSize={'14px'}>
+                Show {showMore ? 'less' : 'more'}
+              </Text>
+              <Image src={IconChevronDown} transform={showMore ? 'rotate(180deg)' : ''} />
+            </Flex>
+            <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
+          </Flex>
         </Box>
 
         <Flex flexDir={'column'} gap="3">
-          <Box>
-            <Flex gap="6" align={'center'}>
-              <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
-              <Flex
-                gap="1"
-                align={'center'}
-                onClick={() => setShowMore((prev) => !prev)}
-                cursor={'pointer'}
-                whiteSpace={'nowrap'}
-              >
-                <Text userSelect={'none'} color="#818181" fontSize={'14px'}>
-                  Show more
-                </Text>
-                <Image src={IconChevronDown} transform={showMore ? 'rotate(180deg)' : ''} />
+          <InfoWrap color="#818181" fontSize="14px">
+            <InfoItem>
+              <LabelItem label="Gas" tooltip={'123'} chainVisible={true} />
+              <Flex gap="2" fontWeight={'500'}>
+                {requiredAmount ? (
+                  <>
+                    <Text>{requiredAmount}</Text>
+                    <GasSelect
+                      gasToken={payToken}
+                      sponsor={sponsor}
+                      useSponsor={useSponsor}
+                      onChange={(val: string, isSponsor: boolean) => onPayTokenChange(val, isSponsor)}
+                    />
+                  </>
+                ) : (
+                  <Image src={IconLoading} />
+                )}
               </Flex>
-              <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
-            </Flex>
-          </Box>
-
-          {showMore && (
-            <InfoWrap color="#818181" fontSize="14px">
+            </InfoItem>
+            {useSponsor && requiredAmount && (
               <InfoItem>
-                <LabelItem label="Gas" tooltip={'123'} chainVisible={true} />
-
-                <Flex gap="2" fontWeight={'500'}>
-                  {requiredAmount ? (
-                    <>
-                      <Text>{requiredAmount}</Text>
-                      <GasSelect
-                        gasToken={payToken}
-                        sponsor={sponsor}
-                        useSponsor={useSponsor}
-                        onChange={(val: string, isSponsor: boolean) => onPayTokenChange(val, isSponsor)}
-                      />
-                    </>
-                  ) : (
-                    <Image src={IconLoading} />
-                  )}
-                </Flex>
+                <LabelItem label="Sponsor" tooltip={'123'} />
+                <Text color="brand.red">-{requiredAmount} ETH</Text>
               </InfoItem>
-              {useSponsor && requiredAmount && (
-                <InfoItem>
-                  <LabelItem label="Sponsor" tooltip={'123'} />
-                  <Text color="brand.red">-{requiredAmount} ETH</Text>
-                </InfoItem>
-              )}
+            )}
 
-              <InfoItem color="#000" fontWeight="600">
-                <Text>Total</Text>
-                {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
-                {totalMsgValue && Number(totalMsgValue) && !useSponsor && requiredAmount ? ' + ' : ''}
-                {!useSponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
-                {!useSponsor &&
-                requiredAmount &&
-                decodedData &&
+            <InfoItem color="#000" fontWeight="600">
+              <Text>Total</Text>
+              {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
+              {totalMsgValue && Number(totalMsgValue) && !useSponsor && requiredAmount ? ' + ' : ''}
+              {!useSponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
+              {!useSponsor &&
+              requiredAmount &&
+              decodedData &&
+              decodedData.length > 0 &&
+              decodedData.filter((item: any) => item.sendErc20Amount).length > 0
+                ? ' + '
+                : ''}
+              {decodedData &&
                 decodedData.length > 0 &&
-                decodedData.filter((item: any) => item.sendErc20Amount).length > 0
-                  ? ' + '
-                  : ''}
-                {decodedData &&
-                  decodedData.length > 0 &&
-                  decodedData
-                    .filter((item: any) => item.sendErc20Amount)
-                    .map((item: any) => item.sendErc20Amount)
-                    .join(' + ')}
+                decodedData
+                  .filter((item: any) => item.sendErc20Amount)
+                  .map((item: any) => item.sendErc20Amount)
+                  .join(' + ')}
+            </InfoItem>
+            {hintText && (
+              <InfoItem>
+                <Text color="#f00">{hintText}</Text>
               </InfoItem>
-              {hintText && (
-                <InfoItem>
-                  <Text color="#f00">{hintText}</Text>
-                </InfoItem>
-              )}
-              {!balanceEnough && !useSponsor && (
-                <InfoItem>
-                  <Text color="#f00">Not enough balance</Text>
-                </InfoItem>
-              )}
-            </InfoWrap>
-          )}
+            )}
+            {!balanceEnough && !useSponsor && (
+              <InfoItem>
+                <Text color="#f00">Not enough balance</Text>
+              </InfoItem>
+            )}
+          </InfoWrap>
         </Flex>
 
         {/* {decodedData && decodedData.length > 1 && (

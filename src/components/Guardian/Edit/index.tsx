@@ -377,7 +377,7 @@ const GuardianInput = ({
         setRightInput={setRightInput}
         rightErrorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
         _rightInputStyles={{
-          fontFamily: 'Martian',
+          
           fontWeight: 600,
           fontSize: '14px',
         }}

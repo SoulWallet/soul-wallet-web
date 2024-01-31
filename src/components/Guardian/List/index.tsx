@@ -167,7 +167,7 @@ export default function GuardianList({
                     rightPlaceholder={`Guardian address ${i + 1}`}
                     rightValue={item.address}
                     _rightInputStyles={{
-                      fontFamily: 'Martian',
+                      
                       fontWeight: 600,
                       fontSize: '14px',
                     }}

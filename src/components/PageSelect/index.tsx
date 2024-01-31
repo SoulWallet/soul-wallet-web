@@ -1,6 +1,4 @@
-import React from 'react';
 import { Box, Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, MenuDivider } from '@chakra-ui/react';
-import useBrowser from '@/hooks/useBrowser';
 import MenuIcon from '@/components/Icons/Menu';
 import AssetIcon from '@/components/Icons/Asset';
 import ActivityIcon from '@/components/Icons/Activity';
@@ -8,8 +6,8 @@ import LogoutIcon from '@/components/Icons/Logout';
 import AppsIcon from '@/components/Icons/Apps';
 import SecurityIcon from '@/components/Icons/Security';
 import { toCapitalize } from '@/lib/tools';
-import storage from '@/lib/storage';
-import useTools from '@/hooks/useTools';
+import useWalletContext from '@/context/hooks/useWalletContext';
+import useBrowser from '@/hooks/useBrowser';
 
 const getPageIcon = (type: string) => {
   if (type === 'asset') {
@@ -26,14 +24,8 @@ const getPageIcon = (type: string) => {
 };
 
 export default function PageSelect() {
-  const { navigate } = useBrowser();
-  const { clearLogData } = useTools();
-
-  const doLogout = () => {
-    clearLogData();
-    navigate('/auth');
-  };
-
+const {showLogout} = useWalletContext();
+const { navigate } = useBrowser();
   return (
     <Menu>
       {() => (
@@ -56,7 +48,7 @@ export default function PageSelect() {
               return (
                 <MenuItem
                   key={item}
-                  onClick={() => (item === 'logout' ? doLogout() : navigate(`/${item}`))}
+                  onClick={() => (item === 'logout' ? showLogout() : navigate(`/${item}`))}
                   width="60px"
                   height="60px"
                   borderRadius="16px"

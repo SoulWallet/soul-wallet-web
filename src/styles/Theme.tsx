@@ -23,7 +23,8 @@ const menuTheme = defineStyleConfig({
   baseStyle: {
     list: {
       borderRadius: '16px',
-      boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+      boxShadow: "0px 4px 20px 0px rgba(0, 0, 0, 0.10)",
+      // boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
       overflow: 'hidden',
     },
     divider: {

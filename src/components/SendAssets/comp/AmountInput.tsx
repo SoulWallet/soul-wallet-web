@@ -91,7 +91,7 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
               outline="none"
               border="none"
               fontSize="48px"
-              fontWeight={'800'}
+              fontWeight={'700'}
               lineHeight={'1'}
               variant={'unstyled'}
             />

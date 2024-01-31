@@ -57,7 +57,7 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
             justifyContent="center"
             flexDirection="column"
           >
-            <Box fontSize="12px" fontWeight="600" fontFamily="Martian">Estimated fee</Box>
+            <Box fontSize="12px" fontWeight="600" >Estimated fee</Box>
             <Box fontSize={{base: "20px", md: "24px", lg: "32px"}} fontWeight="800" fontFamily="Nunito" textAlign="center">{BN(fee).shiftedBy(-18).toString()} ETH</Box>
           </Box>
           <Box width="100%" display="flex" alignItems="center" justifyContent="center">
@@ -67,18 +67,18 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
               {tokenBalance && tokenBalance[0] && <Text fontSize="12px" fontWeight="600" marginLeft="5px">Available {tokenBalance[0].tokenBalanceFormatted}</Text>}
             </Box>
           </Box>
-          {!hasBalance && <Text fontSize="12px" fontWeight="500" fontFamily="Martian" textAlign="center">Not enough balance</Text>}
+          {!hasBalance && <Text fontSize="12px" fontWeight="500"  textAlign="center">Not enough balance</Text>}
           <Box width="100%" height="1px" background="#D7D7D7" />
           <Box padding="0 10px">
             <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
-              <Box fontSize="12px" fontWeight="500" fontFamily="Martian">From:</Box>
-              <Box fontSize="12px" fontWeight="400" fontFamily="Martian" color="#6A52EF">
+              <Box fontSize="12px" fontWeight="500" >From:</Box>
+              <Box fontSize="12px" fontWeight="400"  color="#6A52EF">
                 <AccountSelect isInModal={true} />
               </Box>
             </Box>
             <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
-              <Box fontSize="12px" fontWeight="500" fontFamily="Martian">Network:</Box>
-              <Box fontSize="12px" fontWeight="400" fontFamily="Martian" color="#6A52EF">
+              <Box fontSize="12px" fontWeight="500" >Network:</Box>
+              <Box fontSize="12px" fontWeight="400"  color="#6A52EF">
                 <ChainSelect isInModal={true} />
               </Box>
             </Box>

@@ -14,11 +14,7 @@ import { headerHeight } from '@/config';
 export default function Header() {
   const { navigate } = useBrowser();
   const { clearLogData } = useTools();
-
-  const doLogout = () => {
-    clearLogData();
-    navigate('/auth');
-  };
+  const {showLogout} = useWalletContext();
 
   return (
     <Flex
@@ -37,7 +33,7 @@ export default function Header() {
         <AccountSelectFull />
         {/* <ChainSelect /> */}
         <Flex
-          onClick={doLogout}
+          onClick={() => showLogout()}
           cursor={'pointer'}
           align={'center'}
           justify={'center'}

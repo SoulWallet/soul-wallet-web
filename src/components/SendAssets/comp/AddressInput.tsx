@@ -29,7 +29,7 @@ export function AddressInput({ label, placeholder, value, memo, onChange, disabl
           onChange={onChange}
           variant={'unstyled'}
           _disabled={{ opacity: '1', cursor: 'not-allowed' }}
-          _placeholder={{ fontWeight: '600' }}
+          _placeholder={{ fontWeight: '600', color: "rgba(0, 0, 0, 0.20)" }}
           fontWeight={'800'}
           autoFocus
           color="#1e1e1e"
