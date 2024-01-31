@@ -38,7 +38,7 @@ export default function useForm(props: any) {
     setValues({ ...values, [fieldName]: value });
   };
 
-    const onChangeValues = (newValues: any) => {
+  const onChangeValues = (newValues: any) => {
     setValues({ ...values, ...newValues });
   };
 

@@ -75,7 +75,8 @@ export default function EditGuardian({
   cancelEdit,
   onEditGuardianConfirm,
   startEditGuardian,
-  cancelEditGuardian
+  cancelEditGuardian,
+  openBackupGuardianModal
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, clearCreateInfo } = useTempStore();
@@ -263,7 +264,7 @@ export default function EditGuardian({
             <Box>Guardian List</Box>
             {!!guardianList.length && (
               <Box marginLeft="auto">
-                <TextButton type="mid" onClick={() => {}}>
+                <TextButton type="mid" onClick={openBackupGuardianModal}>
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>

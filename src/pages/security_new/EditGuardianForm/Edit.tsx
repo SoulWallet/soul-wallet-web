@@ -287,8 +287,9 @@ const GuardianInput = ({
   }
 
   const rightOnBlur = (id: any, value: any) => {
-    onBlur(`address_${id}`)
-    // setIsOpen(false)
+    if (value) {
+      onBlur(`address_${id}`)(value)
+    }
   }
 
   const setRightInput = (value: any) => {

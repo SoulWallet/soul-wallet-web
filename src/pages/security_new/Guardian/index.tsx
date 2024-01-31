@@ -180,6 +180,7 @@ export default function Guardian() {
           <EditGuardian
             startEditGuardian={startEditGuardian}
             cancelEditGuardian={cancelEditGuardian}
+            openBackupGuardianModal={openBackupGuardianModal}
           />
         )}
         {!isEditing && (
