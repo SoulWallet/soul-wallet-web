@@ -278,8 +278,8 @@ export default function Auth() {
         padding="20px"
         display="flex"
         alignItems="center"
-        justifyContent="flex-start"
-        minHeight="calc(100% - 58px)"
+        justifyContent="center"
+        height="calc(100vh - 58px)"
         flexDirection="column"
       >
         <RoundContainer

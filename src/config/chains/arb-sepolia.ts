@@ -27,7 +27,7 @@ export default {
   defaultMaxPriorityFee: '0',
   chainName: 'Arbitrum Sepolia',
   chainToken: 'ETH',
-  addressPrefix: 'arb:',
+  addressPrefix: 'arb-sep:',
   support1559: true,
 
   recovering: false,

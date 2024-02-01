@@ -36,12 +36,9 @@ export default function SetPasskey() {
   const [credentials, setCredentials] = useState<any>([])
   const { register } = usePassKey()
   const toast = useToast();
-  const {
-    addCredential,
-  } = useSignerStore();
   const [isCreating, setIsCreating] = useState(false);
   const { navigate } = useBrowser();
-  console.log('create', credentials)
+  console.log('create info', createInfo)
 
   const createWallet = async () => {
     try {
@@ -176,14 +173,14 @@ export default function SetPasskey() {
                 </Box>
               </Box>
               <Box>
-                <Button
+                {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && <Button
                   width="80px"
                   theme="light"
                   marginRight="18px"
                   onClick={skip}
                 >
                   Skip
-                </Button>
+                </Button>}
                 <Button
                   width="115px"
                   maxWidth="100%"
@@ -293,14 +290,15 @@ export default function SetPasskey() {
               </Box>
             </Box>
             <Box>
-              <Button
+              {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && <Button
                 width="80px"
                 theme="light"
                 marginRight="18px"
                 onClick={skip}
               >
                 Skip
-              </Button>
+              </Button>}
+              
               <Button
                 width="115px"
                 maxWidth="100%"

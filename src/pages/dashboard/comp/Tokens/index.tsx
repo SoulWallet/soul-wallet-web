@@ -12,11 +12,7 @@ import { SkipModal } from '@/pages/create/SetGuardians';
 import ReceiveCode from '@/components/ReceiveCode';
 import { useAddressStore } from '@/store/address';
 
-const SetGuardianHint = ({
-  onShowSkip
-}: {
-  onShowSkip: () => void;
-}) => {
+const SetGuardianHint = ({ onShowSkip }: { onShowSkip: () => void }) => {
   return (
     <Flex
       align={'center'}
@@ -80,11 +76,17 @@ const DepositHint = () => {
 };
 
 const lineColors = [
-  '#627EEA',
-  '#2775CA',
-  '#F5AC37',
-  '#1BB193',
-]
+  '#5B92FF',
+  '#AF81F2',
+  '#FF9458',
+  '#FFAAB4',
+  '#FE5A95',
+  '#AF56D9',
+  '#00C4A0',
+  '#FFA800',
+  '#8AB11B',
+  '#6328E5',
+];
 
 const TokenBalanceTable = ({ tokenBalance, showSendAssets }: any) => {
   return (
@@ -96,7 +98,7 @@ const TokenBalanceTable = ({ tokenBalance, showSendAssets }: any) => {
             idx={idx}
             icon={item.logoURI}
             title={item.name || 'Unknown'}
-            lineColor={lineColors[idx % lineColors.length]}
+            lineColor={lineColors[idx] || 'brand.gray'}
             amount={item.tokenBalanceFormatted}
             // amountDesc={item.symbol}
             onClick={() => showSendAssets(item.contractAddress)}

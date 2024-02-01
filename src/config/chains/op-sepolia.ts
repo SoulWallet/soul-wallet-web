@@ -28,7 +28,7 @@ export default {
   defaultMaxPriorityFee: '0',
   chainName: 'Optimism Sepolia',
   chainToken: 'ETH',
-  addressPrefix: 'op:',
+  addressPrefix: 'opsep:',
   support1559: true,
   recovering: false,
   paymasterTokens: [
