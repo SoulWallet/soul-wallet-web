@@ -1,4 +1,3 @@
-import pickColorFromImage from '@/lib/tools';
 import { Flex, Text, Tooltip, Box } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import { motion } from 'framer-motion';

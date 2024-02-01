@@ -44,7 +44,7 @@ export const WalletContext = createContext<IWalletContext>({
   showSend: async () => {},
   showClaimAssets: async () => {},
   showFeedback: async () => {},
-  showLogout: async (_redirectUrl?: string) => {},
+  showLogout: async (_redirectUrl?: any) => {},
   showTestGuide: async () => {},
   checkActivated: async () => false,
   showSetGuardianHintModal: async () => {},
@@ -146,7 +146,7 @@ export const WalletContextProvider = ({ children }: any) => {
     return await feedbackModal.current.show();
   };
 
-  const showLogout = async (_redirectUrl:string) => {
+  const showLogout = async (_redirectUrl:any) => {
     return await logoutModal.current.show(_redirectUrl);
   }
 
