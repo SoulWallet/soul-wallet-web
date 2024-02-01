@@ -3,7 +3,7 @@ import Button from '../Button';
 import { Flex, Box, Text, useToast } from '@chakra-ui/react';
 import useTransaction from '@/hooks/useTransaction';
 import { ethers } from 'ethers';
-import BN from 'bignumber.js'
+import BN from 'bignumber.js';
 import { useBalanceStore } from '@/store/balance';
 import AmountInput from './comp/AmountInput';
 import { AddressInput, AddressInputReadonly } from './comp/AddressInput';
@@ -11,6 +11,7 @@ import api from '@/lib/api';
 import { useSlotStore } from '@/store/slot';
 import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
+import useConfig from '@/hooks/useConfig';
 
 interface ISendAssets {
   tokenAddress: string;
@@ -20,10 +21,11 @@ interface ISendAssets {
 export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const [amount, setAmount] = useState<string>('');
   const { getTokenBalance } = useBalanceStore();
-  const { setFinishedSteps} = useSettingStore();
+  const { setFinishedSteps } = useSettingStore();
   const [sendToken, setSendToken] = useState(tokenAddress);
   const [receiverAddress, setReceiverAddress] = useState<string>('');
   const { slotInfo } = useSlotStore();
+  const { chainConfig } = useConfig();
   const toast = useToast();
 
   const selectedToken = getTokenBalance(sendToken);
@@ -33,7 +35,19 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const { sendErc20, sendEth } = useTransaction();
 
   const confirmAddress = async () => {
-    const trimedAddress = receiverAddress ? receiverAddress.trim() : '';
+    let trimedAddress = receiverAddress ? receiverAddress.trim() : '';
+    if (trimedAddress.includes(':')) {
+      const chainPrefix = `${trimedAddress.split(':')[0]}:`;
+      if (chainPrefix !== chainConfig.addressPrefix) {
+        toast({
+          title: 'Please select the correct network',
+          status: 'error',
+        });
+        return;
+      } else {
+        trimedAddress = trimedAddress.split(':')[1];
+      }
+    }
     if (!trimedAddress || !ethers.isAddress(trimedAddress)) {
       toast({
         title: 'Invalid address',
@@ -66,7 +80,7 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
     const res = await api.operation.finishStep({
       slot: slotInfo.slot,
       steps: [1],
-    })
+    });
 
     setFinishedSteps(res.data.finishedSteps);
 
@@ -78,7 +92,6 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const resetState = () => {
     setAmount('');
     setReceiverAddress('');
-
   };
 
   return (
