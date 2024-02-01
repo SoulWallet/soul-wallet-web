@@ -93,7 +93,7 @@ export default function BackupGuardianModal({
     threshold: 0
   }
   console.log('guardianDetails', guardianDetails)
-  const threshold = guardianDetails.threshold || 0
+  const threshold = guardiansInfo.threshold || guardianDetails.threshold || 0
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
   const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
     return {
