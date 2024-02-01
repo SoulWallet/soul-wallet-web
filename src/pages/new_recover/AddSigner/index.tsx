@@ -227,7 +227,7 @@ export default function AddSigner({ next }: any) {
                     fontFamily="Nunito"
                   >
                     <Box marginRight="8px"><PlusIcon color="black" /></Box>
-                    <Box>Add Passkey</Box>
+                    <Box>Add Signer</Box>
                   </Box>
                 </MenuButton>
                 <MenuList padding="0">

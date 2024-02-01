@@ -40,7 +40,12 @@ const validate = (values: any) => {
   const errors: any = {};
   const { address } = values;
 
-  if (!ethers.isAddress(address)) {
+  let trimedAddress = address ? address.trim() : '';
+  if (trimedAddress.includes(':')) {
+    trimedAddress = trimedAddress.split(':')[1];
+  }
+
+  if (!ethers.isAddress(trimedAddress)) {
     errors.address = 'Invalid Address';
   }
 
@@ -64,7 +69,10 @@ export default function SetWalletAddress({ next, back }: any) {
 
     try {
       setLoading(true);
-      const walletAddress = values.address
+      let walletAddress = values.address;
+      if(walletAddress.includes(':')) {
+        walletAddress = walletAddress.split(':')[1]
+      }
       const res1 = await api.guardian.getSlotInfo({ walletAddress });
       if (!res1.data) {
         setLoading(false);
