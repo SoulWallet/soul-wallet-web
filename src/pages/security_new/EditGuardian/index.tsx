@@ -79,7 +79,7 @@ export default function EditGuardian({
   openBackupGuardianModal
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
-  const { getEditingGuardiansInfo, clearCreateInfo } = useTempStore();
+  const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
@@ -120,8 +120,18 @@ export default function EditGuardian({
   });
 
   const selectAmount = (amount: any) => () => {
+    updateEditingGuardiansInfo({
+      threshold: amount
+    })
+
     amountForm.onChange('amount')(amount);
   };
+
+  useEffect(() => {
+    updateEditingGuardiansInfo({
+      threshold: getRecommandCount(amountData.guardiansCount)
+    })
+  }, [])
 
   /* useEffect(() => {
    *   setAmountData({ guardiansCount: guardianList.length });
