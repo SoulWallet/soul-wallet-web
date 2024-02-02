@@ -300,7 +300,7 @@ export default function Auth() {
             pt="100px"
           >
             <Heading marginBottom="40px" fontSize="40px">
-              Your smart wallet for Ethereum L2s
+              Social recovery wallet for Ethereum
             </Heading>
             <Box marginBottom="90px">
               <Box marginBottom="18px" height="20px" display="flex">
@@ -315,7 +315,7 @@ export default function Auth() {
                 <Box marginRight="14px"><AccountIcon /></Box>
                 <Box>
                   <TextBody>
-                    Never lose your wallet
+                    Recover wallet through trusted friends
                   </TextBody>
                 </Box>
               </Box>
@@ -323,7 +323,7 @@ export default function Auth() {
                 <Box marginRight="14px"><TransferIcon /></Box>
                 <Box>
                   <TextBody>
-                    Maximize flexibility when transacting
+                    Pay gas fee with ERC-20 tokens and stablecoin
                   </TextBody>
                 </Box>
               </Box>
@@ -331,7 +331,7 @@ export default function Auth() {
                 <Box marginRight="14px"><TokenIcon /></Box>
                 <Box>
                   <TextBody>
-                    Unified Ethereum Experience
+                    Cross-L2 experience secured by Ethereum
                   </TextBody>
                 </Box>
               </Box>
