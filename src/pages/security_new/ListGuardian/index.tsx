@@ -124,7 +124,6 @@ export default function ListGuardian({
                       key={i}
                       name={guardianNames[i] || 'No Name'}
                       address={address}
-                      time="Added on 2023-12-14 "
                       marginRight="18px"
                       cursor="pointer"
                     />
