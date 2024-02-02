@@ -25,19 +25,26 @@ import {
   Input
 } from '@chakra-ui/react'
 import TextBody from '@/components/new/TextBody'
+import useBrowser from '@/hooks/useBrowser';
 import Title from '@/components/new/Title'
 import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import ImportIcon from '@/components/Icons/Auth/Import'
+import BackIcon from '@/components/Icons/Back'
 import Button from '@/components/new/Button'
 import { ethers } from 'ethers';
 
 export default function ImportAccountModal({ isOpen, onClose, importWallet, isImporting, openSelectAccount }: any) {
   const [address, setAddress] = useState('')
+  const { navigate } = useBrowser();
 
   const onAddressChange = useCallback((e: any) => {
     const address = e.target.value
     console.log('address', address)
     setAddress(address)
+  }, [])
+
+  const goToRecover = useCallback(() => {
+    navigate(`/recover`);
   }, [])
 
   return (
@@ -54,6 +61,21 @@ export default function ImportAccountModal({ isOpen, onClose, importWallet, isIm
         >
           Import account
         </ModalHeader>
+        <Box>
+          <Box
+            display="flex"
+            justifyContent="flex-start"
+            alignItems="center"
+            fontWeight="800"
+            padding="0 32px"
+            cursor="pointer"
+            gap="8px"
+            onClick={() => { onClose(); openSelectAccount(); }}
+          >
+            <Box as="span"><BackIcon /></Box>
+            <Box>Back to select wallet</Box>
+          </Box>
+        </Box>
         <ModalCloseButton top="14px" />
         <ModalBody overflow="auto" padding="20px 32px">
           <Box
@@ -68,18 +90,9 @@ export default function ImportAccountModal({ isOpen, onClose, importWallet, isIm
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between" marginBottom="10px">
                 <Box fontSize="14px" fontWeight="400" display="flex" alignItems="center">
-                  Forgot address? Try <Box fontSize="14px" color="#FF2E79" fontWeight="700" marginLeft="6px" cursor="pointer">Social Recovery</Box>
+                  Forgot address? Try <Box fontSize="14px" color="#FF2E79" fontWeight="700" marginLeft="6px" cursor="pointer" onClick={goToRecover}>Social Recovery</Box>
                 </Box>
                 <Box>
-                  <Button
-                    theme="dark"
-                    color="white"
-                    padding="0 20px"
-                    marginRight="14px"
-                    onClick={() => { onClose(); openSelectAccount(); }}
-                  >
-                    Back
-                  </Button>
                   <Button
                     theme="dark"
                     color="white"

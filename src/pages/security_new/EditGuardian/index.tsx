@@ -178,7 +178,8 @@ export default function EditGuardian({
         })
 
         // guardianStore()
-        await api.guardian.backupGuardians(guardiansInfo);
+        console.log('keepPrivate', keepPrivate)
+        if (!keepPrivate) await api.guardian.backupGuardians(guardiansInfo);
         guardianStore.setGuardiansInfo(guardiansInfo)
 
         for (let i = 0; i < guardianAddresses.length; i++) {
@@ -225,7 +226,7 @@ export default function EditGuardian({
           keepPrivate
         };
 
-        // await api.guardian.backupGuardians(guardiansInfo);
+        await api.guardian.backupGuardians(guardiansInfo);
         const { initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
         const currentKeys = L1KeyStore.initialKeysToAddress([
           ...credentials.map((credential: any) => credential.publicKey),
@@ -300,7 +301,7 @@ export default function EditGuardian({
 
   const onBackupFinished = useCallback(() => {
     next()
-  }, [])
+  }, [keepPrivate])
 
   return (
     <Fragment>

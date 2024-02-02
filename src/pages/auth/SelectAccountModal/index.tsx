@@ -33,9 +33,22 @@ import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
 import IconEth from '@/assets/chains/eth.svg';
 
+const getChainIcon = (chainId: any) => {
+  if (chainId == '0xaa36a7') {
+    return IconEth
+  } else if (chainId == '0x66eee') {
+    return IconArb
+  } else if (chainId == '0xaa37dc') {
+    return IconOp
+  }
+
+  return IconEth
+}
+
 export default function SelectAccountModal({ isOpen, onClose, startImportAccount, activeLoginAccount, importWallet, isImporting }: any) {
   const [selectedAddress, setSelectedAddress] = useState()
-  const chainId = '0xaa36a7'
+  const [chainId, setChainId] = useState<any>('0xaa36a7')
+  const chainIds = ['0xaa36a7', '0x66eee', '0xaa37dc']
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -65,20 +78,16 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
                 Multiple wallets found under this signer, please select to login
               </Title>
               <Box width="100%" display="flex" flexWrap="wrap">
-                <Box borderRadius="12px" padding="24px" width="100%" marginBottom="24px" border={(activeLoginAccount && activeLoginAccount[chainId] === selectedAddress) ? '2px solid black' : `1px solid rgba(0, 0, 0, 0.1)`} onClick={() => setSelectedAddress(activeLoginAccount && activeLoginAccount[chainId])}>
+                <Box borderRadius="12px" padding="24px" width="100%" marginBottom="24px" border={'2px solid black'} onClick={() => { setSelectedAddress(activeLoginAccount && activeLoginAccount[chainId])}} cursor="pointer">
                   <Title fontSize="18px">Wallet _1</Title>
                   {!!activeLoginAccount && (
                     <Fragment>
                       <Box display="flex" marginTop="18px">
-                        <Box marginRight="11px" borderBottom="2px solid black" paddingBottom="10px" cursor="pointer">
-                          <Image width="22px" height="22px" src={IconEth} borderRadius="100%" />
-                        </Box>
-                        <Box marginRight="11px" opacity="0.5" cursor="pointer">
-                          <Image width="22px" height="22px" src={IconArb} borderRadius="100%" />
-                        </Box>
-                        <Box marginRight="11px" opacity="0.5" cursor="pointer">
-                          <Image width="22px" height="22px" src={IconOp} borderRadius="100%" />
-                        </Box>
+                        {chainIds.map((id: any) =>
+                          <Box marginRight="11px" borderBottom={id === chainId ? '2px solid black' : 'none'} opacity={id === chainId ? '1' : '0.5'} paddingBottom="10px" cursor="pointer" onClick={() => setChainId(id)}>
+                            <Image width="22px" height="22px" src={getChainIcon(id)} borderRadius="100%" />
+                          </Box>
+                        )}
                       </Box>
                       <Box background="rgba(236, 236, 236, 0.3)" borderRadius="12px" padding="14px" marginTop="14px">
                         <TextBody fontWeight="normal">ETH Address: {activeLoginAccount[chainId]}</TextBody>

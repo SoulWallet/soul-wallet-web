@@ -175,7 +175,6 @@ const defaultGuardianInfo = {
 
 export default function GuardianForm({
   cancelEdit,
-  startBackup,
   startGuardianInterval,
   onConfirm,
   onBack,
@@ -185,13 +184,12 @@ export default function GuardianForm({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const tempStore = useTempStore()
-  const { getEditingGuardiansInfo } = tempStore;
-  const guardiansInfo = getEditingGuardiansInfo();
-  const guardianDetails = guardiansInfo.guardianDetails || {
+  const { recoverInfo } = tempStore;
+  const guardianDetails = recoverInfo.guardianDetails || {
     guardians: [],
     threshold: 0
   }
-  const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
+  const guardianNames = (recoverInfo && recoverInfo.guardianNames) || []
   const defaultGuardianIds = getDefaultGuardianIds((guardianDetails.guardians && guardianDetails.guardians.length > 1 && guardianDetails.guardians.length) || 1)
   const [guardianIds, setGuardianIds] = useState(defaultGuardianIds);
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
@@ -207,7 +205,6 @@ export default function GuardianForm({
   const { showConfirmPayment } = useWalletContext();
   const { credentials } = useSignerStore();
   const [showAdvance, setShowAdvance] = useState(false)
-  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
   const [status, setStatus] = useState<string>('editing');
   const [isDone, setIsDone] = useState(false);
   const [downloading, setDownloading] = useState(false);
@@ -267,8 +264,9 @@ export default function GuardianForm({
 
       const guardianAddresses = guardiansList.map((item: any) => item.address);
       const guardianNames = guardiansList.map((item: any) => item.name);
+      const threshold = amountForm.values.amount
 
-      onConfirm(guardianAddresses, guardianNames)
+      onConfirm(guardianAddresses, guardianNames, threshold)
     }
   }
 
@@ -309,95 +307,6 @@ export default function GuardianForm({
 
   const hasGuardians = guardianDetails && guardianDetails.guardians && !!guardianDetails.guardians.length
 
-  const handleEmailBackupGuardians = async () => {
-    try {
-      setSending(true);
-      const keystore = chainConfig.contracts.l1Keystore;
-      const slot = slotInfo.slot
-      const guardiansList = guardianIds
-        .map((id) => {
-          const addressKey = `address_${id}`;
-          const nameKey = `name_${id}`;
-          let address = values[addressKey];
-
-          if (address && address.length) {
-            return { address, name: values[nameKey] };
-          }
-
-          return null;
-        })
-        .filter((i) => !!i);
-
-      const guardianAddresses = guardiansList.map((item: any) => item.address);
-      const guardianNames = guardiansList.map((item: any) => item.name);
-      const threshold = amountForm.values.amount || 0;
-      const guardianHash = calcGuardianHash(guardianAddresses, threshold);
-      const salt = ethers.ZeroHash;
-
-      const guardiansInfo = {
-        keystore,
-        slot,
-        guardianHash,
-        guardianNames,
-        guardianDetails: {
-          guardians: guardianAddresses,
-          threshold,
-          salt,
-        },
-        keepPrivate
-      };
-
-      const filename = generateJsonName('guardian');
-      await api.guardian.emailBackupGuardians({
-        email: emailForm.values.email,
-        filename,
-        ...guardiansInfo
-      });
-      setSending(false);
-      emailForm.clearFields(['email'])
-      setIsDone(true)
-      /* updateGuardiansInfo({
-       *   requireBackup: false
-       * }) */
-      toast({
-        title: 'Email Backup Success!',
-        status: 'success',
-      });
-    } catch (e: any) {
-      setSending(false);
-      toast({
-        title: e.message,
-        status: 'error',
-      });
-    }
-  }
-
-  const getGuardiansDetails = () => {
-    const guardiansList = guardianIds
-      .map((id) => {
-        const addressKey = `address_${id}`;
-        const nameKey = `name_${id}`;
-        let address = values[addressKey];
-
-        if (address && address.length) {
-          return { address, name: values[nameKey] };
-        }
-
-        return null;
-      })
-      .filter((i) => !!i);
-
-    const guardianAddresses = guardiansList.map((item: any) => item.address);
-    const guardianNames = guardiansList.map((item: any) => item.name);
-    const threshold = amountForm.values.amount || 0;
-
-    return {
-      guardians: guardianAddresses,
-      guardianNames,
-      threshold,
-    }
-  }
-
   const goBack = () => {
     setStatus('editing');
   };
@@ -426,8 +335,6 @@ export default function GuardianForm({
       hasGuardians={hasGuardians}
       cancelEdit={cancelEdit}
       selectAmount={selectAmount}
-      keepPrivate={keepPrivate}
-      setKeepPrivate={setKeepPrivate}
       canGoBack={canGoBack}
     />
   )

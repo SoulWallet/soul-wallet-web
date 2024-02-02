@@ -12,6 +12,8 @@ import Activity from '@/pages/activity';
 import Security from '@/pages/security_new';
 import Signer from '@/pages/security_new/Signer';
 import Guardian from '@/pages/security_new/Guardian';
+import Pay from '@/pages/public/Pay';
+import Sign from '@/pages/public/Sign';
 import Auth from '@/pages/auth';
 
 export const router = createBrowserRouter([
@@ -38,6 +40,13 @@ export const router = createBrowserRouter([
         ],
       },
       { path: 'auth', element: <Auth /> },
+      {
+        path: 'public',
+        children: [
+          { path: 'sign', element: <Sign /> },
+          { path: 'pay', element: <Pay /> },
+        ]
+      },
     ],
   },
   {

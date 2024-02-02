@@ -26,10 +26,12 @@ import PasskeyIcon from '@/components/Icons/Intro/Passkey'
 import AccountIcon from '@/components/Icons/Intro/Account'
 import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
+import RedCheckIcon from '@/components/Icons/RedCheck'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 import { passkeyTooltipText } from '@/config/constants';
+import QuestionIcon from '@/components/Icons/Auth/Question'
 
 export default function SetPasskey() {
   const { createInfo, updateCreateInfo } = useTempStore()
@@ -115,7 +117,7 @@ export default function SetPasskey() {
               <Heading marginBottom="6px" type="h3">
                 Passkey signer added!
               </Heading>
-              <TextBody fontWeight="600">Having passkeys as signer makes it easier to sign transactions.</TextBody>
+              <TextBody fontWeight="600">Passkey is faster to sign in with, easier to use, and much more secure.</TextBody>
               <Box
                 marginBottom="90px"
                 background="#F7F7F7"
@@ -126,14 +128,8 @@ export default function SetPasskey() {
                 maxWidth="100%"
               >
                 <Heading type="h4" marginBottom="8px">
-                  What is Passkey signer?
+                  My passkeys
                 </Heading>
-                <TextBody type="t2">
-                  Sign transaction with passkey saved on your device. Safer, but twice more expensive on L2!
-                </TextBody>
-                <TextBody type="t2" color="#797979" marginBottom="18px">
-                  *If you're an Apple user, you can even sync your passkey across all devices end to end encrypted via icloud keychain.
-                </TextBody>
                 <Flex display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" gap="2">
                   {credentials.map((passKey: any) =>
                     <Box background="white" borderRadius="16px" padding="16px" width="100%" marginBottom="4px">
@@ -151,44 +147,46 @@ export default function SetPasskey() {
                     </Box>
                   )}
                 </Flex>
-                <Box
-                  width="100%"
-                  mt="18px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
+              </Box>
+              <Box width="100%" display="flex" justifyContent="center">
+                {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && (
                   <Button
-                    width="275px"
+                    width="80px"
+                    theme="light"
+                    onClick={skip}
+                    type="lg"
+                    marginRight="18px"
+                  >
+                    Skip
+                  </Button>
+                )}
+                {!!credentials.length && (
+                  <Button
                     maxWidth="100%"
+                    padding="0 20px"
                     theme="light"
                     disabled={isCreating}
                     loading={isCreating}
                     onClick={createWallet}
-                    margin="0 auto"
+                    type="lg"
                   >
                     <Box marginRight="8px"><PlusIcon color="black" /></Box>
-                    Add Another Passkey
+                    Add another Passkey
                   </Button>
-                </Box>
-              </Box>
-              <Box>
-                {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && <Button
-                  width="80px"
-                  theme="light"
-                  marginRight="18px"
-                  onClick={skip}
-                >
-                  Skip
-                </Button>}
-                <Button
-                  width="115px"
-                  maxWidth="100%"
-                  theme="dark"
-                  onClick={next}
-                >
-                  Continue
-                </Button>
+                )}
+                {!!credentials.length && (
+                  <Button
+                    width="115px"
+                    maxWidth="100%"
+                    theme="dark"
+                    onClick={next}
+                    disabled={isCreating || !credentials.length}
+                    marginLeft="18px"
+                    type="lg"
+                  >
+                    Continue
+                  </Button>
+                )}
               </Box>
             </Box>
           </RoundContainer>
@@ -238,7 +236,6 @@ export default function SetPasskey() {
             <TextBody fontWeight="600">Turn your own device into hardware wallet! Add passkey now <Box as="span" color="#FF2E79">for free</Box>!</TextBody>
             <Box
               marginBottom="90px"
-              background="#F7F7F7"
               padding="24px"
               margin="24px"
               borderRadius="20px"
@@ -249,65 +246,97 @@ export default function SetPasskey() {
                 Why sign with passkey?
               </Heading>
               <Box width="100%" display="flex" marginBottom="18px">
-                <Box width="50%">
-                  <Title marginBottom="5px">👍🏻 Advantage:</Title>
-                  <Box paddingLeft="20px">
-                    <TextBody type="t2">
+                <Box
+                  width="calc(50% - 10px)"
+                  border="1px solid rgba(0, 0, 0, 0.10)"
+                  borderRadius="8px"
+                  marginRight="20px"
+                >
+                  <Title
+                    height="47px"
+                    background="#F7F7F7"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    👍🏻 Advantage:
+                  </Title>
+                  <Box padding="20px 40px">
+                    <TextBody type="t2" display="flex" marginBottom="4px">
+                      <Box as="span" marginRight="4px"><RedCheckIcon /></Box>
                       Much more secure. Resistant to phishing.
                     </TextBody>
-                    <TextBody type="t2">
-                      Easier to use. Login and sign faster with your face/touch ID.
+                    <TextBody type="t2" display="flex" marginBottom="4px">
+                      <Box as="span" marginRight="4px"><RedCheckIcon /></Box>
+                      Login and sign faster
                     </TextBody>
-                    <TextBody type="t2">
-                      Sync end-to-end encrypted across Apple devices via iCloud keychain.
-                    </TextBody>
-                  </Box>
-                </Box>
-                <Box width="50%">
-                  <Title marginBottom="5px">👎🏻 Disadvantage:</Title>
-                  <Box paddingLeft="20px">
-                    <TextBody type="t2">
-                      {`More expensive. It cost $0.7 more to send an ERC-20 token on L2 comparing sign with EOA ($0.86 vs. $0.16).`}
-                    </TextBody>
-                    <TextBody type="t2">
-                      {`Bound with our website. Your passkey only works with our website (also save you from scam sites).`}
+                    <TextBody type="t2" display="flex">
+                      <Box as="span" marginRight="4px"><RedCheckIcon /></Box>
+                      iCloud keychain supported
                     </TextBody>
                   </Box>
                 </Box>
-              </Box>
-              <Box display="flex" alignItems="center" justifyContent="center">
-                <Button
-                  width="275px"
-                  maxWidth="100%"
-                  theme="light"
-                  disabled={isCreating}
-                  loading={isCreating}
-                  onClick={createWallet}
+                <Box
+                  width="calc(50% - 10px)"
+                  border="1px solid rgba(0, 0, 0, 0.10)"
+                  borderRadius="8px"
                 >
-                  <Box marginRight="8px"><PlusIcon color="black" /></Box>
-                  Add Passkey
-                </Button>
+                  <Title
+                    height="47px"
+                    background="#F7F7F7"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    👎🏻 Disadvantage:
+                  </Title>
+                  <Box padding="20px 40px">
+                    <Tooltip hasArrow bg='brand.black' label={`It cost $0.7 more to send an ERC-20 token on L2 comparing sign with EOA ($0.86 vs. $0.16).`}>
+                      <Box>
+                        <TextBody type="t2" marginBottom="4px" display="flex" alignItems="center">
+                          Higher gas fee
+                          <Box as="span" marginLeft="5px"><QuestionIcon /></Box>
+                        </TextBody>
+                      </Box>
+                    </Tooltip>
+                    <Tooltip hasArrow bg='brand.black' label={`Your passkey only works with our website (also save you from scam sites).`}>
+                      <Box>
+                        <TextBody type="t2" display="flex" alignItems="center">
+                          Bound with our website
+                          <Box as="span" marginLeft="5px"><QuestionIcon /></Box>
+                        </TextBody>
+                      </Box>
+                    </Tooltip>
+                  </Box>
+                </Box>
               </Box>
-            </Box>
-            <Box>
-              {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && <Button
-                width="80px"
-                theme="light"
-                marginRight="18px"
-                onClick={skip}
-              >
-                Skip
-              </Button>}
-              
-              <Button
-                width="115px"
-                maxWidth="100%"
-                theme="dark"
-                onClick={next}
-                disabled={isCreating || !credentials.length}
-              >
-                Continue
-              </Button>
+              <Box width="100%" display="flex" justifyContent="center">
+                {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && (
+                  <Button
+                    width="80px"
+                    theme="light"
+                    marginRight="18px"
+                    onClick={skip}
+                    type="lg"
+                  >
+                    Skip
+                  </Button>
+                )}
+                {!credentials.length && (
+                  <Button
+                    maxWidth="100%"
+                    padding="0 20px"
+                    theme="dark"
+                    disabled={isCreating}
+                    loading={isCreating}
+                    onClick={createWallet}
+                    type="lg"
+                  >
+                    <Box marginRight="8px"><PlusIcon color="white" /></Box>
+                    Add Passkey
+                  </Button>
+                )}
+              </Box>
             </Box>
           </Box>
         </RoundContainer>

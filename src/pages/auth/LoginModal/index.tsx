@@ -73,10 +73,7 @@ export default function LoginModal({
             display="flex"
           >
             <Box width="calc(60% - 20px)">
-              <Title type="t2" marginBottom="20px">
-                Login with Web3 wallet
-              </Title>
-              <Box width="100%" display="flex" flexWrap="wrap">
+              <Box width="100%" display="flex" flexWrap="wrap" marginTop="20px">
                 {connectors.filter(item => supportedEoas.includes(item.id)).map((connector: Connector) =>
                   <WalletOption
                     key={connector.uid}
@@ -101,8 +98,7 @@ export default function LoginModal({
                 or
               </TextBody>
             </Box>
-            <Box width="calc(40%)" display="flex" alignItems="center" justifyContent="center" flexDirection="column" paddingLeft="25px" position="relative">
-              <Title type="t2" fontWeight="500" marginBottom="25px">Login with device passkey</Title>
+            <Box width="calc(40%)" display="flex" alignItems="center" justifyContent="center" flexDirection="column" paddingLeft="25px" position="relative" paddingTop="40px">
               <Button
                 width="100%"
                 theme="dark"

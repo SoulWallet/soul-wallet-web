@@ -409,7 +409,7 @@ const GuardianInput = ({
           onClick={() => removeGuardian(id)}
           position="absolute"
           width="40px"
-          right={{ base: '-28px', md: '-40px' }}
+          right={{ base: '-28px', md: '-36px' }}
           top="0"
           height="100%"
           display="flex"
@@ -508,7 +508,6 @@ export default function Edit({
   handleBack,
   canGoBack
 }: any) {
-  console.log('canGoBack', canGoBack)
   return (
     <Fragment>
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -542,6 +541,65 @@ export default function Edit({
             <Text fontSize="16px" fontWeight="800" marginLeft="5px">Add more guardians</Text>
           </TextButton>
         </Box>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-start"
+        marginTop="10px"
+      >
+        <Box
+          fontFamily="Nunito"
+          fontWeight="700"
+          fontSize="14px"
+          marginRight="6px"
+        >
+          Threshold:
+        </Box>
+        <TextBody display="flex" alignItems="center" justifyContent="flex-start">
+          <Box>Wallet recovery requires</Box>
+          <Box width="80px" margin="0 10px">
+            <Menu>
+              <MenuButton
+                px={2}
+                py={2}
+                width="80px"
+                transition="all 0.2s"
+                borderRadius="16px"
+                borderWidth="1px"
+                padding="12px"
+                background="white"
+                _hover={{
+                  borderColor: '#3182ce',
+                  boxShadow: '0 0 0 1px #3182ce',
+                }}
+                _expanded={{
+                  borderColor: '#3182ce',
+                  boxShadow: '0 0 0 1px #3182ce',
+                }}
+              >
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                  {amountForm.values.amount}
+                  <DropDownIcon />
+                </Box>
+              </MenuButton>
+              <MenuList>
+                {!amountData.guardiansCount && (
+                  <MenuItem key={nanoid(4)} onClick={selectAmount(0)}>
+                    0
+                  </MenuItem>
+                )}
+                {!!amountData.guardiansCount &&
+                 getNumberArray(guardiansList.length || 0).map((i: any) => (
+                   <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
+                     {i}
+                   </MenuItem>
+                ))}
+              </MenuList>
+            </Menu>
+          </Box>
+          <Box>{`out of ${guardiansList.length || 0} guardian(s) confirmation.`}</Box>
+        </TextBody>
       </Box>
       <Box marginTop="30px" display="flex" justifyContent="flex-end">
         <Box>
