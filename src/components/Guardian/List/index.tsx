@@ -112,7 +112,7 @@ const validate = (values: any) => {
     if (address && address.length && !ethers.isAddress(address)) {
       errors[addressKey] = 'Invalid Address';
     } else if (existedAddress.indexOf(address) !== -1) {
-      errors[addressKey] = 'Duplicated Address';
+      errors[addressKey] = 'Address already in use';
     } else if (address && address.length) {
       existedAddress.push(address);
     }
