@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Wrapper from './Wrapper';
+import WalletWrapper from './wrapper/WalletWrapper';
+import PublicWrapper from './wrapper/PublicWrapper';
 import Dashboard from '@/pages/dashboard';
 import Create from '@/pages/create';
 import Recover from '@/pages/new_recover';
@@ -16,7 +17,7 @@ import Auth from '@/pages/auth';
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Wrapper />,
+    element: <WalletWrapper />,
     children: [
       { path: '/', element: <Dashboard /> },
       { path: 'dashboard', element: <Dashboard /> },
@@ -26,7 +27,7 @@ export const router = createBrowserRouter([
       { path: 'asset', element: <Asset /> },
       { path: 'create', element: <Create /> },
       { path: 'recover', element: <Recover /> },
-      { path: 'popup', element: <Popup />},
+      { path: 'popup', element: <Popup /> },
       {
         path: 'security',
         element: <Security />,
@@ -34,9 +35,19 @@ export const router = createBrowserRouter([
           { index: true, element: <Signer /> },
           { path: 'signer', element: <Signer /> },
           { path: 'guardian', element: <Guardian /> },
-        ]
+        ],
       },
       { path: 'auth', element: <Auth /> },
+    ],
+  },
+  {
+    path: '/public',
+    element: <PublicWrapper />,
+    children: [
+      {
+        path: 'pay',
+        // element: <Pay />
+      },
     ],
   },
 ]);
