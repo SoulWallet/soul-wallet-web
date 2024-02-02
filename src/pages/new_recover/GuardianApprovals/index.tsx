@@ -45,7 +45,9 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import api from '@/lib/api';
 import UploadIcon from '@/components/Icons/Upload'
 import UploadedIcon from '@/components/Icons/Uploaded'
+import { ethers } from 'ethers';
 import StepProgress from '../StepProgress'
+import AddGuardianModal from '../AddGuardianModal'
 
 export default function AddSigner({ next, back }: any) {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
@@ -61,13 +63,30 @@ export default function AddSigner({ next, back }: any) {
   const { getJsonFromFile } = useTools();
   const { chainConfig } = useConfig();
   const { calcGuardianHash } = useKeystore();
+  const [isAddGuardianOpen, setIsAddGuardianOpen] = useState<any>(false);
 
   const closeEditGuardianModal = useCallback(() => {
     setIsEditGuardianOpen(false)
   }, [])
 
-  const onEditGuardianConfirm = useCallback((addresses: any, names: any, threshold: any) => {
-    setIsEditGuardianOpen(false)
+  const onAddGuardianConfirm = useCallback((addresses: any, names: any, threshold: any) => {
+    console.log('onAddGuardianConfirm', addresses, names, threshold)
+    const guardians = addresses
+    const guardianNames = names
+    const guardianDetails = {
+      guardians,
+      threshold,
+      salt: ethers.ZeroHash
+    }
+    const guardianHash = calcGuardianHash(guardians, threshold);
+
+    updateRecoverInfo({
+      guardianDetails,
+      guardianNames,
+      guardianHash,
+    });
+
+    setIsAddGuardianOpen(false)
   }, [])
 
   const doCopy = () => {
@@ -97,6 +116,7 @@ export default function AddSigner({ next, back }: any) {
       const file = event.target.files[0];
 
       if (!file) {
+        setUploading(false);
         return;
       }
 
@@ -256,7 +276,7 @@ export default function AddSigner({ next, back }: any) {
                 <Button
                   width="320px"
                   maxWidth="100%"
-                  onClick={() => setIsEditGuardianOpen(true)}
+                  onClick={() => setIsAddGuardianOpen(true)}
                   theme="light"
                 >
                   Enter guardians info manually
@@ -287,11 +307,10 @@ export default function AddSigner({ next, back }: any) {
           </RoundContainer>
           <StepProgress activeIndex={2} />
         </Box>
-        <EditGuardianModal
-          isOpen={isEditGuardianOpen}
-          onClose={closeEditGuardianModal}
-          setIsEditGuardianOpen={setIsEditGuardianOpen}
-          onConfirm={onEditGuardianConfirm}
+        <AddGuardianModal
+          isOpen={isAddGuardianOpen}
+          onClose={() => setIsAddGuardianOpen(false)}
+          onConfirm={onAddGuardianConfirm}
         />
       </Box>
     )
