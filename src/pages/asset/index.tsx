@@ -45,8 +45,8 @@ export const Tabs = ({ tabList, activeTab, onChange }: any) => {
 
 export default function Asset() {
   const [activeTab, setActiveTab] = useState(0);
-  const { chainList } = useChainStore();
-  const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
+  // const { chainList } = useChainStore();
+  // const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
 
   return (
     <DashboardLayout>
@@ -61,13 +61,13 @@ export default function Asset() {
               </Text>
             </Flex>
           </Box>
-          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} border="1px solid #818181" />
+          {/* <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} border="1px solid #818181" /> */}
         </Flex>
 
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
         <Flex gap="5" mt="3" alignItems={'flex-start'}>
           <Box w="100%" rounded="20px" bg="#fff" p="8">
-            {activeTab === 0 && <TokensTable activeChains={activeChains} />}
+            {activeTab === 0 && <TokensTable />}
             {activeTab === 1 && <NftsTable />}
           </Box>
         </Flex>

@@ -14,6 +14,7 @@ import IconExternal from '@/assets/icons/external.svg';
 import IconEth from '@/assets/tokens/eth.svg';
 import EmptyHint from '@/components/EmptyHint';
 import ActivityEmpty from '@/assets/icons/activity-empty.svg';
+import { useChainStore } from '@/store/chain';
 
 const ActivityItem = ({ item }: any) => {
   const { chainConfig } = useConfig();
@@ -56,15 +57,16 @@ const ActivityItem = ({ item }: any) => {
   );
 };
 
-export default function ActivityTable({ activeChains }: any) {
+export default function ActivityTable() {
   const { selectedAddress } = useAddressStore();
   const { ethersProvider } = useWalletContext();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {selectedChainId} = useChainStore();
   const getList = async () => {
     setLoading(true);
     try {
-      const res = await fetchHistoryApi(selectedAddress, activeChains, ethersProvider);
+      const res = await fetchHistoryApi(selectedAddress, [selectedChainId], ethersProvider);
       setList(res.data.ops);
     } finally {
       setLoading(false);
@@ -72,21 +74,21 @@ export default function ActivityTable({ activeChains }: any) {
   };
 
   useEffect(() => {
-    if (!activeChains || !activeChains.length) {
+    if (!selectedChainId) {
       return;
     }
     setList([]);
     getList();
-  }, [activeChains]);
+  }, [selectedChainId]);
 
   return (
     <Flex flexDir={'column'}>
-      {activeChains.length === 0 && (
+      {/* {activeChains.length === 0 && (
         <Text fontSize={'20px'} fontWeight={'600'}>
           Please select a chain
         </Text>
-      )}
-      {!list.length && activeChains.length && (
+      )} */}
+      {!list.length && (
         <Flex py="120px" flexDir={'column'} justify={'center'} align={'center'}>
           {loading ? (
             <Image src={IconLoading} display={'block'} w="50px" h="50px" />
@@ -97,7 +99,7 @@ export default function ActivityTable({ activeChains }: any) {
           )}
         </Flex>
       )}
-      {activeChains.length && list.length
+      {list.length
         ? list.map((item: IActivityItem, idx) => (
             <React.Fragment key={idx}>
               {idx ? <Divider /> : ''}

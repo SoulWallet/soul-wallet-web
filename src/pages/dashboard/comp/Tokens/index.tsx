@@ -66,9 +66,7 @@ const DepositHint = () => {
   return (
     <Box>
       <Text fontWeight={'600'} lineHeight={1.5} textAlign={'center'} mb="4">
-        You are not holding any token yet.
-        <br />
-        Get your first deposit with your wallet address
+      You don't have any tokens in your wallet yet,<br/> deposit tokens into the following address to experience Soul wallet.
       </Text>
       <ReceiveCode address={selectedAddress} imgWidth="100px" showFullAddress={true} mb="6" />
     </Box>

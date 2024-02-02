@@ -72,7 +72,7 @@ const FilterMenu = ({ active, list }: any) => {
 
 export default function Activity() {
   const { chainList } = useChainStore();
-  const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
+  // const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
   const [activeStatus, setActiveStatus] = useState(statusList[0].key);
   const [activeTypes, setActiveTypes] = useState(typesList[0].key);
 
@@ -83,16 +83,16 @@ export default function Activity() {
           Activity
         </Text>
 
-        <Flex px="6" justify={'space-between'}>
+        <Flex px="6" justify={'space-between'} mb="3">
           <Flex gap="8">
             <FilterMenu active={activeStatus} list={statusList} />
             <FilterMenu active={activeTypes} list={typesList} />
           </Flex>
-          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
+          {/* <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} /> */}
         </Flex>
 
         <Box rounded="20px" bg="#fff" py="6px" px="26px">
-          <ActivityTable activeChains={activeChains} />
+          <ActivityTable />
         </Box>
       </Box>
     </DashboardLayout>

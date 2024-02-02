@@ -98,10 +98,11 @@ export default function RegisterModal({
                 </Box>
               </Box>
               <Box marginTop="60px" display="flex">
-                <Button
+                {/* <Button
                   width="100%"
+                  background="#fff"
+                  color="#000"
                   theme="dark"
-                  color="white"
                   marginBottom="49px"
                   onClick={() => disconnectEOA()}
                   padding="0 20px"
@@ -109,7 +110,7 @@ export default function RegisterModal({
                   type="mid"
                 >
                   Disconnect
-                </Button>
+                </Button> */}
                 <Button
                   width="100%"
                   theme="dark"

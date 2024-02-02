@@ -10,11 +10,11 @@ import IconLoading from '@/assets/loading.svg';
 import { chainMapping } from '@/config';
 import BN from 'bignumber.js';
 
-export default function TokensTable({ activeChains }: any) {
+export default function TokensTable() {
   const { showSend } = useWalletContext();
   const [loading, setLoading] = useState(false);
   const { selectedAddress } = useAddressStore();
-  const { setSelectedChainId } = useChainStore();
+  const { setSelectedChainId , selectedChainId} = useChainStore();
   const [balanceList, setBalanceList] = useState([]);
 
   const getTokenBalance = async () => {
@@ -22,10 +22,11 @@ export default function TokensTable({ activeChains }: any) {
       setLoading(true);
       const res = await api.balance.token({
         walletAddress: selectedAddress,
-        chains: activeChains.map((item: any) => ({
-          chainID: item,
-          reservedTokenAddresses: [],
-        })),
+        chains: [selectedChainId],
+        // chains: activeChains.map((item: any) => ({
+        //   chainID: item,
+        //   reservedTokenAddresses: [],
+        // })),
       });
       setBalanceList(res.data);
     } finally {
@@ -34,12 +35,12 @@ export default function TokensTable({ activeChains }: any) {
   };
 
   useEffect(() => {
-    if (!activeChains || !activeChains.length) {
+    if (!selectedChainId) {
       return;
     }
     setBalanceList([]);
     getTokenBalance();
-  }, [activeChains]);
+  }, [selectedChainId]);
 
   const showTransfer = (tokenAddress: string, chainIdHex: string) => {
     // IMPORTANT TODO, change to this chain id
@@ -52,19 +53,19 @@ export default function TokensTable({ activeChains }: any) {
       <Thead>
         <Tr fontFamily={'Nunito'} fontWeight={'400'} fontSize={'18px'}>
           <Th>Token</Th>
-          <Th>Network</Th>
+          {/* <Th>Network</Th> */}
           <Th isNumeric>Balance</Th>
           <Th isNumeric>Price(24hr)</Th>
         </Tr>
       </Thead>
       <Tbody>
-        {activeChains.length === 0 && (
+        {/* {activeChains.length === 0 && (
           <Text fontSize={'20px'} fontWeight={'600'} mt="6">
             Please select a chain
           </Text>
-        )}
-        {loading && !balanceList.length && activeChains.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
-        {activeChains.length && balanceList.length
+        )} */}
+        {loading && !balanceList.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
+        {balanceList.length
           ? balanceList.map((item: any, idx: number) => {
               return (
                 <Tr
@@ -99,11 +100,11 @@ export default function TokensTable({ activeChains }: any) {
                       </Button>
                     </Flex>
                   </Td>
-                  <Td>
+                  {/* <Td>
                     <Flex align={'center'} justify={'center'} bg="#F2F2F2" rounded="full" w="12" h="12">
                       <Image src={(chainMapping as any)[item.chainID].icon} w="5" h="5" />
                     </Flex>
-                  </Td>
+                  </Td> */}
                   <Td isNumeric>
                     <Text mb="1" fontWeight={'800'}>
                       {BN(item.tokenBalance).shiftedBy(-item.decimals).toFixed(4)}
