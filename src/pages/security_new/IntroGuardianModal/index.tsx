@@ -47,20 +47,13 @@ export default function IntroGuardianModal({
   const [showQuestion2, setShowQuestion2] = useState(false)
   const [showQuestion3, setShowQuestion3] = useState(false)
 
-  const startIntroGuardian = useCallback(() => {
-    console.log('startIntroGuardian')
-    setIsSelectGuardianOpen(false)
-    setIsIntroGuardianOpen(true)
-  }, [])
-
-  const startEditGuardian = useCallback(() => {
-    console.log('startEditGuardian')
-    setIsSelectGuardianOpen(false)
-    setIsEditGuardianOpen(true)
+  const handleClose = useCallback(() => {
+    setIsIntroGuardianOpen(false)
+    setIsSelectGuardianOpen(true)
   }, [])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
       <ModalContent maxW="840px" borderRadius="20px">
         <ModalHeader

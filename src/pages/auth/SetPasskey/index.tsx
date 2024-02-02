@@ -149,6 +149,17 @@ export default function SetPasskey() {
                 </Flex>
               </Box>
               <Box width="100%" display="flex" justifyContent="center">
+                {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && (
+                  <Button
+                    width="80px"
+                    theme="light"
+                    onClick={skip}
+                    type="lg"
+                    marginRight="18px"
+                  >
+                    Skip
+                  </Button>
+                )}
                 {!!credentials.length && (
                   <Button
                     maxWidth="100%"
@@ -161,17 +172,6 @@ export default function SetPasskey() {
                   >
                     <Box marginRight="8px"><PlusIcon color="black" /></Box>
                     Add another Passkey
-                  </Button>
-                )}
-                {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && (
-                  <Button
-                    width="80px"
-                    theme="light"
-                    onClick={skip}
-                    type="lg"
-                    marginLeft="18px"
-                  >
-                    Skip
                   </Button>
                 )}
                 {!!credentials.length && (

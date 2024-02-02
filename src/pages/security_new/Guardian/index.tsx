@@ -227,6 +227,8 @@ export default function Guardian() {
       <IntroGuardianModal
         isOpen={isIntroGuardianOpen}
         onClose={closeIntroGuardianModal}
+        setIsIntroGuardianOpen={setIsIntroGuardianOpen}
+        setIsSelectGuardianOpen={setIsSelectGuardianOpen}
       />
       <EditGuardianModal
         isOpen={isEditGuardianOpen}
