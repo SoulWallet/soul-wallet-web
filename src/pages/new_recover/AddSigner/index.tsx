@@ -42,7 +42,7 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import ConnectWalletModal from '../ConnectWalletModal'
 import StepProgress from '../StepProgress'
 
-export default function AddSigner({ next }: any) {
+export default function AddSigner({ next, back }: any) {
   const [signers, setSigners] = useState<any>([])
   const [credentials, setCredentials] = useState<any>([])
   const [isCreating, setIsCreating] = useState<any>(false)
@@ -57,10 +57,6 @@ export default function AddSigner({ next }: any) {
   const { updateRecoverInfo } = useTempStore()
   const { chainConfig } = useConfig();
   const { recoverInfo } = useTempStore()
-
-  const back = useCallback(() => {
-    navigate(`/auth`);
-  }, [])
 
   const addCredential = useCallback(async () => {
     try {
@@ -92,6 +88,11 @@ export default function AddSigner({ next }: any) {
     })
 
     const hasGuardians = recoverInfo.guardianDetails && recoverInfo.guardianDetails.guardians && !!recoverInfo.guardianDetails.guardians.length
+
+    if (!hasGuardians) {
+      next()
+      return
+    }
 
     try {
       setIsConfirming(true)

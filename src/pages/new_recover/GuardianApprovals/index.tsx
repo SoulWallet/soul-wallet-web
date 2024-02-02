@@ -38,15 +38,29 @@ import CopyIcon from '@/components/Icons/Copy';
 import OpenScanIcon from '@/components/Icons/OpenScan';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
 import config from '@/config';
+import useTools from '@/hooks/useTools';
+import useConfig from '@/hooks/useConfig';
+import useKeystore from '@/hooks/useKeystore';
+import { L1KeyStore } from '@soulwallet/sdk';
+import api from '@/lib/api';
+import UploadIcon from '@/components/Icons/Upload'
+import UploadedIcon from '@/components/Icons/Uploaded'
 import StepProgress from '../StepProgress'
 
-export default function AddSigner({ next }: any) {
-  const [isPrivate, setIsPrivate] = useState(false)
+export default function AddSigner({ next, back }: any) {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
-  const { recoverInfo } = useTempStore()
-  const { recoveryRecordID, guardianDetails, recoveryRecord } = recoverInfo
-  const { guardianSignatures } = recoveryRecord
+  const { recoverInfo, updateRecoverInfo } = useTempStore()
+  const { recoveryRecordID, guardianDetails, recoveryRecord, signers } = recoverInfo
+  const hasGuardians = !!guardianDetails
+  const hasRecord = recoveryRecord && recoveryRecordID
+  const guardianSignatures = hasRecord ? recoveryRecord.guardianSignatures : []
   const toast = useToast();
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const [isConfirming, setIsConfirming] = useState<any>(false)
+  const { getJsonFromFile } = useTools();
+  const { chainConfig } = useConfig();
+  const { calcGuardianHash } = useKeystore();
 
   const closeEditGuardianModal = useCallback(() => {
     setIsEditGuardianOpen(false)
@@ -77,14 +91,87 @@ export default function AddSigner({ next }: any) {
     window.open(`https://sepolia.etherscan.io/address/${address}`, '_blank')
   }
 
-  const signatures = (guardianDetails.guardians || []).map((item: any) => {
+  const handleFileChange = async (event: any) => {
+    try {
+      setUploading(true);
+      const file = event.target.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      const data: any = await getJsonFromFile(file);
+      const guardianDetails = data.guardianDetails
+      const guardianNames = data.guardianNames
+      const guardians = guardianDetails.guardians
+      const threshold = guardianDetails.threshold
+      const guardianHash = calcGuardianHash(guardians, threshold);
+
+      updateRecoverInfo({
+        guardianDetails,
+        guardianNames,
+        guardianHash,
+      });
+
+      setUploading(false);
+      setUploaded(true);
+    } catch (e: any) {
+      setUploading(false);
+      toast({
+        title: e.message,
+        status: 'error',
+      });
+    }
+  };
+
+  const handleNext = useCallback(async () => {
+    try {
+      setIsConfirming(true)
+      const keystore = chainConfig.contracts.l1Keystore;
+      const initialKeys = signers.map((signer: any) => signer.signerId)
+      const newOwners = L1KeyStore.initialKeysToAddress(initialKeys);
+      const slot = recoverInfo.slot
+      const slotInitInfo = recoverInfo.slotInitInfo
+      const guardianDetails = recoverInfo.guardianDetails
+
+      const params = {
+        guardianDetails,
+        slot,
+        slotInitInfo,
+        keystore,
+        newOwners
+      }
+
+      console.log('createRecoverRecord', params);
+
+      const res = await api.guardian.createRecoverRecord(params)
+      const recoveryRecordID = res.data.recoveryRecordID
+      const res2 = await api.guardian.getRecoverRecord({ recoveryRecordID })
+      const recoveryRecord = res2.data
+
+      updateRecoverInfo({
+        recoveryRecordID,
+        recoveryRecord,
+      });
+
+      setIsConfirming(false)
+    } catch (error: any) {
+      setIsConfirming(false)
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }, [recoverInfo])
+
+  const signatures = hasRecord ? (guardianDetails.guardians || []).map((item: any) => {
     const isValid = (guardianSignatures || []).filter((sig: any) => sig.guardian === item && sig.valid).length === 1;
     return { guardian: item, isValid };
-  });
+  }) : [];
 
   console.log('signatures', signatures)
 
-  if (isPrivate) {
+  if (!hasRecord) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
         <Box height="58px" padding="10px 20px">
@@ -141,9 +228,29 @@ export default function AddSigner({ next }: any) {
                 <Button
                   width="275px"
                   maxWidth="100%"
-                  onClick={next}
+                  position="relative"
+                  background={uploaded ? '#7F56D9' : 'black'}
+                  borderColor={uploaded ? '#7F56D9' : 'black'}
+                  onClick={handleFileChange}
+                  disabled={uploading}
                 >
+                  <Box marginRight="4px">
+                    {uploaded ? <UploadedIcon /> : <UploadIcon />}
+                  </Box>
                   Upload guardians file
+                  <Input
+                    type="file"
+                    id="file"
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    width="100%"
+                    height="100%"
+                    background="red"
+                    opacity="0"
+                    cursor="pointer"
+                    onChange={handleFileChange}
+                  />
                 </Button>
                 <Box padding="10px">Or</Box>
                 <Button
@@ -161,7 +268,7 @@ export default function AddSigner({ next }: any) {
                   theme="light"
                   marginRight="12px"
                   type="lg"
-                  onClick={() => {}}
+                  onClick={back}
                 >
                   Back
                 </Button>
@@ -170,7 +277,8 @@ export default function AddSigner({ next }: any) {
                   maxWidth="100%"
                   theme="dark"
                   type="lg"
-                  onClick={next}
+                  onClick={handleNext}
+                  disabled={!hasGuardians || isConfirming}
                 >
                   Next
                 </Button>
