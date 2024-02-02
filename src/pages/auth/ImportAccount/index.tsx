@@ -36,7 +36,7 @@ import { ethers } from 'ethers';
 import { useTempStore } from '@/store/temp';
 import NoWalletIcon from '@/assets/icons/no-wallet.svg'
 
-export default function ImportAccount({ importWallet, isImporting }: any) {
+export default function ImportAccount({ importWallet, isImporting, back }: any) {
   const [address, setAddress] = useState('')
   const [added, setAdded] = useState(false)
   const { createInfo, updateCreateInfo } = useTempStore()
@@ -87,6 +87,14 @@ export default function ImportAccount({ importWallet, isImporting }: any) {
 
     navigate(`/dashboard`);
   }, [credentials])
+
+  const goToCreate = useCallback(() => {
+    back()
+  }, [])
+
+  const goToRecover = useCallback(() => {
+    navigate(`/recover`);
+  }, [])
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
@@ -141,7 +149,7 @@ export default function ImportAccount({ importWallet, isImporting }: any) {
               <Box width="100%" maxWidth="548px" display="flex" marginBottom="10px" flexDirection="column">
                 <Input height="44px" borderRadius="12px" placeholder="Enter wallet address" value={address} onChange={onAddressChange} />
                 <Box fontSize="14px" fontWeight="400" display="flex" alignItems="center" marginTop="10px" padding="0 10px">
-                  Forgot address? Try <Box fontSize="14px" color="#FF2E79" fontWeight="700" marginLeft="6px" cursor="pointer">Social Recovery</Box>
+                  Forgot address? Try <Box fontSize="14px" color="#FF2E79" fontWeight="700" marginLeft="6px" cursor="pointer" onClick={goToRecover}>Social Recovery</Box>
                 </Box>
               </Box>
             </Box>
@@ -157,7 +165,7 @@ export default function ImportAccount({ importWallet, isImporting }: any) {
                 Go to my wallet
               </Button>
               <Box fontWeight="400" fontSize="14px" textAlign="center" marginTop="20px">
-                For new users, please <Box as="span" fontWeight="700" fontSize="14px" marginLeft="2px">Create New Account</Box>
+                For new users, please <Box as="span" fontWeight="700" fontSize="14px" marginLeft="2px" onClick={goToCreate} cursor="pointer">Create New Account</Box>
               </Box>
             </Box>
           </Box>

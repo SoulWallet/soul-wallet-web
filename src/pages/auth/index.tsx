@@ -257,7 +257,7 @@ export default function Auth() {
 
   if (stepType === 'importAccount') {
     return (
-      <ImportAccount importWallet={importWallet} isImporting={isImporting} />
+      <ImportAccount importWallet={importWallet} isImporting={isImporting} back={() => setStepType('auth')} />
     )
   }
 
