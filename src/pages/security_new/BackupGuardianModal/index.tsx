@@ -73,11 +73,12 @@ export default function BackupGuardianModal({
   isOpen,
   onClose,
   startIntroGuardian,
-  startEditGuardian,
+  startEditGuardian
 }: any) {
   const { calcGuardianHash } = useKeystore();
   const [downloading, setDownloading] = useState(false);
   const [sending, setSending] = useState(false);
+  const [isDone, setIsDone] = useState(false);
   const { generateJsonName, downloadJsonFile } = useTools()
   const { chainConfig } = useConfig();
   const toast = useToast();
@@ -127,6 +128,7 @@ export default function BackupGuardianModal({
       updateEditingGuardiansInfo({
         requireBackup: false
       })
+      setIsDone(true)
       toast({
         title: 'Email Backup Success!',
         status: 'success',
@@ -171,6 +173,7 @@ export default function BackupGuardianModal({
       updateEditingGuardiansInfo({
         requireBackup: false
       })
+      setIsDone(true)
       toast({
         title: 'Email Backup Success!',
         status: 'success',
@@ -185,7 +188,7 @@ export default function BackupGuardianModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={() => onClose(isDone)}>
       <ModalOverlay />
       <ModalContent width="434px" borderRadius="20px">
         <ModalCloseButton top="14px" />

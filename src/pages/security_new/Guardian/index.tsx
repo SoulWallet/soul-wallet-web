@@ -1,4 +1,4 @@
-import { useState, useCallback, Fragment } from 'react';
+import { useState, useCallback, Fragment, useRef } from 'react';
 import Header from '@/components/Header';
 import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection'
@@ -52,6 +52,7 @@ export default function Guardian() {
 
   const [isEditing, setIsEditing] = useState<any>(false);
   const { getAddressName, saveAddressName } = useSettingStore();
+  const backupFinishedRef = useRef<any>()
 
   const tempStore = useTempStore();
   const { setEditingGuardiansInfo } = tempStore;
@@ -107,12 +108,17 @@ export default function Guardian() {
     setIsEditGuardianOpen(false)
   }, [])
 
-  const openBackupGuardianModal = useCallback(() => {
+  const openBackupGuardianModal = useCallback((callback: any) => {
     setIsBackupGuardianOpen(true)
+    backupFinishedRef.current = callback
   }, [])
 
-  const closeBackupGuardianModal = useCallback(() => {
+  const closeBackupGuardianModal = useCallback((isDone: any) => {
     setIsBackupGuardianOpen(false)
+
+    if (isDone && backupFinishedRef.current) {
+      onBackupFinished()
+    }
   }, [])
 
   const startAddGuardian = useCallback(() => {
@@ -154,6 +160,14 @@ export default function Guardian() {
         threshold: threshold || 0
       }
     })
+  }, [])
+
+  const onBackupFinished = useCallback(() => {
+    const callback = backupFinishedRef.current as any
+
+    if (callback) {
+      callback()
+    }
   }, [])
 
   return (

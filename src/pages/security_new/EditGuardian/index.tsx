@@ -290,6 +290,10 @@ export default function EditGuardian({
     })
   }, [])
 
+  const onBackupFinished = useCallback(() => {
+    next()
+  }, [])
+
   return (
     <Fragment>
       <RoundSection marginTop="10px" background="white">
@@ -303,7 +307,7 @@ export default function EditGuardian({
             <Box>Guardian List</Box>
             <Box marginLeft="auto">
               {!!guardianList.length && (
-                <TextButton type="mid" onClick={openBackupGuardianModal}>
+                <TextButton type="mid" onClick={() => openBackupGuardianModal()}>
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>
@@ -458,7 +462,7 @@ export default function EditGuardian({
         <Button type="mid" theme="light" padding="0 20px" marginRight="16px" onClick={cancelEditGuardian}>
           Cancel
         </Button>
-        <Button type="mid" onClick={next} isLoading={isCreating} disabled={isCreating || !guardianList.length}>
+        <Button type="mid" onClick={keepPrivate ? () => { openBackupGuardianModal(onBackupFinished) } : () => next()} isLoading={isCreating} disabled={isCreating || !guardianList.length}>
           Continue
         </Button>
       </Box>
