@@ -192,10 +192,14 @@ export default function EditGuardian({
         navigate(`/dashboard`);
       } catch (error: any) {
         setIsCreating(false)
-        toast({
-          status: 'error',
-          title: error.message,
-        });
+
+        if (error.message) {
+          toast({
+            status: 'error',
+            title: error.message,
+          });
+        }
+
         console.log('error', error.message)
       }
     } else {
@@ -268,10 +272,14 @@ export default function EditGuardian({
 
       } catch (error: any) {
         setIsCreating(false)
-        toast({
-          status: 'error',
-          title: error.message,
-        });
+
+        if (error.message) {
+          toast({
+            status: 'error',
+            title: error.message,
+          });
+        }
+
         console.log('error', error.message)
       }
     }

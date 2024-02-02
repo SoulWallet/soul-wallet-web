@@ -252,6 +252,15 @@ export default function AddSigner({ next }: any) {
               <Box width="100%" height="1px" background="rgba(0, 0, 0, 0.10)" />
             </Box>
             <Box
+              color="black"
+              fontFamily="Nunito"
+              fontSize="18px"
+              fontWeight="800"
+              marginBottom="16px"
+            >
+              {(!!signatures && !!signatures.length && signatures.filter((item: any) => !item.isValid).length) || 0} more guardians approval needed
+            </Box>
+            <Box
               width="100%"
               display="flex"
               alignItems="flex-start"

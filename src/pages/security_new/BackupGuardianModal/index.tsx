@@ -187,8 +187,12 @@ export default function BackupGuardianModal({
     }
   }
 
+  const handleClose = useCallback(() => {
+    onClose(isDone)
+  }, [isDone])
+
   return (
-    <Modal isOpen={isOpen} onClose={() => onClose(isDone)}>
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
       <ModalContent width="434px" borderRadius="20px">
         <ModalCloseButton top="14px" />
