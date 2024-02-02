@@ -88,12 +88,12 @@ export default function BackupGuardianModal({
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, updateEditingGuardiansInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
-  const guardianDetails = guardiansInfo.guardianDetails || {
+  const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],
     threshold: 0
   }
   console.log('guardianDetails', guardianDetails)
-  const threshold = guardiansInfo.threshold || guardianDetails.threshold || 0
+  const threshold = (guardiansInfo && guardiansInfo.threshold) || guardianDetails.threshold || 0
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
   const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
     return {

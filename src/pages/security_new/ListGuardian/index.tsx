@@ -105,114 +105,114 @@ export default function ListGuardian({
               <Box display="flex" flexDirection="column" alignItems="center"  justifyContent="center">
                 <Box width="85px" height="85px" borderRadius="85px">
                   <Image width="85px" height="85px" src={EmptyGuardianIcon} />
-                    </Box>
-                    <Box fontWeight="600" fontSize="14px" marginTop="10px">You currently have no guardians</Box>
+                </Box>
+                <Box fontWeight="600" fontSize="14px" marginTop="10px">You currently have no guardians</Box>
               </Box>
             </Box>
           )}
-            {!!guardianList.length && (
-              <Box
-                paddingTop="14px"
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-start"
-              >
-                {guardianDetails && guardianDetails.guardians && (
-                  <Fragment>
-                    {guardianDetails.guardians.map((address: any, i: any) =>
-                      <GuardianCard
-                        key={i}
-                        name={guardianNames[i] || 'No Name'}
-                        address={address}
-                        time="Added on 2023-12-14 "
-                        marginRight="18px"
-                        cursor="pointer"
-                      />
-                    )}
-                  </Fragment>
-                )}
-              </Box>
-            )}
-            <Box borderTop="1px solid #F0F0F0" marginTop="30px" paddingTop="20px">
-              <Title
-                fontFamily="Nunito"
-                fontWeight="700"
-                fontSize="18px"
-                display="flex"
-              >
-                Recovery settings
-              </Title>
-              {!guardianList.length && (
-                <Box display="flex" alignItems="center" justifyContent="center">
-                  <Box fontWeight="600" fontSize="14px" marginTop="20px" marginBottom="20px">Setup recovery threshold after added guardians</Box>
-                </Box>
-              )}
-              {!!guardianList.length && (
+          {!!guardianList.length && (
+            <Box
+              paddingTop="14px"
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-start"
+            >
+              {guardianDetails && guardianDetails.guardians && (
                 <Fragment>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    marginTop="10px"
-                  >
-                    <Box
-                      fontFamily="Nunito"
-                      fontWeight="700"
-                      fontSize="14px"
-                      marginRight="6px"
-                    >
-                      Threshold:
-                    </Box>
-                    <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
-                      <Box>Wallet recovery requires</Box>
-                      <Box width="80px" margin="0 10px">
-                        <Box
-                          px={2}
-                          py={2}
-                          width="80px"
-                          transition="all 0.2s"
-                          borderRadius="16px"
-                          borderWidth="1px"
-                          padding="12px"
-                          background="white"
-                          _expanded={{
-                            borderColor: '#3182ce',
-                            boxShadow: '0 0 0 1px #3182ce',
-                          }}
-                        >
-                          <Box display="flex" alignItems="center" justifyContent="space-between">
-                            {guardianDetails.threshold || 0}
-                            <DropDownIcon />
-                          </Box>
-                        </Box>
-                      </Box>
-                      <Box>{`out of ${guardianDetails.guardians.length} guardian(s) confirmation.`}</Box>
-                    </TextBody>
-                  </Box>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-start"
-                    marginTop="10px"
-                  >
-                    <Box
-                      fontFamily="Nunito"
-                      fontWeight="700"
-                      fontSize="14px"
-                      marginRight="6px"
-                    >
-                      Advanced:
-                    </Box>
-                    <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
-                      <Box marginRight="10px">Keep guardians private</Box>
-                      <Box width="42px" minWidth="42px" height="24px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="2px" cursor="pointer" transition="all 0.2s ease" paddingLeft={keepPrivate ? '20px' : '2px'}>
-                        <Box boxShadow={"0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)"} width="20px" height="20px" background="white" borderRadius="30px" />
-                      </Box>
-                    </TextBody>
-                  </Box>
+                  {guardianDetails.guardians.map((address: any, i: any) =>
+                    <GuardianCard
+                      key={i}
+                      name={guardianNames[i] || 'No Name'}
+                      address={address}
+                      time="Added on 2023-12-14 "
+                      marginRight="18px"
+                      cursor="pointer"
+                    />
+                  )}
                 </Fragment>
               )}
             </Box>
+          )}
+          <Box borderTop="1px solid #F0F0F0" marginTop="30px" paddingTop="20px">
+            <Title
+              fontFamily="Nunito"
+              fontWeight="700"
+              fontSize="18px"
+              display="flex"
+            >
+              Recovery settings
+            </Title>
+            {!guardianList.length && (
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <Box fontWeight="600" fontSize="14px" marginTop="20px" marginBottom="20px">Setup recovery threshold after added guardians</Box>
+              </Box>
+            )}
+            {!!guardianList.length && (
+              <Fragment>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  marginTop="10px"
+                >
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="700"
+                    fontSize="14px"
+                    marginRight="6px"
+                  >
+                    Threshold:
+                  </Box>
+                  <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
+                    <Box>Wallet recovery requires</Box>
+                    <Box width="80px" margin="0 10px">
+                      <Box
+                        px={2}
+                        py={2}
+                        width="80px"
+                        transition="all 0.2s"
+                        borderRadius="16px"
+                        borderWidth="1px"
+                        padding="12px"
+                        background="white"
+                        _expanded={{
+                          borderColor: '#3182ce',
+                          boxShadow: '0 0 0 1px #3182ce',
+                        }}
+                      >
+                        <Box display="flex" alignItems="center" justifyContent="space-between">
+                          {guardianDetails.threshold || 0}
+                          <DropDownIcon />
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box>{`out of ${guardianDetails.guardians.length} guardian(s) confirmation.`}</Box>
+                  </TextBody>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  marginTop="10px"
+                >
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="700"
+                    fontSize="14px"
+                    marginRight="6px"
+                  >
+                    Advanced:
+                  </Box>
+                  <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
+                    <Box marginRight="10px">Keep guardians private</Box>
+                    <Box width="42px" minWidth="42px" height="24px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="2px" cursor="pointer" transition="all 0.2s ease" paddingLeft={keepPrivate ? '20px' : '2px'}>
+                      <Box boxShadow={"0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)"} width="20px" height="20px" background="white" borderRadius="30px" />
+                    </Box>
+                  </TextBody>
+                </Box>
+              </Fragment>
+            )}
+          </Box>
         </Fragment>
       </RoundSection>
       <Box

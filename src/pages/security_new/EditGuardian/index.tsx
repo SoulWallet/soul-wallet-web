@@ -4,7 +4,7 @@ import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection'
 import SignerCard from '@/components/new/SignerCard'
 import GuardianCard from '@/components/new/GuardianCard'
-import { Box, Menu, MenuList, MenuButton, MenuItem, useToast } from '@chakra-ui/react'
+import { Box, Image, Menu, MenuList, MenuButton, MenuItem, useToast } from '@chakra-ui/react'
 import SetSignerModal from '@/pages/security_new/SetSignerModal'
 import SelectSignerTypeModal from '@/pages/security_new/SelectSignerTypeModal'
 import SelectGuardianTypeModal from '@/pages/security_new/SelectGuardianTypeModal'
@@ -37,6 +37,7 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
+import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg'
 
 const getRecommandCount = (c: number) => {
   if (!c) {
@@ -76,7 +77,8 @@ export default function EditGuardian({
   onEditGuardianConfirm,
   startEditGuardian,
   cancelEditGuardian,
-  openBackupGuardianModal
+  openBackupGuardianModal,
+  startDeleteGuardian,
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
@@ -275,6 +277,19 @@ export default function EditGuardian({
     }
   }, [guardianList, keepPrivate, slotInfo])
 
+  const handleDelete = useCallback((i: any) => {
+    const guardiansInfo = getEditingGuardiansInfo();
+    const guardianDetails = guardiansInfo.guardianDetails
+    const guardianNames = guardiansInfo.guardianNames
+    const guardians = guardianDetails.guardians
+    guardianDetails.guardians = guardians.filter((_: any, idx: number) => idx !== i)
+
+    guardianStore.updateEditingGuardiansInfo({
+      guardianDetails,
+      guardianNames: guardianNames.filter((_: any, idx: number) => idx !== i)
+    })
+  }, [])
+
   return (
     <Fragment>
       <RoundSection marginTop="10px" background="white">
@@ -286,40 +301,53 @@ export default function EditGuardian({
             display="flex"
           >
             <Box>Guardian List</Box>
-            {!!guardianList.length && (
-              <Box marginLeft="auto">
+            <Box marginLeft="auto">
+              {!!guardianList.length && (
                 <TextButton type="mid" onClick={openBackupGuardianModal}>
                   <Box marginRight="6px"><HistoryIcon /></Box>
                   Back up list
                 </TextButton>
-                <Button type="mid" onClick={startEditGuardian}>
-                  <Box marginRight="6px"><PlusIcon color="white" /></Box>
-                  Edit Guardian
-                </Button>
+              )}
+              <Button type="mid" onClick={startEditGuardian}>
+                Edit Guardian
+              </Button>
+            </Box>
+          </Box>
+          {!guardianList.length && (
+            <Box width="100%" display="flex" alignItems="center" justifyContent="center">
+              <Box display="flex" flexDirection="column" alignItems="center"  justifyContent="center">
+                <Box width="85px" height="85px" borderRadius="85px">
+                  <Image width="85px" height="85px" src={EmptyGuardianIcon} />
+                </Box>
+                <Box fontWeight="600" fontSize="14px" marginTop="10px">You currently have no guardians</Box>
               </Box>
-            )}
-          </Box>
-          <Box
-            paddingTop="14px"
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-start"
-          >
-            {guardianDetails && guardianDetails.guardians && (
-              <Fragment>
-                {guardianDetails.guardians.map((address: any, i: any) =>
-                  <GuardianCard
-                    key={i}
-                    name={guardianNames[i] || 'No Name'}
-                    address={address}
-                    time="Added on 2023-12-14 "
-                    marginRight="18px"
-                    cursor="pointer"
-                  />
-                )}
-              </Fragment>
-            )}
-          </Box>
+            </Box>
+          )}
+          {!!guardianList.length && (
+            <Box
+              paddingTop="14px"
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-start"
+            >
+              {guardianDetails && guardianDetails.guardians && (
+                <Fragment>
+                  {guardianDetails.guardians.map((address: any, i: any) =>
+                    <GuardianCard
+                      key={i}
+                      name={guardianNames[i] || 'No Name'}
+                      address={address}
+                      time="Added on 2023-12-14 "
+                      marginRight="18px"
+                      cursor="pointer"
+                      allowDelete={true}
+                      onDelete={() => handleDelete(i)}
+                    />
+                  )}
+                </Fragment>
+              )}
+            </Box>
+          )}
           <Box borderTop="1px solid #F0F0F0" marginTop="30px" paddingTop="20px">
             <Title
               fontFamily="Nunito"
