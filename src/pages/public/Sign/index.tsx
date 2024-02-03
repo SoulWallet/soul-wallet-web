@@ -48,9 +48,7 @@ export default function Sign() {
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
-        <Link to="/dashboard">
-          <Image src={IconLogo} h="44px" />
-        </Link>
+        <Image src={IconLogo} h="44px" />
       </Box>
       <Box
         padding="20px"
