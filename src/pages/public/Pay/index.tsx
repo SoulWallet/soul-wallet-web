@@ -32,15 +32,24 @@ import SignatureRequestImg from '@/assets/icons/signature-request.svg';
 import { ethers } from 'ethers';
 import config from '@/config';
 import useTools from '@/hooks/useTools';
+import { useParams } from 'react-router-dom'
+import { metaMask } from 'wagmi/connectors'
+import SuccessIcon from '@/components/Icons/Success'
 import BN from 'bignumber.js';
 
-export default function Sign() {
+export default function Pay() {
+  const { recoverId } = useParams()
+  const [recoveryRecord, setRecoveryRecord] = useState<any>()
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
-  const estimatedFee = 0;
+  const [paying, setPaying] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const [isPaid, setIsPaid] = useState(false)
+  const [estimatedFee, setEstimatedFee] = useState(0)
+  const toast = useToast();
   const recoveryRecordID = '';
-  const { connect } = useConnect();
-  const { isConnected } = useAccount();
+  const { connectAsync } = useConnect();
+  const { address, isConnected, isConnecting } = useAccount()
   const { writeContract: pay, data: payHash } = useWriteContract();
   const result = useWaitForTransactionReceipt({
     hash: payHash,
@@ -48,27 +57,43 @@ export default function Sign() {
 
   console.log('pay result', result);
 
-  const doPayFee = (fee: bigint, payId: string) => {
-    pay(
-      {
-        ...paymentContractConfig,
-        functionName: 'pay',
-        args: [payId],
-        value: fee,
-      },
-      // {
-      //   onSuccess: (hash) => {
-      //     console.log('success', hash);
-      //   },
-      //   onSettled: () => {
-      //     console.log('settled');
-      //   },
-      //   onError: (error) => {
-      //     console.log('error', error);
-      //   },
-      // },
-    );
-  };
+  const doPay = useCallback(async () => {
+    try {
+      setPaying(true)
+      pay(
+        {
+          ...paymentContractConfig,
+          functionName: 'pay',
+          args: [recoverId],
+          value: ethers.parseEther(ethers.formatEther(BN(estimatedFee).toFixed())),
+        },
+        {
+          onSuccess: (hash) => {
+            setPaying(false)
+            setIsPaid(true)
+            toast({
+              title: 'Pay request sent!',
+              status: 'success',
+            });
+            console.log('success', hash);
+          },
+          onSettled: () => {
+            console.log('settled');
+          },
+          onError: (error) => {
+            setPaying(false)
+            toast({
+              title: error.message,
+              status: 'error',
+            });
+            console.log('error', error);
+          },
+        },
+      );
+    } catch (error: any) {
+      console.log('error', error.message)
+    }
+  }, [recoverId, estimatedFee])
 
   const generateQR = async (text: string) => {
     try {
@@ -81,6 +106,188 @@ export default function Sign() {
   useEffect(() => {
     generateQR(`${location.origin}/public/pay/${recoveryRecordID}`);
   }, []);
+
+  const loadRecord = async (recoverId: any) => {
+    try {
+      const res = await api.guardian.getRecoverRecord({ recoveryRecordID: recoverId })
+      const recoveryRecord = res.data
+      setLoaded(true)
+      setRecoveryRecord(recoveryRecord)
+    } catch (error: any) {
+      console.log('error', error.message)
+    }
+  }
+
+  useEffect(() => {
+    if (recoveryRecord) {
+      setEstimatedFee(Number(recoveryRecord.estimatedFee))
+      if (!isPaid) setIsPaid(recoveryRecord.status > 1)
+    }
+  }, [recoveryRecord, isPaid])
+
+  useEffect(() => {
+    if (recoverId) {
+      loadRecord(recoverId)
+      const interval = setInterval(() => loadRecord(recoverId), 5000)
+      return () => clearInterval(interval)
+    }
+  }, [recoverId])
+
+  const connectWallet = useCallback(async () => {
+    await connectAsync({ connector: metaMask() });
+  }, [])
+
+  if (!loaded) {
+    return (
+      <Box width="100%" minHeight="100vh" background="#F2F4F7">
+        <Box height="58px" padding="10px 20px">
+          <Link to="/dashboard">
+            <Image src={IconLogo} h="44px" />
+          </Link>
+        </Box>
+        <Box
+          padding="20px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="calc(100vh - 58px)"
+          flexDirection="column"
+        >
+          <RoundContainer
+            width="1058px"
+            maxWidth="100%"
+            minHeight="544px"
+            maxHeight="100%"
+            display="flex"
+            padding="0"
+            overflow="hidden"
+            flexDirection={{ base: "column", md: "row" }}
+            background="#FFFFFF"
+          >
+            <Box
+              width={{ base: "100%", md: "100%" }}
+              flex="1"
+              display="flex"
+              padding="60px"
+            >
+              <Box
+                width="100%"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Box maxWidth="548px" textAlign="center" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                  <Box
+                    fontSize="32px"
+                    fontWeight="700"
+                    fontFamily="Nunito"
+                  >
+                    Loading...
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </RoundContainer>
+        </Box>
+      </Box>
+    )
+  }
+
+  if (!!isPaid) {
+    return (
+      <Box width="100%" minHeight="100vh" background="#F2F4F7">
+        <Box height="58px" padding="10px 20px">
+          <Link to="/dashboard">
+            <Image src={IconLogo} h="44px" />
+          </Link>
+        </Box>
+        <Box
+          padding="20px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="calc(100vh - 58px)"
+          flexDirection="column"
+        >
+          <RoundContainer
+            width="1058px"
+            maxWidth="100%"
+            minHeight="544px"
+            maxHeight="100%"
+            display="flex"
+            padding="0"
+            overflow="hidden"
+            flexDirection={{ base: "column", md: "row" }}
+            background="#FFFFFF"
+          >
+            <Box
+              width={{ base: "100%", md: "100%" }}
+              flex="1"
+              display="flex"
+              padding="60px"
+            >
+              <Box
+                width="100%"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Box maxWidth="548px" textAlign="center" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                  <Box
+                    marginBottom="22px"
+                    width="120px"
+                    height="120px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <SuccessIcon size="120" />
+                  </Box>
+                  <Box
+                    fontSize="32px"
+                    fontWeight="700"
+                    fontFamily="Nunito"
+                  >
+                    Thank you, payment received!
+                  </Box>
+                  <Box
+                    fontSize="14px"
+                    fontWeight="400"
+                    fontFamily="Nunito"
+                    color="black"
+                    marginTop="34px"
+                    maxWidth="500px"
+                  >
+                    Recover for: {recoveryRecord.addresses.map((item: any) => item.address).join(', ')}
+                  </Box>
+                </Box>
+                <Box
+                  width="320px"
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  marginTop="30px"
+                >
+                  <Button
+                    width="100%"
+                    theme="dark"
+                    color="white"
+                    marginBottom="18px"
+                    onClick={() => {}}
+                  >
+                    Close
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+          </RoundContainer>
+        </Box>
+      </Box>
+    )
+  }
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
@@ -116,9 +323,9 @@ export default function Sign() {
                 alignItems="center"
                 justifyContent="center"
               >
-                <Box marginBottom="22px" width="120px" height="120px">
-                  <Image src={SignatureRequestImg} />
-                </Box>
+                {/* <Box marginBottom="22px" width="120px" height="120px">
+                    <Image src={SignatureRequestImg} />
+                    </Box> */}
                 <Box fontSize="32px" fontWeight="700" fontFamily="Nunito">
                   Pay Recover Fee
                 </Box>
@@ -161,8 +368,8 @@ export default function Sign() {
                     justifyContent="space-between"
                     padding="5px"
                   >
-                    <Box>Network fee:</Box>
-                    <Box>{ethers.formatEther(BN(estimatedFee || 0).toFixed())} ETH</Box>
+                    <Box textAlign="left">Network fee:</Box>
+                    <Box textAlign="right">{ethers.formatEther(BN(estimatedFee || 0).toFixed())} ETH</Box>
                   </Box>
                 </Box>
               </Box>
@@ -180,18 +387,22 @@ export default function Sign() {
                     theme="dark"
                     color="white"
                     marginBottom="18px"
-                    onClick={() =>
-                      doPayFee(
-                        ethers.parseEther('0.00921619648411735'),
-                        '0xe4c1084173787a7a9b396e76ed4fe1d94eee74ba78e6156b5afad25024277557',
-                      )
-                    }
+                    onClick={doPay}
+                    loading={paying}
+                    disabled={paying}
                   >
-                    Pay Fee Test
+                    Pay Fee
                   </Button>
                 ) : (
-                  <Button width="100%" theme="dark" color="white" marginBottom="18px" onClick={connect}>
-                    Connect wallet
+                  <Button
+                    width="100%"
+                    theme="dark"
+                    color="white"
+                    marginBottom="18px"
+                    onClick={connectWallet}
+                    disabled={isConnecting}
+                  >
+                    {isConnecting ? 'Connecting' : 'Connect wallet'}
                   </Button>
                 )}
               </Box>
