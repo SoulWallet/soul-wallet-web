@@ -41,6 +41,7 @@ import { ethers } from 'ethers';
 import config from '@/config';
 import useTools from '@/hooks/useTools';
 import BN from 'bignumber.js';
+import usePublic from '@/hooks/usePublic';
 
 export default function Sign() {
   const [imgSrc, setImgSrc] = useState<string>('');
@@ -48,6 +49,13 @@ export default function Sign() {
   const toast = useToast();
   const estimatedFee = 0
   const recoveryRecordID = ''
+  const { payFee } = usePublic();
+  const { connect } = useConnect();
+  const { isConnected } = useAccount();
+
+  const doPayFee = () => {
+    payFee(ethers.parseEther('0.00921619648411735'), '0xe4c1084173787a7a9b396e76ed4fe1d94eee74ba78e6156b5afad25024277557');
+  }
 
   const generateQR = async (text: string) => {
     try {
@@ -160,14 +168,24 @@ export default function Sign() {
                 justifyContent="center"
                 marginTop="30px"
               >
-                <Button
+                {isConnected ? <Button
                   width="100%"
                   theme="dark"
                   color="white"
                   marginBottom="18px"
+                  onClick={doPayFee}
+                >
+                  Pay Fee Test
+                </Button>: <Button
+                  width="100%"
+                  theme="dark"
+                  color="white"
+                  marginBottom="18px"
+                  onClick={connect}
                 >
                   Connect wallet
-                </Button>
+                </Button>}
+               
               </Box>
             </Box>
           </Box>

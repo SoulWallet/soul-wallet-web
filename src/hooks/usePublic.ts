@@ -4,18 +4,19 @@ import { paymentContractConfig } from '@/contracts/contracts';
 export default function usePublic() {
   const { writeContract } = useWriteContract();
 
-  const payFee = async (fee: string, payId: string) => {
+  const payFee = async (fee: bigint, payId: string) => {
     writeContract(
       {
         ...paymentContractConfig,
         functionName: 'pay',
-        args: [fee, payId],
+        args: [payId],
+        value: fee,
       },
       {
-        onSuccess: (data) => {
-          console.log('success', data);
+        onSuccess: (hash) => {
+          console.log('success', hash);
           const result = useWaitForTransactionReceipt({
-            //   hash: payHash,
+            hash,
             // onSuccess() {
             //   toast({
             //     title: "Success",
@@ -24,9 +25,13 @@ export default function usePublic() {
             //   });
             // },
           });
+          console.log('result issss:', result);
         },
         onSettled: () => {
           console.log('settled');
+        },
+        onError: (error) => {
+          console.log('error', error);
         },
       },
     );
