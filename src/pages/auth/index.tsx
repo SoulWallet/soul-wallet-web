@@ -366,14 +366,9 @@ export default function Auth() {
               >
                 <Button
                   width="100%"
-                  theme="primary"
-                  themeColor="#FF2E79"
-                  background="#FF2E79"
+                  theme="dark"
                   color="white"
                   marginBottom="18px"
-                  _hover={{
-                    background: "#FF2E79"
-                  }}
                   onClick={openRegister}
                 >
                   Create account
