@@ -154,16 +154,27 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
               </Box>
             </Box>
             <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" width="100%">
-              <Button
-                theme="dark"
-                color="white"
-                padding="0 20px"
-                disabled={!ethers.isAddress(address) || isImporting}
-                onClick={() => importWallet(address)}
-                loading={isImporting}
-              >
-                Go to my wallet
-              </Button>
+              <Box>
+                <Button
+                  theme="dark"
+                  color="white"
+                  padding="0 20px"
+                  marginRight="16px"
+                  onClick={back}
+                >
+                  Back
+                </Button>
+                <Button
+                  theme="dark"
+                  color="white"
+                  padding="0 20px"
+                  disabled={!ethers.isAddress(address) || isImporting}
+                  onClick={() => importWallet(address)}
+                  loading={isImporting}
+                >
+                  Go to my wallet
+                </Button>
+              </Box>
               <Box fontWeight="400" fontSize="14px" textAlign="center" marginTop="20px">
                 For new users, please <Box as="span" fontWeight="700" fontSize="14px" marginLeft="2px" onClick={goToCreate} cursor="pointer">Create New Account</Box>
               </Box>
