@@ -47,7 +47,9 @@ export const router = createBrowserRouter([
     element: <PublicWrapper />,
     children: [
       { path: 'sign', element: <Sign /> },
+      { path: 'sign/:recoverId', element: <Sign /> },
       { path: 'pay', element: <Pay /> },
+      { path: 'pay/:recoverId', element: <Pay /> },
     ]
   },
 ]);

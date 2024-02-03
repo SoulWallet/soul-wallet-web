@@ -36,8 +36,13 @@ import useSdk from '@/hooks/useSdk';
 import { useSignerStore } from '@/store/signer';
 import AuthImg from '@/assets/auth.svg'
 import SignatureRequestImg from '@/assets/icons/signature-request.svg'
+import { useParams } from 'react-router-dom'
 
 export default function Sign() {
+  const { recoverId } = useParams()
+  const { address, isConnected, isConnecting } = useAccount()
+  console.log('recoverId', recoverId)
+
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
@@ -94,7 +99,7 @@ export default function Sign() {
                   fontFamily="Nunito"
                   color="rgba(0, 0, 0, 0.80)"
                 >
-                  From: 0xAAAA12345678E25FDa5f8a56B8e267fDaB6dS123
+                  From: {address}
                 </Box>
                 <Box
                   fontSize="14px"
