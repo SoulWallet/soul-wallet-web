@@ -13,7 +13,7 @@ import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
 import ArbConfig from './chains/arb-sepolia';
-import OpConfig from './chains/op-sepolia';
+// import OpConfig from './chains/op-sepolia';
 import BaseConfig from './chains/sepolia';
 
 export const chainIdMapping = {

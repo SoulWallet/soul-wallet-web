@@ -37,7 +37,6 @@ import BN from 'bignumber.js';
 export default function Sign() {
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
-  const toast = useToast();
   const estimatedFee = 0;
   const recoveryRecordID = '';
   const { connect } = useConnect();

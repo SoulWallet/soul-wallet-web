@@ -390,7 +390,7 @@ const GuardianInput = ({
         leftErrorMsg={showErrors[`name_${id}`] && errors[`name_${id}`]}
         leftComponent={
           <Text color="#898989" fontWeight="600">
-            eth:
+            {import.meta.env.VITE_MAINNET_ADDRESS_PREFIX}
           </Text>
         }
         _leftContainerStyles={{ width: '30%' }}

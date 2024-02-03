@@ -6,14 +6,25 @@ import useConfig from '@/hooks/useConfig';
 const buttonStyles = {
   black: {
     color: '#fff',
-    bg: '#1c1c1e',
-    _hover: { bg: '#4e4e54' },
+    bg: '#000',
+    _hover: { bg: '#4E4E53' },
+    _disabled:{ bg: '#B2B2B2'},
   },
   white: {
     color: '#000',
     bg: '#fff',
-    border: '1px solid #E0E0E0',
-    _hover: { bg: '#f8f8f8' },
+    _hover: { bg: '#eee' },
+    _disabled: {color: "#B2B2B2"},
+  },
+  red:{
+    color: "#fff",
+    bg: "brand.red",
+    _hover:{
+      bg:"#FF689E"
+    },
+    _disabled:{
+      bg: "#B2B2B2",
+    }
   },
   purple: {
     color: 'brand.purple',

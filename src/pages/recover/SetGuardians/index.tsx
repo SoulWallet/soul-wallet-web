@@ -453,7 +453,7 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
                       errorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
                       leftComponent={
                         <Text color="#898989" fontWeight="600">
-                          eth:
+                          {import.meta.env.VITE_MAINNET_ADDRESS_PREFIX}
                         </Text>
                       }
                       _styles={{ width: '100%', minWidth: '520px' }}

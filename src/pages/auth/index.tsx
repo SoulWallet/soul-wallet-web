@@ -337,7 +337,7 @@ export default function Auth() {
               </Box>
             </Box>
             <TextBody fontWeight="700" color="#818181">
-              For more info, check out <Box as="a" color="#FF2E79">{`FAQs >`}</Box>
+              For more info, check out <Box as="a" target='_blank' href={`${import.meta.env.VITE_OFFICIAL_WEB_URL}#faq`} color="#FF2E79">{`FAQs >`}</Box>
             </TextBody>
           </Box>
           <Box
