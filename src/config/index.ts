@@ -71,7 +71,7 @@ export const chainMapping = {
   },
 };
 // This is an important store switch which will clear all users' data
-export const storeVersion = '17';
+export const storeVersion = '18';
 
 export const defaultGuardianSafePeriod = 1;
 
@@ -119,6 +119,9 @@ export default {
   backendURL: `${import.meta.env.VITE_BACKEND_URL}/appapi`,
   soulScanURL: `${import.meta.env.VITE_SCAN_URL}/opapi`,
   officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
-  /* @vite-ignore */
-  chainList: [ArbConfig, OpConfig, BaseConfig],
+  chainList: [
+    ArbConfig,
+    // OpConfig,
+    BaseConfig,
+  ],
 };

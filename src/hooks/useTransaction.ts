@@ -4,7 +4,7 @@
 
 import { ethers } from 'ethers';
 import BN from 'bignumber.js';
-import Erc20ABI from '../contract/abi/ERC20.json';
+import { erc20Abi } from 'viem'
 import { useAddressStore } from '@/store/address';
 import { Transaction } from '@soulwallet/sdk';
 import useQuery from './useQuery';
@@ -45,7 +45,7 @@ export default function useTransaction() {
 
   const sendErc20 = async (tokenAddress: string, to: string, amount: string, decimals: number) => {
     const amountInWei = new BN(amount).shiftedBy(decimals).toString();
-    const erc20Interface = new ethers.Interface(Erc20ABI);
+    const erc20Interface = new ethers.Interface(erc20Abi);
     const callData = erc20Interface.encodeFunctionData('transfer', [to, amountInWei]);
     const tx = {
       from: selectedAddress,

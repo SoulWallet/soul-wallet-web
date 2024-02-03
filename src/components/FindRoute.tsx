@@ -33,8 +33,9 @@ export default function FindRoute({ children }: { children: ReactNode }) {
     }
 
     if (
-      !createInfo.eoaAddress &&
-      !createInfo.credentials.length &&
+      // !createInfo.eoaAddress &&
+      // !createInfo.credentials &&
+      // !createInfo.credentials.length &&
       !selectedAddress &&
       !isRecoverPage &&
       !isCreatePage &&

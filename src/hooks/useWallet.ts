@@ -5,7 +5,7 @@ import { ABI_SoulWallet } from '@soulwallet/abi';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { addPaymasterAndData } from '@/lib/tools';
-import Erc20ABI from '../contract/abi/ERC20.json';
+import {  erc20Abi } from 'viem'
 import { L1KeyStore, SignkeyType, UserOperation } from '@soulwallet/sdk';
 import { executeTransaction } from '@/lib/tx';
 import BN from 'bignumber.js';
@@ -36,9 +36,8 @@ export default function useWallet() {
   const { soulWallet, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, setAddressList } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
-  const { setSignerIdAddress } = useSettingStore();
+  const { setSignerIdAddress, setFinishedSteps } = useSettingStore();
     const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo } = useTempStore();
-  const {packKeystoreSignature} = useKeystore();
 
   const createWallet = async ({
     initialGuardianHash,
@@ -132,9 +131,9 @@ export default function useWallet() {
 
     // approve paymaster to spend ERC-20
     const soulAbi = new ethers.Interface(ABI_SoulWallet);
-    const erc20Abi = new ethers.Interface(Erc20ABI);
+    const erc20Interface = new ethers.Interface(erc20Abi);
     const approveTos = chainConfig.paymasterTokens;
-    const approveCalldata = erc20Abi.encodeFunctionData('approve', [
+    const approveCalldata = erc20Interface.encodeFunctionData('approve', [
       chainConfig.contracts.paymaster,
       ethers.parseEther('1000'),
     ]);
@@ -331,22 +330,12 @@ export default function useWallet() {
     });
   };
 
+  // will be executed only once after recover process finished
   const boostAfterRecovered = async () => {
     retrieveSlotInfo({
       ...recoverInfo,
       initialKeys: recoverInfo.initialKeysAddress,
     });
-    // const newAddress = await calcWalletAddress(0);
-
-    // setAddressList([
-    //   {
-    //     address: newAddress,
-    //     // TODO, check activate status
-    //     activatedChains: [],
-  //   },
-  // ]);
-
-    // saveAddressName(newAddress, 'Account 1', true);
     const addressList = recoverInfo.recoveryRecord.addresses.map((item: any) => ({
       address: item.address,
       chainIdHex: item.chain_id
@@ -357,9 +346,9 @@ export default function useWallet() {
     if (credentials.length) setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey'));
     setEoas(recoverInfo.signers.filter((signer: any) => signer.type === 'eoa').map((signer: any) => signer.signerId));
     // set mainnet if no selected chainId
-    if (!selectedChainId) {
-      setSelectedChainId(import.meta.env.VITE_MAINNET_CHAIN_ID);
-    }
+    // if (!selectedChainId) {
+    setSelectedChainId(import.meta.env.VITE_MAINNET_CHAIN_ID);
+    // }
 
     updateGuardiansInfo({
       guardianDetails: recoverInfo.guardianDetails,
@@ -372,6 +361,13 @@ export default function useWallet() {
     updateRecoverInfo({
       enabled: true,
     });
+
+    const res = await api.operation.finishStep({
+      slot: slotInfo.slot,
+      steps: [5],
+    });
+
+    setFinishedSteps(res.data.finishedSteps);
   };
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {

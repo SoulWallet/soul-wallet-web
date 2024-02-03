@@ -83,13 +83,13 @@ export default function Activity() {
           Activity
         </Text>
 
-        <Flex px="6" justify={'space-between'} mb="3">
+        {/* <Flex px="6" justify={'space-between'} mb="3">
           <Flex gap="8">
             <FilterMenu active={activeStatus} list={statusList} />
             <FilterMenu active={activeTypes} list={typesList} />
           </Flex>
-          {/* <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} /> */}
-        </Flex>
+          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
+        </Flex> */}
 
         <Box rounded="20px" bg="#fff" py="6px" px="26px">
           <ActivityTable />

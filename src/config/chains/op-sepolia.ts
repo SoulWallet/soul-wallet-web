@@ -32,8 +32,6 @@ export default {
   support1559: true,
   recovering: false,
   paymasterTokens: [
-    // test u
-    '0x7E07E15D2a87A24492740D16f5bdF58c16db0c4E',
   ],
   contracts: {
     ...keystoreContracts,

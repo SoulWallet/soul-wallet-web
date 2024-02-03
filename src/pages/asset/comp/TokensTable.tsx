@@ -7,7 +7,6 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import IconDefaultToken from '@/assets/tokens/default.svg';
 import { useChainStore } from '@/store/chain';
 import IconLoading from '@/assets/loading.svg';
-import { chainMapping } from '@/config';
 import BN from 'bignumber.js';
 
 export default function TokensTable() {

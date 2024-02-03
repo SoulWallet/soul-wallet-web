@@ -40,23 +40,14 @@ export const router = createBrowserRouter([
         ],
       },
       { path: 'auth', element: <Auth /> },
-      {
-        path: 'public',
-        children: [
-          { path: 'sign', element: <Sign /> },
-          { path: 'pay', element: <Pay /> },
-        ]
-      },
     ],
   },
   {
     path: '/public',
     element: <PublicWrapper />,
     children: [
-      {
-        path: 'pay',
-        // element: <Pay />
-      },
-    ],
+      { path: 'sign', element: <Sign /> },
+      { path: 'pay', element: <Pay /> },
+    ]
   },
 ]);

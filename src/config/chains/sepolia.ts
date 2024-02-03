@@ -33,7 +33,7 @@ export default {
   recovering: false,
   paymasterTokens: [
     // test u
-    '0x07865c6E87B9F70255377e024ace6630C1Eaa37F',
+    '0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8',
   ],
   contracts: {
     ...keystoreContracts,

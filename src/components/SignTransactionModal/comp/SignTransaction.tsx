@@ -307,7 +307,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             <Flex flexDir={'column'} align={'center'} fontSize={'20px'} fontWeight={'800'}>
               {decodedData.length > 0
                 ? decodedData.map((item: any, index: number) => (
-                    <Tooltip label={item.to ? `To: ${item.to}` : null}>
+                    <Tooltip key={index} label={item.to ? `To: ${item.to}` : null}>
                       <Text my="1" textTransform="capitalize" key={index}>
                         {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
                         {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
@@ -330,9 +330,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         </Flex>
         <Image src={IconArrowDown} mb="1" w="8" mx="auto" />
         <Box mb="1" w="300px" mx="auto" textAlign={'center'}>
-          <Box py="3" mb="2px" bg="#F9F9F9" roundedTop="20px" fontWeight={'700'}>
+          {sendToAddress && <Box py="3" mb="2px" bg="#F9F9F9" roundedTop="20px" fontWeight={'700'}>
             {toShortAddress(sendToAddress)}
-          </Box>
+          </Box>}
           <Box py="1" bg="#F9F9F9" color="#818181" fontSize={'14px'} roundedBottom={'20px'}>
             From {selectedChainItem.addressPrefix}
             {getAddressName(selectedAddress)}({toShortAddress(selectedAddress)})
@@ -371,7 +371,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           </Tooltip> */}
         </Box>
 
-        <Box mb="3">
+        <Box mb="5" h="1px" bg="rgba(0, 0, 0, 0.10)" />
+
+        {/* <Box mb="3">
           <Flex gap="6" align={'center'}>
             <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
             <Flex
@@ -388,7 +390,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             </Flex>
             <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
           </Flex>
-        </Box>
+        </Box> */}
 
         <Flex flexDir={'column'} gap="3">
           <InfoWrap color="#818181" fontSize="14px">

@@ -21,7 +21,7 @@ const ActivityItem = ({ item }: any) => {
   const { scanUrl } = chainConfig;
   return (
     <Flex justifyContent={'space-between'} alignItems={'center'} py="5">
-      <Link display={'flex'} alignItems={'center'} target="_blank" href={`${scanUrl}/tx/${item.trxHash}`} gap="2">
+      <Link w="30%" display={'flex'} alignItems={'center'} target="_blank" href={`${scanUrl}/tx/${item.trxHash}`} gap="2">
         <Box pos={'relative'}>
           <Image src={getIconMapping(item.functionName)} />
         </Box>
@@ -36,9 +36,9 @@ const ActivityItem = ({ item }: any) => {
           <Text color="#898989">{new Date(item.timestamp * 1000).toLocaleString()}</Text>
         </Box>
       </Link>
-      <Flex w="12" h="12" bg="#f2f2f2" rounded={'full'} align={'center'} justify={'center'}>
+      {/* <Flex w="12" h="12" bg="#f2f2f2" rounded={'full'} align={'center'} justify={'center'}>
         <Image src={(chainMapping as any)[item.chainId].icon} />
-      </Flex>
+      </Flex> */}
       {item.actualGasCost ? (
         <Flex gap="2">
           <Image src={IconEth} w="8" />
