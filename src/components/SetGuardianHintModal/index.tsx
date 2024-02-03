@@ -1,5 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react';
-import { useToast, Text, Box, Link, Image, } from '@chakra-ui/react';
+import { useToast, Text, Box, Image, } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import Button from '../Button';
 import TxModal from '../TxModal';
 import { SkipModal } from '@/pages/create/SetGuardians';
@@ -48,7 +49,7 @@ const SetGuardianHintModal = (_: unknown, ref: Ref<any>) => {
             </Text>
             . Effective immediately!
           </Text>
-          <Link href="/security/guardian">
+          <Link to="/security/guardian" onClick={onClose}>
             <Button
               py="16px"
               fontSize={'18px'}

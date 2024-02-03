@@ -370,7 +370,13 @@ export default function useWallet() {
     setFinishedSteps(res.data.finishedSteps);
   };
 
-  const checkRecoverStatus = async (recoveryRecordID: string) => {
+  const checkRecoverStatus = async () => {
+    const recoveryRecordID = recoverInfo.recoveryRecordID;
+
+    if(!recoveryRecordID){
+      return;
+    }
+
     const res = (await api.guardian.getRecoverRecord({ recoveryRecordID })).data;
     updateRecoverInfo({
       recoveryRecord: res,

@@ -28,7 +28,7 @@ export default function Signer() {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('signer');
   const [signerIdToSet, setSignerIdToSet] = useState('');
-  const { eoas, credentials, signerId , setSignerId } = useSignerStore();
+  const { eoas, credentials, signerId } = useSignerStore();
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
   const [isChooseSignerOpen, setIsChooseSignerOpen] = useState<any>(false);
   const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
@@ -37,7 +37,7 @@ export default function Signer() {
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
 
-  console.log('s', signerId)
+  console.log('s', signerId);
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true);
   }, []);

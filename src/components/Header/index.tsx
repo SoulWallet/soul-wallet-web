@@ -12,8 +12,6 @@ import useTools from '@/hooks/useTools';
 import { headerHeight } from '@/config';
 
 export default function Header() {
-  const { navigate } = useBrowser();
-  const { clearLogData } = useTools();
   const {showLogout} = useWalletContext();
 
   return (

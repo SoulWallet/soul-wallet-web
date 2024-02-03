@@ -8,7 +8,7 @@ import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
 import { useState, useEffect } from 'react';
 import IconArrowDown from '@/assets/icons/arrow-down.svg';
-import IconChevronDown from '@/assets/icons/chevron-down-gray.svg';
+import SignerSelect from '@/components/SignerSelect';
 import IconQuestion from '@/assets/icons/question.svg';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
@@ -22,11 +22,11 @@ import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
 import { useAddressStore, getIndexByAddress } from '@/store/address';
-import IconChecked from '@/assets/icons/checked-green.svg';
 import { useSettingStore } from '@/store/setting';
-import useTools from '@/hooks/useTools';
 import { useSlotStore } from '@/store/slot';
 import { bundlerErrMapping } from '@/config';
+import DropdownSelect from '@/components/DropdownSelect';
+import AddressIcon from '@/components/AddressIcon';
 
 export default function SignTransaction({ onSuccess, txns, sendToAddress }: any) {
   const toast = useToast();
@@ -330,15 +330,28 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         </Flex>
         <Image src={IconArrowDown} mb="1" w="8" mx="auto" />
         <Box mb="1" w="300px" mx="auto" textAlign={'center'}>
-          {sendToAddress && <Box py="3" mb="2px" bg="#F9F9F9" roundedTop="20px" fontWeight={'700'}>
-            {toShortAddress(sendToAddress)}
-          </Box>}
+          {sendToAddress && (
+            <Flex
+              py="3"
+              mb="2px"
+              bg="#F9F9F9"
+              roundedTop="20px"
+              fontSize={'18px'}
+              align={'center'}
+              justify={'center'}
+              gap="2"
+              fontWeight={'700'}
+            >
+              <AddressIcon address={sendToAddress} width={32} />
+              {toShortAddress(sendToAddress)}
+            </Flex>
+          )}
           <Box py="1" bg="#F9F9F9" color="#818181" fontSize={'14px'} roundedBottom={'20px'}>
             From {selectedChainItem.addressPrefix}
-            {getAddressName(selectedAddress)}({toShortAddress(selectedAddress)})
+            {toShortAddress(selectedAddress)}
           </Box>
         </Box>
-            {/** Only show when interact with dapp */}
+        {/** Only show when interact with dapp */}
 
         <Box textAlign={'center'} mb="9">
           {/* <Tooltip
@@ -393,13 +406,28 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         </Box> */}
 
         <Flex flexDir={'column'} gap="3">
-          <InfoWrap color="#818181" fontSize="14px">
+          <InfoWrap fontSize="14px">
             <InfoItem>
-              <LabelItem label="Gas" tooltip={'123'} chainVisible={true} />
+              <LabelItem
+                label="Signer"
+                tooltip={`A transaction signer is responsible for authorizing blockchain transactions, ensuring security and validity before they're processed on the network.`}
+              />
               <Flex gap="2" fontWeight={'500'}>
+                <SignerSelect />
+              </Flex>
+            </InfoItem>
+            <InfoItem>
+              <LabelItem
+                label="Gas"
+                tooltip={`Gas fees are charges for transactions on blockchains, paying for computing efforts to process and secure activities. These fees fluctuate with network demand and transaction details.`}
+                chainVisible={true}
+              />
+              <Flex gap="2" fontWeight={'500'} align={'center'}>
                 {requiredAmount ? (
                   <>
-                    <Text>{requiredAmount}</Text>
+                    <Text fontSize={'14px'} fontWeight={'600'}>
+                      {requiredAmount}
+                    </Text>
                     <GasSelect
                       gasToken={payToken}
                       sponsor={sponsor}
@@ -414,12 +442,21 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             </InfoItem>
             {useSponsor && requiredAmount && (
               <InfoItem>
-                <LabelItem label="Sponsor" tooltip={'123'} />
-                <Text color="brand.red">-{requiredAmount} ETH</Text>
+                <LabelItem
+                  label="Sponsor"
+                  tooltip={`A gas fee sponsor pays blockchain transaction costs for users, enhancing experience and encouraging app usage without fee concerns.`}
+                />
+                <Flex gap="2">
+                  <Text color="brand.red" fontSize={'14px'} fontWeight={'600'}>
+                    -{requiredAmount} ETH
+                  </Text>
+                  <DropdownSelect>
+                    <Text>Soul Wallet</Text>
+                  </DropdownSelect>
+                </Flex>
               </InfoItem>
             )}
-
-            <InfoItem color="#000" fontWeight="600">
+            {/* <InfoItem color="#000" fontWeight="600">
               <Text>Total</Text>
               {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
               {totalMsgValue && Number(totalMsgValue) && !useSponsor && requiredAmount ? ' + ' : ''}
@@ -437,7 +474,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                   .filter((item: any) => item.sendErc20Amount)
                   .map((item: any) => item.sendErc20Amount)
                   .join(' + ')}
-            </InfoItem>
+            </InfoItem> */}
             {hintText && (
               <InfoItem>
                 <Text color="#f00">{hintText}</Text>

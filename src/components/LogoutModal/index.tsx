@@ -28,7 +28,7 @@ const LogoutModal = (_: unknown, ref: Ref<any>) => {
 
   const doLogout = () => {
     clearLogData();
-    navigate(redirectUrl);
+    navigate(redirectUrl, { replace: true });
     onClose();
   };
 

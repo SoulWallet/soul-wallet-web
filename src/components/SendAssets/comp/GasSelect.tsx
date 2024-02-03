@@ -1,38 +1,41 @@
-import React from 'react';
-import { Flex, Text, MenuButton, Menu, MenuList, MenuItem } from '@chakra-ui/react';
-import { Image } from '@chakra-ui/react';
-import IconChevronRight from '@/assets/icons/chevron-right-purple.svg';
+import { Flex, Text, Image, MenuButton, Menu, MenuList, MenuItem } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import TokenLine from './TokenLine';
-import IconSponsor from '@/assets/icons/sponsor.svg';
 import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
 import useConfig from '@/hooks/useConfig';
-export default function GasSelect({ gasToken, onChange, sponsor, useSponsor }: any) {
+import DropdownSelect from '@/components/DropdownSelect';
+export default function GasSelect({ gasToken, onChange }: any) {
   const { tokenBalance } = useBalanceStore();
   const { chainConfig } = useConfig();
+
+  const selectedToken = tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress === gasToken)[0];
 
   return (
     <Menu>
       <MenuButton>
-        <Flex align="center">
+        <DropdownSelect>
+          <Image src={selectedToken.logoURI} w="4" h="4" />
+          {selectedToken.symbol}
+        </DropdownSelect>
+        {/* <Flex align="center">
           <Text color="brand.purple">
             {sponsor && useSponsor
               ? 'Sponsored'
               : tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress === gasToken)[0].symbol}
           </Text>
           <Image src={IconChevronRight} />
-        </Flex>
+        </Flex> */}
       </MenuButton>
       <MenuList>
-        {sponsor && (
+        {/* {sponsor && (
           <MenuItem onClick={() => onChange(ethers.ZeroAddress, true)}>
             <TokenLine icon={IconSponsor} symbol={'Sponsor'} memo={sponsor.sponsorParty || 'Soul Wallet'} />
           </MenuItem>
-        )}
+        )} */}
         {tokenBalance
           .filter(
             (item: ITokenBalanceItem) =>
-              (item.contractAddress !== gasToken || useSponsor) &&
+              item.contractAddress !== gasToken &&
               (item.contractAddress === ethers.ZeroAddress ||
                 chainConfig.paymasterTokens.map((item: any) => item.toLowerCase()).includes(item.contractAddress)),
           )

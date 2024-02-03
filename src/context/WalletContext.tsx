@@ -18,17 +18,13 @@ import useWallet from '@/hooks/useWallet';
 
 interface IWalletContext {
   ethersProvider: any;
-  showSignTransaction: (
-    txns: any,
-    origin?: string,
-    sendTo?: string,
-  ) => Promise<void>;
+  showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showConfirmPayment: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
   showClaimAssets: () => Promise<void>;
   showTestGuide: () => Promise<void>;
   showSignMessage: (messageToSign: any, signType?: string) => Promise<any>;
   showReceive: () => Promise<void>;
-  showSend: (tokenAddress?: string, transferType?:string) => Promise<void>;
+  showSend: (tokenAddress?: string, transferType?: string) => Promise<void>;
   showFeedback: () => Promise<void>;
   showLogout: (_redirectUrl?: string) => Promise<void>;
   showSetGuardianHintModal: () => Promise<void>;
@@ -55,7 +51,6 @@ export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainItem } = useConfig();
   const { checkRecoverStatus } = useWallet();
   const { recoverInfo } = useTempStore();
-  const recoveryRecordID = recoverInfo.recoveryRecordID;
   const { selectedChainId } = useChainStore();
   const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
   const signTransactionModal = useRef<any>();
@@ -68,7 +63,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const testGuideModal = useRef<any>();
   const feedbackModal = useRef<any>();
   const setGuardianHintModal = useRef<any>();
-  
+
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
     if (!selectedChainItem) {
@@ -78,21 +73,20 @@ export const WalletContextProvider = ({ children }: any) => {
   }, [selectedChainItem]);
 
   useEffect(() => {
-    console.log('recover id', recoveryRecordID);
+    const recoveryRecordID = recoverInfo.recoveryRecordID;
+
     if (!recoveryRecordID) {
       return;
     }
 
-    console.log('check recover status', recoveryRecordID);
+    checkRecoverStatus();
 
-    checkRecoverStatus(recoveryRecordID);
-
-    const interval = setInterval(() => checkRecoverStatus(recoveryRecordID), 5000);
+    const interval = setInterval(() => checkRecoverStatus(), 5000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [recoveryRecordID]);
+  }, [recoverInfo.recoveryRecordID]);
 
   const checkActivated = async () => {
     const res = getIsActivated(selectedAddress, selectedChainId);
@@ -122,8 +116,8 @@ export const WalletContextProvider = ({ children }: any) => {
     return await confirmPaymentModal.current.show(fee, origin, sendTo);
   };
 
-  const showSignMessage = async (messageToSign: string,signType?: string) => {
-    return await signMessageModal.current.show(messageToSign,signType);
+  const showSignMessage = async (messageToSign: string, signType?: string) => {
+    return await signMessageModal.current.show(messageToSign, signType);
   };
 
   const showReceive = async () => {
@@ -146,9 +140,9 @@ export const WalletContextProvider = ({ children }: any) => {
     return await feedbackModal.current.show();
   };
 
-  const showLogout = async (_redirectUrl:any) => {
+  const showLogout = async (_redirectUrl: any) => {
     return await logoutModal.current.show(_redirectUrl);
-  }
+  };
 
   const showSetGuardianHintModal = async () => {
     return await setGuardianHintModal.current.show();
@@ -180,7 +174,7 @@ export const WalletContextProvider = ({ children }: any) => {
       }}
     >
       {children}
-      {/** todo, move to another component **/ }
+      {/** todo, move to another component **/}
       <SignTransactionModal ref={signTransactionModal} />
       <ConfirmPaymentModal ref={confirmPaymentModal} />
       <SignMessageModal ref={signMessageModal} />
