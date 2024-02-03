@@ -6,12 +6,15 @@ import { Link } from 'react-router-dom';
 // import IconPlus from '@/assets/icons/dapp-plus.svg';
 import { ExternalLink } from '@/pages/dashboard/comp/HomeCard';
 import HomeCard from '@/pages/dashboard/comp/HomeCard';
+import useTools from '@/hooks/useTools';
 
 const DappItem = ({ item }: any) => {
+  const { checkInitialized } = useTools();
   return (
     <GridItem
       as={Link}
-      to={item.isExternal ? item.url : `/apps?appUrl=${encodeURIComponent(item.url)}`}
+      to={checkInitialized() ? (item.isExternal ? item.url : `/apps?appUrl=${encodeURIComponent(item.url)}`) : null}
+      {...(checkInitialized() ? {} : { onClick: () => checkInitialized(true) })}
       target={item.isExternal ? '_blank' : '_self'}
       _hover={{ bg: 'rgba(0, 0, 0, 0.05)' }}
       transition={'all .3s'}
@@ -59,12 +62,13 @@ const DappItem = ({ item }: any) => {
 // );
 
 export default function DappList() {
+  const { checkInitialized } = useTools();
   return (
     <HomeCard
       h="210px"
       wrapperZIndex="50"
       title="Featured Dapps"
-      external={<ExternalLink title="View more" to="/dapps" />}
+      external={checkInitialized() ? <ExternalLink title="View more" to="/dapps" /> : null}
     >
       <Grid
         templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}

@@ -32,6 +32,7 @@ export function AccountSelectFull({ ...restProps }) {
   const { selectedAddress } = useAddressStore();
   const { doCopy } = useTools();
   const { chainConfig } = useConfig();
+  const { checkInitialized } = useTools();
 
   return (
     <Flex align={'center'} gap="2px" {...restProps}>
@@ -45,7 +46,12 @@ export function AccountSelectFull({ ...restProps }) {
         roundedRight={'full'}
         bg={{ base: '#fff', lg: '#f2f2f2' }}
       >
-        <Image src={IconCopy} w="20px" cursor={'pointer'} onClick={() => doCopy(`${chainConfig.addressPrefix}${selectedAddress}`)} />
+        <Image
+          src={IconCopy}
+          w="20px"
+          cursor={'pointer'}
+          onClick={() => (checkInitialized(true) ? doCopy(`${chainConfig.addressPrefix}${selectedAddress}`) : null)}
+        />
       </Flex>
     </Flex>
   );

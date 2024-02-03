@@ -12,6 +12,7 @@ import Footer from '../Footer';
 import { guideList } from '@/data';
 import { useSettingStore } from '@/store/setting';
 import { useState } from 'react';
+import useTools from '@/hooks/useTools';
 
 const ExtraLink = ({ children, ...restProps }: FlexProps) => {
   return (
@@ -35,6 +36,7 @@ export default function Sidebar() {
   const { showClaimAssets, showTestGuide, showFeedback } = useWalletContext();
   const [navHoverIndex, setNavHoverIndex] = useState(-1);
   const [externalHoverIndex, setExternalHoverIndex] = useState(-1);
+  const { checkInitialized } = useTools();
   const pathname = location.pathname;
 
   return (
@@ -47,7 +49,8 @@ export default function Sidebar() {
               <Flex
                 onMouseEnter={() => setNavHoverIndex(index)}
                 onMouseLeave={() => setNavHoverIndex(-1)}
-                {...(link.isComing ? {} : { as: Link, to: link.href, cursor: 'pointer' })}
+                {...(link.isComing || !checkInitialized() ? {} : { as: Link, to: link.href, cursor: 'pointer' })}
+                {...(checkInitialized() ? {} : { onClick: () => checkInitialized(true) })}
                 gap="2"
                 align={'center'}
               >
@@ -71,7 +74,7 @@ export default function Sidebar() {
           <ExtraLink
             onMouseEnter={() => setExternalHoverIndex(0)}
             onMouseLeave={() => setExternalHoverIndex(-1)}
-            onClick={() => showTestGuide()}
+            onClick={() => (checkInitialized(true) ? showTestGuide() : null)}
           >
             <Image src={externalHoverIndex === 0 ? IconGuideActive : IconGuide} />
             <Text>Test guide</Text>
@@ -92,7 +95,7 @@ export default function Sidebar() {
           <ExtraLink
             onMouseEnter={() => setExternalHoverIndex(1)}
             onMouseLeave={() => setExternalHoverIndex(-1)}
-            onClick={() => showClaimAssets()}
+            onClick={() => (checkInitialized(true) ? showClaimAssets() : null)}
           >
             <Image src={externalHoverIndex === 1 ? IconClaimActive : IconClaim} />
             <Box pos={'relative'}>
