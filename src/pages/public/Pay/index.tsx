@@ -80,7 +80,7 @@ export default function Sign() {
   };
 
   const doCopy = () => {
-    copyText(`${config.officialWebUrl}/pay-recover/${recoveryRecordID}`);
+    copyText(`${config.officialWebUrl}/public/pay/${recoveryRecordID}`);
     toast({
       title: 'Copy success!',
       status: 'success',
@@ -88,7 +88,7 @@ export default function Sign() {
   };
 
   useEffect(() => {
-    generateQR(`${config.officialWebUrl}/pay-recover/${recoveryRecordID}`);
+    generateQR(`${config.officialWebUrl}/public/pay/${recoveryRecordID}`);
   }, []);
 
   return (

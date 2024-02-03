@@ -74,7 +74,7 @@ const SignatureRequest = ({ changeStep }: any) => {
   const { navigate } = useBrowser();
 
   const doCopy = () => {
-    copyText(`${config.officialWebUrl}/recover/${recoveryRecordID}`);
+    copyText(`${config.officialWebUrl}/public/sign/${recoveryRecordID}`);
     toast({
       title: 'Copy success!',
       status: 'success',
@@ -90,16 +90,16 @@ const SignatureRequest = ({ changeStep }: any) => {
   };
 
   useEffect(() => {
-    generateQR(`${config.officialWebUrl}/recover/${recoveryRecordID}`);
+    generateQR(`${config.officialWebUrl}/public/sign/${recoveryRecordID}`);
   }, []);
 
   const handleCopy = async () => {
     let url;
 
     if (recoverStatus === 1) {
-      url = `${config.officialWebUrl}/pay-recover/${recoveryRecordID}`;
+      url = `${config.officialWebUrl}/public/pay/${recoveryRecordID}`;
     } else {
-      url = `${config.officialWebUrl}/recover/${recoveryRecordID}`;
+      url = `${config.officialWebUrl}/public/sign/${recoveryRecordID}`;
     }
 
     copyText(url);
@@ -117,7 +117,7 @@ const SignatureRequest = ({ changeStep }: any) => {
   const handlePay = async () => {
     setShowPayButton(false)
     setShowProgress(true)
-    const url = `${config.officialWebUrl}/pay-recover/${recoveryRecordID}`;
+    const url = `${config.officialWebUrl}/public/pay/${recoveryRecordID}`;
     window.open(url, '_blank');
   };
 

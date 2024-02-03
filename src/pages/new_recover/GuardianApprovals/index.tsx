@@ -90,7 +90,7 @@ export default function AddSigner({ next, back }: any) {
   }, [])
 
   const doCopy = () => {
-    copyText(`${config.officialWebUrl}/recover/${recoveryRecordID}`);
+    copyText(`${config.officialWebUrl}/public/sign/${recoveryRecordID}`);
     toast({
       title: 'Copy success!',
       status: 'success',
@@ -359,7 +359,7 @@ export default function AddSigner({ next, back }: any) {
               Share this link with your guardians to sign:
             </TextBody>
             <Box marginBottom="10px" background="#F9F9F9" borderRadius="12px" padding="12px" fontSize="18px" fontWeight="700">
-              {`${config.officialWebUrl}/recover/${recoveryRecordID}`}
+              {`${config.officialWebUrl}/public/sign/${recoveryRecordID}`}
             </Box>
             <Box
               width="100%"
