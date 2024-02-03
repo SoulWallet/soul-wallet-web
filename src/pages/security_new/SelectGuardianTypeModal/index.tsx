@@ -71,7 +71,7 @@ export default function SelectGuardianTypeModal({
           // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
-          Add guardians
+          Add guardian
         </ModalHeader>
         <ModalCloseButton top="14px" />
         <ModalBody overflow="auto" padding="20px 32px">
@@ -103,7 +103,7 @@ export default function SelectGuardianTypeModal({
                     justifyContent="center"
                     background="rgba(0, 0, 0, 0.05)"
                   >
-                    <Image src={EmailGuardianIcon} />
+                    <Image src={EOAGuardianIcon} />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px">Ethereum wallet</TextBody>
@@ -129,7 +129,7 @@ export default function SelectGuardianTypeModal({
                     justifyContent="center"
                     background="rgba(0, 0, 0, 0.05)"
                   >
-                    <Image src={EOAGuardianIcon} />
+                    <Image src={EmailGuardianIcon} />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px" display="flex" alignItems="center">
