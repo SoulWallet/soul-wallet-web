@@ -70,6 +70,7 @@ export default function Pay() {
         {
           onSuccess: (hash) => {
             setPaying(false)
+            setIsPaid(true)
             toast({
               title: 'Pay request sent!',
               status: 'success',
@@ -120,9 +121,9 @@ export default function Pay() {
   useEffect(() => {
     if (recoveryRecord) {
       setEstimatedFee(Number(recoveryRecord.estimatedFee))
-      setIsPaid(recoveryRecord.status > 1)
+      if (!isPaid) setIsPaid(recoveryRecord.status > 1)
     }
-  }, [recoveryRecord])
+  }, [recoveryRecord, isPaid])
 
   useEffect(() => {
     if (recoverId) {
