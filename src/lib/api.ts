@@ -43,6 +43,7 @@ const guardian = {
   getSlotInfo: (params: any) => axio.get('/backup/slot-info', { params }),
   getGuardianDetails: (params: any) => axio.get('/social-recovery/guardian-details', { params }),
   createRecoverRecord: (params: any) => axio.post('/social-recovery/create-recovery-record', params),
+  guardianSign: (params: any) => axio.post('/social-recovery/sign-recovery-record', params),
   getRecoverRecord: (params: any) => axio.get('/social-recovery/recovery-record', { params }),
   createTask: (params: any) => axio.post('/keystore-execute-helper/create-task', params),
   getTask: (params: any) => axio.get('/keystore-execute-helper/task', { params }),

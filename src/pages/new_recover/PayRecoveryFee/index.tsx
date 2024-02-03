@@ -57,7 +57,7 @@ export default function PayRecoveryFee({ next }: any) {
   };
 
   const doCopy = () => {
-    copyText(`${config.officialWebUrl}/pay-recover/${recoveryRecordID}`);
+    copyText(`${config.officialWebUrl}/public/pay/${recoveryRecordID}`);
     toast({
       title: 'Copy success!',
       status: 'success',
@@ -65,12 +65,12 @@ export default function PayRecoveryFee({ next }: any) {
   };
 
   const handlePay = async () => {
-    const url = `${config.officialWebUrl}/pay-recover/${recoveryRecordID}`;
+    const url = `${config.officialWebUrl}/public/pay/${recoveryRecordID}`;
     window.open(url, '_blank');
   };
 
   useEffect(() => {
-    generateQR(`${config.officialWebUrl}/pay-recover/${recoveryRecordID}`);
+    generateQR(`${config.officialWebUrl}/public/pay/${recoveryRecordID}`);
   }, []);
 
   console.log('estimatedFee', estimatedFee)
