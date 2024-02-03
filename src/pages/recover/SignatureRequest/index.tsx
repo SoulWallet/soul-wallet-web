@@ -59,6 +59,8 @@ const SignatureRequest = ({ changeStep }: any) => {
   let recoverStatus: any
   let hasChainFinished: any = false
 
+  const guardianSignUrl = `${location.origin}/public/sign/${recoveryRecordID}`
+  const payUrl = `${location.origin}/public/pay/${recoveryRecordID}`
   if (recoveringGuardiansInfo.recoveryRecord) {
     const recoveryRecord = recoveringGuardiansInfo.recoveryRecord
     guardianSignatures = recoveryRecord && recoveryRecord.guardianSignatures
@@ -74,7 +76,7 @@ const SignatureRequest = ({ changeStep }: any) => {
   const { navigate } = useBrowser();
 
   const doCopy = () => {
-    copyText(`${config.officialWebUrl}/public/sign/${recoveryRecordID}`);
+    copyText(guardianSignUrl);
     toast({
       title: 'Copy success!',
       status: 'success',
@@ -90,25 +92,8 @@ const SignatureRequest = ({ changeStep }: any) => {
   };
 
   useEffect(() => {
-    generateQR(`${config.officialWebUrl}/public/sign/${recoveryRecordID}`);
+    generateQR(guardianSignUrl);
   }, []);
-
-  const handleCopy = async () => {
-    let url;
-
-    if (recoverStatus === 1) {
-      url = `${config.officialWebUrl}/public/pay/${recoveryRecordID}`;
-    } else {
-      url = `${config.officialWebUrl}/public/sign/${recoveryRecordID}`;
-    }
-
-    copyText(url);
-
-    toast({
-      title: 'Copy success!',
-      status: 'success',
-    });
-  };
 
   const handleNext = async () => {
     setShowPayButton(true);
@@ -116,9 +101,8 @@ const SignatureRequest = ({ changeStep }: any) => {
 
   const handlePay = async () => {
     setShowPayButton(false)
-    setShowProgress(true)
-    const url = `${config.officialWebUrl}/public/pay/${recoveryRecordID}`;
-    window.open(url, '_blank');
+    setShowProgress(true);
+    window.open(payUrl, '_blank');
   };
 
   const replaceWallet = async () => {

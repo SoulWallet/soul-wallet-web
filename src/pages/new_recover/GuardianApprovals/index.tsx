@@ -64,6 +64,7 @@ export default function AddSigner({ next, back }: any) {
   const { chainConfig } = useConfig();
   const { calcGuardianHash } = useKeystore();
   const [isAddGuardianOpen, setIsAddGuardianOpen] = useState<any>(false);
+  const guardianSignUrl = `${location.origin}/public/sign/${recoveryRecordID}`
 
   const closeEditGuardianModal = useCallback(() => {
     setIsEditGuardianOpen(false)
@@ -90,7 +91,7 @@ export default function AddSigner({ next, back }: any) {
   }, [])
 
   const doCopy = () => {
-    copyText(`${config.officialWebUrl}/public/sign/${recoveryRecordID}`);
+    copyText(guardianSignUrl);
     toast({
       title: 'Copy success!',
       status: 'success',
@@ -359,7 +360,7 @@ export default function AddSigner({ next, back }: any) {
               Share this link with your guardians to sign:
             </TextBody>
             <Box marginBottom="10px" background="#F9F9F9" borderRadius="12px" padding="12px" fontSize="18px" fontWeight="700">
-              {`${config.officialWebUrl}/public/sign/${recoveryRecordID}`}
+              {guardianSignUrl}
             </Box>
             <Box
               width="100%"

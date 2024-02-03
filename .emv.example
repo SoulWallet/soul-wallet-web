@@ -1,7 +1,6 @@
 VITE_BRANCH=develop
 VITE_BACKEND_URL=https://api.soulwallet.io/alpha
 VITE_SCAN_URL=https://api-dev.soulwallet.io
-VITE_OFFICIAL_WEB_URL=https://security-alpha.soulwallet.io
 
 VITE_EntryPoint=
 VITE_Payment=

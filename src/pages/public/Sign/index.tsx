@@ -41,6 +41,7 @@ import WarningIcon from '@/components/Icons/Warning'
 import SuccessIcon from '@/components/Icons/Success'
 import { metaMask } from 'wagmi/connectors'
 import { L1KeyStore } from "@soulwallet/sdk";
+import { useEthersSigner } from '@/hooks/useEthersSigner';
 
 const validateSigner = (recoveryRecord: any, address: any) => {
   if (!recoveryRecord) return
@@ -60,12 +61,11 @@ export default function Sign() {
   const [recoveryRecord, setRecoveryRecord] = useState<any>()
   const { address, isConnected, isConnecting } = useAccount()
   const { connectAsync } = useConnect()
-  const { disconnectAsync } = useDisconnect()
-  const { signTypedData, signTypedDataAsync } = useSignTypedData()
   const [signing, setSigning] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [isSigned, setIsSigned] = useState<any>(false)
   const toast = useToast();
+  const ethersSigner = useEthersSigner();
 
   const isValidSigner = validateSigner(recoveryRecord, address)
   console.log('recoverId', recoveryRecord, isSigned)
@@ -130,9 +130,10 @@ export default function Sign() {
         newSigner: newKeyHash,
       };
 
-      const signature = await signTypedDataAsync({ domain, types, primaryType: 'SocialRecovery', message });
-      console.log('to sign type', domain, types, message, signature)
-
+      const signer = await ethersSigner;
+      const signature = await signer?.signTypedData(domain, types, message);
+      // const signature = await signTypedDataAsync({ domain, types, primaryType: 'SocialRecovery', message });
+      // console.log('to sign type', domain, types, message, signature)
       // const signature = await signMessage(recoverId);
       const res: any = await api.guardian.guardianSign({
         recoveryRecordID: recoverId,
@@ -202,6 +203,7 @@ export default function Sign() {
                   <Box
                     fontSize="32px"
                     fontWeight="700"
+                    lineHeight={"normal"}
                     fontFamily="Nunito"
                   >
                     Loading...
@@ -269,6 +271,7 @@ export default function Sign() {
                   <Box
                     fontSize="32px"
                     fontWeight="700"
+                    lineHeight={"normal"}
                     fontFamily="Nunito"
                   >
                     Thank you, signature received!
@@ -277,7 +280,8 @@ export default function Sign() {
                     fontSize="14px"
                     fontWeight="400"
                     fontFamily="Nunito"
-                    color="black"
+                  lineHeight={"normal"}
+                  color="black"
                     marginTop="34px"
                     maxWidth="500px"
                   >
@@ -364,6 +368,7 @@ export default function Sign() {
                   <Box
                     fontSize="32px"
                     fontWeight="700"
+                    lineHeight={"normal"}
                     fontFamily="Nunito"
                   >
                     You’re not the guardian
@@ -372,7 +377,8 @@ export default function Sign() {
                     fontSize="14px"
                     fontWeight="400"
                     fontFamily="Nunito"
-                    color="black"
+                  lineHeight={"normal"}
+                  color="black"
                     marginTop="34px"
                   >
                     The wallet you connected is not the guardian for the recovery wallet. Please double check.
@@ -448,6 +454,7 @@ export default function Sign() {
                 <Box
                   fontSize="32px"
                   fontWeight="700"
+                  lineHeight={"normal"}
                   fontFamily="Nunito"
                 >
                   Signature request
@@ -468,6 +475,7 @@ export default function Sign() {
                   fontFamily="Nunito"
                   color="black"
                   marginTop="34px"
+                  lineHeight={"normal"}
                 >
                   Your friend's wallet is lost. As their guardian, please connect your wallet and confirm request to assist with their wallet recovery.
                 </Box>

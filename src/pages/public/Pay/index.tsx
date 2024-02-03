@@ -79,16 +79,8 @@ export default function Sign() {
     }
   };
 
-  const doCopy = () => {
-    copyText(`${config.officialWebUrl}/public/pay/${recoveryRecordID}`);
-    toast({
-      title: 'Copy success!',
-      status: 'success',
-    });
-  };
-
   useEffect(() => {
-    generateQR(`${config.officialWebUrl}/public/pay/${recoveryRecordID}`);
+    generateQR(`${location.origin}/public/pay/${recoveryRecordID}`);
   }, []);
 
   return (

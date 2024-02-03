@@ -48,6 +48,8 @@ export default function PayRecoveryFee({ next }: any) {
   const { generateQrCode } = useTools();
   const toast = useToast();
 
+  const payUrl = `${location.origin}/public/pay/${recoveryRecordID}`
+
   const generateQR = async (text: string) => {
     try {
       setImgSrc(await generateQrCode(text));
@@ -57,7 +59,7 @@ export default function PayRecoveryFee({ next }: any) {
   };
 
   const doCopy = () => {
-    copyText(`${config.officialWebUrl}/public/pay/${recoveryRecordID}`);
+    copyText(payUrl);
     toast({
       title: 'Copy success!',
       status: 'success',
@@ -65,12 +67,11 @@ export default function PayRecoveryFee({ next }: any) {
   };
 
   const handlePay = async () => {
-    const url = `${config.officialWebUrl}/public/pay/${recoveryRecordID}`;
-    window.open(url, '_blank');
+    window.open(payUrl, '_blank');
   };
 
   useEffect(() => {
-    generateQR(`${config.officialWebUrl}/public/pay/${recoveryRecordID}`);
+    generateQR(payUrl);
   }, []);
 
   console.log('estimatedFee', estimatedFee)

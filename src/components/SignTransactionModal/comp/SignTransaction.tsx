@@ -446,7 +446,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                   label="Sponsor"
                   tooltip={`A gas fee sponsor pays blockchain transaction costs for users, enhancing experience and encouraging app usage without fee concerns.`}
                 />
-                <Flex gap="2">
+                <Flex gap="2" align={'center'}>
                   <Text color="brand.red" fontSize={'14px'} fontWeight={'600'}>
                     -{requiredAmount} ETH
                   </Text>

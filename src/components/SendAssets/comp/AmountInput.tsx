@@ -41,9 +41,12 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
     fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
   }, [selectedAddress, selectedChainItem]);
 
+  // const unselectedTokens = tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress !== sendToken);
+
+  const unselectedTokens: any = [];
   return (
     <Box>
-      <Text  fontSize="12px" fontWeight={'700'} mb="2" lineHeight={'1'}>
+      <Text fontSize="12px" fontWeight={'700'} mb="2" lineHeight={'1'}>
         {label}
       </Text>
       <Flex flexDir={'column'} pos={'relative'} gap="3" bg={'#f9f9f9'} rounded="20px">
@@ -59,18 +62,22 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
                 />
               </MenuButton>
               <MenuList rootProps={{ w: '100%' }}>
-                {tokenBalance
-                  .filter((item: ITokenBalanceItem) => item.contractAddress !== sendToken)
-                  .map((item: ITokenBalanceItem) => (
-                    <MenuItem w="100%" key={item.contractAddress}>
-                      <TokenLine
-                        icon={item.logoURI}
-                        symbol={item.symbol}
-                        memo={item.tokenBalanceFormatted}
-                        onClick={() => onTokenChange(item.contractAddress)}
-                      />
-                    </MenuItem>
-                  ))}
+                {unselectedTokens.map((item: ITokenBalanceItem) => (
+                  <MenuItem w="100%" key={item.contractAddress}>
+                    <TokenLine
+                      icon={item.logoURI}
+                      symbol={item.symbol}
+                      memo={item.tokenBalanceFormatted}
+                      onClick={() => onTokenChange(item.contractAddress)}
+                    />
+                  </MenuItem>
+                ))}
+
+                {!unselectedTokens.length && (
+                  <Text py="12" mx="auto" textAlign={'center'} display={'block'} color="#B2B2B2" fontSize={'14px'}>
+                    No available balance
+                  </Text>
+                )}
               </MenuList>
             </>
           )}
@@ -78,7 +85,7 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
         <Box bg="#d7d7d7" h="1px" mx="4" />
         <Box px="4" pb="3">
           <Flex align={'center'} gap="1">
-            <Text fontSize={'20px'} color={amount ? "" : "rgba(0, 0, 0, 0.20)"}>
+            <Text fontSize={'20px'} color={amount ? '' : 'rgba(0, 0, 0, 0.20)'}>
               $
             </Text>
             <Input

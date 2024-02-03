@@ -118,7 +118,6 @@ export default {
   magicValue: '0x1626ba7e',
   backendURL: `${import.meta.env.VITE_BACKEND_URL}/appapi`,
   soulScanURL: `${import.meta.env.VITE_SCAN_URL}/opapi`,
-  officialWebUrl: import.meta.env.VITE_OFFICIAL_WEB_URL,
   chainList: [
     ArbConfig,
     // OpConfig,
