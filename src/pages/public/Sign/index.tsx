@@ -25,7 +25,7 @@ import PasskeyIcon from '@/components/Icons/Intro/Passkey'
 import AccountIcon from '@/components/Icons/Intro/Account'
 import TransferIcon from '@/components/Icons/Intro/Transfer'
 import TokenIcon from '@/components/Icons/Intro/Token'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useSignTypedData } from 'wagmi'
 import { useTempStore } from '@/store/temp';
 import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
@@ -41,7 +41,9 @@ import { useParams } from 'react-router-dom'
 export default function Sign() {
   const { recoverId } = useParams()
   const { address, isConnected, isConnecting } = useAccount()
+  const { connect } = useConnect();
   console.log('recoverId', recoverId)
+  const  {signTypedData} = useSignTypedData();
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
@@ -119,14 +121,48 @@ export default function Sign() {
                 justifyContent="center"
                 marginTop="30px"
               >
-                <Button
+                {isConnected ?  <Button
                   width="100%"
                   theme="dark"
                   color="white"
                   marginBottom="18px"
+                  onClick={() => signTypedData({
+                    types: {
+                      Person: [
+                        { name: 'name', type: 'string' },
+                        { name: 'wallet', type: 'address' },
+                      ],
+                      Mail: [
+                        { name: 'from', type: 'Person' },
+                        { name: 'to', type: 'Person' },
+                        { name: 'contents', type: 'string' },
+                      ],
+                    },
+                    primaryType: 'Mail',
+                    message: {
+                      from: {
+                        name: 'Cow',
+                        wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+                      },
+                      to: {
+                        name: 'Bob',
+                        wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+                      },
+                      contents: 'Hello, Bob!',
+                    },
+                  })}
+                >
+                  Sign typed data
+                </Button>: <Button
+                  width="100%"
+                  theme="dark"
+                  color="white"
+                  marginBottom="18px"
+                  onClick={connect}
                 >
                   Connect wallet
-                </Button>
+                </Button>}
+               
               </Box>
             </Box>
           </Box>
