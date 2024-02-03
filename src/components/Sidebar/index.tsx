@@ -45,7 +45,7 @@ export default function Sidebar() {
         {sidebarLinks.map((link, index) => {
           const isActive = link.href === pathname || pathname.indexOf(link.href) !== -1 || index === navHoverIndex;
           return (
-            <Tooltip label={link.isComing ? 'Coming Soon' : null}>
+            <Tooltip label={link.isComing ? 'Coming Soon' : null} key={index}>
               <Flex
                 onMouseEnter={() => setNavHoverIndex(index)}
                 onMouseLeave={() => setNavHoverIndex(-1)}

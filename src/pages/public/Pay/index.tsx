@@ -276,7 +276,7 @@ export default function Pay() {
                     theme="dark"
                     color="white"
                     marginBottom="18px"
-                    onClick={() => {}}
+                    onClick={() => window.close()}
                   >
                     Close
                   </Button>

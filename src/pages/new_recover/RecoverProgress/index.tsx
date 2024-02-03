@@ -13,25 +13,11 @@ import {
   MenuItem
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
 import IconLogo from '@/assets/logo-all-v3.svg';
-import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
-import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import Button from '@/components/new/Button'
-import PlusIcon from '@/components/Icons/Plus';
-import ComputerIcon from '@/components/Icons/Computer';
-import TwitterIcon from '@/components/Icons/Social/Twitter'
-import TelegramIcon from '@/components/Icons/Social/Telegram'
-import GithubIcon from '@/components/Icons/Social/Github'
-import PasskeyIcon from '@/components/Icons/Intro/Passkey'
-import AccountIcon from '@/components/Icons/Intro/Account'
-import TransferIcon from '@/components/Icons/Intro/Transfer'
-import TokenIcon from '@/components/Icons/Intro/Token'
-import usePassKey from '@/hooks/usePasskey';
-import { useSignerStore } from '@/store/signer';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
@@ -84,9 +70,7 @@ export default function RecoverProgress() {
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
-        <Link to="/dashboard">
-          <Image src={IconLogo} h="44px" />
-        </Link>
+        <Image src={IconLogo} h="44px" />
       </Box>
       <Box
         padding="20px"
