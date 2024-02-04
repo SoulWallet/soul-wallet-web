@@ -54,6 +54,17 @@ const getWalletIcon = (chainId: any) => {
   return IconEthSquare
 }
 
+const getWalletAddress = (chainId: any, list: any) => {
+  const item = list.filter((item: any) => item.chain_id == chainId)
+  console.log('getWalletAddress', chainId, list, item)
+
+  if (item && item[0]) {
+    return item[0].address
+  }
+
+  return null
+}
+
 export default function RecoverProgress() {
   const { recoverInfo, updateRecoverInfo } = useTempStore()
   const { recoveryRecordID, recoveryRecord  } = recoverInfo
@@ -101,15 +112,6 @@ export default function RecoverProgress() {
             <Heading marginBottom="18px" type="h3">
               Wallet recovery progress
             </Heading>
-            <TextBody
-              fontWeight="600"
-              maxWidth="550px"
-              textAlign="center"
-              marginBottom="20px"
-              color="rgba(0, 0, 0, 0.8)"
-            >
-              Recovering for: {addresses.map((item: any) => item.address).join(', ')}
-            </TextBody>
             <Box marginBottom="20px" display="flex">
               {chainRecoveryStatus.map((item: any) => {
                 return (
@@ -120,7 +122,10 @@ export default function RecoverProgress() {
                     <Box fontSize="16px" fontWeight="700">
                       {getNetwork(Number(item.chainId))}
                     </Box>
-                    <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="20px" marginBottom="30px">
+                    <Box fontSize="12px" fontWeight="500" maxWidth="100%" textAlign="center" marginTop="16px">
+                      {getWalletAddress(String(item.chainId), addresses)}
+                    </Box>
+                    <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="24px" marginBottom="30px">
                       <Box width={getProgressPercent(item.startTime, item.expectFinishTime)} height="100%" background="#0CB700" />
                     </Box>
                     {item.status === 0 && (
