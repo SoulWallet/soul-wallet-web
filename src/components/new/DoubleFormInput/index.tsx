@@ -23,7 +23,7 @@ export default function DoubleFormInput({
   _rightContainerStyles,
   leftComponent,
   rightComponent,
-  leftAutoFocus,
+  rightAutoFocus,
   onEnter,
 }: any) {
   const handleLeftChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +75,6 @@ export default function DoubleFormInput({
               paddingRight="24px"
               height="48px"
               background="white"
-              autoFocus={leftAutoFocus}
               onKeyDown={onKeyDown}
               {..._leftInputStyles}
             />
@@ -122,6 +121,7 @@ export default function DoubleFormInput({
               background="white"
               onKeyDown={onKeyDown}
               width="100%"
+              autoFocus={true}
               {..._rightInputStyles}
             />
             {(rightPlaceholder && !rightValue) && (
@@ -170,7 +170,6 @@ export function DoubleFormInfo({
   _rightContainerStyles,
   leftComponent,
   rightComponent,
-  leftAutoFocus,
   onEnter,
 }: any) {
   return (

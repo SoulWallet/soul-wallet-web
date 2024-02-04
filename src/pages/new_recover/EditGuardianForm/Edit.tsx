@@ -384,7 +384,7 @@ const GuardianInput = ({
           fontFamily: 'Nunito'
         }}
         _rightContainerStyles={{ width: 'calc(100% - 240px)', zIndex: 0 }}
-        leftAutoFocus={id === guardianIds[0]}
+        rightAutoFocus={true}
         leftPlaceholder="Guardian Name (optinal)"
         leftValue={values[`name_${id}`]}
         leftOnChange={onChange(`name_${id}`)}
