@@ -110,14 +110,14 @@ export default function Signer() {
             <Fragment>
               <Box fontFamily="Nunito" fontWeight="700" fontSize="18px" display="flex">
                 <Box>My Signers</Box>
-                <Box marginLeft="auto">
+                {/* <Box marginLeft="auto">
                   <Button type="mid" onClick={openChooseSignerModal}>
                     <Box marginRight="6px">
                       <PlusIcon color="white" />
                     </Box>
                     Add signer
                   </Button>
-                </Box>
+                </Box> */}
               </Box>
               <Box paddingTop="14px" display="flex">
                 {eoas.map((item) => (
@@ -140,7 +140,7 @@ export default function Signer() {
                 ))}
                 {credentials.map((item: any, index: number) => (
                   <SignerCard
-                    name={`Passkey_${index + 1}`}
+                    name={item.name}
                     address={item.id}
                     device="Chrome profile"
                     time="Added on 2023-12-14 "

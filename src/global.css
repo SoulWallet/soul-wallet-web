@@ -1,4 +1,16 @@
-wcm-modal{
-    z-index: 10000;
+wcm-modal {
+    z-index : 10000;
     position: relative;
+}
+
+.chakra-alert[data-status="success"] {
+    background-color: #0CB700;
+}
+
+.chakra-alert[data-status="warning"] {
+    background-color: #F90;
+}
+
+.chakra-alert[data-status="error"] {
+    background-color: #E83D26;
 }

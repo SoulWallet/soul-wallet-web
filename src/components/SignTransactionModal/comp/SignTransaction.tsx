@@ -280,8 +280,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const LabelItem = ({ label, tooltip, chainVisible }: { label: string; tooltip?: string; chainVisible?: boolean }) => {
     return (
-      <Flex gap="1">
-        <Text>{label}</Text>
+      <Flex gap="1" align={'center'}>
+        <Text lineHeight={"1"}>{label}</Text>
         {tooltip && (
           <Tooltip label={tooltip}>
             <Image src={IconQuestion} w="18px" h="18px" />
@@ -322,7 +322,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               <Text mt="7" fontSize={{ base: '20px', md: '24px', lg: '30px' }} mb="3" fontWeight={'700'}>
                 {totalMsgValue} ETH
               </Text>
-              <Text fontWeight={'600'} mb="6">
+              <Text fontWeight={'600'} mb="4">
                 ≈${BN(totalMsgValue).times(1900).toFormat()}
               </Text>
             </>

@@ -211,7 +211,7 @@ export default function RegisterModal({
               </TextBody>
             </Box>
             <Box width="calc(40%)" display="flex" alignItems="center" justifyContent="center" flexDirection="column" paddingLeft="25px" position="relative" minHeight="240px">
-              <Title type="t2" fontWeight="500">Fresh to Ethereum? Try this!</Title>
+              <Title type="t2" fontWeight="500">Fresh to Ethereum?</Title>
               <Title type="t2" fontWeight="500" color="rgba(0, 0, 0, 0.4)" marginBottom="0px">(Or wanna try something better)</Title>
               <Box marginTop="25px" paddingBottom="25px">
                 <Button

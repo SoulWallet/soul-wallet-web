@@ -8,7 +8,7 @@ import IconChevronDown from '@/assets/icons/chevron-down-black.svg';
 
 const statusList = [
   {
-    title: 'All status',
+    title: 'All activities',
     key: 'all',
   },
   {
@@ -57,7 +57,7 @@ const FilterMenu = ({ active, list }: any) => {
     <Menu>
       <MenuButton>
         <Flex alignItems={'center'} gap="2">
-          <Text fontWeight={"700"}>{list.filter((item: any) => item.key === active)[0].title}</Text>
+          <Text fontWeight={'700'}>{list.filter((item: any) => item.key === active)[0].title}</Text>
           <Image src={IconChevronDown} />
         </Flex>
       </MenuButton>
@@ -78,18 +78,18 @@ export default function Activity() {
 
   return (
     <DashboardLayout>
-      <Box pr="48px" pt="34px">
-        <Text fontWeight="800" fontSize="32px" mb="9">
+      <Box pr="48px" pt="6">
+        {/* <Text fontWeight="800" fontSize="32px" mb="9">
           Activity
-        </Text>
+        </Text> */}
 
-        {/* <Flex px="6" justify={'space-between'} mb="3">
+        <Flex px="6" justify={'space-between'} mb="3">
           <Flex gap="8">
             <FilterMenu active={activeStatus} list={statusList} />
-            <FilterMenu active={activeTypes} list={typesList} />
+            {/* <FilterMenu active={activeTypes} list={typesList} /> */}
           </Flex>
-          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} />
-        </Flex> */}
+          {/* <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} /> */}
+        </Flex>
 
         <Box rounded="20px" bg="#fff" py="6px" px="26px">
           <ActivityTable />

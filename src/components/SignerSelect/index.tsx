@@ -5,12 +5,21 @@ import { SignkeyType } from '@soulwallet/sdk';
 import DropdownSelect from '../DropdownSelect';
 import IconChecked from '@/assets/icons/signer-checked.svg';
 import IconUnchecked from '@/assets/icons/signer-unchecked.svg';
+import IconWallet from '@/assets/icons/signer-wallet.svg';
+import IconPasskey from '@/assets/icons/signer-passkey.svg';
 
-const SignerItem = ({ title, checked, ...restProps }: { title: string; checked: boolean } & FlexProps) => {
+const SignerItem = ({
+  title,
+  checked,
+  type,
+  ...restProps
+}: { title: string; checked: boolean; type: 'wallet' | 'passkey' } & FlexProps) => {
   return (
     <Flex justify={'space-between'} w="100%" gap="3" {...restProps}>
       <Flex align={'center'} gap="2">
-        <Box w="10" h="10" bg="#EFEFEF" rounded="full" />
+        <Flex align={'center'} justify={'center'} w="10" h="10" bg="#EFEFEF" rounded="full">
+          <Image src={type === 'wallet' ? IconWallet : IconPasskey} />
+        </Flex>
         <Box>
           <Text fontWeight={'700'} mb="2px">
             {title}
@@ -39,26 +48,44 @@ export default function SignerSelect() {
         </DropdownSelect>
       </MenuButton>
       <MenuList p="4">
-        <Text fontWeight={'700'} mb="5" lineHeight={'1'}>
-          EOA wallet
-        </Text>
-        {eoas.map((item) => (
-          <MenuItem p="0" _hover={{ bg: 'none' }}>
-            <SignerItem title={toShortAddress(item)} checked={signerId === item} onClick={() => setSignerId(item)} />
-          </MenuItem>
-        ))}
+        {eoas.length > 0 && (
+          <>
+            <Text fontWeight={'700'} mb="5" lineHeight={'1'}>
+              EOA wallet
+            </Text>
+            {eoas.map((item) => (
+              <MenuItem p="0" bg="none !important">
+                <SignerItem
+                  title={toShortAddress(item)}
+                  checked={signerId === item}
+                  onClick={() => setSignerId(item)}
+                  type="wallet"
+                />
+              </MenuItem>
+            ))}
+          </>
+        )}
 
         {eoas.length && credentials.length && <Box bg="rgba(0, 0, 0, 0.05)" h="1px" my="5" />}
 
-        <Text fontWeight={'700'} mb="5" lineHeight={'1'}>
-          Passkey
-        </Text>
+        {credentials.length > 0 && (
+          <>
+            <Text fontWeight={'700'} mb="5" lineHeight={'1'}>
+              Passkey
+            </Text>
 
-        {credentials.map((item: any) => (
-          <MenuItem p="0" _hover={{ bg: 'none' }}>
-            <SignerItem title={item.name} checked={signerId === item.id} onClick={() => setSignerId(item.id)} />
-          </MenuItem>
-        ))}
+            {credentials.map((item: any) => (
+              <MenuItem p="0" bg="none !important">
+                <SignerItem
+                  title={item.name}
+                  checked={signerId === item.id}
+                  onClick={() => setSignerId(item.id)}
+                  type="passkey"
+                />
+              </MenuItem>
+            ))}
+          </>
+        )}
       </MenuList>
     </Menu>
   );

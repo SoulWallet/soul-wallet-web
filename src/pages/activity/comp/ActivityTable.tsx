@@ -27,7 +27,7 @@ const ActivityItem = ({ item }: any) => {
         </Box>
         <Box>
           <Flex align={'center'} gap="1">
-            <Text textTransform={'capitalize'} fontSize={'16px'} fontWeight={'800'}>
+            <Text textTransform={'capitalize'} fontSize={'18px'} fontWeight={'800'}>
               {item.functionName || 'Unknown'}
             </Text>
             <Image src={IconExternal} />
@@ -43,7 +43,7 @@ const ActivityItem = ({ item }: any) => {
         <Flex gap="2">
           <Image src={IconEth} w="8" />
           <Box>
-            <Text color="brand.black" fontWeight={'800'}>
+            <Text color="brand.black" fontSize={"18px"} fontWeight={'800'}>
               -{numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH
             </Text>
             <Text color="#898989">$141.00</Text>

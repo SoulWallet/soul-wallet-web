@@ -56,6 +56,12 @@ const checkSigned = (recoveryRecord: any, address: any) => {
   return guardianSignatures.map((item: any) => item.guardian).includes(String(address).toLowerCase())
 }
 
+export const SignHeader = () => {
+  return <Box height="58px" pos="absolute" top="0" left={"0"} right={"0"} padding="10px 20px">
+    <Image src={IconLogo} h="44px" />
+  </Box> 
+}
+
 export default function Sign() {
   const { recoverId } = useParams()
   const [recoveryRecord, setRecoveryRecord] = useState<any>()
@@ -162,11 +168,7 @@ export default function Sign() {
   if (!loaded) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
-        <Box height="58px" padding="10px 20px">
-          <Link to="/dashboard">
-            <Image src={IconLogo} h="44px" />
-          </Link>
-        </Box>
+        <SignHeader />
         <Box
           padding="20px"
           display="flex"
@@ -220,11 +222,7 @@ export default function Sign() {
   if (!!isSigned) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
-        <Box height="58px" padding="10px 20px">
-          <Link to="/dashboard">
-            <Image src={IconLogo} h="44px" />
-          </Link>
-        </Box>
+        <SignHeader />
         <Box
           padding="20px"
           display="flex"
@@ -317,11 +315,7 @@ export default function Sign() {
   if (!!isConnected && !isValidSigner) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
-        <Box height="58px" padding="10px 20px">
-          <Link to="/dashboard">
-            <Image src={IconLogo} h="44px" />
-          </Link>
-        </Box>
+        <SignHeader />
         <Box
           padding="20px"
           display="flex"
@@ -412,9 +406,7 @@ export default function Sign() {
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+      <SignHeader />
       <Box
         padding="20px"
         display="flex"

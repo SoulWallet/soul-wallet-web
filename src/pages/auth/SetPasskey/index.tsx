@@ -149,7 +149,7 @@ export default function SetPasskey() {
                 </Flex>
               </Box>
               <Box width="100%" display="flex" justifyContent="center">
-                {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && (
+                {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && !credentials.length && (
                   <Button
                     width="80px"
                     theme="light"
@@ -242,9 +242,9 @@ export default function SetPasskey() {
               width="700px"
               maxWidth="100%"
             >
-              <Heading type="h4" marginBottom="18px">
+              {/* <Heading type="h4" marginBottom="18px">
                 Why sign with passkey?
-              </Heading>
+              </Heading> */}
               <Box width="100%" display="flex" marginBottom="18px">
                 <Box
                   width="calc(50% - 10px)"
@@ -259,7 +259,7 @@ export default function SetPasskey() {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    👍🏻 Advantage:
+                    👍🏻 Advantage
                   </Title>
                   <Box padding="20px 40px">
                     <TextBody type="t2" display="flex" marginBottom="4px">
@@ -288,7 +288,7 @@ export default function SetPasskey() {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    👎🏻 Disadvantage:
+                    👎🏻 Disadvantage
                   </Title>
                   <Box padding="20px 40px">
                     <Tooltip hasArrow bg='brand.black' label={`It cost $0.7 more to send an ERC-20 token on L2 comparing sign with EOA ($0.86 vs. $0.16).`}>

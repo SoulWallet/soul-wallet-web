@@ -14,6 +14,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [claimableCount, setClaimableCount] = useState(0);
+  const [checkedClaimable, setCheckedClaimable] = useState(false);
   const { slotInfo } = useSlotStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
@@ -46,6 +47,8 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
       }
     } catch (err) {
       setClaimableCount(0);
+    }finally{
+      setCheckedClaimable(true)
     }
   };
 
@@ -100,10 +103,10 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
         bodyStyle={{ py: '9', px: '42px' }}
       >
         <Box textAlign="center">
-          <Image src={claimableCount ? IconClaimable : IconUnclaimable} mx="auto" mb="18px" />
+          <Image src={(claimableCount || !checkedClaimable) ? IconClaimable : IconUnclaimable} mx="auto" mb="18px" />
           {/* <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" /> */}
           <Text fontSize={'20px'} mb="2" fontWeight={'800'} lineHeight={'1.6'} letterSpacing={'-0.4px'}>
-            {claimableCount ? 'Claim test tokens' : 'Claim limit has been reached'}
+            {(claimableCount || !checkedClaimable) ? 'Claim test tokens' : 'Claim limit has been reached'}
           </Text>
           <Text fontSize={'14px'} fontWeight={'600'} mb="18px">
             Each wallet address can claim test tokens

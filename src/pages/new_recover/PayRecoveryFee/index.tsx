@@ -138,7 +138,7 @@ export default function PayRecoveryFee({ next }: any) {
               </Box>
               <Box width="100%" display="flex" fontSize="12px" alignItems="center" justifyContent="space-between" padding="5px">
                 <Box>Network fee:</Box>
-                <Box>{ethers.formatEther(BN(estimatedFee || 0).toFixed())} ETH</Box>
+                <Box>{BN(ethers.formatEther(BN(estimatedFee || 0).toFixed())).toFixed(6)} ETH</Box>
               </Box>
             </Box>
             <Box

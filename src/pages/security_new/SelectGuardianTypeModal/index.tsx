@@ -107,7 +107,7 @@ export default function SelectGuardianTypeModal({
                   </Box>
                   <Box>
                     <TextBody fontSize="18px">Ethereum wallet</TextBody>
-                    <TextBody type="t2">Use wallet address from yourself or friends & family. Fully decentralized.</TextBody>
+                    <TextBody type="t2">Use your own or your friends & family's wallet addresses.</TextBody>
                   </Box>
                 </Box>
                 <Box
@@ -118,6 +118,7 @@ export default function SelectGuardianTypeModal({
                   padding="16px"
                   marginBottom="14px"
                   width="100%"
+                  cursor={"not-allowed"}
                 >
                   <Box
                     width="60px"

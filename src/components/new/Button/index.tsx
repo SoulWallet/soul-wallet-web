@@ -6,17 +6,20 @@ import BlackIconLoading from '@/assets/loading.svg';
 import { Box } from '@chakra-ui/react';
 
 const getStyles = (type: string = 'xl', theme: string = 'dark', themeColor: any) => {
-  const baseStyles = theme === 'dark' ? {
-    background: '#000000',
-    color: 'white',
-    border: '1px solid #000000',
-    boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)'
-  } : {
-    background: 'white',
-    color: 'black',
-    border: `1px solid ${themeColor || '#D0D5DD'}`,
-    boxShadow: '0px 1px 2px 0px rgba(208, 213, 221, 0.05)'
-  }
+  const baseStyles =
+    theme === 'dark'
+      ? {
+          background: '#000000',
+          color: 'white',
+          border: '1px solid #000000',
+          boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+        }
+      : {
+          background: 'white',
+          color: 'black',
+          border: `1px solid ${themeColor || '#D0D5DD'}`,
+          boxShadow: '0px 1px 2px 0px rgba(208, 213, 221, 0.05)',
+        };
 
   if (type === 'xl') {
     return {
@@ -24,41 +27,41 @@ const getStyles = (type: string = 'xl', theme: string = 'dark', themeColor: any)
       borderRadius: '48px',
       fontSize: '18px',
       fontWeight: '700',
-      ...baseStyles
-    }
+      ...baseStyles,
+    };
   } else if (type === 'lg') {
     return {
       height: '40px',
       borderRadius: '40px',
       fontSize: '16px',
       fontWeight: '700',
-      ...baseStyles
-    }
+      ...baseStyles,
+    };
   } else if (type === 'mid') {
     return {
       height: '36px',
       borderRadius: '36px',
       fontSize: '14px',
       fontWeight: '700',
-      ...baseStyles
-    }
+      ...baseStyles,
+    };
   } else if (type === 'sm') {
     return {
       height: '24px',
       borderRadius: '24px',
       fontSize: '12px',
       fontWeight: '700',
-      ...baseStyles
-    }
+      ...baseStyles,
+    };
   } else if (type === 'xs') {
     return {
       height: '18px',
       borderRadius: '18px',
       fontSize: '12px',
-      ...baseStyles
-    }
+      ...baseStyles,
+    };
   }
-}
+};
 
 export default function Button({
   onClick,
@@ -86,7 +89,7 @@ export default function Button({
     moreProps.href = href;
   }
 
-  const theme = restProps.theme || 'dark'
+  const theme = restProps.theme || 'dark';
 
   return (
     <CButton
@@ -100,10 +103,18 @@ export default function Button({
       {..._styles}
       {...restProps}
     >
-      {loading && loadingColor !== 'dark' && <Image height="20px" width="20px" marginRight="8px" src={IconLoading} />}
-      {loading && loadingColor === 'dark' && <Image height="20px" width="20px" marginRight="8px" src={BlackIconLoading} />}
-      <Box marginRight="4px">{LeftIcon}</Box>
-      {children}
+      {loading && (
+        <>
+          {loadingColor !== 'dark' && <Image height="20px" width="20px" src={IconLoading} />}
+          {loadingColor === 'dark' && <Image height="20px" width="20px" src={BlackIconLoading} />}
+        </>
+      )}
+      {!loading && (
+        <>
+          {LeftIcon && <Box marginRight="4px">{LeftIcon}</Box>}
+          {children}
+        </>
+      )}
     </CButton>
   );
 }

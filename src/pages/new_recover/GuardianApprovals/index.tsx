@@ -48,6 +48,7 @@ import UploadedIcon from '@/components/Icons/Uploaded'
 import { ethers } from 'ethers';
 import StepProgress from '../StepProgress'
 import AddGuardianModal from '../AddGuardianModal'
+import AddressIcon from '@/components/AddressIcon';
 
 export default function AddSigner({ next, back }: any) {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
@@ -403,14 +404,16 @@ export default function AddSigner({ next, back }: any) {
                     minWidth="400px"
                     marginRight="20px"
                     marginBottom="14px"
+                    gap="8px"
                   >
-                    <Box
+                    {/* <Box
                       width="32px"
                       height="32px"
                       background="#D9D9D9"
                       borderRadius="32px"
                       marginRight="10px"
-                    />
+                    /> */}
+                    <AddressIcon address={item.guardian} width={32} />
                     <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" display="flex">
                       <Box>{toShortAddress(item.guardian)}</Box>
                       <Box height="100%" display="flex" alignItems="center" justifyContent="center" padding="0 10px">

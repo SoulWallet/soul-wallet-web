@@ -50,8 +50,8 @@ export default function Asset() {
 
   return (
     <DashboardLayout>
-      <Box pr="48px">
-        <Flex rounded="20px" p="6" bg="brand.white" mt="24px" mb="30px" justify={'space-between'}>
+      <Box pr="48px" pt="6">
+        {/* <Flex rounded="20px" p="6" bg="brand.white" mt="24px" mb="30px" justify={'space-between'}>
           <Box>
             <AvatarWithName editable={false} />
             <Flex mt="14px" gap="2px" fontWeight={'700'} align={'center'}>
@@ -61,8 +61,8 @@ export default function Asset() {
               </Text>
             </Flex>
           </Box>
-          {/* <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} border="1px solid #818181" /> */}
-        </Flex>
+          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} border="1px solid #818181" />
+        </Flex> */}
 
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
         <Flex gap="5" mt="3" alignItems={'flex-start'}>

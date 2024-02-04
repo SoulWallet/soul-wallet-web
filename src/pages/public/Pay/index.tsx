@@ -10,6 +10,7 @@ import RoundContainer from '@/components/new/RoundContainer';
 import Heading from '@/components/new/Heading';
 import TextBody from '@/components/new/TextBody';
 import Button from '@/components/new/Button';
+import { SignHeader } from '../Sign';
 import TwitterIcon from '@/components/Icons/Social/Twitter';
 import TelegramIcon from '@/components/Icons/Social/Telegram';
 import GithubIcon from '@/components/Icons/Social/Github';
@@ -140,11 +141,7 @@ export default function Pay() {
   if (!loaded) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
-        <Box height="58px" padding="10px 20px">
-          <Link to="/dashboard">
-            <Image src={IconLogo} h="44px" />
-          </Link>
-        </Box>
+        <SignHeader />
         <Box
           padding="20px"
           display="flex"
@@ -197,11 +194,8 @@ export default function Pay() {
   if (!!isPaid) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
-        <Box height="58px" padding="10px 20px">
-          <Link to="/dashboard">
-            <Image src={IconLogo} h="44px" />
-          </Link>
-        </Box>
+                <SignHeader />
+
         <Box
           padding="20px"
           display="flex"
@@ -291,9 +285,7 @@ export default function Pay() {
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+      <SignHeader />
       <Box
         padding="20px"
         display="flex"
@@ -369,7 +361,7 @@ export default function Pay() {
                     padding="5px"
                   >
                     <Box textAlign="left">Network fee:</Box>
-                    <Box textAlign="right">{ethers.formatEther(BN(estimatedFee || 0).toFixed())} ETH</Box>
+                    <Box textAlign="right">{BN(ethers.formatEther(BN(estimatedFee || 0).toFixed())).toFixed(6)} ETH</Box>
                   </Box>
                 </Box>
               </Box>

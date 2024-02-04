@@ -10,7 +10,7 @@ import { keystoreContracts } from './common';
 const chainId = 11155111
 
 export default {
-  icon: IconEth,
+  icon: IconEthSquare,
   iconFaded: IconEthFaded,
   iconSquare: IconEthSquare,
   cardBg: 'radial-gradient(51.95% 100.00% at 100.00% 100.00%, #A3B2FF 0%, #E2FC89 100%)',

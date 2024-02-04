@@ -60,7 +60,7 @@ export default function SignerCard({
       >
         {device}
       </Box>
-      <Box
+      {/* <Box
         fontFamily="Nunito"
         fontWeight="500"
         fontSize="12px"
@@ -68,7 +68,7 @@ export default function SignerCard({
         marginTop="10px"
       >
         {time}
-      </Box>
+      </Box> */}
     </Box>
   );
 }
