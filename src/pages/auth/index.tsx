@@ -37,6 +37,7 @@ import useSdk from '@/hooks/useSdk';
 import { useSignerStore } from '@/store/signer';
 import AuthImg from '@/assets/auth.svg'
 import SetPasskey from './SetPasskey'
+import SetWalletName from './SetWalletName'
 import ImportAccount from './ImportAccount'
 import LoginModal from './LoginModal'
 import RegisterModal from './RegisterModal'
@@ -121,10 +122,18 @@ export default function Auth() {
     setActiveConnector(connector)
   }, [])
 
+  const updateWalletName = useCallback((name: any) => {
+    updateCreateInfo({
+      walletName: name
+    })
+    setStepType('setPassKey')
+  }, [])
+
   const startRegisterWithPasskey = useCallback(() => {
     setIsConnectAtive(true)
     setRegisterMethod('passkey')
     closeRegister()
+    setStepType('setWalletName')
   }, [])
 
   const startRegisterWithEOA = useCallback((address: any) => {
@@ -134,7 +143,7 @@ export default function Auth() {
     updateCreateInfo({
       eoaAddress: [address]
     })
-    setStepType('setPassKey')
+    setStepType('setWalletName')
   }, [])
 
   const disconnectEOA = useCallback(async () => {
@@ -258,6 +267,12 @@ export default function Auth() {
   if (stepType === 'importAccount') {
     return (
       <ImportAccount importWallet={importWallet} isImporting={isImporting} back={() => setStepType('auth')} />
+    )
+  }
+
+  if (stepType === 'setWalletName') {
+    return (
+      <SetWalletName updateWalletName={updateWalletName} />
     )
   }
 
