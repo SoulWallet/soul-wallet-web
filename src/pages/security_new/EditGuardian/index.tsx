@@ -79,9 +79,23 @@ export default function EditGuardian({
   cancelEditGuardian,
   openBackupGuardianModal,
   startDeleteGuardian,
+  startAddGuardian,
+  startEditSingleGuardian
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
-  const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo, getCreateInfo } = useTempStore();
+  const {
+    getEditingGuardiansInfo,
+    updateEditingGuardiansInfo,
+
+    getEditingSingleGuardiansInfo,
+    updateEditingSingleGuardiansInfo,
+
+    getAddingGuardiansInfo,
+    updateAddingGuardiansInfo,
+
+    clearCreateInfo,
+    getCreateInfo,
+  } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
@@ -102,6 +116,7 @@ export default function EditGuardian({
   }
 
   const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
+  console.log('getEditingGuardiansInfo', getEditingGuardiansInfo(), guardianNames)
 
   const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
     return {
@@ -321,8 +336,8 @@ export default function EditGuardian({
                   Backup list
                 </Button>
               )}
-              <Button size="mid" onClick={startEditGuardian}>
-                Edit Guardian
+              <Button size="mid" onClick={() => startAddGuardian()}>
+                Add Guardian
               </Button>
             </Box>
           </Box>
@@ -354,6 +369,14 @@ export default function EditGuardian({
                       cursor="pointer"
                       allowDelete={true}
                       onDelete={() => handleDelete(i)}
+                      allowEdit={true}
+                      onEdit={() => startEditSingleGuardian({
+                        guardianDetails: {
+                          guardians: [address]
+                        },
+                        guardianNames: [guardianNames[i]],
+                        i
+                      })}
                     />
                   )}
                 </Fragment>

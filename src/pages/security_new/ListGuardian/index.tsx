@@ -29,6 +29,7 @@ import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg'
 export default function ListGuardian({
   openEditGuardianModal,
   startEditGuardian,
+  openBackupGuardianModal,
   startAddGuardian
 }: any) {
   const { navigate } = useBrowser();
@@ -94,11 +95,14 @@ export default function ListGuardian({
             display="flex"
           >
             <Box>Guardian List</Box>
-            {!!guardianList.length && (
-              <Box marginLeft="auto">
-
-              </Box>
-            )}
+            <Box marginLeft="auto">
+              {!!guardianList.length && (
+                <Button size="mid" type="white" onClick={() => openBackupGuardianModal()} marginRight="14px">
+                  <Box marginRight="2px"><HistoryIcon /></Box>
+                  Backup list
+                </Button>
+              )}
+            </Box>
           </Box>
           {!guardianList.length && (
             <Box width="100%" display="flex" alignItems="center" justifyContent="center">

@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, ButtonProps } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
 import DeleteIcon from '@/components/Icons/Delete'
+import EditIcon from '@/components/Icons/Edit2'
 
 export default function GuardianCard({
   name,
@@ -10,7 +11,9 @@ export default function GuardianCard({
   device,
   isDefault,
   allowDelete,
+  allowEdit,
   onDelete,
+  onEdit,
   ...props
 }: any) {
   return (
@@ -76,19 +79,38 @@ export default function GuardianCard({
         >
           {time}
         </Box>
-        {allowDelete && (
-          <Box
-            height="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            marginLeft="auto"
-            cursor="pointer"
-            onClick={onDelete}
-          >
-            <DeleteIcon />
-          </Box>
-        )}
+        <Box
+          display="flex"
+          marginLeft="auto"
+        >
+          {allowEdit && (
+            <Box
+              height="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              marginLeft="auto"
+              cursor="pointer"
+              onClick={onEdit}
+              marginRight="10px"
+            >
+              <EditIcon />
+            </Box>
+          )}
+          {allowDelete && (
+            <Box
+              height="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              marginLeft="auto"
+              cursor="pointer"
+              onClick={onDelete}
+            >
+              <DeleteIcon />
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );

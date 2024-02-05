@@ -49,13 +49,21 @@ export default function Guardian() {
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
   const [canBackToSelectGuardianType, setCanBackToSelectGuardianType] = useState<any>(false);
+  const [editType, setEditType] = useState<any>('edit')
+  const [count, setCount] = useState<any>(0)
 
   const [isEditing, setIsEditing] = useState<any>(false);
   const { getAddressName, saveAddressName } = useSettingStore();
   const backupFinishedRef = useRef<any>()
 
   const tempStore = useTempStore();
-  const { setEditingGuardiansInfo } = tempStore;
+  const {
+    getEditingGuardiansInfo,
+    setEditingGuardiansInfo,
+    updateEditingGuardiansInfo,
+    setEditingSingleGuardiansInfo,
+    getEditingSingleGuardiansInfo
+  } = tempStore;
   const guardianStore = useGuardianStore();
   console.log('guardianStore111', guardianStore)
   const guardiansInfo = (!tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
@@ -100,7 +108,8 @@ export default function Guardian() {
     setIsIntroGuardianOpen(false)
   }, [])
 
-  const openEditGuardianModal = useCallback(() => {
+  const openEditGuardianModal = useCallback((editType: any) => {
+    setEditType(editType)
     setIsEditGuardianOpen(true)
   }, [])
 
@@ -126,6 +135,7 @@ export default function Guardian() {
       setEditingGuardiansInfo(guardiansInfo)
     }
 
+    setEditType('add')
     setCanBackToSelectGuardianType(true)
     setIsSelectGuardianOpen(true)
   }, [isEditing, guardiansInfo])
@@ -136,6 +146,15 @@ export default function Guardian() {
     }
 
     setCanBackToSelectGuardianType(false)
+    setIsEditing(true)
+    // setIsEditGuardianOpen(true)
+  }, [isEditing, guardiansInfo])
+
+  const startEditSingleGuardian = useCallback((info: any) => {
+    setEditingSingleGuardiansInfo(info)
+    setEditType('editSingle')
+    setCanBackToSelectGuardianType(false)
+    setIsEditing(true)
     setIsEditGuardianOpen(true)
   }, [isEditing, guardiansInfo])
 
@@ -143,24 +162,69 @@ export default function Guardian() {
     setIsEditing(false)
   }, [isEditing, guardiansInfo])
 
-  const onEditGuardianConfirm = useCallback((addresses: any, names: any, threshold: any) => {
-    setIsEditGuardianOpen(false)
-    setIsEditing(true)
+  const onEditGuardianConfirm = useCallback((addresses: any, names: any, i: any) => {
+    if (editType === 'edit') {
+      setIsEditGuardianOpen(false)
+      setIsEditing(true)
 
-    for (let i = 0; i < addresses.length; i++) {
-      const address = addresses[i]
-      const name = names[i]
-      if (address) saveAddressName(address.toLowerCase(), name);
-    }
-
-    setEditingGuardiansInfo({
-      guardianNames: names,
-      guardianDetails: {
-        guardians: addresses,
-        threshold: threshold || 0
+      for (let i = 0; i < addresses.length; i++) {
+        const address = addresses[i]
+        const name = names[i]
+        if (address) saveAddressName(address.toLowerCase(), name);
       }
-    })
-  }, [])
+
+      setEditingGuardiansInfo({
+        guardianNames: names,
+        guardianDetails: {
+          guardians: addresses,
+          threshold: 0
+        }
+      })
+    } else if (editType === 'editSingle') {
+      setIsEditGuardianOpen(false)
+
+      const info = getEditingSingleGuardiansInfo()
+      const i = info.i
+
+      const editingGuardianInfo = getEditingGuardiansInfo()
+      const currentAddresses = editingGuardianInfo.guardianDetails.guardians
+      const currentNames = editingGuardianInfo.guardianNames
+      currentAddresses[i] = addresses[0]
+      currentNames[i] = names[0]
+
+      const address = addresses[0]
+      const name = names[0]
+      if (address) saveAddressName(address.toLowerCase(), name);
+
+      updateEditingGuardiansInfo({
+        guardianNames: currentNames,
+        guardianDetails: {
+          guardians: currentAddresses,
+          threshold: 0
+        }
+      })
+    } else if (editType === 'add') {
+      console.log('add', addresses, names)
+      setIsEditGuardianOpen(false)
+      const editingGuardianInfo = getEditingGuardiansInfo()
+      const currentAddresses = editingGuardianInfo.guardianDetails.guardians
+      const currentNames = editingGuardianInfo.guardianNames
+
+      for (let i = 0; i < addresses.length; i++) {
+        const address = addresses[i]
+        const name = names[i]
+        if (address) saveAddressName(address.toLowerCase(), name);
+      }
+
+      updateEditingGuardiansInfo({
+        guardianNames: [...currentNames, ...names],
+        guardianDetails: {
+          guardians: [...currentAddresses, ...addresses],
+          threshold: 0
+        }
+      })
+    }
+  }, [editType, count])
 
   const onBackupFinished = useCallback(() => {
     const callback = backupFinishedRef.current as any
@@ -197,6 +261,9 @@ export default function Guardian() {
             startEditGuardian={startEditGuardian}
             cancelEditGuardian={cancelEditGuardian}
             openBackupGuardianModal={openBackupGuardianModal}
+            startAddGuardian={startAddGuardian}
+            startEditSingleGuardian={startEditSingleGuardian}
+            count={count}
           />
         )}
         {!isEditing && (
@@ -205,6 +272,7 @@ export default function Guardian() {
             startEditGuardian={startEditGuardian}
             startAddGuardian={startAddGuardian}
             cancelEditGuardian={cancelEditGuardian}
+            openBackupGuardianModal={openBackupGuardianModal}
           />
         )}
       </Box>
@@ -237,6 +305,7 @@ export default function Guardian() {
         setIsEditGuardianOpen={setIsEditGuardianOpen}
         onConfirm={onEditGuardianConfirm}
         canGoBack={canBackToSelectGuardianType}
+        editType={editType}
       />
       <BackupGuardianModal
         isOpen={isBackupGuardianOpen}

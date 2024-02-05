@@ -170,7 +170,8 @@ const defaultGuardianInfo = {
   guardianDetails: {
     guardians: [],
     threshold: 0
-  }
+  },
+  guardianNames: []
 }
 
 export default function GuardianForm({
@@ -179,14 +180,21 @@ export default function GuardianForm({
   startGuardianInterval,
   onConfirm,
   onBack,
-  canGoBack
+  canGoBack,
+  editType
 }: any) {
   const { getAddressName, setFinishedSteps, saveAddressName } = useSettingStore();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const tempStore = useTempStore()
-  const { getEditingGuardiansInfo } = tempStore;
-  const guardiansInfo = getEditingGuardiansInfo();
+  const {
+    getEditingGuardiansInfo,
+    getEditingSingleGuardiansInfo,
+    getAddingGuardiansInfo
+  } = tempStore;
+  const guardiansInfo = (editType === 'edit') ? getEditingGuardiansInfo() : (
+    editType === 'add' ? defaultGuardianInfo : getEditingSingleGuardiansInfo()
+  );
   const guardianDetails = guardiansInfo.guardianDetails || {
     guardians: [],
     threshold: 0
@@ -249,7 +257,7 @@ export default function GuardianForm({
     setAmountData({ guardiansCount: guardiansList.length });
   }, [guardiansList]);
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     if (onConfirm) {
       const guardiansList = guardianIds
         .map((id) => {
@@ -268,9 +276,14 @@ export default function GuardianForm({
       const guardianAddresses = guardiansList.map((item: any) => item.address);
       const guardianNames = guardiansList.map((item: any) => item.name);
 
-      onConfirm(guardianAddresses, guardianNames)
+      if (editType === 'editSingle') {
+        const info = getEditingSingleGuardiansInfo()
+        onConfirm(guardianAddresses, guardianNames, info.i)
+      } else {
+        onConfirm(guardianAddresses, guardianNames)
+      }
     }
-  }
+  }, [editType, values])
 
   const handleBack = () => {
     if (onBack) {
@@ -309,95 +322,6 @@ export default function GuardianForm({
 
   const hasGuardians = guardianDetails && guardianDetails.guardians && !!guardianDetails.guardians.length
 
-  const handleEmailBackupGuardians = async () => {
-    try {
-      setSending(true);
-      const keystore = chainConfig.contracts.l1Keystore;
-      const slot = slotInfo.slot
-      const guardiansList = guardianIds
-        .map((id) => {
-          const addressKey = `address_${id}`;
-          const nameKey = `name_${id}`;
-          let address = values[addressKey];
-
-          if (address && address.length) {
-            return { address, name: values[nameKey] };
-          }
-
-          return null;
-        })
-        .filter((i) => !!i);
-
-      const guardianAddresses = guardiansList.map((item: any) => item.address);
-      const guardianNames = guardiansList.map((item: any) => item.name);
-      const threshold = amountForm.values.amount || 0;
-      const guardianHash = calcGuardianHash(guardianAddresses, threshold);
-      const salt = ethers.ZeroHash;
-
-      const guardiansInfo = {
-        keystore,
-        slot,
-        guardianHash,
-        guardianNames,
-        guardianDetails: {
-          guardians: guardianAddresses,
-          threshold,
-          salt,
-        },
-        keepPrivate
-      };
-
-      const filename = generateJsonName('guardian');
-      await api.guardian.emailBackupGuardians({
-        email: emailForm.values.email,
-        filename,
-        ...guardiansInfo
-      });
-      setSending(false);
-      emailForm.clearFields(['email'])
-      setIsDone(true)
-      /* updateGuardiansInfo({
-       *   requireBackup: false
-       * }) */
-      toast({
-        title: 'Email Backup Success!',
-        status: 'success',
-      });
-    } catch (e: any) {
-      setSending(false);
-      toast({
-        title: e.message,
-        status: 'error',
-      });
-    }
-  }
-
-  const getGuardiansDetails = () => {
-    const guardiansList = guardianIds
-      .map((id) => {
-        const addressKey = `address_${id}`;
-        const nameKey = `name_${id}`;
-        let address = values[addressKey];
-
-        if (address && address.length) {
-          return { address, name: values[nameKey] };
-        }
-
-        return null;
-      })
-      .filter((i) => !!i);
-
-    const guardianAddresses = guardiansList.map((item: any) => item.address);
-    const guardianNames = guardiansList.map((item: any) => item.name);
-    const threshold = amountForm.values.amount || 0;
-
-    return {
-      guardians: guardianAddresses,
-      guardianNames,
-      threshold,
-    }
-  }
-
   const goBack = () => {
     setStatus('editing');
   };
@@ -429,6 +353,7 @@ export default function GuardianForm({
       keepPrivate={keepPrivate}
       setKeepPrivate={setKeepPrivate}
       canGoBack={canGoBack}
+      editType={editType}
     />
   )
 }

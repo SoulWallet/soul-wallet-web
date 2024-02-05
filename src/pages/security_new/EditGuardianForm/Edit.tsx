@@ -506,7 +506,8 @@ export default function Edit({
   formWidth,
   handleConfirm,
   handleBack,
-  canGoBack
+  canGoBack,
+  editType
 }: any) {
   console.log('canGoBack', canGoBack)
   return (
@@ -537,10 +538,14 @@ export default function Edit({
               i={i}
             />
           ))}
-          <TextButton onClick={() => addGuardian()} color="#FF2E79" _hover={{ color: '#FF2E79' }} padding="2px">
-            <PlusIcon color="#FF2E79" />
-            <Text fontSize="16px" fontWeight="800" marginLeft="5px">Add more guardians</Text>
-          </TextButton>
+          {editType !== 'editSingle' && (
+            <TextButton onClick={() => addGuardian()} color="#FF2E79" _hover={{ color: '#FF2E79' }} padding="2px">
+              <PlusIcon color="#FF2E79" />
+              <Text fontSize="16px" fontWeight="800" marginLeft="5px">
+                Add more guardians
+              </Text>
+            </TextButton>
+          )}
         </Box>
       </Box>
       <Box marginTop="30px" display="flex" justifyContent="flex-end">
