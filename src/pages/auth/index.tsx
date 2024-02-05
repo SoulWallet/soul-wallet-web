@@ -42,6 +42,7 @@ import LoginModal from './LoginModal'
 import RegisterModal from './RegisterModal'
 import SelectAccountModal from './SelectAccountModal'
 import ImportAccountModal from './ImportAccountModal'
+import { SignHeader } from '../public/Sign';
 
 export default function Auth() {
   const [stepType, setStepType] = useState('auth')
@@ -268,12 +269,13 @@ export default function Auth() {
   }
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
+    <Flex width="100%" align={'center'} justify={'center'} minHeight="100vh" background="#F2F4F7">
+      <SignHeader />
+      {/* <Box height="58px" padding="10px 20px">
         <Link to="/dashboard">
           <Image src={IconLogo} h="44px" />
         </Link>
-      </Box>
+      </Box> */}
       <Box
         padding="20px"
         display="flex"
@@ -394,12 +396,12 @@ export default function Auth() {
             color="#818181"
             fontSize="16px"
           >
-            If you have any questions, reach out to us at <Box as="a" color="#2D5AF6" textDecoration="underline">support@soulwallet.io</Box>
+            If you have any questions, reach out to us at <Box as="a" href="mailto:support@soulwallet.io" color="#2D5AF6" textDecoration="underline">support@soulwallet.io</Box>
           </TextBody>
-          <Box display="flex" alignItems="center" justifyContent="center" marginTop="10px">
-            <Box padding="10px"><TwitterIcon /></Box>
-            <Box padding="10px"><TelegramIcon /></Box>
-            <Box padding="10px"><GithubIcon /></Box>
+          <Box display="flex" alignItems="center" justifyContent="center" marginTop="10px" gap="10px">
+            <Box as="a" target='_blank' href="https://twitter.com/soulwallet_eth"><TwitterIcon /></Box>
+            <Box as="a" target='_blank' href="https://t.me/+XFUHusXFdTYyODQ9"><TelegramIcon /></Box>
+            <Box as="a" target='_blank' href="https://github.com/SoulWallet"><GithubIcon /></Box>
           </Box>
         </Box>
         <LoginModal
@@ -443,6 +445,6 @@ export default function Auth() {
           isImporting={isImporting}
         />
       </Box>
-    </Box>
+    </Flex>
   )
 }

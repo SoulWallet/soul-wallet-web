@@ -32,6 +32,7 @@ import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 import { passkeyTooltipText } from '@/config/constants';
 import QuestionIcon from '@/components/Icons/Auth/Question'
+import { SignHeader } from '@/pages/public/Sign';
 
 export default function SetPasskey() {
   const { createInfo, updateCreateInfo } = useTempStore()
@@ -81,12 +82,8 @@ export default function SetPasskey() {
 
   if (credentials && credentials.length) {
     return (
-      <Box width="100%" minHeight="100vh" background="#F2F4F7">
-        <Box height="58px" padding="10px 20px">
-          <Link to="/dashboard">
-            <Image src={IconLogo} h="44px" />
-          </Link>
-        </Box>
+      <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
+        <SignHeader />
         <Box
           padding="20px"
           display="flex"
@@ -191,17 +188,13 @@ export default function SetPasskey() {
             </Box>
           </RoundContainer>
         </Box>
-      </Box>
+      </Flex>
     )
   }
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Link to="/dashboard">
-          <Image src={IconLogo} h="44px" />
-        </Link>
-      </Box>
+    <Flex width="100%" align={'center'} justify={'center'} minHeight="100vh" background="#F2F4F7">
+      <SignHeader />
       <Box
         padding="20px"
         display="flex"
@@ -341,6 +334,6 @@ export default function SetPasskey() {
           </Box>
         </RoundContainer>
       </Box>
-    </Box>
+    </Flex>
   )
 }

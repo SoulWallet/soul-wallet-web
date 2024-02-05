@@ -522,7 +522,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         onClick={onConfirm}
         loading={signing}
         disabled={(loadingFee || !balanceEnough) && (!sponsor || !useSponsor)}
-        checkCanSign
       >
         Confirm
       </Button>

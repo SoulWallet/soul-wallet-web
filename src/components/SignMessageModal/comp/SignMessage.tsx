@@ -130,7 +130,6 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
         </Button>
       ) : (
         <Button
-          checkCanSign
           disabled={shouldDisable}
           w="100%"
           fontSize={'20px'}

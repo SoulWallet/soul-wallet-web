@@ -39,7 +39,7 @@ interface IProps extends Omit<ButtonProps, 'type'> {
   type?: keyof typeof buttonStyles;
   loading?: boolean;
   disabled?: boolean;
-  checkCanSign?: boolean;
+  skipSignCheck?: boolean;
   href?: string;
 }
 
@@ -50,12 +50,13 @@ export default function Button({
   loading,
   disabled,
   href,
-  checkCanSign,
+  skipSignCheck,
   ...restProps
 }: IProps) {
   const { selectedChainItem } = useConfig();
   // const [canSion, setCanSign] = useState(false);
   const styles = buttonStyles[type || 'black'];
+  const canSign = !selectedChainItem.recovering || skipSignCheck;
 
   const doClick = () => {
     if (!loading && !disabled && canSign && onClick) {
@@ -69,7 +70,6 @@ export default function Button({
     moreProps.href = href;
   }
 
-  const canSign = !selectedChainItem.recovering;
 
   return (
     <CButton
