@@ -26,6 +26,9 @@ const createStagingSlice = immer<any>((set, get) => ({
       }
     }
   }),
+  getCreateInfo: () => {
+    return get().createInfo
+  },
   clearCreateInfo: () => set({
     createInfo: {},
   }),

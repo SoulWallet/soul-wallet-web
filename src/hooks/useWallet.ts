@@ -36,7 +36,7 @@ export default function useWallet() {
   const { soulWallet, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, setAddressList } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
-  const { setSignerIdAddress, setFinishedSteps } = useSettingStore();
+  const { setSignerIdAddress, setFinishedSteps, saveAddressName } = useSettingStore();
     const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo } = useTempStore();
 
   const createWallet = async ({
@@ -82,6 +82,10 @@ export default function useWallet() {
       },
       initialKeys: initialKeysAddress,
     });
+
+    const { walletName } = useTempStore.getState().createInfo;
+    console.log('walletName', slot, walletName)
+    if (walletName && slot) saveAddressName(slot, walletName);
 
     console.log('after public backup slot');
 
@@ -182,7 +186,7 @@ export default function useWallet() {
 
   const getEoaSignature = async (packedHash: any, validationData: string) => {
     const signatureData: any = await signWithEoa(packedHash);
-    
+
     console.log('packUserEoaSignature params:', signatureData, validationData);
 
     const packedSignatureRet = await soulWallet.packUserOpEOASignature(

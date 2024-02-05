@@ -81,7 +81,7 @@ export default function EditGuardian({
   startDeleteGuardian,
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
-  const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
+  const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo, getCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
