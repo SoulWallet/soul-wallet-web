@@ -20,7 +20,7 @@ import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import PlusIcon from '@/components/Icons/Plus';
 import ComputerIcon from '@/components/Icons/Computer';
 import TwitterIcon from '@/components/Icons/Social/Twitter'
@@ -152,14 +152,17 @@ export default function PayRecoveryFee({ next }: any) {
                 maxWidth="100%"
                 marginBottom="14px"
                 onClick={handlePay}
+                size="xl"
+                type="black"
               >
                 Connect wallet and pay
               </Button>
               <Button
                 width="275px"
                 maxWidth="100%"
-                theme="light"
+                type="white"
                 onClick={doCopy}
+                size="xl"
               >
                 Ask friend to pay
               </Button>

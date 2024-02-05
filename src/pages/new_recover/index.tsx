@@ -15,7 +15,7 @@ import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import PlusIcon from '@/components/Icons/Plus';
 import ComputerIcon from '@/components/Icons/Computer';
 import TwitterIcon from '@/components/Icons/Social/Twitter'
@@ -186,17 +186,19 @@ export default function Recover() {
             <Box>
               <Button
                 width="80px"
-                theme="light"
+                type="white"
                 marginRight="18px"
                 onClick={back}
+                size="xl"
               >
                 Back
               </Button>
               <Button
                 width="135px"
                 maxWidth="100%"
-                theme="dark"
+                type="black"
                 onClick={next}
+                size="xl"
               >
                 Get started
               </Button>

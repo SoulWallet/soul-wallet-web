@@ -10,7 +10,7 @@ import {
   Menu,
   MenuList,
   MenuButton,
-  MenuItem
+  MenuItem,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -20,7 +20,7 @@ import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import PlusIcon from '@/components/Icons/Plus';
 import ComputerIcon from '@/components/Icons/Computer';
 import TwitterIcon from '@/components/Icons/Social/Twitter'
@@ -39,6 +39,8 @@ import { useAccount, useConnect, useReconnect, useDisconnect } from 'wagmi'
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
 import { L1KeyStore } from '@soulwallet/sdk';
+import Icon from '@/components/Icon';
+import MinusIcon from '@/assets/icons/minus.svg';
 import ConnectWalletModal from '../ConnectWalletModal'
 import StepProgress from '../StepProgress'
 
@@ -133,6 +135,12 @@ export default function AddSigner({ next, back }: any) {
     }
   };
 
+  const removeSigner = useCallback((id: any) => {
+    setSigners(signers.filter((item: any) => item.signerId !== id))
+  }, [signers])
+
+  console.log('signers', signers)
+
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
       <Box height="58px" padding="10px 20px">
@@ -177,25 +185,53 @@ export default function AddSigner({ next, back }: any) {
               {signers.map((signer: any) => {
                 if (signer.type === 'eoa') {
                   return (
-                    <Box marginBottom="10px" key={signer.signerId}>
+                    <Box marginBottom="10px" key={signer.signerId} position="relative">
                       <Box width="550px">
                         <Input placeholder="Enter ENS or wallet adderss" borderColor="#E4E4E4" value={signer.signerId} readOnly={true} />
+                      </Box>
+                      <Box
+                        onClick={() => removeSigner(signer.signerId)}
+                        position="absolute"
+                        width="40px"
+                        right={{ base: '-28px', md: '-40px' }}
+                        top="0"
+                        height="100%"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        cursor="pointer"
+                      >
+                        <Icon src={MinusIcon} />
                       </Box>
                     </Box>
                   )
                 } else {
                   return (
-                    <Box background="white" borderRadius="12px" padding="16px" width="100%" border="1px solid #E4E4E4" marginBottom="10px" key={signer.signerId}>
+                    <Box background="white" borderRadius="12px" padding="16px" width="100%" border="1px solid #E4E4E4" marginBottom="10px" key={signer.signerId} position="relative">
                       <Box display="flex" alignItems="center">
                         <Box width="50px" height="50px" background="#efefef" borderRadius="50px" marginRight="16px" display="flex" alignItems="center" justifyContent="center"><ComputerIcon /></Box>
                         <Box>
                           <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="800">
-                            Chrome on Mac
+                            {signer.name}
                           </Text>
                           <Text color="rgb(51, 51, 51)" fontSize="14px">
                             Created on: 12/14/2023 12:12:09
                           </Text>
                         </Box>
+                      </Box>
+                      <Box
+                        onClick={() => removeSigner(signer.signerId)}
+                        position="absolute"
+                        width="40px"
+                        right={{ base: '-28px', md: '-40px' }}
+                        top="0"
+                        height="100%"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        cursor="pointer"
+                      >
+                        <Icon src={MinusIcon} />
                       </Box>
                     </Box>
                   )
@@ -271,9 +307,9 @@ export default function AddSigner({ next, back }: any) {
             <Box width="100%" display="flex" alignItems="center" justifyContent="center" marginTop="100px">
               <Button
                 width="80px"
-                theme="light"
+                type="white"
                 marginRight="12px"
-                type="lg"
+                size="lg"
                 onClick={back}
               >
                 Back
@@ -281,8 +317,8 @@ export default function AddSigner({ next, back }: any) {
               <Button
                 width="80px"
                 maxWidth="100%"
-                theme="dark"
-                type="lg"
+                type="black"
+                size="lg"
                 onClick={handleNext}
                 disabled={isConfirming || !signers || !signers.length}
                 loading={isConfirming}

@@ -16,7 +16,7 @@ import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import PlusIcon from '@/components/Icons/Plus';
 import ComputerIcon from '@/components/Icons/Computer';
 import TwitterIcon from '@/components/Icons/Social/Twitter'
@@ -149,9 +149,8 @@ export default function SetPasskey() {
                 {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && !credentials.length && (
                   <Button
                     width="80px"
-                    theme="light"
                     onClick={skip}
-                    type="lg"
+                    size="lg"
                     marginRight="18px"
                   >
                     Skip
@@ -161,11 +160,11 @@ export default function SetPasskey() {
                   <Button
                     maxWidth="100%"
                     padding="0 20px"
-                    theme="light"
+                    type="white"
                     disabled={isCreating}
                     loading={isCreating}
                     onClick={createWallet}
-                    type="lg"
+                    size="lg"
                   >
                     <Box marginRight="8px"><PlusIcon color="black" /></Box>
                     Add another Passkey
@@ -175,11 +174,11 @@ export default function SetPasskey() {
                   <Button
                     width="115px"
                     maxWidth="100%"
-                    theme="dark"
+                    type="black"
                     onClick={next}
                     disabled={isCreating || !credentials.length}
                     marginLeft="18px"
-                    type="lg"
+                    size="lg"
                   >
                     Continue
                   </Button>
@@ -307,10 +306,10 @@ export default function SetPasskey() {
                 {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && (
                   <Button
                     width="80px"
-                    theme="light"
+                    type="white"
                     marginRight="18px"
                     onClick={skip}
-                    type="lg"
+                    size="lg"
                   >
                     Skip
                   </Button>
@@ -319,11 +318,11 @@ export default function SetPasskey() {
                   <Button
                     maxWidth="100%"
                     padding="0 20px"
-                    theme="dark"
+                    type="black"
                     disabled={isCreating}
                     loading={isCreating}
                     onClick={createWallet}
-                    type="lg"
+                    size="lg"
                   >
                     <Box marginRight="8px"><PlusIcon color="white" /></Box>
                     Add Passkey

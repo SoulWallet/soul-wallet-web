@@ -30,7 +30,7 @@ import Title from '@/components/new/Title'
 import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import ImportIcon from '@/components/Icons/Auth/Import'
 import BackIcon from '@/components/Icons/Back'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import { ethers } from 'ethers';
 
 export default function ImportAccountModal({ isOpen, onClose, importWallet, isImporting, openSelectAccount }: any) {
@@ -94,12 +94,13 @@ export default function ImportAccountModal({ isOpen, onClose, importWallet, isIm
                 </Box>
                 <Box>
                   <Button
-                    theme="dark"
+                    type="black"
                     color="white"
                     padding="0 20px"
                     disabled={!ethers.isAddress(address) || isImporting}
                     onClick={() => importWallet(address)}
                     loading={isImporting}
+                    size="xl"
                   >
                     Go to my wallet
                   </Button>

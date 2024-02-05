@@ -17,7 +17,7 @@ import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import TwitterIcon from '@/components/Icons/Social/Twitter'
 import TelegramIcon from '@/components/Icons/Social/Telegram'
 import GithubIcon from '@/components/Icons/Social/Github'
@@ -278,8 +278,8 @@ export default function Sign() {
                     fontSize="14px"
                     fontWeight="400"
                     fontFamily="Nunito"
-                  lineHeight={"normal"}
-                  color="black"
+                    lineHeight={"normal"}
+                    color="black"
                     marginTop="34px"
                     maxWidth="500px"
                   >
@@ -296,10 +296,11 @@ export default function Sign() {
                 >
                   <Button
                     width="100%"
-                    theme="dark"
+                    type="black"
                     color="white"
                     marginBottom="18px"
                     onClick={() => {}}
+                    size="xl"
                   >
                     Close
                   </Button>
@@ -371,8 +372,8 @@ export default function Sign() {
                     fontSize="14px"
                     fontWeight="400"
                     fontFamily="Nunito"
-                  lineHeight={"normal"}
-                  color="black"
+                    lineHeight={"normal"}
+                    color="black"
                     marginTop="34px"
                   >
                     The wallet you connected is not the guardian for the recovery wallet. Please double check.
@@ -388,10 +389,11 @@ export default function Sign() {
                 >
                   <Button
                     width="100%"
-                    theme="dark"
+                    type="black"
                     color="white"
                     marginBottom="18px"
                     onClick={connectWallet}
+                    size="xl"
                   >
                     Connect another wallet
                   </Button>
@@ -483,23 +485,25 @@ export default function Sign() {
                 {isConnected ?  (
                   <Button
                     width="100%"
-                    theme="dark"
+                    type="black"
                     color="white"
                     marginBottom="18px"
                     onClick={sign}
                     loading={signing}
                     disabled={signing}
+                    size="xl"
                   >
                     Sign typed data
                   </Button>
                 ): (
                   <Button
                     width="100%"
-                    theme="dark"
+                    type="black"
                     color="white"
                     marginBottom="18px"
                     onClick={connectWallet}
                     disabled={isConnecting}
+                    size="xl"
                   >
                     {isConnecting ? 'Connecting' : 'Connect wallet'}
                   </Button>

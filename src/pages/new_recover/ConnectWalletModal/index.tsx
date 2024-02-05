@@ -15,7 +15,7 @@ import Title from '@/components/new/Title'
 // import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import { supportedEoas } from '@/config'
 import SuccessIcon from "@/components/Icons/Success";
 import WalletOption from '@/components/new/WalletOption'

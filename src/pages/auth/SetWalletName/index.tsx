@@ -36,8 +36,8 @@ import { ethers } from 'ethers';
 import { useTempStore } from '@/store/temp';
 import NoWalletIcon from '@/assets/icons/no-wallet.svg'
 
-export default function ImportAccount({ importWallet, isImporting, back }: any) {
-  const [address, setAddress] = useState('')
+export default function SetWalletName({ updateWalletName, back }: any) {
+  const [name, setName] = useState('')
   const [added, setAdded] = useState(false)
   const { createInfo, updateCreateInfo } = useTempStore()
   const toast = useToast();
@@ -52,32 +52,15 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
     setAdded(true)
   }, [])
 
-  // const createWallet = async () => {
-  //   try {
-  //     setIsCreating(true);
-  //     const credentialKey = await register();
-  //     addCredential(credentialKey);
-  //     setIsCreating(false);
-  //   } catch (error: any) {
-  //     console.log('ERR', error)
-  //     console.log('error', error);
-  //     setIsCreating(false);
-  //     toast({
-  //       title: error.message,
-  //       status: 'error',
-  //     });
-  //   }
-  // }
-
   const skip = useCallback(() => {
     console.log('skip')
     navigate(`/dashboard`);
   }, [])
 
-  const onAddressChange = useCallback((e: any) => {
-    const address = e.target.value
-    console.log('address', address)
-    setAddress(address)
+  const onNameChange = useCallback((e: any) => {
+    const name = e.target.value
+    console.log('name', name)
+    setName(name)
   }, [])
 
   const next = useCallback(() => {
@@ -95,6 +78,13 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
   const goToRecover = useCallback(() => {
     navigate(`/recover`);
   }, [])
+
+  const onKeyDown = useCallback((event: any) => {
+    console.log('onKeyDown', event)
+    if (event.keyCode === 13) {
+      updateWalletName(name)
+    }
+  }, [name])
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
@@ -129,13 +119,10 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
             justifyContent="center"
             flexDirection="column"
           >
-            <Box height="100px" width="100px" borderRadius="100px" marginBottom="30px">
-              <Image width="100px" borderRadius="100px" src={NoWalletIcon} />
-            </Box>
             <Heading marginBottom="0" type="h3">
-              No wallet found on this device
+              Pick a name for your wallet
             </Heading>
-            <TextBody fontWeight="600">To access your Soul wallet, please enter Soul wallet address</TextBody>
+            <TextBody fontWeight="600">You’ve got a default wallet name, you can also make it your own.</TextBody>
             <Box
               background="white"
               height="100%"
@@ -147,10 +134,14 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
               padding="30px"
             >
               <Box width="100%" maxWidth="548px" display="flex" marginBottom="10px" flexDirection="column">
-                <Input height="44px" borderRadius="12px" placeholder="Enter wallet address" value={address} onChange={onAddressChange} />
-                <Box fontSize="14px" fontWeight="400" display="flex" alignItems="center" marginTop="10px" padding="0 10px">
-                  Forgot address? Try <Box fontSize="14px" color="#FF2E79" fontWeight="700" marginLeft="6px" cursor="pointer" onClick={goToRecover}>Social Recovery</Box>
-                </Box>
+                <Input
+                  height="44px"
+                  borderRadius="12px"
+                  placeholder="Enter wallet name"
+                  value={name}
+                  onChange={onNameChange}
+                  onKeyDown={onKeyDown}
+                />
               </Box>
             </Box>
             <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" width="100%">
@@ -169,16 +160,12 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
                   type="black"
                   color="white"
                   padding="0 20px"
-                  disabled={!ethers.isAddress(address) || isImporting}
-                  onClick={() => importWallet(address)}
-                  loading={isImporting}
+                  disabled={!name}
+                  onClick={() => updateWalletName(name)}
                   size="xl"
                 >
-                  Go to my wallet
+                  Continue
                 </Button>
-              </Box>
-              <Box fontWeight="400" fontSize="14px" textAlign="center" marginTop="20px">
-                For new users, please <Box as="span" fontWeight="700" fontSize="14px" marginLeft="2px" onClick={goToCreate} cursor="pointer">Create New Account</Box>
               </Box>
             </Box>
           </Box>

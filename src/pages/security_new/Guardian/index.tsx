@@ -12,7 +12,7 @@ import IntroGuardianModal from '@/pages/security_new/IntroGuardianModal'
 import EditGuardianModal from '@/pages/security_new/EditGuardianModal'
 import BackupGuardianModal from '@/pages/security_new/BackupGuardianModal'
 import WalletConnectModal from '@/pages/security_new/WalletConnectModal'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import TextButton from '@/components/new/TextButton'
 import PlusIcon from '@/components/Icons/Plus';
 import HistoryIcon from '@/components/Icons/History';

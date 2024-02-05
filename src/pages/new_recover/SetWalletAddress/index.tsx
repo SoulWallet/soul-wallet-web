@@ -16,7 +16,7 @@ import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import PlusIcon from '@/components/Icons/Plus';
 import ComputerIcon from '@/components/Icons/Computer';
 import TwitterIcon from '@/components/Icons/Social/Twitter'
@@ -198,17 +198,17 @@ export default function SetWalletAddress({ next, back }: any) {
             <Box width="100%" display="flex" alignItems="center" justifyContent="center" marginTop="100px">
               <Button
                 width="80px"
-                theme="light"
+                type="white"
                 marginRight="12px"
-                type="lg"
+                size="lg"
                 onClick={back}
               >
                 Back
               </Button>
               <Button
                 minWidth="80px"
-                theme="dark"
-                type="lg"
+                type="black"
+                size="lg"
                 onClick={handleNext}
                 disabled={disabled}
                 loading={loading}

@@ -9,7 +9,7 @@ import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer';
 import Heading from '@/components/new/Heading';
 import TextBody from '@/components/new/TextBody';
-import Button from '@/components/new/Button';
+import Button from '@/components/Button';
 import { SignHeader } from '../Sign';
 import TwitterIcon from '@/components/Icons/Social/Twitter';
 import TelegramIcon from '@/components/Icons/Social/Telegram';
@@ -267,7 +267,7 @@ export default function Pay() {
                 >
                   <Button
                     width="100%"
-                    theme="dark"
+                    type="black"
                     color="white"
                     marginBottom="18px"
                     onClick={() => window.close()}
@@ -376,7 +376,7 @@ export default function Pay() {
                 {isConnected ? (
                   <Button
                     width="100%"
-                    theme="dark"
+                    type="black"
                     color="white"
                     marginBottom="18px"
                     onClick={doPay}
@@ -388,7 +388,7 @@ export default function Pay() {
                 ) : (
                   <Button
                     width="100%"
-                    theme="dark"
+                    type="black"
                     color="white"
                     marginBottom="18px"
                     onClick={connectWallet}
