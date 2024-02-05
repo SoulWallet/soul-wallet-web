@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Box, Text, Image, useToast, Grid, GridItem, Flex, Popover, PopoverTrigger } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi';
 import { paymentContractConfig } from '@/contracts/contracts';
 import Header from '@/components/Header';
 import IconLogo from '@/assets/logo-all-v3.svg';
@@ -48,15 +48,16 @@ export default function Pay() {
   const [isPaid, setIsPaid] = useState(false)
   const [estimatedFee, setEstimatedFee] = useState(0)
   const toast = useToast();
+  const { switchChain } = useSwitchChain();
   const recoveryRecordID = '';
   const { connectAsync } = useConnect();
-  const { address, isConnected, isConnecting } = useAccount()
+  const { address, isConnected, isConnecting, chainId : connectedChainId, } = useAccount()
   const { writeContract: pay, data: payHash } = useWriteContract();
   const result = useWaitForTransactionReceipt({
     hash: payHash,
   });
 
-  console.log('pay result', result);
+  const mainnetChainId = Number(import.meta.env.VITE_MAINNET_CHAIN_ID);
 
   const doPay = useCallback(async () => {
     try {
@@ -375,12 +376,25 @@ export default function Pay() {
                 marginTop="30px"
               >
                 {isConnected ? (
+                  connectedChainId === mainnetChainId ? 
                   <Button
                     width="100%"
                     type="black"
                     color="white"
                     marginBottom="18px"
                     onClick={doPay}
+                    size="xl"
+                    skipSignCheck
+                    loading={paying}
+                    disabled={paying}
+                  >
+                    Pay Fee
+                  </Button>: <Button
+                    width="100%"
+                    type="black"
+                    color="white"
+                    marginBottom="18px"
+                    onClick={() => switchChain({ chainId: mainnetChainId })}
                     size="xl"
                     skipSignCheck
                     loading={paying}

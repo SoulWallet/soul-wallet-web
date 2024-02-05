@@ -15,7 +15,7 @@ import PasskeyIcon from '@/components/Icons/Intro/Passkey';
 import AccountIcon from '@/components/Icons/Intro/Account';
 import TransferIcon from '@/components/Icons/Intro/Transfer';
 import TokenIcon from '@/components/Icons/Intro/Token';
-import { useAccount, useConnect, useDisconnect, useSignTypedData } from 'wagmi';
+import { useAccount, useConfig, useConnect, useDisconnect, useSignTypedData, useSwitchChain } from 'wagmi';
 import { useTempStore } from '@/store/temp';
 import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
@@ -32,6 +32,7 @@ import SuccessIcon from '@/components/Icons/Success';
 import { metaMask } from 'wagmi/connectors';
 import { L1KeyStore } from '@soulwallet/sdk';
 import { useEthersSigner } from '@/hooks/useEthersSigner';
+import { useChainStore } from '@/store/chain';
 
 const validateSigner = (recoveryRecord: any, address: any) => {
   if (!recoveryRecord) return;
@@ -67,12 +68,13 @@ export const SignHeader = ({ url }: { url?: string }) => {
 export default function Sign() {
   const { recoverId } = useParams();
   const [recoveryRecord, setRecoveryRecord] = useState<any>();
-  const { address, isConnected, isConnecting } = useAccount();
+  const { address, isConnected, isConnecting, chainId: connectedChainId } = useAccount();
   const { connectAsync } = useConnect();
   const [signing, setSigning] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [isSigned, setIsSigned] = useState<any>(false);
   const toast = useToast();
+  const { switchChain } = useSwitchChain();
   const ethersSigner = useEthersSigner();
 
   const isValidSigner = validateSigner(recoveryRecord, address);
@@ -367,6 +369,8 @@ export default function Sign() {
     );
   }
 
+  const mainnetChainId = Number(import.meta.env.VITE_MAINNET_CHAIN_ID);
+
   return (
     <Flex justify="center" align="center" width="100%" minHeight="100vh" background="#F2F4F7">
       <SignHeader />
@@ -431,18 +435,31 @@ export default function Sign() {
                 marginTop="30px"
               >
                 {isConnected ? (
-                  <Button
-                    width="100%"
-                    type="black"
-                    color="white"
-                    marginBottom="18px"
-                    onClick={sign}
-                    loading={signing}
-                    disabled={signing}
-                    size="xl"
-                  >
-                    Sign typed data
-                  </Button>
+                  connectedChainId === mainnetChainId ? (
+                    <Button
+                      width="100%"
+                      type="black"
+                      color="white"
+                      marginBottom="18px"
+                      onClick={sign}
+                      loading={signing}
+                      disabled={signing}
+                      size="xl"
+                    >
+                      Sign typed data
+                    </Button>
+                  ) : (
+                    <Button
+                      width="100%"
+                      type="black"
+                      color="white"
+                      marginBottom="18px"
+                      onClick={() => switchChain({ chainId: mainnetChainId })}
+                      size="xl"
+                    >
+                      Switch chain
+                    </Button>
+                  )
                 ) : (
                   <Button
                     width="100%"
