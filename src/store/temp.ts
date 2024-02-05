@@ -64,7 +64,12 @@ const createStagingSlice = immer<any>((set, get) => ({
     recoverInfo: {},
     guardianInfo: {},
   }),
+
   guardianInfo: {},
+
+  getGuardiansInfo: () => {
+    return get().guardianInfo
+  },
   getEditingGuardiansInfo: () => {
     return get().guardianInfo && get().guardianInfo.editingGuardiansInfo
   },
@@ -83,6 +88,45 @@ const createStagingSlice = immer<any>((set, get) => ({
       }
     }
   }),
+
+  getEditingSingleGuardiansInfo: () => {
+    return get().guardianInfo && get().guardianInfo.editingSingleGuardiansInfo
+  },
+  setEditingSingleGuardiansInfo: (value: any) => set({
+    guardianInfo: {
+      ...get().guardianInfo,
+      editingSingleGuardiansInfo: value
+    }
+  }),
+  updateEditingSingleGuardiansInfo: (value: any) => set({
+    guardianInfo: {
+      ...get().guardianInfo,
+      editingSingleGuardiansInfo: {
+        ...(get().getEditingSingleGuardiansInfo() || {}),
+        ...value
+      }
+    }
+  }),
+
+  getAddingGuardiansInfo: () => {
+    return get().guardianInfo && get().guardianInfo.addingGuardiansInfo
+  },
+  setAddingGuardiansInfo: (value: any) => set({
+    guardianInfo: {
+      ...get().guardianInfo,
+      addingGuardiansInfo: value
+    }
+  }),
+  updateAddingGuardiansInfo: (value: any) => set({
+    guardianInfo: {
+      ...get().guardianInfo,
+      addingGuardiansInfo: {
+        ...(get().getAddingGuardiansInfo() || {}),
+        ...value
+      }
+    }
+  }),
+
   clearGuardianInfo: () => set({
     guardianInfo: {},
   }),
