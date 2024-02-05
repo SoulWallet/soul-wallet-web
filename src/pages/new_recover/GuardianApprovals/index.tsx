@@ -355,13 +355,12 @@ export default function AddSigner({ next, back }: any) {
             </Heading>
             <TextBody
               fontWeight="600"
-              maxWidth="90%"
+              maxWidth="635px"
               marginBottom="20px"
-              wordBreak={"break-all"}
             >
               Share this link with your guardians to sign:
             </TextBody>
-            <Box marginBottom="10px" background="#F9F9F9" borderRadius="12px" padding="12px" fontSize="18px" fontWeight="700">
+            <Box            wordBreak={"break-all"} marginBottom="10px" background="#F9F9F9" borderRadius="12px" padding="12px" fontSize="18px" fontWeight="700">
               {guardianSignUrl}
             </Box>
             <Box

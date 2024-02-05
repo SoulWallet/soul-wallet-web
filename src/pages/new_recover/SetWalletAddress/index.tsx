@@ -8,26 +8,10 @@ import {
   useToast,
   Input
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import IconLogo from '@/assets/logo-all-v3.svg';
-import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
-import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import Button from '@/components/Button'
-import PlusIcon from '@/components/Icons/Plus';
-import ComputerIcon from '@/components/Icons/Computer';
-import TwitterIcon from '@/components/Icons/Social/Twitter'
-import TelegramIcon from '@/components/Icons/Social/Telegram'
-import GithubIcon from '@/components/Icons/Social/Github'
-import PasskeyIcon from '@/components/Icons/Intro/Passkey'
-import AccountIcon from '@/components/Icons/Intro/Account'
-import TransferIcon from '@/components/Icons/Intro/Transfer'
-import TokenIcon from '@/components/Icons/Intro/Token'
-import usePassKey from '@/hooks/usePasskey';
-import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 import useForm from '@/hooks/useForm';
 import FormInput from '@/components/new/FormInput'
@@ -35,6 +19,7 @@ import { ethers } from 'ethers';
 import api from '@/lib/api';
 import useKeystore from '@/hooks/useKeystore';
 import StepProgress from '../StepProgress'
+import { SignHeader } from '@/pages/public/Sign';
 
 const validate = (values: any) => {
   const errors: any = {};
@@ -143,10 +128,8 @@ export default function SetWalletAddress({ next, back }: any) {
   };
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+    <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
+      <SignHeader url="/auth" />
       <Box
         padding="20px"
         display="flex"
@@ -220,6 +203,6 @@ export default function SetWalletAddress({ next, back }: any) {
         </RoundContainer>
         <StepProgress activeIndex={0} />
       </Box>
-    </Box>
+    </Flex>
   )
 }

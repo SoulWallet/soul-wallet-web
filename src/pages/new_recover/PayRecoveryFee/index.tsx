@@ -12,6 +12,7 @@ import {
   MenuButton,
   MenuItem
 } from '@chakra-ui/react';
+import { SignHeader } from '@/pages/public/Sign';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import IconLogo from '@/assets/logo-all-v3.svg';
@@ -77,10 +78,8 @@ export default function PayRecoveryFee({ next }: any) {
   console.log('estimatedFee', estimatedFee)
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+    <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
+      <SignHeader url="/auth" />
       <Box
         padding="20px"
         display="flex"
@@ -173,6 +172,6 @@ export default function PayRecoveryFee({ next }: any) {
         </RoundContainer>
         <StepProgress activeIndex={3} />
       </Box>
-    </Box>
+    </Flex>
   )
 }

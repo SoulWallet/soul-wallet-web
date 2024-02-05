@@ -43,6 +43,7 @@ import Icon from '@/components/Icon';
 import MinusIcon from '@/assets/icons/minus.svg';
 import ConnectWalletModal from '../ConnectWalletModal'
 import StepProgress from '../StepProgress'
+import { SignHeader } from '@/pages/public/Sign';
 
 export default function AddSigner({ next, back }: any) {
   const [signers, setSigners] = useState<any>([])
@@ -142,10 +143,8 @@ export default function AddSigner({ next, back }: any) {
   console.log('signers', signers)
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+    <Flex width="100%" align={'center'} justify={'center'} minHeight="100vh" background="#F2F4F7">
+      <SignHeader url="/auth" />
       <Box
         padding="20px"
         display="flex"
@@ -331,6 +330,6 @@ export default function AddSigner({ next, back }: any) {
         <StepProgress activeIndex={1} />
       </Box>
       <ConnectWalletModal isOpen={isConnectOpen} addEOA={addEOA} onClose={() => setIsConnectOpen(false)} />
-    </Box>
+    </Flex>
   )
 }

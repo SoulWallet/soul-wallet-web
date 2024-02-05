@@ -24,6 +24,7 @@ import IconArbSquare from '@/assets/chains/arb-square.svg';
 import { useTempStore } from '@/store/temp';
 import CheckedIcon from '@/components/Icons/Checked';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
+import { SignHeader } from '@/pages/public/Sign';
 
 const getProgressPercent = (startTime: any, endTime: any) => {
   if (startTime && endTime) {
@@ -79,10 +80,8 @@ export default function RecoverProgress() {
   const canViewWallet = chainRecoveryStatus.filter((item: any) => !!item.status).length > 0
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+    <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
+      <SignHeader url="/auth" />
       <Box
         padding="20px"
         display="flex"
@@ -161,6 +160,6 @@ export default function RecoverProgress() {
           </Box>
         </RoundContainer>
       </Box>
-    </Box>
+    </Flex>
   )
 }

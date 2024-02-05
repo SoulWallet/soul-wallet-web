@@ -35,6 +35,7 @@ import api from '@/lib/api';
 import GuardianApprovals from './GuardianApprovals'
 import PayRecoveryFee from './PayRecoveryFee'
 import RecoverProgress from './RecoverProgress'
+import { SignHeader } from '../public/Sign';
 
 export default function Recover() {
   const [step, setStep] = useState(0)
@@ -133,10 +134,8 @@ export default function Recover() {
   }
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+    <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
+      <SignHeader url="/auth" />
       <Box
         padding="20px"
         display="flex"
@@ -206,6 +205,6 @@ export default function Recover() {
           </Box>
         </RoundContainer>
       </Box>
-    </Box>
+    </Flex>
   )
 }
