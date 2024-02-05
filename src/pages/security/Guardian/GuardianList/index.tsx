@@ -233,11 +233,13 @@ export default function GuardianList({ onSubmit, textButton, startBackup }: any)
       console.log('handleSubmit1111', res1, res2, res3);
       setEditingGuardiansInfo(guardiansInfo)
       setLoading(false);
-      const res = await api.operation.finishStep({
-        slot,
-        steps: [2],
-      })
-      setFinishedSteps(res.data.finishedSteps);
+      if(slot){
+        const res = await api.operation.finishStep({
+          slot,
+          steps: [2],
+        })
+        setFinishedSteps(res.data.finishedSteps);
+      }
     } catch (error: any) {
       console.log('error', error.message)
       setLoading(false);

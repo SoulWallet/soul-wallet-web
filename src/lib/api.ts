@@ -72,15 +72,11 @@ const operation = {
   feedback: (params: any) => axio.post('/operation/feedback', params),
   fileUploadUrl: (params: any) => axio.get('/operation/file-upload-url', { params }),
   requestTestToken: (params: any) => axio.post('/operation/request-test-token', params),
-  finishStep: (params: any) => {
-    if (!params.slot) {
-      return;
-    }
+  finishStep: (params: any) =>
     axio.post('/operation/finish-step', {
       taskID: 0,
       ...params,
-    });
-  },
+    }),
 };
 
 export default {

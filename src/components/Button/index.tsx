@@ -134,7 +134,7 @@ export default function Button({
     <CButton
       h="unset"
       transition={'all 0.2s ease-in-out'}
-      _disabled={{ bg: '#898989', cursor: 'not-allowed', _hover: { bg: '#898989' } }}
+      // _disabled={{ bg: '#898989', cursor: 'not-allowed', _hover: { bg: '#898989' } }}
       onClick={() => (canSign ? doClick() : null)}
       rounded={'30px'}
       lineHeight={'1'}

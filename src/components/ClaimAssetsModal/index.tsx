@@ -65,12 +65,16 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
           title: 'Test token claimed successfully',
           status: 'success',
         });
-        const res = await api.operation.finishStep({
-          slot: slotInfo.slot,
-          steps: [0],
-        });
 
-        setFinishedSteps(res.data.finishedSteps);
+        if(slotInfo.slot){
+          const res = await api.operation.finishStep({
+            slot: slotInfo.slot,
+            steps: [0],
+          });
+  
+          setFinishedSteps(res.data.finishedSteps);
+        }
+      
         setVisible(false);
       } else {
         toast({
