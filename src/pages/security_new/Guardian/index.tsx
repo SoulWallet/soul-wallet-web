@@ -69,8 +69,8 @@ export default function Guardian() {
     getEditingSingleGuardiansInfo
   } = tempStore;
   const guardianStore = useGuardianStore();
-  console.log('guardianStore111', guardianStore)
   const guardiansInfo = (!tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
+  console.log('guardianStore111', guardiansInfo)
 
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true)
@@ -164,6 +164,7 @@ export default function Guardian() {
       setEditingGuardiansInfo(guardiansInfo)
     }
 
+    setEditType('add')
     setCanBackToSelectGuardianType(false)
     setIsEditing(true)
     setIsEditGuardianOpen(true)
@@ -223,8 +224,8 @@ export default function Guardian() {
       const i = info.i
 
       const editingGuardianInfo = getEditingGuardiansInfo()
-      const currentAddresses = editingGuardianInfo.guardianDetails.guardians
-      const currentNames = editingGuardianInfo.guardianNames
+      const currentAddresses = editingGuardianInfo.guardianDetails ? (editingGuardianInfo.guardianDetails.guardians || []) : []
+      const currentNames = editingGuardianInfo.guardianNames || []
       currentAddresses[i] = addresses[0]
       currentNames[i] = names[0]
 
@@ -240,11 +241,10 @@ export default function Guardian() {
         }
       })
     } else if (editType === 'add') {
-      console.log('add', addresses, names)
       setIsEditGuardianOpen(false)
       const editingGuardianInfo = getEditingGuardiansInfo()
-      const currentAddresses = editingGuardianInfo.guardianDetails.guardians
-      const currentNames = editingGuardianInfo.guardianNames
+      const currentAddresses = editingGuardianInfo.guardianDetails ? (editingGuardianInfo.guardianDetails.guardians || []) : []
+      const currentNames = editingGuardianInfo.guardianNames || []
 
       for (let i = 0; i < addresses.length; i++) {
         const address = addresses[i]
@@ -252,6 +252,13 @@ export default function Guardian() {
         if (address) saveAddressName(address.toLowerCase(), name);
       }
 
+      console.log('add11111', addresses, names, {
+        guardianNames: [...currentNames, ...names],
+        guardianDetails: {
+          guardians: [...currentAddresses, ...addresses],
+          threshold: 0
+        }
+      })
       updateEditingGuardiansInfo({
         guardianNames: [...currentNames, ...names],
         guardianDetails: {
