@@ -92,11 +92,13 @@ const isENSAddress = (address: string) => {
   return ensRegex.test(address);
 };
 
-const validate = (values: any) => {
+const validate = (values: any, props: any = {}) => {
+  console.log('validate1111', values, props)
   const errors: any = {};
   const addressKeys = Object.keys(values).filter((key) => key.indexOf('address') === 0);
   const nameKeys = Object.keys(values).filter((key) => key.indexOf('name') === 0);
   const existedAddress = [];
+  const { editType, eoas, getEditingGuardiansInfo } = props
 
   for (const addressKey of addressKeys) {
     const address = values[addressKey];
@@ -107,6 +109,15 @@ const validate = (values: any) => {
       errors[addressKey] = 'Address already in use';
     } else if (address && address.length) {
       existedAddress.push(address);
+    } else if (eoas.indexOf(address) !== -1) {
+      errors[addressKey] = 'Can not use signer as guardian';
+    } else if (editType === 'add') {
+      const editingGuardiansInfo = getEditingGuardiansInfo()
+      const guardians = editingGuardiansInfo.guardianDetails ? (editingGuardiansInfo.guardianDetails.guardians || []) : []
+
+      if (guardians.indexOf(address)) {
+        errors[addressKey] = 'Address already in use';
+      }
     }
   }
 
@@ -213,7 +224,7 @@ export default function GuardianForm({
   const [loading, setLoading] = useState(false);
   const { sendErc20, payTask } = useTransaction();
   const { showConfirmPayment } = useWalletContext();
-  const { credentials } = useSignerStore();
+  const { credentials, eoas } = useSignerStore();
   const [showAdvance, setShowAdvance] = useState(false)
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
   const [status, setStatus] = useState<string>('editing');
@@ -230,7 +241,12 @@ export default function GuardianForm({
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields, onChangeValues } = useForm({
     fields,
     validate,
-    initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardianNames)
+    initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardianNames),
+    restProps: {
+      editType,
+      getEditingGuardiansInfo,
+      eoas
+    }
   });
 
   const amountForm = useForm({

@@ -338,6 +338,7 @@ export default function EditGuardian({
                 </Button>
               )}
               <Button size="mid" onClick={() => startAddGuardian()}>
+                <Box marginRight="6px"><PlusIcon color="white" /></Box>
                 Add Guardian
               </Button>
             </Box>

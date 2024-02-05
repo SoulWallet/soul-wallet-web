@@ -30,7 +30,8 @@ export default function ListGuardian({
   openEditGuardianModal,
   startEditGuardian,
   openBackupGuardianModal,
-  startAddGuardian
+  startAddGuardian,
+  enterEditGuardian
 }: any) {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('guardian');
@@ -226,13 +227,13 @@ export default function ListGuardian({
         justifyContent="center"
       >
         {(!guardianList || !guardianList.length) && (
-          <Button size="mid" onClick={startAddGuardian}>
+          <Button size="mid" onClick={startEditGuardian}>
             <Box marginRight="6px"><PlusIcon color="white" /></Box>
             Add Guardian
           </Button>
         )}
         {(!!guardianList && !!guardianList.length) && (
-          <Button size="mid" onClick={startEditGuardian}>
+          <Button size="mid" onClick={enterEditGuardian}>
             Edit
           </Button>
         )}

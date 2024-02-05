@@ -150,6 +150,15 @@ export default function Guardian() {
     setIsRemoveGuardianOpen(true)
   }, [])
 
+  const enterEditGuardian = useCallback(() => {
+    if (!isEditing) {
+      setEditingGuardiansInfo(guardiansInfo)
+    }
+
+    setCanBackToSelectGuardianType(false)
+    setIsEditing(true)
+  }, [isEditing, guardiansInfo])
+
   const startEditGuardian = useCallback(() => {
     if (!isEditing) {
       setEditingGuardiansInfo(guardiansInfo)
@@ -157,7 +166,7 @@ export default function Guardian() {
 
     setCanBackToSelectGuardianType(false)
     setIsEditing(true)
-    // setIsEditGuardianOpen(true)
+    setIsEditGuardianOpen(true)
   }, [isEditing, guardiansInfo])
 
   const startEditSingleGuardian = useCallback((info: any) => {
@@ -298,6 +307,7 @@ export default function Guardian() {
           <ListGuardian
             openEditGuardianModal={openEditGuardianModal}
             startEditGuardian={startEditGuardian}
+            enterEditGuardian={enterEditGuardian}
             startAddGuardian={startAddGuardian}
             cancelEditGuardian={cancelEditGuardian}
             openBackupGuardianModal={openBackupGuardianModal}
