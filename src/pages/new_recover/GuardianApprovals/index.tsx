@@ -20,7 +20,7 @@ import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import PlusIcon from '@/components/Icons/Plus';
 import ComputerIcon from '@/components/Icons/Computer';
 import TwitterIcon from '@/components/Icons/Social/Twitter'
@@ -251,7 +251,7 @@ export default function AddSigner({ next, back }: any) {
                   position="relative"
                   background={uploaded ? '#7F56D9' : 'black'}
                   borderColor={uploaded ? '#7F56D9' : 'black'}
-                  onClick={handleFileChange}
+                  onClick={handleFileChange as any}
                   disabled={uploading}
                 >
                   <Box marginRight="4px">
@@ -277,7 +277,7 @@ export default function AddSigner({ next, back }: any) {
                   width="320px"
                   maxWidth="100%"
                   onClick={() => setIsAddGuardianOpen(true)}
-                  theme="light"
+                  type="white"
                 >
                   Enter guardians info manually
                 </Button>
@@ -285,9 +285,9 @@ export default function AddSigner({ next, back }: any) {
               <Box width="100%" display="flex" alignItems="center" justifyContent="center" marginTop="100px">
                 <Button
                   width="80px"
-                  theme="light"
+                  type="white"
                   marginRight="12px"
-                  type="lg"
+                  size="lg"
                   onClick={back}
                 >
                   Back
@@ -295,8 +295,8 @@ export default function AddSigner({ next, back }: any) {
                 <Button
                   width="80px"
                   maxWidth="100%"
-                  theme="dark"
-                  type="lg"
+                  type="black"
+                  size="lg"
                   onClick={handleNext}
                   disabled={!hasGuardians || isConfirming}
                 >
@@ -369,6 +369,7 @@ export default function AddSigner({ next, back }: any) {
                 width="275px"
                 maxWidth="100%"
                 onClick={doCopy}
+                size="xl"
               >
                 Share link with guardians
               </Button>

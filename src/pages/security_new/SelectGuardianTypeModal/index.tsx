@@ -29,7 +29,7 @@ import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
 import VideoIcon from '@/components/Icons/Video'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import MetamaskIcon from '@/assets/wallets/metamask.png'
 import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
 import CoinbaseIcon from '@/assets/wallets/coinbase.png'
@@ -155,7 +155,7 @@ export default function SelectGuardianTypeModal({
                     <Box>What’s guardian?</Box>
                   </Box>
                   <Box>
-                    <Button onClick={startEditGuardian}>
+                    <Button onClick={startEditGuardian} size="xl">
                       Next
                     </Button>
                   </Box>

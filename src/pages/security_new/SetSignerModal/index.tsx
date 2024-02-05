@@ -22,7 +22,7 @@ import {
   ModalBody
 } from '@chakra-ui/react'
 
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import WarningIcon from '@/components/Icons/Warning';
 import { useSignerStore } from '@/store/signer'
 
@@ -75,7 +75,7 @@ export default function SetSingerModal({ isOpen, signerIdToSet, onClose }: any) 
                   width="140px"
                   height="40px"
                   fontSize="16px"
-                  theme="light"
+                  type="white"
                   marginRight="16px"
                   onClick={onClose}
                 >
@@ -85,7 +85,7 @@ export default function SetSingerModal({ isOpen, signerIdToSet, onClose }: any) 
                   width="140px"
                   height="40px"
                   fontSize="16px"
-                  theme="dark"
+                  type="black"
                   onClick={doSet}
                 >
                   Confirm

@@ -5,7 +5,7 @@ import ArrowRightIcon from '@/components/Icons/ArrowRight';
 import Heading1 from '@/components/web/Heading1';
 import Heading3 from '@/components/web/Heading3';
 import TextBody from '@/components/web/TextBody';
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import TextButton from '@/components/web/TextButton';
 import { ethers } from 'ethers';
 import MinusIcon from '@/assets/icons/minus.svg';
@@ -603,7 +603,7 @@ export default function Edit({
       </Box>
       <Box marginTop="30px" display="flex" justifyContent="flex-end">
         <Box>
-          {canGoBack && <Button theme="light" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>}
+          {canGoBack && <Button type="white" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>}
           <Button onClick={handleConfirm} disabled={disabled} loading={loading}>Confirm</Button>
         </Box>
       </Box>

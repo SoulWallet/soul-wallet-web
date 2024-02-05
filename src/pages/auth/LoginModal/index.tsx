@@ -29,7 +29,7 @@ import Title from '@/components/new/Title'
 import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import MetamaskIcon from '@/assets/wallets/metamask.png'
 import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
 import CoinbaseIcon from '@/assets/wallets/coinbase.png'
@@ -101,12 +101,13 @@ export default function LoginModal({
             <Box width="calc(40%)" display="flex" alignItems="center" justifyContent="center" flexDirection="column" paddingLeft="25px" position="relative" paddingTop="40px">
               <Button
                 width="100%"
-                theme="dark"
+                type="black"
                 color="white"
                 marginBottom="49px"
                 onClick={startLoginWithPasskey}
                 disabled={isLoging}
                 loading={isLoging}
+                size="xl"
               >
                 <Box marginRight="10px"><PasskeyIcon /></Box>
                 Login with passkey

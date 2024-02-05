@@ -18,7 +18,7 @@ import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import TwitterIcon from '@/components/Icons/Social/Twitter'
 import TelegramIcon from '@/components/Icons/Social/Telegram'
 import GithubIcon from '@/components/Icons/Social/Github'
@@ -381,18 +381,20 @@ export default function Auth() {
               >
                 <Button
                   width="100%"
-                  theme="dark"
+                  type="black"
                   color="white"
                   marginBottom="18px"
+                  size="xl"
                   onClick={openRegister}
                 >
                   Create account
                 </Button>
                 <Button
                   width="100%"
-                  theme="light"
+                  type="white"
                   marginBottom="48px"
                   onClick={openLogin}
+                  size="xl"
                 >
                   Login
                 </Button>

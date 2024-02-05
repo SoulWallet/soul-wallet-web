@@ -27,7 +27,7 @@ import TextBody from '@/components/new/TextBody'
 import Title from '@/components/new/Title'
 import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import ImportIcon from '@/components/Icons/Auth/Import'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import { getChainInfo } from '@/lib/tools';
 import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
@@ -111,12 +111,13 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
                   Import account
                 </TextBody>
                 <Button
-                  theme="dark"
+                  type="black"
                   color="white"
                   padding="0 20px"
                   disabled={!selectedAddress || !!isImporting}
                   isLoading={isImporting}
                   onClick={() => importWallet(activeLoginAccount[chainId])}
+                  size="xl"
                 >
                   Go to my wallet
                 </Button>

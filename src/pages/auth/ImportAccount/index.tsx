@@ -20,7 +20,7 @@ import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import PlusIcon from '@/components/Icons/Plus';
 import ComputerIcon from '@/components/Icons/Computer';
 import TwitterIcon from '@/components/Icons/Social/Twitter'
@@ -156,21 +156,23 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
             <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" width="100%">
               <Box>
                 <Button
-                  theme="dark"
+                  type="black"
                   color="white"
                   padding="0 20px"
                   marginRight="16px"
                   onClick={back}
+                  size="xl"
                 >
                   Back
                 </Button>
                 <Button
-                  theme="dark"
+                  type="black"
                   color="white"
                   padding="0 20px"
                   disabled={!ethers.isAddress(address) || isImporting}
                   onClick={() => importWallet(address)}
                   loading={isImporting}
+                  size="xl"
                 >
                   Go to my wallet
                 </Button>

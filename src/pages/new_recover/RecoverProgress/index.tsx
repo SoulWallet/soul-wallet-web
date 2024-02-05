@@ -17,7 +17,7 @@ import IconLogo from '@/assets/logo-all-v3.svg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
 import TextBody from '@/components/new/TextBody'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
@@ -149,8 +149,8 @@ export default function RecoverProgress() {
               <Button
                 width="320px"
                 maxWidth="100%"
-                theme="dark"
-                type="mid"
+                type="black"
+                size="mid"
                 onClick={viewWallet}
                 disabled={!canViewWallet}
               >

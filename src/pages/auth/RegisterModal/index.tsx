@@ -16,7 +16,7 @@ import Title from '@/components/new/Title'
 // import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import { supportedEoas } from '@/config'
 import SuccessIcon from "@/components/Icons/Success";
 import WalletOption from '@/components/new/WalletOption'
@@ -102,23 +102,23 @@ export default function RegisterModal({
                   width="100%"
                   background="#fff"
                   color="#000"
-                  theme="dark"
+                  type="black"
                   marginBottom="49px"
                   onClick={() => disconnectEOA()}
                   padding="0 20px"
                   marginRight="16px"
-                  type="mid"
+                  size="mid"
                 >
                   Disconnect
                 </Button> */}
                 <Button
                   width="100%"
-                  theme="dark"
+                  type="black"
                   color="white"
                   marginBottom="49px"
                   onClick={() => startRegisterWithEOA(address)}
                   padding="0 20px"
-                  type="mid"
+                  size="mid"
                 >
                   Continue
                 </Button>
@@ -216,12 +216,13 @@ export default function RegisterModal({
               <Box marginTop="25px" paddingBottom="25px">
                 <Button
                   width="100%"
-                  theme="dark"
+                  type="black"
                   color="white"
                   marginBottom="49px"
                   onClick={startRegisterWithPasskey}
                   disabled={isConnecting}
                   padding="0 20px"
+                  size="xl"
                 >
                   <Box marginRight="5px"><PasskeyIcon /></Box>
                   Create wallet with passkey

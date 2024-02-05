@@ -30,7 +30,7 @@ import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
 import DownloadIcon from '@/components/Icons/Download'
-import Button from '@/components/new/Button'
+import Button from '@/components/Button'
 import TextButton from '@/components/new/TextButton'
 import MetamaskIcon from '@/assets/wallets/metamask.png'
 import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
@@ -218,6 +218,7 @@ export default function BackupGuardianModal({
                     backgroundColor="#6A52EF"
                     borderColor="#6A52EF"
                     _hover={{ backgroundColor: "#6A52EF" }}
+                    size="xl"
                   >
                     <Box marginRight="4px"><DownloadIcon /></Box>
                     Download
@@ -271,6 +272,7 @@ export default function BackupGuardianModal({
                     onClick={handleEmailBackupGuardians}
                     disabled={sending || !emailForm.values.email}
                     loading={sending}
+                    size="xl"
                   >
                     Send
                   </Button>
