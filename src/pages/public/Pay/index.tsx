@@ -193,9 +193,8 @@ export default function Pay() {
 
   if (!!isPaid) {
     return (
-      <Box width="100%" minHeight="100vh" background="#F2F4F7">
-                <SignHeader />
-
+      <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
+        <SignHeader />
         <Box
           padding="20px"
           display="flex"
@@ -257,7 +256,7 @@ export default function Pay() {
                     Recover for: {recoveryRecord.addresses.map((item: any) => item.address).join(', ')}
                   </Box>
                 </Box>
-                <Box
+                {/* <Box
                   width="320px"
                   display="flex"
                   flexDirection="column"
@@ -276,17 +275,17 @@ export default function Pay() {
                   >
                     Close
                   </Button>
-                </Box>
+                </Box> */}
               </Box>
             </Box>
           </RoundContainer>
         </Box>
-      </Box>
+      </Flex>
     )
   }
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
+    <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
       <SignHeader />
       <Box
         padding="20px"
@@ -408,6 +407,6 @@ export default function Pay() {
           </Box>
         </RoundContainer>
       </Box>
-    </Box>
+    </Flex>
   );
 }

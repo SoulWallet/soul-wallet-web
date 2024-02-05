@@ -242,11 +242,13 @@ const UploadGuardians = ({ onStepChange, changeStep }: any) => {
       });
       changeStep(4)
       setLoading(false);
-      const resSteps = await api.operation.finishStep({
-        slot,
-        steps: [5],
-      })
-      setFinishedSteps(resSteps.data.finishedSteps);
+      if(slot){
+        const resSteps = await api.operation.finishStep({
+          slot,
+          steps: [5],
+        })
+        setFinishedSteps(resSteps.data.finishedSteps);
+      }
     } catch (e: any) {
       setLoading(false);
       toast({

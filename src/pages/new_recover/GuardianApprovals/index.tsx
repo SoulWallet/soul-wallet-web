@@ -253,6 +253,8 @@ export default function AddSigner({ next, back }: any) {
                   borderColor={uploaded ? '#7F56D9' : 'black'}
                   onClick={handleFileChange as any}
                   disabled={uploading}
+                  skipSignCheck
+                  size="xl"
                 >
                   <Box marginRight="4px">
                     {uploaded ? <UploadedIcon /> : <UploadIcon />}
@@ -275,6 +277,8 @@ export default function AddSigner({ next, back }: any) {
                 <Box padding="10px">Or</Box>
                 <Button
                   width="320px"
+                  skipSignCheck
+                  size="xl"
                   maxWidth="100%"
                   onClick={() => setIsAddGuardianOpen(true)}
                   type="white"
@@ -351,8 +355,9 @@ export default function AddSigner({ next, back }: any) {
             </Heading>
             <TextBody
               fontWeight="600"
-              maxWidth="650px"
+              maxWidth="90%"
               marginBottom="20px"
+              wordBreak={"break-all"}
             >
               Share this link with your guardians to sign:
             </TextBody>

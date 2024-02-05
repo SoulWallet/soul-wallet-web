@@ -132,7 +132,7 @@ export default function useKeystore() {
 
     const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
 
-    const signature = await showSignMessage({ domain, types, message, primaryType }, signType);
+    const signature = await showSignMessage({ domain, types, message, primaryType }, signType, 'Confirm Guardian Change');
 
     const keySignature = await packKeystoreSignature(signature);
 

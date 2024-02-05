@@ -4,10 +4,10 @@ import Button from '../../Button';
 import { useAccount, useSignTypedData, useSwitchChain } from 'wagmi';
 import useWallet from '@/hooks/useWallet';
 import useConfig from '@/hooks/useConfig';
-import { toShortAddress } from '@/lib/tools';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { TypedDataEncoder, ethers } from 'ethers';
-import { useSettingStore } from '@/store/setting';
+import SignerSelect from '@/components/SignerSelect';
+import { LabelItem } from '@/components/SignTransactionModal/comp/SignTransaction';
 
 const getHash = (message: string) => {
   return ethers.hashMessage(message);
@@ -19,16 +19,16 @@ const getTypedHash = (typedData: any) => {
   return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.value || typedData.message);
 };
 
-export default function SignMessage({ messageToSign, onSign, signType }: any) {
-  const { selectedAddressItem } = useConfig();
+export default function SignMessage({ messageToSign, onSign, signType, signTitle }: any) {
+  // const { selectedAddressItem } = useConfig();
   const { signTypedDataAsync, signTypedData } = useSignTypedData();
-  const { getAddressName } = useSettingStore();
+  // const { getAddressName } = useSettingStore();
   const { signRawHash, signWithPasskey } = useWallet();
   const [isActivated, setIsActivated] = useState(false);
   const [targetChainId, setTargetChainId] = useState<undefined | number>();
   const { chainId } = useAccount();
   const { switchChain } = useSwitchChain();
-  const origin = document.referrer;
+  // const origin = document.referrer;
 
   const onConfirm = async () => {
     try {
@@ -75,41 +75,46 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
     }
   }, [chainId, messageToSign, signType]);
 
-  const checkIsActivated = async () => {
-    // setIsActivated(await checkActivated());
-  };
-
-  useEffect(() => {
-    checkIsActivated();
-  }, []);
-
   const shouldDisable = signType !== 'passkey' && signType !== 'eoa' && !isActivated;
 
   return (
     <>
-      <Text fontSize="20px" fontWeight="800" color="#1e1e1e">
-        Sign Message
-      </Text>
-
-      {origin && (
+      {signTitle && (
+        <Text fontSize="20px" fontWeight="800" textAlign={'center'}>
+          {signTitle}
+        </Text>
+      )}
+      {/* {origin && (
         <Text fontWeight={'600'} mt="1">
           {origin}
         </Text>
-      )}
-
-      <Flex flexDir={'column'} gap="5" mt="6">
-        <Box bg="#f2f2f2" py="3" px="4" rounded="20px" fontWeight={'800'} maxH="160px" overflowY={'auto'}>
-          {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
-            ? JSON.stringify(messageToSign)
-            : messageToSign}
+      )} */}
+      <Flex flexDir={'column'} gap="6" mt="9">
+        <Box bg="#f9f9f9" color="#818181" fontSize={'14px'} p="4" rounded="20px" maxH="160px" overflowY={'auto'}>
+          <pre>
+            <code>
+              {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
+                ? JSON.stringify(messageToSign, null, 2)
+                : messageToSign}
+            </code>
+          </pre>
         </Box>
-        <InfoWrap color="#646464" fontSize="12px">
+        <InfoWrap fontSize="14px">
           <InfoItem>
+            <LabelItem
+              label="Signer"
+              tooltip={`A transaction signer is responsible for authorizing blockchain transactions, ensuring security and validity before they're processed on the network.`}
+            />
+            <Flex gap="2" fontWeight={'500'}>
+              <SignerSelect />
+            </Flex>
+          </InfoItem>
+          {/* <InfoItem>
             <Text>From</Text>
             <Text>
               {getAddressName(selectedAddressItem.address)}({toShortAddress(selectedAddressItem.address)})
             </Text>
-          </InfoItem>
+          </InfoItem> */}
         </InfoWrap>
       </Flex>
       {shouldDisable && (
@@ -119,11 +124,13 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
       )}
       {targetChainId ? (
         <Button
-          w="100%"
+          w="320px"
           fontSize={'20px'}
           py="4"
           fontWeight={'800'}
           mt="6"
+          mx="auto"
+          display={'block'}
           onClick={() => switchChain({ chainId: targetChainId })}
         >
           Switch Chain
@@ -131,11 +138,13 @@ export default function SignMessage({ messageToSign, onSign, signType }: any) {
       ) : (
         <Button
           disabled={shouldDisable}
-          w="100%"
+          w="320px"
           fontSize={'20px'}
           py="4"
           fontWeight={'800'}
           mt="6"
+          mx="auto"
+          display={'block'}
           onClick={onConfirm}
         >
           Confirm

@@ -156,8 +156,7 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
             <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" width="100%">
               <Box>
                 <Button
-                  type="black"
-                  color="white"
+                  type="white"
                   padding="0 20px"
                   marginRight="16px"
                   onClick={back}

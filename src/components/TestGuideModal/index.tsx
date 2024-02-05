@@ -17,6 +17,7 @@ const TestGuideModal = (_: unknown, ref: Ref<any>) => {
   const { setFinishedSteps, finishedSteps } = useSettingStore();
 
   const getStepInfo = async () => {
+    if (!slotInfo.slot) return;
     const res = await api.operation.finishStep({
       slot: slotInfo.slot,
       steps: [],

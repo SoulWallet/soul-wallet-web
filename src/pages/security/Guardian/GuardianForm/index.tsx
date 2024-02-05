@@ -330,11 +330,13 @@ export default function GuardianForm({ cancelEdit, startBackup, startGuardianInt
       cancelEdit()
       setLoading(false);
       setPending(false)
-      const res = await api.operation.finishStep({
-        slot,
-        steps: [2],
-      })
-      setFinishedSteps(res.data.finishedSteps);
+      if(slot){
+        const res = await api.operation.finishStep({
+          slot,
+          steps: [2],
+        })
+        setFinishedSteps(res.data.finishedSteps);
+      }
     } catch (error: any) {
       console.log('error', error.message)
       setLoading(false);

@@ -18,6 +18,9 @@ export default function Guidance() {
   const { goGuideAction, checkInitialized } = useTools();
   // todo, should remmeber this
   const checkSteps = async () => {
+    if(!slotInfo.slot){
+      return
+    }
     const res = await api.operation.finishStep({
       slot: slotInfo.slot,
       steps: [],

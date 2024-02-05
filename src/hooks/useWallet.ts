@@ -366,12 +366,14 @@ export default function useWallet() {
       enabled: true,
     });
 
-    const res = await api.operation.finishStep({
-      slot: slotInfo.slot,
-      steps: [5],
-    });
-
-    setFinishedSteps(res.data.finishedSteps);
+    if(slotInfo.slot){
+      const res = await api.operation.finishStep({
+        slot: slotInfo.slot,
+        steps: [5],
+      });
+  
+      setFinishedSteps(res.data.finishedSteps);
+    }
   };
 
   const checkRecoverStatus = async () => {

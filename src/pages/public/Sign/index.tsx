@@ -167,7 +167,7 @@ export default function Sign() {
 
   if (!loaded) {
     return (
-      <Box width="100%" minHeight="100vh" background="#F2F4F7">
+      <Flex justify="center" align="center" width="100%" minHeight="100vh" background="#F2F4F7">
         <SignHeader />
         <Box
           padding="20px"
@@ -215,13 +215,13 @@ export default function Sign() {
             </Box>
           </RoundContainer>
         </Box>
-      </Box>
+      </Flex>
     )
   }
 
   if (!!isSigned) {
     return (
-      <Box width="100%" minHeight="100vh" background="#F2F4F7">
+      <Flex justify="center" align="center" width="100%" minHeight="100vh" background="#F2F4F7">
         <SignHeader />
         <Box
           padding="20px"
@@ -309,13 +309,13 @@ export default function Sign() {
             </Box>
           </RoundContainer>
         </Box>
-      </Box>
+      </Flex>
     )
   }
 
   if (!!isConnected && !isValidSigner) {
     return (
-      <Box width="100%" minHeight="100vh" background="#F2F4F7">
+      <Flex justify="center" align="center" width="100%" minHeight="100vh" background="#F2F4F7">
         <SignHeader />
         <Box
           padding="20px"
@@ -402,12 +402,12 @@ export default function Sign() {
             </Box>
           </RoundContainer>
         </Box>
-      </Box>
+      </Flex>
     )
   }
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
+    <Flex justify="center" align="center" width="100%" minHeight="100vh" background="#F2F4F7">
       <SignHeader />
       <Box
         padding="20px"
@@ -513,6 +513,6 @@ export default function Sign() {
           </Box>
         </RoundContainer>
       </Box>
-    </Box>
+    </Flex>
   )
 }
