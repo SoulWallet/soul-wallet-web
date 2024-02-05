@@ -56,7 +56,7 @@ const ConfirmPaymentModal = (_: unknown, ref: Ref<any>) => {
     <div ref={ref}>
       <TxModal title="Edit Guardians" visible={visible} onClose={onClose}>
         <ConfirmPayment fee={fee} origin={origin} sendToAddress={sendToAddress} onSuccess={onSuccess} />
-        <Text
+        {/* <Text
           color="danger"
           fontSize="20px"
           fontWeight={'800'}
@@ -67,7 +67,7 @@ const ConfirmPaymentModal = (_: unknown, ref: Ref<any>) => {
           lineHeight={'1'}
         >
           Cancel
-        </Text>
+        </Text> */}
       </TxModal>
     </div>
   );

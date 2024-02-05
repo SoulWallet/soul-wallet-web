@@ -28,6 +28,27 @@ import { bundlerErrMapping } from '@/config';
 import DropdownSelect from '@/components/DropdownSelect';
 import AddressIcon from '@/components/AddressIcon';
 
+export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
+  return (
+    <Flex gap="1" align={'center'}>
+      <Text lineHeight={'1'}>{label}</Text>
+      {tooltip && (
+        <Tooltip label={tooltip}>
+          <Image src={IconQuestion} w="18px" h="18px" />
+        </Tooltip>
+      )}
+      {chainName && (
+        <>
+          <Text>·</Text>
+          <Box py="1" px="2" color="brand.black" rounded="full" lineHeight={'1'} bg="#f9f9f9">
+            {chainName}
+          </Box>
+        </>
+      )}
+    </Flex>
+  );
+};
+
 export default function SignTransaction({ onSuccess, txns, sendToAddress }: any) {
   const toast = useToast();
   const [loadingFee, setLoadingFee] = useState(true);
@@ -150,12 +171,12 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
 
     if (steps.length > 0) {
-      if(slotInfo.slot){
+      if (slotInfo.slot) {
         const res = await api.operation.finishStep({
           slot: slotInfo.slot,
           steps,
         });
-  
+
         setFinishedSteps(res.data.finishedSteps);
       }
     }
@@ -280,27 +301,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   }, [requiredAmount, payToken]);
 
-  const LabelItem = ({ label, tooltip, chainVisible }: { label: string; tooltip?: string; chainVisible?: boolean }) => {
-    return (
-      <Flex gap="1" align={'center'}>
-        <Text lineHeight={"1"}>{label}</Text>
-        {tooltip && (
-          <Tooltip label={tooltip}>
-            <Image src={IconQuestion} w="18px" h="18px" />
-          </Tooltip>
-        )}
-        {chainVisible && (
-          <>
-            <Text>·</Text>
-            <Box py="1" px="2" color="brand.black" rounded="full" lineHeight={'1'} bg="#f9f9f9">
-              {selectedChainItem.chainName}
-            </Box>
-          </>
-        )}
-      </Flex>
-    );
-  };
-
   return (
     <>
       <Flex flexDir={'column'}>
@@ -422,7 +422,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               <LabelItem
                 label="Gas"
                 tooltip={`Gas fees are charges for transactions on blockchains, paying for computing efforts to process and secure activities. These fees fluctuate with network demand and transaction details.`}
-                chainVisible={true}
+                chainName={selectedChainItem.chainName}
               />
               <Flex gap="2" fontWeight={'500'} align={'center'}>
                 {requiredAmount ? (

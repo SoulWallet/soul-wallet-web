@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { Flex, Box, Text, useToast, Image } from '@chakra-ui/react';
 import Button from '../../Button';
 import BN from 'bignumber.js';
@@ -7,7 +7,10 @@ import useConfig from '@/hooks/useConfig';
 import { useBalanceStore } from '@/store/balance';
 import { useAddressStore } from '@/store/address';
 import ChainSelect from '@/components/ChainSelect';
+import IconExclamation from '@/assets/icons/exclamation.svg';
 import { AccountSelect } from '@/components/AccountSelect';
+import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
+import { LabelItem } from '@/components/SignTransactionModal/comp/SignTransaction';
 import IconEth from '@/assets/chains/eth.svg';
 import api from '@/lib/api';
 
@@ -23,7 +26,6 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
     } catch (err) {
       console.log('sign page failed', err);
     } finally {
-
     }
   };
 
@@ -44,60 +46,96 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
     getTokenBalance();
   }, []);
 
-  const hasBalance = tokenBalance && tokenBalance[0] && !!Number(tokenBalance[0].tokenBalance) && (BN(tokenBalance[0].tokenBalance ).gt(BN(fee)))
+  const hasBalance =
+    tokenBalance &&
+    tokenBalance[0] &&
+    !!Number(tokenBalance[0].tokenBalance) &&
+    BN(tokenBalance[0].tokenBalance).gt(BN(fee));
 
-
-  console.log('ConfirmPayment', chainConfig, selectedAddressItem, hasBalance, (BN(tokenBalance[0].tokenBalance ).gt(BN(fee))))
-    return (
-      <>
-        <Flex flexDir={'column'} gap="5" mt="6">
+  console.log(
+    'ConfirmPayment',
+    chainConfig,
+    selectedAddressItem,
+    hasBalance,
+    BN(tokenBalance[0].tokenBalance).gt(BN(fee)),
+  );
+  return (
+    <>
+      <Flex flexDir={'column'} gap="5" mt="4">
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+          <Box fontSize="20px" fontWeight="800">
+            Estimated fee
+          </Box>
           <Box
+            fontSize={{ base: '20px', md: '24px', lg: '48px' }}
+            fontWeight="700"
+            fontFamily="Nunito"
+            textAlign="center"
+          >
+            {BN(fee).shiftedBy(-18).toFixed(6)} ETH
+          </Box>
+        </Box>
+        <Box width="100%" display="flex" alignItems="center" justifyContent="center">
+          <Box
+            bg="#f2f2f2"
+            width="320px"
+            borderRadius="36px"
+            height="36px"
             display="flex"
             alignItems="center"
             justifyContent="center"
-            flexDirection="column"
           >
-            <Box fontSize="12px" fontWeight="600" >Estimated fee</Box>
-            <Box fontSize={{base: "20px", md: "24px", lg: "32px"}} fontWeight="800" fontFamily="Nunito" textAlign="center">{BN(fee).shiftedBy(-18).toString()} ETH</Box>
+            <Image src={IconEth} w="5" h="5" />
+            <Text fontSize="16px" fontWeight="800" marginLeft="5px">
+              ETH
+            </Text>
+            {tokenBalance && tokenBalance[0] && (
+              <Text fontSize="12px" fontWeight="600" marginLeft="5px">
+                Available {tokenBalance[0].tokenBalanceFormatted}
+              </Text>
+            )}
           </Box>
-          <Box width="100%" display="flex" alignItems="center" justifyContent="center">
-            <Box bg="#f2f2f2" width="320px" borderRadius="36px" height="36px" display="flex" alignItems="center" justifyContent="center">
-              <Image src={IconEth} w="5" h="5" />
-              <Text fontSize="16px" fontWeight="800" marginLeft="5px">ETH</Text>
-              {tokenBalance && tokenBalance[0] && <Text fontSize="12px" fontWeight="600" marginLeft="5px">Available {tokenBalance[0].tokenBalanceFormatted}</Text>}
-            </Box>
-          </Box>
-          {!hasBalance && <Text fontSize="12px" fontWeight="500"  textAlign="center">Not enough balance</Text>}
-          <Box width="100%" height="1px" background="#D7D7D7" />
-          <Box padding="0 10px">
-            <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
-              <Box fontSize="12px" fontWeight="500" >From:</Box>
-              <Box fontSize="12px" fontWeight="400"  color="#6A52EF">
-                <AccountSelect isInModal={true} />
-              </Box>
-            </Box>
-            <Box padding="5px 0" display="flex" alignItems="center" justifyContent="space-between">
-              <Box fontSize="12px" fontWeight="500" >Network:</Box>
-              <Box fontSize="12px" fontWeight="400"  color="#6A52EF">
-                <ChainSelect isInModal={true} />
-              </Box>
-            </Box>
-          </Box>
-        </Flex>
-        <Button
-          w="100%"
-          fontSize={'20px'}
-          py="4"
-          fontWeight={'800'}
-          mt="6"
-          onClick={onConfirm}
-          disabled={!hasBalance}
-          bg="#6A52EF"
-          color="white"
-          _hover={{ bg: '#6A52EF', color: 'white' }}
-        >
-          Preview Payment
-        </Button>
-      </>
-    );
+        </Box>
+        {!hasBalance && (
+          <Flex
+            py="6px"
+            px="8px"
+            align={'center'}
+            gap="2"
+            bg="#FEF3F2"
+            rounded="full"
+            display={'inline-flex'}
+            mx="auto"
+          >
+            <Image src={IconExclamation} w="4" h="4" />
+            <Text fontSize="14px" fontWeight="600" color="#E83D26">
+              Insufficient balance
+            </Text>
+          </Flex>
+        )}
+        <InfoWrap w="400px" mx="auto" fontSize="14px">
+          <InfoItem>
+            <LabelItem label="Network" tooltip={`123`} />
+            <Flex gap="2" fontWeight={'500'}>
+              <ChainSelect isInModal={true} />
+            </Flex>
+          </InfoItem>
+        </InfoWrap>
+      </Flex>
+      <Button
+        fontSize={'20px'}
+        py="4"
+        fontWeight={'800'}
+        mt="6"
+        w="320px"
+        mx="auto"
+        display={'block'}
+        onClick={onConfirm}
+        disabled={!hasBalance}
+        type="black"
+      >
+        Preview
+      </Button>
+    </>
+  );
 }
