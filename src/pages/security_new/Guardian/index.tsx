@@ -9,6 +9,7 @@ import SetSignerModal from '@/pages/security_new/SetSignerModal'
 import SelectSignerTypeModal from '@/pages/security_new/SelectSignerTypeModal'
 import SelectGuardianTypeModal from '@/pages/security_new/SelectGuardianTypeModal'
 import IntroGuardianModal from '@/pages/security_new/IntroGuardianModal'
+import RemoveGuardianModal from '@/pages/security_new/RemoveGuardianModal'
 import EditGuardianModal from '@/pages/security_new/EditGuardianModal'
 import BackupGuardianModal from '@/pages/security_new/BackupGuardianModal'
 import WalletConnectModal from '@/pages/security_new/WalletConnectModal'
@@ -46,11 +47,14 @@ export default function Guardian() {
   const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
   const [isIntroGuardianOpen, setIsIntroGuardianOpen] = useState<any>(false);
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
+  const [isRemoveGuardianOpen, setIsRemoveGuardianOpen] = useState<any>(false);
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
   const [canBackToSelectGuardianType, setCanBackToSelectGuardianType] = useState<any>(false);
   const [editType, setEditType] = useState<any>('edit')
   const [count, setCount] = useState<any>(0)
+  const [removeIndex, setRemoveIndex] = useState<any>(0)
+  const [removeAddress, setRemoveAddress] = useState<any>('')
 
   const [isEditing, setIsEditing] = useState<any>(false);
   const { getAddressName, saveAddressName } = useSettingStore();
@@ -140,6 +144,12 @@ export default function Guardian() {
     setIsSelectGuardianOpen(true)
   }, [isEditing, guardiansInfo])
 
+  const startRemoveGuardian = useCallback((i: any, address: any) => {
+    setRemoveIndex(i)
+    setRemoveAddress(address)
+    setIsRemoveGuardianOpen(true)
+  }, [])
+
   const startEditGuardian = useCallback(() => {
     if (!isEditing) {
       setEditingGuardiansInfo(guardiansInfo)
@@ -161,6 +171,23 @@ export default function Guardian() {
   const cancelEditGuardian = useCallback(() => {
     setIsEditing(false)
   }, [isEditing, guardiansInfo])
+
+  const onRemoveGuardianConfirm = useCallback((i: any) => {
+    setIsRemoveGuardianOpen(false)
+    const editingGuardianInfo = getEditingGuardiansInfo()
+    const currentAddresses = editingGuardianInfo.guardianDetails.guardians
+    const currentNames = editingGuardianInfo.guardianNames
+    currentNames.splice(i, 1)
+    currentAddresses.splice(i, 1)
+
+    updateEditingGuardiansInfo({
+      guardianNames: currentNames,
+      guardianDetails: {
+        guardians: currentAddresses,
+        threshold: 0
+      }
+    })
+  }, [])
 
   const onEditGuardianConfirm = useCallback((addresses: any, names: any, i: any) => {
     if (editType === 'edit') {
@@ -263,6 +290,7 @@ export default function Guardian() {
             openBackupGuardianModal={openBackupGuardianModal}
             startAddGuardian={startAddGuardian}
             startEditSingleGuardian={startEditSingleGuardian}
+            startRemoveGuardian={startRemoveGuardian}
             count={count}
           />
         )}
@@ -306,6 +334,13 @@ export default function Guardian() {
         onConfirm={onEditGuardianConfirm}
         canGoBack={canBackToSelectGuardianType}
         editType={editType}
+      />
+      <RemoveGuardianModal
+        isOpen={isRemoveGuardianOpen}
+        onClose={() => setIsRemoveGuardianOpen(false)}
+        onConfirm={onRemoveGuardianConfirm}
+        removeIndex={removeIndex}
+        address={removeAddress}
       />
       <BackupGuardianModal
         isOpen={isBackupGuardianOpen}

@@ -80,7 +80,8 @@ export default function EditGuardian({
   openBackupGuardianModal,
   startDeleteGuardian,
   startAddGuardian,
-  startEditSingleGuardian
+  startEditSingleGuardian,
+  startRemoveGuardian
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
   const {
@@ -368,7 +369,7 @@ export default function EditGuardian({
                       marginRight="18px"
                       cursor="pointer"
                       allowDelete={true}
-                      onDelete={() => handleDelete(i)}
+                      onDelete={() => startRemoveGuardian(i, address)}
                       allowEdit={true}
                       onEdit={() => startEditSingleGuardian({
                         guardianDetails: {
