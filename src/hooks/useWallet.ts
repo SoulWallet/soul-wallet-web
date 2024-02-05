@@ -385,26 +385,18 @@ export default function useWallet() {
     updateRecoverInfo({
       recoveryRecord: res,
     });
-    const { addressList } = useAddressStore.getState();
-    if (addressList.length === 0) {
-      // for (let [index, item] of Object.entries(res.addresses)) {
-      //   addAddressItem({
-      //     address: item as any,
-      //     activatedChains: [],
-    //   });
-      // }
-    }
+    // const { addressList } = useAddressStore.getState();
+    // if (addressList.length === 0) {
+    //   // for (let [index, item] of Object.entries(res.addresses)) {
+    //   //   addAddressItem({
+    //   //     address: item as any,
+    //   //     activatedChains: [],
+    // //   });
+    //   // }
+    // }
 
-    // check if should replace key
+    // check if should replace key 
     if (res.status >= 3) {
-      // new credential
-      // const stagingKeysRaw = await Promise.all(credentials.map((credential: any) => credential.publicKey))
-      // const stagingKeys = L1KeyStore.initialKeysToAddress(stagingKeysRaw);
-      // const stagingKeyHash = L1KeyStore.getKeyHash(stagingKeys);
-      // const stagingCredentials = []
-      // const currentCredentials = []
-      // const onchainCredentials = res.newOwners;
-      // if(onchainCredentials.include(stagingCredentials) && !onchainCredentials.include(currentCredentials) ){
       if (!recoverInfo.enabled) {
         await boostAfterRecovered();
       }

@@ -59,6 +59,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
         address: selectedAddress,
         chainID: selectedChainId,
       });
+      console.log('claim result', res);
       if (res.code === 200) {
         toast({
           title: 'Test token claimed successfully',

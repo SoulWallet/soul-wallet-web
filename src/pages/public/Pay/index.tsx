@@ -270,6 +270,8 @@ export default function Pay() {
                     type="black"
                     color="white"
                     marginBottom="18px"
+                    size="xl"
+                    skipSignCheck
                     onClick={() => window.close()}
                   >
                     Close
@@ -380,6 +382,8 @@ export default function Pay() {
                     color="white"
                     marginBottom="18px"
                     onClick={doPay}
+                    size="xl"
+                    skipSignCheck
                     loading={paying}
                     disabled={paying}
                   >
@@ -392,6 +396,8 @@ export default function Pay() {
                     color="white"
                     marginBottom="18px"
                     onClick={connectWallet}
+                    size="xl"
+                    skipSignCheck
                     disabled={isConnecting}
                   >
                     {isConnecting ? 'Connecting' : 'Connect wallet'}

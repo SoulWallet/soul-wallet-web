@@ -7,6 +7,7 @@ import Modal from '@/components/Modal';
 import useTools from '@/hooks/useTools';
 import Button from '@/components/Button';
 import { useAddressStore } from '@/store/address';
+import { useTempStore } from '@/store/temp';
 
 export const EditNameModal = ({
   defaultValue,
@@ -50,6 +51,7 @@ export default function AvatarWithName({ editable = false }: { editable: boolean
   const [editNameModalVisible, setEditNameModalVisible] = useState(false);
   const walletName = getWalletName();
   const { selectedAddress } = useAddressStore();
+  const { createInfo } = useTempStore();
 
   const changeWalletName = (name: string) => {
     setWalletName(name);
@@ -60,7 +62,7 @@ export default function AvatarWithName({ editable = false }: { editable: boolean
         <Flex gap="2" align={'center'}>
           <AddressIcon address={selectedAddress} width={32} />
           <Text fontWeight={'800'} fontSize={'18px'}>
-            {walletName || 'Wallet'}
+            {walletName || createInfo.walletName}
           </Text>
         </Flex>
         {/** IMPORTANT TODO, checkInitialized() to var */}

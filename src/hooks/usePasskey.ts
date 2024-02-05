@@ -7,6 +7,7 @@ import {
   parseBase64url,
   arrayBufferToHex,
 } from '@/lib/tools';
+import { useTempStore } from '@/store/temp';
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
 import { AsnParser } from '@peculiar/asn1-schema';
@@ -23,6 +24,7 @@ const base64Tobase64url = (base64: string) => {
 };
 
 export default function usePasskey() {
+  const { createInfo } = useTempStore();
   const decodeDER = (signature: string) => {
     const derSignature = base64ToBuffer(signature);
     const parsedSignature = AsnParser.parse(derSignature, ECDSASigValue);
@@ -105,7 +107,7 @@ export default function usePasskey() {
   const register = async () => {
     const randomChallenge = btoa('1234567890');
     // const finalCredentialName = `${credentialName}_${getCurrentTimeFormatted()}`;
-    const finalCredentialName = `Wallet_${getCurrentTimeFormatted()}`;
+    const finalCredentialName = `${createInfo.walletName || 'Wallet'}_${getCurrentTimeFormatted()}`;
     const registration = await client.register(finalCredentialName, randomChallenge, {
       authenticatorType: 'both',
     });

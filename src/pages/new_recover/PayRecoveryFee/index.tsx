@@ -154,6 +154,7 @@ export default function PayRecoveryFee({ next }: any) {
                 onClick={handlePay}
                 size="xl"
                 type="black"
+                skipSignCheck
               >
                 Connect wallet and pay
               </Button>
@@ -163,6 +164,7 @@ export default function PayRecoveryFee({ next }: any) {
                 type="white"
                 onClick={doCopy}
                 size="xl"
+                skipSignCheck
               >
                 Ask friend to pay
               </Button>

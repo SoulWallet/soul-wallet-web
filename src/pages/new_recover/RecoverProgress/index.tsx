@@ -116,16 +116,16 @@ export default function RecoverProgress() {
               {chainRecoveryStatus.map((item: any) => {
                 return (
                   <Box key={item.chainId} background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginRight="20px">
-                    <Box>
+                    <Box mb="2">
                       <Image src={getWalletIcon(item.chainId)} width="40px" height="40px" />
                     </Box>
-                    <Box fontSize="16px" fontWeight="700">
+                    <Box fontSize="16px" lineHeight={"1"} fontWeight="700">
                       {getNetwork(Number(item.chainId))}
                     </Box>
-                    <Box fontSize="12px" fontWeight="500" maxWidth="100%" textAlign="center" marginTop="16px">
+                    <Box fontSize="12px" lineHeight={"normal"} fontWeight="500" maxWidth="100%" textAlign="center" marginTop="16px">
                       {getWalletAddress(String(item.chainId), addresses)}
                     </Box>
-                    <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="24px" marginBottom="30px">
+                    <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="24px" marginBottom="16px">
                       <Box width={getProgressPercent(item.startTime, item.expectFinishTime)} height="100%" background="#0CB700" />
                     </Box>
                     {item.status === 0 && (
@@ -152,6 +152,7 @@ export default function RecoverProgress() {
                 type="black"
                 size="mid"
                 onClick={viewWallet}
+                skipSignCheck
                 disabled={!canViewWallet}
               >
                 View in wallet

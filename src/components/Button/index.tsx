@@ -4,10 +4,10 @@ import IconLoading from '@/assets/loading.gif';
 import useConfig from '@/hooks/useConfig';
 
 const getSizeStyles = (size?: string) => {
-  const baseStyles = {}
+  const baseStyles = {};
 
   if (!size) {
-    return baseStyles
+    return baseStyles;
   }
 
   if (size === 'xl') {
@@ -57,28 +57,34 @@ const buttonStyles = {
     color: '#fff',
     bg: '#000',
     _hover: { bg: '#4E4E53' },
-    _disabled:{ bg: '#B2B2B2'},
+    _disabled: { cursor: 'not-allowed', bg: '#B2B2B2', _hover: { bg: '#B2B2B2' } },
   },
   white: {
     color: '#000',
     bg: '#fff',
+    border: '1px solid #D0D5DD',
     _hover: { bg: '#eee' },
-    _disabled: {color: "#B2B2B2"},
+    _disabled: { cursor: 'not-allowed', color: '#B2B2B2', _hover: { color: '#B2B2B2' } },
   },
-  red:{
-    color: "#fff",
-    bg: "brand.red",
-    _hover:{
-      bg:"#FF689E"
+  red: {
+    color: '#fff',
+    bg: 'brand.red',
+    _hover: {
+      bg: '#FF689E',
     },
-    _disabled:{
-      bg: "#B2B2B2",
-    }
+    _disabled: {
+      cursor: 'not-allowed',
+      bg: '#B2B2B2',
+      _hover: { bg: '#B2B2B2' },
+    },
   },
   purple: {
     color: 'brand.purple',
     bg: 'rgba(225, 220, 252, 0.80)',
     _hover: { bg: 'rgba(225, 220, 252, 1)' },
+    _disabled: {
+      cursor: 'not-allowed',
+    },
   },
 };
 
@@ -110,7 +116,7 @@ export default function Button({
 
   const canSign = !selectedChainItem.recovering || skipSignCheck;
 
-  const sizeStyles = getSizeStyles(size)
+  const sizeStyles = getSizeStyles(size);
 
   const doClick = () => {
     if (!loading && !disabled && canSign && onClick) {
@@ -123,7 +129,6 @@ export default function Button({
   if (!disabled) {
     moreProps.href = href;
   }
-
 
   return (
     <CButton
