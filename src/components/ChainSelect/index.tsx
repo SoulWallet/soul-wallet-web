@@ -6,24 +6,14 @@ import { useChainStore } from '@/store/chain';
 import useConfig from '@/hooks/useConfig';
 import DropdownSelect from '../DropdownSelect';
 import { toShortAddress } from '@/lib/tools';
+import { useAddressStore } from '@/store/address';
 
 export default function ChainSelect({ isInModal }: any) {
   const { chainList, setSelectedChainId, selectedChainId } = useChainStore();
-  // const toast = useToast();
   const { selectedChainItem, selectedAddressItem } = useConfig();
+  const { addressList } = useAddressStore();
 
-  // const doSwitchChain = (item: any) => {
-  //   if (item.recovering) {
-  //     toast({
-  //       title: 'This chain is recovering',
-  //       status: 'info',
-  //     });
-  //   } else {
-  //     ;
-  //   }
-  // };
 
-  // console.log('selectedChainItem', selectedChainItem)
   return (
     <Menu>
       {({ isOpen }) => (
@@ -49,12 +39,13 @@ export default function ChainSelect({ isInModal }: any) {
 
           <MenuList w="260px">
             {chainList.map((item: any, idx: number) => {
+              const isRecovering = addressList.filter(addressItem => addressItem.chainIdHex === item.chainIdHex)[0].recovering;
               return (
                 <React.Fragment key={idx}>
                   {idx ? <MenuDivider /> : ''}
                   <MenuItem
                     key={item.chainIdHex}
-                    filter={item.recovering ? 'grayscale(1)' : ''}
+                    filter={isRecovering ? 'grayscale(1)' : ''}
                     onClick={() => setSelectedChainId(item.chainIdHex)}
                   >
                     <Flex w="100%" align={'center'} justify={'space-between'}>
@@ -62,8 +53,8 @@ export default function ChainSelect({ isInModal }: any) {
                         <Image src={item.icon} w="5" h="5" />
                         <Text data-testid={`text-chainname-${idx}`}>{item.chainName}</Text>
                       </Flex>
-                      {item.recovering && <Text fontSize="12px">Recovering</Text>}
-                      {item.chainIdHex === selectedChainId && !item.recovering && (
+                      {isRecovering && <Text fontSize="12px">Recovering</Text>}
+                      {item.chainIdHex === selectedChainId && !isRecovering && (
                         <Image src={IconChecked} w="5" h="5" />
                       )}
                     </Flex>

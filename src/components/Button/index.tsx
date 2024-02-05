@@ -2,6 +2,7 @@ import React from 'react';
 import { Button as CButton, ButtonProps, Image } from '@chakra-ui/react';
 import IconLoading from '@/assets/loading.gif';
 import useConfig from '@/hooks/useConfig';
+import { useSlotStore } from '@/store/slot';
 
 const getSizeStyles = (size?: string) => {
   const baseStyles = {};
@@ -64,7 +65,7 @@ const buttonStyles = {
     bg: '#fff',
     border: '1px solid #D0D5DD',
     _hover: { bg: '#eee' },
-    _disabled: { cursor: 'not-allowed', color: '#B2B2B2', _hover: { color: '#B2B2B2' } },
+    _disabled: { cursor: 'not-allowed', color: '#B2B2B2', _hover: { bg: "#fff" } },
   },
   red: {
     color: '#fff',
@@ -110,11 +111,11 @@ export default function Button({
   size,
   ...restProps
 }: IProps) {
-  const { selectedChainItem } = useConfig();
-  // const [canSion, setCanSign] = useState(false);
+  const { selectedAddressItem } = useConfig();
+  const { slotInfo } = useSlotStore();
   const styles = buttonStyles[type || 'black'];
 
-  const canSign = !selectedChainItem.recovering || skipSignCheck;
+  const canSign = (selectedAddressItem && !selectedAddressItem.recovering) || skipSignCheck || !slotInfo.slot;
 
   const sizeStyles = getSizeStyles(size);
 

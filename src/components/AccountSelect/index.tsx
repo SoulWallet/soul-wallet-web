@@ -120,8 +120,11 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                   {/* {idx ? <MenuDivider /> : ''} */}
                   <MenuItem
                     key={item.address}
-                    {...(chainInfo.recovering ? { cursor: 'not-allowed', filter: 'grayscale(100%)' } : {})}
-                    onClick={() => (chainInfo.recovering ? '' : onAddressChange(item))}
+                    {...(item.recovering
+                      ? { cursor: 'not-allowed', filter: 'grayscale(100%)' }
+                      : {
+                          onClick: () => onAddressChange(item),
+                        })}
                   >
                     <Flex w="100%" align={'center'} justify={'space-between'}>
                       <Flex align={'center'} gap="3">
@@ -132,7 +135,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                             <Text fontSize={'16px'} fontWeight={'700'} lineHeight={1.25}>
                               {chainInfo.chainName}
                             </Text>
-                            {chainInfo.recovering && (
+                            {item.recovering && (
                               <Box px="1" rounded="4px" bg="rgba(0, 0, 0, 0.05)" fontSize={'10px'} fontWeight={'500'}>
                                 Recovering
                               </Box>

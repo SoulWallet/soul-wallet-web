@@ -30,7 +30,6 @@ export default {
   chainToken: 'ETH',
   addressPrefix: 'opsep:',
   support1559: true,
-  recovering: false,
   paymasterTokens: [
   ],
   contracts: {

@@ -6,6 +6,7 @@ export interface IAddressItem {
   address: string;
   chainIdHex:string;
   activated?: boolean;
+  recovering?: boolean;
   // allowedOrigins: string[];
 }
 

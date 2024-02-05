@@ -13,7 +13,6 @@ interface IChainItem {
   contracts: any;
   provider: string;
   bundlerUrl: string;
-  recovering: boolean;
   addressPrefix: string;
 }
 

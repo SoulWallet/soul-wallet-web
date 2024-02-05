@@ -29,8 +29,6 @@ export default {
   chainToken: 'ETH',
   addressPrefix: 'arb-sep:',
   support1559: true,
-
-  recovering: false,
   paymasterTokens: [
   ],
   contracts: {

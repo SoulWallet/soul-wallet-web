@@ -21,6 +21,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
 import useKeystore from './useKeystore';
+import { getWalletAddress } from '@/pages/new_recover/RecoverProgress';
 
 export default function useWallet() {
   const { signByPasskey } = usePasskey();
@@ -34,7 +35,7 @@ export default function useWallet() {
   const { updateChainItem, setSelectedChainId, selectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddressAllChains } = useSdk();
-  const { selectedAddress, setAddressList } = useAddressStore();
+  const { selectedAddress, setAddressList, updateAddressItem } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
   const { setSignerIdAddress, setFinishedSteps, saveAddressName } = useSettingStore();
     const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo } = useTempStore();
@@ -411,7 +412,8 @@ export default function useWallet() {
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;
     for (let item of chainRecoverStatus) {
-      updateChainItem(item.chainId, {
+      const addressToSet = getWalletAddress(item.chainId, res.addresses)
+      updateAddressItem(addressToSet, {
         recovering: item.status === 0,
       });
     }

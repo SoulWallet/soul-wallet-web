@@ -55,7 +55,7 @@ const getWalletIcon = (chainId: any) => {
   return IconEthSquare
 }
 
-const getWalletAddress = (chainId: any, list: any) => {
+export const getWalletAddress = (chainId: any, list: any) => {
   const item = list.filter((item: any) => item.chain_id == chainId)
   console.log('getWalletAddress', chainId, list, item)
 
