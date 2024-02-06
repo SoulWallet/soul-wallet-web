@@ -12,7 +12,7 @@ export default function TxModal({ title, visible, onClose, children, width, body
               <ModalCloseButton top="14px" />
             </ModalHeader>
           )}
-          <ModalBody overflow={'scroll'} pb={{ base: 2, lg: 6 }} px={{ base: 4, lg: 8 }} {...bodyStyle}>
+          <ModalBody pb={{ base: 2, lg: 6 }} px={{ base: 4, lg: 8 }} {...bodyStyle}>
             {children}
           </ModalBody>
         </ModalContent>

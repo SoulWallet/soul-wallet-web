@@ -6,6 +6,7 @@ import Button from '@/components/Button';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import IconDefaultToken from '@/assets/tokens/default.svg';
 import { useChainStore } from '@/store/chain';
+import IconSend from '@/assets/icons/wallet/send.svg';
 import IconLoading from '@/assets/loading.svg';
 import BN from 'bignumber.js';
 
@@ -61,7 +62,9 @@ export default function TokensTable() {
             Balance
           </Th>
           <Th w="25%" textAlign={'center'} />
-          <Th w="25%" textAlign={'right'}>Price(24hr)</Th>
+          <Th w="25%" textAlign={'right'}>
+            Price(24hr)
+          </Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -99,7 +102,21 @@ export default function TokensTable() {
                     <Text fontWeight={'400'}>$120.88</Text>
                   </Td>
                   <Td w="25%" textAlign={'center'}>
-                    <Button
+                    <Box
+                      cursor={'pointer'}
+                      className="send-button"
+                      display={'inline-block'}
+                      visibility={'hidden'}
+                      onClick={() => {
+                        showTransfer(item.contractAddress, item.chainID);
+                      }}
+                    >
+                      <Image src={IconSend} w="8" h="8" mb="2px" />
+                      <Text fontSize={'12px'} fontWeight={'600'} lineHeight={'15px'}>
+                        Send
+                      </Text>
+                    </Box>
+                    {/* <Button
                       transition={'none'}
                       className="send-button"
                       visibility={'hidden'}
@@ -110,7 +127,7 @@ export default function TokensTable() {
                       }}
                     >
                       Send
-                    </Button>
+                    </Button> */}
                   </Td>
                   <Td w="25%" textAlign={'right'} fontWeight={'800'}>
                     0.0000
