@@ -379,6 +379,7 @@ export default function EditGuardian({
                       onDelete={() => startRemoveGuardian(i, address)}
                       allowEdit={true}
                       marginBottom="18px"
+                      height="140px"
                       onEdit={() => startEditSingleGuardian({
                         guardianDetails: {
                           guardians: [address]
@@ -399,6 +400,7 @@ export default function EditGuardian({
                       background="#7F56D9"
                       marginBottom="18px"
                       marginRight="18px"
+                      height="140px"
                     >
                       <Box
                         position="absolute"
@@ -439,6 +441,7 @@ export default function EditGuardian({
                       background="#7F56D9"
                       marginBottom="18px"
                       marginRight="18px"
+                      height="140px"
                     >
                       <Box
                         position="absolute"
