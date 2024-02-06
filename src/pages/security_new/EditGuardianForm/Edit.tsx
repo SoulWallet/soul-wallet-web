@@ -509,7 +509,6 @@ export default function Edit({
   canGoBack,
   editType
 }: any) {
-  console.log('canGoBack', canGoBack)
   return (
     <Fragment>
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">

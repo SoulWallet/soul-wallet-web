@@ -92,9 +92,8 @@ const isENSAddress = (address: string) => {
   return ensRegex.test(address);
 };
 
-const validate = (values: any, props: any = {}) => {
-  console.log('validate1111', values, props)
-  const errors: any = {};
+const validate = (values: any, props: any = {}, callbackRef: any) => {
+  let errors: any = {};
   const addressKeys = Object.keys(values).filter((key) => key.indexOf('address') === 0);
   const nameKeys = Object.keys(values).filter((key) => key.indexOf('name') === 0);
   const existedAddress = [];
@@ -109,15 +108,11 @@ const validate = (values: any, props: any = {}) => {
       errors[addressKey] = 'Address already in use';
     } else if (address && address.length) {
       existedAddress.push(address);
-    } else if (eoas.indexOf(address) !== -1) {
-      errors[addressKey] = 'Can not use signer as guardian';
-    } else if (editType === 'add') {
-      const editingGuardiansInfo = getEditingGuardiansInfo()
-      const guardians = editingGuardiansInfo.guardianDetails ? (editingGuardiansInfo.guardianDetails.guardians || []) : []
+    }
 
-      if (guardians.indexOf(address)) {
-        errors[addressKey] = 'Address already in use';
-      }
+    if (callbackRef) {
+      const externalErrors = callbackRef(values) || {}
+      errors = { ...errors, ...externalErrors }
     }
   }
 
@@ -201,7 +196,8 @@ export default function GuardianForm({
   const {
     getEditingGuardiansInfo,
     getEditingSingleGuardiansInfo,
-    getAddingGuardiansInfo
+    getAddingGuardiansInfo,
+    createInfo
   } = tempStore;
   const guardiansInfo = (editType === 'edit') ? getEditingGuardiansInfo() : (
     editType === 'add' ? defaultGuardianInfo : getEditingSingleGuardiansInfo()
@@ -233,20 +229,45 @@ export default function GuardianForm({
   const [sending, setSending] = useState(false);
   const { generateJsonName, downloadJsonFile } = useTools()
   const toast = useToast();
+  const callbackRef = useRef()
   const emailForm = useForm({
     fields: ['email'],
     validate,
   });
 
+  const externalValidate = useCallback((values: any) => {
+    const errors: any = {}
+    const addressKeys = Object.keys(values).filter((key) => key.indexOf('address') === 0);
+    const nameKeys = Object.keys(values).filter((key) => key.indexOf('name') === 0);
+    const existedAddress = [];
+
+    for (const addressKey of addressKeys) {
+      const address = values[addressKey];
+
+      if (eoas.indexOf(address) !== -1) {
+        errors[addressKey] = 'Can not use signer as guardian';
+      } else if (editType === 'add') {
+        const editingGuardiansInfo = getEditingGuardiansInfo()
+        const guardians = editingGuardiansInfo.guardianDetails ? (editingGuardiansInfo.guardianDetails.guardians || []) : []
+
+        if (guardians.indexOf(address) !== -1) {
+          errors[addressKey] = 'Address already in use';
+        }
+      }
+
+      if (createInfo && createInfo.eoaAddress && createInfo.eoaAddress.indexOf(address) !== -1) {
+        errors[addressKey] = 'Can not use signer as guardian';
+      }
+    }
+
+    return errors
+  }, [editType, eoas, createInfo.eoaAddress])
+
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields, onChangeValues } = useForm({
     fields,
     validate,
     initialValues: getInitialValues(defaultGuardianIds, guardianDetails.guardians, guardianNames),
-    restProps: {
-      editType,
-      getEditingGuardiansInfo,
-      eoas
-    }
+    callbackRef: externalValidate
   });
 
   const amountForm = useForm({
@@ -258,7 +279,7 @@ export default function GuardianForm({
     },
   });
 
-  const disabled = invalid || !guardiansList.length || amountForm.invalid || loading || !isGuardiansListFilled(guardiansList);
+  const disabled = invalid || !guardiansList.length || loading || !isGuardiansListFilled(guardiansList);
 
   useEffect(() => {
     setGuardiansList(
@@ -329,13 +350,13 @@ export default function GuardianForm({
   const selectAmount = (amount: any) => () => {
     amountForm.onChange('amount')(amount);
   };
-
-  useEffect(() => {
-    if (!amountForm.values.amount || Number(amountForm.values.amount) > amountData.guardiansCount) {
-      amountForm.onChange('amount')(getRecommandCount(amountData.guardiansCount));
-    }
-  }, [amountData.guardiansCount, amountForm.values.amount]);
-
+  /*
+   *   useEffect(() => {
+   *     if (!amountForm.values.amount || Number(amountForm.values.amount) > guardiansList.length) {
+   *       amountForm.onChange('amount')(getRecommandCount(guardiansList.length));
+   *     }
+   *   }, [guardiansList, amountForm.values.amount]);
+   *  */
   const hasGuardians = guardianDetails && guardianDetails.guardians && !!guardianDetails.guardians.length
 
   const goBack = () => {

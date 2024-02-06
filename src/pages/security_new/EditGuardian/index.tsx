@@ -319,6 +319,13 @@ export default function EditGuardian({
     next()
   }, [keepPrivate])
 
+
+  useEffect(() => {
+    if (!amountForm.values.amount || Number(amountForm.values.amount) > guardianList.length) {
+      amountForm.onChange('amount')(getRecommandCount(guardianList.length));
+    }
+  }, [guardianList, amountForm.values.amount]);
+
   return (
     <Fragment>
       <RoundSection marginTop="10px" background="white">
@@ -438,17 +445,17 @@ export default function EditGuardian({
                           }}
                         >
                           <Box display="flex" alignItems="center" justifyContent="space-between">
-                            {amountForm.values.amount}
+                            {amountForm.values.amount || 0}
                             <DropDownIcon />
                           </Box>
                         </MenuButton>
                         <MenuList>
-                          {!amountData.guardiansCount && (
+                          {!(guardianList.length || 0) && (
                             <MenuItem key={nanoid(4)} onClick={selectAmount(0)}>
                               0
                             </MenuItem>
                           )}
-                          {!!amountData.guardiansCount &&
+                          {!!(guardianList.length || 0) &&
                            getNumberArray(guardianList.length || 0).map((i: any) => (
                              <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
                                {i}
