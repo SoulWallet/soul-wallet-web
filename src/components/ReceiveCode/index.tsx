@@ -16,7 +16,7 @@ export default function ReceiveCode({ address, showFullAddress, imgWidth = '90px
   const [imgSrc, setImgSrc] = useState<string>('');
   const { chainConfig } = useConfig();
   const { generateQrCode, doCopy } = useTools();
-
+  const addressWithPrefix = `${chainConfig.addressPrefix}${address}`
   const generateQR = async (text: string) => {
     try {
       setImgSrc(await generateQrCode(text));
@@ -26,11 +26,11 @@ export default function ReceiveCode({ address, showFullAddress, imgWidth = '90px
   };
 
   useEffect(() => {
-    if (!address) {
+    if (!addressWithPrefix) {
       return;
     }
-    generateQR(address);
-  }, [address]);
+    generateQR(addressWithPrefix);
+  }, [addressWithPrefix]);
 
   return (
     <Box textAlign={'center'} fontSize={'12px'} {...restProps}>

@@ -400,17 +400,17 @@ export default function Pay() {
                   >
                     Pay Fee
                   </Button>: <Button
-                               width="100%"
-                               type="black"
-                               color="white"
-                               marginBottom="18px"
-                               onClick={() => switchChain({ chainId: mainnetChainId })}
-                               size="xl"
-                               skipSignCheck
-                               loading={paying}
-                               disabled={paying}
-                             >
-                    Pay Fee
+                    width="100%"
+                    type="black"
+                    color="white"
+                    marginBottom="18px"
+                    onClick={() => switchChain({ chainId: mainnetChainId })}
+                    size="xl"
+                    skipSignCheck
+                    loading={paying}
+                    disabled={paying}
+                  >
+                    Switch chain
                   </Button>
                 ) : (
                   <Button

@@ -101,8 +101,9 @@ export default function useTools() {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${name}.json`;
   };
 
-  const doCopy = (text: string) => {
-    copyText(text);
+  const doCopy = async(text: string) => {
+    await navigator.clipboard.writeText(text);
+    // copyText(text);
     toast({
       title: 'Copied',
       status: 'success',
