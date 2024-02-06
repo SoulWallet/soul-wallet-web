@@ -256,7 +256,7 @@ export default function GuardianForm({
       }
 
       if (createInfo && createInfo.eoaAddress && createInfo.eoaAddress.indexOf(address) !== -1) {
-        errors[addressKey] = 'Can not use signer as guardian';
+        errors[addressKey] = 'This address is already been used as signer.';
       }
     }
 

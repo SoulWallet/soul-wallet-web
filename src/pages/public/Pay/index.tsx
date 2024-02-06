@@ -84,8 +84,14 @@ export default function Pay() {
           },
           onError: (error) => {
             setPaying(false)
+            let message = error.message
+
+            if (message && message.indexOf('does not have enough funds') !== -1) {
+              message = 'Not enough balance'
+            }
+
             toast({
-              title: error.message,
+              title: message,
               status: 'error',
             });
             console.log('error', error);
@@ -376,7 +382,7 @@ export default function Pay() {
                 marginTop="30px"
               >
                 {isConnected ? (
-                  connectedChainId === mainnetChainId ? 
+                  connectedChainId === mainnetChainId ?
                   <Button
                     width="100%"
                     type="black"
