@@ -66,7 +66,16 @@ export default function AddSigner({ next, back }: any) {
       const credential = await register();
       setSigners([...signers, { type: 'passkey', signerId: credential.publicKey, ...credential }])
     } catch (error: any) {
+      let message = error.message
 
+      if (message && message.indexOf('The operation either timed out or was not allowed') !== -1) {
+        message = 'Useer canceled the operation.'
+      }
+
+      toast({
+        title: message,
+        status: 'error',
+      });
     }
   }, [signers])
 

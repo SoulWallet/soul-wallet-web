@@ -161,11 +161,17 @@ export default function Sign() {
       setSigning(false);
     } catch (error: any) {
       setSigning(false);
+      let message = error.message
+
+      if (message && message.indexOf('User rejected the request') !== -1) {
+        message = 'User rejected the request.'
+      }
+
       toast({
-        title: error.message,
+        title: message,
         status: 'error',
       });
-      console.log('error', error.message);
+      console.log('error', message);
     }
   }, [recoveryRecord, address]);
 
