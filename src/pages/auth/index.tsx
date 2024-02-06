@@ -44,9 +44,11 @@ import RegisterModal from './RegisterModal'
 import SelectAccountModal from './SelectAccountModal'
 import ImportAccountModal from './ImportAccountModal'
 import { SignHeader } from '../public/Sign';
+import useTools from '@/hooks/useTools';
 
 export default function Auth() {
   const [stepType, setStepType] = useState('auth')
+  const { clearLogData } = useTools();
   const [registerMethod, setRegisterMethod] = useState('eoa')
   const [loginMethod, setLoginMethod] = useState('eoa')
   const [isLoginOpen, setIsLoginOpen] = useState(false)
@@ -88,6 +90,8 @@ export default function Auth() {
   }, [])
 
   const openRegister = useCallback(() => {
+    // make sure no previous log data exist
+    clearLogData();
     setIsRegisterOpen(true)
   }, [])
 
