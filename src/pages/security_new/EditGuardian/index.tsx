@@ -403,7 +403,6 @@ export default function EditGuardian({
                       background="#7F56D9"
                       marginBottom="18px"
                       marginRight="18px"
-                      position="relative"
                     >
                       <Box
                         position="absolute"
@@ -444,7 +443,6 @@ export default function EditGuardian({
                       background="#7F56D9"
                       marginBottom="18px"
                       marginRight="18px"
-                      position="relative"
                     >
                       <Box
                         position="absolute"

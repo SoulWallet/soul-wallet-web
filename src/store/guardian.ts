@@ -8,8 +8,10 @@ import { persist } from 'zustand/middleware';
 import { create } from 'zustand';
 
 export interface GuardianStore {
-  showGuardianTip1: any,
-  showGuardianTip2: any,
+  showGuardianTip1: any;
+  showGuardianTip2: any;
+  closeGuardianTip1: () => void;
+  closeGuardianTip2: () => void;
 
   guardiansInfo: any;
   recoveringGuardiansInfo: any;
