@@ -11,13 +11,12 @@ export default function Dashboard() {
     <DashboardLayout>
       <Flex gap="50px" h="100%">
         <Flex w="40%" h="100%" flexDir={'column'} justify={'center'} align={'center'}>
-          {/* <AccountSelectFull display={{ base: 'flex', lg: 'none' }} w="100%" /> */}
           <WalletCard />
           <Guidance />
           <Activity />
         </Flex>
         <Flex flexDir={'column'} w="60%" h="100%" bg="brand.white" py="30px" px="64px" borderLeft={'1px solid #EAECF0'}>
-          <Tokens  />
+          <Tokens />
           <DappList />
         </Flex>
       </Flex>

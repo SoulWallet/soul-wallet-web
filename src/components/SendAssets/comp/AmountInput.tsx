@@ -41,9 +41,8 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
     fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
   }, [selectedAddress, selectedChainItem]);
 
-  // const unselectedTokens = tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress !== sendToken);
+  const unselectedTokens = tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress !== sendToken);
 
-  const unselectedTokens: any = [];
   return (
     <Box>
       <Text fontSize="12px" fontWeight={'700'} mb="2" lineHeight={'1'}>

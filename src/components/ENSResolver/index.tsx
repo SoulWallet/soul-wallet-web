@@ -3,7 +3,7 @@ import { Box, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuIte
 import { ethers } from 'ethers';
 import IconLoading from '@/assets/loading.svg';
 import { toShortAddress } from '@/lib/tools';
-import { ensContractAddress } from '@/config'
+import config, { ensContractAddress } from '@/config'
 
 function stringToSeed(str: any) {
   let hash = 0;
@@ -73,7 +73,7 @@ export const isENSAddress = (address: string) => {
 export const extractENSAddress = (address: any) => {
   if (!address) return
 
-  if (ethers.isAddress(address)) {
+  if (ethers.isAddress(address)|| config.chainList.some(item => address.startsWith(item.addressPrefix))) {
     return null
   } else if (isENSAddress(address)) {
     return address

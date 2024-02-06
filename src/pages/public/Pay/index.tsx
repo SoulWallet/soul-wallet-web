@@ -406,7 +406,7 @@ export default function Pay() {
                     loading={paying}
                     disabled={paying}
                   >
-                    Pay Fee
+                    Switch chain
                   </Button>
                 ) : (
                   <Button

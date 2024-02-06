@@ -13,6 +13,8 @@ import IconQuestion from '@/assets/icons/question.svg';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
 import { useChainStore } from '@/store/chain';
+import IconChevronDown from '@/assets/icons/chevron-down-gray.svg';
+import IconZoom from '@/assets/icons/zoom.svg';
 import IconLoading from '@/assets/loading.svg';
 import api from '@/lib/api';
 import { ethers } from 'ethers';
@@ -79,6 +81,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
   const { getUserOp } = useTransaction();
+  const [userOpFormatted, setUserOpFormatted] = useState('');
   const selectedToken = getTokenBalance(payToken);
   const [hintText, setHintText] = useState('');
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
@@ -245,6 +248,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       setDecodedData(callDataDecodes);
       checkSponser(userOp);
       getFinalPrefund(userOp, payTokenAddress);
+      setUserOpFormatted(userOp);
       if (payTokenAddress === ethers.ZeroAddress) {
         // ETH is not enough
         if (BN(totalMsgValue).isGreaterThanOrEqualTo(selectedTokenBalance)) {
@@ -355,8 +359,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         </Box>
         {/** Only show when interact with dapp */}
 
-        <Box textAlign={'center'} mb="9">
-          {/* <Tooltip
+        {/* <Box textAlign={'center'} mb="9">
+          <Tooltip
             color="brand.green"
             bg="#EFFFEE"
             label={
@@ -383,12 +387,12 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 Low risk
               </Text>
             </Flex>
-          </Tooltip> */}
-        </Box>
+          </Tooltip>
+        </Box> */}
 
-        <Box mb="5" h="1px" bg="rgba(0, 0, 0, 0.10)" />
-
-        {/* <Box mb="3">
+        <Box mt="4" mb="4" h="1px" bg="rgba(0, 0, 0, 0.10)" />
+{/* 
+        <Box mt="4" mb="4">
           <Flex gap="6" align={'center'}>
             <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
             <Flex
@@ -406,6 +410,18 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
           </Flex>
         </Box> */}
+
+        {showMore && (
+          <>
+            <Box rounded="20px" my="3" h="120px" overflowY={'auto'} bg="#F9F9F9" p="4">
+              <Flex align={'center'} gap="1" mb="4">
+                <Image src={IconZoom} w="20px" h="20px" />
+                <Text fontWeight={'800'}>User Operation</Text>
+              </Flex>
+              {loadingFee ? <Box>Loading...</Box> : <Box>{JSON.stringify(userOpFormatted, null, 2)}</Box>}
+            </Box>
+          </>
+        )}
 
         <Flex flexDir={'column'} gap="3">
           <InfoWrap fontSize="14px">
