@@ -8,6 +8,9 @@ import { persist } from 'zustand/middleware';
 import { create } from 'zustand';
 
 export interface GuardianStore {
+  showGuardianTip1: any,
+  showGuardianTip2: any,
+
   guardiansInfo: any;
   recoveringGuardiansInfo: any;
   editingGuardiansInfo: any;
@@ -27,6 +30,8 @@ export interface GuardianStore {
 }
 
 const createGuardianSlice = immer<GuardianStore>((set, get) => ({
+  showGuardianTip1: true,
+  showGuardianTip2: true,
   guardiansInfo: {},
   recoveringGuardiansInfo: {},
   editingGuardiansInfo: {},
@@ -34,6 +39,14 @@ const createGuardianSlice = immer<GuardianStore>((set, get) => ({
   setGuardiansInfo: (value: any) => set({ guardiansInfo: value || {} }),
   setRecoveringGuardiansInfo: (value: any) => set({ recoveringGuardiansInfo: value || {} }),
   setEditingGuardiansInfo: (value: any) => set({ editingGuardiansInfo: value || {} }),
+
+  closeGuardianTip1: (value: any) => set({
+    showGuardianTip1: false
+  }),
+
+  closeGuardianTip2: (value: any) => set({
+    showGuardianTip2: false
+  }),
 
   updateGuardiansInfo: (value: any) => set({
     guardiansInfo: {

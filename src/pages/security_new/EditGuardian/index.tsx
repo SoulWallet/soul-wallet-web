@@ -38,6 +38,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg'
+import RemoveIcon from '@/components/Icons/Remove'
 
 const getRecommandCount = (c: number) => {
   if (!c) {
@@ -104,6 +105,7 @@ export default function EditGuardian({
   const [isCreating, setIsCreating] = useState(false);
   const { chainConfig } = useConfig();
   const guardianStore = useGuardianStore();
+  const { showGuardianTip1, showGuardianTip2, closeGuardianTip1, closeGuardianTip2 } = guardianStore;
   const { slotInfo } = useSlotStore();
   const { navigate } = useBrowser();
   const { credentials, eoas, } = useSignerStore();
@@ -390,7 +392,7 @@ export default function EditGuardian({
                       })}
                     />
                   )}
-                  {guardianDetails.guardians.length == 1 && (
+                  {guardianDetails.guardians.length == 1 && showGuardianTip1 && (
                     <Box
                       border="1px solid #DFDFDF"
                       padding="19px 13px"
@@ -401,7 +403,17 @@ export default function EditGuardian({
                       background="#7F56D9"
                       marginBottom="18px"
                       marginRight="18px"
+                      position="relative"
                     >
+                      <Box
+                        position="absolute"
+                        top="15px"
+                        right="15px"
+                        cursor="pointer"
+                        onClick={closeGuardianTip1}
+                      >
+                        <RemoveIcon />
+                      </Box>
                       <Box
                         fontFamily="Nunito"
                         fontWeight="700"
@@ -421,7 +433,7 @@ export default function EditGuardian({
                       </Box>
                     </Box>
                   )}
-                  {guardianDetails.guardians.length == 2 && (
+                  {guardianDetails.guardians.length == 2 && showGuardianTip2 && (
                     <Box
                       border="1px solid #DFDFDF"
                       padding="19px 13px"
@@ -432,7 +444,17 @@ export default function EditGuardian({
                       background="#7F56D9"
                       marginBottom="18px"
                       marginRight="18px"
+                      position="relative"
                     >
+                      <Box
+                        position="absolute"
+                        top="15px"
+                        right="15px"
+                        cursor="pointer"
+                        onClick={closeGuardianTip2}
+                      >
+                        <RemoveIcon />
+                      </Box>
                       <Box
                         fontFamily="Nunito"
                         fontWeight="700"
