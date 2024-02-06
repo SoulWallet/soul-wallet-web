@@ -364,8 +364,9 @@ export default function EditGuardian({
             <Box
               paddingTop="14px"
               display="flex"
-              alignItems="center"
+              alignItems="flex-start"
               justifyContent="flex-start"
+              flexWrap="wrap"
             >
               {guardianDetails && guardianDetails.guardians && (
                 <Fragment>
@@ -379,6 +380,7 @@ export default function EditGuardian({
                       allowDelete={true}
                       onDelete={() => startRemoveGuardian(i, address)}
                       allowEdit={true}
+                      marginBottom="18px"
                       onEdit={() => startEditSingleGuardian({
                         guardianDetails: {
                           guardians: [address]
@@ -397,6 +399,8 @@ export default function EditGuardian({
                       position="relative"
                       overflow="hidden"
                       background="#7F56D9"
+                      marginBottom="18px"
+                      marginRight="18px"
                     >
                       <Box
                         fontFamily="Nunito"
@@ -426,6 +430,8 @@ export default function EditGuardian({
                       position="relative"
                       overflow="hidden"
                       background="#7F56D9"
+                      marginBottom="18px"
+                      marginRight="18px"
                     >
                       <Box
                         fontFamily="Nunito"

@@ -119,7 +119,7 @@ export default function Signer() {
                   </Button>
                 </Box> */}
               </Box>
-              <Box paddingTop="14px" display="flex">
+              <Box paddingTop="14px" display="flex" flexWrap="wrap">
                 {eoas.map((item) => (
                   <SignerCard
                     name={`EOA: ${toShortAddress(item, 4, 4)}`}

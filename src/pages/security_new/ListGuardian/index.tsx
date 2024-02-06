@@ -119,8 +119,9 @@ export default function ListGuardian({
             <Box
               paddingTop="14px"
               display="flex"
-              alignItems="center"
+              alignItems="flex-start"
               justifyContent="flex-start"
+              flexWrap="wrap"
             >
               {guardianDetails && guardianDetails.guardians && (
                 <Fragment>
@@ -130,6 +131,7 @@ export default function ListGuardian({
                       name={guardianNames[i] || 'No Name'}
                       address={address}
                       marginRight="18px"
+                      marginBottom="18px"
                       cursor="pointer"
                     />
                   )}
