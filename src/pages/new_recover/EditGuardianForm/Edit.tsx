@@ -604,7 +604,7 @@ export default function Edit({
       <Box marginTop="30px" display="flex" justifyContent="flex-end">
         <Box>
           {canGoBack && <Button type="white" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>}
-          <Button onClick={handleConfirm} disabled={disabled} loading={loading}>Confirm</Button>
+          <Button onClick={handleConfirm} disabled={disabled} loading={loading} size="xl">Confirm</Button>
         </Box>
       </Box>
     </Fragment>

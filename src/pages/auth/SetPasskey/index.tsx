@@ -53,9 +53,15 @@ export default function SetPasskey() {
     } catch (error: any) {
       console.log('ERR', error)
       console.log('error', error);
+      let message = error.message
+
+      if (message && message.indexOf('The operation either timed out or was not allowed') !== -1) {
+        message = 'Useer canceled the operation.'
+      }
+
       setIsCreating(false);
       toast({
-        title: error.message,
+        title: message,
         status: 'error',
       });
     }
@@ -136,9 +142,9 @@ export default function SetPasskey() {
                           <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="800">
                             {passKey.name}
                           </Text>
-                          <Text color="rgb(51, 51, 51)" fontSize="14px">
-                            Created on: 12/14/2023 12:12:09
-                          </Text>
+                          {/* <Text color="rgb(51, 51, 51)" fontSize="14px">
+                              Created on: 12/14/2023 12:12:09
+                              </Text> */}
                         </Box>
                       </Box>
                     </Box>
@@ -223,7 +229,7 @@ export default function SetPasskey() {
           >
             <Heading marginBottom="18px" type="h3">
               Sign with <Tooltip hasArrow bg='brand.black' label={passkeyTooltipText}>
-              <Box as="span" borderBottom="1px solid black" borderStyle="dotted">passkey</Box></Tooltip> 
+              <Box as="span" borderBottom="1px solid black" borderStyle="dotted">passkey</Box></Tooltip>
             </Heading>
             <TextBody fontWeight="600">Turn your own device into hardware wallet! Add passkey now <Box as="span" color="#FF2E79">for free</Box>!</TextBody>
             <Box

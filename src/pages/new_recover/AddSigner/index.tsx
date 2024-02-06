@@ -213,9 +213,9 @@ export default function AddSigner({ next, back }: any) {
                           <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="800">
                             {signer.name}
                           </Text>
-                          <Text color="rgb(51, 51, 51)" fontSize="14px">
-                            Created on: 12/14/2023 12:12:09
-                          </Text>
+                          {/* <Text color="rgb(51, 51, 51)" fontSize="14px">
+                              Created on: 12/14/2023 12:12:09
+                              </Text> */}
                         </Box>
                       </Box>
                       <Box
