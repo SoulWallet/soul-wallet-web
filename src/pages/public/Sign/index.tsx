@@ -272,18 +272,18 @@ export default function Sign() {
                     Recover for: {recoveryRecord.addresses.map((item: any) => item.address).join(', ')}
                   </Box>
                 </Box>
-                <Box
-                  width="320px"
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                  marginTop="30px"
-                >
-                  <Button width="100%" type="black" color="white" marginBottom="18px" onClick={() => {}} size="xl">
+                {/* <Box
+                    width="320px"
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    marginTop="30px"
+                    >
+                    <Button width="100%" type="black" color="white" marginBottom="18px" onClick={() => {}} size="xl">
                     Close
-                  </Button>
-                </Box>
+                    </Button>
+                    </Box> */}
               </Box>
             </Box>
           </RoundContainer>

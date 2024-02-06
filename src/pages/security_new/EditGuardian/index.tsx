@@ -64,8 +64,8 @@ const amountValidate = (values: any, props: any) => {
   if (
     !values.amount ||
     !Number.isInteger(Number(values.amount)) ||
-    Number(values.amount) < 1 ||
-    Number(values.amount) > Number(props.guardiansCount)
+    Number(values.amount) < 1
+    // || Number(values.amount) > Number(props.guardiansCount)
   ) {
     errors.amount = 'Invalid Amount';
   }
@@ -129,14 +129,13 @@ export default function EditGuardian({
     }
   })
 
-  const [amountData, setAmountData] = useState<any>({ guardiansCount: guardianList.length });
+  // const [amountData, setAmountData] = useState<any>({ guardiansCount: guardianList.length });
 
   const amountForm = useForm({
     fields: ['amount'],
     validate: amountValidate,
-    restProps: amountData,
     initialValues: {
-      amount: getRecommandCount(amountData.guardiansCount),
+      amount: 0,
     },
   });
 
@@ -150,14 +149,10 @@ export default function EditGuardian({
 
   useEffect(() => {
     updateEditingGuardiansInfo({
-      threshold: getRecommandCount(amountData.guardiansCount)
+      threshold: getRecommandCount(guardianList.length)
     })
-  }, [])
+  }, [guardianList.length])
 
-  /* useEffect(() => {
-   *   setAmountData({ guardiansCount: guardianList.length });
-   * }, [guardianList]);
-   */
   console.log('guardianList', guardianList)
 
   const handleConfirm = useCallback((addresses: any, names: any) => {
@@ -327,7 +322,7 @@ export default function EditGuardian({
     if (!amountForm.values.amount || Number(amountForm.values.amount) > guardianList.length) {
       amountForm.onChange('amount')(getRecommandCount(guardianList.length));
     }
-  }, [guardianList, amountForm.values.amount]);
+  }, [guardianList.length, amountForm.values.amount]);
 
   return (
     <Fragment>
@@ -384,6 +379,7 @@ export default function EditGuardian({
                       onDelete={() => startRemoveGuardian(i, address)}
                       allowEdit={true}
                       marginBottom="18px"
+                      height="140px"
                       onEdit={() => startEditSingleGuardian({
                         guardianDetails: {
                           guardians: [address]
@@ -404,6 +400,7 @@ export default function EditGuardian({
                       background="#7F56D9"
                       marginBottom="18px"
                       marginRight="18px"
+                      height="140px"
                     >
                       <Box
                         position="absolute"
@@ -444,6 +441,7 @@ export default function EditGuardian({
                       background="#7F56D9"
                       marginBottom="18px"
                       marginRight="18px"
+                      height="140px"
                     >
                       <Box
                         position="absolute"

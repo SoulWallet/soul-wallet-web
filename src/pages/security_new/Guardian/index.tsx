@@ -124,6 +124,7 @@ export default function Guardian() {
   const openBackupGuardianModal = useCallback((callback: any) => {
     setIsBackupGuardianOpen(true)
     backupFinishedRef.current = callback
+    setKeepPrivate(!!callback)
   }, [])
 
   const closeBackupGuardianModal = useCallback((isDone: any) => {
@@ -362,6 +363,7 @@ export default function Guardian() {
       <BackupGuardianModal
         isOpen={isBackupGuardianOpen}
         onClose={closeBackupGuardianModal}
+        keepPrivate={keepPrivate}
       />
       <WalletConnectModal
         isOpen={isWalletConnectOpen}
