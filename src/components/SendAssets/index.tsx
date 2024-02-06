@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Button from '../Button';
 import { Flex, Box, Text, useToast } from '@chakra-ui/react';
 import useTransaction from '@/hooks/useTransaction';
@@ -12,6 +12,7 @@ import { useSlotStore } from '@/store/slot';
 import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
 import useConfig from '@/hooks/useConfig';
+import ENSResolver, { extractENSAddress, isENSAddress } from '@/components/ENSResolver'
 
 interface ISendAssets {
   tokenAddress: string;
@@ -26,6 +27,73 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const [receiverAddress, setReceiverAddress] = useState<string>('');
   const { slotInfo } = useSlotStore();
   const { chainConfig } = useConfig();
+  const [isENSOpen, setIsENSOpen] = useState(false)
+  const [isENSLoading, setIsENSLoading] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  const [searchAddress, setSearchAddress] = useState('')
+  const [resolvedAddress, setResolvedAddress] = useState('')
+
+  const activeENSNameRef = useRef()
+  const menuRef = useRef()
+  const inputRef = useRef()
+
+  const inputOnChange = (value: any) => {
+    setReceiverAddress(value)
+    setSearchText(value)
+
+    if (extractENSAddress(value)) {
+      setIsENSOpen(true)
+    } else {
+      setIsENSOpen(false)
+    }
+  }
+
+  const inputOnFocus = (value: any) => {
+    setSearchText(value)
+
+    if (extractENSAddress(value)) {
+      setIsENSOpen(true)
+    } else {
+      setIsENSOpen(false)
+    }
+  }
+
+  const setMenuRef = (value: any) => {
+    menuRef.current = value
+  }
+
+  const setInputRef = (value: any) => {
+    inputRef.current = value
+  }
+
+  const setActiveENSNameRef = (value: any) => {
+    activeENSNameRef.current = value
+  }
+
+  const getActiveENSNameRef = (value: any) => {
+    return activeENSNameRef.current
+  }
+
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (inputRef.current && !(inputRef.current as any).contains(event.target) && menuRef.current && !(menuRef.current as any).contains(event.target)) {
+        setIsENSOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const submitENSName = (name: any) => {
+    console.log('submitENSName', resolvedAddress)
+    setReceiverAddress(resolvedAddress)
+    setIsENSOpen(false)
+  }
+
   const toast = useToast();
 
   const selectedToken = getTokenBalance(sendToken);
@@ -82,7 +150,7 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
         slot: slotInfo.slot,
         steps: [1],
       });
-  
+
       setFinishedSteps(res.data.finishedSteps);
     }
 
@@ -99,13 +167,41 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   return (
     <Box>
       <Flex flexDir={'column'} gap="5">
-        <AddressInput
-          label="To:"
-          placeholder="Enter ENS or wallet address"
-          value={receiverAddress}
-          onChange={(e: any) => setReceiverAddress(e.target.value)}
-          onEnter={confirmAddress}
-        />
+        <Box
+          position="relative"
+        >
+          <AddressInput
+            label="To:"
+            placeholder="Enter ENS or wallet address"
+            value={receiverAddress}
+            onChange={(e: any) => inputOnChange(e.target.value)}
+            onFocus={(e: any) => inputOnFocus(e.target.value)}
+            setInputRef={setInputRef}
+            onEnter={confirmAddress}
+          />
+          <ENSResolver
+            _styles={{
+              width: "100%",
+              top: "70px",
+              left: "0",
+              right: "0",
+            }}
+            isENSOpen={isENSOpen}
+            setIsENSOpen={setIsENSOpen}
+            isENSLoading={isENSLoading}
+            setIsENSLoading={setIsENSLoading}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            searchAddress={searchAddress}
+            setSearchAddress={setSearchAddress}
+            resolvedAddress={resolvedAddress}
+            setResolvedAddress={setResolvedAddress}
+            setMenuRef={setMenuRef}
+            submitENSName={submitENSName}
+            setActiveENSNameRef={setActiveENSNameRef}
+            getActiveENSNameRef={getActiveENSNameRef}
+          />
+        </Box>
         <AmountInput
           label="Amount:"
           sendToken={sendToken}

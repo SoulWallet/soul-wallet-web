@@ -304,6 +304,12 @@ const GuardianInput = ({
         </Box>
       )}
       <ENSResolver
+        _styles={{
+          width: "calc(100% - 240px)",
+          top: "50px",
+          left: "240px",
+          right: "0",
+        }}
         isENSOpen={isENSOpen}
         setIsENSOpen={setIsENSOpen}
         isENSLoading={isENSLoading}

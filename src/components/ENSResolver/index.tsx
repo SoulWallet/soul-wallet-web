@@ -98,7 +98,8 @@ const ENSResolver = ({
   setMenuRef,
   submitENSName,
   setActiveENSNameRef,
-  getActiveENSNameRef
+  getActiveENSNameRef,
+  _styles,
 }: any) => {
   const resolveName = async (ensName: any) => {
     try {
@@ -152,10 +153,7 @@ const ENSResolver = ({
   return (
     <Box
       position="absolute"
-      width="calc(100% - 240px)"
-      top="50px"
-      left="240px"
-      right="0"
+      {...(_styles)}
       ref={setMenuRef}
       sx={{
         div: {

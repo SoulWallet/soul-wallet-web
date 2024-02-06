@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text, Input, Flex } from '@chakra-ui/react';
 
-export function AddressInput({ label, placeholder, value, memo, onChange, disabled, onEnter }: any) {
+export function AddressInput({ label, placeholder, value, memo, onChange, disabled, onEnter, onBlur, onFocus, setInputRef }: any) {
   const onKeyDown = (e: any) => {
     const { keyCode } = e;
     if (keyCode === 13 && onEnter) {
@@ -24,9 +24,12 @@ export function AddressInput({ label, placeholder, value, memo, onChange, disabl
       >
         <Input
           value={value}
+          ref={setInputRef}
           spellCheck={false}
           placeholder={placeholder}
           onChange={onChange}
+          onBlur={onBlur}
+          onFocus={onFocus}
           variant={'unstyled'}
           _disabled={{ opacity: '1', cursor: 'not-allowed' }}
           _placeholder={{ fontWeight: '600', color: "rgba(0, 0, 0, 0.20)" }}
