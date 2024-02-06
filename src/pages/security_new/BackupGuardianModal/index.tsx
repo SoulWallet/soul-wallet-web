@@ -259,7 +259,6 @@ export default function BackupGuardianModal({
                       width: '100%',
                       height: '48px',
                       borderRadius: '16px',
-                      paddingRight: '24px',
                     }}
                   />
                 </Box>

@@ -105,7 +105,8 @@ export default function EditGuardian({
   const [isCreating, setIsCreating] = useState(false);
   const { chainConfig } = useConfig();
   const guardianStore = useGuardianStore();
-  const { showGuardianTip1, showGuardianTip2, closeGuardianTip1, closeGuardianTip2 } = guardianStore;
+  const [showGuardianTip1, setShowGuardianTip1] = useState(true)
+  const [showGuardianTip2, setShowGuardianTip2] = useState(true)
   const { slotInfo } = useSlotStore();
   const { navigate } = useBrowser();
   const { credentials, eoas, } = useSignerStore();
@@ -409,7 +410,7 @@ export default function EditGuardian({
                         top="15px"
                         right="15px"
                         cursor="pointer"
-                        onClick={closeGuardianTip1}
+                        onClick={() => setShowGuardianTip1(false)}
                       >
                         <RemoveIcon />
                       </Box>
@@ -449,7 +450,7 @@ export default function EditGuardian({
                         top="15px"
                         right="15px"
                         cursor="pointer"
-                        onClick={closeGuardianTip2}
+                        onClick={() => setShowGuardianTip2(false)}
                       >
                         <RemoveIcon />
                       </Box>

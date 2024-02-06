@@ -115,7 +115,7 @@ export default function AddSigner({ next, back }: any) {
   const handleFileChange = async (event: any) => {
     try {
       setUploading(true);
-      const file = event.target.files[0];
+      const file = event.target.files && event.target.files[0];
 
       if (!file) {
         setUploading(false);
@@ -412,12 +412,12 @@ export default function AddSigner({ next, back }: any) {
                     gap="8px"
                   >
                     {/* <Box
-                      width="32px"
-                      height="32px"
-                      background="#D9D9D9"
-                      borderRadius="32px"
-                      marginRight="10px"
-                    /> */}
+                        width="32px"
+                        height="32px"
+                        background="#D9D9D9"
+                        borderRadius="32px"
+                        marginRight="10px"
+                        /> */}
                     <AddressIcon address={item.guardian} width={32} />
                     <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" display="flex">
                       <Box>{toShortAddress(item.guardian)}</Box>
