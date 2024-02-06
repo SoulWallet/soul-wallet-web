@@ -38,7 +38,10 @@ import useTools from '@/hooks/useTools';
 import { ethers } from 'ethers';
 import BN from 'bignumber.js';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
+import { useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import config from '@/config';
+import { paymentContractConfig } from '@/contracts/contracts';
 import StepProgress from '../StepProgress'
 
 export default function PayRecoveryFee({ next }: any) {
@@ -47,7 +50,19 @@ export default function PayRecoveryFee({ next }: any) {
   const { estimatedFee } = recoveryRecord
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
+  const [paying, setPaying] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const [isPaid, setIsPaid] = useState(false)
   const toast = useToast();
+  const { switchChain } = useSwitchChain();
+  const { connectAsync } = useConnect();
+  const { address, isConnected, isConnecting, chainId : connectedChainId, } = useAccount()
+  const { writeContract: pay, data: payHash } = useWriteContract();
+  const result = useWaitForTransactionReceipt({
+    hash: payHash,
+  });
+
+  const mainnetChainId = Number(import.meta.env.VITE_MAINNET_CHAIN_ID);
 
   const payUrl = `${location.origin}/public/pay/${recoveryRecordID}`
 
@@ -58,6 +73,54 @@ export default function PayRecoveryFee({ next }: any) {
       console.error(err);
     }
   };
+
+  const doPay = useCallback(async () => {
+    try {
+      setPaying(true)
+      pay(
+        {
+          ...paymentContractConfig,
+          functionName: 'pay',
+          args: [recoveryRecordID],
+          value: ethers.parseEther(ethers.formatEther(BN(estimatedFee).toFixed())),
+        },
+        {
+          onSuccess: (hash) => {
+            setPaying(false)
+            setIsPaid(true)
+            toast({
+              title: 'Pay request sent!',
+              status: 'success',
+            });
+            console.log('success', hash);
+          },
+          onSettled: () => {
+            console.log('settled');
+          },
+          onError: (error) => {
+            setPaying(false)
+            let message = error.message
+
+            if (message && message.indexOf('does not have enough funds') !== -1) {
+              message = 'Not enough balance'
+            }
+
+            if (message && message.indexOf('User rejected the request') !== -1) {
+              message = 'User rejected the request.'
+            }
+
+            toast({
+              title: message,
+              status: 'error',
+            });
+            console.log('error', error);
+          },
+        },
+      );
+    } catch (error: any) {
+      console.log('error', error.message)
+    }
+  }, [recoveryRecordID, estimatedFee])
 
   const doCopy = () => {
     copyText(payUrl);
@@ -70,6 +133,10 @@ export default function PayRecoveryFee({ next }: any) {
   const handlePay = async () => {
     window.open(payUrl, '_blank');
   };
+
+  const connectWallet = useCallback(async () => {
+    await connectAsync({ connector: metaMask() });
+  }, [])
 
   useEffect(() => {
     generateQR(payUrl);
@@ -146,17 +213,51 @@ export default function PayRecoveryFee({ next }: any) {
               alignItems="flex-start"
               flexDirection="column"
             >
-              <Button
-                width="275px"
-                maxWidth="100%"
-                marginBottom="14px"
-                onClick={handlePay}
-                size="xl"
-                type="black"
-                skipSignCheck
-              >
-                Connect wallet and pay
-              </Button>
+              {isConnected ? (
+                connectedChainId === mainnetChainId ?
+                <Button
+                  width="100%"
+                  type="black"
+                  color="white"
+                  marginBottom="18px"
+                  width="275px"
+                  onClick={doPay}
+                  size="xl"
+                  skipSignCheck
+                  loading={paying}
+                  disabled={paying}
+                >
+                  Pay Fee
+                </Button>: <Button
+                             width="100%"
+                             type="black"
+                             color="white"
+                             marginBottom="18px"
+                             onClick={() => switchChain({ chainId: mainnetChainId })}
+                             size="xl"
+                             skipSignCheck
+                             loading={paying}
+                             disabled={paying}
+                             width="275px"
+                           >
+                  Switch Chain
+                </Button>
+              ) : (
+                <Button
+                  width="100%"
+                  type="black"
+                  color="white"
+                  marginBottom="18px"
+                  onClick={connectWallet}
+                  size="xl"
+                  skipSignCheck
+                  disabled={isConnecting}
+                  width="275px"
+                >
+                  {isConnecting ? 'Connecting' : 'Connect wallet'}
+                </Button>
+              )}
+
               <Button
                 width="275px"
                 maxWidth="100%"

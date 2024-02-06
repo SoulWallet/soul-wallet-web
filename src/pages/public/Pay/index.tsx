@@ -90,6 +90,10 @@ export default function Pay() {
               message = 'Not enough balance'
             }
 
+            if (message && message.indexOf('User rejected the request') !== -1) {
+              message = 'User rejected the request.'
+            }
+
             toast({
               title: message,
               status: 'error',
@@ -264,14 +268,14 @@ export default function Pay() {
                   </Box>
                 </Box>
                 {/* <Box
-                  width="320px"
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                  marginTop="30px"
-                >
-                  <Button
+                    width="320px"
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    marginTop="30px"
+                    >
+                    <Button
                     width="100%"
                     type="black"
                     color="white"
@@ -279,10 +283,10 @@ export default function Pay() {
                     size="xl"
                     skipSignCheck
                     onClick={() => window.close()}
-                  >
+                    >
                     Close
-                  </Button>
-                </Box> */}
+                    </Button>
+                    </Box> */}
               </Box>
             </Box>
           </RoundContainer>
@@ -396,16 +400,16 @@ export default function Pay() {
                   >
                     Pay Fee
                   </Button>: <Button
-                    width="100%"
-                    type="black"
-                    color="white"
-                    marginBottom="18px"
-                    onClick={() => switchChain({ chainId: mainnetChainId })}
-                    size="xl"
-                    skipSignCheck
-                    loading={paying}
-                    disabled={paying}
-                  >
+                               width="100%"
+                               type="black"
+                               color="white"
+                               marginBottom="18px"
+                               onClick={() => switchChain({ chainId: mainnetChainId })}
+                               size="xl"
+                               skipSignCheck
+                               loading={paying}
+                               disabled={paying}
+                             >
                     Pay Fee
                   </Button>
                 ) : (
