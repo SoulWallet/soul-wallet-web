@@ -35,7 +35,7 @@ function SendModal(_: any, ref: Ref<any>) {
     },
   }));
   return (
-    <Modal isOpen={visible} onClose={onClose}>
+    <Modal isOpen={visible} blockScrollOnMount={false} onClose={onClose}>
       <ModalOverlay />
       <ModalContent maxW={{ base: '90%', lg: '640px' }}>
         <ModalHeader px="8">

@@ -392,7 +392,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
         {/* <Box mt="4" mb="4" h="1px" bg="rgba(0, 0, 0, 0.10)" /> */}
 
-        <Box mt="4" mb="4">
+        <Box mt="4" mb="5">
           <Flex gap="6" align={'center'}>
             <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
             <Flex
@@ -413,12 +413,20 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
         {showMore && (
           <>
-            <Box rounded="20px" my="3" h="120px" overflowY={'auto'} bg="#F9F9F9" p="4">
+            <Box rounded="20px" mb="5" bg="#F9F9F9" p="4">
               <Flex align={'center'} gap="1" mb="4">
                 <Image src={IconZoom} w="20px" h="20px" />
                 <Text fontWeight={'800'}>User Operation</Text>
               </Flex>
-              {loadingFee ? <Box>Loading...</Box> : <Box>{JSON.stringify(userOpFormatted, null, 2)}</Box>}
+              <Box h="160px" overflowY={'auto'}>
+                {loadingFee ? (
+                  <Box>Loading...</Box>
+                ) : (
+                  <pre>
+                    <code>{JSON.stringify(userOpFormatted, null, 2)}</code>
+                  </pre>
+                )}
+              </Box>
             </Box>
           </>
         )}
