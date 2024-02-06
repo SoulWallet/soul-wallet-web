@@ -115,7 +115,7 @@ export default function AddSigner({ next, back }: any) {
   const handleFileChange = async (event: any) => {
     try {
       setUploading(true);
-      const file = event.target.files && event.target.files[0];
+      const file = event && event.target.files && event.target.files[0];
 
       if (!file) {
         setUploading(false);
