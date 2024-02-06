@@ -388,6 +388,64 @@ export default function EditGuardian({
                       })}
                     />
                   )}
+                  {guardianDetails.guardians.length == 1 && (
+                    <Box
+                      border="1px solid #DFDFDF"
+                      padding="19px 13px"
+                      borderRadius="12px"
+                      width="270px"
+                      position="relative"
+                      overflow="hidden"
+                      background="#7F56D9"
+                    >
+                      <Box
+                        fontFamily="Nunito"
+                        fontWeight="700"
+                        fontSize="16px"
+                        marginBottom="10px"
+                        color="white"
+                      >
+                        🎉 Bravo!
+                      </Box>
+                      <Box
+                        fontFamily="Nunito"
+                        fontWeight="400"
+                        fontSize="12px"
+                        color="white"
+                      >
+                        You’ve added <Box as="span" fontWeight="bold">1</Box> guardian! We suggest to have <Box as="span" fontWeight="bold">3 guardians</Box> and <Box as="span" fontWeight="bold">2 threshold</Box> to keep your wallet safe! Add some here.
+                      </Box>
+                    </Box>
+                  )}
+                  {guardianDetails.guardians.length == 2 && (
+                    <Box
+                      border="1px solid #DFDFDF"
+                      padding="19px 13px"
+                      borderRadius="12px"
+                      width="270px"
+                      position="relative"
+                      overflow="hidden"
+                      background="#7F56D9"
+                    >
+                      <Box
+                        fontFamily="Nunito"
+                        fontWeight="700"
+                        fontSize="16px"
+                        marginBottom="10px"
+                        color="white"
+                      >
+                        👍🏻 Awesome!
+                      </Box>
+                      <Box
+                        fontFamily="Nunito"
+                        fontWeight="400"
+                        fontSize="12px"
+                        color="white"
+                      >
+                        You’ve added <Box as="span" fontWeight="bold">2</Box> guardian! We suggest to have <Box as="span" fontWeight="bold">3 guardians</Box> and <Box as="span" fontWeight="bold">2 threshold</Box> to keep your wallet safe! 1 more to go.
+                      </Box>
+                    </Box>
+                  )}
                 </Fragment>
               )}
             </Box>
