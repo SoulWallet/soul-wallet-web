@@ -42,6 +42,7 @@ import { useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from '
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import config from '@/config';
 import { paymentContractConfig } from '@/contracts/contracts';
+import { metaMask } from 'wagmi/connectors'
 import StepProgress from '../StepProgress'
 
 export default function PayRecoveryFee({ next }: any) {
@@ -216,7 +217,6 @@ export default function PayRecoveryFee({ next }: any) {
               {isConnected ? (
                 connectedChainId === mainnetChainId ?
                 <Button
-                  width="100%"
                   type="black"
                   color="white"
                   marginBottom="18px"
@@ -229,7 +229,6 @@ export default function PayRecoveryFee({ next }: any) {
                 >
                   Pay Fee
                 </Button>: <Button
-                             width="100%"
                              type="black"
                              color="white"
                              marginBottom="18px"
@@ -244,7 +243,6 @@ export default function PayRecoveryFee({ next }: any) {
                 </Button>
               ) : (
                 <Button
-                  width="100%"
                   type="black"
                   color="white"
                   marginBottom="18px"
