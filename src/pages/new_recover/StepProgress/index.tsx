@@ -25,7 +25,7 @@ export default function StepProgress({ activeIndex }: any) {
       <Box fontSize="16px" fontWeight="800" marginBottom="20px">Recovery process ({index + 1}/4)</Box>
       <Box>
         {stepNames.map((name: string, i: number) =>
-          <Box fontSize="14px" fontWeight={i <= index ? 800 : 400} marginBottom="10px" display="flex" alignItems="center">
+          <Box key={i} fontSize="14px" fontWeight={i <= index ? 800 : 400} marginBottom="10px" display="flex" alignItems="center">
             <Box>
               {i < index && <StepCheckedIcon />}
               {i === index && <StepActiveIcon />}

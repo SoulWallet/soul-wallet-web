@@ -115,7 +115,7 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
         )}
         <InfoWrap w="400px" mx="auto" fontSize="14px">
           <InfoItem>
-            <LabelItem label="Network" tooltip={`123`} />
+            <LabelItem label="Network" tooltip={`Select any network with enough funds to cover the guardian editing fee.`} />
             <Flex gap="2" fontWeight={'500'}>
               <ChainSelect isInModal={true} />
             </Flex>

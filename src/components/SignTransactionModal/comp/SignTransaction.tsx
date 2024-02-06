@@ -390,8 +390,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           </Tooltip>
         </Box> */}
 
-        <Box mt="4" mb="4" h="1px" bg="rgba(0, 0, 0, 0.10)" />
-{/* 
+        {/* <Box mt="4" mb="4" h="1px" bg="rgba(0, 0, 0, 0.10)" /> */}
+
         <Box mt="4" mb="4">
           <Flex gap="6" align={'center'}>
             <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
@@ -409,7 +409,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             </Flex>
             <Box w="100%" h="1px" bg="rgba(0, 0, 0, 0.10)" />
           </Flex>
-        </Box> */}
+        </Box>
 
         {showMore && (
           <>

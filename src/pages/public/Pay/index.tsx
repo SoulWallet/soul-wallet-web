@@ -87,7 +87,7 @@ export default function Pay() {
             let message = error.message
 
             if (message && message.indexOf('does not have enough funds') !== -1) {
-              message = 'Not enough balance'
+              message = 'Not enough balance in the wallet you connected'
             }
 
             if (message && message.indexOf('User rejected the request') !== -1) {
