@@ -91,7 +91,7 @@ export default function Auth() {
 
   const openRegister = useCallback(() => {
     // make sure no previous log data exist
-    clearLogData();
+
     setIsRegisterOpen(true)
   }, [])
 
@@ -268,6 +268,11 @@ export default function Auth() {
       })
     }
   }, [isConnected, address])
+
+  useEffect(()=>{
+    // clear log data everytime visited
+    clearLogData();
+  }, [])
 
   if (stepType === 'importAccount') {
     return (
