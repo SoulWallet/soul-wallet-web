@@ -9,43 +9,41 @@ import { useChainStore } from '@/store/chain';
 import IconSend from '@/assets/icons/wallet/send.svg';
 import IconLoading from '@/assets/loading.svg';
 import BN from 'bignumber.js';
+import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
+import useConfig from '@/hooks/useConfig';
 
 export default function TokensTable() {
   const { showSend } = useWalletContext();
-  const [loading, setLoading] = useState(false);
   const { selectedAddress } = useAddressStore();
+  const { fetchTokenBalance, tokenBalance } = useBalanceStore();
   const { setSelectedChainId, selectedChainId } = useChainStore();
-  const [balanceList, setBalanceList] = useState([]);
+  const { selectedAddressItem, selectedChainItem } = useConfig();
 
-  const getTokenBalance = async () => {
-    try {
-      setLoading(true);
-      const res = await api.balance.token({
-        walletAddress: selectedAddress,
-        chains: [
-          {
-            chainID: selectedChainId,
-            reservedTokenAddresses: [],
-          },
-        ],
-        // chains: activeChains.map((item: any) => ({
-        //   chainID: item,
-        //   reservedTokenAddresses: [],
-        // })),
-      });
-      setBalanceList(res.data);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getTokenBalance = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const res = await api.balance.token({
+  //       walletAddress: selectedAddress,
+  //       chains: [
+  //         {
+  //           chainID: selectedChainId,
+  //           reservedTokenAddresses: [],
+  //         },
+  //       ],
+  //       // chains: activeChains.map((item: any) => ({
+  //       //   chainID: item,
+  //       //   reservedTokenAddresses: [],
+  //       // })),
+  //     });
+  //     setBalanceList(res.data);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
-    if (!selectedChainId) {
-      return;
-    }
-    setBalanceList([]);
-    getTokenBalance();
-  }, [selectedChainId]);
+    fetchTokenBalance(selectedAddressItem.address, selectedChainItem.chainIdHex, selectedChainItem.paymasterTokens);
+  }, []);
 
   const showTransfer = (tokenAddress: string, chainIdHex: string) => {
     // IMPORTANT TODO, change to this chain id
@@ -68,9 +66,9 @@ export default function TokensTable() {
         </Tr>
       </Thead>
       <Tbody>
-        {loading && !balanceList.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
-        {balanceList.length
-          ? balanceList.map((item: any, idx: number) => {
+        {!tokenBalance.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
+        {tokenBalance.length
+          ? tokenBalance.map((item: ITokenBalanceItem, idx: number) => {
               return (
                 <Tr
                   key={idx}
@@ -97,9 +95,9 @@ export default function TokensTable() {
                   </Td> */}
                   <Td w="25%" textAlign={'left'}>
                     <Text mb="1" fontWeight={'800'}>
-                      {BN(item.tokenBalance).shiftedBy(-item.decimals).toFixed(4)}
+                      {item.tokenBalanceFormatted}
                     </Text>
-                    <Text fontWeight={'400'}>$120.88</Text>
+                    <Text fontWeight={'400'}>${item.usdValue}</Text>
                   </Td>
                   <Td w="25%" textAlign={'center'}>
                     <Box
@@ -108,7 +106,7 @@ export default function TokensTable() {
                       display={'inline-block'}
                       visibility={'hidden'}
                       onClick={() => {
-                        showTransfer(item.contractAddress, item.chainID);
+                        showTransfer(item.contractAddress, item.chainId.toString());
                       }}
                     >
                       <Image src={IconSend} w="8" h="8" mb="2px" />

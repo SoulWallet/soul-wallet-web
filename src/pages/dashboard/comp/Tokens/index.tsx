@@ -88,6 +88,7 @@ const lineColors = [
 ];
 
 const TokenBalanceTable = ({ tokenBalance, showSendAssets }: any) => {
+  const { totalUsdValue } = useBalanceStore();
   return (
     <Flex gap="6" flexDir={'column'}>
       {tokenBalance.map((item: ITokenBalanceItem, idx: number) => (
@@ -96,10 +97,12 @@ const TokenBalanceTable = ({ tokenBalance, showSendAssets }: any) => {
             key={idx}
             idx={idx}
             icon={item.logoURI}
+            tokenPrice={item.tokenPrice}
+            usdValue={item.usdValue}
+            totalUsdValue={totalUsdValue}
             title={item.name || 'Unknown'}
             lineColor={lineColors[idx] || 'brand.gray'}
             amount={item.tokenBalanceFormatted}
-            // amountDesc={item.symbol}
             onClick={() => showSendAssets(item.contractAddress)}
           />
         </React.Fragment>

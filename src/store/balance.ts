@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 import { ethers } from 'ethers';
 import IconDefaultToken from '@/assets/tokens/default.svg';
 import IconEth from '@/assets/tokens/eth.svg';
+import BN from 'bignumber.js';
 import { formatIPFS } from '@/lib/tools';
 
 export interface ITokenBalanceItem {
@@ -15,6 +16,8 @@ export interface ITokenBalanceItem {
   symbol: string;
   tokenBalance: string;
   tokenBalanceFormatted: string;
+  tokenPrice: string;
+  usdValue?: string;
   type?: number;
 }
 
@@ -34,9 +37,12 @@ const defaultEthBalance: ITokenBalanceItem = {
   symbol: 'ETH',
   tokenBalance: '0',
   tokenBalanceFormatted: '0',
+  tokenPrice: '0',
+  usdValue: '0',
 };
 
 export interface IBalanceStore {
+  totalUsdValue: string;
   tokenBalance: ITokenBalanceItem[];
   nftBalance: INftBalanceItem[];
   clearBalance: () => void;
@@ -44,6 +50,10 @@ export interface IBalanceStore {
   fetchTokenBalance: (address: string, chainId: string, paymasterTokens: string[]) => void;
   getNftBalance: (tokenAddress: string) => any;
   fetchNftBalance: (address: string, chainId: number) => void;
+}
+
+export interface priceMapping {
+  [address: string]: number;
 }
 
 export const formatTokenBalance = (item: ITokenBalanceItem) => {
@@ -77,6 +87,7 @@ const formatNftBalance = (item: any) => {
 export const useBalanceStore = create<IBalanceStore>()(
   persist(
     (set, get) => ({
+      totalUsdValue: '0',
       tokenBalance: [defaultEthBalance],
       nftBalance: [],
       getTokenBalance: (tokenAddress: string) => {
@@ -85,9 +96,10 @@ export const useBalanceStore = create<IBalanceStore>()(
       clearBalance: () => {
         set({ tokenBalance: [defaultEthBalance], nftBalance: [] });
       },
+
       fetchTokenBalance: async (address: string, chainId: string, paymasterTokens: string[]) => {
-        if(!address || !chainId ){
-          return
+        if (!address || !chainId) {
+          return;
         }
 
         const res = await api.balance.token({
@@ -100,10 +112,26 @@ export const useBalanceStore = create<IBalanceStore>()(
           ],
         });
 
-        const tokenList = res.data.map((item: ITokenBalanceItem) => formatTokenBalance(item));
+        const resPrice = await api.price.token({});
+
+        console.log('price:', resPrice, chainId);
+        const targetedItem = resPrice.data.filter((item: any) => item.chainID === chainId)[0];
+        console.log('ppppp', targetedItem);
+        let totalUsdValue = BN('0');
+        const tokenList = res.data.map((item: ITokenBalanceItem) => {
+          let formattedItem = formatTokenBalance(item);
+          const tokenPrice = targetedItem.prices.filter((price: any) => price.tokenAddress === item.contractAddress)[0];
+          console.log('TTTT', tokenPrice);
+          if (tokenPrice) {
+            item.tokenPrice = tokenPrice.priceUSD;
+            item.usdValue = BN(tokenPrice.priceUSD).times(item.tokenBalanceFormatted).toFixed(2);
+            totalUsdValue = totalUsdValue.plus(item.usdValue);
+          }
+          return formattedItem;
+        });
 
         // format balance list here
-        set({ tokenBalance: tokenList });
+        set({ tokenBalance: tokenList, totalUsdValue: totalUsdValue.toFixed(2) });
       },
       getNftBalance: (tokenAddress: string) => {
         return get().nftBalance.filter((item: INftBalanceItem) => item.address === tokenAddress)[0];
