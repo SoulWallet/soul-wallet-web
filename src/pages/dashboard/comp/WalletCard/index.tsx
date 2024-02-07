@@ -14,12 +14,14 @@ import useConfig from '@/hooks/useConfig';
 import { useAddressStore } from '@/store/address';
 import AvatarWithName from '@/components/AvatarWithName';
 import useTools from '@/hooks/useTools';
+import { useBalanceStore } from '@/store/balance';
 
 export default function WalletCard() {
   const { showSend, showReceive } = useWalletContext();
   const [hoverIndex, setHoverIndex] = useState(-1);
   const { checkInitialized } = useTools();
   const { selectedAddress } = useAddressStore();
+  const { totalUsdValue } = useBalanceStore();
   const { chainConfig } = useConfig();
   const { scanUrl } = chainConfig;
 
@@ -78,7 +80,7 @@ export default function WalletCard() {
           $
         </Text>
         <Text fontWeight={'800'} fontSize={'72px'} lineHeight={'1'}>
-          0
+          {totalUsdValue}
         </Text>
       </Flex>
       <Flex gap="6" align={'center'}>

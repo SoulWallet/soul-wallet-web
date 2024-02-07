@@ -54,6 +54,10 @@ const balance = {
   token: (params: any) => axio.post('/token/ft', params),
 };
 
+const price = {
+  token: (params: any) => axio.get('/token/ft-price', { params }),
+}
+
 const backup = {
   publicBackupCredentialId: (params: any) => axio.post('/backup/public-backup-credential-id', params),
   credential: (params: any) => axio.get('/backup/credential', { params }),
@@ -88,4 +92,5 @@ export default {
   sponsor,
   operation,
   backup,
+  price,
 };

@@ -59,20 +59,16 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [signing, setSigning] = useState<boolean>(false);
   const { checkActivated, ethersProvider } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
-  const { getAddressName } = useSettingStore();
   const [prechecked, setPrechecked] = useState(false);
   const [totalMsgValue, setTotalMsgValue] = useState('');
-  // const [prefundCalculated, setPrefundCalculated] = useState(false);
-  // TODO, remember user's last select
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
   const [payTokenSymbol, setPayTokenSymbol] = useState('');
-  // const [feeCost, setFeeCost] = useState('');
   const [balanceEnough, setBalanceEnough] = useState(true);
   const [requiredAmount, setRequiredAmount] = useState('');
   const [activeOperation, setActiveOperation] = useState<UserOperation>();
   const [sponsor, setSponsor] = useState<any>(null);
   const { selectedChainId } = useChainStore();
-  const { toggleActivatedChain, addressList, selectedAddress } = useAddressStore();
+  const { toggleActivatedChain, selectedAddress } = useAddressStore();
   const { setFinishedSteps } = useSettingStore();
   const { slotInfo } = useSlotStore();
   // todo, set false as default
@@ -85,6 +81,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const selectedToken = getTokenBalance(payToken);
   const [hintText, setHintText] = useState('');
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
+  const selectedTokenPrice = selectedToken.tokenPrice;
   const origin = document.referrer;
   const [showMore, setShowMore] = useState(false);
 
@@ -328,9 +325,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               <Text mt="7" fontSize={{ base: '20px', md: '24px', lg: '30px' }} mb="3" fontWeight={'700'}>
                 {totalMsgValue} ETH
               </Text>
-              <Text fontWeight={'600'} mb="4">
-                ≈${BN(totalMsgValue).times(1900).toFormat()}
-              </Text>
+              {totalMsgValue && selectedTokenPrice && (
+                <Text fontWeight={'600'} mb="4">
+                  ≈${BN(totalMsgValue).times(selectedTokenPrice).toFormat()}
+                </Text>
+              )}
             </>
           )}
         </Flex>
