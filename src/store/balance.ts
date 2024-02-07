@@ -94,7 +94,7 @@ export const useBalanceStore = create<IBalanceStore>()(
         return get().tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress === tokenAddress)[0];
       },
       clearBalance: () => {
-        set({ tokenBalance: [defaultEthBalance], nftBalance: [] });
+        set({ tokenBalance: [defaultEthBalance], nftBalance: [], totalUsdValue: '0' });
       },
 
       fetchTokenBalance: async (address: string, chainId: string, paymasterTokens: string[]) => {
