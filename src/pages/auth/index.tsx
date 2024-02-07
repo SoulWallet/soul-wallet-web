@@ -295,11 +295,6 @@ export default function Auth() {
   return (
     <Flex width="100%" align={'center'} justify={'center'} minHeight="100vh" background="#F2F4F7">
       <SignHeader />
-      {/* <Box height="58px" padding="10px 20px">
-        <Link to="/dashboard">
-          <Image src={IconLogo} h="44px" />
-        </Link>
-      </Box> */}
       <Box
         padding="20px"
         display="flex"

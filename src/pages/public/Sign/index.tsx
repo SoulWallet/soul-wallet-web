@@ -51,11 +51,11 @@ export const SignHeader = ({ url }: { url?: string }) => {
   return (
     <Box height="58px" pos="absolute" top="0" left={'0'} right={'0'} padding="10px 20px">
       <Link
+        display="inline-block"
         {...(url
           ? {
               href: url,
               cursor: 'pointer',
-              display: 'inline-block',
             }
           : {})}
       >
@@ -161,10 +161,10 @@ export default function Sign() {
       setSigning(false);
     } catch (error: any) {
       setSigning(false);
-      let message = error.message
+      let message = error.message;
 
       if (message && message.indexOf('User rejected the request') !== -1) {
-        message = 'User rejected the request.'
+        message = 'User rejected the request.';
       }
 
       toast({

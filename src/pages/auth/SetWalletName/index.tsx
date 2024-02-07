@@ -35,6 +35,7 @@ import { useSignerStore } from '@/store/signer';
 import { ethers } from 'ethers';
 import { useTempStore } from '@/store/temp';
 import NoWalletIcon from '@/assets/icons/no-wallet.svg'
+import { SignHeader } from '@/pages/public/Sign';
 
 export default function SetWalletName({ updateWalletName, back }: any) {
   const [name, setName] = useState('')
@@ -87,12 +88,8 @@ export default function SetWalletName({ updateWalletName, back }: any) {
   }, [name])
 
   return (
-    <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Link to="/dashboard">
-          <Image src={IconLogo} h="44px" />
-        </Link>
-      </Box>
+    <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
+      <SignHeader />
       <Box
         padding="20px"
         display="flex"
@@ -171,6 +168,6 @@ export default function SetWalletName({ updateWalletName, back }: any) {
           </Box>
         </RoundContainer>
       </Box>
-    </Box>
+    </Flex>
   )
 }
