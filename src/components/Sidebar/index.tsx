@@ -56,7 +56,7 @@ export default function Sidebar() {
               >
                 <Image w="6" src={isActive ? link.iconActive : link.icon} />
                 <Text
-                  fontWeight={isActive ? '700' : '600'}
+                  fontWeight={'600'}
                   color={isActive ? 'brand.purple' : 'brand.black'}
                   fontSize={'16px'}
                   className="title"
