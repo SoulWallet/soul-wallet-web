@@ -32,6 +32,11 @@ import { getChainInfo } from '@/lib/tools';
 import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
 import IconEth from '@/assets/chains/eth.svg';
+import { createConfig, http, useBalance } from 'wagmi';
+import { sepolia, arbitrumSepolia, optimismSepolia } from 'wagmi/chains';
+import { injected, walletConnect } from 'wagmi/connectors';
+import { ethers } from 'ethers';
+import BN from 'bignumber.js';
 
 const getChainIcon = (chainId: any) => {
   if (chainId == '0xaa36a7') {
@@ -45,10 +50,47 @@ const getChainIcon = (chainId: any) => {
   return IconEth
 }
 
+const config = createConfig({
+  chains: [sepolia, arbitrumSepolia, optimismSepolia],
+  transports: {
+    [sepolia.id]: http(),
+    [arbitrumSepolia.id]: http(),
+    [optimismSepolia.id]: http(),
+  },
+  connectors: [
+    injected(),
+    walletConnect({
+      projectId: import.meta.env.VITE_WALLETCONNECT_ID,
+    }),
+  ],
+});
+
 export default function SelectAccountModal({ isOpen, onClose, startImportAccount, activeLoginAccount, importWallet, isImporting }: any) {
   const [selectedAddress, setSelectedAddress] = useState()
   const [chainId, setChainId] = useState<any>('0xaa36a7')
-  const chainIds = ['0xaa36a7', '0x66eee', '0xaa37dc']
+  const chainIds = ['0xaa36a7', '0x66eee']
+  const currentBalance = useBalance({
+    address: activeLoginAccount && activeLoginAccount[chainId],
+    chainId: Number(chainId),
+  })
+  console.log('currentBalance', currentBalance, activeLoginAccount)
+
+  useEffect(() => {
+    const getBalances = async () => {
+      if (activeLoginAccount) {
+        const balanceMap = {}
+
+        for (const chainId of chainIds) {
+          /* const address = activeLoginAccount[chainId]
+           * const balance = getBalance(config, { address })
+           * balanceMap[chainId] = balance
+           * console.log('balance', chainId, balance) */
+        }
+
+        // setBalanceMap(balanceMap)
+      }
+    }
+  }, [activeLoginAccount])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -91,7 +133,7 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
                       </Box>
                       <Box background="rgba(236, 236, 236, 0.3)" borderRadius="12px" padding="14px" marginTop="14px">
                         <TextBody fontWeight="normal">ETH Address: {activeLoginAccount[chainId]}</TextBody>
-                        <TextBody fontWeight="normal">Balance ≈ 0.88 ETH</TextBody>
+                        <TextBody fontWeight="normal">Balance ≈ {(currentBalance && currentBalance.data && currentBalance.data.formatted) || 0} ETH</TextBody>
                       </Box>
                     </Fragment>
                   )}
