@@ -90,8 +90,8 @@ export default function Pay() {
               message = 'Not enough balance in the wallet you connected'
             }
 
-            if (message && message.indexOf('User rejected the request') !== -1) {
-              message = 'User rejected the request.'
+            if (message && message.indexOf('user rejected action') !== -1) {
+              message = 'User rejected action'
             }
 
             toast({
