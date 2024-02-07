@@ -42,8 +42,9 @@ export default function TokensTable() {
   // };
 
   useEffect(() => {
+    if (!selectedAddressItem.address || !selectedChainItem.chainIdHex) return;
     fetchTokenBalance(selectedAddressItem.address, selectedChainItem.chainIdHex, selectedChainItem.paymasterTokens);
-  }, []);
+  }, [selectedAddressItem, selectedChainItem]);
 
   const showTransfer = (tokenAddress: string, chainIdHex: string) => {
     // IMPORTANT TODO, change to this chain id

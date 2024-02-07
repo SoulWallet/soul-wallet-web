@@ -185,6 +185,8 @@ export default function EditGuardian({
           keepPrivate
         };
 
+        if (!keepPrivate) await api.guardian.backupGuardians(guardiansInfo);
+
         const initialGuardianSafePeriod = defaultGuardianSafePeriod
         await createWallet({
           initialGuardianHash: newGuardianHash,
@@ -193,7 +195,7 @@ export default function EditGuardian({
 
         // guardianStore()
         console.log('keepPrivate', keepPrivate)
-        if (!keepPrivate) await api.guardian.backupGuardians(guardiansInfo);
+
         guardianStore.setGuardiansInfo(guardiansInfo)
 
         for (let i = 0; i < guardianAddresses.length; i++) {

@@ -63,15 +63,6 @@ export default function useWallet() {
 
     const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
 
-    setSlotInfo({
-      initialKeys,
-      initialKeyHash,
-      initialKeysAddress,
-      slot,
-      initialGuardianHash,
-      initialGuardianSafePeriod: toHex(initialGuardianSafePeriod),
-    });
-
     // save slot info to api
     await api.guardian.backupSlot({
       keystore,
@@ -82,6 +73,15 @@ export default function useWallet() {
         initialGuardianSafePeriod: toHex(initialGuardianSafePeriod),
       },
       initialKeys: initialKeysAddress,
+    });
+
+    setSlotInfo({
+      initialKeys,
+      initialKeyHash,
+      initialKeysAddress,
+      slot,
+      initialGuardianHash,
+      initialGuardianSafePeriod: toHex(initialGuardianSafePeriod),
     });
 
     const { walletName } = useTempStore.getState().createInfo;
