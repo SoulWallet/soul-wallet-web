@@ -4,9 +4,28 @@
 
 import { useEffect, useState } from 'react';
 import { isNativeMethod } from '@/lib/tools';
-import { Alert, AlertIcon, AlertTitle, Flex } from '@chakra-ui/react';
+import { Alert, AlertIcon, AlertProps, AlertTitle, Flex } from '@chakra-ui/react';
 import Button from './Button';
 import { useSettingStore } from '@/store/setting';
+
+const EnvAlert = ({ children, ...restProps }: AlertProps) => {
+  return (
+    <Alert
+      pos={'absolute'}
+      bottom="24px"
+      left={'0'}
+      right={'0'}
+      m="auto"
+      w="50%"
+      rounded={'full'}
+      status="warning"
+      justifyContent={'space-between'}
+      {...restProps}
+    >
+      {children}
+    </Alert>
+  );
+};
 
 export default function EnvCheck({ children }: any) {
   const { ignoreWebauthnOverride, setIgnoreWebauthnOverride } = useSettingStore();
@@ -28,7 +47,7 @@ export default function EnvCheck({ children }: any) {
   return (
     <>
       {!isWebauthnNative && !ignoreWebauthnOverride && (
-        <Alert status="warning" justifyContent={'space-between'}>
+        <EnvAlert status="warning" justifyContent={'space-between'}>
           <Flex>
             <AlertIcon />
             <AlertTitle>Your passkey has been overridden by plugins.</AlertTitle>
@@ -41,15 +60,15 @@ export default function EnvCheck({ children }: any) {
           >
             I understand the risk
           </Button>
-        </Alert>
+        </EnvAlert>
       )}
       {isFirefox && (
-        <Alert status="warning" justifyContent={'space-between'}>
+        <EnvAlert status="warning" justifyContent={'space-between'}>
           <Flex>
             <AlertIcon />
             <AlertTitle>Your are using firefox which is not supported yet.</AlertTitle>
           </Flex>
-        </Alert>
+        </EnvAlert>
       )}
       {children}
     </>
