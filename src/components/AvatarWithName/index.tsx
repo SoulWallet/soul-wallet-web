@@ -62,7 +62,7 @@ export default function AvatarWithName({ editable = false }: { editable: boolean
         <Flex gap="2" align={'center'}>
           <AddressIcon address={selectedAddress} width={32} />
           <Text fontWeight={'800'} fontSize={'18px'}>
-            {walletName || createInfo.walletName}
+            {createInfo.walletName || walletName || 'Wallet'}
           </Text>
         </Flex>
         {/** IMPORTANT TODO, checkInitialized() to var */}

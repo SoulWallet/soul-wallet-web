@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Flex, Box, Text } from '@chakra-ui/react';
+import { Flex, Box, Text, Image, } from '@chakra-ui/react';
 import Button from '../../Button';
 import { useAccount, useSignTypedData, useSwitchChain } from 'wagmi';
 import useWallet from '@/hooks/useWallet';
-import useConfig from '@/hooks/useConfig';
+import IconZoom from '@/assets/icons/zoom.svg';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { TypedDataEncoder, ethers } from 'ethers';
 import SignerSelect from '@/components/SignerSelect';
@@ -90,14 +90,20 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
         </Text>
       )} */}
       <Flex flexDir={'column'} gap="6" mt="9">
-        <Box bg="#f9f9f9" color="#818181" fontSize={'14px'} p="4" rounded="20px" maxH="160px" overflowY={'auto'}>
-          <pre>
-            <code>
-              {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
-                ? JSON.stringify(messageToSign, null, 2)
-                : messageToSign}
-            </code>
-          </pre>
+        <Box bg="#f9f9f9" color="#818181" fontSize={'14px'} p="4" rounded="20px" overflowY={'auto'}>
+          <Flex align={'center'} gap="1" mb="4">
+            <Image src={IconZoom} w="20px" h="20px" />
+            <Text fontWeight={'800'} color="#000">Message details</Text>
+          </Flex>
+          <Box maxH="160px" overflowY={"auto"}>
+            <pre>
+              <code>
+                {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
+                  ? JSON.stringify(messageToSign, null, 2)
+                  : messageToSign}
+              </code>
+            </pre>
+          </Box>
         </Box>
         <InfoWrap fontSize="14px">
           <InfoItem>

@@ -86,6 +86,10 @@ export const useBalanceStore = create<IBalanceStore>()(
         set({ tokenBalance: [defaultEthBalance], nftBalance: [] });
       },
       fetchTokenBalance: async (address: string, chainId: string, paymasterTokens: string[]) => {
+        if(!address || !chainId ){
+          return
+        }
+
         const res = await api.balance.token({
           walletAddress: address,
           chains: [
