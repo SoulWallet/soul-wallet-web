@@ -1,284 +1,374 @@
-import React, { useRef, useState, useEffect, Fragment } from 'react';
-import {
-  Box,
-  Button,
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody
-} from '@chakra-ui/react';
+import { useState, useCallback, Fragment, useRef } from 'react';
 import Header from '@/components/Header';
-import Heading1 from '@/components/web/Heading1';
-import Heading2 from '@/components/web/Heading2';
-import TextBody from '@/components/web/TextBody';
-import TextButton from '@/components/web/TextButton';
-import RoundButton from '@/components/web/Button';
+import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
+import RoundSection from '@/components/new/RoundSection'
+import SignerCard from '@/components/new/SignerCard'
+import GuardianCard from '@/components/new/GuardianCard'
+import { Box, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react'
+import SetSignerModal from '@/pages/security/SetSignerModal'
+import SelectSignerTypeModal from '@/pages/security/SelectSignerTypeModal'
+import SelectGuardianTypeModal from '@/pages/security/SelectGuardianTypeModal'
+import IntroGuardianModal from '@/pages/security/IntroGuardianModal'
+import RemoveGuardianModal from '@/pages/security/RemoveGuardianModal'
+import EditGuardianModal from '@/pages/security/EditGuardianModal'
+import BackupGuardianModal from '@/pages/security/BackupGuardianModal'
+import WalletConnectModal from '@/pages/security/WalletConnectModal'
+import Button from '@/components/Button'
+import TextButton from '@/components/new/TextButton'
 import PlusIcon from '@/components/Icons/Plus';
-import SuccessIcon from '@/components/Icons/Success';
-import api from '@/lib/api';
-import { L1KeyStore } from '@soulwallet/sdk';
-import { useAddressStore } from '@/store/address';
-import useKeystore from '@/hooks/useKeystore';
+import HistoryIcon from '@/components/Icons/History';
+import Title from '@/components/new/Title'
+import TextBody from '@/components/new/TextBody'
+import DropDownIcon from '@/components/Icons/DropDown';
+import useBrowser from '@/hooks/useBrowser';
+import DashboardLayout from '@/components/Layouts/DashboardLayout';
+import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
-import { useSlotStore } from '@/store/slot';
-import GuardianIntro from './GuardianIntro'
-import GuardianList from './GuardianList'
-import GuardianForm from './GuardianForm'
-import GuardianBackup from './GuardianBackup'
+import { useSettingStore } from '@/store/setting';
+import EditGuardian from '../EditGuardian'
+import ListGuardian from '../ListGuardian'
 
-function GuardianEditor() {
-  return (
-    <Fragment>
-      <Box background="#D9D9D9" borderRadius="20px" padding="45px" display="flex">
-        <Box width="40%" paddingRight="32px">
-          <Heading1>Current guardian</Heading1>
-          <TextBody fontSize="18px" marginBottom="20px">Choose trusted friends or use your existing Ethereum wallets as guardians. Learn more</TextBody>
-          <Box>
-            <TextButton _styles={{ padding: '0', color: '#EC588D' }} _hover={{ color: '#EC588D' }} onClick={() => {}}>
-              Learn more
-            </TextButton>
-          </Box>
-        </Box>
-        <Box width="60%">
-        </Box>
-      </Box>
-      <Box padding="40px">
-        <Box display="flex" alignItems="center" justifyContent="center">
-          <RoundButton _styles={{ width: '320px', background: '#1E1E1E', color: 'white' }} _hover={{ background: '#1E1E1E', color: 'white' }} onClick={() => {}}>
-            Backup current guardian
-          </RoundButton>
-        </Box>
-      </Box>
-    </Fragment>
-  )
+const defaultGuardianDetails = {
+  guardians: [],
+  guardianNames: [],
+  threshold: 0
 }
 
-export default function Guardian({ setActiveSection }: any) {
-  const { getActiveGuardianHash } = useKeystore();
-  const [status, setStatus] = useState<string>('intro');
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const { guardiansInfo, updateGuardiansInfo, editingGuardiansInfo, getEditingGuardiansInfo } = useGuardianStore();
-  const { slotInfo } = useSlotStore()
-  const [isPending, setIsPending] = useState<boolean>(editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash);
-  const intervalRef = useRef<any>()
+const defaultGuardianInfo = {
+  guardianDetails: defaultGuardianDetails
+}
 
-  // const isPending = editingGuardiansInfo && !!editingGuardiansInfo.guardianDetails && editingGuardiansInfo.guardianHash !== guardiansInfo.guardianHash
+export default function Guardian() {
+  const { navigate } = useBrowser();
+  const [activeSection, setActiveSection] = useState<string>('guardian');
+  const [keepPrivate, setKeepPrivate] = useState<any>(false);
+  const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
+  const [isChooseSignerOpen, setIsChooseSignerOpen] = useState<any>(false);
+  const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
+  const [isIntroGuardianOpen, setIsIntroGuardianOpen] = useState<any>(false);
+  const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
+  const [isRemoveGuardianOpen, setIsRemoveGuardianOpen] = useState<any>(false);
+  const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
+  const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
+  const [canBackToSelectGuardianType, setCanBackToSelectGuardianType] = useState<any>(false);
+  const [editType, setEditType] = useState<any>('edit')
+  const [count, setCount] = useState<any>(0)
+  const [removeIndex, setRemoveIndex] = useState<any>(0)
+  const [removeAddress, setRemoveAddress] = useState<any>('')
 
-  const startManage = () => {
-    setStatus('managing')
-  }
+  const [isEditing, setIsEditing] = useState<any>(false);
+  const { getAddressName, saveAddressName } = useSettingStore();
+  const backupFinishedRef = useRef<any>()
 
-  const startBackup = () => {
-    setStatus('backuping')
-  }
+  const tempStore = useTempStore();
+  const {
+    getEditingGuardiansInfo,
+    setEditingGuardiansInfo,
+    updateEditingGuardiansInfo,
+    setEditingSingleGuardiansInfo,
+    getEditingSingleGuardiansInfo
+  } = tempStore;
+  const guardianStore = useGuardianStore();
+  const guardiansInfo = (!tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
+  console.log('guardianStore111', guardiansInfo)
 
-  const startIntro = () => {
-    setStatus('intro')
-  }
+  const openSetDefaultModal = useCallback(() => {
+    setIsSetDefaultOpen(true)
+  }, [])
 
-  const startEdit = () => {
-    setStatus('editing')
-  }
+  const closeSetDefaultModal = useCallback(() => {
+    setIsSetDefaultOpen(false)
+  }, [])
 
-  const cancelEdit = () => {
-    setStatus('managing')
-  }
+  const openChooseSignerModal = useCallback(() => {
+    setIsChooseSignerOpen(true)
+  }, [])
 
-  const cancelBackup = () => {
-    setStatus('managing')
-  }
+  const closeChooseSignerModal = useCallback(() => {
+    setIsChooseSignerOpen(false)
+  }, [])
 
-  console.log('guardiansInfo', guardiansInfo)
+  const openWalletConnectModal = useCallback(() => {
+    setIsWalletConnectOpen(true)
+  }, [])
 
-  const getGuardianInfo = async (isFirstLoad?: any) => {
-    try {
-      const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
-      let activeGuardianHash
+  const closeWalletConnectModal = useCallback(() => {
+    setIsWalletConnectOpen(false)
+  }, [])
 
-      if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
-        activeGuardianHash = activeGuardianInfo.pendingGuardianHash
-      } else {
-        activeGuardianHash = activeGuardianInfo.activeGuardianHash
-      }
+  const openSelectGuardianModal = useCallback(() => {
+    setIsSelectGuardianOpen(true)
+  }, [])
 
-      const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
-      const data = res2.data;
-      const guardianDetails = data.guardianDetails;
+  const closeSelectGuardianModal = useCallback(() => {
+    setIsSelectGuardianOpen(false)
+  }, [])
 
-      const guardiansInfo: any = {
-        guardianHash: activeGuardianHash,
-        guardianDetails,
-      };
+  const openIntroGuardianModal = useCallback(() => {
+    setIsIntroGuardianOpen(true)
+  }, [])
 
-      const editingGuardiansInfo = getEditingGuardiansInfo()
+  const closeIntroGuardianModal = useCallback(() => {
+    setIsIntroGuardianOpen(false)
+  }, [])
 
-      if (editingGuardiansInfo.guardianHash === guardiansInfo.guardianHash) {
-        guardiansInfo.guardianNames = editingGuardiansInfo.guardianNames
-        guardiansInfo.keepPrivate = editingGuardiansInfo.keepPrivate
-      }
+  const openEditGuardianModal = useCallback((editType: any) => {
+    setEditType(editType)
+    setIsEditGuardianOpen(true)
+  }, [])
 
-      console.log('guardiansInfo', guardiansInfo)
+  const closeEditGuardianModal = useCallback(() => {
+    setIsEditGuardianOpen(false)
+  }, [])
 
-      updateGuardiansInfo({
-        ...guardiansInfo
-      })
+  const openBackupGuardianModal = useCallback((callback: any) => {
+    setIsBackupGuardianOpen(true)
+    backupFinishedRef.current = callback
+    setKeepPrivate(!!callback)
+  }, [])
 
-      if (isFirstLoad) {
-        const hasGuardians = guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && !!guardiansInfo.guardianDetails.guardians.length
+  const closeBackupGuardianModal = useCallback((isDone: any) => {
+    setIsBackupGuardianOpen(false)
 
-        if (hasGuardians) {
-          startManage()
-        } else {
-          startEdit()
-        }
-      }
-
-      setIsLoaded(true)
-      return guardiansInfo
-    } catch (error) {
-      setIsLoaded(true)
-    }
-  }
-
-  const startGuardianInterval = () => {
-    return new Promise((reslove, reject) => {
-      intervalRef.current = setInterval(() => {
-        getGuardianInfo().then((guardianInfo: any) => {
-          if (guardianInfo.guardianHash === getEditingGuardiansInfo().guardianHash) {
-            clearGuardianInterval()
-            reslove(true)
-          }
-        })
-      }, 3000)
-    })
-  }
-
-  const clearGuardianInterval = () => {
-    if (intervalRef) clearInterval(intervalRef.current)
-  }
-
-  useEffect(() => {
-    if (guardiansInfo.requireBackup) {
-      startBackup()
-      setIsLoaded(true)
-    } else {
-      if (isPending) {
-        startGuardianInterval().then(() => {
-          setIsPending(false)
-          startManage()
-        })
-      } else {
-        getGuardianInfo(true)
-      }
+    if (isDone && backupFinishedRef.current) {
+      onBackupFinished()
     }
   }, [])
 
-  if (isPending) {
-    return (
-      <Box width="100%" height="100vh">
-        <Box height="102px">
-          <Header />
-        </Box>
-        <Box width="100%" height="calc(100% - 102px)">
-          <Box padding="32px 39px">
-            <Heading1>Passkey and Guardian Settings</Heading1>
-            <Box display="flex" width="100%">
-              <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
-                Guardian
-              </Heading2>
-              <Heading2 fontSize="18px" color="#898989" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
-                Passkey
-              </Heading2>
-            </Box>
-            <Heading1 textAlign="center">Pending...</Heading1>
-          </Box>
-        </Box>
-      </Box>
-    )
-  }
+  const startAddGuardian = useCallback(() => {
+    if (!isEditing) {
+      setEditingGuardiansInfo(guardiansInfo)
+    }
 
-  if (!isLoaded) {
-    return (
-      <Box width="100%" height="100vh">
-        <Box height="102px">
-          <Header />
-        </Box>
-        <Box width="100%" height="calc(100% - 102px)">
-          <Box padding="32px 39px">
-            <Heading1>Passkey and Guardian Settings</Heading1>
-            <Box display="flex" width="100%">
-              <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
-                Guardian
-              </Heading2>
-              <Heading2 fontSize="18px" color="#898989" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
-                Passkey
-              </Heading2>
-            </Box>
-            <Heading1 textAlign="center">Loading...</Heading1>
-          </Box>
-        </Box>
-      </Box>
-    )
-  }
+    setEditType('add')
+    setCanBackToSelectGuardianType(true)
+    setIsSelectGuardianOpen(true)
+  }, [isEditing, guardiansInfo])
+
+  const startRemoveGuardian = useCallback((i: any, address: any) => {
+    setRemoveIndex(i)
+    setRemoveAddress(address)
+    setIsRemoveGuardianOpen(true)
+  }, [])
+
+  const enterEditGuardian = useCallback(() => {
+    if (!isEditing) {
+      setEditingGuardiansInfo(guardiansInfo)
+    }
+
+    setCanBackToSelectGuardianType(false)
+    setIsEditing(true)
+  }, [isEditing, guardiansInfo])
+
+  const startEditGuardian = useCallback(() => {
+    if (!isEditing) {
+      setEditingGuardiansInfo(guardiansInfo)
+    }
+
+    setEditType('add')
+    setCanBackToSelectGuardianType(false)
+    setIsEditing(true)
+    setIsEditGuardianOpen(true)
+  }, [isEditing, guardiansInfo])
+
+  const startEditSingleGuardian = useCallback((info: any) => {
+    setEditingSingleGuardiansInfo(info)
+    setEditType('editSingle')
+    setCanBackToSelectGuardianType(false)
+    setIsEditing(true)
+    setIsEditGuardianOpen(true)
+  }, [isEditing, guardiansInfo])
+
+  const cancelEditGuardian = useCallback(() => {
+    setIsEditing(false)
+  }, [isEditing, guardiansInfo])
+
+  const onRemoveGuardianConfirm = useCallback((i: any) => {
+    setIsRemoveGuardianOpen(false)
+    const editingGuardianInfo = getEditingGuardiansInfo()
+    const currentAddresses = editingGuardianInfo.guardianDetails.guardians
+    const currentNames = editingGuardianInfo.guardianNames
+    currentNames.splice(i, 1)
+    currentAddresses.splice(i, 1)
+
+    updateEditingGuardiansInfo({
+      guardianNames: currentNames,
+      guardianDetails: {
+        guardians: currentAddresses,
+        threshold: 0
+      }
+    })
+  }, [])
+
+  const onEditGuardianConfirm = useCallback((addresses: any, names: any, i: any) => {
+    if (editType === 'edit') {
+      setIsEditGuardianOpen(false)
+      setIsEditing(true)
+
+      for (let i = 0; i < addresses.length; i++) {
+        const address = addresses[i]
+        const name = names[i]
+        if (address) saveAddressName(address.toLowerCase(), name);
+      }
+
+      setEditingGuardiansInfo({
+        guardianNames: names,
+        guardianDetails: {
+          guardians: addresses,
+          threshold: 0
+        }
+      })
+    } else if (editType === 'editSingle') {
+      setIsEditGuardianOpen(false)
+
+      const info = getEditingSingleGuardiansInfo()
+      const i = info.i
+
+      const editingGuardianInfo = getEditingGuardiansInfo()
+      const currentAddresses = editingGuardianInfo.guardianDetails ? (editingGuardianInfo.guardianDetails.guardians || []) : []
+      const currentNames = editingGuardianInfo.guardianNames || []
+      currentAddresses[i] = addresses[0]
+      currentNames[i] = names[0]
+
+      const address = addresses[0]
+      const name = names[0]
+      if (address) saveAddressName(address.toLowerCase(), name);
+
+      updateEditingGuardiansInfo({
+        guardianNames: currentNames,
+        guardianDetails: {
+          guardians: currentAddresses,
+          threshold: 0
+        }
+      })
+    } else if (editType === 'add') {
+      setIsEditGuardianOpen(false)
+      const editingGuardianInfo = getEditingGuardiansInfo()
+      const currentAddresses = editingGuardianInfo.guardianDetails ? (editingGuardianInfo.guardianDetails.guardians || []) : []
+      const currentNames = editingGuardianInfo.guardianNames || []
+
+      for (let i = 0; i < addresses.length; i++) {
+        const address = addresses[i]
+        const name = names[i]
+        if (address) saveAddressName(address.toLowerCase(), name);
+      }
+
+      console.log('add11111', addresses, names, {
+        guardianNames: [...currentNames, ...names],
+        guardianDetails: {
+          guardians: [...currentAddresses, ...addresses],
+          threshold: 0
+        }
+      })
+      updateEditingGuardiansInfo({
+        guardianNames: [...currentNames, ...names],
+        guardianDetails: {
+          guardians: [...currentAddresses, ...addresses],
+          threshold: 0
+        }
+      })
+    }
+  }, [editType, count])
+
+  const onBackupFinished = useCallback(() => {
+    const callback = backupFinishedRef.current as any
+
+    if (callback) {
+      callback()
+    }
+  }, [])
 
   return (
-    <Box width="100%" height="100vh">
-      <Box height="102px">
-        <Header />
+    <Fragment>
+      <Box
+        display="flex"
+        flexDirection="column"
+        padding="0 40px"
+        pt="6"
+      >
+        <SectionMenu>
+          <SectionMenuItem
+            isActive={activeSection == 'signer'}
+            onClick={() => navigate('/security/signer')}
+          >
+            Signer
+          </SectionMenuItem>
+          <SectionMenuItem
+            isActive={activeSection == 'guardian'}
+            onClick={() => navigate('/security/guardian')}
+          >
+            Guardian
+          </SectionMenuItem>
+        </SectionMenu>
+        {!!isEditing && (
+          <EditGuardian
+            startEditGuardian={startEditGuardian}
+            cancelEditGuardian={cancelEditGuardian}
+            openBackupGuardianModal={openBackupGuardianModal}
+            startAddGuardian={startAddGuardian}
+            startEditSingleGuardian={startEditSingleGuardian}
+            startRemoveGuardian={startRemoveGuardian}
+            count={count}
+          />
+        )}
+        {!isEditing && (
+          <ListGuardian
+            openEditGuardianModal={openEditGuardianModal}
+            startEditGuardian={startEditGuardian}
+            enterEditGuardian={enterEditGuardian}
+            startAddGuardian={startAddGuardian}
+            cancelEditGuardian={cancelEditGuardian}
+            openBackupGuardianModal={openBackupGuardianModal}
+          />
+        )}
       </Box>
-      <Box width="100%" height="calc(100% - 102px)">
-        <Box padding="32px 39px">
-          <Heading1>Passkey and Guardian Settings</Heading1>
-          <Box display="flex" width="100%">
-            <Heading2 fontSize="18px" color="#EC588D" padding="10px" cursor="pointer" onClick={() => setActiveSection('guardian')}>
-              Guardian
-            </Heading2>
-            <Heading2 fontSize="18px" color="#898989" padding="10px" cursor="pointer" onClick={() => setActiveSection('passkey')}>
-              Passkey
-            </Heading2>
-            {(status === 'managing') && (
-              <Box marginLeft="auto">
-                {isPending && (
-                  <Button
-                    px="5"
-                    onClick={() => startBackup()}
-                    bg="#1e1e1e"
-                    _hover={{bg: "#4e4e54"}}
-                    color="#fff"
-                    fontWeight={'700'}
-                    rounded="50px"
-                    disabled={(status as any) === 'editing'}
-                    marginRight="14px"
-                    fontSize={{ base: '12px', md: '16px' }}
-                  >
-                    Backup Current Guardians
-                  </Button>
-                )}
-                <Button
-                  px="5"
-                  onClick={() => startEdit()}
-                  bg="#1e1e1e"
-                  _hover={{bg: "#4e4e54"}}
-                  color="#fff"
-                  fontWeight={'700'}
-                  rounded="50px"
-                  disabled={(status as any) === 'editing'}
-                  fontSize={{ base: '12px', md: '16px' }}
-                >
-                  Edit Guardians
-                </Button>
-              </Box>
-            )}
-          </Box>
-          {status === 'intro' && <GuardianIntro startManage={startManage} startEdit={startEdit} />}
-          {status === 'managing' && <GuardianList startBackup={startBackup} />}
-          {status === 'editing' && <GuardianForm cancelEdit={cancelEdit} startBackup={startBackup} startGuardianInterval={startGuardianInterval} />}
-          {status === 'backuping' && <GuardianBackup cancelBackup={cancelBackup} />}
-        </Box>
-      </Box>
-    </Box>
+      <SetSignerModal
+        isOpen={isSetDefaultOpen}
+        onClose={closeSetDefaultModal}
+      />
+      <SelectSignerTypeModal
+        isOpen={isChooseSignerOpen}
+        onClose={closeChooseSignerModal}
+        startWalletConnect={openWalletConnectModal}
+      />
+      <SelectGuardianTypeModal
+        isOpen={isSelectGuardianOpen}
+        onClose={closeSelectGuardianModal}
+        setIsIntroGuardianOpen={setIsIntroGuardianOpen}
+        setIsSelectGuardianOpen={setIsSelectGuardianOpen}
+        setIsEditGuardianOpen={setIsEditGuardianOpen}
+      />
+      <IntroGuardianModal
+        isOpen={isIntroGuardianOpen}
+        onClose={closeIntroGuardianModal}
+        setIsIntroGuardianOpen={setIsIntroGuardianOpen}
+        setIsSelectGuardianOpen={setIsSelectGuardianOpen}
+      />
+      <EditGuardianModal
+        isOpen={isEditGuardianOpen}
+        onClose={closeEditGuardianModal}
+        setIsSelectGuardianOpen={setIsSelectGuardianOpen}
+        setIsEditGuardianOpen={setIsEditGuardianOpen}
+        onConfirm={onEditGuardianConfirm}
+        canGoBack={canBackToSelectGuardianType}
+        editType={editType}
+      />
+      <RemoveGuardianModal
+        isOpen={isRemoveGuardianOpen}
+        onClose={() => setIsRemoveGuardianOpen(false)}
+        onConfirm={onRemoveGuardianConfirm}
+        removeIndex={removeIndex}
+        address={removeAddress}
+      />
+      <BackupGuardianModal
+        isOpen={isBackupGuardianOpen}
+        onClose={closeBackupGuardianModal}
+        keepPrivate={keepPrivate}
+      />
+      <WalletConnectModal
+        isOpen={isWalletConnectOpen}
+        onClose={closeWalletConnectModal}
+      />
+    </Fragment>
   );
 }

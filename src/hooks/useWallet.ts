@@ -20,8 +20,7 @@ import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
-import useKeystore from './useKeystore';
-import { getWalletAddress } from '@/pages/new_recover/RecoverProgress';
+import { getWalletAddress } from '@/pages/recover/RecoverProgress';
 
 export default function useWallet() {
   const { signByPasskey } = usePasskey();

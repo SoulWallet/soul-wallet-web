@@ -1,50 +1,52 @@
-import React, { useState } from 'react';
-import FullscreenContainer from '@/components/FullscreenContainer';
-import { Box, useToast } from '@chakra-ui/react';
-import Heading1 from '@/components/web/Heading1';
-import TextBody from '@/components/web/TextBody';
-import Button from '@/components/web/Button';
-import TextButton from '@/components/web/TextButton';
-import Steps from '@/components/web/Steps';
-import PassKeyList from '@/components/web/PassKeyList';
-import usePassKey from '@/hooks/usePasskey';
-import { useSignerStore } from '@/store/signer';
+import React, { useState, useCallback, useEffect } from 'react';
 import useBrowser from '@/hooks/useBrowser';
-import useConfig from '@/hooks/useConfig';
-import useKeystore from '@/hooks/useKeystore';
-import { useGuardianStore } from '@/store/guardian';
-import { ethers } from 'ethers';
-import { L1KeyStore } from '@soulwallet/sdk';
-import { toHex } from '@/lib/tools';
-import useSdk from '@/hooks/useSdk';
-import { useAddressStore } from '@/store/address';
-import FormInput from '@/components/web/Form/FormInput';
+import {
+  Box,
+  Text,
+  Image,
+  Flex,
+  useToast,
+  Input
+} from '@chakra-ui/react';
+import RoundContainer from '@/components/new/RoundContainer'
+import Heading from '@/components/new/Heading'
+import TextBody from '@/components/new/TextBody'
+import Button from '@/components/Button'
+import { useTempStore } from '@/store/temp';
 import useForm from '@/hooks/useForm';
-import WalletCard from '@/components/web/WalletCard';
-import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
+import FormInput from '@/components/new/FormInput'
+import { ethers } from 'ethers';
 import api from '@/lib/api';
+import useKeystore from '@/hooks/useKeystore';
+import StepProgress from '../StepProgress'
+import { SignHeader } from '@/pages/public/Sign';
 
 const validate = (values: any) => {
   const errors: any = {};
   const { address } = values;
 
-  if (!ethers.isAddress(address)) {
+  let trimedAddress = address ? address.trim() : '';
+  if (trimedAddress.includes(':')) {
+    trimedAddress = trimedAddress.split(':')[1];
+  }
+
+  if (!ethers.isAddress(trimedAddress)) {
     errors.address = 'Invalid Address';
   }
 
   return errors;
 };
 
-export default function Recover({ changeStep }: any) {
-  const { navigate } = useBrowser();
-  const [loading, setLoading] = useState(false);
-  const { getActiveGuardianHash } = useKeystore();
+export default function SetWalletAddress({ next, back }: any) {
   const toast = useToast();
+  const { navigate } = useBrowser();
+  const { updateRecoverInfo } = useTempStore()
+  const [loading, setLoading] = useState(false);
   const { values, errors, invalid, onChange, onBlur, showErrors } = useForm({
     fields: ['address'],
     validate,
   });
-  const { updateRecoveringGuardiansInfo } = useGuardianStore();
+  const { getActiveGuardianHash } = useKeystore();
   const disabled = loading || invalid;
 
   const handleNext = async () => {
@@ -52,7 +54,10 @@ export default function Recover({ changeStep }: any) {
 
     try {
       setLoading(true);
-      const walletAddress = values.address
+      let walletAddress = values.address;
+      if(walletAddress.includes(':')) {
+        walletAddress = walletAddress.split(':')[1]
+      }
       const res1 = await api.guardian.getSlotInfo({ walletAddress });
       if (!res1.data) {
         setLoading(false);
@@ -62,9 +67,17 @@ export default function Recover({ changeStep }: any) {
         });
         return
       }
-      const slotInitInfo = res1.data.slotInitInfo
-      const initialKeysAddress = res1.data.initialKeys
-      const slot = L1KeyStore.getSlot(slotInitInfo.initialKeyHash, slotInitInfo.initialGuardianHash, slotInitInfo.initialGuardianSafePeriod);
+
+      const info = res1.data
+      const {
+        initialKeys,
+        keystore,
+        slot,
+        slotInitInfo,
+        walletAddresses
+      } = info
+
+      const initialKeysAddress = initialKeys
       const activeGuardianInfo = await getActiveGuardianHash(slotInitInfo)
       let activeGuardianHash
 
@@ -78,26 +91,20 @@ export default function Recover({ changeStep }: any) {
       const data = res2.data;
 
       if (!data) {
-        setLoading(false);
-        /* toast({
-         *   title: 'No guardians found!',
-         *   status: 'error',
-         * }); */
         console.log('No guardians found!')
 
-        updateRecoveringGuardiansInfo({
+        updateRecoverInfo({
           slot,
           slotInitInfo,
           activeGuardianInfo,
-          initialKeysAddress
+          initialKeysAddress,
+          walletAddresses
         })
-        changeStep(1)
       } else {
         const guardianDetails = data.guardianDetails;
         const guardianNames = data.guardianNames;
-        console.log('getGuardianDetails', res2)
 
-        updateRecoveringGuardiansInfo({
+        updateRecoverInfo({
           slot,
           slotInitInfo,
           activeGuardianInfo,
@@ -105,10 +112,12 @@ export default function Recover({ changeStep }: any) {
           initialKeysAddress,
           guardianHash: activeGuardianHash,
           guardianNames,
+          walletAddresses
         })
-        setLoading(false);
-        changeStep(1)
       }
+
+      setLoading(false);
+      next()
     } catch (e: any) {
       setLoading(false);
       toast({
@@ -118,55 +127,82 @@ export default function Recover({ changeStep }: any) {
     }
   };
 
-  const goBack = () => {
-    navigate('/auth');
-  };
-
-  const onStepChange = () => {
-
-  }
-
   return (
-    <FullscreenContainer>
-      <Box width="400px" maxWidth="calc(100vw - 20px)" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-        <Box marginBottom="12px" marginRight="24px">
-          <Steps
-            backgroundColor="#1E1E1E"
-            foregroundColor="white"
-            count={4}
-            activeIndex={0}
-            marginTop="24px"
-            showBackButton
-            onStepChange={changeStep}
-          />
-        </Box>
-        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-          <Heading1>Recover wallet</Heading1>
-        </Box>
-        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" width="320px" marginBottom="20px">
-          <TextBody color="#1E1E1E" fontSize="16px" textAlign="center">
-            Enter the address you want to recover.(Recommend activated wallet.)
-          </TextBody>
-        </Box>
-        <FormInput
-          label=""
-          placeholder="Enter wallet address"
-          value={values.address}
-          onChange={onChange('address')}
-          onBlur={onBlur('address')}
-          errorMsg={showErrors.address && errors.address}
-          _styles={{  w: '460px', maxW: "98%",  }}
-          autoFocus={true}
-          onEnter={handleNext}
-        />
-        <Button
-          onClick={handleNext}
-          _styles={{ width: '320px', marginTop: '12px' }}
-          loading={loading}
+    <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
+      <SignHeader url="/auth" />
+      <Box
+        padding="20px"
+        display="flex"
+        alignItems="flex-start"
+        justifyContent="center"
+        minHeight="calc(100% - 58px)"
+      >
+        <RoundContainer
+          width="1058px"
+          maxWidth="100%"
+          maxHeight="100%"
+          display="flex"
+          padding="0"
+          overflow="hidden"
+          background="white"
         >
-          Continue
-        </Button>
+          <Box
+            width="100%"
+            height="100%"
+            padding="50px"
+            display="flex"
+            alignItems="flex-start"
+            justifyContent="center"
+            flexDirection="column"
+          >
+            <Heading marginBottom="18px" type="h4" fontSize="24px" fontWeight="700">
+              Step 1/4: Wallet address
+            </Heading>
+            <TextBody
+              fontWeight="600"
+              maxWidth="550px"
+              marginBottom="20px"
+            >
+              Enter any one of your wallet address on any chains, we'll be able to recover them all.
+            </TextBody>
+            <Box width="550px">
+              <FormInput
+                label=""
+                placeholder="Enter ENS or wallet adderss"
+                value={values.address}
+                onChange={onChange('address')}
+                onBlur={onBlur('address')}
+                errorMsg={showErrors.address && errors.address}
+                _styles={{  w: '100%'  }}
+                autoFocus={true}
+                onEnter={handleNext}
+              />
+            </Box>
+            <Box width="100%" display="flex" alignItems="center" justifyContent="center" marginTop="100px">
+              <Button
+                width="80px"
+                type="white"
+                marginRight="12px"
+                size="lg"
+                onClick={back}
+              >
+                Back
+              </Button>
+              <Button
+                minWidth="80px"
+                type="black"
+                size="lg"
+                onClick={handleNext}
+                disabled={disabled}
+                loading={loading}
+              >
+                Next
+              </Button>
+            </Box>
+          </Box>
+        </RoundContainer>
+        <StepProgress activeIndex={0} />
       </Box>
-    </FullscreenContainer>
+    </Flex>
   )
 }
