@@ -111,17 +111,12 @@ export const useBalanceStore = create<IBalanceStore>()(
             },
           ],
         });
-
         const resPrice = await api.price.token({});
-
-        console.log('price:', resPrice, chainId);
         const targetedItem = resPrice.data.filter((item: any) => item.chainID === chainId)[0];
-        console.log('ppppp', targetedItem);
         let totalUsdValue = BN('0');
         const tokenList = res.data.map((item: ITokenBalanceItem) => {
           let formattedItem = formatTokenBalance(item);
           const tokenPrice = targetedItem.prices.filter((price: any) => price.tokenAddress === item.contractAddress)[0];
-          console.log('TTTT', tokenPrice);
           if (tokenPrice) {
             item.tokenPrice = tokenPrice.priceUSD;
             item.usdValue = BN(tokenPrice.priceUSD).times(item.tokenBalanceFormatted).toFixed(2);
