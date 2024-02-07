@@ -133,7 +133,7 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
                       </Box>
                       <Box background="rgba(236, 236, 236, 0.3)" borderRadius="12px" padding="14px" marginTop="14px">
                         <TextBody fontWeight="normal">ETH Address: {activeLoginAccount[chainId]}</TextBody>
-                        <TextBody fontWeight="normal">Balance ≈ {(currentBalance && currentBalance.data && currentBalance.data.formatted) || 0} ETH</TextBody>
+                        <TextBody fontWeight="normal">Balance ≈ {(currentBalance && currentBalance.data && currentBalance.data.formatted) || 0} {(currentBalance && currentBalance.data && currentBalance.data.symbol)}</TextBody>
                       </Box>
                     </Fragment>
                   )}
