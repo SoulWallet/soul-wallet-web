@@ -55,9 +55,10 @@ export const SignHeader = ({ url }: { url?: string }) => {
         {...(url
           ? {
               href: url,
-              cursor: 'pointer',
             }
-          : {})}
+          : {
+              cursor: 'default',
+            })}
       >
         <Image src={IconLogo} h="44px" />
       </Link>

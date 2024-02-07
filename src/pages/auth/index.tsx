@@ -1,32 +1,19 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import useBrowser from '@/hooks/useBrowser';
-import {
-  Box,
-  Text,
-  Image,
-  useToast,
-  Grid,
-  GridItem,
-  Flex,
-  Popover,
-  PopoverTrigger,
-} from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import IconLogo from '@/assets/logo-all-v3.svg';
-import IntroImg from '@/assets/Intro.jpg';
-import RoundContainer from '@/components/new/RoundContainer'
-import Heading from '@/components/new/Heading'
-import TextBody from '@/components/new/TextBody'
-import Button from '@/components/Button'
-import TwitterIcon from '@/components/Icons/Social/Twitter'
-import TelegramIcon from '@/components/Icons/Social/Telegram'
-import GithubIcon from '@/components/Icons/Social/Github'
-import PasskeyIcon from '@/components/Icons/Intro/Passkey'
-import AccountIcon from '@/components/Icons/Intro/Account'
-import TransferIcon from '@/components/Icons/Intro/Transfer'
-import TokenIcon from '@/components/Icons/Intro/Token'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { Box, Text, Image, useToast, Grid, GridItem, Flex, Popover, Link, PopoverTrigger } from '@chakra-ui/react';
+import config from '@/config';
+import RoundContainer from '@/components/new/RoundContainer';
+import Heading from '@/components/new/Heading';
+import TextBody from '@/components/new/TextBody';
+import Button from '@/components/Button';
+import TwitterIcon from '@/components/Icons/Social/Twitter';
+import TelegramIcon from '@/components/Icons/Social/Telegram';
+import GithubIcon from '@/components/Icons/Social/Github';
+import PasskeyIcon from '@/components/Icons/Intro/Passkey';
+import AccountIcon from '@/components/Icons/Intro/Account';
+import TransferIcon from '@/components/Icons/Intro/Transfer';
+import TokenIcon from '@/components/Icons/Intro/Token';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { useTempStore } from '@/store/temp';
 import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
@@ -35,37 +22,37 @@ import api from '@/lib/api';
 import useWallet from '@/hooks/useWallet';
 import useSdk from '@/hooks/useSdk';
 import { useSignerStore } from '@/store/signer';
-import AuthImg from '@/assets/auth.svg'
-import SetPasskey from './SetPasskey'
-import SetWalletName from './SetWalletName'
-import ImportAccount from './ImportAccount'
-import LoginModal from './LoginModal'
-import RegisterModal from './RegisterModal'
-import SelectAccountModal from './SelectAccountModal'
-import ImportAccountModal from './ImportAccountModal'
+import AuthImg from '@/assets/auth.svg';
+import SetPasskey from './SetPasskey';
+import SetWalletName from './SetWalletName';
+import ImportAccount from './ImportAccount';
+import LoginModal from './LoginModal';
+import RegisterModal from './RegisterModal';
+import SelectAccountModal from './SelectAccountModal';
+import ImportAccountModal from './ImportAccountModal';
 import { SignHeader } from '../public/Sign';
 import useTools from '@/hooks/useTools';
 
 export default function Auth() {
-  const [stepType, setStepType] = useState('auth')
+  const [stepType, setStepType] = useState('auth');
   const { clearLogData } = useTools();
-  const [registerMethod, setRegisterMethod] = useState('eoa')
-  const [loginMethod, setLoginMethod] = useState('eoa')
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const [isConnectAtive, setIsConnectAtive] = useState(false)
-  const [activeConnector, setActiveConnector] = useState()
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false)
-  const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false)
-  const [isImportAccountOpen, setIsImportAccountOpen] = useState(false)
-  const { connect } = useConnect()
-  const { disconnectAsync } = useDisconnect()
-  const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo, getLoginInfo } = useTempStore()
-  const account = useAccount()
-  const { address, isConnected, isConnecting } = account
+  const [registerMethod, setRegisterMethod] = useState('eoa');
+  const [loginMethod, setLoginMethod] = useState('eoa');
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isConnectAtive, setIsConnectAtive] = useState(false);
+  const [activeConnector, setActiveConnector] = useState();
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false);
+  const [isImportAccountOpen, setIsImportAccountOpen] = useState(false);
+  const { connect } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo, getLoginInfo } = useTempStore();
+  const account = useAccount();
+  const { address, isConnected, isConnecting } = account;
   const { signerIdAddress, getSignerIdAddress } = useSettingStore();
   const { authenticate } = usePassKey();
-  const [isLoging, setIsLoging] = useState(false)
-  const [isImporting, setIsImporting] = useState(false)
+  const [isLoging, setIsLoging] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const { retrieveSlotInfo } = useWallet();
   const { setAddressList } = useAddressStore();
   const { calcWalletAddressAllChains } = useSdk();
@@ -73,156 +60,159 @@ export default function Auth() {
   const toast = useToast();
   const { navigate } = useBrowser();
   const { setCredentials, setEoas } = useSignerStore();
-  const activeSignerId = loginInfo.signerId
-  const activeLoginAccount = signerIdAddress[loginInfo.signerId]
-  console.log('signerIdAddress', signerIdAddress, activeSignerId, activeLoginAccount)
+  const activeSignerId = loginInfo.signerId;
+  const activeLoginAccount = signerIdAddress[loginInfo.signerId];
+  console.log('signerIdAddress', signerIdAddress, activeSignerId, activeLoginAccount);
 
   const openRecover = useCallback(() => {
-    navigate('/recover')
-  }, [])
+    navigate('/recover');
+  }, []);
 
   const openLogin = useCallback(() => {
-    setIsLoginOpen(true)
-  }, [])
+    setIsLoginOpen(true);
+  }, []);
 
   const closeLogin = useCallback(() => {
-    setIsLoginOpen(false)
-  }, [])
+    setIsLoginOpen(false);
+  }, []);
 
   const openRegister = useCallback(() => {
     // make sure no previous log data exist
 
-    setIsRegisterOpen(true)
-  }, [])
+    setIsRegisterOpen(true);
+  }, []);
 
   const closeRegister = useCallback(() => {
-    setIsRegisterOpen(false)
-  }, [])
+    setIsRegisterOpen(false);
+  }, []);
 
   const openSelectAccount = useCallback(() => {
-    setIsSelectAccountOpen(true)
-  }, [])
+    setIsSelectAccountOpen(true);
+  }, []);
 
   const closeSelectAccount = useCallback(() => {
-    setIsSelectAccountOpen(false)
-  }, [])
+    setIsSelectAccountOpen(false);
+  }, []);
 
   const openImportAccount = useCallback(() => {
-    setIsImportAccountOpen(true)
-  }, [])
+    setIsImportAccountOpen(true);
+  }, []);
 
   const closeImportAccount = useCallback(() => {
-    setIsImportAccountOpen(false)
-  }, [])
+    setIsImportAccountOpen(false);
+  }, []);
 
   const startLogin = useCallback(() => {
-    setIsLoginOpen(false)
-    setIsSelectAccountOpen(true)
-  }, [])
+    setIsLoginOpen(false);
+    setIsSelectAccountOpen(true);
+  }, []);
 
   const connectEOA = useCallback(async (connector: any) => {
-    console.log('connectEOA', connector)
-    setIsConnectAtive(true)
-    connect({ connector })
-    setActiveConnector(connector)
-  }, [])
+    console.log('connectEOA', connector);
+    setIsConnectAtive(true);
+    connect({ connector });
+    setActiveConnector(connector);
+  }, []);
 
   const updateWalletName = useCallback((name: any) => {
     updateCreateInfo({
-      walletName: name
-    })
-    setStepType('setPassKey')
-  }, [])
+      walletName: name,
+    });
+    setStepType('setPassKey');
+  }, []);
 
   const startRegisterWithPasskey = useCallback(() => {
-    setIsConnectAtive(true)
-    setRegisterMethod('passkey')
-    closeRegister()
-    setStepType('setWalletName')
-  }, [])
+    setIsConnectAtive(true);
+    setRegisterMethod('passkey');
+    closeRegister();
+    setStepType('setWalletName');
+  }, []);
 
   const startRegisterWithEOA = useCallback((address: any) => {
-    setIsConnectAtive(true)
-    setRegisterMethod('eoa')
-    closeRegister()
+    setIsConnectAtive(true);
+    setRegisterMethod('eoa');
+    closeRegister();
     updateCreateInfo({
-      eoaAddress: [address]
-    })
-    setStepType('setWalletName')
-  }, [])
+      eoaAddress: [address],
+    });
+    setStepType('setWalletName');
+  }, []);
 
   const disconnectEOA = useCallback(async () => {
-    await disconnectAsync()
-    setIsConnectAtive(false)
+    await disconnectAsync();
+    setIsConnectAtive(false);
     updateCreateInfo({
-      eoaAddress: []
-    })
+      eoaAddress: [],
+    });
     // closeRegister()
-  }, [])
+  }, []);
 
   const startLoginWithPasskey = useCallback(async () => {
     try {
-      setLoginMethod('passkey')
-      setIsLoging(true)
+      setLoginMethod('passkey');
+      setIsLoging(true);
       // closeLogin()
       const { publicKey, credential } = await authenticate();
-      const { credentialId } = credential
+      const { credentialId } = credential;
       updateLoginInfo({
         signerId: credentialId,
         method: 'passkey',
-        credential
-      })
-      setIsLoging(false)
-      closeLogin()
-      const signerIdAddress = getSignerIdAddress()
+        credential,
+      });
+      setIsLoging(false);
+      closeLogin();
+      const signerIdAddress = getSignerIdAddress();
 
       if (signerIdAddress[credentialId]) {
-        openSelectAccount()
+        openSelectAccount();
       } else {
-        setStepType('importAccount')
+        setStepType('importAccount');
       }
     } catch (error: any) {
-      console.log('error', error.message)
-      setIsLoging(false)
+      console.log('error', error.message);
+      setIsLoging(false);
     }
-  }, [])
+  }, []);
 
-  const startLoginWithEOA = useCallback((connector: any) => {
-    connect({ connector })
-    setLoginMethod('eoa')
-    updateLoginInfo({
-      signerId: address,
-      method: 'eoa',
-      eoaAddress: address
-    })
-    closeLogin()
+  const startLoginWithEOA = useCallback(
+    (connector: any) => {
+      connect({ connector });
+      setLoginMethod('eoa');
+      updateLoginInfo({
+        signerId: address,
+        method: 'eoa',
+        eoaAddress: address,
+      });
+      closeLogin();
 
-    const signerIdAddress = getSignerIdAddress()
+      const signerIdAddress = getSignerIdAddress();
 
-    if (signerIdAddress[address as any]) {
-      openSelectAccount()
-    } else {
-      setStepType('importAccount')
-    }
-  }, [address])
+      if (signerIdAddress[address as any]) {
+        openSelectAccount();
+      } else {
+        setStepType('importAccount');
+      }
+    },
+    [address],
+  );
 
   const startImportAccount = useCallback(() => {
-    setIsSelectAccountOpen(false)
-    setIsImportAccountOpen(true)
-  }, [])
+    setIsSelectAccountOpen(false);
+    setIsImportAccountOpen(true);
+  }, []);
 
   const importWallet = useCallback(async (address: string) => {
-    setIsImporting(true)
+    setIsImporting(true);
     const slotInitInfo = (
       await api.guardian.getSlotInfo({
         walletAddress: address,
       })
-    ).data
+    ).data;
 
-    retrieveSlotInfo(slotInitInfo)
+    retrieveSlotInfo(slotInitInfo);
 
     const addresses = await calcWalletAddressAllChains(0);
-    console.log('addresses', addresses)
+    console.log('addresses', addresses);
     setAddressList(addresses);
 
     // save signer id to address mapping
@@ -237,7 +227,7 @@ export default function Auth() {
      *   setSignerIdAddress(item, chainIdAddress);
      * });
      */
-    const loginInfo = getLoginInfo()
+    const loginInfo = getLoginInfo();
 
     if (loginInfo.method === 'eoa') {
       setEoas([loginInfo.eoaAddress]);
@@ -245,51 +235,43 @@ export default function Auth() {
       setCredentials([loginInfo.credential]);
     }
 
-    console.log('loginInfo', loginInfo)
-    setIsImporting(false)
+    console.log('loginInfo', loginInfo);
+    setIsImporting(false);
     toast({
       title: 'Logged in',
       status: 'success',
-    })
-    setIsSelectAccountOpen(false)
-    navigate('/dashboard')
-  }, [])
+    });
+    setIsSelectAccountOpen(false);
+    navigate('/dashboard');
+  }, []);
 
-  const jumpToHome = useCallback(() => {
-
-  }, [])
+  const jumpToHome = useCallback(() => {}, []);
 
   useEffect(() => {
     if (isConnected && address) {
       updateLoginInfo({
         signerId: address,
         method: 'eoa',
-        eoaAddress: address
-      })
+        eoaAddress: address,
+      });
     }
-  }, [isConnected, address])
+  }, [isConnected, address]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // clear log data everytime visited
     clearLogData();
-  }, [])
+  }, []);
 
   if (stepType === 'importAccount') {
-    return (
-      <ImportAccount importWallet={importWallet} isImporting={isImporting} back={() => setStepType('auth')} />
-    )
+    return <ImportAccount importWallet={importWallet} isImporting={isImporting} back={() => setStepType('auth')} />;
   }
 
   if (stepType === 'setWalletName') {
-    return (
-      <SetWalletName updateWalletName={updateWalletName} />
-    )
+    return <SetWalletName updateWalletName={updateWalletName} back={() => setStepType('auth')} />;
   }
 
   if (stepType === 'setPassKey' || registerMethod === 'passkey') {
-    return (
-      <SetPasskey />
-    )
+    return <SetPasskey />;
   }
 
   return (
@@ -311,97 +293,67 @@ export default function Auth() {
           display="flex"
           padding="0"
           overflow="hidden"
-          flexDirection={{ base: "column", md: "row" }}
+          flexDirection={{ base: 'column', md: 'row' }}
           background="#FFFFFF"
         >
-          <Box
-            width={{ base: "100%", md: "50%" }}
-            height="100%"
-            p="60px"
-            pt="100px"
-          >
+          <Box width={{ base: '100%', md: '50%' }} height="100%" p="60px" pt="100px">
             <Heading marginBottom="40px" fontSize="40px">
               Social recovery wallet for Ethereum
             </Heading>
             <Box marginBottom="90px">
               <Box marginBottom="18px" height="20px" display="flex">
-                <Box marginRight="14px"><PasskeyIcon /></Box>
+                <Box marginRight="14px">
+                  <PasskeyIcon />
+                </Box>
                 <Box>
-                  <TextBody>
-                    Self-custody with passkey
-                  </TextBody>
+                  <TextBody>Self-custody with passkey</TextBody>
                 </Box>
               </Box>
               <Box marginBottom="18px" height="20px" display="flex">
-                <Box marginRight="14px"><AccountIcon /></Box>
+                <Box marginRight="14px">
+                  <AccountIcon />
+                </Box>
                 <Box>
-                  <TextBody>
-                    Recover wallet through trusted friends
-                  </TextBody>
+                  <TextBody>Recover wallet through trusted friends</TextBody>
                 </Box>
               </Box>
               <Box marginBottom="18px" height="20px" display="flex">
-                <Box marginRight="14px"><TransferIcon /></Box>
+                <Box marginRight="14px">
+                  <TransferIcon />
+                </Box>
                 <Box>
-                  <TextBody>
-                    Pay gas fee with ERC-20 tokens and stablecoin
-                  </TextBody>
+                  <TextBody>Pay gas fee with ERC-20 tokens and stablecoin</TextBody>
                 </Box>
               </Box>
               <Box marginBottom="18px" height="20px" display="flex">
-                <Box marginRight="14px"><TokenIcon /></Box>
+                <Box marginRight="14px">
+                  <TokenIcon />
+                </Box>
                 <Box>
-                  <TextBody>
-                    Cross-L2 experience secured by Ethereum
-                  </TextBody>
+                  <TextBody>Cross-L2 experience secured by Ethereum</TextBody>
                 </Box>
               </Box>
             </Box>
             <TextBody fontWeight="700" color="#818181">
-              For more info, check out <Box as="a" target='_blank' href={`${import.meta.env.VITE_OFFICIAL_WEB_URL}#faq`} color="#FF2E79">{`FAQs >`}</Box>
+              For more info, check out{' '}
+              <Box
+                as="a"
+                target="_blank"
+                href={`${import.meta.env.VITE_OFFICIAL_WEB_URL}#faq`}
+                color="#FF2E79"
+              >{`FAQs >`}</Box>
             </TextBody>
           </Box>
-          <Box
-            width={{ base: "100%", md: "50%" }}
-            background="#F7F7FF"
-            flex="1"
-            display="flex"
-            padding="60px"
-          >
-            <Box
-              width="100%"
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
+          <Box width={{ base: '100%', md: '50%' }} background="#F7F7FF" flex="1" display="flex" padding="60px">
+            <Box width="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
               <Box marginBottom="40px">
                 <Image src={AuthImg} />
               </Box>
-              <Box
-                width="335px"
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Button
-                  width="100%"
-                  type="black"
-                  color="white"
-                  marginBottom="18px"
-                  size="xl"
-                  onClick={openRegister}
-                >
+              <Box width="335px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                <Button width="100%" type="black" color="white" marginBottom="18px" size="xl" onClick={openRegister}>
                   Create account
                 </Button>
-                <Button
-                  width="100%"
-                  type="white"
-                  marginBottom="48px"
-                  onClick={openLogin}
-                  size="xl"
-                >
+                <Button width="100%" type="white" marginBottom="48px" onClick={openLogin} size="xl">
                   Login
                 </Button>
                 <TextBody onClick={openRecover} cursor="pointer">
@@ -412,18 +364,33 @@ export default function Auth() {
           </Box>
         </RoundContainer>
         <Box marginTop="40px">
-          <TextBody
-            fontWeight="600"
-            color="#818181"
-            fontSize="16px"
-          >
-            If you have any questions, reach out to us at <Box as="a" href="mailto:support@soulwallet.io" color="#2D5AF6" textDecoration="underline">support@soulwallet.io</Box>
+          <TextBody fontWeight="600" color="#818181" fontSize="16px">
+            If you have any questions, reach out to us at{' '}
+            <Box as="a" href="mailto:support@soulwallet.io" color="#2D5AF6" textDecoration="underline">
+              support@soulwallet.io
+            </Box>
           </TextBody>
-          <Box display="flex" alignItems="center" justifyContent="center" marginTop="10px" gap="10px">
-            <Box as="a" target='_blank' href="https://twitter.com/soulwallet_eth"><TwitterIcon /></Box>
-            <Box as="a" target='_blank' href="https://t.me/+XFUHusXFdTYyODQ9"><TelegramIcon /></Box>
-            <Box as="a" target='_blank' href="https://github.com/SoulWallet"><GithubIcon /></Box>
-          </Box>
+
+          <Flex gap="4" justify={'center'} align={'center'} mt="10px">
+            {config.socials.map((item, idx) => (
+              <Link
+                href={item.link}
+                target="_blank"
+                key={idx}
+                _hover={{
+                  '> .icon': {
+                    display: 'none',
+                  },
+                  '> .icon-activated': {
+                    display: 'block',
+                  },
+                }}
+              >
+                <Image w="6" src={item.icon} className="icon" />
+                <Image w="6" src={item.iconActivated} display={'none'} className="icon-activated" />
+              </Link>
+            ))}
+          </Flex>
         </Box>
         <LoginModal
           isOpen={isLoginOpen}
@@ -435,7 +402,6 @@ export default function Auth() {
           startLoginWithEOA={startLoginWithEOA}
           startLoginWithPasskey={startLoginWithPasskey}
           isLoging={isLoging}
-
         />
         <RegisterModal
           isOpen={isRegisterOpen}
@@ -467,5 +433,5 @@ export default function Auth() {
         />
       </Box>
     </Flex>
-  )
+  );
 }
