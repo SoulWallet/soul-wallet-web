@@ -103,6 +103,7 @@ export default function RecoverProgress() {
           overflow="hidden"
           boxShadow="none"
           marginBottom="20px"
+          margin="0 auto"
         >
           <Box
             width="100%"
