@@ -27,6 +27,7 @@ export interface IAddressStore {
 }
 
 export const getIndexByAddress = (addressList: IAddressItem[], address: string) => {
+  if(!addressList || !addressList.length || !address) return -1;
   return addressList.findIndex((item: IAddressItem) => item.address.toLowerCase() === address.toLowerCase());
 };
 
