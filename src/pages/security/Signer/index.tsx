@@ -119,13 +119,13 @@ export default function Signer() {
                   </Button>
                 </Box> */}
               </Box>
-              <Box paddingTop="14px" display="flex" flexWrap="wrap">
+              <Box paddingTop="14px" display="flex" gap="18px" flexWrap="wrap">
                 {eoas.map((item) => (
                   <SignerCard
                     name={`EOA: ${toShortAddress(item, 4, 4)}`}
                     address={item}
                     time="Added on 2023-12-14"
-                    marginRight="18px"
+                    // marginRight="18px"
                     isDefault={signerId === item}
                     cursor="pointer"
                     {...(signerId !== item
@@ -145,7 +145,7 @@ export default function Signer() {
                     device="Chrome profile"
                     time="Added on 2023-12-14 "
                     cursor="pointer"
-                    marginRight="18px"
+                    // marginRight="18px"
                     isDefault={signerId === item.id}
                     {...(signerId !== item.id
                       ? {

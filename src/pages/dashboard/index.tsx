@@ -26,6 +26,7 @@ export default function Dashboard() {
           mx="auto"
           rounded={{ base: '20px', lg: 'unset' }}
           h={{ lg: '100%' }}
+          gap={{base: 8, lg: 0}}
           bg="brand.white"
           py={{ base: '24px', lg: '30px' }}
           px={{ base: '24px', lg: '64px' }}

@@ -78,7 +78,7 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
   const shouldDisable = signType !== 'passkey' && signType !== 'eoa' && !isActivated;
 
   return (
-    <>
+    <Box pb={{base: 6, lg: 0}}>
       {signTitle && (
         <Text fontSize="20px" fontWeight="800" textAlign={'center'}>
           {signTitle}
@@ -89,7 +89,7 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
           {origin}
         </Text>
       )} */}
-      <Flex flexDir={'column'} gap="6" mt="9">
+      <Flex flexDir={'column'} gap="6" mt={{base:4, lg: 9}}>
         <Box bg="#f9f9f9" color="#818181" fontSize={'14px'} p="4" rounded="20px" overflowY={'auto'}>
           <Flex align={'center'} gap="1" mb="4">
             <Image src={IconZoom} w="20px" h="20px" />
@@ -156,6 +156,6 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
           Confirm
         </Button>
       )}
-    </>
+    </Box>
   );
 }

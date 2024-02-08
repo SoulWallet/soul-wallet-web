@@ -4,7 +4,7 @@ import SignTransaction from './comp/SignTransaction';
 import TxModal from '../TxModal';
 
 export const InfoWrap = ({ children, ...restProps }: any) => (
-  <Flex fontSize="12px" fontWeight={'500'} px="4" gap="6"  flexDir={'column'} {...restProps}>
+  <Flex fontSize="12px" fontWeight={'500'} px={{ lg: 4}} gap="6"  flexDir={'column'} {...restProps}>
     {children}
   </Flex>
 );
