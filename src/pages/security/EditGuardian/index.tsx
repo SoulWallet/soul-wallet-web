@@ -206,7 +206,8 @@ export default function EditGuardian({
 
         setIsCreating(false)
         clearCreateInfo()
-        navigate(`/dashboard`);
+        cancelEditGuardian()
+        // navigate(`/dashboard`);
       } catch (error: any) {
         setIsCreating(false)
 
