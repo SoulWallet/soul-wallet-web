@@ -66,7 +66,7 @@ export default function EditGuardianModal({
         <ModalBody
           overflow="auto"
           padding={{ base: "20px 10px", md: "20px 32px" }}
-          marginTop="60px"
+          marginTop={{ base: "30px", md: "60px" }}
         >
           <Box
             height="100%"
