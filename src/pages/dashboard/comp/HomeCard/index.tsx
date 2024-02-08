@@ -23,7 +23,7 @@ export default function HomeCard({ title, external, h, wrapperZIndex, titleProps
         {external}
       </Flex>
       <Box h="1px" bg="rgba(0,0,0,.5)" opacity={0.2} mt="4" />
-      <Box {...restProps} pos="relative" pt="30px">
+      <Box {...restProps} pos="relative" pt={{base: "15px", lg: "30px"}}>
         {/* <Box overflowY={'auto'} h="100%" w="100%"> */}
         {children}
         {/* </Box> */}

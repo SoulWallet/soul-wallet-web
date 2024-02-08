@@ -65,6 +65,7 @@ export default function WalletCard() {
   return (
     <Box
       w={{ base: '400px', '2xl': '460px' }}
+      maxW={'95%'}
       zIndex={'20'}
       pt="14px"
       px="30px"
@@ -76,10 +77,10 @@ export default function WalletCard() {
     >
       <AvatarWithName editable={true} />
       <Flex align={'center'} mt="24px" mb="20px" gap="2px">
-        <Text fontWeight={'700'} fontSize={'24px'} lineHeight={'1'}>
+        <Text fontWeight={'700'} fontSize={{ base: '20px', lg: '24px' }} lineHeight={'1'}>
           $
         </Text>
-        <Text fontWeight={'800'} fontSize={'72px'} lineHeight={'1'}>
+        <Text fontWeight={'800'} fontSize={{ base: '52px', lg: '72px' }} lineHeight={'1'}>
           {totalUsdValue}
         </Text>
       </Flex>

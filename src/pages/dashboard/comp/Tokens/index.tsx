@@ -20,7 +20,7 @@ const SetGuardianHint = ({ onShowSkip }: { onShowSkip: () => void }) => {
       justify={'center'}
       backdropFilter={'blur(12px)'}
       pos="absolute"
-      pt={{ xl: "80px", "2xl" :"100px"}}
+      pt={{base: "40px", xl: "80px", "2xl" :"100px"}}
       pb="100px"
       top="0"
       right={'0'}
