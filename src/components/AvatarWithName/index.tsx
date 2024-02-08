@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Flex, Text, Image } from '@chakra-ui/react';
+import { Box, Flex, Text, Image, useMediaQuery } from '@chakra-ui/react';
 import IconEdit from '@/assets/icons/edit.svg';
 import Input from '@/components/Input';
 import AddressIcon from '@/components/AddressIcon';
@@ -49,6 +49,7 @@ export const EditNameModal = ({
 export default function AvatarWithName({ editable = false }: { editable: boolean }) {
   const { getWalletName, setWalletName, checkInitialized } = useTools();
   const [editNameModalVisible, setEditNameModalVisible] = useState(false);
+  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   const walletName = getWalletName();
   const { selectedAddress } = useAddressStore();
   const { createInfo } = useTempStore();
@@ -60,8 +61,8 @@ export default function AvatarWithName({ editable = false }: { editable: boolean
     <>
       <Flex align={'center'} gap="1">
         <Flex gap="2" align={'center'}>
-          <AddressIcon address={selectedAddress} width={32} />
-          <Text fontWeight={'800'} fontSize={'18px'}>
+          <AddressIcon address={selectedAddress} width={isLargerThan992 ? 32 : 24} />
+          <Text fontWeight={'800'} fontSize={{base: '14px', md: '16px', lg: '18px'}}>
             {createInfo.walletName || walletName || 'Wallet'}
           </Text>
         </Flex>

@@ -7,7 +7,7 @@ export default function DropdownSelect({ children, hideChevron }: { children: Re
     <Flex
       align={'center'}
       color="#000"
-      fontSize={'14px'}
+      fontSize={{base: '12px', lg: '14px'}}
       fontWeight={'600'}
       py="1"
       gap="1"

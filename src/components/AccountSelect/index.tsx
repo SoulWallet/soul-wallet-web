@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, Box } from '@chakra-ui/react';
+import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, Box, useMediaQuery } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
 // import IconLoading from '@/assets/loading.gif';
@@ -36,15 +36,15 @@ export function AccountSelectFull({ ...restProps }) {
 
   return (
     <Flex align={'center'} gap="2px" {...restProps}>
-      <AccountSelect pl={{ base: '3', lg: '4' }} wrapperProps={{ w: { base: '50%', lg: 'unset' } }} />
+      <AccountSelect pl={{ base: '2', lg: '4' }} pr={{ base: 2, lg: 4 }} />
       <Flex
-        w={{ base: '50%', lg: 'unset' }}
+        w={{ base: '44px', lg: 'unset' }}
         gap="1"
         align={'center'}
         px="3"
         py="10px"
         roundedRight={'full'}
-        bg={{ base: '#fff', lg: '#f2f2f2' }}
+        bg={'#f2f2f2'}
       >
         <Image
           src={IconCopy}
@@ -60,7 +60,7 @@ export function AccountSelectFull({ ...restProps }) {
 export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ...restProps }: any) {
   const { navigate } = useBrowser();
   const { selectedAddressItem, selectedChainItem } = useConfig();
-
+  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   const { getAddressName } = useSettingStore();
   const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
   const { getChainItem, setSelectedChainId } = useChainStore();
@@ -70,6 +70,8 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
     setSelectedAddress(item.address);
     setSelectedChainId(item.chainIdHex);
   };
+
+  const addressLength = isLargerThan992 ? 5 : 2;
 
   return selectedAddressItem ? (
     <Menu>
@@ -82,8 +84,9 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
               px="3"
               py="10px"
               h="40px"
-              w="340px"
-              bg={isInModal ? 'transparent' : { base: '#fff', lg: '#f2f2f2' }}
+              w={{ lg: '340px' }}
+              fontSize={{ base: '12px', lg: '16px' }}
+              bg={isInModal ? 'transparent' : '#f2f2f2'}
               roundedLeft={'full'}
               cursor={'pointer'}
               _hover={{ color: 'brand.red' }}
@@ -98,21 +101,26 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                 )}
                 {!isInModal && (
                   <Flex mr="1" align={'center'}>
-                    <Image w="5" h="5" src={selectedChainItem.iconSquare} />
-                    <Text ml="2" fontWeight={'700'}>
-                      {selectedChainItem.chainName}
-                    </Text>
+                    {isLargerThan992 && <Image w="5" h="5" mr="2" src={selectedChainItem.iconSquare} />}
+                    <Text fontWeight={'700'}>{selectedChainItem.chainName}</Text>
                     &nbsp;
-                    <Text fontWeight={'600'}>({toShortAddress(selectedAddressItem.address, 5, 5)})</Text>
+                    <Text fontWeight={'600'}>
+                      ({toShortAddress(selectedAddressItem.address, addressLength, addressLength)})
+                    </Text>
                   </Flex>
                 )}
               </>
 
-              <Image src={IconCheveronRight} w="20px" h="20px" transform={isOpen ? 'rotate(90deg)' : 'none'} />
+              <Image
+                src={IconCheveronRight}
+                w={{ base: 3, lg: 5 }}
+                h={{ base: 3, lg: 5 }}
+                transform={isOpen ? 'rotate(90deg)' : 'none'}
+              />
             </Flex>
           </MenuButton>
 
-          <MenuList w="340px" zIndex={'200'}>
+          <MenuList w={{ lg: '340px' }} zIndex={'200'}>
             {addressList.map((item: any, idx: number) => {
               const chainInfo = getChainItem(item.chainIdHex);
               return (
@@ -166,15 +174,14 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
       px="3"
       py="10px"
       h="40px"
-      bg={isInModal ? 'transparent' : { base: '#fff', lg: '#f2f2f2' }}
+      fontSize={{ base: '12px', lg: '16px' }}
+      bg={isInModal ? 'transparent' : '#f2f2f2'}
       roundedLeft={'full'}
       {...restProps}
     >
       <Flex mr="1" align={'center'}>
         {/* <Image w="5" h="5" src={selectedChainItem.icon} /> */}
-        <Text ml="2" fontWeight={'700'}>
-          {selectedChainItem.chainName}
-        </Text>
+        <Text fontWeight={'700'}>{selectedChainItem.chainName}</Text>
         &nbsp;
         <Text fontWeight={'600'}>(******)</Text>
       </Flex>
