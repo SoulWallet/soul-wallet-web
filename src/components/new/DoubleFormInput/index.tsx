@@ -53,7 +53,11 @@ export default function DoubleFormInput({
   };
 
   return (
-    <Box display="flex" flexDirection="row" {..._styles}>
+    <Box
+      display="flex"
+      flexDirection={{ base: 'column', 'md': 'row' }}
+      {..._styles}
+    >
       <Box display="flex" flexDirection="column" width="50%" {..._leftContainerStyles}>
         {leftLabel && (
           <Box as="label" htmlFor="leftLabel">
@@ -62,7 +66,7 @@ export default function DoubleFormInput({
         )}
         <Box position="relative">
           <Box
-            marginRight="16px"
+            marginRight={{ base: '0', 'md': '16px' }}
           >
             <Input
               type="text"

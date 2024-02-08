@@ -340,12 +340,12 @@ export default function EditGuardian({
             <Box>Guardian List</Box>
             <Box marginLeft="auto">
               {!!guardianList.length && (
-                <Button size="mid" type="white" onClick={() => openBackupGuardianModal()} marginRight="14px">
+                <Button size="mid" type="white" onClick={() => openBackupGuardianModal()} marginRight="14px" marginBottom="20px">
                   <Box marginRight="2px"><HistoryIcon /></Box>
                   Backup list
                 </Button>
               )}
-              <Button size="mid" onClick={() => startAddGuardian()}>
+              <Button size="mid" onClick={() => startAddGuardian()} marginBottom="20px">
                 <Box marginRight="6px"><PlusIcon color="white" /></Box>
                 Add Guardian
               </Button>
@@ -496,9 +496,10 @@ export default function EditGuardian({
               <Fragment>
                 <Box
                   display="flex"
-                  alignItems="center"
                   justifyContent="flex-start"
                   marginTop="10px"
+                  alignItems={{ base: 'flex-start', md: 'center' }}
+                  flexDirection={{ base: 'column', md: 'row' }}
                 >
                   <Box
                     fontFamily="Nunito"
@@ -508,9 +509,18 @@ export default function EditGuardian({
                   >
                     Threshold:
                   </Box>
-                  <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
+                  <TextBody
+                    type="t2"
+                    justifyContent="flex-start"
+                    display="flex"
+                    flexDirection={{ base: 'column', md: 'row' }}
+                    alignItems={{ base: 'flex-start', md: 'center' }}
+                  >
                     <Box>Wallet recovery requires</Box>
-                    <Box width="80px" margin="0 10px">
+                    <Box
+                      width="80px"
+                      margin={{ base: '0', md: '0 10px' }}
+                    >
                       <Menu>
                         <MenuButton
                           px={2}
