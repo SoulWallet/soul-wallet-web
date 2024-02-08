@@ -119,10 +119,21 @@ export default function SetPasskey() {
               justifyContent="center"
               flexDirection="column"
             >
-              <Heading marginBottom="6px" type="h3">
+              <Heading
+                type="h3"
+                fontSize={{ base: "24px", lg: "32px" }}
+                textAlign={{ base: "left", lg: "center" }}
+                width="100%"
+                marginBottom="10px"
+              >
                 Passkey signer added!
               </Heading>
-              <TextBody fontWeight="600" textAlign="center">Passkey is faster to sign in with, easier to use, and much more secure.</TextBody>
+              <TextBody
+                fontWeight="600"
+                textAlign={{ base: "left", lg: "center" }}
+              >
+                Passkey is faster to sign in with, easier to use, and much more secure.
+              </TextBody>
               <Box
                 marginBottom="90px"
                 background="#F7F7F7"
@@ -153,7 +164,12 @@ export default function SetPasskey() {
                   )}
                 </Flex>
               </Box>
-              <Box width="100%" display="flex" justifyContent="center">
+              <Box
+                width="100%"
+                display="flex"
+                justifyContent="center"
+                flexDirection={{ base: 'column', md: 'row' }}
+              >
                 {createInfo && createInfo.eoaAddress && createInfo.eoaAddress.length && !credentials.length && (
                   <Button
                     width="80px"
@@ -180,13 +196,14 @@ export default function SetPasskey() {
                 )}
                 {!!credentials.length && (
                   <Button
-                    width="115px"
                     maxWidth="100%"
                     type="black"
                     onClick={next}
                     disabled={isCreating || !credentials.length}
-                    marginLeft="18px"
                     size="lg"
+                    width={{ base: '100%', md: '115px' }}
+                    marginLeft={{ base: '0', md: '18px' }}
+                    marginTop={{ base: '18px', md: '0' }}
                   >
                     Continue
                   </Button>

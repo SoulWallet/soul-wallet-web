@@ -85,7 +85,12 @@ export default function ConnectWalletModal({
                 </Box>
               )}
               {!(isConnecting) && (
-                <Box width="100%" display="flex" flexWrap="wrap">
+                <Box
+                  width="100%"
+                  display="flex"
+                  flexWrap="wrap"
+                  justifyContent={{ base: 'space-between', md: 'flex-start' }}
+                >
                   {connectors.filter(item => supportedEoas.includes(item.id)).map((connector: Connector) =>
                     <WalletOption
                       key={connector.uid}

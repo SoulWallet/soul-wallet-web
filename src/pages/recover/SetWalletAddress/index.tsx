@@ -153,7 +153,7 @@ export default function SetWalletAddress({ next, back }: any) {
           <Box
             width="100%"
             height="100%"
-            padding="50px"
+            padding={{ base: '20px', md: '50px' }}
             display="flex"
             alignItems="flex-start"
             justifyContent="center"

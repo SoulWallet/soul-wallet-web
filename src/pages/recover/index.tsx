@@ -158,7 +158,7 @@ export default function Recover() {
           <Box
             width="100%"
             height="100%"
-            padding="84px"
+            padding={{ base: '20px', md: '84px' }}
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -173,7 +173,11 @@ export default function Recover() {
             >
               <Image src={RecoverWalletIcon} />
             </Box>
-            <Heading marginBottom="18px" type="h3">
+            <Heading
+              marginBottom="18px"
+              type="h3"
+              fontSize={{ base: "24px", lg: "32px" }}
+            >
               Recover my wallet
             </Heading>
             <TextBody

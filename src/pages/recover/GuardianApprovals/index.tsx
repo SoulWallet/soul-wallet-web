@@ -223,7 +223,7 @@ export default function AddSigner({ next, back }: any) {
             <Box
               width="100%"
               height="100%"
-              padding="50px"
+              padding={{ base: '20px', md: '50px' }}
               display="flex"
               alignItems="flex-start"
               justifyContent="center"
@@ -351,7 +351,7 @@ export default function AddSigner({ next, back }: any) {
           <Box
             width="100%"
             height="100%"
-            padding="50px"
+            padding={{ base: '20px', md: '50px' }}
             display="flex"
             alignItems="flex-start"
             justifyContent="center"
@@ -398,11 +398,11 @@ export default function AddSigner({ next, back }: any) {
               {(!!signatures && !!signatures.length && signatures.filter((item: any) => !item.isValid).length) || 0} more guardians approval needed
             </Box>
             <Box
-              width="100%"
               display="flex"
               alignItems="flex-start"
               justifyContent="flex-start"
               flexWrap="wrap"
+              width={{ base: '100%', md: '100%' }}
             >
               {signatures.map((item: any) => {
                 return (
@@ -413,18 +413,12 @@ export default function AddSigner({ next, back }: any) {
                     display="flex"
                     alignItems="center"
                     justifyContent="flex-start"
-                    minWidth="400px"
-                    marginRight="20px"
+                    minWidth={{ base: '0', md: '400px' }}
+                    marginRight={{ base: '0', md: '20px' }}
                     marginBottom="14px"
                     gap="8px"
+                    width={{ base: '100%', md: 'auto' }}
                   >
-                    {/* <Box
-                        width="32px"
-                        height="32px"
-                        background="#D9D9D9"
-                        borderRadius="32px"
-                        marginRight="10px"
-                        /> */}
                     <AddressIcon address={item.guardian} width={32} />
                     <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" display="flex">
                       <Box>{toShortAddress(item.guardian)}</Box>
@@ -437,7 +431,15 @@ export default function AddSigner({ next, back }: any) {
                       <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#1CD20F" marginLeft="auto">Signed</Box>
                     )}
                     {!item.isValid && (
-                      <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#848488" marginLeft="auto">Waiting</Box>
+                      <Box
+                        fontSize="14px"
+                        fontWeight="700"
+                        fontFamily="Nunito"
+                        color="#848488"
+                        marginLeft={{ base: '0', md: 'auto' }}
+                      >
+                        Waiting
+                      </Box>
                     )}
                   </Box>
                 )

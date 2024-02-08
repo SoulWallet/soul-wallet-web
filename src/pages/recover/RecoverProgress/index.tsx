@@ -90,9 +90,9 @@ export default function RecoverProgress() {
         alignItems="center"
         justifyContent="flex-start"
         minHeight="calc(100% - 58px)"
-        flexDirection="column"
         width="100%"
         paddingTop="60px"
+        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
@@ -107,19 +107,36 @@ export default function RecoverProgress() {
           <Box
             width="100%"
             height="100%"
-            padding="84px"
+            padding={{ base: '20px', md: '84px' }}
             display="flex"
             alignItems="center"
             justifyContent="center"
             flexDirection="column"
           >
-            <Heading marginBottom="18px" type="h3">
+            <Heading marginBottom="18px" type="h3" textAlign="center">
               Wallet recovery progress
             </Heading>
-            <Box marginBottom="20px" display="flex">
+            <Box
+              marginBottom="20px"
+              display="flex"
+              flexDirection={{ base: 'column', 'md': 'row' }}
+            >
               {chainRecoveryStatus.map((item: any) => {
                 return (
-                  <Box key={item.chainId} background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginRight="20px">
+                  <Box
+                    key={item.chainId}
+                    background="white"
+                    borderRadius="12px"
+                    padding="16px"
+                    height="240px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    flexDirection="column"
+                    marginRight="20px"
+                    marginBottom="20px"
+                    width={{ base: '100%', 'md': '200px' }}
+                  >
                     <Box mb="2">
                       <Image src={getWalletIcon(item.chainId)} width="40px" height="40px" />
                     </Box>
