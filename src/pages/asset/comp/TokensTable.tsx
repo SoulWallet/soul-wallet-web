@@ -1,5 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Box, Flex, Text, Table, Tr, Thead, Tbody, Th, Td, Image, GridItem, Grid } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Text,
+  Table,
+  Tr,
+  Thead,
+  Tbody,
+  Th,
+  Td,
+  Image,
+  GridItem,
+  Grid,
+  TableContainer,
+} from '@chakra-ui/react';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import Button from '@/components/Button';
@@ -53,69 +67,70 @@ export default function TokensTable() {
   };
 
   return (
-    <Table color="#000">
-      <Thead>
-        <Tr fontFamily={'Nunito'} fontWeight={'400'} fontSize={'18px'}>
-          <Th w="25%">Token</Th>
-          <Th w="25%" textAlign={'left'}>
-            Balance
-          </Th>
-          <Th w="25%" textAlign={'center'} />
-          <Th w="25%" textAlign={'right'}>
-            Price(24hr)
-          </Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {!tokenBalance.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
-        {tokenBalance.length
-          ? tokenBalance.map((item: ITokenBalanceItem, idx: number) => {
-              return (
-                <Tr
-                  key={idx}
-                  _hover={{
-                    '.send-button': {
-                      visibility: 'visible',
-                    },
-                  }}
-                >
-                  <Td w="25%">
-                    <Flex gap="4" align="center">
-                      <Box pos="relative">
-                        <Image src={item.logoURI || IconDefaultToken} w="35px" h="35px" />
-                      </Box>
-                      <Text fontWeight={'800'} fontSize={'18px'}>
-                        {item.symbol}
-                      </Text>
-                    </Flex>
-                  </Td>
-                  {/* <Td>
+    <TableContainer overflowX={'auto'}>
+      <Table color="#000">
+        <Thead>
+          <Tr fontFamily={'Nunito'} fontWeight={'400'} fontSize={'18px'}>
+            <Th w={'25%'}>Token</Th>
+            <Th w={'25%'} textAlign={'left'}>
+              Balance
+            </Th>
+            <Th w={'25%'} textAlign={'center'} />
+            <Th w={'25%'} textAlign={'right'}>
+              Price(24hr)
+            </Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {!tokenBalance.length && <Image src={IconLoading} display={'block'} mt="6" w="50px" h="50px" />}
+          {tokenBalance.length
+            ? tokenBalance.map((item: ITokenBalanceItem, idx: number) => {
+                return (
+                  <Tr
+                    key={idx}
+                    _hover={{
+                      '.send-button': {
+                        visibility: 'visible',
+                      },
+                    }}
+                  >
+                    <Td w={'25%'}>
+                      <Flex gap="4" align="center">
+                        <Box pos="relative">
+                          <Image src={item.logoURI || IconDefaultToken} w="35px" h="35px" />
+                        </Box>
+                        <Text fontWeight={'800'} fontSize={'18px'}>
+                          {item.symbol}
+                        </Text>
+                      </Flex>
+                    </Td>
+                    {/* <Td>
                     <Flex align={'center'} justify={'center'} bg="#F2F2F2" rounded="full" w="12" h="12">
                       <Image src={(chainMapping as any)[item.chainID].icon} w="5" h="5" />
                     </Flex>
                   </Td> */}
-                  <Td w="25%" textAlign={'left'}>
-                    <Text mb="1" fontWeight={'800'}>
-                      {item.tokenBalanceFormatted}
-                    </Text>
-                    <Text fontWeight={'400'}>${item.usdValue}</Text>
-                  </Td>
-                  <Td w="25%" textAlign={'center'}>
-                    <Box
-                      cursor={'pointer'}
-                      className="send-button"
-                      display={'inline-block'}
-                      visibility={'hidden'}
-                      onClick={() => {
-                        showTransfer(item.contractAddress, item.chainId.toString());
-                      }}
-                    >
-                      <Image src={IconSend} w="8" h="8" mb="2px" />
-                      <Text fontSize={'12px'} fontWeight={'600'} lineHeight={'15px'}>
-                        Send
+                    <Td w={'25%'} textAlign={'left'}>
+                      <Text mb="1" fontWeight={'800'}>
+                        {item.tokenBalanceFormatted}
                       </Text>
-                    </Box>
-                    {/* <Button
+                      <Text fontWeight={'400'}>${item.usdValue}</Text>
+                    </Td>
+                    <Td w={'25%'} textAlign={'center'}>
+                      <Box
+                        cursor={'pointer'}
+                        className="send-button"
+                        display={'inline-block'}
+                        visibility={'hidden'}
+                        onClick={() => {
+                          showTransfer(item.contractAddress, item.chainId.toString());
+                        }}
+                      >
+                        <Image src={IconSend} w="8" h="8" mb="2px" />
+                        <Text fontSize={'12px'} fontWeight={'600'} lineHeight={'15px'}>
+                          Send
+                        </Text>
+                      </Box>
+                      {/* <Button
                       transition={'none'}
                       className="send-button"
                       visibility={'hidden'}
@@ -127,15 +142,16 @@ export default function TokensTable() {
                     >
                       Send
                     </Button> */}
-                  </Td>
-                  <Td w="25%" textAlign={'right'} fontWeight={'800'}>
-                    0.0000
-                  </Td>
-                </Tr>
-              );
-            })
-          : ''}
-      </Tbody>
-    </Table>
+                    </Td>
+                    <Td w={'25%'} textAlign={'right'} fontWeight={'800'}>
+                      0.0000
+                    </Td>
+                  </Tr>
+                );
+              })
+            : ''}
+        </Tbody>
+      </Table>
+    </TableContainer>
   );
 }
