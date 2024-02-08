@@ -13,6 +13,7 @@ import {
   GridItem,
   Grid,
   TableContainer,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
@@ -28,10 +29,10 @@ import useConfig from '@/hooks/useConfig';
 
 export default function TokensTable() {
   const { showSend } = useWalletContext();
-  const { selectedAddress } = useAddressStore();
   const { fetchTokenBalance, tokenBalance } = useBalanceStore();
   const { setSelectedChainId, selectedChainId } = useChainStore();
   const { selectedAddressItem, selectedChainItem } = useConfig();
+  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
 
   // const getTokenBalance = async () => {
   //   try {
@@ -96,9 +97,11 @@ export default function TokensTable() {
                   >
                     <Td w={'25%'}>
                       <Flex gap="4" align="center">
-                        <Box pos="relative">
-                          <Image src={item.logoURI || IconDefaultToken} w="35px" h="35px" />
-                        </Box>
+                        <Image
+                          src={item.logoURI || IconDefaultToken}
+                          w={{ base: '16px', lg: '35px' }}
+                          h={{ base: '16px', lg: '35px' }}
+                        />
                         <Text fontWeight={'800'} fontSize={'18px'}>
                           {item.symbol}
                         </Text>
@@ -120,7 +123,7 @@ export default function TokensTable() {
                         cursor={'pointer'}
                         className="send-button"
                         display={'inline-block'}
-                        visibility={'hidden'}
+                        visibility={isLargerThan992 ? 'hidden' : 'visible'}
                         onClick={() => {
                           showTransfer(item.contractAddress, item.chainId.toString());
                         }}
