@@ -67,7 +67,7 @@ export default function RegisterModal({
             >
               <SuccessIcon />
               <Box fontWeight="700" fontSize="20px" marginBottom="16px">Connected To</Box>
-              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box display="flex" alignItems="center" justifyContent="center" maxWidth="100%" flexWrap="wrap" gap="10px">
                 <Box
                   border="1px solid rgba(0, 0, 0, 0.1)"
                   borderRadius="12px"
@@ -160,7 +160,11 @@ export default function RegisterModal({
                 Already have a wallet? Connect here!
               </Title>
               {!!(isConnecting && isConnectAtive) && (
-                <Box width="100%" display="flex" height="calc(100% - 34px)">
+                <Box
+                  width="100%"
+                  display="flex"
+                  height={{ base: '100%', md: 'calc(100% - 34px)' }}
+                >
                   <Box
                     display="flex"
                     alignItems="center"
@@ -189,7 +193,12 @@ export default function RegisterModal({
                 </Box>
               )}
               {!(isConnecting && isConnectAtive) && (
-                <Box width="100%" display="flex" flexWrap="wrap">
+                <Box
+                  width="100%"
+                  display="flex"
+                  flexWrap="wrap"
+                  justifyContent={{ base: 'space-between', md: 'flex-start' }}
+                >
                   {connectors.filter(item => supportedEoas.includes(item.id)).map((connector: Connector) =>
                     <WalletOption
                       key={connector.uid}
@@ -234,7 +243,7 @@ export default function RegisterModal({
               alignItems="center"
               justifyContent="center"
               flexDirection="column"
-              paddingLeft="25px"
+              paddingLeft={{ base: '0px', md: '25px' }}
               position="relative"
               minHeight="240px"
             >

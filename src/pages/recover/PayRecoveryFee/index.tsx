@@ -156,6 +156,7 @@ export default function PayRecoveryFee({ next }: any) {
         minHeight="calc(100% - 58px)"
         width="100%"
         paddingTop="60px"
+        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
@@ -170,7 +171,7 @@ export default function PayRecoveryFee({ next }: any) {
           <Box
             width="100%"
             height="100%"
-            padding="50px"
+            padding={{ base: '20px', md: '50px' }}
             display="flex"
             alignItems="flex-start"
             justifyContent="center"
@@ -192,7 +193,7 @@ export default function PayRecoveryFee({ next }: any) {
               fontSize="18px"
               fontWeight="700"
               padding="24px"
-              width="260px"
+              width={{ base: '100%', md: '260px' }}
               display="flex"
               alignItems="center"
               justifyContent="center"
@@ -223,12 +224,12 @@ export default function PayRecoveryFee({ next }: any) {
                   type="black"
                   color="white"
                   marginBottom="18px"
-                  width="275px"
                   onClick={doPay}
                   size="xl"
                   skipSignCheck
                   loading={paying}
                   disabled={paying}
+                  width={{ base: '100%', md: '275px' }}
                 >
                   Pay Fee
                 </Button>: <Button
@@ -240,7 +241,7 @@ export default function PayRecoveryFee({ next }: any) {
                              skipSignCheck
                              loading={paying}
                              disabled={paying}
-                             width="275px"
+                             width={{ base: '100%', md: '275px' }}
                            >
                   Switch Chain
                 </Button>
@@ -253,14 +254,14 @@ export default function PayRecoveryFee({ next }: any) {
                   size="xl"
                   skipSignCheck
                   disabled={isConnecting}
-                  width="275px"
+                  width={{ base: '100%', md: '275px' }}
                 >
                   {isConnecting ? 'Connecting' : 'Connect wallet'}
                 </Button>
               )}
 
               <Button
-                width="275px"
+                width={{ base: '100%', md: '275px' }}
                 maxWidth="100%"
                 type="white"
                 onClick={doCopy}

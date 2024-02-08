@@ -232,6 +232,8 @@ export default function Sign() {
           justifyContent="center"
           height="calc(100vh - 58px)"
           flexDirection="column"
+          width="100%"
+          marginTop="60px"
         >
           <RoundContainer
             width="1058px"
@@ -432,6 +434,7 @@ export default function Sign() {
                   color="black"
                   marginTop="34px"
                   lineHeight={'normal'}
+                  wordBreak="break-all"
                 >
                   Your friend's wallet is lost. As their guardian, please connect your wallet and confirm request to
                   assist with their wallet recovery.

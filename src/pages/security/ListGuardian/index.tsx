@@ -94,11 +94,27 @@ export default function ListGuardian({
             fontWeight="700"
             fontSize="18px"
             display="flex"
+            flexDirection={{ base: 'column', md: 'row' }}
           >
             <Box>Guardian List</Box>
-            <Box marginLeft="auto">
+            <Box
+              marginLeft={{ base: '0', md: 'auto' }}
+              marginTop={{ base: '20px', md: '0' }}
+              display="flex"
+              alignItems="flex-start"
+              justifyContent="center"
+              flexDirection={{ base: 'column', md: 'row' }}
+              width={{ base: '100%', md: 'auto' }}
+            >
               {!!guardianList.length && (
-                <Button size="mid" type="white" onClick={() => openBackupGuardianModal()} marginRight="14px" marginBottom="20px">
+                <Button
+                  size="mid"
+                  type="white"
+                  onClick={() => openBackupGuardianModal()}
+                  marginBottom="20px"
+                  marginRight={{ base: '0px', md: '14px' }}
+                  width={{ base: '100%', md: 'auto' }}
+                >
                   <Box marginRight="2px"><HistoryIcon /></Box>
                   Backup list
                 </Button>
@@ -130,8 +146,9 @@ export default function ListGuardian({
                       key={i}
                       name={guardianNames[i] || 'No Name'}
                       address={address}
-                      marginRight="18px"
+                      marginRight={{ base: '0px', md: '18px' }}
                       marginBottom="18px"
+                      width={{ base: '100%', md: 'auto' }}
                       cursor="pointer"
                     />
                   )}

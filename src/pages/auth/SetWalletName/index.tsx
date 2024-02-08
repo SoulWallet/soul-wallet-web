@@ -117,7 +117,13 @@ export default function SetWalletName({ updateWalletName, back }: any) {
             justifyContent="center"
             flexDirection="column"
           >
-            <Heading marginBottom="0" type="h3">
+            <Heading
+              type="h3"
+              fontSize={{ base: "24px", lg: "32px" }}
+              textAlign={{ base: "left", lg: "center" }}
+              width="100%"
+              marginBottom="10px"
+            >
               Pick a name for your wallet
             </Heading>
             <TextBody fontWeight="600">You’ve got a default wallet name, you can also make it your own.</TextBody>

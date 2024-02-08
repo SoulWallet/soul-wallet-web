@@ -311,9 +311,9 @@ const GuardianInput = ({
       )}
       <ENSResolver
         _styles={{
-          width: "calc(100% - 240px)",
-          top: "50px",
-          left: "240px",
+          width: { base: "100%", lg: "calc(100% - 240px)" },
+          top: { base: "120px", lg: "50px" },
+          left: { base: "0", lg: "240px" },
           right: "0",
         }}
         isENSOpen={isENSOpen}
