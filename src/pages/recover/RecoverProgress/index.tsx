@@ -81,7 +81,7 @@ export default function RecoverProgress() {
 
   return (
     <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
-      <SignHeader url="/auth" />
+      <SignHeader />
       <Box
         padding="20px"
         display="flex"

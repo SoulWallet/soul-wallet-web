@@ -5,13 +5,13 @@ import RoundSection from '@/components/new/RoundSection'
 import SignerCard from '@/components/new/SignerCard'
 import GuardianCard from '@/components/new/GuardianCard'
 import { Box, Image, Menu, MenuList, MenuButton, MenuItem, useToast } from '@chakra-ui/react'
-import SetSignerModal from '@/pages/security_new/SetSignerModal'
-import SelectSignerTypeModal from '@/pages/security_new/SelectSignerTypeModal'
-import SelectGuardianTypeModal from '@/pages/security_new/SelectGuardianTypeModal'
-import IntroGuardianModal from '@/pages/security_new/IntroGuardianModal'
-import EditGuardianModal from '@/pages/security_new/EditGuardianModal'
-import BackupGuardianModal from '@/pages/security_new/BackupGuardianModal'
-import WalletConnectModal from '@/pages/security_new/WalletConnectModal'
+import SetSignerModal from '@/pages/security/SetSignerModal'
+import SelectSignerTypeModal from '@/pages/security/SelectSignerTypeModal'
+import SelectGuardianTypeModal from '@/pages/security/SelectGuardianTypeModal'
+import IntroGuardianModal from '@/pages/security/IntroGuardianModal'
+import EditGuardianModal from '@/pages/security/EditGuardianModal'
+import BackupGuardianModal from '@/pages/security/BackupGuardianModal'
+import WalletConnectModal from '@/pages/security/WalletConnectModal'
 import Button from '@/components/Button'
 import TextButton from '@/components/new/TextButton'
 import PlusIcon from '@/components/Icons/Plus';
@@ -185,6 +185,8 @@ export default function EditGuardian({
           keepPrivate
         };
 
+        if (!keepPrivate) await api.guardian.backupGuardians(guardiansInfo);
+
         const initialGuardianSafePeriod = defaultGuardianSafePeriod
         await createWallet({
           initialGuardianHash: newGuardianHash,
@@ -193,7 +195,7 @@ export default function EditGuardian({
 
         // guardianStore()
         console.log('keepPrivate', keepPrivate)
-        if (!keepPrivate) await api.guardian.backupGuardians(guardiansInfo);
+
         guardianStore.setGuardiansInfo(guardiansInfo)
 
         for (let i = 0; i < guardianAddresses.length; i++) {
@@ -204,7 +206,8 @@ export default function EditGuardian({
 
         setIsCreating(false)
         clearCreateInfo()
-        navigate(`/dashboard`);
+        cancelEditGuardian()
+        // navigate(`/dashboard`);
       } catch (error: any) {
         setIsCreating(false)
 

@@ -33,7 +33,7 @@ import TokenIcon from '@/components/Icons/Intro/Token'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
-import EditGuardianModal from '@/pages/security_new/EditGuardianModal';
+import EditGuardianModal from '@/pages/security/EditGuardianModal';
 import CopyIcon from '@/components/Icons/Copy';
 import OpenScanIcon from '@/components/Icons/OpenScan';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
