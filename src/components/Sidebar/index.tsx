@@ -78,7 +78,7 @@ export default function Sidebar() {
         })}
       </Flex>
       <Flex flexDir={{ base: 'row', lg: 'column' }} gap="8">
-        <Flex flexDir={{ base: 'row', lg: 'column' }} gap={{base: 2, md: 4, lg: 6}} fontSize={{base: '12px', lg: '14px'}} fontWeight={{base: 600, lg: 400}} color="#383838">
+        <Flex flexDir={{ base: 'row', lg: 'column' }} gap={{base: 2, md: 4, lg: 6}} fontSize={{base: '12px', md: '14px'}} fontWeight={{base: 600, lg: 400}} color="#383838">
           <ExtraLink
             onMouseEnter={() => setExternalHoverIndex(0)}
             onMouseLeave={() => setExternalHoverIndex(-1)}

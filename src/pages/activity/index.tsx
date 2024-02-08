@@ -78,7 +78,7 @@ export default function Activity() {
 
   return (
     <DashboardLayout>
-      <Box pr="48px" pt="6">
+      <Box pl={{ base: '24px', lg: '0' }} pr={{ base: '24px', lg: '48px' }} pt="6">
         {/* <Text fontWeight="800" fontSize="32px" mb="9">
           Activity
         </Text> */}
@@ -91,7 +91,7 @@ export default function Activity() {
           {/* <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} /> */}
         </Flex>
 
-        <Box rounded="20px" bg="#fff" py="6px" px="26px">
+        <Box rounded="20px" bg="#fff" py="6px" px={{base: "16px", lg: "26px"}}>
           <ActivityTable />
         </Box>
       </Box>

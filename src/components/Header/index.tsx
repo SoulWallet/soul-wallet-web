@@ -25,7 +25,7 @@ export default function Header() {
       justify={'space-between'}
     >
       <Link to="/dashboard">
-        <Image src={IconLogo} h={{base: "24px", lg: "44px"}} />
+        <Image src={IconLogo} h={{base: "24px", sm: "32px", md: "44px"}} />
       </Link>
       <Flex gap="2" align={'center'}>
         <AccountSelectFull />
