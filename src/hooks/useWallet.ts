@@ -376,10 +376,10 @@ export default function useWallet() {
     }
   };
 
-  const checkRecoverStatus = async () => {
-    const slotInfo = getSlotInfo()
-    const slot = slotInfo.slot
-    const recoveryRecordID = getRecoverRecordId(slot)
+  const checkRecoverStatus = async (recoveryRecordID: string) => {
+    // const slotInfo = getSlotInfo()
+    // const slot = slotInfo.slot
+    // const recoveryRecordID = getRecoverRecordId(slot)
 
     if(!recoveryRecordID){
       return;

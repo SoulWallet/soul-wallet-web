@@ -79,9 +79,9 @@ export const WalletContextProvider = ({ children }: any) => {
       return;
     }
 
-    checkRecoverStatus();
+    checkRecoverStatus(recoveryRecordID);
 
-    const interval = setInterval(() => checkRecoverStatus(), 5000);
+    const interval = setInterval(() => checkRecoverStatus(recoveryRecordID), 5000);
 
     return () => {
       clearInterval(interval);
