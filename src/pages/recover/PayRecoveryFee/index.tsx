@@ -156,6 +156,7 @@ export default function PayRecoveryFee({ next }: any) {
         minHeight="calc(100% - 58px)"
         width="100%"
         paddingTop="60px"
+        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
