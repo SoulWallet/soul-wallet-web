@@ -23,6 +23,7 @@ import useWallet from '@/hooks/useWallet';
 import useSdk from '@/hooks/useSdk';
 import { useSignerStore } from '@/store/signer';
 import AuthImg from '@/assets/auth.svg';
+import useKeystore from '@/hooks/useKeystore';
 import SetPasskey from './SetPasskey';
 import SetWalletName from './SetWalletName';
 import ImportAccount from './ImportAccount';
@@ -32,6 +33,7 @@ import SelectAccountModal from './SelectAccountModal';
 import ImportAccountModal from './ImportAccountModal';
 import { SignHeader } from '../public/Sign';
 import useTools from '@/hooks/useTools';
+import { useGuardianStore } from '@/store/guardian';
 
 export default function Auth() {
   const [stepType, setStepType] = useState('auth');
@@ -60,6 +62,8 @@ export default function Auth() {
   const toast = useToast();
   const { navigate } = useBrowser();
   const { setCredentials, setEoas } = useSignerStore();
+  const { getActiveGuardianHash } = useKeystore();
+  const { updateGuardiansInfo } = useGuardianStore();
   const activeSignerId = loginInfo.signerId;
   const activeLoginAccount = signerIdAddress[loginInfo.signerId];
   console.log('signerIdAddress', signerIdAddress, activeSignerId, activeLoginAccount);
@@ -203,13 +207,13 @@ export default function Auth() {
 
   const importWallet = useCallback(async (address: string) => {
     setIsImporting(true);
-    const slotInitInfo = (
+    const slotInfo = (
       await api.guardian.getSlotInfo({
         walletAddress: address,
       })
     ).data;
 
-    retrieveSlotInfo(slotInitInfo);
+    retrieveSlotInfo(slotInfo);
 
     const addresses = await calcWalletAddressAllChains(0);
     console.log('addresses', addresses);
@@ -227,6 +231,30 @@ export default function Auth() {
      *   setSignerIdAddress(item, chainIdAddress);
      * });
      */
+    const activeGuardianInfo = await getActiveGuardianHash(slotInfo.slotInitInfo)
+    let activeGuardianHash
+
+    if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+      activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+    } else {
+      activeGuardianHash = activeGuardianInfo.activeGuardianHash
+    }
+
+    const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
+    const data = res2.data;
+
+    if (!data) {
+      console.log('No guardians found!')
+    } else {
+      const guardianDetails = data.guardianDetails;
+      const guardianNames = data.guardianNames;
+
+      updateGuardiansInfo({
+        guardianDetails,
+        guardianNames
+      })
+    }
+
     const loginInfo = getLoginInfo();
 
     if (loginInfo.method === 'eoa') {
