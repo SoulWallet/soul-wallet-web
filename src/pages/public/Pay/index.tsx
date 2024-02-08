@@ -309,6 +309,7 @@ export default function Pay() {
         justifyContent="center"
         height="calc(100vh - 58px)"
         flexDirection="column"
+        width="100%"
       >
         <RoundContainer
           width="1058px"
