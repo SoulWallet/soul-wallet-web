@@ -23,7 +23,7 @@ import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
-import { useAddressStore, getIndexByAddress } from '@/store/address';
+import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
 import { useSlotStore } from '@/store/slot';
 import { bundlerErrMapping } from '@/config';
@@ -206,7 +206,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         // if activated, get userOp directly
         return await getUserOp(txns, payTokenAddress);
       } else {
-        // const activateIndex = getIndexByAddress(addressList, selectedAddress);
         // if not activated, prepend activate txns
         return await getActivateOp(0, payToken, txns);
       }
