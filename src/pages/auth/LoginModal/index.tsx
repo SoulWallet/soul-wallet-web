@@ -71,8 +71,11 @@ export default function LoginModal({
             height="100%"
             roundedBottom="20px"
             display="flex"
+            flexDirection={{ base: 'column', md: 'row' }}
           >
-            <Box width="calc(60% - 20px)">
+            <Box
+              width={{ base: '100%', md: 'calc(60% - 20px)' }}
+            >
               <Box width="100%" display="flex" flexWrap="wrap" marginTop="20px">
                 {connectors.filter(item => supportedEoas.includes(item.id)).map((connector: Connector) =>
                   <WalletOption
@@ -87,18 +90,42 @@ export default function LoginModal({
               </Box>
             </Box>
             <Box
-              width="20px"
+              width={{ base: '100%', md: '20px' }}
               display="flex"
               alignItems="center"
               justifyContent="center"
               position="relative"
+              margin="0 auto"
             >
-              <Box width="1px" height="100%" background="rgba(0, 0, 0, 0.1)" position="absolute" />
-              <TextBody fontWeight="normal" height="80px" width="20px" display="flex" alignItems="center" justifyContent="center" background="white" zIndex="1">
+              <Box
+                width={{ base: '100%', md: '1px' }}
+                height={{ base: '1px', md: '100%' }}
+                background="rgba(0, 0, 0, 0.1)"
+                position="absolute"
+              />
+              <TextBody
+                fontWeight="normal"
+                width={{ base: '80px', md: '20px' }}
+                height={{ base: '20px', md: '80px' }}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                background="white"
+                zIndex="1"
+              >
                 or
               </TextBody>
             </Box>
-            <Box width="calc(40%)" display="flex" alignItems="center" justifyContent="center" flexDirection="column" paddingLeft="25px" position="relative" paddingTop="40px">
+            <Box
+              width={{ base: '100%', md: 'calc(40%)' }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+              paddingLeft="25px"
+              position="relative"
+              paddingTop="40px"
+            >
               <Button
                 width="100%"
                 type="black"
@@ -113,12 +140,12 @@ export default function LoginModal({
                 Login with passkey
               </Button>
               <Tooltip hasArrow bg='brand.black' label={passkeyTooltipText}>
-              <Box position="absolute" width="100%" bottom="16px" display="flex" alignItems="center" justifyContent="center">
-                <TextBody fontSize="14px" fontWeight="600" color="rgba(0, 0, 0, 0.6)" display="flex" alignItems="center">
-                  What is passkey?
-                  <Box as="span" marginLeft="5px"><QuestionIcon /></Box>
-                </TextBody>
-              </Box>
+                <Box position="absolute" width="100%" bottom="16px" display="flex" alignItems="center" justifyContent="center">
+                  <TextBody fontSize="14px" fontWeight="600" color="rgba(0, 0, 0, 0.6)" display="flex" alignItems="center">
+                    What is passkey?
+                    <Box as="span" marginLeft="5px"><QuestionIcon /></Box>
+                  </TextBody>
+                </Box>
               </Tooltip>
             </Box>
           </Box>

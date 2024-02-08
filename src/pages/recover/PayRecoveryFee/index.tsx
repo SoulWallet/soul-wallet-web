@@ -154,6 +154,8 @@ export default function PayRecoveryFee({ next }: any) {
         alignItems="flex-start"
         justifyContent="center"
         minHeight="calc(100% - 58px)"
+        width="100%"
+        paddingTop="60px"
       >
         <RoundContainer
           width="1058px"
@@ -163,6 +165,7 @@ export default function PayRecoveryFee({ next }: any) {
           padding="0"
           overflow="hidden"
           background="white"
+          marginBottom="20px"
         >
           <Box
             width="100%"

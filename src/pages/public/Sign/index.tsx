@@ -310,6 +310,8 @@ export default function Sign() {
           justifyContent="center"
           height="calc(100vh - 58px)"
           flexDirection="column"
+          width="100%"
+          paddingTop="60px"
         >
           <RoundContainer
             width="1058px"
@@ -388,6 +390,8 @@ export default function Sign() {
         justifyContent="center"
         height="calc(100vh - 58px)"
         flexDirection="column"
+        width="100%"
+        paddingTop="60px"
       >
         <RoundContainer
           width="1058px"

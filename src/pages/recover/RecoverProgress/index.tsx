@@ -26,7 +26,9 @@ import CheckedIcon from '@/components/Icons/Checked';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
 import { SignHeader } from '@/pages/public/Sign';
 
-const getProgressPercent = (startTime: any, endTime: any) => {
+const getProgressPercent = (startTime: any, endTime: any, status: any) => {
+  if (status === 1) return '100%'
+
   if (startTime && endTime) {
     const ct = Date.now();
     const st = +new Date(startTime);
@@ -89,6 +91,8 @@ export default function RecoverProgress() {
         justifyContent="flex-start"
         minHeight="calc(100% - 58px)"
         flexDirection="column"
+        width="100%"
+        paddingTop="60px"
       >
         <RoundContainer
           width="1058px"
@@ -98,6 +102,7 @@ export default function RecoverProgress() {
           padding="0"
           overflow="hidden"
           boxShadow="none"
+          marginBottom="20px"
         >
           <Box
             width="100%"
@@ -125,7 +130,7 @@ export default function RecoverProgress() {
                       {getWalletAddress(String(item.chainId), addresses)}
                     </Box>
                     <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="24px" marginBottom="16px">
-                      <Box width={getProgressPercent(item.startTime, item.expectFinishTime)} height="100%" background="#0CB700" />
+                      <Box width={getProgressPercent(item.startTime, item.expectFinishTime, item.status)} height="100%" background="#0CB700" />
                     </Box>
                     {item.status === 0 && (
                       <Box fontSize="14px" fontWeight="bold" color="#848488" zIndex="2">

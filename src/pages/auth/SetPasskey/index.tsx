@@ -97,6 +97,8 @@ export default function SetPasskey() {
           justifyContent="flex-start"
           minHeight="calc(100% - 58px)"
           flexDirection="column"
+          paddingTop="60px"
+          width="100%"
         >
           <RoundContainer
             width="1058px"
@@ -111,7 +113,7 @@ export default function SetPasskey() {
             <Box
               width="100%"
               height="100%"
-              padding="84px"
+              padding={{ base: '20px', md: '84px' }}
               display="flex"
               alignItems="center"
               justifyContent="center"
@@ -120,7 +122,7 @@ export default function SetPasskey() {
               <Heading marginBottom="6px" type="h3">
                 Passkey signer added!
               </Heading>
-              <TextBody fontWeight="600">Passkey is faster to sign in with, easier to use, and much more secure.</TextBody>
+              <TextBody fontWeight="600" textAlign="center">Passkey is faster to sign in with, easier to use, and much more secure.</TextBody>
               <Box
                 marginBottom="90px"
                 background="#F7F7F7"
@@ -207,6 +209,8 @@ export default function SetPasskey() {
         justifyContent="flex-start"
         minHeight="calc(100% - 58px)"
         flexDirection="column"
+        paddingTop="60px"
+        width="100%"
       >
         <RoundContainer
           width="1058px"
@@ -221,7 +225,7 @@ export default function SetPasskey() {
           <Box
             width="100%"
             height="100%"
-            padding="84px"
+            padding={{ base: '20px', md: '84px' }}
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -234,21 +238,27 @@ export default function SetPasskey() {
             <TextBody fontWeight="600">Turn your own device into hardware wallet! Add passkey now <Box as="span" color="#FF2E79">for free</Box>!</TextBody>
             <Box
               marginBottom="90px"
-              padding="24px"
               margin="24px"
               borderRadius="20px"
               width="700px"
               maxWidth="100%"
+              padding={{ base: '0%', md: '24px' }}
             >
               {/* <Heading type="h4" marginBottom="18px">
-                Why sign with passkey?
-              </Heading> */}
-              <Box width="100%" display="flex" marginBottom="18px">
+                  Why sign with passkey?
+                  </Heading> */}
+              <Box
+                width="100%"
+                display="flex"
+                marginBottom="18px"
+                flexDirection={{ base: 'column', md: 'row' }}
+              >
                 <Box
-                  width="calc(50% - 10px)"
+                  width={{ base: '100%', md: `calc(50% - 10px)` }}
                   border="1px solid rgba(0, 0, 0, 0.10)"
                   borderRadius="8px"
                   marginRight="20px"
+                  marginBottom="20px"
                 >
                   <Title
                     height="47px"
@@ -275,9 +285,10 @@ export default function SetPasskey() {
                   </Box>
                 </Box>
                 <Box
-                  width="calc(50% - 10px)"
                   border="1px solid rgba(0, 0, 0, 0.10)"
                   borderRadius="8px"
+                  marginBottom="20px"
+                  width={{ base: '100%', md: `calc(50% - 10px)` }}
                 >
                   <Title
                     height="47px"

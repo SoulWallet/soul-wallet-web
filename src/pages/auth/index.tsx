@@ -307,17 +307,16 @@ export default function Auth() {
       <SignHeader />
       <Box
         padding="20px"
+        paddingTop="60px"
         display="flex"
         alignItems="center"
         justifyContent="center"
-        height="calc(100vh - 58px)"
+        height={{ base: 'auto', 'md': 'calc(100vh - 58px)' }}
         flexDirection="column"
+        width="100%"
       >
         <RoundContainer
-          width="1058px"
-          maxWidth="100%"
           minHeight="544px"
-          maxHeight="100%"
           display="flex"
           padding="0"
           overflow="hidden"
@@ -391,7 +390,10 @@ export default function Auth() {
             </Box>
           </Box>
         </RoundContainer>
-        <Box marginTop="40px">
+        <Box
+          marginTop="40px"
+          textAlign="center"
+        >
           <TextBody fontWeight="600" color="#818181" fontSize="16px">
             If you have any questions, reach out to us at{' '}
             <Box as="a" href="mailto:support@soulwallet.io" color="#2D5AF6" textDecoration="underline">

@@ -52,7 +52,9 @@ export default function ConnectWalletModal({
             roundedBottom="20px"
             display="flex"
           >
-            <Box width="calc(60% - 20px)">
+            <Box
+              width={{ base: '100%', 'md': 'calc(60% - 20px)' }}
+            >
               {!!(isConnecting) && (
                 <Box width="100%" display="flex" height="calc(100% - 34px)">
                   <Box

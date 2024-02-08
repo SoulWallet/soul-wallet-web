@@ -136,6 +136,9 @@ export default function SetWalletAddress({ next, back }: any) {
         alignItems="flex-start"
         justifyContent="center"
         minHeight="calc(100% - 58px)"
+        width="100%"
+        paddingTop="60px"
+        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
@@ -145,6 +148,7 @@ export default function SetWalletAddress({ next, back }: any) {
           padding="0"
           overflow="hidden"
           background="white"
+          marginBottom="20px"
         >
           <Box
             width="100%"
@@ -165,7 +169,7 @@ export default function SetWalletAddress({ next, back }: any) {
             >
               Enter any one of your wallet address on any chains, we'll be able to recover them all.
             </TextBody>
-            <Box width="550px">
+            <Box width="550px" maxWidth="100%">
               <FormInput
                 label=""
                 placeholder="Enter ENS or wallet adderss"

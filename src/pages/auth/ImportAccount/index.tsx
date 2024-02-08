@@ -107,6 +107,8 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
         justifyContent="flex-start"
         minHeight="calc(100% - 58px)"
         flexDirection="column"
+        width="100%"
+        paddingTop="60px"
       >
         <RoundContainer
           width="1058px"
@@ -120,7 +122,7 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
           <Box
             width="100%"
             height="100%"
-            padding="84px"
+            padding={{ base: '20px', md: '84px' }}
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -141,7 +143,7 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
               display="flex"
               flexDirection="column"
               alignItems="center"
-              padding="30px"
+              padding={{ base: '30px 0', md: '30px' }}
             >
               <Box width="100%" maxWidth="548px" display="flex" marginBottom="10px" flexDirection="column">
                 <Input height="44px" borderRadius="12px" placeholder="Enter wallet address" value={address} onChange={onAddressChange} />

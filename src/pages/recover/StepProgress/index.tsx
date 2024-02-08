@@ -21,7 +21,14 @@ export default function StepProgress({ activeIndex }: any) {
   const index = activeIndex || 0
 
   return (
-    <Box color="black" background="white" borderRadius="20px" padding="24px" marginLeft="34px">
+    <Box
+      color="black"
+      background="white"
+      borderRadius="20px"
+      padding="24px"
+      marginLeft={{ base: '0', md: '34px' }}
+      width={{ base: '100%', md: 'auto' }}
+    >
       <Box fontSize="16px" fontWeight="800" marginBottom="20px">Recovery process ({index + 1}/4)</Box>
       <Box>
         {stepNames.map((name: string, i: number) =>

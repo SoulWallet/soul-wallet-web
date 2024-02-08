@@ -143,6 +143,8 @@ export default function Recover() {
         justifyContent="flex-start"
         minHeight="calc(100% - 58px)"
         flexDirection="column"
+        paddingTop="60px"
+        width="100%"
       >
         <RoundContainer
           width="1058px"

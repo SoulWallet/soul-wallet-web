@@ -49,6 +49,8 @@ import { ethers } from 'ethers';
 import StepProgress from '../StepProgress'
 import AddGuardianModal from '../AddGuardianModal'
 import AddressIcon from '@/components/AddressIcon';
+import { useSettingStore } from '@/store/setting';
+import { SignHeader } from '@/pages/public/Sign';
 
 export default function AddSigner({ next, back }: any) {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
@@ -65,6 +67,7 @@ export default function AddSigner({ next, back }: any) {
   const { chainConfig } = useConfig();
   const { calcGuardianHash } = useKeystore();
   const [isAddGuardianOpen, setIsAddGuardianOpen] = useState<any>(false);
+  const { saveRecoverRecordId } = useSettingStore();
   const guardianSignUrl = `${location.origin}/public/sign/${recoveryRecordID}`
 
   const closeEditGuardianModal = useCallback(() => {
@@ -176,6 +179,7 @@ export default function AddSigner({ next, back }: any) {
         recoveryRecord,
       });
 
+      saveRecoverRecordId(slot, recoveryRecordID)
       setIsConfirming(false)
     } catch (error: any) {
       setIsConfirming(false)
@@ -196,15 +200,16 @@ export default function AddSigner({ next, back }: any) {
   if (!hasRecord) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
-        <Box height="58px" padding="10px 20px">
-          <Image src={IconLogo} h="44px" />
-        </Box>
+        <SignHeader url="/auth" />
         <Box
           padding="20px"
           display="flex"
           alignItems="flex-start"
           justifyContent="center"
           minHeight="calc(100% - 58px)"
+          width="100%"
+          paddingTop="60px"
+          flexDirection={{ base: 'column', 'md': 'row' }}
         >
           <RoundContainer
             width="1058px"
@@ -322,15 +327,16 @@ export default function AddSigner({ next, back }: any) {
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+      <SignHeader url="/auth" />
       <Box
         padding="20px"
         display="flex"
         alignItems="flex-start"
         justifyContent="center"
         minHeight="calc(100% - 58px)"
+        width="100%"
+        paddingTop="60px"
+        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
@@ -340,6 +346,7 @@ export default function AddSigner({ next, back }: any) {
           padding="0"
           overflow="hidden"
           background="white"
+          marginBottom="20px"
         >
           <Box
             width="100%"

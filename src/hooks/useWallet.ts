@@ -30,14 +30,14 @@ export default function useWallet() {
   const { signMessageAsync } = useSignMessage();
   const { updateGuardiansInfo, recoveringGuardiansInfo, updateRecoveringGuardiansInfo, setRecoveringGuardiansInfo } =
     useGuardianStore();
-  const { slotInfo, setSlotInfo } = useSlotStore();
+  const { slotInfo, setSlotInfo, getSlotInfo } = useSlotStore();
   const { updateChainItem, setSelectedChainId, selectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, setAddressList, updateAddressItem } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
-  const { setSignerIdAddress, setFinishedSteps, saveAddressName } = useSettingStore();
-    const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo } = useTempStore();
+  const { setSignerIdAddress, setFinishedSteps, saveAddressName, getRecoverRecordId } = useSettingStore();
+  const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo } = useTempStore();
 
   const createWallet = async ({
     initialGuardianHash,
@@ -371,13 +371,15 @@ export default function useWallet() {
         slot: slotInfo.slot,
         steps: [5],
       });
-  
+
       setFinishedSteps(res.data.finishedSteps);
     }
   };
 
   const checkRecoverStatus = async () => {
-    const recoveryRecordID = recoverInfo.recoveryRecordID;
+    const slotInfo = getSlotInfo()
+    const slot = slotInfo.slot
+    const recoveryRecordID = getRecoverRecordId(slot)
 
     if(!recoveryRecordID){
       return;
@@ -393,11 +395,11 @@ export default function useWallet() {
     //   //   addAddressItem({
     //   //     address: item as any,
     //   //     activatedChains: [],
-    // //   });
+  // //   });
     //   // }
     // }
 
-    // check if should replace key 
+    // check if should replace key
     if (res.status >= 3) {
       if (!recoverInfo.enabled) {
         await boostAfterRecovered();
