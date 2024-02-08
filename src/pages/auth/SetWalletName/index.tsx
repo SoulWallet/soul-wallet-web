@@ -97,6 +97,7 @@ export default function SetWalletName({ updateWalletName, back }: any) {
         justifyContent="flex-start"
         minHeight="calc(100% - 58px)"
         flexDirection="column"
+        width="100%"
       >
         <RoundContainer
           width="1058px"
@@ -110,13 +111,19 @@ export default function SetWalletName({ updateWalletName, back }: any) {
           <Box
             width="100%"
             height="100%"
-            padding="84px"
+            padding={{ base: '20px', md: '84px' }}
             display="flex"
             alignItems="center"
             justifyContent="center"
             flexDirection="column"
           >
-            <Heading marginBottom="0" type="h3">
+            <Heading
+              type="h3"
+              fontSize={{ base: "24px", lg: "32px" }}
+              textAlign={{ base: "left", lg: "center" }}
+              width="100%"
+              marginBottom="10px"
+            >
               Pick a name for your wallet
             </Heading>
             <TextBody fontWeight="600">You’ve got a default wallet name, you can also make it your own.</TextBody>
@@ -128,9 +135,15 @@ export default function SetWalletName({ updateWalletName, back }: any) {
               display="flex"
               flexDirection="column"
               alignItems="center"
-              padding="30px"
+              padding={{ base: '30px 0', md: '30px' }}
             >
-              <Box width="100%" maxWidth="548px" display="flex" marginBottom="10px" flexDirection="column">
+              <Box
+                width="100%"
+                maxWidth="548px"
+                display="flex"
+                marginBottom="10px"
+                flexDirection="column"
+              >
                 <Input
                   height="44px"
                   borderRadius="12px"

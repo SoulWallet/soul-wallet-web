@@ -336,16 +336,37 @@ export default function EditGuardian({
             fontWeight="700"
             fontSize="18px"
             display="flex"
+            flexDirection={{ base: 'column', md: 'row' }}
           >
             <Box>Guardian List</Box>
-            <Box marginLeft="auto">
+            <Box
+              marginLeft={{ base: '0', md: 'auto' }}
+              marginTop={{ base: '20px', md: '0' }}
+              display="flex"
+              alignItems="flex-start"
+              justifyContent="center"
+              flexDirection={{ base: 'column', md: 'row' }}
+              width={{ base: '100%', md: 'auto' }}
+            >
               {!!guardianList.length && (
-                <Button size="mid" type="white" onClick={() => openBackupGuardianModal()} marginRight="14px">
+                <Button
+                  size="mid"
+                  type="white"
+                  onClick={() => openBackupGuardianModal()}
+                  marginBottom="20px"
+                  marginRight={{ base: '0px', md: '14px' }}
+                  width={{ base: '100%', md: 'auto' }}
+                >
                   <Box marginRight="2px"><HistoryIcon /></Box>
                   Backup list
                 </Button>
               )}
-              <Button size="mid" onClick={() => startAddGuardian()}>
+              <Button
+                size="mid"
+                onClick={() => startAddGuardian()}
+                marginBottom="20px"
+                width={{ base: '100%', md: 'auto' }}
+              >
                 <Box marginRight="6px"><PlusIcon color="white" /></Box>
                 Add Guardian
               </Button>
@@ -376,12 +397,13 @@ export default function EditGuardian({
                       key={i}
                       name={guardianNames[i] || 'No Name'}
                       address={address}
-                      marginRight="18px"
                       cursor="pointer"
                       allowDelete={true}
                       onDelete={() => startRemoveGuardian(i, address)}
                       allowEdit={true}
+                      marginRight={{ base: '0px', md: '18px' }}
                       marginBottom="18px"
+                      width={{ base: '100%', md: 'auto' }}
                       height="140px"
                       onEdit={() => startEditSingleGuardian({
                         guardianDetails: {
@@ -397,13 +419,13 @@ export default function EditGuardian({
                       border="1px solid #DFDFDF"
                       padding="19px 13px"
                       borderRadius="12px"
-                      width="270px"
                       position="relative"
                       overflow="hidden"
                       background="#7F56D9"
-                      marginBottom="18px"
-                      marginRight="18px"
                       height="140px"
+                      marginRight={{ base: '0px', md: '18px' }}
+                      marginBottom="18px"
+                      width={{ base: '100%', md: '270px' }}
                     >
                       <Box
                         position="absolute"
@@ -438,13 +460,13 @@ export default function EditGuardian({
                       border="1px solid #DFDFDF"
                       padding="19px 13px"
                       borderRadius="12px"
-                      width="270px"
                       position="relative"
                       overflow="hidden"
                       background="#7F56D9"
-                      marginBottom="18px"
-                      marginRight="18px"
                       height="140px"
+                      marginRight={{ base: '0px', md: '18px' }}
+                      marginBottom="18px"
+                      width={{ base: '100%', md: '270px' }}
                     >
                       <Box
                         position="absolute"
@@ -496,9 +518,10 @@ export default function EditGuardian({
               <Fragment>
                 <Box
                   display="flex"
-                  alignItems="center"
                   justifyContent="flex-start"
                   marginTop="10px"
+                  alignItems={{ base: 'flex-start', md: 'center' }}
+                  flexDirection={{ base: 'column', md: 'row' }}
                 >
                   <Box
                     fontFamily="Nunito"
@@ -508,9 +531,18 @@ export default function EditGuardian({
                   >
                     Threshold:
                   </Box>
-                  <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
+                  <TextBody
+                    type="t2"
+                    justifyContent="flex-start"
+                    display="flex"
+                    flexDirection={{ base: 'column', md: 'row' }}
+                    alignItems={{ base: 'flex-start', md: 'center' }}
+                  >
                     <Box>Wallet recovery requires</Box>
-                    <Box width="80px" margin="0 10px">
+                    <Box
+                      width="80px"
+                      margin={{ base: '0', md: '0 10px' }}
+                    >
                       <Menu>
                         <MenuButton
                           px={2}

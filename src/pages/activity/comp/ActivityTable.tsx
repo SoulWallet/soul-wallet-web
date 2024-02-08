@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Divider, Image, Link } from '@chakra-ui/react';
+import { Box, Flex, Text, Divider, Image, Link, useMediaQuery } from '@chakra-ui/react';
 import BN from 'bignumber.js';
 import { numToFixed } from '@/lib/tools';
 import { toShortAddress, getIconMapping } from '@/lib/tools';
@@ -18,16 +18,30 @@ import { useChainStore } from '@/store/chain';
 
 const ActivityItem = ({ item }: any) => {
   const { chainConfig } = useConfig();
+  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   const { scanUrl } = chainConfig;
   return (
-    <Flex justifyContent={'space-between'} alignItems={'center'} py="5">
-      <Link w="30%" display={'flex'} alignItems={'center'} target="_blank" href={`${scanUrl}/tx/${item.trxHash}`} gap="2">
+    <Flex
+      // flexDir={{ base: 'column', md: 'row' }}
+      // gap={{ base: 3, lg: 0 }}
+      justifyContent={'space-between'}
+      alignItems={'center'}
+      py="5"
+    >
+      <Link
+        w={{ base: '50%', lg: '30%' }}
+        display={'flex'}
+        alignItems={'center'}
+        target="_blank"
+        href={`${scanUrl}/tx/${item.trxHash}`}
+        gap="2"
+      >
         <Box pos={'relative'}>
           <Image src={getIconMapping(item.functionName)} />
         </Box>
         <Box>
           <Flex align={'center'} gap="1">
-            <Text textTransform={'capitalize'} fontSize={'18px'} fontWeight={'800'}>
+            <Text textTransform={'capitalize'} fontSize={{ base: '14px', lg: '18px' }} fontWeight={'800'}>
               {item.functionName || 'Unknown'}
             </Text>
             <Image src={IconExternal} />
@@ -41,9 +55,9 @@ const ActivityItem = ({ item }: any) => {
       </Flex> */}
       {item.actualGasCost ? (
         <Flex gap="2">
-          <Image src={IconEth} w="8" />
+          <Image src={IconEth} w={{ base: 4, lg: 8 }} />
           <Box>
-            <Text color="brand.black" fontSize={"18px"} fontWeight={'800'}>
+            <Text color="brand.black" fontSize={{ base: '14px', lg: '18px' }} fontWeight={'800'}>
               -{numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH
             </Text>
             <Text color="#898989">$141.00</Text>
@@ -52,7 +66,9 @@ const ActivityItem = ({ item }: any) => {
       ) : (
         ''
       )}
-      <Box>{item.sender && <Text color="brand.black">Sender: {toShortAddress(item.sender)}</Text>}</Box>
+      {isLargerThan992 && (
+        <Box>{item.sender && <Text color="brand.black">Sender: {toShortAddress(item.sender)}</Text>}</Box>
+      )}
     </Flex>
   );
 };
@@ -62,7 +78,7 @@ export default function ActivityTable() {
   const { ethersProvider } = useWalletContext();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {selectedChainId} = useChainStore();
+  const { selectedChainId } = useChainStore();
   const getList = async () => {
     setLoading(true);
     try {

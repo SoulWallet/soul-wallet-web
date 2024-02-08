@@ -50,7 +50,7 @@ export default function Asset() {
 
   return (
     <DashboardLayout>
-      <Box pr="48px" pt="6">
+      <Box pl={{ base: '24px', lg: '0' }} pr={{ base: '24px', lg: '48px' }} pt="6">
         {/* <Flex rounded="20px" p="6" bg="brand.white" mt="24px" mb="30px" justify={'space-between'}>
           <Box>
             <AvatarWithName editable={false} />
@@ -66,7 +66,7 @@ export default function Asset() {
 
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
         <Flex gap="5" mt="3" alignItems={'flex-start'}>
-          <Box w="100%" rounded="20px" bg="#fff" p="8">
+          <Box w="100%" rounded="20px" bg="#fff" p={{base: 3, md : 5, lg: 8}}>
             {activeTab === 0 && <TokensTable />}
             {activeTab === 1 && <NftsTable />}
           </Box>

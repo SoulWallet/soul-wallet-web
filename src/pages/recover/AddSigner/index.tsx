@@ -35,6 +35,7 @@ import EOASignerIcon from '@/components/Icons/EOASigner'
 import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
+import { useSettingStore } from '@/store/setting';
 import { useAccount, useConnect, useReconnect, useDisconnect } from 'wagmi'
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
@@ -60,6 +61,7 @@ export default function AddSigner({ next, back }: any) {
   const { updateRecoverInfo } = useTempStore()
   const { chainConfig } = useConfig();
   const { recoverInfo } = useTempStore()
+  const { saveRecoverRecordId } = useSettingStore();
 
   const addCredential = useCallback(async () => {
     try {
@@ -134,6 +136,7 @@ export default function AddSigner({ next, back }: any) {
         enabled: false,
       });
 
+      saveRecoverRecordId(slot, recoveryRecordID)
       setIsConfirming(false)
       next()
     } catch (error: any) {
@@ -160,6 +163,9 @@ export default function AddSigner({ next, back }: any) {
         alignItems="flex-start"
         justifyContent="center"
         minHeight="calc(100% - 58px)"
+        width="100%"
+        paddingTop="60px"
+        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
@@ -169,11 +175,12 @@ export default function AddSigner({ next, back }: any) {
           padding="0"
           overflow="hidden"
           background="white"
+          marginBottom="20px"
         >
           <Box
             width="100%"
             height="100%"
-            padding="50px"
+            padding={{ base: '20px', md: '50px' }}
             display="flex"
             alignItems="flex-start"
             justifyContent="center"
@@ -184,7 +191,7 @@ export default function AddSigner({ next, back }: any) {
             </Heading>
             <TextBody
               fontWeight="600"
-              maxWidth="650px"
+              maxWidth={{ base: '100%', 'md': '650px' }}
               marginBottom="20px"
             >
               Sign transactions on the using your preferred method, whether it's through an externally owned account (EOA) such as MetaMask or Ledger, or by creating a passkey.
@@ -193,15 +200,26 @@ export default function AddSigner({ next, back }: any) {
               {signers.map((signer: any) => {
                 if (signer.type === 'eoa') {
                   return (
-                    <Box marginBottom="10px" key={signer.signerId} position="relative">
-                      <Box width="550px">
-                        <Input placeholder="Enter ENS or wallet adderss" borderColor="#E4E4E4" value={signer.signerId} readOnly={true} />
+                    <Box
+                      marginBottom="10px"
+                      key={signer.signerId}
+                      position="relative"
+                      maxWidth={{ base: '550px', 'md': '550px' }}
+                    >
+                      <Box
+                      >
+                        <Input
+                          placeholder="Enter ENS or wallet adderss"
+                          borderColor="#E4E4E4"
+                          value={signer.signerId}
+                          readOnly={true}
+                        />
                       </Box>
                       <Box
                         onClick={() => removeSigner(signer.signerId)}
                         position="absolute"
                         width="40px"
-                        right={{ base: '-28px', md: '-40px' }}
+                        right={{ base: '-40px', md: '-40px' }}
                         top="0"
                         height="100%"
                         display="flex"

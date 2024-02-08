@@ -67,7 +67,7 @@ export default function RegisterModal({
             >
               <SuccessIcon />
               <Box fontWeight="700" fontSize="20px" marginBottom="16px">Connected To</Box>
-              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box display="flex" alignItems="center" justifyContent="center" maxWidth="100%" flexWrap="wrap" gap="10px">
                 <Box
                   border="1px solid rgba(0, 0, 0, 0.1)"
                   borderRadius="12px"
@@ -151,13 +151,20 @@ export default function RegisterModal({
             height="100%"
             roundedBottom="20px"
             display="flex"
+            flexDirection={{ base: 'column', md: 'row' }}
           >
-            <Box width="calc(60% - 20px)">
+            <Box
+              width={{ base: '100%', md: 'calc(60% - 20px)' }}
+            >
               <Title type="t2" marginBottom="20px">
                 Already have a wallet? Connect here!
               </Title>
               {!!(isConnecting && isConnectAtive) && (
-                <Box width="100%" display="flex" height="calc(100% - 34px)">
+                <Box
+                  width="100%"
+                  display="flex"
+                  height={{ base: '100%', md: 'calc(100% - 34px)' }}
+                >
                   <Box
                     display="flex"
                     alignItems="center"
@@ -186,7 +193,12 @@ export default function RegisterModal({
                 </Box>
               )}
               {!(isConnecting && isConnectAtive) && (
-                <Box width="100%" display="flex" flexWrap="wrap">
+                <Box
+                  width="100%"
+                  display="flex"
+                  flexWrap="wrap"
+                  justifyContent={{ base: 'space-between', md: 'flex-start' }}
+                >
                   {connectors.filter(item => supportedEoas.includes(item.id)).map((connector: Connector) =>
                     <WalletOption
                       key={connector.uid}
@@ -199,18 +211,42 @@ export default function RegisterModal({
               )}
             </Box>
             <Box
-              width="20px"
+              width={{ base: '100%', md: '20px' }}
               display="flex"
               alignItems="center"
               justifyContent="center"
               position="relative"
+              margin="0 auto"
             >
-              <Box width="1px" height="100%" background="rgba(0, 0, 0, 0.1)" position="absolute" />
-              <TextBody fontWeight="normal" height="80px" width="20px" display="flex" alignItems="center" justifyContent="center" background="white" zIndex="1">
+              <Box
+                width={{ base: '100%', md: '1px' }}
+                height={{ base: '1px', md: '100%' }}
+                background="rgba(0, 0, 0, 0.1)"
+                position="absolute"
+              />
+              <TextBody
+                fontWeight="normal"
+                width={{ base: '80px', md: '20px' }}
+                height={{ base: '20px', md: '80px' }}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                background="white"
+                zIndex="1"
+              >
                 or
               </TextBody>
             </Box>
-            <Box width="calc(40%)" display="flex" alignItems="center" justifyContent="center" flexDirection="column" paddingLeft="25px" position="relative" minHeight="240px">
+            <Box
+              width={{ base: '100%', md: 'calc(40%)' }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+              paddingLeft={{ base: '0px', md: '25px' }}
+              position="relative"
+              minHeight="240px"
+            >
               <Title type="t2" fontWeight="500">Fresh to Ethereum?</Title>
               <Title type="t2" fontWeight="500" color="rgba(0, 0, 0, 0.4)" marginBottom="0px">(Or wanna try something better)</Title>
               <Box marginTop="25px" paddingBottom="25px">
@@ -229,12 +265,12 @@ export default function RegisterModal({
                 </Button>
               </Box>
               <Tooltip hasArrow bg='brand.black' label={passkeyTooltipText}>
-              <Box position="absolute" width="100%" bottom="16px" display="flex" alignItems="center" justifyContent="center">
-                <TextBody fontSize="14px" fontWeight="600" color="rgba(0, 0, 0, 0.6)" display="flex" alignItems="center">
-                  What is passkey?
-                  <Box as="span" marginLeft="5px"><QuestionIcon /></Box>
-                </TextBody>
-              </Box>
+                <Box position="absolute" width="100%" bottom="16px" display="flex" alignItems="center" justifyContent="center">
+                  <TextBody fontSize="14px" fontWeight="600" color="rgba(0, 0, 0, 0.6)" display="flex" alignItems="center">
+                    What is passkey?
+                    <Box as="span" marginLeft="5px"><QuestionIcon /></Box>
+                  </TextBody>
+                </Box>
               </Tooltip>
             </Box>
           </Box>

@@ -1,4 +1,4 @@
-import { Flex, Box, Text, useToast, Image, Divider, Tooltip } from '@chakra-ui/react';
+import { Flex, Box, Text, useToast, Image, Divider, Tooltip, useMediaQuery } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
 import IconCopy from '@/assets/copy.svg';
 import Button from '../../Button';
@@ -56,6 +56,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [loadingFee, setLoadingFee] = useState(true);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const [decodedData, setDecodedData] = useState<any>({});
+  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   const [signing, setSigning] = useState<boolean>(false);
   const { checkActivated, ethersProvider } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
@@ -302,7 +303,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   }, [requiredAmount, payToken]);
 
   return (
-    <>
+    <Box  pb={{base: 6, lg: 0}}>
       <Flex flexDir={'column'}>
         <Flex flexDir={'column'} align={'center'} lineHeight={'1'}>
           {decodedData && (
@@ -444,13 +445,13 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               <LabelItem
                 label="Gas"
                 tooltip={`Gas fees are charges for transactions on blockchains, paying for computing efforts to process and secure activities. These fees fluctuate with network demand and transaction details.`}
-                chainName={selectedChainItem.chainName}
+                chainName={isLargerThan992 ? selectedChainItem.chainName : null}
               />
               <Flex gap="2" fontWeight={'500'} align={'center'}>
                 {requiredAmount ? (
                   <>
                     <Text fontSize={'14px'} fontWeight={'600'}>
-                      {requiredAmount}
+                      {BN(requiredAmount).toFormat(6)}
                     </Text>
                     <GasSelect
                       gasToken={payToken}
@@ -472,7 +473,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 />
                 <Flex gap="2" align={'center'}>
                   <Text color="brand.red" fontSize={'14px'} fontWeight={'600'}>
-                    -{requiredAmount} ETH
+                    -{BN(requiredAmount).toFormat(6)} ETH
                   </Text>
                   <DropdownSelect>
                     <Text>Soul Wallet</Text>
@@ -549,6 +550,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       >
         Confirm
       </Button>
-    </>
+    </Box>
   );
 }

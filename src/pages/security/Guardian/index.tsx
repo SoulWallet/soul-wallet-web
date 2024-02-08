@@ -1,4 +1,4 @@
-import { useState, useCallback, Fragment, useRef } from 'react';
+import { useState, useCallback, Fragment, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection'
@@ -25,6 +25,9 @@ import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
+import { useSlotStore } from '@/store/slot';
+import useKeystore from '@/hooks/useKeystore';
+import api from '@/lib/api';
 import EditGuardian from '../EditGuardian'
 import ListGuardian from '../ListGuardian'
 
@@ -55,6 +58,8 @@ export default function Guardian() {
   const [count, setCount] = useState<any>(0)
   const [removeIndex, setRemoveIndex] = useState<any>(0)
   const [removeAddress, setRemoveAddress] = useState<any>('')
+  const { getSlotInfo } = useSlotStore();
+  const { getActiveGuardianHash } = useKeystore();
 
   const [isEditing, setIsEditing] = useState<any>(false);
   const { getAddressName, saveAddressName } = useSettingStore();
@@ -278,12 +283,44 @@ export default function Guardian() {
     }
   }, [])
 
+  const loadGuardianInfo = async () => {
+    console.log('loadGuardianInfo')
+    const slotInfo = getSlotInfo()
+    const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
+    let activeGuardianHash
+
+    if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+      activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+    } else {
+      activeGuardianHash = activeGuardianInfo.activeGuardianHash
+    }
+
+    const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
+    const data = res2.data;
+
+    if (!data) {
+      console.log('No guardians found!')
+    } else {
+      const guardianDetails = data.guardianDetails;
+      const guardianNames = data.guardianNames;
+
+      guardianStore.updateGuardiansInfo({
+        guardianDetails,
+        guardianNames
+      })
+    }
+  }
+
+  useEffect(() => {
+    loadGuardianInfo()
+  }, [])
+
   return (
     <Fragment>
       <Box
         display="flex"
         flexDirection="column"
-        padding="0 40px"
+        padding={{ base: "0 24px", lg: "auto" }}
         pt="6"
       >
         <SectionMenu>

@@ -18,8 +18,8 @@ export default function Guidance() {
   const { goGuideAction, checkInitialized } = useTools();
   // todo, should remmeber this
   const checkSteps = async () => {
-    if(!slotInfo.slot){
-      return
+    if (!slotInfo.slot) {
+      return;
     }
     const res = await api.operation.finishStep({
       slot: slotInfo.slot,
@@ -47,6 +47,7 @@ export default function Guidance() {
       px="6"
       pb="2px"
       w={{ base: '380px', '2xl': '400px' }}
+      maxW={'95%'}
       mt="-2"
       bg="#fff"
       border="1px solid #EAECF0"

@@ -160,6 +160,8 @@ export default function Pay() {
           justifyContent="center"
           height="calc(100vh - 58px)"
           flexDirection="column"
+          width="100%"
+          paddingTop="60px"
         >
           <RoundContainer
             width="1058px"
@@ -213,6 +215,8 @@ export default function Pay() {
           justifyContent="center"
           height="calc(100vh - 58px)"
           flexDirection="column"
+          width="100%"
+          paddingTop="60px"
         >
           <RoundContainer
             width="1058px"
@@ -305,6 +309,7 @@ export default function Pay() {
         justifyContent="center"
         height="calc(100vh - 58px)"
         flexDirection="column"
+        width="100%"
       >
         <RoundContainer
           width="1058px"
@@ -333,9 +338,14 @@ export default function Pay() {
                 <Box fontSize="32px" fontWeight="700" fontFamily="Nunito">
                   Pay Recover Fee
                 </Box>
-                <TextBody fontWeight="600" maxWidth="650px" marginBottom="20px">
-                  Pay the recovery fee to get the wallet back. This fee is used on the Ethereum network for wallet
-                  recovery. We don't charge fee from this transaction.
+                <TextBody
+                  fontWeight="600"
+                  maxWidth={{ base: '360px', md: '650px' }}
+                  marginBottom="20px"
+                  wordBreak="break-all"
+                  width="100%"
+                >
+                  Pay the recovery fee to get the wallet back. This fee is used on the Ethereum network for wallet recovery. We don't charge fee from this transaction.
                 </TextBody>
                 <Box
                   background="#F9F9F9"
@@ -400,16 +410,16 @@ export default function Pay() {
                   >
                     Pay Fee
                   </Button>: <Button
-                    width="100%"
-                    type="black"
-                    color="white"
-                    marginBottom="18px"
-                    onClick={() => switchChain({ chainId: mainnetChainId })}
-                    size="xl"
-                    skipSignCheck
-                    loading={paying}
-                    disabled={paying}
-                  >
+                               width="100%"
+                               type="black"
+                               color="white"
+                               marginBottom="18px"
+                               onClick={() => switchChain({ chainId: mainnetChainId })}
+                               size="xl"
+                               skipSignCheck
+                               loading={paying}
+                               disabled={paying}
+                             >
                     Switch chain
                   </Button>
                 ) : (

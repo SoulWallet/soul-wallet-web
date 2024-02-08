@@ -26,7 +26,9 @@ import CheckedIcon from '@/components/Icons/Checked';
 import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
 import { SignHeader } from '@/pages/public/Sign';
 
-const getProgressPercent = (startTime: any, endTime: any) => {
+const getProgressPercent = (startTime: any, endTime: any, status: any) => {
+  if (status === 1) return '100%'
+
   if (startTime && endTime) {
     const ct = Date.now();
     const st = +new Date(startTime);
@@ -88,7 +90,9 @@ export default function RecoverProgress() {
         alignItems="center"
         justifyContent="flex-start"
         minHeight="calc(100% - 58px)"
-        flexDirection="column"
+        width="100%"
+        paddingTop="60px"
+        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
@@ -98,23 +102,42 @@ export default function RecoverProgress() {
           padding="0"
           overflow="hidden"
           boxShadow="none"
+          marginBottom="20px"
+          margin="0 auto"
         >
           <Box
             width="100%"
             height="100%"
-            padding="84px"
+            padding={{ base: '20px', md: '84px' }}
             display="flex"
             alignItems="center"
             justifyContent="center"
             flexDirection="column"
           >
-            <Heading marginBottom="18px" type="h3">
+            <Heading marginBottom="18px" type="h3" textAlign="center">
               Wallet recovery progress
             </Heading>
-            <Box marginBottom="20px" display="flex">
+            <Box
+              marginBottom="20px"
+              display="flex"
+              flexDirection={{ base: 'column', 'md': 'row' }}
+            >
               {chainRecoveryStatus.map((item: any) => {
                 return (
-                  <Box key={item.chainId} background="white" borderRadius="12px" padding="16px" width="200px" height="240px" display="flex" alignItems="center" justifyContent="center" flexDirection="column" marginRight="20px">
+                  <Box
+                    key={item.chainId}
+                    background="white"
+                    borderRadius="12px"
+                    padding="16px"
+                    height="240px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    flexDirection="column"
+                    marginRight="20px"
+                    marginBottom="20px"
+                    width={{ base: '100%', 'md': '200px' }}
+                  >
                     <Box mb="2">
                       <Image src={getWalletIcon(item.chainId)} width="40px" height="40px" />
                     </Box>
@@ -125,7 +148,7 @@ export default function RecoverProgress() {
                       {getWalletAddress(String(item.chainId), addresses)}
                     </Box>
                     <Box width="100%" height="12px" borderRadius="12px" display="block" background="#EEE" overflow="hidden" marginTop="24px" marginBottom="16px">
-                      <Box width={getProgressPercent(item.startTime, item.expectFinishTime)} height="100%" background="#0CB700" />
+                      <Box width={getProgressPercent(item.startTime, item.expectFinishTime, item.status)} height="100%" background="#0CB700" />
                     </Box>
                     {item.status === 0 && (
                       <Box fontSize="14px" fontWeight="bold" color="#848488" zIndex="2">

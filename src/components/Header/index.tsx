@@ -18,14 +18,14 @@ export default function Header() {
     <Flex
       as="header"
       h={`${headerHeight}px`}
-      px={{ base: '4', lg: '8' }}
+      px={{ base: '2', md: 4, lg: '8' }}
       bg="#fff"
       borderBottom={'1px solid #e6e6e6'}
       align="center"
       justify={'space-between'}
     >
       <Link to="/dashboard">
-        <Image src={IconLogo} h="44px" />
+        <Image src={IconLogo} h={{base: "24px", sm: "32px", md: "44px"}} />
       </Link>
       <Flex gap="2" align={'center'}>
         <AccountSelectFull />

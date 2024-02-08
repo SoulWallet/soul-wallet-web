@@ -266,7 +266,10 @@ const GuardianInput = ({
           fontSize: '14px',
           fontFamily: 'Nunito'
         }}
-        _rightContainerStyles={{ width: 'calc(100% - 240px)', zIndex: 0 }}
+        _rightContainerStyles={{
+          width: { base: 'calc(100%)', 'md': 'calc(100% - 240px)' },
+          zIndex: 0
+        }}
         leftAutoFocus={id === guardianIds[0]}
         leftPlaceholder="Guardian Name (optinal)"
         leftValue={values[`name_${id}`]}
@@ -278,7 +281,10 @@ const GuardianInput = ({
             {import.meta.env.VITE_MAINNET_ADDRESS_PREFIX}
           </Text>
         }
-        _leftContainerStyles={{ width: '240px' }}
+        _leftContainerStyles={{
+          width: { base: '100%', 'md': '240px' },
+          marginBottom: { base: '20px', 'md': '0' },
+        }}
         _leftInputStyles={{
           fontWeight: 600,
           fontSize: '14px',
@@ -305,9 +311,9 @@ const GuardianInput = ({
       )}
       <ENSResolver
         _styles={{
-          width: "calc(100% - 240px)",
-          top: "50px",
-          left: "240px",
+          width: { base: "100%", lg: "calc(100% - 240px)" },
+          top: { base: "120px", lg: "50px" },
+          left: { base: "0", lg: "240px" },
           right: "0",
         }}
         isENSOpen={isENSOpen}

@@ -23,6 +23,7 @@ export interface ISettingStore {
   finishedSteps: number[];
   // 1. guardian address -> name 2. slot address -> name
   addressName: { [address: string]: string };
+  recoverRecordIds: { [slot: string]: string };
   // signer id -> wallet address mapping
   signerIdAddress: ISignerIdAddress;
   getSignerIdAddress: () => any;
@@ -30,6 +31,10 @@ export interface ISettingStore {
   saveAddressName: (address: string, name: string, checkExists?: boolean) => void;
   removeAddressName: (address: string) => void;
   getAddressName: (address: string) => string;
+
+  saveRecoverRecordId: (slot: string, id: string) => void;
+  removeRecoverRecordId: (slot: string) => void;
+  getRecoverRecordId: (slot: string) => string;
 }
 
 const createSettingSlice = immer<ISettingStore>((set, get) => ({
@@ -37,6 +42,7 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
   ignoreWebauthnOverride: false,
   finishedSteps: [],
   addressName: {},
+  recoverRecordIds: {},
   signerIdAddress: {},
   getSignerIdAddress: () => {
     return get().signerIdAddress;
@@ -85,6 +91,30 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
         addressName: newState,
       };
       // state.addressName = newState;
+    });
+  },
+
+  getRecoverRecordId: (slot) => {
+    return get().recoverRecordIds[slot] || '';
+  },
+  saveRecoverRecordId: (slot, id) => {
+    set((state) => ({
+      recoverRecordIds: {
+        ...state.recoverRecordIds,
+        [slot]: id,
+      },
+    }));
+  },
+  removeRecoverRecordId: (slot) => {
+    set((state) => {
+      const newState = {
+        ...state.recoverRecordIds,
+      };
+      delete newState[slot];
+      return {
+        recoverRecordIds: newState,
+      };
+      // state.recoverRecordIds = newState;
     });
   },
 }));

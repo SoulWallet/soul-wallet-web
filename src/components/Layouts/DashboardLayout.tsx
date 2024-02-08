@@ -7,7 +7,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <Box>
       <Header />
-      <Flex minH={`calc(100vh - ${headerHeight}px)`} gap="50px">
+      <Flex
+        minH={`calc(100vh - ${headerHeight}px)`}
+        flexDir={{ base: 'column', lg: 'row' }}
+        gap={{ base: 6, md: 8, lg: '50px' }}
+      >
         <Sidebar />
         <Box w="100%">{children}</Box>
       </Flex>

@@ -30,9 +30,9 @@ const DappItem = ({ item }: any) => {
         <Image src={IconLink} />
         <Image src={IconBookmark} />
       </Flex> */}
-      <Image src={item.icon} h="60px" />
+      <Image src={item.icon} h={{ base: '40px', lg: '60px' }} />
       <Box>
-        <Text fontWeight={'700'} fontSize={'18px'} mb="2">
+        <Text fontWeight={'700'} fontSize={{ base: '16px', lg: '18px' }} mb={{ base: 1, lg: 2 }}>
           {item.title}
         </Text>
         <Text fontWeight={'500'} fontSize={'12px'} lineHeight={'16px'}>
@@ -72,8 +72,8 @@ export default function DappList() {
     >
       <Grid
         templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}
-        rowGap={'24px'}
-        columnGap={'64px'}
+        rowGap={{base: '20px', lg: '24px'}}
+        columnGap={{base: "44px", lg: '64px'}}
         fontSize={'14px'}
         lineHeight={'1'}
       >

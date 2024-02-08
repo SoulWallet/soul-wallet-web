@@ -14,11 +14,11 @@ export default function Activity() {
   }
 
   return (
-    <Box mt="40px" w="380px">
-      <Text fontWeight="800" fontSize={'18px'} lineHeight={'1.25'} mb="22px">
+    <Box mt={{base: 6, lg: "40px"}} w="380px" maxW={"90%"}>
+      <Text fontWeight="800" fontSize={'18px'} lineHeight={'1.25'} mb={{base: 3, lg: "22px"}}>
         Recent Transactions
       </Text>
-      <Flex gap="5" flexDir={"column"}>
+      <Flex gap={{base: 3, lg: 5}} flexDir={"column"}>
         {historyList.slice(0, 3).map((item: any, idx: number) => (
           <ActivityItem key={idx} idx={idx} item={item} scanUrl={chainConfig.scanUrl} />
         ))}

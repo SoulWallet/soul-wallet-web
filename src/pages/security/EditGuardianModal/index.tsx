@@ -63,7 +63,11 @@ export default function EditGuardianModal({
       <ModalOverlay />
       <ModalContent maxW="840px" borderRadius="20px">
         <ModalCloseButton top="14px" />
-        <ModalBody overflow="auto" padding="20px 32px" marginTop="60px">
+        <ModalBody
+          overflow="auto"
+          padding={{ base: "20px 10px", md: "20px 32px" }}
+          marginTop={{ base: "30px", md: "60px" }}
+        >
           <Box
             height="100%"
             roundedBottom="20px"

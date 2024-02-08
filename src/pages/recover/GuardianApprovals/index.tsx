@@ -49,6 +49,8 @@ import { ethers } from 'ethers';
 import StepProgress from '../StepProgress'
 import AddGuardianModal from '../AddGuardianModal'
 import AddressIcon from '@/components/AddressIcon';
+import { useSettingStore } from '@/store/setting';
+import { SignHeader } from '@/pages/public/Sign';
 
 export default function AddSigner({ next, back }: any) {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
@@ -65,6 +67,7 @@ export default function AddSigner({ next, back }: any) {
   const { chainConfig } = useConfig();
   const { calcGuardianHash } = useKeystore();
   const [isAddGuardianOpen, setIsAddGuardianOpen] = useState<any>(false);
+  const { saveRecoverRecordId } = useSettingStore();
   const guardianSignUrl = `${location.origin}/public/sign/${recoveryRecordID}`
 
   const closeEditGuardianModal = useCallback(() => {
@@ -176,6 +179,7 @@ export default function AddSigner({ next, back }: any) {
         recoveryRecord,
       });
 
+      saveRecoverRecordId(slot, recoveryRecordID)
       setIsConfirming(false)
     } catch (error: any) {
       setIsConfirming(false)
@@ -196,15 +200,16 @@ export default function AddSigner({ next, back }: any) {
   if (!hasRecord) {
     return (
       <Box width="100%" minHeight="100vh" background="#F2F4F7">
-        <Box height="58px" padding="10px 20px">
-          <Image src={IconLogo} h="44px" />
-        </Box>
+        <SignHeader url="/auth" />
         <Box
           padding="20px"
           display="flex"
           alignItems="flex-start"
           justifyContent="center"
           minHeight="calc(100% - 58px)"
+          width="100%"
+          paddingTop="60px"
+          flexDirection={{ base: 'column', 'md': 'row' }}
         >
           <RoundContainer
             width="1058px"
@@ -218,7 +223,7 @@ export default function AddSigner({ next, back }: any) {
             <Box
               width="100%"
               height="100%"
-              padding="50px"
+              padding={{ base: '20px', md: '50px' }}
               display="flex"
               alignItems="flex-start"
               justifyContent="center"
@@ -322,15 +327,16 @@ export default function AddSigner({ next, back }: any) {
 
   return (
     <Box width="100%" minHeight="100vh" background="#F2F4F7">
-      <Box height="58px" padding="10px 20px">
-        <Image src={IconLogo} h="44px" />
-      </Box>
+      <SignHeader url="/auth" />
       <Box
         padding="20px"
         display="flex"
         alignItems="flex-start"
         justifyContent="center"
         minHeight="calc(100% - 58px)"
+        width="100%"
+        paddingTop="60px"
+        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
@@ -340,11 +346,12 @@ export default function AddSigner({ next, back }: any) {
           padding="0"
           overflow="hidden"
           background="white"
+          marginBottom="20px"
         >
           <Box
             width="100%"
             height="100%"
-            padding="50px"
+            padding={{ base: '20px', md: '50px' }}
             display="flex"
             alignItems="flex-start"
             justifyContent="center"
@@ -391,11 +398,11 @@ export default function AddSigner({ next, back }: any) {
               {(!!signatures && !!signatures.length && signatures.filter((item: any) => !item.isValid).length) || 0} more guardians approval needed
             </Box>
             <Box
-              width="100%"
               display="flex"
               alignItems="flex-start"
               justifyContent="flex-start"
               flexWrap="wrap"
+              width={{ base: '100%', md: '100%' }}
             >
               {signatures.map((item: any) => {
                 return (
@@ -406,18 +413,12 @@ export default function AddSigner({ next, back }: any) {
                     display="flex"
                     alignItems="center"
                     justifyContent="flex-start"
-                    minWidth="400px"
-                    marginRight="20px"
+                    minWidth={{ base: '0', md: '400px' }}
+                    marginRight={{ base: '0', md: '20px' }}
                     marginBottom="14px"
                     gap="8px"
+                    width={{ base: '100%', md: 'auto' }}
                   >
-                    {/* <Box
-                        width="32px"
-                        height="32px"
-                        background="#D9D9D9"
-                        borderRadius="32px"
-                        marginRight="10px"
-                        /> */}
                     <AddressIcon address={item.guardian} width={32} />
                     <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" display="flex">
                       <Box>{toShortAddress(item.guardian)}</Box>
@@ -430,7 +431,15 @@ export default function AddSigner({ next, back }: any) {
                       <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#1CD20F" marginLeft="auto">Signed</Box>
                     )}
                     {!item.isValid && (
-                      <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" color="#848488" marginLeft="auto">Waiting</Box>
+                      <Box
+                        fontSize="14px"
+                        fontWeight="700"
+                        fontFamily="Nunito"
+                        color="#848488"
+                        marginLeft={{ base: '0', md: 'auto' }}
+                      >
+                        Waiting
+                      </Box>
                     )}
                   </Box>
                 )
