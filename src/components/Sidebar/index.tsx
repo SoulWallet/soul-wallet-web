@@ -40,8 +40,8 @@ export default function Sidebar() {
   const pathname = location.pathname;
 
   return (
-    <Flex flexDir={'column'} justify={'space-between'} m="6" mr="0">
-      <Flex flexDir={'column'} gap="28px">
+    <Flex bg={{ base: '#fff', lg: 'unset' }} p={{base: "4", lg: "0"}} flexDir={'column'} justify={'space-between'} m={{ base: 0, lg: 6 }} mr="0">
+      <Flex flexDir={{ base: 'row', lg: 'column' }} gap={{ base: 4, lg: '28px' }}>
         {sidebarLinks.map((link, index) => {
           const isActive = link.href === pathname || pathname.indexOf(link.href) !== -1 || index === navHoverIndex;
           return (
@@ -68,9 +68,8 @@ export default function Sidebar() {
           );
         })}
       </Flex>
-
-      <Flex flexDir={'column'} gap="8">
-        <Flex flexDir={'column'} gap="6" fontSize={'14px'} color="#383838">
+      <Flex flexDir={{ base: 'row', lg: 'column' }} gap="8">
+        <Flex flexDir={{ base: 'row', lg: 'column' }} gap="6" fontSize={'14px'} color="#383838">
           <ExtraLink
             onMouseEnter={() => setExternalHoverIndex(0)}
             onMouseLeave={() => setExternalHoverIndex(-1)}

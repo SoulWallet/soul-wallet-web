@@ -96,7 +96,7 @@ export default function Signer() {
 
   return (
     <Fragment>
-      <Box display="flex" flexDirection="column" padding="0 40px" pt="6">
+      <Box display="flex" flexDirection="column" padding={{base: "0 24px", lg: "0 40px"}} pt="6">
         <SectionMenu>
           <SectionMenuItem isActive={activeSection == 'signer'} onClick={() => navigate('/security/signer')}>
             Signer

@@ -323,8 +323,8 @@ export default function Auth() {
           flexDirection={{ base: 'column', md: 'row' }}
           background="#FFFFFF"
         >
-          <Box width={{ base: '100%', md: '50%' }} height="100%" p="60px" pt="100px">
-            <Heading marginBottom="40px" fontSize="40px">
+          <Box width={{ base: '100%', md: '50%' }} height="100%" p={{base: "32px", lg: "60px"}} pt={{base: "64px", lg: "100px"}}>
+            <Heading marginBottom="40px" fontSize={{base: "32px", lg: "40px"}}>
               Social recovery wallet for Ethereum
             </Heading>
             <Box marginBottom="90px">
