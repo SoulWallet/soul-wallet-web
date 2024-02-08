@@ -219,7 +219,7 @@ export default function AddSigner({ next, back }: any) {
                         onClick={() => removeSigner(signer.signerId)}
                         position="absolute"
                         width="40px"
-                        right={{ base: '-28px', md: '-40px' }}
+                        right={{ base: '-40px', md: '-40px' }}
                         top="0"
                         height="100%"
                         display="flex"

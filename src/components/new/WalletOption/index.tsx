@@ -24,7 +24,8 @@ export default function WalletOption({ name, icon, onClick }: { name: string, ic
         height="48px"
         border="1px solid rgba(0, 0, 0, 0.1)"
         borderRadius="12px"
-        marginRight="12px"
+        marginRight={{ base: '0px', md: '12px' }}
+        marginBottom={{ base: '4px', md: '0' }}
         display="flex"
         alignItems="center"
         justifyContent="center"

@@ -156,7 +156,6 @@ export default function PayRecoveryFee({ next }: any) {
         minHeight="calc(100% - 58px)"
         width="100%"
         paddingTop="60px"
-        flexDirection={{ base: 'column', 'md': 'row' }}
       >
         <RoundContainer
           width="1058px"
@@ -184,6 +183,8 @@ export default function PayRecoveryFee({ next }: any) {
               fontWeight="600"
               maxWidth="650px"
               marginBottom="20px"
+              width="100%"
+              wordBreak="break-all"
             >
               Pay the recovery fee to get the wallet back. This fee is used on the Ethereum network for wallet recovery. We don't charge fee from this transaction.
             </TextBody>

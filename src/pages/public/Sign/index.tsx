@@ -423,7 +423,7 @@ export default function Sign() {
                   Signature request
                 </Box>
                 {address && (
-                  <Box fontSize="14px" fontWeight="500" fontFamily="Nunito" color="rgba(0, 0, 0, 0.80)">
+                  <Box fontSize="14px" fontWeight="500" fontFamily="Nunito" color="rgba(0, 0, 0, 0.80)" wordBreak="break-all">
                     From: {address}
                   </Box>
                 )}

@@ -320,7 +320,7 @@ export default function Guardian() {
       <Box
         display="flex"
         flexDirection="column"
-        padding={{base: "0 24px", lg: "0 40px"}}
+        padding={{ base: "0 24px", lg: "auto" }}
         pt="6"
       >
         <SectionMenu>

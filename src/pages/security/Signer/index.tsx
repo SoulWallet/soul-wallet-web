@@ -96,7 +96,7 @@ export default function Signer() {
 
   return (
     <Fragment>
-      <Box display="flex" flexDirection="column" padding={{base: "0 24px", lg: "0 40px"}} pt="6">
+      <Box display="flex" flexDirection="column" padding={{base: "0 24px", lg: "auto"}} pt="6">
         <SectionMenu>
           <SectionMenuItem isActive={activeSection == 'signer'} onClick={() => navigate('/security/signer')}>
             Signer
@@ -125,7 +125,9 @@ export default function Signer() {
                     name={`EOA: ${toShortAddress(item, 4, 4)}`}
                     address={item}
                     time="Added on 2023-12-14"
-                    marginRight="18px"
+                    marginRight={{ base: '0', md: '18px' }}
+                    width={{ base: '100%', md: 'auto' }}
+                    marginBottom="18px"
                     isDefault={signerId === item}
                     cursor="pointer"
                     {...(signerId !== item
@@ -145,7 +147,9 @@ export default function Signer() {
                     device="Chrome profile"
                     time="Added on 2023-12-14 "
                     cursor="pointer"
-                    marginRight="18px"
+                    marginRight={{ base: '0', md: '18px' }}
+                    width={{ base: '100%', md: 'auto' }}
+                    marginBottom="18px"
                     isDefault={signerId === item.id}
                     {...(signerId !== item.id
                       ? {
