@@ -18,6 +18,7 @@ export interface ISignerStore {
 }
 
 export const getIndexByCredentialId = (credentials: any, id: string) => {
+  if (!credentials || !credentials.length || !id) return -1;
   return credentials.findIndex((item: any) => item.id === id);
 };
 

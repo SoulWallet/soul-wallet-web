@@ -27,6 +27,7 @@ interface IChainStore {
 }
 
 const getIndexByChainId = (chainList: IChainItem[], chainId: string) => {
+  if(!chainList || !chainList.length || !chainId) return -1;
   return chainList.findIndex((item: IChainItem) => BN(item.chainIdHex).isEqualTo(chainId));
 };
 
