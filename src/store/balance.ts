@@ -8,7 +8,7 @@ import BN from 'bignumber.js';
 import { formatIPFS } from '@/lib/tools';
 
 export interface ITokenBalanceItem {
-  chainID: number;
+  chainID: string;
   contractAddress: string;
   decimals: number;
   logoURI: string;
@@ -29,7 +29,7 @@ export interface INftBalanceItem {
 }
 
 const defaultEthBalance: ITokenBalanceItem = {
-  chainID: 1,
+  chainID: '1',
   contractAddress: ethers.ZeroAddress,
   decimals: 18,
   logoURI: IconEth,
