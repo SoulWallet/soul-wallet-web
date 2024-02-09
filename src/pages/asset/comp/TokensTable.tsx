@@ -125,7 +125,7 @@ export default function TokensTable() {
                         display={'inline-block'}
                         visibility={isLargerThan992 ? 'hidden' : 'visible'}
                         onClick={() => {
-                          showTransfer(item.contractAddress, item.chainId.toString());
+                          showTransfer(item.contractAddress, item.chainID);
                         }}
                       >
                         <Image src={IconSend} w="8" h="8" mb="2px" />

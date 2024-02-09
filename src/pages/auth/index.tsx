@@ -219,18 +219,6 @@ export default function Auth() {
     console.log('addresses', addresses);
     setAddressList(addresses);
 
-    // save signer id to address mapping
-    /* const chainIdAddress = addresses.reduce((obj, item) => {
-     *   return {
-     *     ...obj,
-     *     [item.chainIdHex]: item.address,
-     *   };
-     * }, {});
-
-     * initialSignerIds.forEach((item) => {
-     *   setSignerIdAddress(item, chainIdAddress);
-     * });
-     */
     const activeGuardianInfo = await getActiveGuardianHash(slotInfo.slotInitInfo)
     let activeGuardianHash
 

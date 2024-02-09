@@ -19,7 +19,7 @@ export interface ISignerStore {
 
 export const getIndexByCredentialId = (credentials: any, id: string) => {
   if (!credentials || !credentials.length || !id) return -1;
-  return credentials.findIndex((item: any) => item.id === id);
+  return credentials.findIndex((item: any) => item.credentialId === id);
 };
 
 const createCredentialSlice = immer<ISignerStore>((set, get) => ({
@@ -57,7 +57,7 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
     set((state) => {
       state.credentials = credentials;
       // set the first one as default
-      state.signerId = credentials[0].id;
+      state.signerId = credentials[0].credentialId;
     });
   },
   clearSigners: () => {
