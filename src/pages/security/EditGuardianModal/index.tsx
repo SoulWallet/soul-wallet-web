@@ -61,7 +61,7 @@ export default function EditGuardianModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent maxW="840px" borderRadius="20px">
+      <ModalContent maxW={{base: "95%", lg :"840px"}} my={{base: "120px"}} borderRadius="20px">
         <ModalCloseButton top="14px" />
         <ModalBody
           overflow="auto"
