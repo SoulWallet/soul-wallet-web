@@ -148,7 +148,7 @@ export default function ListGuardian({
                       address={address}
                       marginRight={{ base: '0px', md: '18px' }}
                       marginBottom="18px"
-                      width={{ base: '100%', md: 'auto' }}
+                      width={{ base: '100%', md: '272px' }}
                       cursor="pointer"
                     />
                   )}
@@ -262,7 +262,7 @@ export default function ListGuardian({
           </Button>
         )}
         {(!!guardianList && !!guardianList.length) && (
-          <Button size="mid" onClick={enterEditGuardian}>
+          <Button size="mid" w="120px" onClick={enterEditGuardian}>
             Edit
           </Button>
         )}

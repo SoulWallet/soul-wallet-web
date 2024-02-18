@@ -233,7 +233,7 @@ export const hasCommonElement = (arr1: [], arr2: []) => {
   return arr1.some((item) => arr2.includes(item));
 };
 
-export const toShortAddress = (address: string, firstSlice: number = 6, lastSlice: number = 4) => {
+export const toShortAddress = (address: string, firstSlice: number = 5, lastSlice: number = 5) => {
   if (address.length > 10) {
     return `${address.slice(0, firstSlice)}...${address.slice(-lastSlice)}`;
   }

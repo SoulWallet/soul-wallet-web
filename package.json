@@ -31,7 +31,6 @@
     "ethers": "^6.7.1",
     "framer-motion": "^10.16.4",
     "immer": "^10.0.2",
-    "json-rpc-engine": "^6.1.0",
     "nanoid": "^3.3.6",
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
@@ -39,7 +38,7 @@
     "react-jazzicon": "^1.0.4",
     "react-router-dom": "^6.16.0",
     "viem": "2.x",
-    "wagmi": "^2.1.2",
+    "wagmi": "^2.5.7",
     "zustand": "^4.4.1"
   },
   "devDependencies": {

@@ -48,7 +48,7 @@ export default function SignerSelect() {
         </DropdownSelect>
       </MenuButton>
       <MenuList p="4">
-        {eoas.length > 0 && (
+        {eoas.length > 0 ? (
           <>
             <Text fontWeight={'700'} mb="5" lineHeight={'1'}>
               EOA wallet
@@ -64,11 +64,11 @@ export default function SignerSelect() {
               </MenuItem>
             ))}
           </>
-        )}
+        ) : null}
 
-        {eoas.length && credentials.length && <Box bg="rgba(0, 0, 0, 0.05)" h="1px" my="5" />}
+        {eoas.length && credentials.length ? <Box bg="rgba(0, 0, 0, 0.05)" h="1px" my="5" /> : null}
 
-        {credentials.length > 0 && (
+        {credentials.length > 0 ? (
           <>
             <Text fontWeight={'700'} mb="5" lineHeight={'1'}>
               Passkey
@@ -85,7 +85,7 @@ export default function SignerSelect() {
               </MenuItem>
             ))}
           </>
-        )}
+        ) : null}
       </MenuList>
     </Menu>
   );

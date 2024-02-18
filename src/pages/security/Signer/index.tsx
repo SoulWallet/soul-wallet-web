@@ -122,11 +122,11 @@ export default function Signer() {
               <Box paddingTop="14px" display="flex" gap="18px" flexWrap="wrap">
                 {eoas.map((item) => (
                   <SignerCard
-                    name={`EOA: ${toShortAddress(item, 4, 4)}`}
+                    name={`EOA: ${toShortAddress(item)}`}
                     address={item}
                     time="Added on 2023-12-14"
                     marginRight={{ base: '0', md: '18px' }}
-                    width={{ base: '100%', md: 'auto' }}
+                    width={{ base: '100%', md: '272px' }}
                     marginBottom="18px"
                     isDefault={signerId === item}
                     cursor="pointer"
@@ -148,7 +148,7 @@ export default function Signer() {
                     time="Added on 2023-12-14 "
                     cursor="pointer"
                     marginRight={{ base: '0', md: '18px' }}
-                    width={{ base: '100%', md: 'auto' }}
+                    width={{ base: '100%', md: '272px' }}
                     marginBottom="18px"
                     isDefault={signerId === item.id}
                     {...(signerId !== item.id

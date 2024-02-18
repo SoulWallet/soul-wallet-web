@@ -403,7 +403,7 @@ export default function EditGuardian({
                       allowEdit={true}
                       marginRight={{ base: '0px', md: '18px' }}
                       marginBottom="18px"
-                      width={{ base: '100%', md: 'auto' }}
+                      width={{ base: '100%', md: '272px' }}
                       height="140px"
                       onEdit={() => startEditSingleGuardian({
                         guardianDetails: {

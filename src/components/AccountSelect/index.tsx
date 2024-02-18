@@ -96,7 +96,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
               <>
                 {isInModal && selectedAddressItem && (
                   <Text>
-                    {getAddressName(selectedAddress)} ({toShortAddress(selectedAddress, 4, 6)})
+                    {getAddressName(selectedAddress)} ({toShortAddress(selectedAddress)})
                   </Text>
                 )}
                 {!isInModal && (
@@ -151,7 +151,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                           </Flex>
 
                           <Text fontSize={'12px'} data-testid={`text-accountname-${idx}`} lineHeight={1.6}>
-                            {toShortAddress(item.address, 5, 5)}
+                            {toShortAddress(item.address)}
                           </Text>
                         </Box>
                       </Flex>

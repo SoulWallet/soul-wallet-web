@@ -88,7 +88,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
               <MenuButton>
                 <Flex align={'center'}>
                   <Text color="brand.red" fontWeight={'500'}>
-                    {toShortAddress(address, 5, 4)}
+                    {toShortAddress(address)}
                   </Text>
                   <Image src={IconChevronRight} />
                 </Flex>
@@ -109,7 +109,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
                         <Flex gap="3" align="center">
                           <Text fontWeight={'800'}>{getAddressName(item.address)}</Text>
                           <Text fontSize={'12px'} color="#898989">
-                            {toShortAddress(item.address, 6, 4)}
+                            {toShortAddress(item.address)}
                           </Text>
                         </Flex>
                         {item.address === selectedAddressItem.address && <Image src={IconCheckmark} />}
@@ -117,7 +117,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
                     ) : (
                       <Flex gap="3" align="center" color="#cececf" w="100%" h="100%">
                         <Text fontWeight={'800'}>{getAddressName(item.address)}</Text>
-                        <Text fontSize={'12px'}>{toShortAddress(item.address, 6, 4)}</Text>
+                        <Text fontSize={'12px'}>{toShortAddress(item.address)}</Text>
                       </Flex>
                     )}
                   </MenuItem>
