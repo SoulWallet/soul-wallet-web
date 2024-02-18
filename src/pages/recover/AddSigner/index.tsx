@@ -196,7 +196,7 @@ export default function AddSigner({ next, back }: any) {
             >
               Sign transactions on the using your preferred method, whether it's through an externally owned account (EOA) such as MetaMask or Ledger, or by creating a passkey.
             </TextBody>
-            <Box marginBottom="10px">
+            <Box marginBottom="10px" width="100%">
               {signers.map((signer: any) => {
                 if (signer.type === 'eoa') {
                   return (
@@ -205,8 +205,10 @@ export default function AddSigner({ next, back }: any) {
                       key={signer.signerId}
                       position="relative"
                       maxWidth={{ base: '550px', 'md': '550px' }}
+                      width={{ base: 'calc(100% - 30px)', md: '100%' }}
                     >
                       <Box
+                        width="100%"
                       >
                         <Input
                           placeholder="Enter ENS or wallet adderss"
@@ -233,8 +235,22 @@ export default function AddSigner({ next, back }: any) {
                   )
                 } else {
                   return (
-                    <Box background="white" borderRadius="12px" padding="16px" width="100%" border="1px solid #E4E4E4" marginBottom="10px" key={signer.signerId} position="relative">
-                      <Box display="flex" alignItems="center">
+                    <Box
+                      background="white"
+                      borderRadius="12px"
+                      padding="16px"
+                      border="1px solid #E4E4E4"
+                      marginBottom="10px"
+                      key={signer.signerId}
+                      position="relative"
+                      maxWidth={{ base: '550px', md: '550px' }}
+                      width={{ base: 'calc(100% - 30px)', md: '100%' }}
+                    >
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        width="100%"
+                      >
                         <Box width="50px" height="50px" background="#efefef" borderRadius="50px" marginRight="16px" display="flex" alignItems="center" justifyContent="center"><ComputerIcon /></Box>
                         <Box>
                           <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="800">
@@ -249,7 +265,7 @@ export default function AddSigner({ next, back }: any) {
                         onClick={() => removeSigner(signer.signerId)}
                         position="absolute"
                         width="40px"
-                        right={{ base: '-28px', md: '-40px' }}
+                        right={{ base: '-40px', md: '-40px' }}
                         top="0"
                         height="100%"
                         display="flex"
