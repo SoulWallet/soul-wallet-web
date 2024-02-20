@@ -191,8 +191,8 @@ export default function Guardian() {
   const onRemoveGuardianConfirm = useCallback((i: any) => {
     setIsRemoveGuardianOpen(false)
     const editingGuardianInfo = getEditingGuardiansInfo()
-    const currentAddresses = editingGuardianInfo.guardianDetails.guardians
-    const currentNames = editingGuardianInfo.guardianNames
+    const currentAddresses = editingGuardianInfo.guardianDetails.guardians || []
+    const currentNames = editingGuardianInfo.guardianNames || []
     currentNames.splice(i, 1)
     currentAddresses.splice(i, 1)
 

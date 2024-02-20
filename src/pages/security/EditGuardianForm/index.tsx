@@ -92,6 +92,10 @@ const isENSAddress = (address: string) => {
   return ensRegex.test(address);
 };
 
+const toLowerCase = (str: any) => {
+  return (typeof str === 'string') ? str.toLowerCase() : null
+}
+
 const validate = (values: any, props: any = {}, callbackRef: any) => {
   let errors: any = {};
   const addressKeys = Object.keys(values).filter((key) => key.indexOf('address') === 0);
@@ -104,7 +108,7 @@ const validate = (values: any, props: any = {}, callbackRef: any) => {
 
     if (address && address.length && !ethers.isAddress(address)) {
       errors[addressKey] = 'Invalid Address';
-    } else if (existedAddress.indexOf(address) !== -1) {
+    } else if (existedAddress.map((address: any) => toLowerCase(address)).filter((address: any) => !!address).indexOf((toLowerCase(address))) !== -1) {
       errors[addressKey] = 'Address already in use';
     } else if (address && address.length) {
       existedAddress.push(address);
@@ -250,12 +254,12 @@ export default function GuardianForm({
         const editingGuardiansInfo = getEditingGuardiansInfo()
         const guardians = editingGuardiansInfo.guardianDetails ? (editingGuardiansInfo.guardianDetails.guardians || []) : []
 
-        if (guardians.indexOf(address) !== -1) {
+        if (guardians.map((address: any) => toLowerCase(address)).filter((address: any) => !!address).indexOf(toLowerCase(address)) !== -1) {
           errors[addressKey] = 'Address already in use';
         }
       }
 
-      if (createInfo && createInfo.eoaAddress && createInfo.eoaAddress.indexOf(address) !== -1) {
+      if (createInfo && createInfo.eoaAddress && createInfo.eoaAddress.map((address: any) => toLowerCase(address)).filter((address: any) => !!address).indexOf(toLowerCase(address)) !== -1) {
         errors[addressKey] = 'This address is already been used as signer.';
       }
     }
