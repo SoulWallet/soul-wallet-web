@@ -1,48 +1,19 @@
-import React, { useState, useRef, useImperativeHandle, useCallback, useEffect, Fragment } from 'react';
-import { Box, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem, Tooltip } from '@chakra-ui/react';
-import FullscreenContainer from '@/components/FullscreenContainer';
-import ArrowRightIcon from '@/components/Icons/ArrowRight';
-import Heading1 from '@/components/web/Heading1';
-import Heading3 from '@/components/web/Heading3';
+import React, { useState, useRef, useEffect, Fragment } from 'react';
+import { Box, Text, Image,  Menu, MenuList, MenuButton, MenuItem, Tooltip } from '@chakra-ui/react';
 import TextBody from '@/components/web/TextBody';
 import Button from '@/components/Button'
 import TextButton from '@/components/web/TextButton';
 import { ethers } from 'ethers';
 import MinusIcon from '@/assets/icons/minus.svg';
-import IconButton from '@/components/web/IconButton';
-import SendIcon from '@/components/Icons/Send';
-import FormInput from '@/components/web/Form/FormInput';
 import DoubleFormInput from '@/components/new/DoubleFormInput';
-import useWallet from '@/hooks/useWallet';
-import useForm from '@/hooks/useForm';
-import BN from 'bignumber.js'
 import Icon from '@/components/Icon';
 import { nextRandomId } from '@/lib/tools';
 import DropDownIcon from '@/components/Icons/DropDown';
 import PlusIcon from '@/components/Icons/Plus';
-import ArrowDownIcon from '@/components/Icons/ArrowDown';
-import QuestionIcon from '@/components/Icons/Question';
-import DownloadIcon from '@/components/Icons/Download';
-import useWalletContext from '@/context/hooks/useWalletContext';
-import { useAddressStore } from '@/store/address';
 import { nanoid } from 'nanoid';
-import { useGuardianStore } from '@/store/guardian';
-import useKeystore from '@/hooks/useKeystore';
-import useConfig from '@/hooks/useConfig';
-import { L1KeyStore } from '@soulwallet/sdk';
-import useTransaction from '@/hooks/useTransaction';
-import api from '@/lib/api';
-import { useSignerStore } from '@/store/signer';
-import useTools from '@/hooks/useTools';
-import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
-import GreySection from '@/components/GreySection'
-import config from '@/config';
-import Backup from '@/components/Guardian/Backup';
 import { toShortAddress } from '@/lib/tools';
 import IconLoading from '@/assets/loading.svg';
 import { ensContractAddress } from '@/config'
-
-const defaultGuardianIds = [nextRandomId()];
 
 const getNumberArray = (count: number) => {
   const arr = [];
@@ -138,34 +109,6 @@ const getDefaultGuardianIds = (count: number) => {
   return ids;
 };
 
-// const getInitialValues = (ids: string[], guardians: string[], guardianNames: string[]) => {
-//   const idCount = ids.length;
-//   const guardianCount = guardians.length;
-//   const count = idCount > guardianCount ? idCount : guardianCount;
-//   const values: any = {};
-
-//   for (let i = 0; i < count; i++) {
-//     if (ids[i]) {
-//       values[`address_${ids[i]}`] = guardians[i];
-//       values[`name_${ids[i]}`] = guardianNames[i];
-//     }
-//   }
-
-//   return values;
-// };
-
-const isGuardiansListFilled = (list: any) => {
-  if (!list.length) return false
-
-  let isFilled = true
-
-  for (const item of list) {
-    isFilled = isFilled && item
-  }
-
-  return isFilled
-}
-
 const extractENSAddress = (address: any) => {
   if (!address) return
 
@@ -245,13 +188,11 @@ const GuardianInput = ({
   values,
   showErrors,
   errors,
-  guardianIds,
   onChange,
   onBlur,
   handleSubmit,
   removeGuardian,
   onChangeValues,
-  handleConfirm,
   i
 }: any) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -260,7 +201,6 @@ const GuardianInput = ({
   const [searchText, setSearchText] = useState('')
   const [searchAddress, setSearchAddress] = useState('')
   const [resolvedAddress, setResolvedAddress] = useState('')
-  // const { ethersProvider } = useWalletContext();
   const rightInputRef = useRef()
   const activeENSNameRef = useRef()
   const menuRef = useRef()
@@ -480,7 +420,6 @@ const GuardianInput = ({
 }
 
 export default function Edit({
-  description,
   guardianIds,
   guardiansList,
   values,
@@ -493,15 +432,9 @@ export default function Edit({
   handleSubmit,
   amountForm,
   amountData,
-  showAdvance,
-  setShowAdvance,
   loading,
   disabled,
-  hasGuardians,
   selectAmount,
-  keepPrivate,
-  setKeepPrivate,
-  confirmButton,
   onChangeValues,
   formWidth,
   handleConfirm,

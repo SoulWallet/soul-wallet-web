@@ -1,9 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import useBrowser from '@/hooks/useBrowser';
+import { useState, useCallback } from 'react';
 import {
   Box,
   Text,
-  Image,
   Flex,
   useToast,
   Input,
@@ -12,31 +10,18 @@ import {
   MenuButton,
   MenuItem,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import IconLogo from '@/assets/logo-all-v3.svg';
-import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
-import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import Button from '@/components/Button'
 import PlusIcon from '@/components/Icons/Plus';
 import ComputerIcon from '@/components/Icons/Computer';
-import TwitterIcon from '@/components/Icons/Social/Twitter'
-import TelegramIcon from '@/components/Icons/Social/Telegram'
-import GithubIcon from '@/components/Icons/Social/Github'
-import PasskeyIcon from '@/components/Icons/Intro/Passkey'
-import AccountIcon from '@/components/Icons/Intro/Account'
-import TransferIcon from '@/components/Icons/Intro/Transfer'
-import TokenIcon from '@/components/Icons/Intro/Token'
 import PasskeySignerIcon from '@/components/Icons/PasskeySigner'
 import EOASignerIcon from '@/components/Icons/EOASigner'
 import usePassKey from '@/hooks/usePasskey';
-import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
-import { useAccount, useConnect, useReconnect, useDisconnect } from 'wagmi'
+import { useConnect, useDisconnect } from 'wagmi'
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
 import { L1KeyStore } from '@soulwallet/sdk';
@@ -48,16 +33,12 @@ import { SignHeader } from '@/pages/public/Sign';
 
 export default function AddSigner({ next, back }: any) {
   const [signers, setSigners] = useState<any>([])
-  const [credentials, setCredentials] = useState<any>([])
-  const [isCreating, setIsCreating] = useState<any>(false)
   const [isConfirming, setIsConfirming] = useState<any>(false)
   const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
-  const [eoas, setEoas] = useState<any>([])
   const toast = useToast();
-  const { connect, connectAsync } = useConnect()
-  const { disconnect, disconnectAsync } = useDisconnect()
+  const { connectAsync } = useConnect()
+  const { disconnectAsync } = useDisconnect()
   const { register } = usePassKey()
-  const { navigate } = useBrowser();
   const { updateRecoverInfo } = useTempStore()
   const { chainConfig } = useConfig();
   const { recoverInfo } = useTempStore()
@@ -256,9 +237,6 @@ export default function AddSigner({ next, back }: any) {
                           <Text color="rgb(7, 32, 39)" fontSize="18px" fontWeight="800">
                             {signer.name}
                           </Text>
-                          {/* <Text color="rgb(51, 51, 51)" fontSize="14px">
-                              Created on: 12/14/2023 12:12:09
-                              </Text> */}
                         </Box>
                       </Box>
                       <Box

@@ -1,10 +1,8 @@
 import { useState, useCallback, Fragment } from 'react';
-import Header from '@/components/Header';
 import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection';
 import SignerCard from '@/components/new/SignerCard';
-import GuardianCard from '@/components/new/GuardianCard';
-import { Box, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import SetSignerModal from '@/pages/security/SetSignerModal';
 import SelectSignerTypeModal from '@/pages/security/SelectSignerTypeModal';
 import SelectGuardianTypeModal from '@/pages/security/SelectGuardianTypeModal';
@@ -12,21 +10,13 @@ import IntroGuardianModal from '@/pages/security/IntroGuardianModal';
 import EditGuardianModal from '@/pages/security/EditGuardianModal';
 import BackupGuardianModal from '@/pages/security/BackupGuardianModal';
 import WalletConnectModal from '@/pages/security/WalletConnectModal';
-import Button from '@/components/Button';
-import TextButton from '@/components/new/TextButton';
-import PlusIcon from '@/components/Icons/Plus';
-import HistoryIcon from '@/components/Icons/History';
-import Title from '@/components/new/Title';
-import TextBody from '@/components/new/TextBody';
-import DropDownIcon from '@/components/Icons/DropDown';
 import useBrowser from '@/hooks/useBrowser';
-import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import { useSignerStore } from '@/store/signer';
 import { toShortAddress } from '@/lib/tools';
 
 export default function Signer() {
   const { navigate } = useBrowser();
-  const [activeSection, setActiveSection] = useState<string>('signer');
+  const [activeSection] = useState<string>('signer');
   const [signerIdToSet, setSignerIdToSet] = useState('');
   const { eoas, credentials, signerId } = useSignerStore();
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
@@ -37,17 +27,12 @@ export default function Signer() {
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
 
-  console.log('s', signerId);
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true);
   }, []);
 
   const closeSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(false);
-  }, []);
-
-  const openChooseSignerModal = useCallback(() => {
-    setIsChooseSignerOpen(true);
   }, []);
 
   const closeChooseSignerModal = useCallback(() => {
@@ -62,32 +47,16 @@ export default function Signer() {
     setIsWalletConnectOpen(false);
   }, []);
 
-  const openSelectGuardianModal = useCallback(() => {
-    setIsSelectGuardianOpen(true);
-  }, []);
-
   const closeSelectGuardianModal = useCallback(() => {
     setIsSelectGuardianOpen(false);
-  }, []);
-
-  const openIntroGuardianModal = useCallback(() => {
-    setIsIntroGuardianOpen(true);
   }, []);
 
   const closeIntroGuardianModal = useCallback(() => {
     setIsIntroGuardianOpen(false);
   }, []);
 
-  const openEditGuardianModal = useCallback(() => {
-    setIsEditGuardianOpen(true);
-  }, []);
-
   const closeEditGuardianModal = useCallback(() => {
     setIsEditGuardianOpen(false);
-  }, []);
-
-  const openBackupGuardianModal = useCallback(() => {
-    setIsBackupGuardianOpen(true);
   }, []);
 
   const closeBackupGuardianModal = useCallback(() => {
@@ -110,14 +79,6 @@ export default function Signer() {
             <Fragment>
               <Box fontFamily="Nunito" fontWeight="700" fontSize="18px" display="flex">
                 <Box>My Signers</Box>
-                {/* <Box marginLeft="auto">
-                  <Button size="mid" onClick={openChooseSignerModal}>
-                    <Box marginRight="6px">
-                      <PlusIcon color="white" />
-                    </Box>
-                    Add signer
-                  </Button>
-                </Box> */}
               </Box>
               <Box paddingTop="14px" display="flex" gap="18px" flexWrap="wrap">
                 {eoas.map((item) => (

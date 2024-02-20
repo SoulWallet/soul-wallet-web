@@ -1,21 +1,5 @@
-import React, {
-  useState,
-  useRef,
-  useImperativeHandle,
-  useCallback,
-  useEffect,
-  Fragment
-} from 'react'
 import {
   Box,
-  Text,
-  Image,
-  useToast,
-  Select,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -24,7 +8,6 @@ import {
 
 import Button from '@/components/Button'
 import WarningIcon from '@/components/Icons/Warning';
-import { useSignerStore } from '@/store/signer'
 
 export default function RemoveGuardianModal({
   isOpen,

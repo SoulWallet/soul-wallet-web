@@ -1,21 +1,6 @@
-import React, {
-  useState,
-  useRef,
-  useImperativeHandle,
-  useCallback,
-  useEffect,
-  Fragment
-} from 'react'
 import {
   Box,
-  Text,
   Image,
-  useToast,
-  Select,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -24,11 +9,6 @@ import {
   ModalBody
 } from '@chakra-ui/react'
 import TextBody from '@/components/new/TextBody'
-import Title from '@/components/new/Title'
-import ArrowRightIcon from '@/components/Icons/ArrowRight'
-import PasskeyIcon from '@/components/Icons/Auth/Passkey'
-import QuestionIcon from '@/components/Icons/Auth/Question'
-import Button from '@/components/Button'
 import MetamaskIcon from '@/assets/wallets/metamask.png'
 import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
 import CoinbaseIcon from '@/assets/wallets/coinbase.png'

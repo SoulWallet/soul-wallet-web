@@ -1,10 +1,6 @@
 import { useState, useCallback, Fragment, useRef, useEffect } from 'react';
-import Header from '@/components/Header';
 import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
-import RoundSection from '@/components/new/RoundSection'
-import SignerCard from '@/components/new/SignerCard'
-import GuardianCard from '@/components/new/GuardianCard'
-import { Box, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import SetSignerModal from '@/pages/security/SetSignerModal'
 import SelectSignerTypeModal from '@/pages/security/SelectSignerTypeModal'
 import SelectGuardianTypeModal from '@/pages/security/SelectGuardianTypeModal'
@@ -13,15 +9,7 @@ import RemoveGuardianModal from '@/pages/security/RemoveGuardianModal'
 import EditGuardianModal from '@/pages/security/EditGuardianModal'
 import BackupGuardianModal from '@/pages/security/BackupGuardianModal'
 import WalletConnectModal from '@/pages/security/WalletConnectModal'
-import Button from '@/components/Button'
-import TextButton from '@/components/new/TextButton'
-import PlusIcon from '@/components/Icons/Plus';
-import HistoryIcon from '@/components/Icons/History';
-import Title from '@/components/new/Title'
-import TextBody from '@/components/new/TextBody'
-import DropDownIcon from '@/components/Icons/DropDown';
 import useBrowser from '@/hooks/useBrowser';
-import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';

@@ -1,12 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState } from 'react';
 import useBrowser from '@/hooks/useBrowser';
 import {
   Box,
-  Text,
-  Image,
   Flex,
-  useToast,
-  Input
+  useToast
 } from '@chakra-ui/react';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'

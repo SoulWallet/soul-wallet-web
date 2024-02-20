@@ -1,67 +1,39 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import useBrowser from '@/hooks/useBrowser';
+import { useState, useCallback, useEffect } from 'react';
 import {
   Box,
-  Text,
   Image,
   Flex,
-  useToast,
-  Input,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem
+  useToast
 } from '@chakra-ui/react';
 import { SignHeader } from '@/pages/public/Sign';
-import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import IconLogo from '@/assets/logo-all-v3.svg';
-import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
-import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import Button from '@/components/Button'
-import PlusIcon from '@/components/Icons/Plus';
-import ComputerIcon from '@/components/Icons/Computer';
-import TwitterIcon from '@/components/Icons/Social/Twitter'
-import TelegramIcon from '@/components/Icons/Social/Telegram'
-import GithubIcon from '@/components/Icons/Social/Github'
-import PasskeyIcon from '@/components/Icons/Intro/Passkey'
-import AccountIcon from '@/components/Icons/Intro/Account'
-import TransferIcon from '@/components/Icons/Intro/Transfer'
-import TokenIcon from '@/components/Icons/Intro/Token'
-import usePassKey from '@/hooks/usePasskey';
-import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
 import useTools from '@/hooks/useTools';
 import { ethers } from 'ethers';
 import BN from 'bignumber.js';
-import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
+import { copyText } from '@/lib/tools';
 import { useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import config from '@/config';
+import { useAccount, useConnect } from 'wagmi';
 import { paymentContractConfig } from '@/contracts/contracts';
 import { metaMask } from 'wagmi/connectors'
 import StepProgress from '../StepProgress'
 
 export default function PayRecoveryFee({ next }: any) {
-  const { recoverInfo, updateRecoverInfo } = useTempStore()
+  const { recoverInfo } = useTempStore()
   const { recoveryRecordID, recoveryRecord  } = recoverInfo
   const { estimatedFee } = recoveryRecord
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
   const [paying, setPaying] = useState(false)
-  const [loaded, setLoaded] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
   const toast = useToast();
   const { switchChain } = useSwitchChain();
   const { connectAsync } = useConnect();
-  const { address, isConnected, isConnecting, chainId : connectedChainId, } = useAccount()
-  const { writeContract: pay, data: payHash } = useWriteContract();
-  const result = useWaitForTransactionReceipt({
-    hash: payHash,
-  });
+  const { isConnected, isConnecting, chainId : connectedChainId, } = useAccount()
+  const { writeContract: pay } = useWriteContract();
 
   const mainnetChainId = Number(import.meta.env.VITE_MAINNET_CHAIN_ID);
 
@@ -129,10 +101,6 @@ export default function PayRecoveryFee({ next }: any) {
       title: 'Copy success!',
       status: 'success',
     });
-  };
-
-  const handlePay = async () => {
-    window.open(payUrl, '_blank');
   };
 
   const connectWallet = useCallback(async () => {

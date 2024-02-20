@@ -1,29 +1,20 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import useBrowser from '@/hooks/useBrowser';
 import {
   Box,
   Text,
   Image,
-  Flex,
-  useToast,
-  Input,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem
+  Flex
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import IconLogo from '@/assets/logo-all-v3.svg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
-import TextBody from '@/components/new/TextBody'
 import Button from '@/components/Button'
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
 import { useTempStore } from '@/store/temp';
 import CheckedIcon from '@/components/Icons/Checked';
-import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
+import { getNetwork } from '@/lib/tools';
 import { SignHeader } from '@/pages/public/Sign';
 
 const getProgressPercent = (startTime: any, endTime: any, status: any) => {
@@ -69,7 +60,7 @@ export const getWalletAddress = (chainId: any, list: any) => {
 }
 
 export default function RecoverProgress() {
-  const { recoverInfo, updateRecoverInfo } = useTempStore()
+  const { recoverInfo } = useTempStore()
   const { recoveryRecordID, recoveryRecord  } = recoverInfo
   const { addresses, statusData } = recoveryRecord
   const { chainRecoveryStatus } = statusData

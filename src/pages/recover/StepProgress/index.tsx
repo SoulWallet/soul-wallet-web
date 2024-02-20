@@ -1,10 +1,5 @@
 import {
-  Box,
-  Text,
-  Image,
-  Flex,
-  useToast,
-  Input
+  Box
 } from '@chakra-ui/react';
 import StepInactiveIcon from '@/components/Icons/StepInactive'
 import StepActiveIcon from '@/components/Icons/StepActive'

@@ -1,7 +1,5 @@
-import { Fragment } from 'react'
 import {
   Box,
-  Image,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -10,14 +8,7 @@ import {
   ModalBody
 } from '@chakra-ui/react'
 import { Connector, useConnect } from 'wagmi'
-import TextBody from '@/components/new/TextBody'
-import Title from '@/components/new/Title'
-// import ArrowRightIcon from '@/components/Icons/ArrowRight'
-import PasskeyIcon from '@/components/Icons/Auth/Passkey'
-import QuestionIcon from '@/components/Icons/Auth/Question'
-import Button from '@/components/Button'
 import { supportedEoas } from '@/config'
-import SuccessIcon from "@/components/Icons/Success";
 import WalletOption from '@/components/new/WalletOption'
 import { getWalletIcon } from '@/lib/tools'
 
@@ -26,7 +17,6 @@ export default function ConnectWalletModal({
   onClose,
   addEOA,
   isConnecting,
-  isConnected,
 }: any) {
   const { connectors } = useConnect();
 
@@ -40,7 +30,6 @@ export default function ConnectWalletModal({
           gap="5"
           fontWeight="800"
           textAlign="center"
-          // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
           Connect wallet

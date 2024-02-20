@@ -1,43 +1,17 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import useBrowser from '@/hooks/useBrowser';
+import { useState, useCallback } from 'react';
 import {
   Box,
-  Text,
-  Image,
-  Flex,
   useToast,
   Input,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import IconLogo from '@/assets/logo-all-v3.svg';
-import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
-import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import Button from '@/components/Button'
-import PlusIcon from '@/components/Icons/Plus';
-import ComputerIcon from '@/components/Icons/Computer';
-import TwitterIcon from '@/components/Icons/Social/Twitter'
-import TelegramIcon from '@/components/Icons/Social/Telegram'
-import GithubIcon from '@/components/Icons/Social/Github'
-import PasskeyIcon from '@/components/Icons/Intro/Passkey'
-import AccountIcon from '@/components/Icons/Intro/Account'
-import TransferIcon from '@/components/Icons/Intro/Transfer'
-import TokenIcon from '@/components/Icons/Intro/Token'
-import usePassKey from '@/hooks/usePasskey';
-import { useSignerStore } from '@/store/signer';
 import { useTempStore } from '@/store/temp';
-import EditGuardianModal from '@/pages/security/EditGuardianModal';
 import CopyIcon from '@/components/Icons/Copy';
 import OpenScanIcon from '@/components/Icons/OpenScan';
-import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
-import config from '@/config';
+import { copyText, toShortAddress } from '@/lib/tools';
 import useTools from '@/hooks/useTools';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
@@ -53,7 +27,6 @@ import { useSettingStore } from '@/store/setting';
 import { SignHeader } from '@/pages/public/Sign';
 
 export default function AddSigner({ next, back }: any) {
-  const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
   const { recoverInfo, updateRecoverInfo } = useTempStore()
   const { recoveryRecordID, guardianDetails, recoveryRecord, signers } = recoverInfo
   const hasGuardians = !!guardianDetails
@@ -69,10 +42,6 @@ export default function AddSigner({ next, back }: any) {
   const [isAddGuardianOpen, setIsAddGuardianOpen] = useState<any>(false);
   const { saveRecoverRecordId } = useSettingStore();
   const guardianSignUrl = `${location.origin}/public/sign/${recoveryRecordID}`
-
-  const closeEditGuardianModal = useCallback(() => {
-    setIsEditGuardianOpen(false)
-  }, [])
 
   const onAddGuardianConfirm = useCallback((addresses: any, names: any, threshold: any) => {
     console.log('onAddGuardianConfirm', addresses, names, threshold)

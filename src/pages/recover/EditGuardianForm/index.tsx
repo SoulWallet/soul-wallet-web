@@ -1,70 +1,9 @@
-import React, { useState, useRef, useImperativeHandle, useCallback, useEffect, Fragment } from 'react';
-import { Box, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem, Tooltip } from '@chakra-ui/react';
-import FullscreenContainer from '@/components/FullscreenContainer';
-import ArrowRightIcon from '@/components/Icons/ArrowRight';
-import Heading1 from '@/components/web/Heading1';
-import Heading3 from '@/components/web/Heading3';
-import TextBody from '@/components/web/TextBody';
-import Button from '@/components/web/Button';
-import TextButton from '@/components/web/TextButton';
+import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import MinusIcon from '@/assets/icons/minus.svg';
-import IconButton from '@/components/web/IconButton';
-import SendIcon from '@/components/Icons/Send';
-import FormInput from '@/components/web/Form/FormInput';
-import DoubleFormInput from '@/components/web/Form/DoubleFormInput';
-import useWallet from '@/hooks/useWallet';
 import useForm from '@/hooks/useForm';
-import BN from 'bignumber.js'
-import Icon from '@/components/Icon';
 import { nextRandomId } from '@/lib/tools';
-import DropDownIcon from '@/components/Icons/DropDown';
-import PlusIcon from '@/components/Icons/Plus';
-import ArrowDownIcon from '@/components/Icons/ArrowDown';
-import QuestionIcon from '@/components/Icons/Question';
-import DownloadIcon from '@/components/Icons/Download';
-import useWalletContext from '@/context/hooks/useWalletContext';
-import { useAddressStore } from '@/store/address';
-import { nanoid } from 'nanoid';
-import { useGuardianStore } from '@/store/guardian';
-import { useSlotStore } from '@/store/slot';
-import useKeystore from '@/hooks/useKeystore';
-import useConfig from '@/hooks/useConfig';
-import { L1KeyStore } from '@soulwallet/sdk';
-import useTransaction from '@/hooks/useTransaction';
-import api from '@/lib/api';
-import { useSignerStore } from '@/store/signer';
-import useTools from '@/hooks/useTools';
-import ArrowLeftIcon from '@/components/Icons/ArrowLeft';
-import GreySection from '@/components/GreySection'
-import Backup from '@/components/Guardian/Backup';
 import Edit from './Edit';
-import { useSettingStore } from '@/store/setting';
 import { useTempStore } from '@/store/temp';
-
-const defaultGuardianIds = [nextRandomId()];
-
-const getNumberArray = (count: number) => {
-  const arr = [];
-
-  for (let i = 1; i <= count; i++) {
-    arr.push(i);
-  }
-
-  return arr;
-};
-
-const toHex = (num: any) => {
-  let hexStr = num.toString(16);
-
-  if (hexStr.length % 2 === 1) {
-    hexStr = '0' + hexStr;
-  }
-
-  hexStr = '0x' + hexStr;
-
-  return hexStr;
-};
 
 const getRecommandCount = (c: number) => {
   if (!c) {
@@ -85,11 +24,6 @@ const getFieldsByGuardianIds = (ids: any) => {
   }
 
   return fields;
-};
-
-const isENSAddress = (address: string) => {
-  const ensRegex = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/;
-  return ensRegex.test(address);
 };
 
 const validate = (values: any) => {
@@ -166,22 +100,12 @@ const isGuardiansListFilled = (list: any) => {
   return isFilled
 }
 
-const defaultGuardianInfo = {
-  guardianDetails: {
-    guardians: [],
-    threshold: 0
-  }
-}
-
 export default function GuardianForm({
   cancelEdit,
-  startGuardianInterval,
   onConfirm,
   onBack,
   canGoBack
 }: any) {
-  const { getAddressName, setFinishedSteps, saveAddressName } = useSettingStore();
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const tempStore = useTempStore()
   const { recoverInfo } = tempStore;
@@ -195,26 +119,8 @@ export default function GuardianForm({
   const [fields, setFields] = useState(getFieldsByGuardianIds(defaultGuardianIds));
   const [guardiansList, setGuardiansList] = useState([]);
   const [amountData, setAmountData] = useState<any>({});
-  const { setGuardiansInfo, setEditingGuardiansInfo } = useGuardianStore();
-  const { slotInfo } = useSlotStore()
-  const { getReplaceGuardianInfo, calcGuardianHash, getSlot } = useKeystore();
-  const { chainConfig } = useConfig();
-  const [pending, setPending] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { sendErc20, payTask } = useTransaction();
-  const { showConfirmPayment } = useWalletContext();
-  const { credentials } = useSignerStore();
+  const [loading] = useState(false);
   const [showAdvance, setShowAdvance] = useState(false)
-  const [status, setStatus] = useState<string>('editing');
-  const [isDone, setIsDone] = useState(false);
-  const [downloading, setDownloading] = useState(false);
-  const [sending, setSending] = useState(false);
-  const { generateJsonName, downloadJsonFile } = useTools()
-  const toast = useToast();
-  const emailForm = useForm({
-    fields: ['email'],
-    validate,
-  });
 
   const { values, errors, invalid, onChange, onBlur, showErrors, addFields, removeFields, onChangeValues } = useForm({
     fields,
@@ -306,10 +212,6 @@ export default function GuardianForm({
   }, [amountData.guardiansCount, amountForm.values.amount]);
 
   const hasGuardians = guardianDetails && guardianDetails.guardians && !!guardianDetails.guardians.length
-
-  const goBack = () => {
-    setStatus('editing');
-  };
 
   return (
     <Edit

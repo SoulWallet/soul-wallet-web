@@ -13,18 +13,9 @@ import {
 } from '@chakra-ui/react'
 import TextBody from '@/components/new/TextBody'
 import Title from '@/components/new/Title'
-import ArrowRightIcon from '@/components/Icons/ArrowRight'
-import PasskeyIcon from '@/components/Icons/Auth/Passkey'
-import QuestionIcon from '@/components/Icons/Auth/Question'
 import DownloadIcon from '@/components/Icons/Download'
 import Button from '@/components/Button'
 import TextButton from '@/components/new/TextButton'
-import MetamaskIcon from '@/assets/wallets/metamask.png'
-import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
-import CoinbaseIcon from '@/assets/wallets/coinbase.png'
-import BinanceIcon from '@/assets/wallets/binance.png'
-import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
-import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
 import useForm from '@/hooks/useForm';
@@ -59,8 +50,6 @@ const validate = (values: any) => {
 export default function BackupGuardianModal({
   isOpen,
   onClose,
-  startIntroGuardian,
-  startEditGuardian,
   keepPrivate
 }: any) {
   const { calcGuardianHash } = useKeystore();

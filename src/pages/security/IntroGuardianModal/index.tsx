@@ -1,21 +1,9 @@
-import React, {
+import {
   useState,
-  useRef,
-  useImperativeHandle,
-  useCallback,
-  useEffect,
-  Fragment
+  useCallback
 } from 'react'
 import {
   Box,
-  Text,
-  Image,
-  useToast,
-  Select,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -24,24 +12,12 @@ import {
   ModalBody
 } from '@chakra-ui/react'
 import TextBody from '@/components/new/TextBody'
-import Title from '@/components/new/Title'
 import ArrowRightIcon from '@/components/Icons/ArrowRight'
-import PasskeyIcon from '@/components/Icons/Auth/Passkey'
-import QuestionIcon from '@/components/Icons/Auth/Question'
-import Button from '@/components/Button'
-import MetamaskIcon from '@/assets/wallets/metamask.png'
-import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
-import CoinbaseIcon from '@/assets/wallets/coinbase.png'
-import BinanceIcon from '@/assets/wallets/binance.png'
-import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
-import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
 
 export default function IntroGuardianModal({
   isOpen,
-  onClose,
   setIsIntroGuardianOpen,
-  setIsSelectGuardianOpen,
-  setIsEditGuardianOpen
+  setIsSelectGuardianOpen
 }: any) {
   const [showQuestion1, setShowQuestion1] = useState(false)
   const [showQuestion2, setShowQuestion2] = useState(false)
@@ -62,7 +38,6 @@ export default function IntroGuardianModal({
           gap="5"
           fontWeight="800"
           textAlign="center"
-          // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
           What’s guardian?

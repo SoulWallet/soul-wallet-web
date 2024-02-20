@@ -1,48 +1,25 @@
 import { useState, useCallback, Fragment } from 'react';
-import Header from '@/components/Header';
-import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection'
-import SignerCard from '@/components/new/SignerCard'
 import GuardianCard from '@/components/new/GuardianCard'
 import { Image, Box, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react'
-import SetSignerModal from '@/pages/security/SetSignerModal'
-import SelectSignerTypeModal from '@/pages/security/SelectSignerTypeModal'
-import SelectGuardianTypeModal from '@/pages/security/SelectGuardianTypeModal'
-import IntroGuardianModal from '@/pages/security/IntroGuardianModal'
-import EditGuardianModal from '@/pages/security/EditGuardianModal'
-import BackupGuardianModal from '@/pages/security/BackupGuardianModal'
-import WalletConnectModal from '@/pages/security/WalletConnectModal'
 import Button from '@/components/Button'
-import TextButton from '@/components/new/TextButton'
 import PlusIcon from '@/components/Icons/Plus';
 import HistoryIcon from '@/components/Icons/History';
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import DropDownIcon from '@/components/Icons/DropDown';
 import useBrowser from '@/hooks/useBrowser';
-import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import { useTempStore } from '@/store/temp';
 import { useGuardianStore } from '@/store/guardian';
 import { useSettingStore } from '@/store/setting';
 import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg'
 
 export default function ListGuardian({
-  openEditGuardianModal,
   startEditGuardian,
   openBackupGuardianModal,
-  startAddGuardian,
   enterEditGuardian
 }: any) {
-  const { navigate } = useBrowser();
-  const [activeSection, setActiveSection] = useState<string>('guardian');
-  const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
-  const [isChooseSignerOpen, setIsChooseSignerOpen] = useState<any>(false);
-  const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
-  const [isIntroGuardianOpen, setIsIntroGuardianOpen] = useState<any>(false);
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
-  const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
-  const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
-  const [isEditing, setIsEditing] = useState<any>(false);
 
   const [editingGuardianDetails, setEditingGuardianDetails] = useState<any>({
     guardians: [],
@@ -55,7 +32,6 @@ export default function ListGuardian({
   const tempStore = useTempStore();
   const guardianStore = useGuardianStore();
   const guardiansInfo = !tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()
-  const updateGuardiansInfo = !tempStore.createInfo.creatingGuardianInfo ? guardianStore.updateGuardiansInfo : tempStore.updateCreatingGuardianInfo
   const keepPrivate = guardiansInfo.keepPrivate
 
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
@@ -73,17 +49,6 @@ export default function ListGuardian({
     }
   })
   console.log('guardiansInfo000', guardiansInfo)
-
-  const onGuardianListConfirm = useCallback((addresses: any, names: any) => {
-    setIsEditGuardianOpen(false)
-    // startEditing()
-
-    setEditingGuardianDetails({
-      guardians: addresses,
-      guardianNames: names,
-      threshold: editingGuardianDetails.threshold || 0
-    })
-  }, [editingGuardianDetails])
 
   return (
     <Fragment>

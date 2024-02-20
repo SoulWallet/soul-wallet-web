@@ -1,26 +1,14 @@
 import { useState, useCallback, Fragment, useEffect } from 'react';
-import Header from '@/components/Header';
-import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection'
-import SignerCard from '@/components/new/SignerCard'
 import GuardianCard from '@/components/new/GuardianCard'
 import { Box, Image, Menu, MenuList, MenuButton, MenuItem, useToast } from '@chakra-ui/react'
-import SetSignerModal from '@/pages/security/SetSignerModal'
-import SelectSignerTypeModal from '@/pages/security/SelectSignerTypeModal'
-import SelectGuardianTypeModal from '@/pages/security/SelectGuardianTypeModal'
-import IntroGuardianModal from '@/pages/security/IntroGuardianModal'
-import EditGuardianModal from '@/pages/security/EditGuardianModal'
-import BackupGuardianModal from '@/pages/security/BackupGuardianModal'
-import WalletConnectModal from '@/pages/security/WalletConnectModal'
 import Button from '@/components/Button'
-import TextButton from '@/components/new/TextButton'
 import PlusIcon from '@/components/Icons/Plus';
 import HistoryIcon from '@/components/Icons/History';
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import DropDownIcon from '@/components/Icons/DropDown';
 import useBrowser from '@/hooks/useBrowser';
-import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
 import useForm from '@/hooks/useForm';
@@ -74,12 +62,8 @@ const amountValidate = (values: any, props: any) => {
 };
 
 export default function EditGuardian({
-  cancelEdit,
-  onEditGuardianConfirm,
-  startEditGuardian,
   cancelEditGuardian,
   openBackupGuardianModal,
-  startDeleteGuardian,
   startAddGuardian,
   startEditSingleGuardian,
   startRemoveGuardian
@@ -88,15 +72,7 @@ export default function EditGuardian({
   const {
     getEditingGuardiansInfo,
     updateEditingGuardiansInfo,
-
-    getEditingSingleGuardiansInfo,
-    updateEditingSingleGuardiansInfo,
-
-    getAddingGuardiansInfo,
-    updateAddingGuardiansInfo,
-
     clearCreateInfo,
-    getCreateInfo,
   } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
@@ -108,10 +84,9 @@ export default function EditGuardian({
   const [showGuardianTip1, setShowGuardianTip1] = useState(true)
   const [showGuardianTip2, setShowGuardianTip2] = useState(true)
   const { slotInfo } = useSlotStore();
-  const { navigate } = useBrowser();
   const { credentials, eoas, } = useSignerStore();
   const { showConfirmPayment } = useWalletContext();
-  const { sendErc20, payTask } = useTransaction();
+  const { payTask } = useTransaction();
   const toast = useToast();
 
   const guardianDetails = guardiansInfo.guardianDetails || {
@@ -154,10 +129,6 @@ export default function EditGuardian({
   }, [guardianList.length])
 
   console.log('guardianList', guardianList)
-
-  const handleConfirm = useCallback((addresses: any, names: any) => {
-    console.log('handleConfirm', addresses, names)
-  }, [])
 
   const next = useCallback(async () => {
     const initialGuardianHash = slotInfo && slotInfo.initialGuardianHash
@@ -274,8 +245,8 @@ export default function EditGuardian({
 
         const task = res1.data
         const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
-        const res2 = await showConfirmPayment(task.estiamtedFee);
-        const res3 = await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
+        await showConfirmPayment(task.estiamtedFee);
+        await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
         guardianStore.updateGuardiansInfo({
           ...guardiansInfo
         })
@@ -303,23 +274,9 @@ export default function EditGuardian({
     }
   }, [guardianList, keepPrivate, slotInfo])
 
-  const handleDelete = useCallback((i: any) => {
-    const guardiansInfo = getEditingGuardiansInfo();
-    const guardianDetails = guardiansInfo.guardianDetails
-    const guardianNames = guardiansInfo.guardianNames
-    const guardians = guardianDetails.guardians
-    guardianDetails.guardians = guardians.filter((_: any, idx: number) => idx !== i)
-
-    guardianStore.updateEditingGuardiansInfo({
-      guardianDetails,
-      guardianNames: guardianNames.filter((_: any, idx: number) => idx !== i)
-    })
-  }, [])
-
   const onBackupFinished = useCallback(() => {
     next()
   }, [keepPrivate])
-
 
   useEffect(() => {
     if (!amountForm.values.amount || Number(amountForm.values.amount) > guardianList.length) {
