@@ -1,11 +1,5 @@
-import { useEffect, useState } from 'react';
-import Header from '@/components/Header';
-import { Box, Flex, Text, Table, Tr, Thead, Tbody, Th, Td, Image, GridItem, Grid } from '@chakra-ui/react';
-import AppContainer from '@/components/AppContainer';
-import Footer from '@/components/Footer';
-import AvatarWithName from '@/components/AvatarWithName';
-import ChainSelectMultiple from '@/components/ChainSelectMultiple';
-import { useChainStore } from '@/store/chain';
+import {  useState } from 'react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import TokensTable from './comp/TokensTable';
 import NftsTable from './comp/NftsTable';
 import DashboardLayout from '@/components/Layouts/DashboardLayout';
@@ -45,25 +39,10 @@ export const Tabs = ({ tabList, activeTab, onChange }: any) => {
 
 export default function Asset() {
   const [activeTab, setActiveTab] = useState(0);
-  // const { chainList } = useChainStore();
-  // const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
 
   return (
     <DashboardLayout>
       <Box pl={{ base: '24px', lg: '0' }} pr={{ base: '24px', lg: '48px' }} pt="6">
-        {/* <Flex rounded="20px" p="6" bg="brand.white" mt="24px" mb="30px" justify={'space-between'}>
-          <Box>
-            <AvatarWithName editable={false} />
-            <Flex mt="14px" gap="2px" fontWeight={'700'} align={'center'}>
-              <Text fontSize={'24px'}>$</Text>
-              <Text fontSize={'48px'} lineHeight={'1'}>
-                0
-              </Text>
-            </Flex>
-          </Box>
-          <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} border="1px solid #818181" />
-        </Flex> */}
-
         <Tabs tabList={tabList} activeTab={activeTab} onChange={setActiveTab} />
         <Flex gap="5" mt="3" alignItems={'flex-start'}>
           <Box w="100%" rounded="20px" bg="#fff" p={{base: 3, md : 5, lg: 8}}>
