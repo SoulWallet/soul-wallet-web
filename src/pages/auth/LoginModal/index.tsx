@@ -1,21 +1,5 @@
-import React, {
-  useState,
-  useRef,
-  useImperativeHandle,
-  useCallback,
-  useEffect,
-  Fragment
-} from 'react'
 import {
   Box,
-  Text,
-  Image,
-  useToast,
-  Select,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
   Tooltip,
   Modal,
   ModalOverlay,
@@ -25,17 +9,9 @@ import {
   ModalBody
 } from '@chakra-ui/react'
 import TextBody from '@/components/new/TextBody'
-import Title from '@/components/new/Title'
-import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
 import Button from '@/components/Button'
-import MetamaskIcon from '@/assets/wallets/metamask.png'
-import OKXWalletIcon from '@/assets/wallets/okx-wallet.png'
-import CoinbaseIcon from '@/assets/wallets/coinbase.png'
-import BinanceIcon from '@/assets/wallets/binance.png'
-import WalletConnectIcon from '@/assets/wallets/wallet-connect.png'
-import XDEFIIcon from '@/assets/wallets/xdefi-wallet.png'
 import { supportedEoas } from '@/config'
 import { Connector, useConnect } from 'wagmi'
 import WalletOption from '@/components/new/WalletOption'

@@ -1,10 +1,6 @@
-import React, {
+import {
   useState,
-  useRef,
-  useImperativeHandle,
   useCallback,
-  useEffect,
-  Fragment
 } from 'react'
 import {
   Box,
@@ -24,11 +20,7 @@ import {
   ModalBody,
   Input
 } from '@chakra-ui/react'
-import TextBody from '@/components/new/TextBody'
 import useBrowser from '@/hooks/useBrowser';
-import Title from '@/components/new/Title'
-import ArrowRightIcon from '@/components/Icons/ArrowRight'
-import ImportIcon from '@/components/Icons/Auth/Import'
 import BackIcon from '@/components/Icons/Back'
 import Button from '@/components/Button'
 import { ethers } from 'ethers';
@@ -86,7 +78,7 @@ export default function ImportAccountModal({ isOpen, onClose, importWallet, isIm
           >
             <Box width="100%">
               <Box width="100%" display="flex" marginBottom="30px">
-                <Input height="44px" borderRadius="12px" value={address} onChange={onAddressChange} />
+                <Input height="44px" borderRadius="12px" value={address} onChange={onAddressChange} placeholder="Enter Soul wallet address" />
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between" marginBottom="10px">
                 <Box fontSize="14px" fontWeight="400" display="flex" alignItems="center">

@@ -1,36 +1,16 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import useBrowser from '@/hooks/useBrowser';
 import {
   Box,
-  Text,
   Image,
-  Grid,
-  GridItem,
   Flex,
-  Popover,
-  PopoverTrigger,
   useToast,
   Input
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import IconLogo from '@/assets/logo-all-v3.svg';
-import IntroImg from '@/assets/Intro.jpg';
 import RoundContainer from '@/components/new/RoundContainer'
 import Heading from '@/components/new/Heading'
-import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import Button from '@/components/Button'
-import PlusIcon from '@/components/Icons/Plus';
-import ComputerIcon from '@/components/Icons/Computer';
-import TwitterIcon from '@/components/Icons/Social/Twitter'
-import TelegramIcon from '@/components/Icons/Social/Telegram'
-import GithubIcon from '@/components/Icons/Social/Github'
-import PasskeyIcon from '@/components/Icons/Intro/Passkey'
-import AccountIcon from '@/components/Icons/Intro/Account'
-import TransferIcon from '@/components/Icons/Intro/Transfer'
-import TokenIcon from '@/components/Icons/Intro/Token'
-import usePassKey from '@/hooks/usePasskey';
 import { useSignerStore } from '@/store/signer';
 import { ethers } from 'ethers';
 import { useTempStore } from '@/store/temp';
@@ -39,36 +19,11 @@ import { SignHeader } from '@/pages/public/Sign';
 
 export default function ImportAccount({ importWallet, isImporting, back }: any) {
   const [address, setAddress] = useState('')
-  const [added, setAdded] = useState(false)
-  const { createInfo, updateCreateInfo } = useTempStore()
-  const toast = useToast();
+  const { updateCreateInfo } = useTempStore()
   const {
     credentials,
   } = useSignerStore();
-  const [isCreating, setIsCreating] = useState(false);
   const { navigate } = useBrowser();
-  console.log('create', credentials)
-
-  const addPasskey = useCallback(() => {
-    setAdded(true)
-  }, [])
-
-  // const createWallet = async () => {
-  //   try {
-  //     setIsCreating(true);
-  //     const credentialKey = await register();
-  //     addCredential(credentialKey);
-  //     setIsCreating(false);
-  //   } catch (error: any) {
-  //     console.log('ERR', error)
-  //     console.log('error', error);
-  //     setIsCreating(false);
-  //     toast({
-  //       title: error.message,
-  //       status: 'error',
-  //     });
-  //   }
-  // }
 
   const skip = useCallback(() => {
     console.log('skip')

@@ -2,7 +2,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import WalletWrapper from './wrapper/WalletWrapper';
 import PublicWrapper from './wrapper/PublicWrapper';
 import Dashboard from '@/pages/dashboard';
-import Create from '@/pages/create';
 import Recover from '@/pages/recover';
 import Popup from '@/pages/popup';
 import Apps from '@/pages/apps';
@@ -25,7 +24,6 @@ export const router = createBrowserRouter([
       { path: 'apps', element: <Apps /> },
       { path: 'activity', element: <Activity /> },
       { path: 'asset', element: <Asset /> },
-      { path: 'create', element: <Create /> },
       { path: 'recover', element: <Recover /> },
       { path: 'popup', element: <Popup /> },
       {

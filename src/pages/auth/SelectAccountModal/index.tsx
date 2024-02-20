@@ -1,21 +1,11 @@
-import React, {
+import {
   useState,
-  useRef,
-  useImperativeHandle,
-  useCallback,
   useEffect,
   Fragment
 } from 'react'
 import {
   Box,
-  Text,
   Image,
-  useToast,
-  Select,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -25,18 +15,14 @@ import {
 } from '@chakra-ui/react'
 import TextBody from '@/components/new/TextBody'
 import Title from '@/components/new/Title'
-import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import ImportIcon from '@/components/Icons/Auth/Import'
 import Button from '@/components/Button'
-import { getChainInfo } from '@/lib/tools';
 import IconOp from '@/assets/chains/op.svg';
 import IconArb from '@/assets/chains/arb.svg';
 import IconEth from '@/assets/chains/eth.svg';
 import { createConfig, http, useBalance } from 'wagmi';
 import { sepolia, arbitrumSepolia, optimismSepolia } from 'wagmi/chains';
 import { injected, walletConnect } from 'wagmi/connectors';
-import { ethers } from 'ethers';
-import BN from 'bignumber.js';
 
 const getChainIcon = (chainId: any) => {
   if (chainId == '0xaa36a7') {
@@ -73,24 +59,6 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
     address: activeLoginAccount && activeLoginAccount[chainId],
     chainId: Number(chainId),
   })
-  console.log('currentBalance', currentBalance, activeLoginAccount)
-
-  useEffect(() => {
-    const getBalances = async () => {
-      if (activeLoginAccount) {
-        const balanceMap = {}
-
-        for (const chainId of chainIds) {
-          /* const address = activeLoginAccount[chainId]
-           * const balance = getBalance(config, { address })
-           * balanceMap[chainId] = balance
-           * console.log('balance', chainId, balance) */
-        }
-
-        // setBalanceMap(balanceMap)
-      }
-    }
-  }, [activeLoginAccount])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -102,7 +70,6 @@ export default function SelectAccountModal({ isOpen, onClose, startImportAccount
           gap="5"
           fontWeight="800"
           textAlign="center"
-          // borderBottom="1px solid #d7d7d7"
           padding="20px 32px"
         >
           Select a wallet

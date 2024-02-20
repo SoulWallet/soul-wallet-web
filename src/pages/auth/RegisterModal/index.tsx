@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import {
   Box,
   Image,
@@ -13,7 +12,6 @@ import {
 import { Connector, useConnect } from 'wagmi'
 import TextBody from '@/components/new/TextBody'
 import Title from '@/components/new/Title'
-// import ArrowRightIcon from '@/components/Icons/ArrowRight'
 import PasskeyIcon from '@/components/Icons/Auth/Passkey'
 import QuestionIcon from '@/components/Icons/Auth/Question'
 import Button from '@/components/Button'
@@ -26,7 +24,6 @@ import { passkeyTooltipText } from '@/config/constants'
 export default function RegisterModal({
   isOpen,
   onClose,
-  startLogin,
   connectEOA,
   isConnecting,
   isConnected,
@@ -35,7 +32,6 @@ export default function RegisterModal({
   activeConnector,
   address,
   startRegisterWithEOA,
-  disconnectEOA
 }: any) {
   const { connectors } = useConnect();
 
@@ -50,7 +46,6 @@ export default function RegisterModal({
             gap="5"
             fontWeight="800"
             textAlign="center"
-            // borderBottom="1px solid #d7d7d7"
             padding="20px 32px"
           >
             Wallet connected
@@ -98,19 +93,6 @@ export default function RegisterModal({
                 </Box>
               </Box>
               <Box marginTop="60px" display="flex">
-                {/* <Button
-                  width="100%"
-                  background="#fff"
-                  color="#000"
-                  type="black"
-                  marginBottom="49px"
-                  onClick={() => disconnectEOA()}
-                  padding="0 20px"
-                  marginRight="16px"
-                  size="mid"
-                >
-                  Disconnect
-                </Button> */}
                 <Button
                   width="100%"
                   type="black"

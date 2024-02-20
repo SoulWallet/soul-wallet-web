@@ -3,7 +3,7 @@ import { useToast, Text, Box, Image, } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Button from '../Button';
 import TxModal from '../TxModal';
-import { SkipModal } from '@/pages/create/SetGuardians';
+import SkipModal from '@/components/SkipModal';
 import IconLastStep from '@/assets/icons/last-step.svg';
 
 const SetGuardianHintModal = (_: unknown, ref: Ref<any>) => {

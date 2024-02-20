@@ -8,7 +8,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useSlotStore } from '@/store/slot';
 import Button from '@/components/Button';
 import { Link } from 'react-router-dom';
-import { SkipModal } from '@/pages/create/SetGuardians';
+import SkipModal from '@/components/SkipModal';
 import ReceiveCode from '@/components/ReceiveCode';
 import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
@@ -67,7 +67,7 @@ const DepositHint = () => {
   return (
     <Box>
       <Text fontWeight={'600'} lineHeight={1.5} textAlign={'center'} mb="4">
-      You don't have any tokens in your wallet yet,<br/> deposit tokens into the following address to experience Soul wallet.
+        You don't have any tokens in your wallet yet,<br/> deposit tokens into the following address to experience Soul wallet.
       </Text>
       <ReceiveCode address={selectedAddress} imgWidth="100px" showFullAddress={true} mb="6" />
     </Box>
