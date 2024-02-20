@@ -1,7 +1,5 @@
-import React, { Fragment, useState } from 'react';
-import { Box, Button, Text, useToast } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import Heading1 from '@/components/web/Heading1';
-import Heading3 from '@/components/web/Heading3';
 import TextBody from '@/components/web/TextBody';
 import RoundButton from '@/components/web/Button';
 import DownloadIcon from '@/components/Icons/Download';
