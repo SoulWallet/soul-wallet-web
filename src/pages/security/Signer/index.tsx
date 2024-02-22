@@ -81,47 +81,38 @@ export default function Signer() {
                 <Box>My Signers</Box>
               </Box>
               <Box paddingTop="14px" display="flex" gap="18px" flexWrap="wrap">
-                {eoas.map((item) => (
-                  <SignerCard
-                    name={`EOA: ${toShortAddress(item)}`}
-                    address={item}
-                    time="Added on 2023-12-14"
-                    marginRight={{ base: '0', md: '18px' }}
-                    width={{ base: '100%', md: '272px' }}
-                    marginBottom="18px"
-                    isDefault={signerId === item}
-                    cursor="pointer"
-                    {...(signerId !== item
-                      ? {
-                          onClick: () => {
-                            setSignerIdToSet(item);
-                            openSetDefaultModal();
-                          },
-                        }
-                      : {})}
-                  />
-                ))}
-                {credentials.map((item: any, index: number) => (
-                  <SignerCard
-                    name={item.name}
-                    address={item.id}
-                    device="Chrome profile"
-                    time="Added on 2023-12-14 "
-                    cursor="pointer"
-                    marginRight={{ base: '0', md: '18px' }}
-                    width={{ base: '100%', md: '272px' }}
-                    marginBottom="18px"
-                    isDefault={signerId === item.id}
-                    {...(signerId !== item.id
-                      ? {
-                          onClick: () => {
-                            setSignerIdToSet(item.id);
-                            openSetDefaultModal();
-                          },
-                        }
-                      : {})}
-                  />
-                ))}
+                <Fragment>
+                  {eoas.map((item) => (
+                    <SignerCard
+                      name={`EOA: ${toShortAddress(item)}`}
+                      address={item}
+                      time="Added on 2023-12-14"
+                      marginRight={{ base: '0', md: '18px' }}
+                      width={{ base: '100%', md: '272px' }}
+                      marginBottom="18px"
+                      isDefault={signerId === item}
+                      cursor="pointer"
+                      onClick={signerId !== item.id ? () => { setSignerIdToSet(item.id); openSetDefaultModal(); } : () => {}}
+                    />
+                  ))}
+                </Fragment>
+                <Fragment>
+                  {credentials.map((item: any, index: number) => (
+                    <SignerCard
+                      name={item.name || 'No Name'}
+                      address={item.id}
+                      device="Chrome profile"
+                      time="Added on 2023-12-14 "
+                      cursor="pointer"
+                      marginRight={{ base: '0', md: '18px' }}
+                      width={{ base: '100%', md: '272px' }}
+                      marginBottom="18px"
+                      isDefault={signerId === item.id}
+                      onClick={signerId !== item.id ? () => { setSignerIdToSet(item.id); openSetDefaultModal(); } : () => {}}
+                    />
+                  ))}
+                </Fragment>
+
               </Box>
             </Fragment>
           )}

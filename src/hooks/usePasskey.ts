@@ -217,6 +217,7 @@ export default function usePasskey() {
       credential: {
         ...authentication,
         algorithm: credentialInfo.algorithm,
+        id: authentication.credentialId
       },
     };
   };
