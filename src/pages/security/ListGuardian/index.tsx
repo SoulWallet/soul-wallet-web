@@ -76,7 +76,7 @@ export default function ListGuardian({
                   size="mid"
                   type="white"
                   onClick={() => openBackupGuardianModal()}
-                  marginBottom="20px"
+                  marginBottom={{ base: '20px', md: '0px' }}
                   marginRight={{ base: '0px', md: '14px' }}
                   width={{ base: '100%', md: 'auto' }}
                 >

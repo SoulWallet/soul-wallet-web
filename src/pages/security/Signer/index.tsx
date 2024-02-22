@@ -77,7 +77,7 @@ export default function Signer() {
         <RoundSection marginTop="10px" background="white">
           {activeSection === 'signer' && (
             <Fragment>
-              <Box fontFamily="Nunito" fontWeight="700" fontSize="18px" display="flex">
+              <Box fontFamily="Nunito" fontWeight="700" fontSize="18px" display="flex" height="36px">
                 <Box>My Signers</Box>
               </Box>
               <Box paddingTop="14px" display="flex" gap="18px" flexWrap="wrap">

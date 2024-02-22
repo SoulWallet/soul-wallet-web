@@ -310,7 +310,7 @@ export default function EditGuardian({
                   size="mid"
                   type="white"
                   onClick={() => openBackupGuardianModal()}
-                  marginBottom="20px"
+                  marginBottom={{ base: '20px', md: '0px' }}
                   marginRight={{ base: '0px', md: '14px' }}
                   width={{ base: '100%', md: 'auto' }}
                 >
@@ -321,7 +321,7 @@ export default function EditGuardian({
               <Button
                 size="mid"
                 onClick={() => startAddGuardian()}
-                marginBottom="20px"
+                marginBottom={{ base: '20px', md: '0px' }}
                 width={{ base: '100%', md: 'auto' }}
               >
                 <Box marginRight="6px"><PlusIcon color="white" /></Box>
