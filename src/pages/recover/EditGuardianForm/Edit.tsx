@@ -349,9 +349,9 @@ const GuardianInput = ({
           onClick={() => removeGuardian(id)}
           position="absolute"
           width="40px"
-          right={{ base: '-28px', md: '-36px' }}
+          right={{ base: '-28px', md: '-40px' }}
           top="0"
-          height="100%"
+          height="48px"
           display="flex"
           alignItems="center"
           justifyContent="center"
