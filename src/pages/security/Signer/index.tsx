@@ -92,7 +92,7 @@ export default function Signer() {
                       marginBottom="18px"
                       isDefault={signerId === item}
                       cursor="pointer"
-                      onClick={signerId !== item.id ? () => { setSignerIdToSet(item.id); openSetDefaultModal(); } : () => {}}
+                      onClick={signerId !== item ? () => { setSignerIdToSet(item); openSetDefaultModal(); } : () => {}}
                     />
                   ))}
                 </Fragment>

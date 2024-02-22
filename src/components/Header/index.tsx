@@ -18,7 +18,7 @@ export default function Header() {
     <Flex
       as="header"
       h={`${headerHeight}px`}
-      px={{ base: '2', md: 4, lg: '8' }}
+      px={{ base: '2', md: 5 }}
       bg="#fff"
       borderBottom={'1px solid #e6e6e6'}
       align="center"

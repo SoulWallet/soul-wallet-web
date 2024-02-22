@@ -4,7 +4,7 @@ import BN from 'bignumber.js';
 import { chainIdMapping, chainMapping } from '@/config';
 import IconDefault from '@/assets/tokens/default.svg';
 import storage from '@/lib/storage';
-import ERC20ABI from '../abi/ERC20.json';
+import { erc20Abi } from 'viem';
 import { DecodeUserOp, DecodeResult } from '@soulwallet/decoder';
 import { UserOperation } from '@soulwallet/sdk';
 import IconSend from '@/assets/activities/send.svg';
@@ -328,7 +328,7 @@ export const decodeCalldata = async (
     if (i.method && i.method.name === 'transfer') {
       // get erc20 info
       const tokenAddress = i.to;
-      const tokenContract = new Contract(tokenAddress, ERC20ABI, ethersProvider);
+      const tokenContract = new Contract(tokenAddress, erc20Abi, ethersProvider);
 
       const decimals = await tokenContract.decimals();
       const symbol = await tokenContract.symbol();
