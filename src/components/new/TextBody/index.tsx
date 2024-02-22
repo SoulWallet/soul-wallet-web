@@ -1,4 +1,3 @@
-import React from 'react';
 import { Text, TextProps } from '@chakra-ui/react';
 
 const getStyles = (type: string = 't1') => {

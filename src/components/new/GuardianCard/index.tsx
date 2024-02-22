@@ -1,5 +1,3 @@
-import React from 'react';
-import { Button, ButtonProps } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
 import DeleteIcon from '@/components/Icons/Delete'
 import EditIcon from '@/components/Icons/Edit2'

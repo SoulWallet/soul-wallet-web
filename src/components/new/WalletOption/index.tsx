@@ -1,5 +1,4 @@
-import React from 'react';
-import { Text, Button, Image } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 import TextBody from '@/components/new/TextBody'
 import { Box } from '@chakra-ui/react';
 

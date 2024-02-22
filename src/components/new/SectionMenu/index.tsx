@@ -1,5 +1,3 @@
-import React from 'react';
-import { Text, Button } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
 
 export function SectionMenu({ children, ...restProps }: any) {

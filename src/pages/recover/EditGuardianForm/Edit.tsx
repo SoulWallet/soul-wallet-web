@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, Fragment } from 'react';
 import { Box, Text, Image,  Menu, MenuList, MenuButton, MenuItem, Tooltip } from '@chakra-ui/react';
-import TextBody from '@/components/web/TextBody';
+import TextBody from '@/components/new/TextBody';
 import Button from '@/components/Button'
-import TextButton from '@/components/web/TextButton';
+import TextButton from '@/components/new/TextButton';
 import { ethers } from 'ethers';
 import MinusIcon from '@/assets/icons/minus.svg';
 import DoubleFormInput from '@/components/new/DoubleFormInput';
@@ -471,7 +471,7 @@ export default function Edit({
           ))}
           <TextButton onClick={() => addGuardian()} color="#FF2E79" _hover={{ color: '#FF2E79' }} padding="2px">
             <PlusIcon color="#FF2E79" />
-            <Text fontSize="16px" fontWeight="800" marginLeft="5px">Add more guardians</Text>
+            <Text fontSize="16px" fontWeight="800" marginLeft="5px" color="#FF2E79">Add more guardians</Text>
           </TextButton>
         </Box>
       </Box>

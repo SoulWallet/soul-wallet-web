@@ -1,5 +1,3 @@
-import React from 'react';
-import { Button, ButtonProps } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
 
 export default function SignerCard({
@@ -60,15 +58,6 @@ export default function SignerCard({
       >
         {device}
       </Box>
-      {/* <Box
-        fontFamily="Nunito"
-        fontWeight="500"
-        fontSize="12px"
-        color="black"
-        marginTop="10px"
-      >
-        {time}
-      </Box> */}
     </Box>
   );
 }

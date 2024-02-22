@@ -8,7 +8,7 @@ import {
   ModalCloseButton,
   ModalBody
 } from '@chakra-ui/react';
-import TextBody from '@/components/web/TextBody';
+import TextBody from '@/components/new/TextBody';
 import ArrowRightIcon from '@/components/Icons/ArrowRight';
 
 export default function GuardianModal({ isOpen, onClose }: any) {

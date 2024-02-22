@@ -1,6 +1,4 @@
-import React from 'react';
-import { Text, Button } from '@chakra-ui/react';
-import { Box } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 
 const getStyles = (type: string = 'h1') => {
   if (type === 'h1') {

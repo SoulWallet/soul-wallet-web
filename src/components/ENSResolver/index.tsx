@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { Box, Text, Image, useToast, Select, Menu, MenuList, MenuButton, MenuItem, Tooltip } from '@chakra-ui/react';
+import { useEffect } from 'react'
+import { Box, Image, Menu, MenuList, MenuItem } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import IconLoading from '@/assets/loading.svg';
 import { toShortAddress } from '@/lib/tools';
@@ -90,7 +90,6 @@ const ENSResolver = ({
   isENSLoading,
   setIsENSLoading,
   searchText,
-  setSearchText,
   searchAddress,
   setSearchAddress,
   resolvedAddress,

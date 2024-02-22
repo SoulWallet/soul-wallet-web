@@ -4,14 +4,6 @@ import {
 } from 'react'
 import {
   Box,
-  Text,
-  Image,
-  useToast,
-  Select,
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
   Modal,
   ModalOverlay,
   ModalContent,

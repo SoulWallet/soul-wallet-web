@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useRef } from 'react';
+import { ChangeEvent } from 'react';
 import { Box, Text, Input } from '@chakra-ui/react';
 
 export default function DoubleFormInput({
@@ -22,8 +22,6 @@ export default function DoubleFormInput({
   _leftContainerStyles,
   _rightContainerStyles,
   leftComponent,
-  rightComponent,
-  rightAutoFocus,
   onEnter,
 }: any) {
   const handleLeftChange = (e: ChangeEvent<HTMLInputElement>) => {

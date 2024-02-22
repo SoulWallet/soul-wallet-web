@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button as CButton, ButtonProps } from '@chakra-ui/react';
+import { Button as CButton } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import IconLoading from '@/assets/loading.gif';
 import BlackIconLoading from '@/assets/loading.svg';
