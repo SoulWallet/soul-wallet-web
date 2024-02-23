@@ -2,7 +2,6 @@
  * Goerli
  */
 
-import IconEth from '@/assets/chains/eth.svg';
 import IconEthFaded from '@/assets/chains/eth-faded.svg';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import { keystoreContracts } from './common';
