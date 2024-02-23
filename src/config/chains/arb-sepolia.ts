@@ -2,7 +2,6 @@
  * Arbitrum Sepolia
  */
 
-import IconArb from '@/assets/chains/arb.svg';
 import IconArbFaded from '@/assets/chains/arb-faded.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
 import { keystoreContracts } from './common';

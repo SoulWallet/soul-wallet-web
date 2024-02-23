@@ -14,7 +14,7 @@ import { useSettingStore } from '@/store/setting';
 
 export default function Guidance() {
   const { slotInfo } = useSlotStore();
-  const { setFinishedSteps, finishedSteps, collapseGuidance, setCollapseGuidance } = useSettingStore();
+  const { setFinishedSteps, finishedSteps, collapseGuidance, toggleCollapseGuidance } = useSettingStore();
   const { goGuideAction, checkInitialized } = useTools();
   // todo, should remmeber this
   const checkSteps = async () => {
@@ -59,9 +59,8 @@ export default function Guidance() {
       <Box
         overflow={'hidden'}
         as={motion.div}
-        animate={{
-          height: collapseGuidance ? 0 : 'auto',
-        }}
+        h={collapseGuidance ? 0 : 'auto'}
+        animate={{ height: collapseGuidance ? 0 : 'auto' }}
       >
         <Text fontSize={'18px'} fontWeight={'800'} lineHeight={'1.25'} mt="7" mb="3">
           {currentStep.title}
@@ -87,7 +86,7 @@ export default function Guidance() {
           </Button>
         </Flex>
       </Box>
-      <Box textAlign={'center'} cursor={'pointer'} onClick={() => setCollapseGuidance(!collapseGuidance)}>
+      <Box textAlign={'center'} cursor={'pointer'} onClick={() => toggleCollapseGuidance()}>
         <Image
           src={ImgArrowUp}
           transform={collapseGuidance ? 'rotate(180deg)' : 'rotate(0deg)'}
