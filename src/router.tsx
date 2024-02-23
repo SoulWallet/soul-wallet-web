@@ -24,7 +24,6 @@ export const router = createBrowserRouter([
       { path: 'apps', element: <Apps /> },
       { path: 'activity', element: <Activity /> },
       { path: 'asset', element: <Asset /> },
-      { path: 'recover', element: <Recover /> },
       { path: 'popup', element: <Popup /> },
       {
         path: 'security',
@@ -36,6 +35,13 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: '/recover',
+    element: <PublicWrapper />,
+    children: [
+      { path: '', element: <Recover /> },
+    ]
   },
   {
     path: '/auth',
