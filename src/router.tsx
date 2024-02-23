@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import WalletWrapper from './wrapper/WalletWrapper';
 import PublicWrapper from './wrapper/PublicWrapper';
 import Dashboard from '@/pages/dashboard';
@@ -13,42 +13,48 @@ import Guardian from '@/pages/security/Guardian';
 import Pay from '@/pages/public/Pay';
 import Sign from '@/pages/public/Sign';
 import Auth from '@/pages/auth';
+import DashboardLayout from './components/Layouts/DashboardLayout';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <WalletWrapper />,
     children: [
-      { path: '/', element: <Dashboard /> },
-      { path: 'dashboard', element: <Dashboard /> },
-      { path: 'apps', element: <Apps /> },
-      { path: 'activity', element: <Activity /> },
-      { path: 'asset', element: <Asset /> },
-      { path: 'popup', element: <Popup /> },
       {
-        path: 'security',
-        element: <Security />,
+        path: '/',
+        element: <DashboardLayout />,
         children: [
-          { index: true, element: <Signer /> },
-          { path: 'signer', element: <Signer /> },
-          { path: 'guardian', element: <Guardian /> },
+          { path: 'dashboard', element: <Dashboard /> },
+          { path: 'apps', element: <Apps /> },
+          { path: 'activity', element: <Activity /> },
+          { path: 'asset', element: <Asset /> },
+          { path: 'popup', element: <Popup /> },
+          {
+            path: 'security',
+            element: <Security />,
+            children: [
+              { index: true, element: <Signer /> },
+              { path: 'signer', element: <Signer /> },
+              { path: 'guardian', element: <Guardian /> },
+            ],
+          },
+          {
+            path: '/',
+            element: <Navigate to="/dashboard" replace />,
+          },
         ],
       },
+      {
+        path: '/recover',
+        element: <PublicWrapper />,
+        children: [{ path: '', element: <Recover /> }],
+      },
+      {
+        path: '/auth',
+        element: <PublicWrapper />,
+        children: [{ path: '', element: <Auth /> }],
+      },
     ],
-  },
-  {
-    path: '/recover',
-    element: <PublicWrapper />,
-    children: [
-      { path: '', element: <Recover /> },
-    ]
-  },
-  {
-    path: '/auth',
-    element: <PublicWrapper />,
-    children: [
-      { path: '', element: <Auth /> },
-    ]
   },
   {
     path: '/public',
@@ -58,6 +64,6 @@ export const router = createBrowserRouter([
       { path: 'sign/:recoverId', element: <Sign /> },
       { path: 'pay', element: <Pay /> },
       { path: 'pay/:recoverId', element: <Pay /> },
-    ]
+    ],
   },
 ]);
