@@ -54,7 +54,7 @@ export default function SignerSelect() {
               EOA wallet
             </Text>
             {eoas.map((item) => (
-              <MenuItem p="0" bg="none !important">
+              <MenuItem p="0" bg="none !important" key={item}>
                 <SignerItem
                   title={toShortAddress(item)}
                   checked={signerId === item}
@@ -73,9 +73,8 @@ export default function SignerSelect() {
             <Text fontWeight={'700'} mb="5" lineHeight={'1'}>
               Passkey
             </Text>
-
             {credentials.map((item: any) => (
-              <MenuItem p="0" bg="none !important">
+              <MenuItem p="0" bg="none !important" key={item.id}>
                 <SignerItem
                   title={item.name}
                   checked={signerId === item.id}
