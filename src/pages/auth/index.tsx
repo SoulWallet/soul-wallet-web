@@ -65,8 +65,8 @@ export default function Auth() {
   const { getActiveGuardianHash } = useKeystore();
   const { updateGuardiansInfo } = useGuardianStore();
   const activeSignerId = loginInfo.signerId;
-  const activeLoginAccount = signerIdAddress[loginInfo.signerId];
-  console.log('signerIdAddress', signerIdAddress, activeSignerId, activeLoginAccount);
+  const activeLoginAccounts = signerIdAddress[loginInfo.signerId];
+  console.log('signerIdAddress', activeSignerId, activeLoginAccounts);
 
   const openRecover = useCallback(() => {
     navigate('/recover');
@@ -438,7 +438,7 @@ export default function Auth() {
           isOpen={isSelectAccountOpen}
           onClose={closeSelectAccount}
           startImportAccount={startImportAccount}
-          activeLoginAccount={activeLoginAccount}
+          activeLoginAccounts={activeLoginAccounts}
           importWallet={importWallet}
           isImporting={isImporting}
         />

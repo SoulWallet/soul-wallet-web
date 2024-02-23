@@ -49,7 +49,9 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
   },
   setSignerIdAddress: (signerId: string, chainIdAddress: IChainIdAddress) => {
     set((state) => {
-      state.signerIdAddress[signerId] = chainIdAddress;
+      let currentSignerIdAddress = get().signerIdAddress
+      const addressList: any = currentSignerIdAddress[signerId] || []
+      state.signerIdAddress[signerId] = [...addressList, chainIdAddress] as any;
     });
   },
   setIgnoreWebauthnOverride: (val: boolean) => {
