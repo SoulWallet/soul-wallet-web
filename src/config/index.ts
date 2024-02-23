@@ -119,7 +119,7 @@ export default {
   backendURL: `${import.meta.env.VITE_BACKEND_URL}/appapi`,
   soulScanURL: `${import.meta.env.VITE_SCAN_URL}/opapi`,
   chainList: [
-    ArbConfig,
+    // ArbConfig,
     // OpConfig,
     BaseConfig,
   ],
