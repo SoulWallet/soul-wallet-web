@@ -27,6 +27,7 @@ import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg'
 import RemoveIcon from '@/components/Icons/Remove'
+import useSigner from '@/hooks/useSigner';
 
 const getRecommandCount = (c: number) => {
   if (!c) {
@@ -75,6 +76,7 @@ export default function EditGuardian({
     clearCreateInfo,
   } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
+  const { listOwner } = useSigner();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
   const { createWallet } = useWallet();
@@ -215,16 +217,9 @@ export default function EditGuardian({
         };
 
         await api.guardian.backupGuardians(guardiansInfo);
-        const { initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod, slot } = slotInfo;
-        const currentKeys = L1KeyStore.initialKeysToAddress([
-          ...credentials.map((credential: any) => credential.publicKey),
-          ...eoas,
-        ]);
-        const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
-        console.log('currentKeys', currentKeys, initialKeys, newGuardianHash)
-
-        
-        // const initialKeyHash = L1KeyStore.getKeyHash(initialKeys);
+        const { initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
+        const owners = await listOwner();
+        const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [Object.values(owners)]);
 
         const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
 

@@ -19,7 +19,7 @@ import IconLoading from '@/assets/loading.svg';
 import api from '@/lib/api';
 import { ethers } from 'ethers';
 import { useBalanceStore } from '@/store/balance';
-import { UserOpUtils, UserOperation } from '@soulwallet/sdk';
+import { SignkeyType, UserOpUtils, UserOperation } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWallet from '@/hooks/useWallet';
@@ -78,6 +78,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { address } = useAccount();
   // todo, set false as default
   const [useSponsor, setUseSponsor] = useState(true);
+  const { getSelectedKeyType } = useSignerStore();
   const { getPrefund } = useQuery();
   const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
@@ -121,7 +122,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const onConfirm = async () => {
     try {
-      if (!eoas.includes(address as string)) {
+      if (!eoas.includes(address as string) && getSelectedKeyType() === SignkeyType.EOA) {
         toast({
           title: 'The account you connected is not in the list of signers',
           status: 'error',
