@@ -3,7 +3,6 @@ import { Box, Flex, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@c
 import ChainSelectMultiple from '@/components/ChainSelectMultiple';
 import { useChainStore } from '@/store/chain';
 import ActivityTable from './comp/ActivityTable';
-import DashboardLayout from '@/components/Layouts/DashboardLayout';
 import IconChevronDown from '@/assets/icons/chevron-down-black.svg';
 
 const statusList = [
@@ -77,24 +76,22 @@ export default function Activity() {
   const [activeTypes, setActiveTypes] = useState(typesList[0].key);
 
   return (
-    <DashboardLayout>
-      <Box pl={{ base: '24px', lg: '0' }} pr={{ base: '24px', lg: '48px' }} pt="6">
-        {/* <Text fontWeight="800" fontSize="32px" mb="9">
+    <Box pl={{ base: '24px', lg: '0' }} pr={{ base: '24px', lg: '48px' }} pt="6">
+      {/* <Text fontWeight="800" fontSize="32px" mb="9">
           Activity
-        </Text> */}
+          </Text> */}
 
-        <Flex px="6" justify={'space-between'} mb="3">
-          <Flex gap="8">
-            <FilterMenu active={activeStatus} list={statusList} />
-            {/* <FilterMenu active={activeTypes} list={typesList} /> */}
-          </Flex>
-          {/* <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} /> */}
+      <Flex px="6" justify={'space-between'} mb="3">
+        <Flex gap="8">
+          <FilterMenu active={activeStatus} list={statusList} />
+          {/* <FilterMenu active={activeTypes} list={typesList} /> */}
         </Flex>
+        {/* <ChainSelectMultiple activeChains={activeChains} onChange={setActiveChains} /> */}
+      </Flex>
 
-        <Box rounded="20px" bg="#fff" py="6px" px={{base: "16px", lg: "26px"}}>
-          <ActivityTable />
-        </Box>
+      <Box rounded="20px" bg="#fff" py="6px" px={{base: "16px", lg: "26px"}}>
+        <ActivityTable />
       </Box>
-    </DashboardLayout>
+    </Box>
   );
 }
