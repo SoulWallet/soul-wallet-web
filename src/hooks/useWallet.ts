@@ -187,14 +187,6 @@ export default function useWallet() {
   };
 
   const getEoaSignature = async (packedHash: any, validationData: string) => {
-    if (!eoas.includes(address as string)) {
-      toast({
-        title: 'The account you connected is not in the list of signers',
-        status: 'error',
-      });
-      return;
-    }
-
     const signatureData: any = await signWithEoa(packedHash);
 
     console.log('packUserEoaSignature params:', signatureData, validationData);
@@ -270,12 +262,7 @@ export default function useWallet() {
     console.log('selected key type', selectedKeyType);
 
     if (selectedKeyType === SignkeyType.EOA) {
-      const signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
-      if(signature){
-        userOp.signature = signature;
-      }else{
-        return;
-      }
+      userOp.signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
     } else if (selectedKeyType === SignkeyType.P256 || selectedKeyType === SignkeyType.RS256) {
       userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
     } else {
