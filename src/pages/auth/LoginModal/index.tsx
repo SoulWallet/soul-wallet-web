@@ -39,7 +39,7 @@ export default function LoginModal({
           textAlign="center"
           padding="20px 32px"
         >
-          Login to Soul Wallet
+          Login
         </ModalHeader>
         <ModalCloseButton top="14px" />
         <ModalBody overflow="auto" padding="20px 32px">

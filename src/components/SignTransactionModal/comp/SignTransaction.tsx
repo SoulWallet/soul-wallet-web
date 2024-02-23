@@ -475,7 +475,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                   <Text color="brand.red" fontSize={'14px'} fontWeight={'600'}>
                     -{BN(requiredAmount).toFormat(6)} ETH
                   </Text>
-                  <DropdownSelect>
+                  <DropdownSelect hideChevron>
                     <Text>Soul Wallet</Text>
                   </DropdownSelect>
                 </Flex>

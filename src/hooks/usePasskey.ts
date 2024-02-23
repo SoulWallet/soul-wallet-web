@@ -213,10 +213,10 @@ export default function usePasskey() {
     );
 
     return {
-      publicKey: credentialInfo.publicKey,
       credential: {
         ...authentication,
         algorithm: credentialInfo.algorithm,
+        publicKey: credentialInfo.publicKey,
         id: authentication.credentialId
       },
     };

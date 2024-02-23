@@ -156,7 +156,7 @@ export default function Auth() {
       setLoginMethod('passkey');
       setIsLoging(true);
       // closeLogin()
-      const { publicKey, credential } = await authenticate();
+      const { credential } = await authenticate();
       const { credentialId } = credential;
       updateLoginInfo({
         signerId: credentialId,
