@@ -10,21 +10,25 @@ const Fonts = () => (
     @font-face {
         font-family: 'Nunito';
         font-weight: 400;
+        font-swap: block;
         src: url(${NunitoRegular});
     }
     @font-face {
       font-family: 'Nunito';
       font-weight: 600;
+      font-swap: block;
       src: url(${NunitoSemiBold});
     }
     @font-face {
       font-family: 'Nunito';
       font-weight: 700;
+      font-swap: block;
       src: url(${NunitoBold});
     }
     @font-face {
       font-family: 'Nunito';
       font-weight: 800;
+      font-swap: block;
       src: url(${NunitoExtraBold});
     }
  `}

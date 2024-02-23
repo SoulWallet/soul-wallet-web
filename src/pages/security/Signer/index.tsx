@@ -1,4 +1,4 @@
-import { useState, useCallback, Fragment } from 'react';
+import { useState, useCallback, Fragment, useEffect } from 'react';
 import { SectionMenu, SectionMenuItem } from '@/components/new/SectionMenu';
 import RoundSection from '@/components/new/RoundSection';
 import SignerCard from '@/components/new/SignerCard';
@@ -13,12 +13,14 @@ import WalletConnectModal from '@/pages/security/WalletConnectModal';
 import useBrowser from '@/hooks/useBrowser';
 import { useSignerStore } from '@/store/signer';
 import { toShortAddress } from '@/lib/tools';
+import useWalletContract from '@/hooks/useWalletContract';
 
 export default function Signer() {
   const { navigate } = useBrowser();
   const [activeSection] = useState<string>('signer');
   const [signerIdToSet, setSignerIdToSet] = useState('');
   const { eoas, credentials, signerId } = useSignerStore();
+  const [owners, setOwners] = useState([]);
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
   const [isChooseSignerOpen, setIsChooseSignerOpen] = useState<any>(false);
   const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
@@ -26,6 +28,7 @@ export default function Signer() {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
+  const { listOwner }= useWalletContract();
 
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true);
@@ -62,6 +65,18 @@ export default function Signer() {
   const closeBackupGuardianModal = useCallback(() => {
     setIsBackupGuardianOpen(false);
   }, []);
+
+  const getOwners = async() => {
+    const res = await listOwner();
+    // compare owners length to the contract
+    if(res.length > eoas.length + credentials.length) {
+      setOwners(res);
+    }
+  }
+
+  useEffect(()=>{
+
+  }, [])
 
   return (
     <Fragment>

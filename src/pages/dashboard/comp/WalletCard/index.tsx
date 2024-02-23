@@ -100,7 +100,7 @@ export default function WalletCard() {
                     },
                   })}
             >
-              <Image src={hoverIndex === index ? item.iconActive : item.icon} mb="2px" w="8" mx="auto" />
+              <Image src={hoverIndex === index ? item.iconActive : item.icon} mb="2px" w="8" h="8" mx="auto" />
               <Text fontSize={'12px'} fontWeight={'600'} lineHeight={'1.25'} color="#5b606d">
                 {item.title}
               </Text>

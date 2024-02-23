@@ -8,7 +8,7 @@ import useConfig from './useConfig';
 import { ABI_SoulWallet } from '@soulwallet/abi';
 import useWalletContext from '@/context/hooks/useWalletContext';
 
-export default function useSigner() {
+export default function useWalletContract() {
   const { selectedChainItem, selectedAddressItem } = useConfig();
   const { ethersProvider } = useWalletContext();
 

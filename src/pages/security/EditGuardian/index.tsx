@@ -8,8 +8,8 @@ import HistoryIcon from '@/components/Icons/History';
 import Title from '@/components/new/Title'
 import TextBody from '@/components/new/TextBody'
 import DropDownIcon from '@/components/Icons/DropDown';
-import useBrowser from '@/hooks/useBrowser';
 import { useTempStore } from '@/store/temp';
+import useWalletContext from '@/context/hooks/useWalletContext';
 import { useSettingStore } from '@/store/setting';
 import useForm from '@/hooks/useForm';
 import useKeystore from '@/hooks/useKeystore';
@@ -22,12 +22,11 @@ import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { useSignerStore } from '@/store/signer';
 import { L1KeyStore } from '@soulwallet/sdk';
-import useWalletContext from '@/context/hooks/useWalletContext';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
 import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg'
 import RemoveIcon from '@/components/Icons/Remove'
-import useSigner from '@/hooks/useSigner';
+import useWalletContract from '@/hooks/useWalletContract';
 
 const getRecommandCount = (c: number) => {
   if (!c) {
@@ -76,7 +75,7 @@ export default function EditGuardian({
     clearCreateInfo,
   } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
-  const { listOwner } = useSigner();
+  const { listOwner } = useWalletContract();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
   const { createWallet } = useWallet();
