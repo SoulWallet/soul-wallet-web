@@ -29,6 +29,8 @@ import { useSlotStore } from '@/store/slot';
 import { bundlerErrMapping } from '@/config';
 import DropdownSelect from '@/components/DropdownSelect';
 import AddressIcon from '@/components/AddressIcon';
+import { useSignerStore } from '@/store/signer';
+import { useAccount } from 'wagmi';
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
   return (
@@ -72,6 +74,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { toggleActivatedChain, selectedAddress } = useAddressStore();
   const { setFinishedSteps } = useSettingStore();
   const { slotInfo } = useSlotStore();
+  const { eoas } = useSignerStore();
+  const { address } = useAccount();
   // todo, set false as default
   const [useSponsor, setUseSponsor] = useState(true);
   const { getPrefund } = useQuery();
@@ -103,24 +107,27 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   };
 
   const clearState = () => {
-    // setOrigin('');
     setPromiseInfo({});
     setDecodedData({});
     setLoadingFee(true);
     setSigning(false);
-    // setPrefundCalculated(false);
     setPayToken(ethers.ZeroAddress);
     setPayTokenSymbol('');
-    // setFeeCost('');
     setRequiredAmount('');
     setActiveOperation(undefined);
     setSponsor(null);
     setUseSponsor(true);
-    // setSendToAddress('');
   };
 
   const onConfirm = async () => {
     try {
+      if (!eoas.includes(address as string)) {
+        toast({
+          title: 'The account you connected is not in the list of signers',
+          status: 'error',
+        });
+        return;
+      }
       setSigning(true);
 
       let userOp: any;
@@ -303,7 +310,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   }, [requiredAmount, payToken]);
 
   return (
-    <Box  pb={{base: 6, lg: 0}}>
+    <Box pb={{ base: 6, lg: 0 }}>
       <Flex flexDir={'column'}>
         <Flex flexDir={'column'} align={'center'} lineHeight={'1'}>
           {decodedData && (

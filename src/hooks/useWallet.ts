@@ -5,7 +5,7 @@ import { ABI_SoulWallet } from '@soulwallet/abi';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
 import { addPaymasterAndData } from '@/lib/tools';
-import {  erc20Abi } from 'viem'
+import { erc20Abi, verifyMessage } from 'viem';
 import { L1KeyStore, SignkeyType, UserOperation } from '@soulwallet/sdk';
 import { executeTransaction } from '@/lib/tx';
 import BN from 'bignumber.js';
@@ -13,7 +13,7 @@ import useConfig from './useConfig';
 import api from '@/lib/api';
 import usePasskey from './usePasskey';
 import { toHex } from '@/lib/tools';
-import { useSignMessage, useSignTypedData } from 'wagmi';
+import { useAccount, useSignMessage, useSignTypedData } from 'wagmi';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
@@ -21,6 +21,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
 import { getWalletAddress } from '@/pages/recover/RecoverProgress';
+import { useToast } from '@chakra-ui/react';
 
 export default function useWallet() {
   const { signByPasskey } = usePasskey();
@@ -32,7 +33,9 @@ export default function useWallet() {
     useGuardianStore();
   const { slotInfo, setSlotInfo, getSlotInfo } = useSlotStore();
   const { updateChainItem, setSelectedChainId } = useChainStore();
-  const { setCredentials, getSelectedCredential } = useSignerStore();
+  const { address } = useAccount();
+  const toast = useToast();
+  const { setCredentials, getSelectedCredential, eoas } = useSignerStore();
   const { soulWallet, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, setAddressList, updateAddressItem } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
@@ -84,7 +87,7 @@ export default function useWallet() {
     });
 
     const { walletName } = useTempStore.getState().createInfo;
-    console.log('walletName', slot, walletName)
+    console.log('walletName', slot, walletName);
     if (walletName && slot) saveAddressName(slot, walletName);
 
     console.log('after public backup slot');
@@ -104,7 +107,6 @@ export default function useWallet() {
     initialSignerIds.forEach((item) => {
       setSignerIdAddress(item, chainIdAddress);
     });
-
 
     if (credentials.length > 0) {
       setCredentials(credentials);
@@ -161,8 +163,8 @@ export default function useWallet() {
     for (let i = 0; i < extraTxs.length; i++) {
       // get gas from tx or onchain
       const gas = BN(extraTxs[i].gas).isGreaterThan(0)
-                ? BN(extraTxs[i].gas)
-                : await ethersProvider.estimateGas(extraTxs[i]);
+        ? BN(extraTxs[i].gas)
+        : await ethersProvider.estimateGas(extraTxs[i]);
       callGasLimit = callGasLimit.plus(gas);
     }
 
@@ -185,6 +187,14 @@ export default function useWallet() {
   };
 
   const getEoaSignature = async (packedHash: any, validationData: string) => {
+    if (!eoas.includes(address as string)) {
+      toast({
+        title: 'The account you connected is not in the list of signers',
+        status: 'error',
+      });
+      return;
+    }
+
     const signatureData: any = await signWithEoa(packedHash);
 
     console.log('packUserEoaSignature params:', signatureData, validationData);
@@ -213,18 +223,18 @@ export default function useWallet() {
     console.log('packUserOp256Signature params:', signatureData, validationData);
     const packedSignatureRet =
       selectedCredential.algorithm === 'ES256'
-      ? await soulWallet.packUserOpP256Signature(
-        chainConfig.contracts.defaultValidator,
-        signatureData,
-        validationData,
-      )
-      : selectedCredential.algorithm === 'RS256'
-      ? await soulWallet.packUserOpRS256Signature(
-        chainConfig.contracts.defaultValidator,
-        signatureData,
-        validationData,
-      )
-      : null;
+        ? await soulWallet.packUserOpP256Signature(
+            chainConfig.contracts.defaultValidator,
+            signatureData,
+            validationData,
+          )
+        : selectedCredential.algorithm === 'RS256'
+          ? await soulWallet.packUserOpRS256Signature(
+              chainConfig.contracts.defaultValidator,
+              signatureData,
+              validationData,
+            )
+          : null;
 
     if (!packedSignatureRet) {
       throw new Error('algorithm not supported');
@@ -260,7 +270,12 @@ export default function useWallet() {
     console.log('selected key type', selectedKeyType);
 
     if (selectedKeyType === SignkeyType.EOA) {
-      userOp.signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
+      const signature = await getEoaSignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
+      if(signature){
+        userOp.signature = signature;
+      }else{
+        return;
+      }
     } else if (selectedKeyType === SignkeyType.P256 || selectedKeyType === SignkeyType.RS256) {
       userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
     } else {
@@ -288,7 +303,7 @@ export default function useWallet() {
         raw: hash,
       },
     });
-  }
+  };
 
   const initializeWithEoa = async (initInfo: any, eoaAddress: string) => {};
 
@@ -301,8 +316,8 @@ export default function useWallet() {
     //   {
     //     address: newAddress,
     //     activatedChains: [],
-  //   },
-  // ]);
+    //   },
+    // ]);
 
     // saveAddressName(newAddress, 'Account 1', true);
 
@@ -342,11 +357,11 @@ export default function useWallet() {
     });
     const addressList = recoverInfo.recoveryRecord.addresses.map((item: any) => ({
       address: item.address,
-      chainIdHex: item.chain_id
-    }))
-    setAddressList(addressList)
+      chainIdHex: item.chain_id,
+    }));
+    setAddressList(addressList);
 
-    const credentials = recoverInfo.signers.filter((signer: any) => signer.type === 'passkey')
+    const credentials = recoverInfo.signers.filter((signer: any) => signer.type === 'passkey');
     if (credentials.length) setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey'));
     setEoas(recoverInfo.signers.filter((signer: any) => signer.type === 'eoa').map((signer: any) => signer.signerId));
     // set mainnet if no selected chainId
@@ -366,7 +381,7 @@ export default function useWallet() {
       enabled: true,
     });
 
-    if(slotInfo.slot){
+    if (slotInfo.slot) {
       const res = await api.operation.finishStep({
         slot: slotInfo.slot,
         steps: [5],
@@ -381,7 +396,7 @@ export default function useWallet() {
     // const slot = slotInfo.slot
     // const recoveryRecordID = getRecoverRecordId(slot)
 
-    if(!recoveryRecordID){
+    if (!recoveryRecordID) {
       return;
     }
 
@@ -395,7 +410,7 @@ export default function useWallet() {
     //   //   addAddressItem({
     //   //     address: item as any,
     //   //     activatedChains: [],
-  // //   });
+    // //   });
     //   // }
     // }
 
@@ -413,7 +428,7 @@ export default function useWallet() {
 
     const chainRecoverStatus = res.statusData.chainRecoveryStatus;
     for (let item of chainRecoverStatus) {
-      const addressToSet = getWalletAddress(item.chainId, res.addresses)
+      const addressToSet = getWalletAddress(item.chainId, res.addresses);
       updateAddressItem(addressToSet, {
         recovering: item.status === 0,
       });

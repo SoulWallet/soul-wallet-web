@@ -211,7 +211,7 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
         />
       </Flex>
       <Button onClick={confirmAddress} w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6">
-        Preview
+        Next
       </Button>
     </Box>
   );
