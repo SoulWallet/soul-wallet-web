@@ -47,8 +47,8 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
       }
     } catch (err) {
       setClaimableCount(0);
-    }finally{
-      setCheckedClaimable(true)
+    } finally {
+      setCheckedClaimable(true);
     }
   };
 
@@ -66,15 +66,18 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
           status: 'success',
         });
 
-        if(slotInfo.slot){
-          const res = await api.operation.finishStep({
-            slot: slotInfo.slot,
-            steps: [0],
-          });
-  
-          setFinishedSteps(res.data.finishedSteps);
+        try {
+          if (slotInfo.slot) {
+            const res = await api.operation.finishStep({
+              slot: slotInfo.slot,
+              steps: [0],
+            });
+
+            setFinishedSteps(res.data.finishedSteps);
+          }
+        } catch (err) {
+          console.log('finish step error', err);
         }
-      
         setVisible(false);
       } else {
         toast({
@@ -108,10 +111,10 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
         bodyStyle={{ py: '9', px: '42px' }}
       >
         <Box textAlign="center">
-          <Image src={(claimableCount || !checkedClaimable) ? IconClaimable : IconUnclaimable} mx="auto" mb="18px" />
+          <Image src={claimableCount || !checkedClaimable ? IconClaimable : IconUnclaimable} mx="auto" mb="18px" />
           {/* <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" /> */}
           <Text fontSize={'20px'} mb="2" fontWeight={'800'} lineHeight={'1.6'} letterSpacing={'-0.4px'}>
-            {(claimableCount || !checkedClaimable) ? 'Claim test tokens' : 'Claim limit has been reached'}
+            {claimableCount || !checkedClaimable ? 'Claim test tokens' : 'Claim limit has been reached'}
           </Text>
           <Text fontSize={'14px'} fontWeight={'600'} mb="18px">
             Each wallet address can claim test tokens

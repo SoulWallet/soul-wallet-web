@@ -16,7 +16,7 @@ interface ISignerIdAddress {
 
 export interface ISettingStore {
   collapseGuidance: boolean;
-  setCollapseGuidance: (val: boolean) => void;
+  toggleCollapseGuidance: () => void;
   ignoreWebauthnOverride: boolean;
   setIgnoreWebauthnOverride: (val: boolean) => void;
   setFinishedSteps: (steps: number[]) => void;
@@ -57,9 +57,9 @@ const createSettingSlice = immer<ISettingStore>((set, get) => ({
       ignoreWebauthnOverride: val,
     });
   },
-  setCollapseGuidance: (val: boolean) => {
-    set({
-      collapseGuidance: val,
+  toggleCollapseGuidance: () => {
+    set((state) => {
+      state.collapseGuidance = !state.collapseGuidance;
     });
   },
   setFinishedSteps: (steps: number[]) => {

@@ -14,8 +14,9 @@ import { useSettingStore } from '@/store/setting';
 
 export default function Guidance() {
   const { slotInfo } = useSlotStore();
-  const { setFinishedSteps, finishedSteps, collapseGuidance, setCollapseGuidance } = useSettingStore();
+  const { setFinishedSteps, finishedSteps, collapseGuidance, toggleCollapseGuidance } = useSettingStore();
   const { goGuideAction, checkInitialized } = useTools();
+  const [shouldAnimate, setShouldAnimate] = useState(false);
   // todo, should remmeber this
   const checkSteps = async () => {
     if (!slotInfo.slot) {
@@ -32,6 +33,11 @@ export default function Guidance() {
   useEffect(() => {
     checkSteps();
   }, []);
+
+  const toggleCollapse = () => {
+    setShouldAnimate(true);
+    toggleCollapseGuidance();
+  };
 
   const missingSteps = findMissingNumbers([0, 1, 2, 3, 4, 5], finishedSteps);
 
@@ -59,9 +65,16 @@ export default function Guidance() {
       <Box
         overflow={'hidden'}
         as={motion.div}
-        animate={{
-          height: collapseGuidance ? 0 : 'auto',
-        }}
+        h={collapseGuidance ? 0 : 'auto'}
+        animate={
+          shouldAnimate
+            ? {
+                height: collapseGuidance ? 0 : 'auto',
+              }
+            : {}
+        }
+        onAnimationEnd={() => setShouldAnimate(false)}
+        // onAnimationComplete={() => setShouldAnimate(false)}
       >
         <Text fontSize={'18px'} fontWeight={'800'} lineHeight={'1.25'} mt="7" mb="3">
           {currentStep.title}
@@ -87,7 +100,7 @@ export default function Guidance() {
           </Button>
         </Flex>
       </Box>
-      <Box textAlign={'center'} cursor={'pointer'} onClick={() => setCollapseGuidance(!collapseGuidance)}>
+      <Box textAlign={'center'} cursor={'pointer'} onClick={toggleCollapse}>
         <Image
           src={ImgArrowUp}
           transform={collapseGuidance ? 'rotate(180deg)' : 'rotate(0deg)'}
