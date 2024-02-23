@@ -223,6 +223,7 @@ export default function EditGuardian({
         const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
         console.log('currentKeys', currentKeys, initialKeys, newGuardianHash)
 
+        
         // const initialKeyHash = L1KeyStore.getKeyHash(initialKeys);
 
         const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)

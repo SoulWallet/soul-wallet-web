@@ -137,7 +137,7 @@ export const guideList = [
     desc: `Deposit tokens into Aave and start earning interest.`,
     buttonText: 'Earn',
     buttonTextFull: 'Open Aave',
-    statusText: 'Deposit tokens into the Aave protocol',
+    statusText: 'Deposit tokens into the Aave',
   },
   {
     id: 5,
