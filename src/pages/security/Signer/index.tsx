@@ -99,6 +99,7 @@ export default function Signer() {
                 <Fragment>
                   {eoas.map((item) => (
                     <SignerCard
+                      key={item}
                       name={`EOA: ${toShortAddress(item)}`}
                       address={item}
                       time="Added on 2023-12-14"
@@ -112,8 +113,9 @@ export default function Signer() {
                   ))}
                 </Fragment>
                 <Fragment>
-                  {credentials.map((item: any, index: number) => (
+                  {credentials.map((item: any) => (
                     <SignerCard
+                      key={item.id}
                       name={item.name || 'No Name'}
                       address={item.id}
                       device="Chrome profile"

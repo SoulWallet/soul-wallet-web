@@ -29,7 +29,7 @@ export default function NftsTable() {
         {nftBalance
           .filter((item: any) => item.logoURI)
           .map((item: any, index: number) => (
-            <GridItem key={number} bg="#f5f5f5" overflow={'hidden'} rounded={'20px'}>
+            <GridItem key={index} bg="#f5f5f5" overflow={'hidden'} rounded={'20px'}>
               <Image src={item.logoURI} />
               <Text p="4" fontWeight={'800'}>
                 {item.title}
