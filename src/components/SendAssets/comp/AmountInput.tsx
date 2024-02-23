@@ -8,7 +8,7 @@ import IconChevronRight from '@/assets/icons/chevron-right.svg';
 import { useAddressStore } from '@/store/address';
 import useConfig from '@/hooks/useConfig';
 
-export default function AmountInput({ sendToken, label, onTokenChange, amount, onChange }: any) {
+export default function AmountInput({ sendToken, label, onTokenChange, amount, onBlur, onChange }: any) {
   const { tokenBalance, fetchTokenBalance } = useBalanceStore();
   const { selectedAddress } = useAddressStore();
   const { selectedChainItem } = useConfig();
@@ -96,6 +96,7 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
               }}
               outline="none"
               border="none"
+              onBlur={onBlur}
               fontSize="48px"
               fontWeight={'700'}
               lineHeight={'1'}

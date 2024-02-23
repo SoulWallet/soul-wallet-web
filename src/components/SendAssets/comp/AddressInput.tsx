@@ -11,7 +11,7 @@ export function AddressInput({ label, placeholder, value, memo, onChange, disabl
 
   return (
     <Box>
-      <Text  fontSize="12px" fontWeight={'700'} mb="2" lineHeight={"1"}>
+      <Text fontSize="12px" fontWeight={'700'} mb="2" lineHeight={"1"}>
         {label}
       </Text>
       <Flex
