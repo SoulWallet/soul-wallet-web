@@ -1,4 +1,8 @@
 import { Global } from '@emotion/react';
+import NunitoRegular from '@/assets/fonts/Nunito/Nunito-Regular.ttf';
+import NunitoSemiBold from '@/assets/fonts/Nunito/Nunito-SemiBold.ttf';
+import NunitoBold from '@/assets/fonts/Nunito/Nunito-Bold.ttf';
+import NunitoExtraBold from '@/assets/fonts/Nunito/Nunito-ExtraBold.ttf';
 
 const Fonts = () => (
   <Global
@@ -6,22 +10,22 @@ const Fonts = () => (
     @font-face {
         font-family: 'Nunito';
         font-weight: 400;
-        src: url('/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
+        src: url(${NunitoRegular});
     }
     @font-face {
       font-family: 'Nunito';
       font-weight: 600;
-      src: url('/fonts/Nunito/Nunito-SemiBold.ttf') format('truetype');
+      src: url(${NunitoSemiBold});
     }
     @font-face {
       font-family: 'Nunito';
       font-weight: 700;
-      src: url('/fonts/Nunito/Nunito-Bold.ttf') format('truetype');
+      src: url(${NunitoBold});
     }
     @font-face {
       font-family: 'Nunito';
       font-weight: 800;
-      src: url('/fonts/Nunito/Nunito-ExtraBold.ttf') format('truetype');
+      src: url(${NunitoExtraBold});
     }
  `}
   />

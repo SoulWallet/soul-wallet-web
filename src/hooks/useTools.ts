@@ -1,7 +1,6 @@
 import api from '@/lib/api';
 import QRCode from 'qrcode';
 import { GuardianItem } from '@/lib/type';
-import { copyText } from '@/lib/tools';
 import { useToast } from '@chakra-ui/react';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
@@ -103,7 +102,6 @@ export default function useTools() {
 
   const doCopy = async(text: string) => {
     await navigator.clipboard.writeText(text);
-    // copyText(text);
     toast({
       title: 'Copied',
       status: 'success',

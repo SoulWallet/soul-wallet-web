@@ -62,7 +62,7 @@ export default function AvatarWithName({ editable = false }: { editable: boolean
       <Flex align={'center'} gap="1">
         <Flex gap="2" align={'center'}>
           <AddressIcon address={selectedAddress} width={isLargerThan992 ? 32 : 24} />
-          <Text fontWeight={'800'} fontSize={{base: '14px', md: '16px', lg: '18px'}}>
+          <Text fontWeight={'800'} fontSize={{ base: '14px', md: '16px', lg: '18px' }}>
             {createInfo.walletName || walletName || 'Wallet'}
           </Text>
         </Flex>

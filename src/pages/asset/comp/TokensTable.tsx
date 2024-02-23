@@ -13,17 +13,12 @@ import {
   GridItem,
   Grid,
   TableContainer,
-  useMediaQuery,
 } from '@chakra-ui/react';
-import api from '@/lib/api';
-import { useAddressStore } from '@/store/address';
-import Button from '@/components/Button';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import IconDefaultToken from '@/assets/tokens/default.svg';
 import { useChainStore } from '@/store/chain';
 import IconSend from '@/assets/icons/wallet/send.svg';
 import IconLoading from '@/assets/loading.svg';
-import BN from 'bignumber.js';
 import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
 import useConfig from '@/hooks/useConfig';
 
@@ -32,29 +27,6 @@ export default function TokensTable() {
   const { fetchTokenBalance, tokenBalance } = useBalanceStore();
   const { setSelectedChainId, selectedChainId } = useChainStore();
   const { selectedAddressItem, selectedChainItem } = useConfig();
-  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
-
-  // const getTokenBalance = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const res = await api.balance.token({
-  //       walletAddress: selectedAddress,
-  //       chains: [
-  //         {
-  //           chainID: selectedChainId,
-  //           reservedTokenAddresses: [],
-  //         },
-  //       ],
-  //       // chains: activeChains.map((item: any) => ({
-  //       //   chainID: item,
-  //       //   reservedTokenAddresses: [],
-  //       // })),
-  //     });
-  //     setBalanceList(res.data);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   useEffect(() => {
     if (!selectedAddressItem.address || !selectedChainItem.chainIdHex) return;
@@ -123,7 +95,7 @@ export default function TokensTable() {
                         cursor={'pointer'}
                         className="send-button"
                         display={'inline-block'}
-                        visibility={isLargerThan992 ? 'hidden' : 'visible'}
+                        visibility={{ base: 'visible', lg: 'hidden' }}
                         onClick={() => {
                           showTransfer(item.contractAddress, item.chainID);
                         }}

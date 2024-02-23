@@ -14,7 +14,6 @@ import { useTempStore } from '@/store/temp';
 import useTools from '@/hooks/useTools';
 import { ethers } from 'ethers';
 import BN from 'bignumber.js';
-import { copyText } from '@/lib/tools';
 import { useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi';
 import { useAccount, useConnect } from 'wagmi';
 import { paymentContractConfig } from '@/contracts/contracts';
@@ -29,6 +28,7 @@ export default function PayRecoveryFee({ next }: any) {
   const { generateQrCode } = useTools();
   const [paying, setPaying] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
+  const { doCopy } = useTools();
   const toast = useToast();
   const { switchChain } = useSwitchChain();
   const { connectAsync } = useConnect();
@@ -94,14 +94,6 @@ export default function PayRecoveryFee({ next }: any) {
       console.log('error', error.message)
     }
   }, [recoveryRecordID, estimatedFee])
-
-  const doCopy = () => {
-    copyText(payUrl);
-    toast({
-      title: 'Copy success!',
-      status: 'success',
-    });
-  };
 
   const connectWallet = useCallback(async () => {
     await connectAsync({ connector: metaMask() });
@@ -234,7 +226,7 @@ export default function PayRecoveryFee({ next }: any) {
                 width={{ base: '100%', md: '275px' }}
                 maxWidth="100%"
                 type="white"
-                onClick={doCopy}
+                onClick={() => doCopy(payUrl)}
                 size="xl"
                 skipSignCheck
               >

@@ -11,27 +11,9 @@ import Heading from '@/components/new/Heading';
 import TextBody from '@/components/new/TextBody';
 import Button from '@/components/Button';
 import { SignHeader } from '../Sign';
-import TwitterIcon from '@/components/Icons/Social/Twitter';
-import TelegramIcon from '@/components/Icons/Social/Telegram';
-import GithubIcon from '@/components/Icons/Social/Github';
-import PasskeyIcon from '@/components/Icons/Intro/Passkey';
-import AccountIcon from '@/components/Icons/Intro/Account';
-import TransferIcon from '@/components/Icons/Intro/Transfer';
-import TokenIcon from '@/components/Icons/Intro/Token';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { useTempStore } from '@/store/temp';
-import { useAddressStore } from '@/store/address';
-import { useSettingStore } from '@/store/setting';
-import usePassKey from '@/hooks/usePasskey';
 import api from '@/lib/api';
-import { copyText, toShortAddress, getNetwork, getStatus, getKeystoreStatus } from '@/lib/tools';
-import useWallet from '@/hooks/useWallet';
-import useSdk from '@/hooks/useSdk';
-import { useSignerStore } from '@/store/signer';
-import AuthImg from '@/assets/auth.svg';
-import SignatureRequestImg from '@/assets/icons/signature-request.svg';
 import { ethers } from 'ethers';
-import config from '@/config';
 import useTools from '@/hooks/useTools';
 import { useParams } from 'react-router-dom'
 import { metaMask } from 'wagmi/connectors'

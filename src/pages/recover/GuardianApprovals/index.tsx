@@ -11,7 +11,7 @@ import Button from '@/components/Button'
 import { useTempStore } from '@/store/temp';
 import CopyIcon from '@/components/Icons/Copy';
 import OpenScanIcon from '@/components/Icons/OpenScan';
-import { copyText, toShortAddress } from '@/lib/tools';
+import { toShortAddress } from '@/lib/tools';
 import useTools from '@/hooks/useTools';
 import useConfig from '@/hooks/useConfig';
 import useKeystore from '@/hooks/useKeystore';
@@ -36,7 +36,7 @@ export default function AddSigner({ next, back }: any) {
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
   const [isConfirming, setIsConfirming] = useState<any>(false)
-  const { getJsonFromFile } = useTools();
+  const { getJsonFromFile, doCopy, } = useTools();
   const { chainConfig } = useConfig();
   const { calcGuardianHash } = useKeystore();
   const [isAddGuardianOpen, setIsAddGuardianOpen] = useState<any>(false);
@@ -62,23 +62,6 @@ export default function AddSigner({ next, back }: any) {
 
     setIsAddGuardianOpen(false)
   }, [])
-
-  const doCopy = () => {
-    copyText(guardianSignUrl);
-    toast({
-      title: 'Copy success!',
-      status: 'success',
-    });
-  };
-
-
-  const copyAddress = (address: string) => {
-    copyText(address);
-    toast({
-      title: 'Copy success!',
-      status: 'success',
-    });
-  };
 
   const openScan = (address: string) => {
     window.open(`https://sepolia.etherscan.io/address/${address}`, '_blank')
@@ -348,7 +331,7 @@ export default function AddSigner({ next, back }: any) {
               <Button
                 width="275px"
                 maxWidth="100%"
-                onClick={doCopy}
+                onClick={() => doCopy(guardianSignUrl)}
                 size="xl"
               >
                 Share link with guardians
@@ -392,7 +375,7 @@ export default function AddSigner({ next, back }: any) {
                     <Box fontSize="14px" fontWeight="700" fontFamily="Nunito" display="flex">
                       <Box>{toShortAddress(item.guardian)}</Box>
                       <Box height="100%" display="flex" alignItems="center" justifyContent="center" padding="0 10px">
-                        <Box cursor="pointer" marginRight="4px" onClick={() => copyAddress(item.guardian)}><CopyIcon color="#898989" /></Box>
+                        <Box cursor="pointer" marginRight="4px" onClick={() => doCopy(item.guardian)}><CopyIcon color="#898989" /></Box>
                         <Box cursor="pointer" onClick={() => openScan(item.guardian)}><OpenScanIcon /></Box>
                       </Box>
                     </Box>

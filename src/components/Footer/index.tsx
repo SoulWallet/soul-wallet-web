@@ -1,10 +1,10 @@
-import { Flex, Image, Link, Text } from '@chakra-ui/react';
+import { Flex, FlexProps, Image, Link, Text } from '@chakra-ui/react';
 import packageJson from '../../../package.json';
 import config from '@/config';
 
-export default function Footer() {
+export default function Footer({ ...restProps }: FlexProps) {
   return (
-    <Flex flexDir={'column'} gap="2" fontSize={'12px'} fontWeight={'400'}>
+    <Flex flexDir={'column'} gap="2" fontSize={'12px'} fontWeight={'400'} {...restProps}>
       <Text color={'rgba(0,0,0,.5)'} whiteSpace={'nowrap'}>
         Version: Alpha {packageJson.version}
       </Text>

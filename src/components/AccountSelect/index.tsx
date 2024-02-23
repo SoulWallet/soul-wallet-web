@@ -1,32 +1,15 @@
 import React from 'react';
-import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, Box, useMediaQuery } from '@chakra-ui/react';
+import { Flex, Menu, MenuButton, Image, MenuItem, Text, MenuList, Box } from '@chakra-ui/react';
 import IconCheveronRight from '@/assets/icons/chevron-right.svg';
 import IconChecked from '@/assets/icons/checked.svg';
-// import IconLoading from '@/assets/loading.gif';
 import useBrowser from '@/hooks/useBrowser';
 import useConfig from '@/hooks/useConfig';
 import { IAddressItem, useAddressStore } from '@/store/address';
 import { toShortAddress } from '@/lib/tools';
 import IconCopy from '@/assets/copy.svg';
-// import { PlusSquareIcon } from '@chakra-ui/icons';
 import useTools from '@/hooks/useTools';
 import { useSettingStore } from '@/store/setting';
 import { useChainStore } from '@/store/chain';
-
-// const CreateAccount = () => {
-//   const [creating, setCreating] = useState(false);
-
-//   const doCreate = async () => {};
-
-//   return (
-//     <MenuItem onClick={doCreate} as={Flex} gap="2" closeOnSelect={false} cursor={'pointer'}>
-//       {creating ? <Image src={IconLoading} w="24px" /> : <PlusSquareIcon boxSize="6" />}
-//       <Text fontSize={'14px'} fontWeight={'700'} lineHeight={1}>
-//         Create account
-//       </Text>
-//     </MenuItem>
-//   );
-// };
 
 export function AccountSelectFull({ ...restProps }) {
   const { selectedAddress } = useAddressStore();
@@ -60,7 +43,6 @@ export function AccountSelectFull({ ...restProps }) {
 export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ...restProps }: any) {
   const { navigate } = useBrowser();
   const { selectedAddressItem, selectedChainItem } = useConfig();
-  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   const { getAddressName } = useSettingStore();
   const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
   const { getChainItem, setSelectedChainId } = useChainStore();
@@ -70,8 +52,6 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
     setSelectedAddress(item.address);
     setSelectedChainId(item.chainIdHex);
   };
-
-  const addressLength = isLargerThan992 ? 5 : 2;
 
   return selectedAddressItem ? (
     <Menu>
@@ -101,11 +81,20 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                 )}
                 {!isInModal && (
                   <Flex mr="1" align={'center'}>
-                    {isLargerThan992 && <Image w="5" h="5" mr="2" src={selectedChainItem.iconSquare} />}
+                    <Image
+                      display={{ base: 'none', lg: 'block' }}
+                      w="5"
+                      h="5"
+                      mr="2"
+                      src={selectedChainItem.iconSquare}
+                    />
                     <Text fontWeight={'700'}>{selectedChainItem.chainName}</Text>
                     &nbsp;
-                    <Text fontWeight={'600'}>
-                      ({toShortAddress(selectedAddressItem.address, addressLength, addressLength)})
+                    <Text fontWeight={'600'} display={{ base: 'none', lg: 'block' }}>
+                      ({toShortAddress(selectedAddressItem.address)})
+                    </Text>
+                    <Text fontWeight={'600'} display={{ base: 'block', lg: 'none' }}>
+                      ({toShortAddress(selectedAddressItem.address, 2, 2)})
                     </Text>
                   </Flex>
                 )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Divider, Image, Link, useMediaQuery } from '@chakra-ui/react';
+import { Box, Flex, Text, Divider, Image, Link } from '@chakra-ui/react';
 import BN from 'bignumber.js';
 import { numToFixed } from '@/lib/tools';
 import { toShortAddress, getIconMapping } from '@/lib/tools';
@@ -18,7 +18,6 @@ import { useChainStore } from '@/store/chain';
 
 const ActivityItem = ({ item }: any) => {
   const { chainConfig } = useConfig();
-  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   const { scanUrl } = chainConfig;
   return (
     <Flex
@@ -66,9 +65,9 @@ const ActivityItem = ({ item }: any) => {
       ) : (
         ''
       )}
-      {isLargerThan992 && (
-        <Box>{item.sender && <Text color="brand.black">Sender: {toShortAddress(item.sender)}</Text>}</Box>
-      )}
+      <Box display={{ base: 'none', lg: 'block' }}>
+        {item.sender && <Text color="brand.black">Sender: {toShortAddress(item.sender)}</Text>}
+      </Box>
     </Flex>
   );
 };

@@ -1,4 +1,4 @@
-import { Flex, Text, Tooltip, Box, useMediaQuery } from '@chakra-ui/react';
+import { Flex, Text, Tooltip, Box } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import BN from 'bignumber.js';
 import { motion } from 'framer-motion';
@@ -44,7 +44,6 @@ export default function ListItem({
     .div(totalUsdValue || '0')
     .times(100)
     .toFixed(2);
-  const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   return (
     <Flex
       onClick={onClick}
@@ -71,21 +70,19 @@ export default function ListItem({
         </Text>
         {usdValue && <Text fontSize={'12px'}>${usdValue}</Text>}
       </Box>
-      {isLargerThan992 && (
-        <Flex w="33%" gap="3" align="center">
-          <Box bg="#d9d9d9" rounded={'8px'} overflow={'hidden'} h="6px" pos="relative" w="150px" flex="0 0 150px">
-            <Box
-              as={motion.div}
-              bg={lineColor}
-              pos="absolute"
-              h="6px"
-              initial={{ width: '0' }}
-              animate={{ width: `${percent}%` }}
-            />
-          </Box>
-          <Text fontSize={'12px'}>{percent}%</Text>
-        </Flex>
-      )}
+      <Flex w="33%" gap="3" align="center" display={{ base: 'none', lg: 'block' }}>
+        <Box bg="#d9d9d9" rounded={'8px'} overflow={'hidden'} h="6px" pos="relative" w="150px" flex="0 0 150px">
+          <Box
+            as={motion.div}
+            bg={lineColor}
+            pos="absolute"
+            h="6px"
+            initial={{ width: '0' }}
+            animate={{ width: `${percent}%` }}
+          />
+        </Box>
+        <Text fontSize={'12px'}>{percent}%</Text>
+      </Flex>
     </Flex>
   );
 }
