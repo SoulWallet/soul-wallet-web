@@ -35,8 +35,14 @@ export const router = createBrowserRouter([
           { path: 'guardian', element: <Guardian /> },
         ],
       },
-      { path: 'auth', element: <Auth /> },
     ],
+  },
+  {
+    path: '/auth',
+    element: <PublicWrapper />,
+    children: [
+      { path: '', element: <Auth /> },
+    ]
   },
   {
     path: '/public',
