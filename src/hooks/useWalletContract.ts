@@ -15,7 +15,7 @@ export default function useWalletContract() {
   const publicClient = useMemo(() => {
     if (!selectedChainItem || !selectedAddressItem) return null;
     return new ethers.Contract(selectedAddressItem.address, ABI_SoulWallet, ethersProvider);
-  }, [selectedChainItem.chainId, selectedAddressItem.address]);
+  }, [selectedChainItem?.chainId, selectedAddressItem?.address]);
 
   const listOwner = async () => {
     if (!publicClient) return;

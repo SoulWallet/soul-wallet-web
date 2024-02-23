@@ -157,9 +157,9 @@ export default function Auth() {
       setIsLoging(true);
       // closeLogin()
       const { credential } = await authenticate();
-      const { credentialId } = credential;
+      const { id } = credential;
       updateLoginInfo({
-        signerId: credentialId,
+        signerId: id,
         method: 'passkey',
         credential,
       });
@@ -167,7 +167,7 @@ export default function Auth() {
       closeLogin();
       const signerIdAddress = getSignerIdAddress();
 
-      if (signerIdAddress[credentialId]) {
+      if (signerIdAddress[id]) {
         openSelectAccount();
       } else {
         setStepType('importAccount');
@@ -260,8 +260,6 @@ export default function Auth() {
     setIsSelectAccountOpen(false);
     navigate('/dashboard');
   }, []);
-
-  const jumpToHome = useCallback(() => {}, []);
 
   useEffect(() => {
     if (isConnected && address) {

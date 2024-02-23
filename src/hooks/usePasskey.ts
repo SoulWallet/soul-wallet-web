@@ -194,6 +194,8 @@ export default function usePasskey() {
     let authentication = await client.authenticate([], challenge, {
       userVerification: 'required',
     });
+    // authentication method will return credentialId, but not id.
+    const credentialId = authentication.credentialId
     console.log('Authenticated', authentication);
     // const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
     const clientData = atob(base64urlTobase64(authentication.clientData));
@@ -207,7 +209,8 @@ export default function usePasskey() {
     const credentialInfo = JSON.parse(
       (
         await api.backup.credential({
-          credentialID: authentication.credentialId,
+      
+          credentialID: credentialId,
         })
       ).data.data,
     );
@@ -217,7 +220,7 @@ export default function usePasskey() {
         ...authentication,
         algorithm: credentialInfo.algorithm,
         publicKey: credentialInfo.publicKey,
-        id: authentication.credentialId
+        id: credentialId,
       },
     };
   };

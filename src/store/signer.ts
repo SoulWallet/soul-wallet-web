@@ -8,18 +8,25 @@ export interface ISignerStore {
   setSignerId: (signerId: string) => void;
   eoas: string[];
   setEoas: (eoas: string[]) => void;
-  credentials: any;
+  credentials: ICredentialItem[];
   getSelectedKeyType: () => SignkeyType;
   getSelectedCredential: () => void;
-  addCredential: (credential: any) => void;
-  setCredentials: (credentials: any) => void;
+  addCredential: (credential: ICredentialItem) => void;
+  setCredentials: (credentials: ICredentialItem[]) => void;
   changeCredentialName: (credentialId: string, name: string) => void;
   clearSigners: () => void;
 }
 
-export const getIndexByCredentialId = (credentials: any, id: string) => {
+export interface ICredentialItem {
+  id: string;
+  algorithm: string;
+  name: string;
+  publicKey: string;
+}
+
+export const getIndexByCredentialId = (credentials: ICredentialItem[], id: string) => {
   if (!credentials || !credentials.length || !id) return -1;
-  return credentials.findIndex((item: any) => item.credentialId === id || item.id === id);
+  return credentials.findIndex((item: ICredentialItem) => item.id === id);
 };
 
 const createCredentialSlice = immer<ISignerStore>((set, get) => ({
@@ -48,16 +55,16 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
       return algorithm === 'ES256' ? SignkeyType.P256 : SignkeyType.RS256;
     }
   },
-  addCredential: (credential: any) => {
+  addCredential: (credential: ICredentialItem) => {
     set((state) => {
       state.credentials.push(credential);
     });
   },
-  setCredentials: (credentials: any) => {
+  setCredentials: (credentials: ICredentialItem[]) => {
     set((state) => {
       state.credentials = credentials;
       // set the first one as default
-      state.signerId = credentials[0].credentialId || credentials[0].id;
+      state.signerId = credentials[0].id;
     });
   },
   clearSigners: () => {

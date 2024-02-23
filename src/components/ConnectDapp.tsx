@@ -41,11 +41,6 @@ export default function ConnectDapp({ msgId }: any) {
   const origin = document.referrer;
   const onConfirm = async (address: string) => {
     // do auth first
-    // const credentialId = credentials[0].id;
-    // const challenge = btoa('1234567890');
-    // const auth = await authenticate();
-    // console.log('auth', auth);
-
     window.opener.postMessage(
       {
         id: msgId,

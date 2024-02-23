@@ -292,35 +292,6 @@ export default function useWallet() {
     });
   };
 
-  const initializeWithEoa = async (initInfo: any, eoaAddress: string) => {};
-
-  const initializeWithPasskey = async (initInfo: any, credential: any) => {
-    // set init info
-    retrieveSlotInfo(initInfo);
-    // calc first address
-    // const newAddress = await calcWalletAddress(0);
-    // setAddressList([
-    //   {
-    //     address: newAddress,
-    //     activatedChains: [],
-    //   },
-    // ]);
-
-    // saveAddressName(newAddress, 'Account 1', true);
-
-    // IMPORTANT TODO, get wallet name from credential storage
-    // set credentials
-    const credentialKey = {
-      id: credential.credentialId,
-      publicKey: credential.publicKey,
-      algorithm: credential.algorithm,
-      name: 'Passkey 1',
-      // coords,
-    };
-
-    setCredentials([credentialKey]);
-  };
-
   const retrieveSlotInfo = (initInfo: any) => {
     // set slot info
     const initialKeysAddress = L1KeyStore.initialKeysToAddress(initInfo.initialKeys);
@@ -431,7 +402,6 @@ export default function useWallet() {
     signRawHash,
     signWithPasskey,
     signWithEoa,
-    initializeWithPasskey,
     retrieveSlotInfo,
     boostAfterRecovered,
     checkRecoverStatus,
