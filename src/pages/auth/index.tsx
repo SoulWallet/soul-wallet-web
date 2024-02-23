@@ -362,7 +362,7 @@ export default function Auth() {
           <Box width={{ base: '100%', md: '50%' }} background="#F7F7FF" flex="1" display="flex" padding="60px">
             <Box width="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
               <Box marginBottom="40px">
-                <Image src={AuthImg} />
+                <Image src={AuthImg} w="300px" h="200px" />
               </Box>
               <Box width="335px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Button width="100%" type="black" color="white" marginBottom="18px" size="xl" onClick={openRegister}>
