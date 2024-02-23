@@ -66,7 +66,7 @@ function AccountCard({ i, id, isSelected, account, selectAccount }: any) {
       <Fragment>
         <Box display="flex" marginTop="18px">
           {chainIds.map((id: any) =>
-            <Box marginRight="11px" borderBottom={id === chainId ? '2px solid black' : 'none'} opacity={id === chainId ? '1' : '0.5'} paddingBottom="10px" cursor="pointer" onClick={() => setChainId(id)}>
+            <Box key={id} marginRight="11px" borderBottom={id === chainId ? '2px solid black' : 'none'} opacity={id === chainId ? '1' : '0.5'} paddingBottom="10px" cursor="pointer" onClick={() => setChainId(id)}>
               <Image width="22px" height="22px" src={getChainIcon(id)} borderRadius="100%" />
             </Box>
           )}

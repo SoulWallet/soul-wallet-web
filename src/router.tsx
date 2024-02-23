@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
             path: 'security',
             element: <Security />,
             children: [
-              { index: true, element: <Navigate to="/signer" replace /> },
+              { index: true, element: <Navigate to="signer" replace /> },
               { path: 'signer', element: <Signer /> },
               { path: 'guardian', element: <Guardian /> },
             ],

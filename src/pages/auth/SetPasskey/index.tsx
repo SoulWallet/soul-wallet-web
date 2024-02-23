@@ -133,8 +133,8 @@ export default function SetPasskey() {
                   My passkeys
                 </Heading>
                 <Flex display="flex" alignItems="flex-start" justifyContent="center" flexDirection="column" width="100%" gap="2">
-                  {credentials.map((passKey: any) =>
-                    <Box background="white" borderRadius="16px" padding="16px" width="100%" marginBottom="4px">
+                  {credentials.map((passKey: any, index: number) =>
+                    <Box key={index} background="white" borderRadius="16px" padding="16px" width="100%" marginBottom="4px">
                       <Box display="flex" alignItems="center">
                         <Box width="50px" height="50px" background="#efefef" borderRadius="50px" marginRight="16px" display="flex" alignItems="center" justifyContent="center"><ComputerIcon /></Box>
                         <Box>

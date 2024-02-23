@@ -356,9 +356,10 @@ export default function AddSigner({ next, back }: any) {
               flexWrap="wrap"
               width={{ base: '100%', md: '100%' }}
             >
-              {signatures.map((item: any) => {
+              {signatures.map((item: any, index: number) => {
                 return (
                   <Box
+                    key={index}
                     border="1px solid rgba(0, 0, 0, 0.10)"
                     borderRadius="12px"
                     padding="14px"
