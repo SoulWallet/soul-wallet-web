@@ -314,9 +314,6 @@ export default function Pay() {
                 alignItems="center"
                 justifyContent="center"
               >
-                {/* <Box marginBottom="22px" width="120px" height="120px">
-                    <Image src={SignatureRequestImg} />
-                    </Box> */}
                 <Box fontSize="32px" fontWeight="700" fontFamily="Nunito">
                   Pay Recover Fee
                 </Box>

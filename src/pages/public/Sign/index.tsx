@@ -417,7 +417,7 @@ export default function Sign() {
                 justifyContent="center"
               >
                 <Box marginBottom="22px" width="120px" height="120px">
-                  <Image src={SignatureRequestImg} />
+                  <Image src={SignatureRequestImg} width="120px" height="120px" />
                 </Box>
                 <Box fontSize="32px" fontWeight="700" lineHeight={'normal'} fontFamily="Nunito">
                   Signature request
