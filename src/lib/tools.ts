@@ -241,6 +241,14 @@ export const toShortAddress = (address: string, firstSlice: number = 5, lastSlic
   return address;
 };
 
+export const trimPrefix = (address: any) => {
+  if (address && address.indexOf(':') !== -1) {
+    return address.split(':')[1]
+  }
+
+  return address
+}
+
 export const numToFixed = (num: any, precision: number) => {
   const bn = BN(num);
   let str = bn.toFixed(precision);

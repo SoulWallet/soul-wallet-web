@@ -16,14 +16,7 @@ import { ethers } from 'ethers';
 import { useTempStore } from '@/store/temp';
 import NoWalletIcon from '@/assets/icons/no-wallet.svg'
 import { SignHeader } from '@/pages/public/Sign';
-
-function trimPrefix(address) {
-  if (address.indexOf(':') !== -1) {
-    return address.split(':')[1]
-  }
-
-  return address
-}
+import { trimPrefix } from '@/lib/tools'
 
 export default function ImportAccount({ importWallet, isImporting, back }: any) {
   const [address, setAddress] = useState('')

@@ -16,14 +16,7 @@ import useBrowser from '@/hooks/useBrowser';
 import BackIcon from '@/components/Icons/Back'
 import Button from '@/components/Button'
 import { ethers } from 'ethers';
-
-function trimPrefix(address) {
-  if (address.indexOf(':') !== -1) {
-    return address.split(':')[1]
-  }
-
-  return address
-}
+import { trimPrefix } from '@/lib/tools'
 
 export default function ImportAccountModal({ isOpen, onClose, importWallet, isImporting, openSelectAccount }: any) {
   const [address, setAddress] = useState('')
