@@ -33,8 +33,15 @@ const SignerItem = ({
     </Flex>
   );
 };
-export default function SignerSelect() {
+export default function SignerSelect({ onChange }: { onChange?: () => void }) {
   const { getSelectedKeyType, signerId, setSignerId, eoas, credentials } = useSignerStore();
+
+  const onSelect = (_signerId: string, _signerType: any) => {
+    if (onChange) {
+      onChange();
+    }
+    setSignerId(_signerId);
+  };
 
   return (
     <Menu>
@@ -58,7 +65,7 @@ export default function SignerSelect() {
                 <SignerItem
                   title={toShortAddress(item)}
                   checked={signerId === item}
-                  onClick={() => setSignerId(item)}
+                  onClick={() => onSelect(item, SignkeyType.EOA)}
                   type="wallet"
                 />
               </MenuItem>
@@ -78,7 +85,7 @@ export default function SignerSelect() {
                 <SignerItem
                   title={item.name}
                   checked={signerId === item.id}
-                  onClick={() => setSignerId(item.id)}
+                  onClick={() => onSelect(item.id, item.algorithm === 'ES256' ? SignkeyType.P256 : SignkeyType.RS256)}
                   type="passkey"
                 />
               </MenuItem>

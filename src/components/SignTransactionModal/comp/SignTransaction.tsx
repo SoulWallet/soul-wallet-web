@@ -29,6 +29,7 @@ import { useSlotStore } from '@/store/slot';
 import { bundlerErrMapping } from '@/config';
 import DropdownSelect from '@/components/DropdownSelect';
 import AddressIcon from '@/components/AddressIcon';
+import { useSignerStore } from '@/store/signer';
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
   return (
@@ -72,6 +73,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { toggleActivatedChain, selectedAddress } = useAddressStore();
   const { setFinishedSteps } = useSettingStore();
   const { slotInfo } = useSlotStore();
+  const { signerId } = useSignerStore();
   // todo, set false as default
   const [useSponsor, setUseSponsor] = useState(true);
   const { getPrefund } = useQuery();
@@ -213,8 +215,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
   };
 
-  const doPrecheck = async (payTokenAddress: string) => {
-    if (prechecked) {
+  const doPrecheck = async (payTokenAddress: string, force: boolean = false) => {
+    if (prechecked && !force) {
       return;
     }
     console.log('trigger pre check', payTokenAddress);
@@ -269,10 +271,13 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   };
 
   const onPayTokenChange = (val: string, isSponsor: boolean) => {
-    setPrechecked(false);
     setPayToken(val);
-    doPrecheck(val);
+    doPrecheck(val, true);
     setUseSponsor(isSponsor);
+  };
+
+  const onSignerChange = () => {
+    doPrecheck(payToken, true);
   };
 
   // IMPORTANT IMPORTANT TODO, rendered twice
@@ -288,8 +293,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     if (!requiredAmount || !payToken || (sponsor && useSponsor)) {
       return;
     }
-
-    console.log('do balance check1', sponsor, useSponsor);
 
     const token = getTokenBalance(payToken);
 
@@ -437,7 +440,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 tooltip={`A transaction signer is responsible for authorizing blockchain transactions, ensuring security and validity before they're processed on the network.`}
               />
               <Flex gap="2" fontWeight={'500'}>
-                <SignerSelect />
+                <SignerSelect onChange={onSignerChange} />
               </Flex>
             </InfoItem>
             <InfoItem>
@@ -504,7 +507,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 <Text color="#f00">{hintText}</Text>
               </InfoItem>
             )}
-            {!balanceEnough && !useSponsor && (
+            {!balanceEnough && (!sponsor || !useSponsor) && (
               <InfoItem>
                 <Text color="#f00">Not enough balance</Text>
               </InfoItem>
@@ -535,11 +538,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         )} */}
       </Flex>
       <Box mt="10">
-        {!balanceEnough && (!sponsor || !useSponsor) && (
+        {/* {!balanceEnough && (!sponsor || !useSponsor) && (
           <Text mb="2" color="danger" textAlign={'center'}>
             Balance not enough
           </Text>
-        )}
+        )} */}
         <Button
           w="320px"
           display={'flex'}
