@@ -85,7 +85,7 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
             flexDirection="column"
           >
             <Box height="100px" width="100px" borderRadius="100px" marginBottom="30px">
-              <Image width="100px" borderRadius="100px" src={NoWalletIcon} />
+              <Image width="100px" height="100px" borderRadius="100px" src={NoWalletIcon} />
             </Box>
             <Heading marginBottom="0" type="h3">
               No wallet found on this device
