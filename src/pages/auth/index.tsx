@@ -46,7 +46,7 @@ export default function Auth() {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false);
   const [isImportAccountOpen, setIsImportAccountOpen] = useState(false);
-  const { connect } = useConnect();
+  const { connect, connectAsync } = useConnect();
   const { disconnectAsync } = useDisconnect();
   const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo, getLoginInfo } = useTempStore();
   const account = useAccount();
@@ -83,6 +83,7 @@ export default function Auth() {
   const openRegister = useCallback(() => {
     // make sure no previous log data exist
 
+    setIsConnectAtive(false);
     setIsRegisterOpen(true);
   }, []);
 
@@ -112,9 +113,9 @@ export default function Auth() {
   }, []);
 
   const connectEOA = useCallback(async (connector: any) => {
-    console.log('connectEOA', connector);
     setIsConnectAtive(true);
-    connect({ connector });
+    await disconnectAsync();
+    await connectAsync({ connector });
     setActiveConnector(connector);
   }, []);
 
@@ -179,8 +180,9 @@ export default function Auth() {
   }, []);
 
   const startLoginWithEOA = useCallback(
-    (connector: any) => {
-      connect({ connector });
+    async (connector: any) => {
+      await disconnectAsync();
+      await connectAsync({ connector });
       setLoginMethod('eoa');
       updateLoginInfo({
         signerId: address,
