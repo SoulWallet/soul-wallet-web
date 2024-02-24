@@ -70,7 +70,7 @@ export default function useTransaction() {
       userOp = await set1559Fee(userOp, payToken);
 
       userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
-      userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
+      userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(100000).toString(16)}`;
 
       return userOp;
     } catch (err:any) {
