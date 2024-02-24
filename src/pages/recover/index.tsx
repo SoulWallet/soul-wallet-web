@@ -154,7 +154,11 @@ export default function Recover() {
               background="#D9D9D9"
               marginBottom="20px"
             >
-              <Image src={RecoverWalletIcon} />
+              <Image
+                src={RecoverWalletIcon}
+                width="120px"
+                height="120px"
+              />
             </Box>
             <Heading
               marginBottom="18px"
