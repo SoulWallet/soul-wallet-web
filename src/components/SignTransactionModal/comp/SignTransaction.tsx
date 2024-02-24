@@ -1,4 +1,4 @@
-import { Flex, Box, Text, useToast, Image, Divider, Tooltip, useMediaQuery } from '@chakra-ui/react';
+import { Flex, Box, Text, useToast, Image, Divider, Tooltip, useMediaQuery, usePanGesture } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
 import IconCopy from '@/assets/copy.svg';
 import Button from '../../Button';
@@ -29,8 +29,6 @@ import { useSlotStore } from '@/store/slot';
 import { bundlerErrMapping } from '@/config';
 import DropdownSelect from '@/components/DropdownSelect';
 import AddressIcon from '@/components/AddressIcon';
-import { useSignerStore } from '@/store/signer';
-import { useAccount } from 'wagmi';
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
   return (
@@ -74,11 +72,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { toggleActivatedChain, selectedAddress } = useAddressStore();
   const { setFinishedSteps } = useSettingStore();
   const { slotInfo } = useSlotStore();
-  const { eoas } = useSignerStore();
-  const { address } = useAccount();
   // todo, set false as default
   const [useSponsor, setUseSponsor] = useState(true);
-  const { getSelectedKeyType } = useSignerStore();
   const { getPrefund } = useQuery();
   const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
@@ -88,7 +83,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [hintText, setHintText] = useState('');
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
   const selectedTokenPrice = selectedToken.tokenPrice;
-  const origin = document.referrer;
   const [showMore, setShowMore] = useState(false);
 
   const checkSponser = async (userOp: UserOperation) => {
@@ -199,11 +193,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
     setRequiredAmount(requiredAmount);
 
-    // if (ethers.ZeroAddress === payTokenAddress) {
-    //   setFeeCost(`${requiredAmount} ${chainConfig.chainToken}`);
-    // } else {
-    //   setFeeCost(`${requiredAmount} USDC`);
-    // }
     setLoadingFee(false);
   };
 
@@ -296,9 +285,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   }, [txns, payToken]);
 
   useEffect(() => {
-    if (!requiredAmount || !payToken) {
+    if (!requiredAmount || !payToken || (sponsor && useSponsor)) {
       return;
     }
+
+    console.log('do balance check1', sponsor, useSponsor);
 
     const token = getTokenBalance(payToken);
 
@@ -308,7 +299,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       // todo, should minus sendErc20 token balance as well
       setBalanceEnough(BN(token.tokenBalanceFormatted).isGreaterThanOrEqualTo(requiredAmount));
     }
-  }, [requiredAmount, payToken]);
+  }, [requiredAmount, payToken, sponsor, useSponsor]);
 
   return (
     <Box pb={{ base: 6, lg: 0 }}>
@@ -473,7 +464,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 )}
               </Flex>
             </InfoItem>
-            {useSponsor && requiredAmount && (
+            {sponsor && useSponsor && requiredAmount && (
               <InfoItem>
                 <LabelItem
                   label="Sponsor"
@@ -543,21 +534,27 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           </>
         )} */}
       </Flex>
-      <Button
-        w="320px"
-        display={'flex'}
-        gap="2"
-        fontSize={'20px'}
-        py="4"
-        fontWeight={'800'}
-        mt="12"
-        mx="auto"
-        onClick={onConfirm}
-        loading={signing}
-        disabled={(loadingFee || !balanceEnough) && (!sponsor || !useSponsor)}
-      >
-        Confirm
-      </Button>
+      <Box mt="10">
+        {!balanceEnough && (!sponsor || !useSponsor) && (
+          <Text mb="2" color="danger" textAlign={'center'}>
+            Balance not enough
+          </Text>
+        )}
+        <Button
+          w="320px"
+          display={'flex'}
+          gap="2"
+          fontSize={'20px'}
+          py="4"
+          fontWeight={'800'}
+          mx="auto"
+          onClick={onConfirm}
+          loading={signing}
+          disabled={(loadingFee || !balanceEnough) && (!sponsor || !useSponsor)}
+        >
+          Confirm
+        </Button>
+      </Box>
     </Box>
   );
 }
