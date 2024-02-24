@@ -46,12 +46,12 @@ export default function Auth() {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false);
   const [isImportAccountOpen, setIsImportAccountOpen] = useState(false);
-  const { connect } = useConnect();
+  const { connect, connectAsync } = useConnect();
   const { disconnectAsync } = useDisconnect();
   const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo, getLoginInfo } = useTempStore();
   const account = useAccount();
   const { address, isConnected, isConnecting } = account;
-  const { signerIdAddress, getSignerIdAddress } = useSettingStore();
+  const { getSignerIdAddress } = useSettingStore();
   const { authenticate } = usePassKey();
   const [isLoging, setIsLoging] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
@@ -64,9 +64,10 @@ export default function Auth() {
   const { setCredentials, setEoas } = useSignerStore();
   const { getActiveGuardianHash } = useKeystore();
   const { updateGuardiansInfo } = useGuardianStore();
+  const signerIdAddress = getSignerIdAddress()
   const activeSignerId = loginInfo.signerId;
   const activeLoginAccounts = signerIdAddress[loginInfo.signerId];
-  console.log('signerIdAddress', activeSignerId, activeLoginAccounts);
+  console.log('signerIdAddress', activeSignerId, activeLoginAccounts, signerIdAddress);
 
   const openRecover = useCallback(() => {
     navigate('/recover');
@@ -83,6 +84,7 @@ export default function Auth() {
   const openRegister = useCallback(() => {
     // make sure no previous log data exist
 
+    setIsConnectAtive(false);
     setIsRegisterOpen(true);
   }, []);
 
@@ -112,9 +114,9 @@ export default function Auth() {
   }, []);
 
   const connectEOA = useCallback(async (connector: any) => {
-    console.log('connectEOA', connector);
     setIsConnectAtive(true);
-    connect({ connector });
+    await disconnectAsync();
+    await connectAsync({ connector });
     setActiveConnector(connector);
   }, []);
 
@@ -179,8 +181,11 @@ export default function Auth() {
   }, []);
 
   const startLoginWithEOA = useCallback(
-    (connector: any) => {
-      connect({ connector });
+    async (connector: any) => {
+      await disconnectAsync();
+      const result = await connectAsync({ connector });
+      const address = result.accounts && result.accounts[0]
+      console.log('startLoginWithEOA', address, result)
       setLoginMethod('eoa');
       updateLoginInfo({
         signerId: address,
@@ -197,7 +202,7 @@ export default function Auth() {
         setStepType('importAccount');
       }
     },
-    [address],
+    [],
   );
 
   const startImportAccount = useCallback(() => {
@@ -402,8 +407,8 @@ export default function Auth() {
                   },
                 }}
               >
-                <Image w="6" src={item.icon} className="icon" />
-                <Image w="6" src={item.iconActivated} display={'none'} className="icon-activated" />
+                <Image w="6" h="6" src={item.icon} className="icon" />
+                <Image w="6" h="6" src={item.iconActivated} display={'none'} className="icon-activated" />
               </Link>
             ))}
           </Flex>

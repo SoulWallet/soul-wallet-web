@@ -288,6 +288,9 @@ export default function Guardian() {
 
     if (!data) {
       console.log('No guardians found!')
+      guardianStore.updateGuardiansInfo({
+        keepPrivate: true
+      })
     } else {
       const guardianDetails = data.guardianDetails;
       const guardianNames = data.guardianNames;

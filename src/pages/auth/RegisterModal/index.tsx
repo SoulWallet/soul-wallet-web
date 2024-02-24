@@ -35,7 +35,7 @@ export default function RegisterModal({
 }: any) {
   const { connectors } = useConnect();
 
-  if (isConnected && isConnectAtive) {
+  if (isConnected && isConnectAtive && activeConnector) {
     return (
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

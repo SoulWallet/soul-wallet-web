@@ -46,6 +46,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
   const { getAddressName } = useSettingStore();
   const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
   const { getChainItem, setSelectedChainId } = useChainStore();
+  console.log('selectedChainItem', selectedChainItem, addressList)
 
   const onAddressChange = (item: IAddressItem) => {
     console.log('change addr', item);
@@ -89,13 +90,13 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
                       src={selectedChainItem.iconSquare}
                     />
                     <Text fontWeight={'700'}>{selectedChainItem.chainName}</Text>
-                    &nbsp;
-                    <Text fontWeight={'600'} display={{ base: 'none', lg: 'block' }}>
-                      ({toShortAddress(selectedAddressItem.address)})
-                    </Text>
-                    <Text fontWeight={'600'} display={{ base: 'block', lg: 'none' }}>
-                      ({toShortAddress(selectedAddressItem.address, 2, 2)})
-                    </Text>
+                  &nbsp;
+                  <Text fontWeight={'600'} display={{ base: 'none', lg: 'block' }}>
+                    ({toShortAddress(selectedAddressItem.address)})
+                  </Text>
+                  <Text fontWeight={'600'} display={{ base: 'block', lg: 'none' }}>
+                    ({toShortAddress(selectedAddressItem.address, 2, 2)})
+                  </Text>
                   </Flex>
                 )}
               </>
@@ -112,17 +113,22 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
           <MenuList w={{ lg: '340px' }} zIndex={'200'}>
             {addressList.map((item: any, idx: number) => {
               const chainInfo = getChainItem(item.chainIdHex);
+
+              if (!chainInfo) {
+                return null
+              }
+
               return (
                 <React.Fragment key={idx}>
                   {/* {idx ? <MenuDivider /> : ''} */}
                   <MenuItem
                     key={item.address}
                     {...(item.recovering
-                      ? { cursor: 'not-allowed', filter: 'grayscale(100%)' }
-                      : {
-                          onClick: () => onAddressChange(item),
-                        })}
-                  >
+                       ? { cursor: 'not-allowed', filter: 'grayscale(100%)' }
+                       : {
+                         onClick: () => onAddressChange(item),
+                    })}
+                    >
                     <Flex w="100%" align={'center'} justify={'space-between'}>
                       <Flex align={'center'} gap="3">
                         <Image src={chainInfo.iconSquare} w="8" h="8" />
@@ -151,7 +157,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
               );
             })}
             {/* <MenuDivider />
-            <CreateAccount /> */}
+                <CreateAccount /> */}
             {/* <DestroyAccount /> */}
           </MenuList>
         </>
@@ -171,7 +177,7 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
       <Flex mr="1" align={'center'}>
         {/* <Image w="5" h="5" src={selectedChainItem.icon} /> */}
         <Text fontWeight={'700'}>{selectedChainItem.chainName}</Text>
-        &nbsp;
+    &nbsp;
         <Text fontWeight={'600'}>(******)</Text>
       </Flex>
     </Flex>

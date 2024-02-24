@@ -16,6 +16,7 @@ import { ethers } from 'ethers';
 import { useTempStore } from '@/store/temp';
 import NoWalletIcon from '@/assets/icons/no-wallet.svg'
 import { SignHeader } from '@/pages/public/Sign';
+import { trimPrefix } from '@/lib/tools'
 
 export default function ImportAccount({ importWallet, isImporting, back }: any) {
   const [address, setAddress] = useState('')
@@ -84,7 +85,7 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
             flexDirection="column"
           >
             <Box height="100px" width="100px" borderRadius="100px" marginBottom="30px">
-              <Image width="100px" borderRadius="100px" src={NoWalletIcon} />
+              <Image width="100px" height="100px" borderRadius="100px" src={NoWalletIcon} />
             </Box>
             <Heading marginBottom="0" type="h3">
               No wallet found on this device
@@ -122,8 +123,8 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
                   type="black"
                   color="white"
                   padding="0 20px"
-                  disabled={!ethers.isAddress(address) || isImporting}
-                  onClick={() => importWallet(address)}
+                  disabled={!ethers.isAddress(trimPrefix(address)) || isImporting}
+                  onClick={() => importWallet(trimPrefix(address))}
                   loading={isImporting}
                   size="xl"
                 >

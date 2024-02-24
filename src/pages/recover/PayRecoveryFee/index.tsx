@@ -186,14 +186,14 @@ export default function PayRecoveryFee({ next }: any) {
                   type="black"
                   color="white"
                   marginBottom="18px"
-                  onClick={doPay}
+                  onClick={!isPaid ? doPay : () => {}}
                   size="xl"
                   skipSignCheck
                   loading={paying}
-                  disabled={paying}
+                  disabled={paying || isPaid}
                   width={{ base: '100%', md: '275px' }}
                 >
-                  Pay Fee
+                  {isPaid ? 'Proceeding' : 'Pay Fee'}
                 </Button>: <Button
                              type="black"
                              color="white"

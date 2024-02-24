@@ -80,7 +80,11 @@ export default function SelectGuardianTypeModal({
                     justifyContent="center"
                     background="rgba(0, 0, 0, 0.05)"
                   >
-                    <Image src={EOAGuardianIcon} />
+                    <Image
+                      src={EOAGuardianIcon}
+                      width="60px"
+                      height="60px"
+                    />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px">Ethereum wallet</TextBody>
@@ -107,7 +111,11 @@ export default function SelectGuardianTypeModal({
                     justifyContent="center"
                     background="rgba(0, 0, 0, 0.05)"
                   >
-                    <Image src={EmailGuardianIcon} />
+                    <Image
+                      src={EmailGuardianIcon}
+                      width="60px"
+                      height="60px"
+                    />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px" display="flex" alignItems="center">

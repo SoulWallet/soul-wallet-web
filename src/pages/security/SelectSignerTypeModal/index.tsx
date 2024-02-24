@@ -71,7 +71,11 @@ export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConn
                     justifyContent="center"
                     background="rgba(0, 0, 0, 0.05)"
                   >
-                    <Image src={EOAGuardianIcon} />
+                    <Image
+                      src={EOAGuardianIcon}
+                      width="60px"
+                      height="60px"
+                    />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px">Wallet extension</TextBody>
@@ -100,7 +104,11 @@ export default function SelectSignerTypeModal({ isOpen, onClose, startWalletConn
                     justifyContent="center"
                     background="rgba(0, 0, 0, 0.05)"
                   >
-                    <Image src={PasskeySignerIcon} />
+                    <Image
+                      src={PasskeySignerIcon}
+                      width="60px"
+                      height="60px"
+                    />
                   </Box>
                   <Box>
                     <TextBody fontSize="18px">Passkey</TextBody>

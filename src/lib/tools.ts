@@ -234,12 +234,20 @@ export const hasCommonElement = (arr1: [], arr2: []) => {
 };
 
 export const toShortAddress = (address: string, firstSlice: number = 5, lastSlice: number = 5) => {
-  if (address.length > 10) {
+  if (address && address.length > 10) {
     return `${address.slice(0, firstSlice)}...${address.slice(-lastSlice)}`;
   }
 
   return address;
 };
+
+export const trimPrefix = (address: any) => {
+  if (address && address.indexOf(':') !== -1) {
+    return address.split(':')[1]
+  }
+
+  return address
+}
 
 export const numToFixed = (num: any, precision: number) => {
   const bn = BN(num);
