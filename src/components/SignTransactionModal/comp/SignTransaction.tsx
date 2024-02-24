@@ -122,13 +122,13 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const onConfirm = async () => {
     try {
-      if (!eoas.includes(address as string) && getSelectedKeyType() === SignkeyType.EOA) {
-        toast({
-          title: 'The account you connected is not in the list of signers',
-          status: 'error',
-        });
-        return;
-      }
+      // if (!eoas.includes(address as string) && getSelectedKeyType() === SignkeyType.EOA) {
+      //   toast({
+      //     title: 'The account you connected is not in the list of signers',
+      //     status: 'error',
+      //   });
+      //   return;
+      // }
       setSigning(true);
 
       let userOp: any;
