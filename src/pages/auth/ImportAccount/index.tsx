@@ -17,6 +17,14 @@ import { useTempStore } from '@/store/temp';
 import NoWalletIcon from '@/assets/icons/no-wallet.svg'
 import { SignHeader } from '@/pages/public/Sign';
 
+function trimPrefix(address) {
+  if (address.indexOf(':') !== -1) {
+    return address.split(':')[1]
+  }
+
+  return address
+}
+
 export default function ImportAccount({ importWallet, isImporting, back }: any) {
   const [address, setAddress] = useState('')
   const { updateCreateInfo } = useTempStore()
@@ -122,8 +130,8 @@ export default function ImportAccount({ importWallet, isImporting, back }: any) 
                   type="black"
                   color="white"
                   padding="0 20px"
-                  disabled={!ethers.isAddress(address) || isImporting}
-                  onClick={() => importWallet(address)}
+                  disabled={!ethers.isAddress(trimPrefix(address)) || isImporting}
+                  onClick={() => importWallet(trimPrefix(address))}
                   loading={isImporting}
                   size="xl"
                 >

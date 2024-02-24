@@ -17,6 +17,14 @@ import BackIcon from '@/components/Icons/Back'
 import Button from '@/components/Button'
 import { ethers } from 'ethers';
 
+function trimPrefix(address) {
+  if (address.indexOf(':') !== -1) {
+    return address.split(':')[1]
+  }
+
+  return address
+}
+
 export default function ImportAccountModal({ isOpen, onClose, importWallet, isImporting, openSelectAccount }: any) {
   const [address, setAddress] = useState('')
   const { navigate } = useBrowser();
@@ -81,8 +89,8 @@ export default function ImportAccountModal({ isOpen, onClose, importWallet, isIm
                     type="black"
                     color="white"
                     padding="0 20px"
-                    disabled={!ethers.isAddress(address) || isImporting}
-                    onClick={() => importWallet(address)}
+                    disabled={!ethers.isAddress(trimPrefix(address)) || isImporting}
+                    onClick={() => importWallet(trimPrefix(address))}
                     loading={isImporting}
                     size="xl"
                   >
