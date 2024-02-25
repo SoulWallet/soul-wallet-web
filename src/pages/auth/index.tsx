@@ -115,7 +115,9 @@ export default function Auth() {
 
   const connectEOA = useCallback(async (connector: any) => {
     setIsConnectAtive(true);
-    await disconnectAsync();
+    if(address){
+      await disconnectAsync();
+    }
     await connectAsync({ connector });
     setActiveConnector(connector);
   }, []);
