@@ -201,9 +201,10 @@ export default function AddSigner({ next, back }: any) {
                 alignItems="center"
                 justifyContent="flex-start"
                 marginTop="20px"
+                flexDirection={{ base: 'column', md: 'row' }}
               >
                 <Button
-                  width="275px"
+                  width={{ base: '100%', md: '275px' }}
                   maxWidth="100%"
                   position="relative"
                   background={uploaded ? '#7F56D9' : 'black'}
@@ -233,7 +234,7 @@ export default function AddSigner({ next, back }: any) {
                 </Button>
                 <Box padding="10px">Or</Box>
                 <Button
-                  width="320px"
+                  width={{ base: '100%', md: '320px' }}
                   skipSignCheck
                   size="xl"
                   maxWidth="100%"
@@ -259,6 +260,7 @@ export default function AddSigner({ next, back }: any) {
                   type="black"
                   size="lg"
                   onClick={handleNext}
+                  loading={isConfirming}
                   disabled={!hasGuardians || isConfirming}
                 >
                   Next

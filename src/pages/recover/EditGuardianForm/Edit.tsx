@@ -14,6 +14,7 @@ import { nanoid } from 'nanoid';
 import { toShortAddress } from '@/lib/tools';
 import IconLoading from '@/assets/loading.svg';
 import { ensContractAddress } from '@/config'
+import ENSResolver, { extractENSAddress } from '@/components/ENSResolver'
 
 const getNumberArray = (count: number) => {
   const arr = [];
@@ -109,20 +110,6 @@ const getDefaultGuardianIds = (count: number) => {
   return ids;
 };
 
-const extractENSAddress = (address: any) => {
-  if (!address) return
-
-  if (ethers.isAddress(address)) {
-    return null
-  } else if (isENSAddress(address)) {
-    return address
-  } else if (address.indexOf('.') === -1) {
-    return `${address}.eth`
-  } else {
-    return address
-  }
-}
-
 function stringToSeed(str: any) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -195,100 +182,63 @@ const GuardianInput = ({
   onChangeValues,
   i
 }: any) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isImported, setIsImported] = useState(false)
+  const [isENSOpen, setIsENSOpen] = useState(false)
+  const [isENSLoading, setIsENSLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [searchAddress, setSearchAddress] = useState('')
   const [resolvedAddress, setResolvedAddress] = useState('')
-  const rightInputRef = useRef()
+
   const activeENSNameRef = useRef()
   const menuRef = useRef()
+  const inputRef = useRef()
 
-  const rightOnChange = (id: any, value: any) => {
+  const inputOnChange = (id: any, value: any) => {
     onChange(`address_${id}`)(value)
     setSearchText(value)
 
     if (extractENSAddress(value)) {
-      setIsOpen(true)
+      setIsENSOpen(true)
     } else {
-      setIsOpen(false)
+      setIsENSOpen(false)
     }
   }
 
-  const rightOnFocus = (id: any, value: any) => {
+  const inputOnFocus = (id: any, value: any) => {
     setSearchText(value)
 
     if (extractENSAddress(value)) {
-      setIsOpen(true)
+      setIsENSOpen(true)
     } else {
-      setIsOpen(false)
+      setIsENSOpen(false)
     }
   }
 
-  const rightOnBlur = (id: any, value: any) => {
+  const inputOnBlur = (id: any, value: any) => {
     if (value) {
       onBlur(`address_${id}`)(value)
     }
   }
 
-  const setRightInput = (value: any) => {
-    rightInputRef.current = value
+  const setMenuRef = (value: any) => {
+    menuRef.current = value
   }
 
-  const resolveName = async (ensName: any) => {
-    try {
-      activeENSNameRef.current = ensName
-      setIsLoading(true)
-      setResolvedAddress('')
-      const ethersProvider = new ethers.JsonRpcProvider(`https://mainnet.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`);
-      const address = await ethersProvider.resolveName(ensName);
-      const isExpired = await isENSExpiration(ensName, ethersProvider);
-      console.log('address', address, isExpired)
-
-      if (activeENSNameRef.current === ensName) {
-        if (address && !isExpired) {
-          setResolvedAddress(address)
-        } else {
-          setResolvedAddress('')
-          setSearchAddress('')
-        }
-
-        setIsLoading(false)
-      }
-    } catch (error: any) {
-      if (activeENSNameRef.current === ensName) {
-        setResolvedAddress('')
-        setSearchAddress('')
-        setIsLoading(false)
-      }
-
-      console.log('error', error.message)
-    }
+  const setInputRef = (value: any) => {
+    inputRef.current = value
   }
 
-  useEffect(() => {
-    if (searchAddress) {
-      resolveName(searchAddress)
-    }
-  }, [searchAddress])
+  const setActiveENSNameRef = (value: any) => {
+    activeENSNameRef.current = value
+  }
 
-  useEffect(() => {
-    if (searchText) {
-      const searchAddress = extractENSAddress(searchText)
-
-      if (searchAddress) {
-        setSearchAddress(searchAddress)
-      } else {
-        setIsOpen(false)
-      }
-    }
-  }, [searchText])
+  const getActiveENSNameRef = (value: any) => {
+    return activeENSNameRef.current
+  }
 
   useEffect(() => {
     function handleClickOutside(event: any) {
-      if (rightInputRef.current && !(rightInputRef.current as any).contains(event.target) && menuRef.current && !(menuRef.current as any).contains(event.target)) {
-        setIsOpen(false)
+      if (inputRef.current && !(inputRef.current as any).contains(event.target) && menuRef.current && !(menuRef.current as any).contains(event.target)) {
+        setIsENSOpen(false)
       }
     }
 
@@ -301,7 +251,7 @@ const GuardianInput = ({
 
   const submitENSName = (name: any) => {
     console.log('submitENSName', resolvedAddress)
-    setIsOpen(false)
+    setIsENSOpen(false)
     onChangeValues({
       [`name_${id}`]: name,
       [`address_${id}`]: resolvedAddress,
@@ -313,17 +263,20 @@ const GuardianInput = ({
       <DoubleFormInput
         rightPlaceholder={`ENS or Ethereum wallet address`}
         rightValue={values[`address_${id}`]}
-        rightOnChange={(value: any) => rightOnChange(id, value)}
-        rightOnFocus={(value: any,) => rightOnFocus(id, value)}
-        rightOnBlur={(value: any) => rightOnBlur(id, value)}
-        setRightInput={setRightInput}
+        rightOnChange={(value: any) => inputOnChange(id, value)}
+        rightOnFocus={(value: any,) => inputOnFocus(id, value)}
+        rightOnBlur={(value: any) => inputOnBlur(id, value)}
+        setRightInput={setInputRef}
         rightErrorMsg={showErrors[`address_${id}`] && errors[`address_${id}`]}
         _rightInputStyles={{
           fontWeight: 600,
           fontSize: '14px',
           fontFamily: 'Nunito'
         }}
-        _rightContainerStyles={{ width: 'calc(100% - 240px)', zIndex: 0 }}
+        _rightContainerStyles={{
+          width: { base: 'calc(100%)', 'md': 'calc(100% - 240px)' },
+          zIndex: 0
+        }}
         rightAutoFocus={true}
         leftPlaceholder="Guardian Name (optinal)"
         leftValue={values[`name_${id}`]}
@@ -335,7 +288,10 @@ const GuardianInput = ({
             {import.meta.env.VITE_MAINNET_ADDRESS_PREFIX}
           </Text>
         }
-        _leftContainerStyles={{ width: '240px' }}
+        _leftContainerStyles={{
+          width: { base: '100%', 'md': '240px' },
+          marginBottom: { base: '20px', 'md': '0' },
+        }}
         _leftInputStyles={{
           fontWeight: 600,
           fontSize: '14px',
@@ -349,7 +305,7 @@ const GuardianInput = ({
           onClick={() => removeGuardian(id)}
           position="absolute"
           width="40px"
-          right={{ base: '-28px', md: '-40px' }}
+          right={{ base: '-28px', md: '-34px' }}
           top="0"
           height="48px"
           display="flex"
@@ -360,61 +316,28 @@ const GuardianInput = ({
           <Icon src={MinusIcon} />
         </Box>
       )}
-      <Box
-        position="absolute"
-        width="calc(100% - 240px)"
-        top="50px"
-        left="240px"
-        right="0"
-        ref={(menuRef as any)}
-        sx={{
-          div: {
-            width: '100%',
-            maxWidth: '100%',
-            minWidth: 'auto'
-          }
+      <ENSResolver
+        _styles={{
+          width: { base: "100%", lg: "calc(100% - 240px)" },
+          top: { base: "120px", lg: "50px" },
+          left: { base: "0", lg: "240px" },
+          right: "0",
         }}
-      >
-        <Menu
-          isOpen={isOpen}
-          isLazy
-        >
-          {() => (
-            <Box maxWidth="100%" overflow="auto">
-              <MenuList background="white" maxWidth="100%" boxShadow="0px 0px 20px 0px rgba(0, 0, 0, 0.2)">
-                <MenuItem maxWidth="100%" position="relative" onClick={(!isLoading && searchAddress) ? (() => submitENSName(searchAddress)) : (() => {})}>
-                  {!!searchAddress && (
-                    <Box
-                      as="span"
-                      background={`linear-gradient(to right, ${generateSeededColor(searchAddress)}, ${generateSeededColor(searchAddress, 1)})`}
-                      width="20px"
-                      height="20px"
-                      borderRadius="20px"
-                      marginRight="10px"
-                    />
-                  )}
-                  {!!searchAddress && <Box as="span" fontWeight="bold" marginRight="4px">{searchAddress}</Box>}
-                  {resolvedAddress && !isLoading && `(${toShortAddress(resolvedAddress)})`}
-                  {!resolvedAddress && !isLoading && <Box as="span" color="#898989">{`No ENS found`}</Box>}
-                  <Box
-                    position="absolute"
-                    top="0"
-                    right="0"
-                    width="40px"
-                    height="100%"
-                    as="span"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    {!!isLoading && <Image width="20px" src={IconLoading} />}
-                  </Box>
-                </MenuItem>
-              </MenuList>
-            </Box>
-          )}
-        </Menu>
-      </Box>
+        isENSOpen={isENSOpen}
+        setIsENSOpen={setIsENSOpen}
+        isENSLoading={isENSLoading}
+        setIsENSLoading={setIsENSLoading}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        searchAddress={searchAddress}
+        setSearchAddress={setSearchAddress}
+        resolvedAddress={resolvedAddress}
+        setResolvedAddress={setResolvedAddress}
+        setMenuRef={setMenuRef}
+        submitENSName={submitENSName}
+        setActiveENSNameRef={setActiveENSNameRef}
+        getActiveENSNameRef={getActiveENSNameRef}
+      />
     </Box>
   )
 }
@@ -477,9 +400,10 @@ export default function Edit({
       </Box>
       <Box
         display="flex"
-        alignItems="center"
         justifyContent="flex-start"
         marginTop="10px"
+        alignItems={{ base: 'flex-start', md: 'center' }}
+        flexDirection={{ base: 'column', md: 'row' }}
       >
         <Box
           fontFamily="Nunito"
@@ -489,7 +413,12 @@ export default function Edit({
         >
           Threshold:
         </Box>
-        <TextBody display="flex" alignItems="center" justifyContent="flex-start">
+        <TextBody
+          display="flex"
+          justifyContent="flex-start"
+          flexDirection={{ base: 'column', md: 'row' }}
+          alignItems={{ base: 'flex-start', md: 'center' }}
+        >
           <Box>Wallet recovery requires</Box>
           <Box width="80px" margin="0 10px">
             <Menu>
