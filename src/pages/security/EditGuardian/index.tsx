@@ -399,7 +399,7 @@ export default function EditGuardian({
                       >
                         <RemoveIcon />
                       </Box>
-                      <Box
+                      {/* <Box
                         fontFamily="Nunito"
                         fontWeight="700"
                         fontSize="16px"
@@ -407,7 +407,7 @@ export default function EditGuardian({
                         color="white"
                       >
                         🎉 Bravo!
-                      </Box>
+                      </Box> */}
                       <Box
                         fontFamily="Nunito"
                         fontWeight="400"

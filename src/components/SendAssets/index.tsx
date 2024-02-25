@@ -112,8 +112,6 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
     setIsENSOpen(false);
   };
 
-  const toast = useToast();
-
   const selectedToken = getTokenBalance(sendToken);
 
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();

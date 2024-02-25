@@ -2,6 +2,9 @@ import { useState, forwardRef, useImperativeHandle, useEffect, Ref } from 'react
 import { Flex, Text } from '@chakra-ui/react';
 import ConfirmPayment from './comp/ConfirmPayment';
 import TxModal from '../TxModal';
+import api from '@/lib/api';
+import { useSlotStore } from '@/store/slot';
+import { useSettingStore } from '@/store/setting';
 
 export const InfoWrap = ({ children, ...restProps }: any) => (
   <Flex fontSize="12px" fontWeight={'500'} px="4" gap="6"  flexDir={'column'} {...restProps}>
@@ -22,6 +25,8 @@ const ConfirmPaymentModal = (_: unknown, ref: Ref<any>) => {
   const [signing, setSigning] = useState<boolean>(false);
   const [fee, setFee] = useState<any>(null);
   const [sendToAddress, setSendToAddress] = useState('');
+  const { slotInfo } = useSlotStore();
+  const { setFinishedSteps } = useSettingStore();
 
   useImperativeHandle(ref, () => ({
     async show(fee: any, origin: string, sendTo: string) {
@@ -49,6 +54,11 @@ const ConfirmPaymentModal = (_: unknown, ref: Ref<any>) => {
 
   const onSuccess = async (receipt: any) => {
     setVisible(false);
+    const res = await api.operation.finishStep({
+      slot: slotInfo.slot,
+      steps: [2],
+    });
+    setFinishedSteps(res.data.finishedSteps);
     promiseInfo.resolve(receipt);
   };
 
