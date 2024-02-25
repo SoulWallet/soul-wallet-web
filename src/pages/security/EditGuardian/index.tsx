@@ -218,7 +218,7 @@ export default function EditGuardian({
           keepPrivate,
         };
 
-        await api.guardian.backupGuardians(guardiansInfo);
+        if (!keepPrivate) await api.guardian.backupGuardians(guardiansInfo);
         const { initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
 
         let rawKeys;
