@@ -49,6 +49,14 @@ export default function useKeystore() {
   };
 
   const getActiveGuardianHash = async (slotInitInfo: any) => {
+    if(!Object.keys(slotInitInfo).length){
+      return {
+        guardianHash: null,
+        activeGuardianHash: null,
+        guardianActivateAt: null,
+        pendingGuardianHash: null,
+      };
+    }
     const { initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInitInfo;
     const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
     const now = Math.floor(Date.now() / 1000);

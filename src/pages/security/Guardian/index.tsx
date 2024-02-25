@@ -274,6 +274,7 @@ export default function Guardian() {
   const loadGuardianInfo = async () => {
     console.log('loadGuardianInfo')
     const slotInfo = getSlotInfo()
+    if(!Object.keys(slotInfo).length) return;
     const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
     let activeGuardianHash
 

@@ -120,7 +120,7 @@ export default function Auth() {
     }
     await connectAsync({ connector });
     setActiveConnector(connector);
-  }, []);
+  }, [address]);
 
   const updateWalletName = useCallback((name: any) => {
     updateCreateInfo({
