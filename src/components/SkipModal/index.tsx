@@ -72,7 +72,8 @@ export default function SkipModal({ isOpen, onClose }: any) {
             </Box>
           </Box>
           <Flex align={'center'} gap="1" cursor="pointer" onClick={() => setUnderstood(prev => !prev)}>
-            <Image src={understood ? IconChecked : IconUnchecked} />
+            <Image display={understood ? 'none' : 'block'} src={IconUnchecked} />
+            <Image display={understood ? 'block' : 'none'} src={IconChecked} />
             <Text fontSize={"14px"} fontWeight={"500"}>
               I understand, do it anyway!
             </Text>

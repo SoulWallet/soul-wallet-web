@@ -13,7 +13,7 @@ import useConfig from './useConfig';
 import api from '@/lib/api';
 import usePasskey from './usePasskey';
 import { toHex } from '@/lib/tools';
-import { useAccount, useSignMessage, useSignTypedData } from 'wagmi';
+import { useSignMessage } from 'wagmi';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
@@ -21,7 +21,6 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
 import { getWalletAddress } from '@/pages/recover/RecoverProgress';
-import { useToast } from '@chakra-ui/react';
 
 export default function useWallet() {
   const { signByPasskey } = usePasskey();
@@ -29,8 +28,7 @@ export default function useWallet() {
   const { chainConfig } = useConfig();
   const { ethersProvider } = useWalletContext();
   const { signMessageAsync } = useSignMessage();
-  const { updateGuardiansInfo, recoveringGuardiansInfo, updateRecoveringGuardiansInfo, setRecoveringGuardiansInfo } =
-    useGuardianStore();
+  const { updateGuardiansInfo } = useGuardianStore();
   const { slotInfo, setSlotInfo, getSlotInfo } = useSlotStore();
   const { updateChainItem, setSelectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useSignerStore();
@@ -248,8 +246,6 @@ export default function useWallet() {
     const validAfter = Math.floor(Date.now() / 1000);
     const validUntil = validAfter + 3600;
 
-    console.log('before pack', userOp);
-
     const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
 
     if (packedUserOpHashRet.isErr()) {
@@ -271,9 +267,18 @@ export default function useWallet() {
   };
 
   const signRawHash = async (hash: string) => {
+    const selectedKeyType = getSelectedKeyType();
+
     const packed1271HashRet = await soulWallet.getEIP1271TypedData(selectedAddress, hash);
     const packedHashRet = await soulWallet.packRawHash(packed1271HashRet.OK.typedMessage);
-    const signature = await getPasskeySignature(packedHashRet.OK.packedHash, packedHashRet.OK.validationData);
+
+    let signature;
+
+    if (selectedKeyType === SignkeyType.EOA) {
+      signature = await getEoaSignature(packedHashRet.OK.packedHash, packedHashRet.OK.validationData);
+    } else if (selectedKeyType === SignkeyType.P256 || selectedKeyType === SignkeyType.RS256) {
+      signature = await getPasskeySignature(packedHashRet.OK.packedHash, packedHashRet.OK.validationData);
+    }
     return signature;
   };
 
@@ -319,7 +324,7 @@ export default function useWallet() {
     const credentialsInStore = recoverInfo.signers.filter((signer: any) => signer.type === 'passkey');
     const eoasInStore = recoverInfo.signers.filter((signer: any) => signer.type === 'eoa');
     if (credentialsInStore.length) setCredentials(credentialsInStore);
-    if(eoasInStore.length) setEoas(eoasInStore.map((signer: any) => signer.signerId));
+    if (eoasInStore.length) setEoas(eoasInStore.map((signer: any) => signer.signerId));
     // set mainnet if no selected chainId
     // if (!selectedChainId) {
     setSelectedChainId(import.meta.env.VITE_MAINNET_CHAIN_ID);

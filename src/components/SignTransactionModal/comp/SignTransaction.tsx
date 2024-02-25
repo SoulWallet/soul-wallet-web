@@ -30,6 +30,8 @@ import { bundlerErrMapping } from '@/config';
 import DropdownSelect from '@/components/DropdownSelect';
 import AddressIcon from '@/components/AddressIcon';
 import { useSignerStore } from '@/store/signer';
+import { useAccount } from 'wagmi';
+import useTools from '@/hooks/useTools';
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
   return (
@@ -58,10 +60,13 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const [decodedData, setDecodedData] = useState<any>({});
   const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
+  const { checkValidSigner } = useTools();
   const [signing, setSigning] = useState<boolean>(false);
   const { checkActivated, ethersProvider } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prechecked, setPrechecked] = useState(false);
+  const { address } = useAccount();
+  const { getSelectedKeyType, eoas } = useSignerStore();
   const [totalMsgValue, setTotalMsgValue] = useState('');
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
   const [payTokenSymbol, setPayTokenSymbol] = useState('');
@@ -73,8 +78,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { toggleActivatedChain, selectedAddress } = useAddressStore();
   const { setFinishedSteps } = useSettingStore();
   const { slotInfo } = useSlotStore();
-  const { signerId } = useSignerStore();
-  // todo, set false as default
   const [useSponsor, setUseSponsor] = useState(true);
   const { getPrefund } = useQuery();
   const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
@@ -118,15 +121,10 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const onConfirm = async () => {
     try {
-      // if (!eoas.includes(address as string) && getSelectedKeyType() === SignkeyType.EOA) {
-      //   toast({
-      //     title: 'The account you connected is not in the list of signers',
-      //     status: 'error',
-      //   });
-      //   return;
-      // }
+      if (!checkValidSigner()) {
+        return;
+      }
       setSigning(true);
-
       let userOp: any;
       if (sponsor && useSponsor && sponsor.paymasterAndData) {
         userOp = { ...activeOperation, paymasterAndData: sponsor.paymasterAndData };

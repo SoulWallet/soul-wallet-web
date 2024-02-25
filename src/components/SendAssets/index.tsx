@@ -9,7 +9,6 @@ import AmountInput from './comp/AmountInput';
 import { AddressInput, AddressInputReadonly } from './comp/AddressInput';
 import api from '@/lib/api';
 import { useSlotStore } from '@/store/slot';
-import { useAddressStore } from '@/store/address';
 import { useSettingStore } from '@/store/setting';
 import useConfig from '@/hooks/useConfig';
 import ENSResolver, { extractENSAddress, isENSAddress } from '@/components/ENSResolver';
@@ -173,6 +172,13 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
 
     setErrors(({ receiverAddress, ...rest }: any) => rest);
   };
+
+  useEffect(() => {
+    if (!amount) {
+      return;
+    }
+    checkAmount();
+  }, [amount]);
 
   const checkAmount = () => {
     if (!amount) {

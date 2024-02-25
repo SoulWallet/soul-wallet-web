@@ -8,6 +8,7 @@ import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { TypedDataEncoder, ethers } from 'ethers';
 import SignerSelect from '@/components/SignerSelect';
 import { LabelItem } from '@/components/SignTransactionModal/comp/SignTransaction';
+import useTools from '@/hooks/useTools';
 
 const getHash = (message: string) => {
   return ethers.hashMessage(message);
@@ -20,17 +21,18 @@ const getTypedHash = (typedData: any) => {
 };
 
 export default function SignMessage({ messageToSign, onSign, signType, signTitle }: any) {
-  // const { selectedAddressItem } = useConfig();
   const { signTypedDataAsync, signTypedData } = useSignTypedData();
-  // const { getAddressName } = useSettingStore();
   const { signRawHash, signWithPasskey } = useWallet();
+  const { checkValidSigner } = useTools();
   const [isActivated, setIsActivated] = useState(false);
   const [targetChainId, setTargetChainId] = useState<undefined | number>();
   const { chainId } = useAccount();
   const { switchChain } = useSwitchChain();
-  // const origin = document.referrer;
 
   const onConfirm = async () => {
+    if(!checkValidSigner()){
+      return
+    }
     try {
       let signHash;
       let signature;
@@ -44,8 +46,6 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
         signHash = getTypedHash(messageToSign);
         signature = await signWithPasskey(signHash);
       } else if (signType === 'eoa') {
-        // signHash = getTypedHash(messageToSign);
-        // console.log('signHash of eoa: ', signHash)
         signature = await signTypedDataAsync(messageToSign);
       } else {
         throw new Error('signType not supported');

@@ -1,12 +1,12 @@
 import { useState, useCallback, Fragment, useEffect } from 'react';
-import RoundSection from '@/components/new/RoundSection'
-import GuardianCard from '@/components/new/GuardianCard'
-import { Box, Image, Menu, MenuList, MenuButton, MenuItem, useToast } from '@chakra-ui/react'
-import Button from '@/components/Button'
+import RoundSection from '@/components/new/RoundSection';
+import GuardianCard from '@/components/new/GuardianCard';
+import { Box, Image, Menu, MenuList, MenuButton, MenuItem, useToast, Flex, } from '@chakra-ui/react';
+import Button from '@/components/Button';
 import PlusIcon from '@/components/Icons/Plus';
 import HistoryIcon from '@/components/Icons/History';
-import Title from '@/components/new/Title'
-import TextBody from '@/components/new/TextBody'
+import Title from '@/components/new/Title';
+import TextBody from '@/components/new/TextBody';
 import DropDownIcon from '@/components/Icons/DropDown';
 import { useTempStore } from '@/store/temp';
 import useWalletContext from '@/context/hooks/useWalletContext';
@@ -24,8 +24,8 @@ import { useSignerStore } from '@/store/signer';
 import { L1KeyStore } from '@soulwallet/sdk';
 import useTransaction from '@/hooks/useTransaction';
 import api from '@/lib/api';
-import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg'
-import RemoveIcon from '@/components/Icons/Remove'
+import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg';
+import RemoveIcon from '@/components/Icons/Remove';
 import useWalletContract from '@/hooks/useWalletContract';
 
 const getRecommandCount = (c: number) => {
@@ -66,44 +66,47 @@ export default function EditGuardian({
   openBackupGuardianModal,
   startAddGuardian,
   startEditSingleGuardian,
-  startRemoveGuardian
+  startRemoveGuardian,
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
-  const {
-    getEditingGuardiansInfo,
-    updateEditingGuardiansInfo,
-    clearCreateInfo,
-  } = useTempStore();
+  const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
   const { listOwner } = useWalletContract();
   const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
-  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
+  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate);
   const { createWallet } = useWallet();
   const [isCreating, setIsCreating] = useState(false);
   const { chainConfig } = useConfig();
   const guardianStore = useGuardianStore();
-  const [showGuardianTip1, setShowGuardianTip1] = useState(true)
-  const [showGuardianTip2, setShowGuardianTip2] = useState(true)
+  const [showGuardianTip1, setShowGuardianTip1] = useState(true);
+  const [showGuardianTip2, setShowGuardianTip2] = useState(true);
   const { slotInfo } = useSlotStore();
-  const { credentials, eoas, } = useSignerStore();
-  const { showConfirmPayment } = useWalletContext();
+  const { credentials, eoas } = useSignerStore();
+  const { showConfirmPayment, checkActivated } = useWalletContext();
   const { payTask } = useTransaction();
   const toast = useToast();
 
   const guardianDetails = guardiansInfo.guardianDetails || {
     guardians: [],
-    threshold: 0
-  }
+    threshold: 0,
+  };
 
-  const guardianNames = (guardiansInfo && guardiansInfo.guardianDetails && guardiansInfo.guardianDetails.guardians && guardiansInfo.guardianDetails.guardians.map((address: any) => getAddressName(address && address.toLowerCase()))) || []
-  console.log('getEditingGuardiansInfo', getEditingGuardiansInfo(), guardianNames)
+  const guardianNames =
+    (guardiansInfo &&
+      guardiansInfo.guardianDetails &&
+      guardiansInfo.guardianDetails.guardians &&
+      guardiansInfo.guardianDetails.guardians.map((address: any) =>
+        getAddressName(address && address.toLowerCase()),
+      )) ||
+    [];
+  console.log('getEditingGuardiansInfo', getEditingGuardiansInfo(), guardianNames);
 
   const guardianList = guardianDetails.guardians.map((guardian: any, i: number) => {
     return {
       address: guardian,
-      name: guardianNames[i]
-    }
-  })
+      name: guardianNames[i],
+    };
+  });
 
   // const [amountData, setAmountData] = useState<any>({ guardiansCount: guardianList.length });
 
@@ -117,26 +120,26 @@ export default function EditGuardian({
 
   const selectAmount = (amount: any) => () => {
     updateEditingGuardiansInfo({
-      threshold: amount
-    })
+      threshold: amount,
+    });
 
     amountForm.onChange('amount')(amount);
   };
 
   useEffect(() => {
     updateEditingGuardiansInfo({
-      threshold: getRecommandCount(guardianList.length)
-    })
-  }, [guardianList.length])
+      threshold: getRecommandCount(guardianList.length),
+    });
+  }, [guardianList.length]);
 
-  console.log('guardianList', guardianList)
+  console.log('guardianList', guardianList);
 
   const next = useCallback(async () => {
-    const initialGuardianHash = slotInfo && slotInfo.initialGuardianHash
+    const initialGuardianHash = slotInfo && slotInfo.initialGuardianHash;
 
     if (!initialGuardianHash) {
       try {
-        setIsCreating(true)
+        setIsCreating(true);
         const guardianAddresses = guardianList.map((item: any) => item.address);
         const guardianNames = guardianList.map((item: any) => item.name);
         const threshold = amountForm.values.amount || 0;
@@ -154,34 +157,34 @@ export default function EditGuardian({
             salt,
           },
           requireBackup: true,
-          keepPrivate
+          keepPrivate,
         };
 
         if (!keepPrivate) await api.guardian.backupGuardians(guardiansInfo);
 
-        const initialGuardianSafePeriod = defaultGuardianSafePeriod
+        const initialGuardianSafePeriod = defaultGuardianSafePeriod;
         await createWallet({
           initialGuardianHash: newGuardianHash,
-          initialGuardianSafePeriod
-        })
+          initialGuardianSafePeriod,
+        });
 
         // guardianStore()
-        console.log('keepPrivate', keepPrivate)
+        console.log('keepPrivate', keepPrivate);
 
-        guardianStore.setGuardiansInfo(guardiansInfo)
+        guardianStore.setGuardiansInfo(guardiansInfo);
 
         for (let i = 0; i < guardianAddresses.length; i++) {
-          const address = guardianAddresses[i]
-          const name = guardianNames[i]
+          const address = guardianAddresses[i];
+          const name = guardianNames[i];
           if (address) saveAddressName(address.toLowerCase(), name);
         }
 
-        setIsCreating(false)
-        clearCreateInfo()
-        cancelEditGuardian()
+        setIsCreating(false);
+        clearCreateInfo();
+        cancelEditGuardian();
         // navigate(`/dashboard`);
       } catch (error: any) {
-        setIsCreating(false)
+        setIsCreating(false);
 
         if (error.message) {
           toast({
@@ -190,11 +193,11 @@ export default function EditGuardian({
           });
         }
 
-        console.log('error', error.message)
+        console.log('error', error.message);
       }
     } else {
       try {
-        setIsCreating(true)
+        setIsCreating(true);
         const guardianAddresses = guardianList.map((item: any) => item.address);
         const guardianNames = guardianList.map((item: any) => item.name);
         const threshold = amountForm.values.amount || 0;
@@ -212,28 +215,34 @@ export default function EditGuardian({
             salt,
           },
           requireBackup: true,
-          keepPrivate
+          keepPrivate,
         };
 
         await api.guardian.backupGuardians(guardiansInfo);
-        const {initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
-        const owners:any = await listOwner();
-        const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [Object.values(owners).sort((a:any, b:any) => {
-          return parseInt(a, 16) - parseInt(b, 16);
-        })]);
-        // const currentKeys = L1KeyStore.initialKeysToAddress([
-        //   ...credentials.map((credential: any) => credential.publicKey),
-        //   ...eoas,
-        // ]);
-        // const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
-        // console.log('currentKeys', currentKeys, initialKeys, newGuardianHash)
+        const { initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
 
+        let rawKeys;
+        if (await checkActivated()) {
+          const owners: any = await listOwner();
+          rawKeys = new ethers.AbiCoder().encode(
+            ['bytes32[]'],
+            [
+              Object.values(owners).sort((a: any, b: any) => {
+                return parseInt(a, 16) - parseInt(b, 16);
+              }),
+            ],
+          );
+        } else {
+          const currentKeys = L1KeyStore.initialKeysToAddress([
+            ...credentials.map((credential: any) => credential.publicKey),
+            ...eoas,
+          ]);
+          rawKeys = new ethers.AbiCoder().encode(['bytes32[]'], [currentKeys]);
+        }
 
+        const { keySignature } = await getReplaceGuardianInfo(newGuardianHash);
 
-
-        const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
-
-        const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`
+        const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`;
         const parameters = [
           initialKeyHash,
           initialGuardianHash,
@@ -241,32 +250,31 @@ export default function EditGuardian({
           newGuardianHash,
           rawKeys,
           keySignature,
-        ]
+        ];
 
         const res1 = await api.guardian.createTask({
           keystore,
           functionName,
-          parameters
-        })
+          parameters,
+        });
 
-        const task = res1.data
+        const task = res1.data;
         const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
         await showConfirmPayment(task.estiamtedFee);
         await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
         guardianStore.updateGuardiansInfo({
-          ...guardiansInfo
-        })
+          ...guardiansInfo,
+        });
 
         for (let i = 0; i < guardianAddresses.length; i++) {
-          const address = guardianAddresses[i]
-          const name = guardianNames[i]
+          const address = guardianAddresses[i];
+          const name = guardianNames[i];
           if (address) saveAddressName(address.toLowerCase(), name);
         }
-        setIsCreating(false)
-        cancelEditGuardian()
-
+        setIsCreating(false);
+        cancelEditGuardian();
       } catch (error: any) {
-        setIsCreating(false)
+        setIsCreating(false);
 
         if (error.message) {
           toast({
@@ -275,14 +283,14 @@ export default function EditGuardian({
           });
         }
 
-        console.log('error', error.message)
+        console.log('error', error.message);
       }
     }
-  }, [guardianList, keepPrivate, slotInfo])
+  }, [guardianList, keepPrivate, slotInfo]);
 
   const onBackupFinished = useCallback(() => {
-    next()
-  }, [keepPrivate])
+    next();
+  }, [keepPrivate]);
 
   useEffect(() => {
     if (!amountForm.values.amount || Number(amountForm.values.amount) > guardianList.length) {
@@ -320,7 +328,9 @@ export default function EditGuardian({
                   marginRight={{ base: '0px', md: '14px' }}
                   width={{ base: '100%', md: 'auto' }}
                 >
-                  <Box marginRight="2px"><HistoryIcon /></Box>
+                  <Box marginRight="2px">
+                    <HistoryIcon />
+                  </Box>
                   Backup list
                 </Button>
               )}
@@ -330,32 +340,30 @@ export default function EditGuardian({
                 marginBottom={{ base: '20px', md: '0px' }}
                 width={{ base: '100%', md: 'auto' }}
               >
-                <Box marginRight="6px"><PlusIcon color="white" /></Box>
+                <Box marginRight="6px">
+                  <PlusIcon color="white" />
+                </Box>
                 Add Guardian
               </Button>
             </Box>
           </Box>
           {!guardianList.length && (
             <Box width="100%" display="flex" alignItems="center" justifyContent="center">
-              <Box display="flex" flexDirection="column" alignItems="center"  justifyContent="center">
+              <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Box width="85px" height="85px" borderRadius="85px">
                   <Image width="85px" height="85px" src={EmptyGuardianIcon} />
                 </Box>
-                <Box fontWeight="600" fontSize="14px" marginTop="10px">You currently have no guardians</Box>
+                <Box fontWeight="600" fontSize="14px" marginTop="10px">
+                  You currently have no guardians
+                </Box>
               </Box>
             </Box>
           )}
           {!!guardianList.length && (
-            <Box
-              paddingTop="14px"
-              display="flex"
-              alignItems="flex-start"
-              justifyContent="flex-start"
-              flexWrap="wrap"
-            >
+            <Box paddingTop="14px" display="flex" alignItems="flex-start" justifyContent="flex-start" flexWrap="wrap">
               {guardianDetails && guardianDetails.guardians && (
                 <Fragment>
-                  {guardianDetails.guardians.map((address: any, i: any) =>
+                  {guardianDetails.guardians.map((address: any, i: any) => (
                     <GuardianCard
                       key={i}
                       name={guardianNames[i] || 'No Name'}
@@ -368,17 +376,20 @@ export default function EditGuardian({
                       marginBottom="18px"
                       width={{ base: '100%', md: '272px' }}
                       height="140px"
-                      onEdit={() => startEditSingleGuardian({
-                        guardianDetails: {
-                          guardians: [address]
-                        },
-                        guardianNames: [guardianNames[i]],
-                        i
-                      })}
+                      onEdit={() =>
+                        startEditSingleGuardian({
+                          guardianDetails: {
+                            guardians: [address],
+                          },
+                          guardianNames: [guardianNames[i]],
+                          i,
+                        })
+                      }
                     />
-                  )}
+                  ))}
                   {guardianDetails.guardians.length == 1 && showGuardianTip1 && (
-                    <Box
+                    <Flex
+                      align="center"
                       border="1px solid #DFDFDF"
                       padding="19px 13px"
                       borderRadius="12px"
@@ -408,18 +419,26 @@ export default function EditGuardian({
                       >
                         🎉 Bravo!
                       </Box> */}
-                      <Box
-                        fontFamily="Nunito"
-                        fontWeight="400"
-                        fontSize="12px"
-                        color="white"
-                      >
-                        You’ve added <Box as="span" fontWeight="bold">1</Box> guardian! We suggest to have <Box as="span" fontWeight="bold">3 guardians</Box> and <Box as="span" fontWeight="bold">2 threshold</Box> to keep your wallet safe! Add some here.
+                      <Box fontFamily="Nunito" fontWeight="400" fontSize="12px" color="white">
+                        You’ve added{' '}
+                        <Box as="span" fontWeight="bold">
+                          1
+                        </Box>{' '}
+                        guardian! We suggest to have{' '}
+                        <Box as="span" fontWeight="bold">
+                          3 guardians
+                        </Box>{' '}
+                        and{' '}
+                        <Box as="span" fontWeight="bold">
+                          2 threshold
+                        </Box>{' '}
+                        to keep your wallet safe! Add some here.
                       </Box>
-                    </Box>
+                    </Flex>
                   )}
                   {guardianDetails.guardians.length == 2 && showGuardianTip2 && (
-                    <Box
+                    <Flex
+                      align="center"
                       border="1px solid #DFDFDF"
                       padding="19px 13px"
                       borderRadius="12px"
@@ -440,41 +459,39 @@ export default function EditGuardian({
                       >
                         <RemoveIcon />
                       </Box>
-                      <Box
-                        fontFamily="Nunito"
-                        fontWeight="700"
-                        fontSize="16px"
-                        marginBottom="10px"
-                        color="white"
-                      >
+                      {/* <Box fontFamily="Nunito" fontWeight="700" fontSize="16px" marginBottom="10px" color="white">
                         👍🏻 Awesome!
+                      </Box> */}
+                      <Box fontFamily="Nunito" fontWeight="400" fontSize="12px" color="white">
+                        You’ve added{' '}
+                        <Box as="span" fontWeight="bold">
+                          2
+                        </Box>{' '}
+                        guardian! We suggest to have{' '}
+                        <Box as="span" fontWeight="bold">
+                          3 guardians
+                        </Box>{' '}
+                        and{' '}
+                        <Box as="span" fontWeight="bold">
+                          2 threshold
+                        </Box>{' '}
+                        to keep your wallet safe! 1 more to go.
                       </Box>
-                      <Box
-                        fontFamily="Nunito"
-                        fontWeight="400"
-                        fontSize="12px"
-                        color="white"
-                      >
-                        You’ve added <Box as="span" fontWeight="bold">2</Box> guardian! We suggest to have <Box as="span" fontWeight="bold">3 guardians</Box> and <Box as="span" fontWeight="bold">2 threshold</Box> to keep your wallet safe! 1 more to go.
-                      </Box>
-                    </Box>
+                    </Flex>
                   )}
                 </Fragment>
               )}
             </Box>
           )}
           <Box borderTop="1px solid #F0F0F0" marginTop="30px" paddingTop="20px">
-            <Title
-              fontFamily="Nunito"
-              fontWeight="700"
-              fontSize="18px"
-              display="flex"
-            >
+            <Title fontFamily="Nunito" fontWeight="700" fontSize="18px" display="flex">
               Recovery settings
             </Title>
             {!guardianList.length && (
               <Box display="flex" alignItems="center" justifyContent="center">
-                <Box fontWeight="600" fontSize="14px" marginTop="20px" marginBottom="20px">Setup recovery threshold after added guardians</Box>
+                <Box fontWeight="600" fontSize="14px" marginTop="20px" marginBottom="20px">
+                  Setup recovery threshold after added guardians
+                </Box>
               </Box>
             )}
             {!!guardianList.length && (
@@ -486,12 +503,7 @@ export default function EditGuardian({
                   alignItems={{ base: 'flex-start', md: 'center' }}
                   flexDirection={{ base: 'column', md: 'row' }}
                 >
-                  <Box
-                    fontFamily="Nunito"
-                    fontWeight="700"
-                    fontSize="14px"
-                    marginRight="6px"
-                  >
+                  <Box fontFamily="Nunito" fontWeight="700" fontSize="14px" marginRight="6px">
                     Threshold:
                   </Box>
                   <TextBody
@@ -502,10 +514,7 @@ export default function EditGuardian({
                     alignItems={{ base: 'flex-start', md: 'center' }}
                   >
                     <Box>Wallet recovery requires</Box>
-                    <Box
-                      width="80px"
-                      margin={{ base: '0', md: '0 10px' }}
-                    >
+                    <Box width="80px" margin={{ base: '0', md: '0 10px' }}>
                       <Menu>
                         <MenuButton
                           px={2}
@@ -537,35 +546,44 @@ export default function EditGuardian({
                             </MenuItem>
                           )}
                           {!!(guardianList.length || 0) &&
-                           getNumberArray(guardianList.length || 0).map((i: any) => (
-                             <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
-                               {i}
-                             </MenuItem>
-                          ))}
+                            getNumberArray(guardianList.length || 0).map((i: any) => (
+                              <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
+                                {i}
+                              </MenuItem>
+                            ))}
                         </MenuList>
                       </Menu>
                     </Box>
                     <Box>{`out of ${guardianList.length || 0} guardian(s) confirmation.`}</Box>
                   </TextBody>
                 </Box>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  marginTop="10px"
-                >
-                  <Box
-                    fontFamily="Nunito"
-                    fontWeight="700"
-                    fontSize="14px"
-                    marginRight="6px"
-                  >
+                <Box display="flex" alignItems="center" justifyContent="flex-start" marginTop="10px">
+                  <Box fontFamily="Nunito" fontWeight="700" fontSize="14px" marginRight="6px">
                     Advanced:
                   </Box>
                   <TextBody type="t2" display="flex" alignItems="center" justifyContent="flex-start">
                     <Box marginRight="10px">Keep guardians private</Box>
-                    <Box width="42px" minWidth="42px" height="24px" background={keepPrivate ? '#1CD20F' : '#D9D9D9'} borderRadius="40px" padding="2px" cursor="pointer" onClick={() => setKeepPrivate(!keepPrivate)} transition="all 0.2s ease" paddingLeft={keepPrivate ? '20px' : '2px'}>
-                      <Box boxShadow={"0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)"} width="20px" height="20px" background="white" borderRadius="30px" />
+                    <Box
+                      width="42px"
+                      minWidth="42px"
+                      height="24px"
+                      background={keepPrivate ? '#1CD20F' : '#D9D9D9'}
+                      borderRadius="40px"
+                      padding="2px"
+                      cursor="pointer"
+                      onClick={() => setKeepPrivate(!keepPrivate)}
+                      transition="all 0.2s ease"
+                      paddingLeft={keepPrivate ? '20px' : '2px'}
+                    >
+                      <Box
+                        boxShadow={
+                          '0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)'
+                        }
+                        width="20px"
+                        height="20px"
+                        background="white"
+                        borderRadius="30px"
+                      />
                     </Box>
                   </TextBody>
                 </Box>
@@ -574,20 +592,25 @@ export default function EditGuardian({
           </Box>
         </Fragment>
       </RoundSection>
-      <Box
-        width="100%"
-        padding="20px"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Box width="100%" padding="20px" display="flex" alignItems="center" justifyContent="center">
         <Button size="mid" type="white" padding="0 20px" marginRight="16px" onClick={cancelEditGuardian}>
           Cancel
         </Button>
-        <Button size="mid" onClick={keepPrivate ? () => { openBackupGuardianModal(onBackupFinished) } : () => next()} isLoading={isCreating} disabled={isCreating || !guardianList.length}>
+        <Button
+          size="mid"
+          onClick={
+            keepPrivate
+              ? () => {
+                  openBackupGuardianModal(onBackupFinished);
+                }
+              : () => next()
+          }
+          isLoading={isCreating}
+          disabled={isCreating || !guardianList.length}
+        >
           Continue
         </Button>
       </Box>
     </Fragment>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 import { toShortAddress } from '@/lib/tools';
 import { useSignerStore } from '@/store/signer';
-import { Menu, MenuButton, MenuItem, MenuList, Box, Text, Image, Flex, FlexProps } from '@chakra-ui/react';
+import { Menu, MenuButton, MenuItem, MenuList, Box, Text, Image, Flex, FlexProps, Tooltip } from '@chakra-ui/react';
 import { SignkeyType } from '@soulwallet/sdk';
 import DropdownSelect from '../DropdownSelect';
 import IconChecked from '@/assets/icons/signer-checked.svg';
