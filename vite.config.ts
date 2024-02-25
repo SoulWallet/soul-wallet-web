@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import checker from 'vite-plugin-checker';
 import path from 'path';
-import terser from 'vite-plugin-terser';
+import removeConsole from "vite-plugin-remove-console";
 
 console.log('B is', process.env.VITE_BRANCH);
 
@@ -22,13 +22,7 @@ export default defineConfig({
       typescript: true,
       overlay: false,
     }),
-    terser({
-      terserOptions: {
-        compress: {
-          drop_console: process.env.VITE_BRANCH === 'develop' ? false : true,
-        },
-      },
-    }),
+    removeConsole(),
   ],
   resolve: {
     alias: {
