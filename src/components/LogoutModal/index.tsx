@@ -46,8 +46,7 @@ const LogoutModal = (_: unknown, ref: Ref<any>) => {
         bodyStyle={{ py: '9', px: '42px' }}
       >
         <Box textAlign="center">
-          <Image src={IconExclamation} mx="auto" />
-          {/* <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" /> */}
+          <Image src={IconExclamation} mx="auto" w="64px" h="64px" />
           <Text fontSize={'20px'} mb="2" fontWeight={'800'} lineHeight={'1.6'} letterSpacing={'-0.4px'}>
             Logout
           </Text>

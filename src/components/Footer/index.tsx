@@ -23,8 +23,8 @@ export default function Footer({ ...restProps }: FlexProps) {
               },
             }}
           >
-            <Image w="5" src={item.icon} className="icon" />
-            <Image w="5" src={item.iconActivated} display={'none'} className="icon-activated" />
+            <Image w="5" h="5" src={item.icon} className="icon" />
+            <Image w="5" h="5" src={item.iconActivated} display={'none'} className="icon-activated" />
           </Link>
         ))}
       </Flex>

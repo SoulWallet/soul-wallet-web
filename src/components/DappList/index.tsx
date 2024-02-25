@@ -30,7 +30,7 @@ const DappItem = ({ item }: any) => {
         <Image src={IconLink} />
         <Image src={IconBookmark} />
       </Flex> */}
-      <Image src={item.icon} h={{ base: '40px', lg: '60px' }} />
+      <Image src={item.icon} w={{ base: '40px', lg: '60px' }} h={{ base: '40px', lg: '60px' }} />
       <Box>
         <Text fontWeight={'700'} fontSize={{ base: '16px', lg: '18px' }} mb={{ base: 1, lg: 2 }}>
           {item.title}

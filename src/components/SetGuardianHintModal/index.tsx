@@ -37,8 +37,7 @@ const SetGuardianHintModal = (_: unknown, ref: Ref<any>) => {
         bodyStyle={{ py: '9', px: '42px' }}
       >
         <Box textAlign="center">
-          <Image mx="auto" src={IconLastStep} mb="18px" />
-          {/* <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" /> */}
+          <Image mx="auto" src={IconLastStep} mb="18px" w="64px" h="64px" />
           <Text fontSize={'20px'} mb="2" fontWeight={'800'} lineHeight={'1.6'} letterSpacing={'-0.4px'}>
             One last step
           </Text>

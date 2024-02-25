@@ -111,7 +111,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
         bodyStyle={{ py: '9', px: '42px' }}
       >
         <Box textAlign="center">
-          <Image src={claimableCount || !checkedClaimable ? IconClaimable : IconUnclaimable} mx="auto" mb="18px" />
+          <Image src={claimableCount || !checkedClaimable ? IconClaimable : IconUnclaimable} mx="auto" w="64px" h="64px" mb="18px" />
           {/* <Box mx={'auto'} bg="#efefef" h="64px" w="64px" mb="18px" rounded="full" /> */}
           <Text fontSize={'20px'} mb="2" fontWeight={'800'} lineHeight={'1.6'} letterSpacing={'-0.4px'}>
             {claimableCount || !checkedClaimable ? 'Claim test tokens' : 'Claim limit has been reached'}

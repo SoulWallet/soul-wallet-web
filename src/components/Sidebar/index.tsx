@@ -62,7 +62,11 @@ export default function Sidebar() {
                 gap={{ base: 1, lg: 2 }}
                 align={'center'}
               >
-                <Image w={{ base: 3, md: 4, lg: 6 }} src={isActive ? link.iconActive : link.icon} />
+                <Image
+                  w={{ base: 3, md: 4, lg: 6 }}
+                  h={{ base: 3, md: 4, lg: 6 }}
+                  src={isActive ? link.iconActive : link.icon}
+                />
                 <Text
                   fontWeight={'600'}
                   color={isActive ? 'brand.purple' : 'brand.black'}
@@ -89,7 +93,11 @@ export default function Sidebar() {
             onMouseLeave={() => setExternalHoverIndex(-1)}
             onClick={() => (checkInitialized(true) ? showTestGuide() : null)}
           >
-            <Image w={{ base: 3, md: 4, lg: 6 }} src={externalHoverIndex === 0 ? IconGuideActive : IconGuide} />
+            <Image
+              w={{ base: 3, md: 4, lg: 6 }}
+              h={{ base: 3, md: 4, lg: 6 }}
+              src={externalHoverIndex === 0 ? IconGuideActive : IconGuide}
+            />
             <Text>Test guide</Text>
             <Box
               bg="brand.white"
@@ -111,7 +119,11 @@ export default function Sidebar() {
             onMouseLeave={() => setExternalHoverIndex(-1)}
             onClick={() => (checkInitialized(true) ? showClaimAssets() : null)}
           >
-            <Image w={{ base: 3, md: 4, lg: 6 }} src={externalHoverIndex === 1 ? IconClaimActive : IconClaim} />
+            <Image
+              w={{ base: 3, md: 4, lg: 6 }}
+              h={{ base: 3, md: 4, lg: 6 }}
+              src={externalHoverIndex === 1 ? IconClaimActive : IconClaim}
+            />
             <Box pos={'relative'}>
               <Text>Claim test tokens</Text>
               <Box
@@ -131,7 +143,11 @@ export default function Sidebar() {
             onMouseLeave={() => setExternalHoverIndex(-1)}
             onClick={() => showFeedback()}
           >
-            <Image w={{ base: 3, md: 4, lg: 6 }} src={externalHoverIndex === 2 ? IconFeedbackActive : IconFeedback} />
+            <Image
+              h={{ base: 3, md: 4, lg: 6 }}
+              w={{ base: 3, md: 4, lg: 6 }}
+              src={externalHoverIndex === 2 ? IconFeedbackActive : IconFeedback}
+            />
             <Text>Feedback</Text>
           </ExtraLink>
         </Flex>
