@@ -118,7 +118,7 @@ const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
           </Text>
           <Text fontSize={'14px'} fontWeight={'600'} mb="18px">
             Each wallet address can claim test tokens
-            <br /> (0.002 ETH) twice per day.
+            <br /> (0.001 ETH and 10 USDC) twice per day.
           </Text>
           <Button
             loading={loading}

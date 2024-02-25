@@ -46,7 +46,6 @@ export function AccountSelect({ labelType = 'title', wrapperProps, isInModal, ..
   const { getAddressName } = useSettingStore();
   const { addressList, selectedAddress, setSelectedAddress } = useAddressStore();
   const { getChainItem, setSelectedChainId } = useChainStore();
-  console.log('selectedChainItem', selectedChainItem, addressList)
 
   const onAddressChange = (item: IAddressItem) => {
     console.log('change addr', item);

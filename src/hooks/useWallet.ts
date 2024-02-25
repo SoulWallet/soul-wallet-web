@@ -33,9 +33,7 @@ export default function useWallet() {
     useGuardianStore();
   const { slotInfo, setSlotInfo, getSlotInfo } = useSlotStore();
   const { updateChainItem, setSelectedChainId } = useChainStore();
-  const { address } = useAccount();
-  const toast = useToast();
-  const { setCredentials, getSelectedCredential, eoas } = useSignerStore();
+  const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddressAllChains } = useSdk();
   const { selectedAddress, setAddressList, updateAddressItem } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
@@ -318,13 +316,14 @@ export default function useWallet() {
       chainIdHex: item.chain_id,
     }));
     setAddressList(addressList);
-
-    const credentials = recoverInfo.signers.filter((signer: any) => signer.type === 'passkey');
-    if (credentials.length) setCredentials(recoverInfo.signers.filter((signer: any) => signer.type === 'passkey'));
-    setEoas(recoverInfo.signers.filter((signer: any) => signer.type === 'eoa').map((signer: any) => signer.signerId));
+    const credentialsInStore = recoverInfo.signers.filter((signer: any) => signer.type === 'passkey');
+    const eoasInStore = recoverInfo.signers.filter((signer: any) => signer.type === 'eoa');
+    if (credentialsInStore.length) setCredentials(credentialsInStore);
+    if(eoasInStore.length) setEoas(eoasInStore.map((signer: any) => signer.signerId));
     // set mainnet if no selected chainId
     // if (!selectedChainId) {
     setSelectedChainId(import.meta.env.VITE_MAINNET_CHAIN_ID);
+
     // }
 
     updateGuardiansInfo({

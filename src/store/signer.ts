@@ -40,9 +40,11 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
   eoas: [],
   setEoas: (eoas: string[]) => {
     console.log('setEOAs', eoas);
-    set({
-      eoas: eoas,
-      signerId: eoas[0],
+    set((state) => {
+      if (eoas.length > 0) {
+        state.eoas = eoas;
+        state.signerId = eoas[0];
+      }
     });
   },
   credentials: [],

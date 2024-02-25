@@ -16,6 +16,8 @@ import { useTempStore } from '@/store/temp';
 import CheckedIcon from '@/components/Icons/Checked';
 import { getNetwork } from '@/lib/tools';
 import { SignHeader } from '@/pages/public/Sign';
+import useConfig from '@/hooks/useConfig';
+import config from '@/config';
 
 const getProgressPercent = (startTime: any, endTime: any, status: any) => {
   if (status === 1) return '100%'
@@ -62,9 +64,12 @@ export const getWalletAddress = (chainId: any, list: any) => {
 export default function RecoverProgress() {
   const { recoverInfo } = useTempStore()
   const { recoveryRecordID, recoveryRecord  } = recoverInfo
+  const {chainConfig} = useConfig();
   const { addresses, statusData } = recoveryRecord
   const { chainRecoveryStatus } = statusData
   const { navigate } = useBrowser();
+
+  const supportedChainIds = config.chainList.map((item: any) => item.chainIdHex);
 
   const viewWallet = useCallback(() => {
     navigate(`/dashboard`);
@@ -113,7 +118,7 @@ export default function RecoverProgress() {
               display="flex"
               flexDirection={{ base: 'column', 'md': 'row' }}
             >
-              {chainRecoveryStatus.map((item: any) => {
+              {chainRecoveryStatus.filter((item:any) => supportedChainIds.includes(item.chainId)).map((item: any) => {
                 return (
                   <Box
                     key={item.chainId}

@@ -216,9 +216,20 @@ export default function EditGuardian({
         };
 
         await api.guardian.backupGuardians(guardiansInfo);
-        const { initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
-        const owners = await listOwner();
-        const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [Object.values(owners)]);
+        const {initialKeys, initialKeyHash, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
+        const owners:any = await listOwner();
+        const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [Object.values(owners).sort((a:any, b:any) => {
+          return parseInt(a, 16) - parseInt(b, 16);
+        })]);
+        // const currentKeys = L1KeyStore.initialKeysToAddress([
+        //   ...credentials.map((credential: any) => credential.publicKey),
+        //   ...eoas,
+        // ]);
+        // const rawKeys = new ethers.AbiCoder().encode(["bytes32[]"], [currentKeys]);
+        // console.log('currentKeys', currentKeys, initialKeys, newGuardianHash)
+
+
+
 
         const { keySignature } = await getReplaceGuardianInfo(newGuardianHash)
 
