@@ -350,7 +350,7 @@ export default function AddSigner({ next, back }: any) {
         </RoundContainer>
         <StepProgress activeIndex={1} />
       </Box>
-      <ConnectWalletModal isOpen={isConnectOpen} addEOA={addEOA} onClose={() => setIsConnectOpen(false)} />
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={addEOA} onClose={() => setIsConnectOpen(false)} />
     </Flex>
   )
 }

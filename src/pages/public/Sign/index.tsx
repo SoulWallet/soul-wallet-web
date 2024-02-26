@@ -33,6 +33,7 @@ import { metaMask } from 'wagmi/connectors';
 import { L1KeyStore } from '@soulwallet/sdk';
 import { useEthersSigner } from '@/hooks/useEthersSigner';
 import { useChainStore } from '@/store/chain';
+import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
 
 const validateSigner = (recoveryRecord: any, address: any) => {
   if (!recoveryRecord) return;
@@ -53,12 +54,12 @@ export const SignHeader = ({ url }: { url?: string }) => {
       <Link
         display="inline-block"
         {...(url
-          ? {
-              href: url,
-            }
-          : {
-              cursor: 'default',
-            })}
+           ? {
+             href: url,
+           }
+           : {
+             cursor: 'default',
+        })}
       >
         <Image src={IconLogo} h="44px" />
       </Link>
@@ -70,16 +71,31 @@ export default function Sign() {
   const { recoverId } = useParams();
   const [recoveryRecord, setRecoveryRecord] = useState<any>();
   const { address, isConnected, isConnecting, chainId: connectedChainId } = useAccount();
-  const { connectAsync } = useConnect();
   const [signing, setSigning] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [isSigned, setIsSigned] = useState<any>(false);
   const toast = useToast();
   const { switchChain } = useSwitchChain();
   const ethersSigner = useEthersSigner();
+  const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
 
   const isValidSigner = validateSigner(recoveryRecord, address);
   console.log('recoverId', recoveryRecord, isSigned);
+
+  const connectEOA = useCallback(async (connector: any) => {
+    try {
+      await disconnectAsync()
+      const { accounts } = await connectAsync({ connector });
+      setIsConnectOpen(false)
+    } catch (error: any) {
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }, [])
 
   const loadRecord = async (recoverId: any) => {
     try {
@@ -104,9 +120,10 @@ export default function Sign() {
     }
   }, [recoverId]);
 
-  const connectWallet = useCallback(async () => {
+  const connectWallet = useCallback(() => {
     // await disconnectAsync()
-    await connectAsync({ connector: metaMask() });
+    // await connectAsync({ connector: metaMask() });
+    setIsConnectOpen(true)
   }, []);
 
   const sign = useCallback(async () => {
@@ -376,6 +393,7 @@ export default function Sign() {
             </Box>
           </RoundContainer>
         </Box>
+        <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
       </Flex>
     );
   }
@@ -492,6 +510,7 @@ export default function Sign() {
           </Box>
         </RoundContainer>
       </Box>
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
     </Flex>
   );
 }

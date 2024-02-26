@@ -15,14 +15,18 @@ import useTools from '@/hooks/useTools';
 import { ethers } from 'ethers';
 import BN from 'bignumber.js';
 import { useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi';
-import { useAccount, useConnect } from 'wagmi';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { paymentContractConfig } from '@/contracts/contracts';
 import { metaMask } from 'wagmi/connectors'
+import useWalletContext from '@/context/hooks/useWalletContext';
 import StepProgress from '../StepProgress'
+import ConnectWalletModal from '../ConnectWalletModal'
 
 export default function PayRecoveryFee({ next }: any) {
+  const { showConnectWallet } = useWalletContext();
   const { recoverInfo } = useTempStore()
   const { recoveryRecordID, recoveryRecord  } = recoverInfo
+  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
   const { estimatedFee } = recoveryRecord
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
@@ -32,6 +36,7 @@ export default function PayRecoveryFee({ next }: any) {
   const toast = useToast();
   const { switchChain } = useSwitchChain();
   const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
   const { isConnected, isConnecting, chainId : connectedChainId, } = useAccount()
   const { writeContract: pay } = useWriteContract();
 
@@ -46,6 +51,19 @@ export default function PayRecoveryFee({ next }: any) {
       console.error(err);
     }
   };
+
+  const connectEOA = useCallback(async (connector: any) => {
+    try {
+      await disconnectAsync()
+      const { accounts } = await connectAsync({ connector });
+      setIsConnectOpen(false)
+    } catch (error: any) {
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }, [])
 
   const doPay = useCallback(async () => {
     try {
@@ -96,7 +114,7 @@ export default function PayRecoveryFee({ next }: any) {
   }, [recoveryRecordID, estimatedFee])
 
   const connectWallet = useCallback(async () => {
-    await connectAsync({ connector: metaMask() });
+    setIsConnectOpen(true)
   }, [])
 
   useEffect(() => {
@@ -104,6 +122,7 @@ export default function PayRecoveryFee({ next }: any) {
   }, []);
 
   console.log('estimatedFee', estimatedFee)
+  console.log('isConnected222', isConnected)
 
   return (
     <Flex align={'center'} justify={'center'} width="100%" minHeight="100vh" background="#F2F4F7">
@@ -236,6 +255,7 @@ export default function PayRecoveryFee({ next }: any) {
           </Box>
         </RoundContainer>
         <StepProgress activeIndex={3} />
+        <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
       </Box>
     </Flex>
   )

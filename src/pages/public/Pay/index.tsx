@@ -18,6 +18,7 @@ import useTools from '@/hooks/useTools';
 import { useParams } from 'react-router-dom'
 import { metaMask } from 'wagmi/connectors'
 import SuccessIcon from '@/components/Icons/Success'
+import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
 import BN from 'bignumber.js';
 
 export default function Pay() {
@@ -33,6 +34,8 @@ export default function Pay() {
   const { switchChain } = useSwitchChain();
   const recoveryRecordID = '';
   const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
   const { address, isConnected, isConnecting, chainId : connectedChainId, } = useAccount()
   const { writeContract: pay, data: payHash } = useWriteContract();
   const result = useWaitForTransactionReceipt({
@@ -40,6 +43,19 @@ export default function Pay() {
   });
 
   const mainnetChainId = Number(import.meta.env.VITE_MAINNET_CHAIN_ID);
+
+  const connectEOA = useCallback(async (connector: any) => {
+    try {
+      await disconnectAsync()
+      const { accounts } = await connectAsync({ connector });
+      setIsConnectOpen(false)
+    } catch (error: any) {
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }, [])
 
   const doPay = useCallback(async () => {
     try {
@@ -128,7 +144,7 @@ export default function Pay() {
   }, [recoverId])
 
   const connectWallet = useCallback(async () => {
-    await connectAsync({ connector: metaMask() });
+    setIsConnectOpen(true)
   }, [])
 
   if (!loaded) {
@@ -420,6 +436,7 @@ export default function Pay() {
           </Box>
         </RoundContainer>
       </Box>
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
     </Flex>
   );
 }
