@@ -7,6 +7,7 @@ export interface ISignerStore {
   signerId: string;
   setSignerId: (signerId: string) => void;
   eoas: string[];
+  addEoa: (eoa: string) => void;
   setEoas: (eoas: string[]) => void;
   credentials: ICredentialItem[];
   getSelectedKeyType: () => SignkeyType;
@@ -38,6 +39,11 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
     });
   },
   eoas: [],
+  addEoa: (eoa: string) => {
+    set((state) => {
+      state.eoas.push(eoa);
+    });
+  },
   setEoas: (eoas: string[]) => {
     console.log('setEOAs', eoas);
     set((state) => {

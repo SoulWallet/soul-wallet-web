@@ -6,9 +6,6 @@ import RoundContainer from '@/components/new/RoundContainer';
 import Heading from '@/components/new/Heading';
 import TextBody from '@/components/new/TextBody';
 import Button from '@/components/Button';
-import TwitterIcon from '@/components/Icons/Social/Twitter';
-import TelegramIcon from '@/components/Icons/Social/Telegram';
-import GithubIcon from '@/components/Icons/Social/Github';
 import PasskeyIcon from '@/components/Icons/Intro/Passkey';
 import AccountIcon from '@/components/Icons/Intro/Account';
 import TransferIcon from '@/components/Icons/Intro/Transfer';
@@ -34,6 +31,7 @@ import ImportAccountModal from './ImportAccountModal';
 import { SignHeader } from '../public/Sign';
 import useTools from '@/hooks/useTools';
 import { useGuardianStore } from '@/store/guardian';
+import useWalletContract from '@/hooks/useWalletContract';
 
 export default function Auth() {
   const [stepType, setStepType] = useState('auth');
@@ -47,6 +45,7 @@ export default function Auth() {
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false);
   const [isImportAccountOpen, setIsImportAccountOpen] = useState(false);
   const { connect, connectAsync } = useConnect();
+  const { listOwner } = useWalletContract();
   const { disconnectAsync } = useDisconnect();
   const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo, getLoginInfo } = useTempStore();
   const account = useAccount();
@@ -58,7 +57,6 @@ export default function Auth() {
   const { retrieveSlotInfo } = useWallet();
   const { setAddressList } = useAddressStore();
   const { calcWalletAddressAllChains } = useSdk();
-  const { setSignerIdAddress } = useSettingStore();
   const toast = useToast();
   const { navigate } = useBrowser();
   const { setCredentials, setEoas } = useSignerStore();

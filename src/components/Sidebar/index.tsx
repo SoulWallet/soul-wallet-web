@@ -10,9 +10,12 @@ import IconFeedback from '@/assets/icons/feedback.svg';
 import IconFeedbackActive from '@/assets/icons/feedback-active.svg';
 import Footer from '../Footer';
 import { guideList } from '@/data';
+import api from '@/lib/api';
 import { useSettingStore } from '@/store/setting';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useTools from '@/hooks/useTools';
+import { useAddressStore } from '@/store/address';
+import { useChainStore } from '@/store/chain';
 
 const ExtraLink = ({ children, ...restProps }: FlexProps) => {
   return (
@@ -32,12 +35,34 @@ const ExtraLink = ({ children, ...restProps }: FlexProps) => {
 
 export default function Sidebar() {
   const location = useLocation();
-  const { finishedSteps } = useSettingStore();
+  const { finishedSteps, claimableCount, setClaimableCount } = useSettingStore();
+  const { selectedAddress } = useAddressStore();
+  const { selectedChainId } = useChainStore();
   const { showClaimAssets, showTestGuide, showFeedback } = useWalletContext();
   const [navHoverIndex, setNavHoverIndex] = useState(-1);
   const [externalHoverIndex, setExternalHoverIndex] = useState(-1);
   const { checkInitialized } = useTools();
   const pathname = location.pathname;
+
+  const checkClaimable = async () => {
+    try {
+      const res: any = await api.operation.requestTestToken({
+        address: selectedAddress,
+        chainID: selectedChainId,
+        dryRun: true,
+      });
+      if (res.code === 200) {
+        setClaimableCount(res.data.remaining);
+      }
+    } catch (err) {
+      setClaimableCount(0);
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedAddress || !selectedChainId) return;
+    checkClaimable();
+  }, [selectedAddress, selectedChainId]);
 
   return (
     <Flex
@@ -126,16 +151,18 @@ export default function Sidebar() {
             />
             <Box pos={'relative'}>
               <Text>Claim test tokens</Text>
-              <Box
-                display={{ base: 'none', lg: 'block' }}
-                bg="#ff2e79"
-                w="6px"
-                h="6px"
-                rounded={'full'}
-                pos="absolute"
-                right={'-8px'}
-                top="2px"
-              />
+              {claimableCount > 0 && (
+                <Box
+                  display={{ base: 'none', lg: 'block' }}
+                  bg="#ff2e79"
+                  w="6px"
+                  h="6px"
+                  rounded={'full'}
+                  pos="absolute"
+                  right={'-8px'}
+                  top="2px"
+                />
+              )}
             </Box>
           </ExtraLink>
           <ExtraLink
