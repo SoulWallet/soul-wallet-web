@@ -22,7 +22,7 @@ import QuestionIcon from '@/components/Icons/Auth/Question'
 import { SignHeader } from '@/pages/public/Sign';
 
 export default function SetPasskey() {
-  const { createInfo, updateCreateInfo } = useTempStore()
+  const { createInfo, updateCreateInfo, setDoneAuth } = useTempStore()
   const [credentials, setCredentials] = useState<any>([])
   const { register } = usePassKey()
   const toast = useToast();
@@ -62,6 +62,8 @@ export default function SetPasskey() {
     updateCreateInfo({
       credentials
     })
+
+    setDoneAuth(true);
 
     navigate(`/dashboard`);
   }, [credentials])

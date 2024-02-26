@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
           { path: 'dashboard', element: <Dashboard /> },
-          { path: 'apps', element: <Apps /> },
+
           { path: 'activity', element: <Activity /> },
           { path: 'asset', element: <Asset /> },
           { path: 'popup', element: <Popup /> },
@@ -44,6 +44,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      { path: 'apps', element: <Apps /> },
       {
         path: '/recover',
         element: <PublicWrapper />,
