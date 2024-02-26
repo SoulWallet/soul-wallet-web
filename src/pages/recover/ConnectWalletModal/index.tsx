@@ -15,7 +15,7 @@ import { getWalletIcon } from '@/lib/tools'
 export default function ConnectWalletModal({
   isOpen,
   onClose,
-  addEOA,
+  connectEOA,
   isConnecting,
 }: any) {
   const { connectors } = useConnect();
@@ -85,7 +85,7 @@ export default function ConnectWalletModal({
                       key={connector.uid}
                       icon={getWalletIcon(connector.id)}
                       name={connector.id === 'injected' ? 'Browser Wallet' : connector.name}
-                      onClick={() => addEOA(connector)}
+                      onClick={() => connectEOA(connector)}
                     />
                   )}
                 </Box>

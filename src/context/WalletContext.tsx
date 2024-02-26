@@ -10,6 +10,7 @@ import FeedbackModal from '@/components/FeedbackModal';
 import SendModal from '@/components/SendModal';
 import ReceiveModal from '@/components/ReceiveModal';
 import SetGuardianHintModal from '@/components/SetGuardianHintModal';
+import ConnectWalletModal from '@/components/ConnectWalletModal';
 import useConfig from '@/hooks/useConfig';
 import { useTempStore } from '@/store/temp';
 import { useChainStore } from '@/store/chain';
@@ -19,6 +20,7 @@ import useWallet from '@/hooks/useWallet';
 interface IWalletContext {
   ethersProvider: any;
   showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
+  showConnectWallet: () => Promise<void>;
   showConfirmPayment: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
   showClaimAssets: () => Promise<void>;
   showTestGuide: () => Promise<void>;
@@ -34,6 +36,7 @@ interface IWalletContext {
 export const WalletContext = createContext<IWalletContext>({
   ethersProvider: new ethers.JsonRpcProvider(),
   showSignTransaction: async () => {},
+  showConnectWallet: async () => {},
   showConfirmPayment: async () => {},
   showSignMessage: async () => {},
   showReceive: async () => {},
@@ -54,6 +57,7 @@ export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainId } = useChainStore();
   const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
   const signTransactionModal = useRef<any>();
+  const connectWalletModal = useRef<any>();
   const confirmPaymentModal = useRef<any>();
   const signMessageModal = useRef<any>();
   const receiveModal = useRef<any>();
@@ -106,6 +110,10 @@ export const WalletContextProvider = ({ children }: any) => {
     return await signTransactionModal.current.show(txns, origin, sendTo);
   };
 
+  const showConnectWallet = async () => {
+    return await connectWalletModal.current.show();
+  };
+
   const showConfirmPayment = async (fee: any, origin?: string, sendTo?: string) => {
     return await confirmPaymentModal.current.show(fee, origin, sendTo);
   };
@@ -155,6 +163,7 @@ export const WalletContextProvider = ({ children }: any) => {
       value={{
         ethersProvider,
         showSignTransaction,
+        showConnectWallet,
         showSignMessage,
         showConfirmPayment,
         showReceive,
@@ -179,6 +188,7 @@ export const WalletContextProvider = ({ children }: any) => {
       <FeedbackModal ref={feedbackModal} />
       <SetGuardianHintModal ref={setGuardianHintModal} />
       <LogoutModal ref={logoutModal} />
+      {/* <ConnectWalletModal ref={connectWalletModal} /> */}
     </WalletContext.Provider>
   );
 };
