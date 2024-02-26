@@ -72,6 +72,7 @@ export default function EditGuardian({
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
+  console.log('guardiansInfo', guardiansInfo)
   const { listOwner } = useWalletContract();
   const { getReplaceGuardianInfo, calcGuardianHash, getActiveGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate);
@@ -263,9 +264,9 @@ export default function EditGuardian({
         const paymentContractAddress = chainConfig.contracts.paymentContractAddress;
         await showConfirmPayment(task.estiamtedFee);
         await payTask(paymentContractAddress, task.estiamtedFee, task.taskID);
-        guardianStore.updateGuardiansInfo({
-          ...guardiansInfo,
-        });
+        /* guardianStore.updateGuardiansInfo({
+         *   ...guardiansInfo,
+         * }); */
 
         for (let i = 0; i < guardianAddresses.length; i++) {
           const address = guardianAddresses[i];

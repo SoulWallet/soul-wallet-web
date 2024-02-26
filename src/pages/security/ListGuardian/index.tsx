@@ -88,7 +88,7 @@ export default function ListGuardian({
             </Box>
           </Box>
           {isPending && (
-            <Box background="#F3FBF2" borderRadius="8px" padding="8px 16px" fontFamily="Nunito" fontSize="14px" fontWeight="700" width="100%" maxWidth="600px">
+            <Box background="#F3FBF2" borderRadius="8px" padding="8px 16px" fontFamily="Nunito" fontSize="14px" fontWeight="700" marginBottom="10px" width="fit-content">
               You have a pending guardian update.
             </Box>
           )}

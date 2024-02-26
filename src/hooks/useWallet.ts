@@ -111,9 +111,9 @@ export default function useWallet() {
       setEoas(eoaAddress);
     }
 
-    clearTempStore();
+    // clearTempStore();
 
-    // clearCreateInfo();
+    clearCreateInfo();
   };
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {

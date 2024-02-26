@@ -291,11 +291,11 @@ export default function Guardian() {
     if (!data) {
       console.log('No guardians found!')
       guardianStore.updateGuardiansInfo({
-        guardianDetails: {
-          guardians: [],
-          threshold: 0,
-        },
-        guardianNames: [],
+        /* guardianDetails: {
+         *   guardians: [],
+         *   threshold: 0,
+         * },
+         * guardianNames: [], */
         keepPrivate: true
       })
     } else {
@@ -310,16 +310,17 @@ export default function Guardian() {
     }
   }
 
-  const waitForPendingGuardian = (targetGuardianHash: any) => {
+  const waitForPendingGuardian = (targetGuardianHash?: any) => {
     return new Promise((resolve: any, reject: any) => {
-      setIsPending(true)
-
       const interval = setInterval(async () => {
         try {
           const slotInfo = getSlotInfo()
           if(!Object.keys(slotInfo).length) return;
           const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
           let activeGuardianHash
+          const isPending = activeGuardianInfo.pendingGuardianHash && activeGuardianInfo.pendingGuardianHash !== '0x0000000000000000000000000000000000000000000000000000000000000000' && activeGuardianInfo.pendingGuardianHash !== (targetGuardianHash || activeGuardianInfo.activeGuardianHash)
+          console.log('isPending', activeGuardianInfo.pendingGuardianHash, activeGuardianInfo.activeGuardianHash, activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash)
+          setIsPending(!!isPending)
 
           if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
             activeGuardianHash = activeGuardianInfo.pendingGuardianHash
@@ -327,7 +328,7 @@ export default function Guardian() {
             activeGuardianHash = activeGuardianInfo.activeGuardianHash
           }
 
-          console.log('waitForPendingGuardian', activeGuardianHash, targetGuardianHash)
+          console.log('waitForPendingGuardian', activeGuardianInfo)
 
           const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
           const data = res2.data;
@@ -353,7 +354,7 @@ export default function Guardian() {
             })
           }
 
-          if (targetGuardianHash === activeGuardianHash) {
+          if (!isPending) {
             clearInterval(interval)
             setIsPending(false)
             resolve(true)
@@ -366,7 +367,8 @@ export default function Guardian() {
   }
 
   useEffect(() => {
-    loadGuardianInfo()
+    // loadGuardianInfo()
+    waitForPendingGuardian()
   }, [])
 
   return (
