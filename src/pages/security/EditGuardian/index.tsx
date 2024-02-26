@@ -67,6 +67,7 @@ export default function EditGuardian({
   startAddGuardian,
   startEditSingleGuardian,
   startRemoveGuardian,
+  waitForPendingGuardian
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
@@ -289,37 +290,6 @@ export default function EditGuardian({
       }
     }
   }, [guardianList, keepPrivate, slotInfo]);
-
-  const waitForPendingGuardian = (targetGuardianHash: any) => {
-    return new Promise((resolve: any, reject: any) => {
-      setInterval(async () => {
-        try {
-          const slotInfo = getSlotInfo()
-          if(!Object.keys(slotInfo).length) return;
-          const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
-          let activeGuardianHash
-
-          if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
-            activeGuardianHash = activeGuardianInfo.pendingGuardianHash
-          } else {
-            activeGuardianHash = activeGuardianInfo.activeGuardianHash
-          }
-
-          console.log('waitForPendingGuardian', activeGuardianHash, targetGuardianHash)
-
-          if (targetGuardianHash === activeGuardianHash) {
-            resolve(true)
-          }
-        } catch (error: any) {
-          console.log('error', error.message)
-        }
-      }, 2000)
-    })
-  }
-
-  /* useEffect(() => {
-   *   waitForPendingGuardian()
-   * }, []) */
 
   const onBackupFinished = useCallback(() => {
     next();

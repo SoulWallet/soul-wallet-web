@@ -50,10 +50,13 @@ export default function Apps() {
       } catch (error: any) {
         const errorResponse = makeError(request.id, error.message);
         console.log('safe message error', errorResponse);
-        toast({
-          title: error.message,
-          status: 'error',
-        });
+        if (error.message) {
+          toast({
+            title: error.message,
+            status: 'error',
+          });
+        }
+
 
         if (iframeRef.current && iframeRef.current.contentWindow) {
           iframeRef.current.contentWindow.postMessage(errorResponse, msg.origin);

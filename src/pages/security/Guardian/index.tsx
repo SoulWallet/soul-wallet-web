@@ -33,6 +33,7 @@ export default function Guardian() {
   const { navigate } = useBrowser();
   const [activeSection, setActiveSection] = useState<string>('guardian');
   const [keepPrivate, setKeepPrivate] = useState<any>(false);
+  const [isPending, setIsPending] = useState<any>(false);
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
   const [isChooseSignerOpen, setIsChooseSignerOpen] = useState<any>(false);
   const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
@@ -290,6 +291,11 @@ export default function Guardian() {
     if (!data) {
       console.log('No guardians found!')
       guardianStore.updateGuardiansInfo({
+        guardianDetails: {
+          guardians: [],
+          threshold: 0,
+        },
+        guardianNames: [],
         keepPrivate: true
       })
     } else {
@@ -301,6 +307,37 @@ export default function Guardian() {
         guardianNames
       })
     }
+  }
+
+  const waitForPendingGuardian = (targetGuardianHash: any) => {
+    return new Promise((resolve: any, reject: any) => {
+      setIsPending(true)
+
+      const interval = setInterval(async () => {
+        try {
+          const slotInfo = getSlotInfo()
+          if(!Object.keys(slotInfo).length) return;
+          const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
+          let activeGuardianHash
+
+          if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+            activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+          } else {
+            activeGuardianHash = activeGuardianInfo.activeGuardianHash
+          }
+
+          console.log('waitForPendingGuardian', activeGuardianHash, targetGuardianHash)
+
+          if (targetGuardianHash === activeGuardianHash) {
+            clearInterval(interval)
+            setIsPending(false)
+            resolve(true)
+          }
+        } catch (error: any) {
+          console.log('error', error.message)
+        }
+      }, 2000)
+    })
   }
 
   useEffect(() => {
@@ -337,6 +374,7 @@ export default function Guardian() {
             startAddGuardian={startAddGuardian}
             startEditSingleGuardian={startEditSingleGuardian}
             startRemoveGuardian={startRemoveGuardian}
+            waitForPendingGuardian={waitForPendingGuardian}
             count={count}
           />
         )}
@@ -348,6 +386,7 @@ export default function Guardian() {
             startAddGuardian={startAddGuardian}
             cancelEditGuardian={cancelEditGuardian}
             openBackupGuardianModal={openBackupGuardianModal}
+            isPending={isPending}
           />
         )}
       </Box>

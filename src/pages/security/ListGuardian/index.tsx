@@ -17,7 +17,8 @@ import EmptyGuardianIcon from '@/assets/icons/empty-guardian.svg'
 export default function ListGuardian({
   startEditGuardian,
   openBackupGuardianModal,
-  enterEditGuardian
+  enterEditGuardian,
+  isPending
 }: any) {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
 
@@ -86,6 +87,11 @@ export default function ListGuardian({
               )}
             </Box>
           </Box>
+          {isPending && (
+            <Box background="#F3FBF2" borderRadius="8px" padding="8px 16px" fontFamily="Nunito" fontSize="14px" fontWeight="700" width="100%" maxWidth="600px">
+              You have a pending guardian update.
+            </Box>
+          )}
           {!guardianList.length && !keepPrivate && (
             <Box width="100%" display="flex" alignItems="center" justifyContent="center">
               <Box display="flex" flexDirection="column" alignItems="center"  justifyContent="center">
