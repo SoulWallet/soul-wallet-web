@@ -55,6 +55,7 @@ export default function SetPasskey() {
 
   const skip = useCallback(() => {
     console.log('skip')
+    setDoneAuth(true);
     navigate(`/dashboard`);
   }, [])
 
@@ -62,9 +63,7 @@ export default function SetPasskey() {
     updateCreateInfo({
       credentials
     })
-
     setDoneAuth(true);
-
     navigate(`/dashboard`);
   }, [credentials])
 
