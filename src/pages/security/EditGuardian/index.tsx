@@ -273,9 +273,9 @@ export default function EditGuardian({
           if (address) saveAddressName(address.toLowerCase(), name);
         }
 
-        await waitForPendingGuardian(newGuardianHash)
         setIsCreating(false);
         cancelEditGuardian();
+        await waitForPendingGuardian(newGuardianHash)
       } catch (error: any) {
         setIsCreating(false);
 
