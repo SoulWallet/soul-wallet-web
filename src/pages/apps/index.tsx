@@ -92,9 +92,7 @@ export default function Apps() {
 
   return (
     <Box width="100%" height="100vh">
-      <Box height="72px">
-        <Header />
-      </Box>
+      <Header />
       <Box width="100%" height={`calc(100vh - ${headerHeight}px)`}>
         {appUrl && (
           <iframe

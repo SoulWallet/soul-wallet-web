@@ -36,7 +36,7 @@ export default function useWallet() {
   const { selectedAddress, setAddressList, updateAddressItem } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
   const { setSignerIdAddress, setFinishedSteps, saveAddressName, getRecoverRecordId } = useSettingStore();
-  const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo, clearTempStore, } = useTempStore();
+  const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo, clearTempStore } = useTempStore();
 
   const createWallet = async ({
     initialGuardianHash,
@@ -345,14 +345,12 @@ export default function useWallet() {
       enabled: true,
     });
 
-    if (slotInfo.slot) {
-      const res = await api.operation.finishStep({
-        slot: slotInfo.slot,
-        steps: [5],
-      });
+    const res = await api.operation.finishStep({
+      slot: recoverInfo.slot,
+      steps: [5],
+    });
 
-      setFinishedSteps(res.data.finishedSteps);
-    }
+    setFinishedSteps(res.data.finishedSteps);
   };
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {
