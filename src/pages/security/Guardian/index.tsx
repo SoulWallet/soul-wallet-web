@@ -318,15 +318,13 @@ export default function Guardian() {
           if(!Object.keys(slotInfo).length) return;
           const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
           let activeGuardianHash
+          const isPending = activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()
 
-          if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+          if (isPending) {
             activeGuardianHash = activeGuardianInfo.pendingGuardianHash
           } else {
             activeGuardianHash = activeGuardianInfo.activeGuardianHash
           }
-
-          const isPending = activeGuardianInfo.pendingGuardianHash && activeGuardianInfo.pendingGuardianHash !== '0x0000000000000000000000000000000000000000000000000000000000000000' && activeGuardianInfo.pendingGuardianHash !== (targetGuardianHash || activeGuardianHash)
-          console.log('isPending', isPending, targetGuardianHash || activeGuardianHash, activeGuardianInfo.pendingGuardianHash)
 
           setIsPending(!!isPending)
           console.log('waitForPendingGuardian', activeGuardianInfo)
@@ -368,8 +366,8 @@ export default function Guardian() {
   }
 
   useEffect(() => {
-    // loadGuardianInfo()
-    waitForPendingGuardian()
+    loadGuardianInfo()
+    // waitForPendingGuardian()
   }, [])
 
   return (
