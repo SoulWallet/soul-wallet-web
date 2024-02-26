@@ -74,7 +74,7 @@ export default function EditGuardian({
   const guardiansInfo = getEditingGuardiansInfo();
   const { listOwner } = useWalletContract();
   const { getReplaceGuardianInfo, calcGuardianHash, getActiveGuardianHash } = useKeystore();
-  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate);
+  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo?.keepPrivate);
   const { createWallet } = useWallet();
   const [isCreating, setIsCreating] = useState(false);
   const { chainConfig } = useConfig();
@@ -87,16 +87,16 @@ export default function EditGuardian({
   const { payTask } = useTransaction();
   const toast = useToast();
 
-  const guardianDetails = guardiansInfo.guardianDetails || {
+  const guardianDetails = guardiansInfo?.guardianDetails || {
     guardians: [],
     threshold: 0,
   };
 
   const guardianNames =
     (guardiansInfo &&
-      guardiansInfo.guardianDetails &&
-      guardiansInfo.guardianDetails.guardians &&
-      guardiansInfo.guardianDetails.guardians.map((address: any) =>
+      guardiansInfo?.guardianDetails &&
+      guardiansInfo?.guardianDetails.guardians &&
+      guardiansInfo?.guardianDetails.guardians.map((address: any) =>
         getAddressName(address && address.toLowerCase()),
       )) ||
     [];

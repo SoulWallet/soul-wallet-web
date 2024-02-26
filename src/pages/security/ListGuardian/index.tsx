@@ -33,7 +33,7 @@ export default function ListGuardian({
   const tempStore = useTempStore();
   const guardianStore = useGuardianStore();
   const guardiansInfo = !tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()
-  const keepPrivate = guardiansInfo.keepPrivate
+  const keepPrivate = guardiansInfo?.keepPrivate
 
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
     guardians: [],

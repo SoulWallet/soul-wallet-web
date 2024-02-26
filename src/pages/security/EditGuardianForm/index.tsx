@@ -146,7 +146,7 @@ export default function GuardianForm({
   const guardiansInfo = (editType === 'edit') ? getEditingGuardiansInfo() : (
     editType === 'add' ? defaultGuardianInfo : getEditingSingleGuardiansInfo()
   );
-  const guardianDetails = guardiansInfo.guardianDetails || {
+  const guardianDetails = guardiansInfo?.guardianDetails || {
     guardians: [],
     threshold: 0
   }
@@ -159,7 +159,7 @@ export default function GuardianForm({
   const [loading, setLoading] = useState(false);
   const { eoas } = useSignerStore();
   const [showAdvance, setShowAdvance] = useState(false)
-  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate)
+  const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo?.keepPrivate)
   const [status, setStatus] = useState<string>('editing');
 
   const externalValidate = useCallback((values: any) => {
