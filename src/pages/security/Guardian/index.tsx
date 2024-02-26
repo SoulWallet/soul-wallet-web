@@ -318,16 +318,19 @@ export default function Guardian() {
           if(!Object.keys(slotInfo).length) return;
           const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
           let activeGuardianHash
-          const isPending = (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) || activeGuardianInfo.activeGuardianHash !== targetGuardianHash
+          const isPending =  (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) || activeGuardianInfo.activeGuardianHash !== targetGuardianHash
 
           if (isPending) {
-            activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+            if (!!Number(activeGuardianInfo.pendingGuardianHash)) {
+              activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+            } else {
+              activeGuardianHash = activeGuardianInfo.activeGuardianHash
+            }
           } else {
             activeGuardianHash = activeGuardianInfo.activeGuardianHash
           }
 
           setIsPending(!!isPending)
-          console.log('waitForPendingGuardian', activeGuardianInfo, targetGuardianHash)
 
           const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
           const data = res2.data;
