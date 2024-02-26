@@ -290,7 +290,7 @@ export default function EditGuardian({
     }
   }, [guardianList, keepPrivate, slotInfo]);
 
-  const waitForPendingGuardian = (targetGuardianHash) => {
+  const waitForPendingGuardian = (targetGuardianHash: any) => {
     return new Promise((resolve: any, reject: any) => {
       setInterval(async () => {
         try {
@@ -317,9 +317,9 @@ export default function EditGuardian({
     })
   }
 
-  useEffect(() => {
-    waitForPendingGuardian()
-  }, [])
+  /* useEffect(() => {
+   *   waitForPendingGuardian()
+   * }, []) */
 
   const onBackupFinished = useCallback(() => {
     next();
