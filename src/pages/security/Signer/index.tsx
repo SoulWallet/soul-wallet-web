@@ -11,7 +11,7 @@ import EditGuardianModal from '@/pages/security/EditGuardianModal';
 import BackupGuardianModal from '@/pages/security/BackupGuardianModal';
 import WalletConnectModal from '@/pages/security/WalletConnectModal';
 import useBrowser from '@/hooks/useBrowser';
-import { useSignerStore } from '@/store/signer';
+import { ICredentialItem, useSignerStore } from '@/store/signer';
 import { toShortAddress } from '@/lib/tools';
 import useWalletContract from '@/hooks/useWalletContract';
 
@@ -20,7 +20,6 @@ export default function Signer() {
   const [activeSection] = useState<string>('signer');
   const [signerIdToSet, setSignerIdToSet] = useState('');
   const { eoas, credentials, signerId } = useSignerStore();
-  const [owners, setOwners] = useState([]);
   const [isSetDefaultOpen, setIsSetDefaultOpen] = useState<any>(false);
   const [isChooseSignerOpen, setIsChooseSignerOpen] = useState<any>(false);
   const [isSelectGuardianOpen, setIsSelectGuardianOpen] = useState<any>(false);
@@ -28,7 +27,6 @@ export default function Signer() {
   const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
   const [isBackupGuardianOpen, setIsBackupGuardianOpen] = useState<any>(false);
   const [isWalletConnectOpen, setIsWalletConnectOpen] = useState<any>(false);
-  const { listOwner }= useWalletContract();
 
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true);
@@ -66,18 +64,6 @@ export default function Signer() {
     setIsBackupGuardianOpen(false);
   }, []);
 
-  const getOwners = async() => {
-    const res = await listOwner();
-    // compare owners length to the contract
-    if(res.length > eoas.length + credentials.length) {
-      setOwners(res);
-    }
-  }
-
-  useEffect(()=>{
-
-  }, [])
-
   return (
     <Fragment>
       <Box display="flex" flexDirection="column" padding={{base: "0 24px", lg: "auto"}} pt="6">
@@ -113,12 +99,12 @@ export default function Signer() {
                   ))}
                 </Fragment>
                 <Fragment>
-                  {credentials.map((item: any) => (
+                  {credentials.filter((item:ICredentialItem) => item.id).map((item: any) => (
                     <SignerCard
                       key={item.id}
                       name={item.name || 'No Name'}
                       address={item.id}
-                      device="Chrome profile"
+                      device="Passkey"
                       time="Added on 2023-12-14 "
                       cursor="pointer"
                       marginRight={{ base: '0', md: '18px' }}

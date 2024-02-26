@@ -15,6 +15,8 @@ interface ISignerIdAddress {
 }
 
 export interface ISettingStore {
+  claimableCount: number;
+  setClaimableCount: (count: number) => void;
   collapseGuidance: boolean;
   toggleCollapseGuidance: () => void;
   ignoreWebauthnOverride: boolean;
@@ -38,12 +40,18 @@ export interface ISettingStore {
 }
 
 const createSettingSlice = immer<ISettingStore>((set, get) => ({
+  claimableCount: 0,
   collapseGuidance: false,
   ignoreWebauthnOverride: false,
   finishedSteps: [],
   addressName: {},
   recoverRecordIds: {},
   signerIdAddress: {},
+  setClaimableCount: (count: number) => {
+    set((state) => {
+      state.claimableCount = count;
+    });
+  },
   getSignerIdAddress: () => {
     return get().signerIdAddress;
   },

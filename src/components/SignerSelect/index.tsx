@@ -1,5 +1,5 @@
 import { toShortAddress } from '@/lib/tools';
-import { useSignerStore } from '@/store/signer';
+import { ICredentialItem, useSignerStore } from '@/store/signer';
 import { Menu, MenuButton, MenuItem, MenuList, Box, Text, Image, Flex, FlexProps, Tooltip } from '@chakra-ui/react';
 import { SignkeyType } from '@soulwallet/sdk';
 import DropdownSelect from '../DropdownSelect';
@@ -43,6 +43,8 @@ export default function SignerSelect({ onChange }: { onChange?: () => void }) {
     setSignerId(_signerId);
   };
 
+  const availableCredentials = credentials.filter((item: ICredentialItem) => item.id);
+
   return (
     <Menu>
       <MenuButton>
@@ -73,14 +75,14 @@ export default function SignerSelect({ onChange }: { onChange?: () => void }) {
           </>
         ) : null}
 
-        {eoas.length && credentials.length ? <Box bg="rgba(0, 0, 0, 0.05)" h="1px" my="5" /> : null}
+        {eoas.length && availableCredentials.length ? <Box bg="rgba(0, 0, 0, 0.05)" h="1px" my="5" /> : null}
 
-        {credentials.length > 0 ? (
+        {availableCredentials.length > 0 ? (
           <>
             <Text fontWeight={'700'} mb="5" lineHeight={'1'}>
               Passkey
             </Text>
-            {credentials.map((item: any) => (
+            {availableCredentials.map((item: any) => (
               <MenuItem p="0" bg="none !important" key={item.id}>
                 <SignerItem
                   title={item.name}
