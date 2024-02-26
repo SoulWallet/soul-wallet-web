@@ -273,7 +273,6 @@ export default function Guardian() {
   }, [])
 
   const loadGuardianInfo = async () => {
-    console.log('loadGuardianInfo')
     const slotInfo = getSlotInfo()
     if(!Object.keys(slotInfo).length) return;
     const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
@@ -285,6 +284,7 @@ export default function Guardian() {
       activeGuardianHash = activeGuardianInfo.activeGuardianHash
     }
 
+    console.log('loadGuardianInfo', activeGuardianHash)
     const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
     const data = res2.data;
 
@@ -304,7 +304,8 @@ export default function Guardian() {
 
       guardianStore.updateGuardiansInfo({
         guardianDetails,
-        guardianNames
+        guardianNames,
+        keepPrivate: false
       })
     }
   }
@@ -327,6 +328,30 @@ export default function Guardian() {
           }
 
           console.log('waitForPendingGuardian', activeGuardianHash, targetGuardianHash)
+
+          const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
+          const data = res2.data;
+
+          if (!data) {
+            console.log('No guardians found!')
+            guardianStore.updateGuardiansInfo({
+              guardianDetails: {
+                guardians: [],
+                threshold: 0,
+              },
+              guardianNames: [],
+              keepPrivate: true
+            })
+          } else {
+            const guardianDetails = data.guardianDetails;
+            const guardianNames = data.guardianNames;
+
+            guardianStore.updateGuardiansInfo({
+              guardianDetails,
+              guardianNames,
+              keepPrivate: false
+            })
+          }
 
           if (targetGuardianHash === activeGuardianHash) {
             clearInterval(interval)
