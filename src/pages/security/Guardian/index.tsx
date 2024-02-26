@@ -325,7 +325,7 @@ export default function Guardian() {
             activeGuardianHash = activeGuardianInfo.activeGuardianHash
           }
 
-          const isPending = activeGuardianInfo.pendingGuardianHash && activeGuardianInfo.pendingGuardianHash !== (targetGuardianHash || activeGuardianHash)
+          const isPending = activeGuardianInfo.pendingGuardianHash && activeGuardianInfo.pendingGuardianHash !== '0x0000000000000000000000000000000000000000000000000000000000000000' && activeGuardianInfo.pendingGuardianHash !== (targetGuardianHash || activeGuardianHash)
           console.log('isPending', isPending, targetGuardianHash || activeGuardianHash, activeGuardianInfo.pendingGuardianHash)
 
           setIsPending(!!isPending)
