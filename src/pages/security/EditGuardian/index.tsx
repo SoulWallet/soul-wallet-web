@@ -72,7 +72,7 @@ export default function EditGuardian({
   const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
   const { listOwner } = useWalletContract();
-  const { getReplaceGuardianInfo, calcGuardianHash } = useKeystore();
+  const { getReplaceGuardianInfo, calcGuardianHash, getActiveGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo.keepPrivate);
   const { createWallet } = useWallet();
   const [isCreating, setIsCreating] = useState(false);
@@ -80,7 +80,7 @@ export default function EditGuardian({
   const guardianStore = useGuardianStore();
   const [showGuardianTip1, setShowGuardianTip1] = useState(true);
   const [showGuardianTip2, setShowGuardianTip2] = useState(true);
-  const { slotInfo } = useSlotStore();
+  const { slotInfo, getSlotInfo } = useSlotStore();
   const { credentials, eoas } = useSignerStore();
   const { showConfirmPayment, checkActivated } = useWalletContext();
   const { payTask } = useTransaction();
@@ -271,6 +271,8 @@ export default function EditGuardian({
           const name = guardianNames[i];
           if (address) saveAddressName(address.toLowerCase(), name);
         }
+
+        await waitForPendingGuardian(newGuardianHash)
         setIsCreating(false);
         cancelEditGuardian();
       } catch (error: any) {
@@ -287,6 +289,37 @@ export default function EditGuardian({
       }
     }
   }, [guardianList, keepPrivate, slotInfo]);
+
+  const waitForPendingGuardian = (targetGuardianHash) => {
+    return new Promise((resolve: any, reject: any) => {
+      setInterval(async () => {
+        try {
+          const slotInfo = getSlotInfo()
+          if(!Object.keys(slotInfo).length) return;
+          const activeGuardianInfo = await getActiveGuardianHash(slotInfo)
+          let activeGuardianHash
+
+          if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
+            activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+          } else {
+            activeGuardianHash = activeGuardianInfo.activeGuardianHash
+          }
+
+          console.log('waitForPendingGuardian', activeGuardianHash, targetGuardianHash)
+
+          if (targetGuardianHash === activeGuardianHash) {
+            resolve(true)
+          }
+        } catch (error: any) {
+          console.log('error', error.message)
+        }
+      }, 2000)
+    })
+  }
+
+  useEffect(() => {
+    waitForPendingGuardian()
+  }, [])
 
   const onBackupFinished = useCallback(() => {
     next();
