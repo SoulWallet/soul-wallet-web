@@ -13,8 +13,6 @@ import { useSettingStore } from '@/store/setting';
 const ClaimAssetsModal = (_: unknown, ref: Ref<any>) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  // const [claimableCount, setClaimableCount] = useState(0);
-  // const [checkedClaimable, setCheckedClaimable] = useState(false);
   const { slotInfo } = useSlotStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});

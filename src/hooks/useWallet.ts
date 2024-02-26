@@ -36,7 +36,7 @@ export default function useWallet() {
   const { selectedAddress, setAddressList, updateAddressItem } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
   const { setSignerIdAddress, setFinishedSteps, saveAddressName, getRecoverRecordId } = useSettingStore();
-  const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo } = useTempStore();
+  const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo, clearTempStore, } = useTempStore();
 
   const createWallet = async ({
     initialGuardianHash,
@@ -111,7 +111,9 @@ export default function useWallet() {
       setEoas(eoaAddress);
     }
 
-    clearCreateInfo();
+    clearTempStore();
+
+    // clearCreateInfo();
   };
 
   const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {

@@ -17,14 +17,15 @@ export default function FindRoute({ children }: { children: ReactNode }) {
   const location = useLocation();
   const { addressList, selectedAddress } = useAddressStore();
   const { clearLogData } = useTools();
-  const { createInfo } = useTempStore();
+  const { createInfo, doneAuth } = useTempStore();
 
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
-    const isRecoverPage = location.pathname.includes('recover');
-    const isCreatePage = location.pathname.includes('create');
-    const isLaunchPage = location.pathname.includes('launch');
-    const isAuthPage = location.pathname.includes('auth');
+
+    const allowBypass =
+      location.pathname.includes('recover') ||
+      location.pathname.includes('create') ||
+      location.pathname.includes('auth');
 
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
@@ -33,27 +34,27 @@ export default function FindRoute({ children }: { children: ReactNode }) {
     }
 
     if (
-      !createInfo.eoaAddress &&
-      !(createInfo.credentials?.length >0) &&
+      // !createInfo.eoaAddress &&
+      // !(createInfo.credentials?.length > 0) &&
+      !doneAuth &&
       !selectedAddress &&
-      !isRecoverPage &&
-      !isCreatePage &&
-      !isAuthPage
+      !allowBypass
     ) {
       navigate({
         pathname: '/auth',
         search: location.search,
       });
-    } else if (isLaunchPage && addressList.length && selectedAddress) {
-      navigate({
-        pathname: '/dashboard',
-      });
+    } else {
+      // navigate({
+      //   pathname: '/dashboard',
+      // });
     }
+    // if (addressList.length && selectedAddress)
   };
 
   useEffect(() => {
     findRoute();
-  }, []);
+  }, [selectedAddress, addressList, location.pathname]);
 
   return (
     <Box bg="appBg" fontSize={'16px'} overflow={'auto'}>

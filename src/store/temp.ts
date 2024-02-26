@@ -7,7 +7,9 @@ import { immer } from 'zustand/middleware/immer';
 import { persist } from 'zustand/middleware';
 
 const createStagingSlice = immer<any>((set, get) => ({
+  doneAuth: false,
   createInfo: {},
+  setDoneAuth: (value: boolean) => set({ doneAuth: value }),
   getCreatingGuardianInfo: () => {
     return get().createInfo && get().createInfo.creatingGuardianInfo
   },
@@ -63,6 +65,7 @@ const createStagingSlice = immer<any>((set, get) => ({
     createInfo: {},
     recoverInfo: {},
     guardianInfo: {},
+    doneAuth: false,
   }),
 
   guardianInfo: {},
