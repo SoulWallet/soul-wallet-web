@@ -22,7 +22,7 @@ const ConnectWalletModal = (_: unknown, ref: Ref<any>) => {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const { connectors, connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
+  // const { disconnectAsync } = useDisconnect();
   const { isConnected } = useAccount()
   const toast = useToast();
 
@@ -52,9 +52,9 @@ const ConnectWalletModal = (_: unknown, ref: Ref<any>) => {
 
   const connectEOA = async (connector: any) => {
     try {
-      if(isConnected){
-        await disconnectAsync()
-      }
+      // if(isConnected){
+      //   await disconnectAsync()
+      // }
       const account = await connectAsync({ connector });
       promiseInfo.resolve(account);
       onClose()
