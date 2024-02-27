@@ -72,7 +72,6 @@ export default function EditGuardian({
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
   const guardiansInfo = getEditingGuardiansInfo();
-  console.log('guardiansInfo', guardiansInfo)
   const { listOwner } = useWalletContract();
   const { getReplaceGuardianInfo, calcGuardianHash, getActiveGuardianHash } = useKeystore();
   const [keepPrivate, setKeepPrivate] = useState(!!guardiansInfo?.keepPrivate);

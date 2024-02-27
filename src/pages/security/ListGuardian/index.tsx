@@ -1,4 +1,4 @@
-import { useState, useCallback, Fragment } from 'react';
+import { useState, useCallback, Fragment, useEffect } from 'react';
 import RoundSection from '@/components/new/RoundSection'
 import GuardianCard from '@/components/new/GuardianCard'
 import { Image, Box, Menu, MenuList, MenuButton, MenuItem } from '@chakra-ui/react'
@@ -20,19 +20,9 @@ export default function ListGuardian({
   enterEditGuardian,
   isPending
 }: any) {
-  const [isEditGuardianOpen, setIsEditGuardianOpen] = useState<any>(false);
-
-  const [editingGuardianDetails, setEditingGuardianDetails] = useState<any>({
-    guardians: [],
-    guardianNames: [],
-    threshold: 0
-  });
-
   const { getAddressName } = useSettingStore();
-
-  const tempStore = useTempStore();
   const guardianStore = useGuardianStore();
-  const guardiansInfo = !tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()
+  const { guardiansInfo } = guardianStore;
   const keepPrivate = guardiansInfo?.keepPrivate
 
   const guardianDetails = (guardiansInfo && guardiansInfo.guardianDetails) || {
@@ -49,7 +39,6 @@ export default function ListGuardian({
       name: guardianNames[i]
     }
   })
-  console.log('guardiansInfo000', guardiansInfo)
 
   return (
     <Fragment>

@@ -64,7 +64,7 @@ export default function Guardian() {
   } = tempStore;
   const guardianStore = useGuardianStore();
   const guardiansInfo = (!tempStore.createInfo.creatingGuardianInfo ? guardianStore.guardiansInfo : tempStore.getCreatingGuardianInfo()) || defaultGuardianInfo
-  console.log('guardianStore111', guardiansInfo)
+  console.log('guardiansInfo111', guardianStore.guardiansInfo, guardianStore.getGuardiansInfo())
 
   const openSetDefaultModal = useCallback(() => {
     setIsSetDefaultOpen(true)
@@ -180,10 +180,10 @@ export default function Guardian() {
   const onRemoveGuardianConfirm = useCallback((i: any) => {
     setIsRemoveGuardianOpen(false)
     const editingGuardianInfo = getEditingGuardiansInfo()
-    const currentAddresses = editingGuardianInfo.guardianDetails.guardians || []
-    const currentNames = editingGuardianInfo.guardianNames || []
-    currentNames.splice(i, 1)
-    currentAddresses.splice(i, 1)
+    let currentAddresses = editingGuardianInfo.guardianDetails.guardians || []
+    let currentNames = editingGuardianInfo.guardianNames || []
+    currentNames = currentNames.filter((_: any, idx: any) => idx !== i)
+    currentAddresses = currentAddresses.filter((_: any, idx: any) => idx !== i)
 
     updateEditingGuardiansInfo({
       guardianNames: currentNames,
