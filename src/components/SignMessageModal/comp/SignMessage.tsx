@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Flex, Box, Text, Image, } from '@chakra-ui/react';
+import { Flex, Box, Text, Image } from '@chakra-ui/react';
 import Button from '../../Button';
 import { useAccount, useSignTypedData, useSwitchChain } from 'wagmi';
 import useWallet from '@/hooks/useWallet';
@@ -9,6 +9,9 @@ import { TypedDataEncoder, ethers } from 'ethers';
 import SignerSelect from '@/components/SignerSelect';
 import { LabelItem } from '@/components/SignTransactionModal/comp/SignTransaction';
 import useTools from '@/hooks/useTools';
+import useWalletContext from '@/context/hooks/useWalletContext';
+import { useSignerStore } from '@/store/signer';
+import { SignkeyType } from '@soulwallet/sdk';
 
 const getHash = (message: string) => {
   return ethers.hashMessage(message);
@@ -23,6 +26,9 @@ const getTypedHash = (typedData: any) => {
 export default function SignMessage({ messageToSign, onSign, signType, signTitle }: any) {
   const { signTypedDataAsync, signTypedData } = useSignTypedData();
   const { signRawHash, signWithPasskey } = useWallet();
+  const { isConnected } = useAccount();
+  const { getSelectedKeyType } = useSignerStore();
+  const { showConnectWallet } = useWalletContext();
   const { checkValidSigner } = useTools();
   const [isActivated, setIsActivated] = useState(false);
   const [targetChainId, setTargetChainId] = useState<undefined | number>();
@@ -30,8 +36,8 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
   const { switchChain } = useSwitchChain();
 
   const onConfirm = async () => {
-    if(!checkValidSigner()){
-      return
+    if (!checkValidSigner()) {
+      return;
     }
     try {
       let signHash;
@@ -78,7 +84,7 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
   const shouldDisable = signType !== 'passkey' && signType !== 'eoa' && !isActivated;
 
   return (
-    <Box pb={{base: 6, lg: 0}}>
+    <Box pb={{ base: 6, lg: 0 }}>
       {signTitle && (
         <Text fontSize="20px" fontWeight="800" textAlign={'center'}>
           {signTitle}
@@ -89,13 +95,15 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
           {origin}
         </Text>
       )} */}
-      <Flex flexDir={'column'} gap="6" mt={{base:4, lg: 9}}>
+      <Flex flexDir={'column'} gap="6" mt={{ base: 4, lg: 9 }}>
         <Box bg="#f9f9f9" color="#818181" fontSize={'14px'} p="4" rounded="20px" overflowY={'auto'}>
           <Flex align={'center'} gap="1" mb="4">
             <Image src={IconZoom} w="20px" h="20px" />
-            <Text fontWeight={'800'} color="#000">Message details</Text>
+            <Text fontWeight={'800'} color="#000">
+              Message details
+            </Text>
           </Flex>
-          <Box maxH="160px" overflowY={"auto"}>
+          <Box maxH="160px" overflowY={'auto'}>
             <pre>
               <code>
                 {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
@@ -128,7 +136,20 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
           Please activate your wallet before signing message
         </Text>
       )}
-      {targetChainId ? (
+      {getSelectedKeyType() === SignkeyType.EOA && !isConnected ? (
+        <Button
+          w="320px"
+          fontSize={'20px'}
+          py="4"
+          fontWeight={'800'}
+          mt="6"
+          mx="auto"
+          display={'block'}
+          onClick={() => showConnectWallet()}
+        >
+          Connect Wallet
+        </Button>
+      ) : targetChainId ? (
         <Button
           w="320px"
           fontSize={'20px'}

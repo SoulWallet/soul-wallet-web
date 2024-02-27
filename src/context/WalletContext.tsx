@@ -188,7 +188,7 @@ export const WalletContextProvider = ({ children }: any) => {
       <FeedbackModal ref={feedbackModal} />
       <SetGuardianHintModal ref={setGuardianHintModal} />
       <LogoutModal ref={logoutModal} />
-      {/* <ConnectWalletModal ref={connectWalletModal} /> */}
+      <ConnectWalletModal ref={connectWalletModal} />
     </WalletContext.Provider>
   );
 };

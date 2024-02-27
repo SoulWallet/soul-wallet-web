@@ -62,10 +62,10 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   const { checkValidSigner } = useTools();
   const [signing, setSigning] = useState<boolean>(false);
-  const { checkActivated, ethersProvider } = useWalletContext();
+  const { checkActivated, ethersProvider, showConnectWallet } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prechecked, setPrechecked] = useState(false);
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { getSelectedKeyType, eoas } = useSignerStore();
   const [totalMsgValue, setTotalMsgValue] = useState('');
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
@@ -541,20 +541,35 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             Balance not enough
           </Text>
         )} */}
-        <Button
-          w="320px"
-          display={'flex'}
-          gap="2"
-          fontSize={'20px'}
-          py="4"
-          fontWeight={'800'}
-          mx="auto"
-          onClick={onConfirm}
-          loading={signing}
-          disabled={(loadingFee || !balanceEnough) && (!sponsor || !useSponsor)}
-        >
-          Confirm
-        </Button>
+        {getSelectedKeyType() === SignkeyType.EOA && !isConnected ? (
+          <Button
+            w="320px"
+            display={'flex'}
+            gap="2"
+            fontSize={'20px'}
+            py="4"
+            fontWeight={'800'}
+            mx="auto"
+            onClick={() => showConnectWallet()}
+          >
+            Connect Wallet
+          </Button>
+        ) : (
+          <Button
+            w="320px"
+            display={'flex'}
+            gap="2"
+            fontSize={'20px'}
+            py="4"
+            fontWeight={'800'}
+            mx="auto"
+            onClick={onConfirm}
+            loading={signing}
+            disabled={(loadingFee || !balanceEnough) && (!sponsor || !useSponsor)}
+          >
+            Confirm
+          </Button>
+        )}
       </Box>
     </Box>
   );

@@ -35,7 +35,15 @@ export default function useTools() {
   const checkValidSigner = () => {
     // check eoa
     if (getSelectedKeyType() === SignkeyType.EOA) {
-      if (true || eoas.some((item: string) => item.toLowerCase() === address?.toLowerCase())) {
+      if (!address) {
+        toast({
+          title: 'Please connect your wallet first.',
+          status: 'error',
+          duration: 5000,
+        });
+        return false;
+      }
+      if (eoas.some((item: string) => item.toLowerCase() === address?.toLowerCase())) {
         return true;
       } else {
         toast({
