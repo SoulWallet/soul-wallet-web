@@ -451,7 +451,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 {requiredAmount ? (
                   <>
                     <Text fontSize={'14px'} fontWeight={'600'}>
-                      {BN(requiredAmount).toFormat(6)}
+                      {BN(requiredAmount).isEqualTo(0) ? '0' : BN(requiredAmount).toFormat(6)}
                     </Text>
                     <GasSelect
                       gasToken={payToken}

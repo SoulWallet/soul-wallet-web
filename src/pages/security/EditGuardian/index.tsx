@@ -334,7 +334,7 @@ export default function EditGuardian({
                   <Box marginRight="2px">
                     <HistoryIcon />
                   </Box>
-                  Backup list
+                  backup guardians
                 </Button>
               )}
               <Button

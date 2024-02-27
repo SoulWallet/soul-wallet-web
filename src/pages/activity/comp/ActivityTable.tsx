@@ -9,7 +9,7 @@ import { useAddressStore } from '@/store/address';
 import IconLoading from '@/assets/loading.svg';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useConfig from '@/hooks/useConfig';
-import { chainMapping } from '@/config';
+// import { chainMapping } from '@/config';
 import IconExternal from '@/assets/icons/external.svg';
 import IconEth from '@/assets/tokens/eth.svg';
 import EmptyHint from '@/components/EmptyHint';

@@ -71,7 +71,7 @@ export default function ListGuardian({
                   width={{ base: '100%', md: 'auto' }}
                 >
                   <Box marginRight="2px"><HistoryIcon /></Box>
-                  Backup list
+                  backup guardians
                 </Button>
               )}
             </Box>
@@ -255,7 +255,7 @@ export default function ListGuardian({
         )}
         {(!!guardianList && !!guardianList.length) && (
           <Button size="mid" w="120px" onClick={enterEditGuardian}>
-            Edit
+            Edit guardians
           </Button>
         )}
       </Box>

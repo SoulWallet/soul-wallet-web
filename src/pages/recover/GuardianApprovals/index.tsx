@@ -217,7 +217,7 @@ export default function AddSigner({ next, back }: any) {
                   <Box marginRight="4px">
                     {uploaded ? <UploadedIcon /> : <UploadIcon />}
                   </Box>
-                  Upload guardians file
+                  {uploaded ? "Uploaded" : "Upload guardians file"}
                   <Input
                     type="file"
                     id="file"

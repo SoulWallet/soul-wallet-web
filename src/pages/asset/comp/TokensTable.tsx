@@ -14,6 +14,7 @@ import {
   Grid,
   TableContainer,
 } from '@chakra-ui/react';
+import BN from 'bignumber.js';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import IconDefaultToken from '@/assets/tokens/default.svg';
 import { useChainStore } from '@/store/chain';
@@ -21,7 +22,8 @@ import IconSend from '@/assets/icons/wallet/send.svg';
 import IconLoading from '@/assets/loading.svg';
 import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
 import useConfig from '@/hooks/useConfig';
-
+import EmptyHint from '@/components/EmptyHint';
+import AssetEmpty from '@/assets/icons/asset-empty.svg';
 export default function TokensTable() {
   const { showSend } = useWalletContext();
   const { fetchTokenBalance, tokenBalance } = useBalanceStore();
@@ -39,7 +41,13 @@ export default function TokensTable() {
     showSend(tokenAddress);
   };
 
-  return (
+  const isEmpty = tokenBalance.every((item: ITokenBalanceItem) => BN(item.tokenBalanceFormatted).isEqualTo(0));
+
+  return isEmpty ? (
+    <Box py="120px">
+      <EmptyHint title="You don't have any tokens yet" icon={AssetEmpty} />
+    </Box>
+  ) : (
     <TableContainer overflowX={'auto'}>
       <Table color="#000">
         <Thead>

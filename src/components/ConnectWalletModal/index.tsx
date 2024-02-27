@@ -20,7 +20,6 @@ import TxModal from '../TxModal';
 const ConnectWalletModal = (_: unknown, ref: Ref<any>) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
-  const [origin, setOrigin] = useState<string>('');
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const { connectors, connectAsync } = useConnect();
   const { disconnectAsync } = useDisconnect();
@@ -53,7 +52,9 @@ const ConnectWalletModal = (_: unknown, ref: Ref<any>) => {
 
   const connectEOA = async (connector: any) => {
     try {
-      await disconnectAsync()
+      if(isConnected){
+        await disconnectAsync()
+      }
       const account = await connectAsync({ connector });
       promiseInfo.resolve(account);
       onClose()
