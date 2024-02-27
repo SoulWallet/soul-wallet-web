@@ -24,7 +24,11 @@ export default function NftsTable() {
 
   return (
     <>
-      {(!nftBalance || nftBalance.length === 0) && <EmptyHint icon={NftEmpty} title="You don't have any NFTs yet" />}
+      {(!nftBalance || nftBalance.length === 0) && (
+        <Box py="120px">
+          <EmptyHint icon={NftEmpty} title="You don't have any NFTs yet" />
+        </Box>
+      )}
       <Grid templateColumns={'repeat(4, 1fr)'} gap="9">
         {nftBalance
           .filter((item: any) => item.logoURI)

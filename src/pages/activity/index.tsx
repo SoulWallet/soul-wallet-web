@@ -20,36 +20,36 @@ const statusList = [
   },
 ];
 
-const typesList = [
-  {
-    title: 'All types',
-    key: 'all',
-  },
-  {
-    title: 'Send',
-    key: 'send',
-  },
-  {
-    title: 'Receive',
-    key: 'receive',
-  },
-  {
-    title: 'Trade',
-    key: 'trade',
-  },
-  {
-    title: 'Approve',
-    key: 'approve',
-  },
-  {
-    title: 'Execute',
-    key: 'execute',
-  },
-  {
-    title: 'Mint',
-    key: 'mint',
-  },
-];
+// const typesList = [
+//   {
+//     title: 'All types',
+//     key: 'all',
+//   },
+//   {
+//     title: 'Send',
+//     key: 'send',
+//   },
+//   {
+//     title: 'Receive',
+//     key: 'receive',
+//   },
+//   {
+//     title: 'Trade',
+//     key: 'trade',
+//   },
+//   {
+//     title: 'Approve',
+//     key: 'approve',
+//   },
+//   {
+//     title: 'Execute',
+//     key: 'execute',
+//   },
+//   {
+//     title: 'Mint',
+//     key: 'mint',
+//   },
+// ];
 
 const FilterMenu = ({ active, list }: any) => {
   return (
@@ -70,7 +70,7 @@ const FilterMenu = ({ active, list }: any) => {
 };
 
 export default function Activity() {
-  const { chainList } = useChainStore();
+  // const { chainList } = useChainStore();
   // const [activeChains, setActiveChains] = useState(chainList.map((item: any) => item.chainIdHex));
   const [activeStatus, setActiveStatus] = useState(statusList[0].key);
 
