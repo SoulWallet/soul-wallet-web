@@ -160,9 +160,9 @@ export default function Guardian() {
     }
 
     setEditType('add')
-    setCanBackToSelectGuardianType(false)
     setIsEditing(true)
-    setIsEditGuardianOpen(true)
+    setCanBackToSelectGuardianType(true)
+    setIsSelectGuardianOpen(true)
   }, [isEditing, guardiansInfo])
 
   const startEditSingleGuardian = useCallback((info: any) => {

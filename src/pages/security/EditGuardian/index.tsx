@@ -337,17 +337,19 @@ export default function EditGuardian({
                   backup guardians
                 </Button>
               )}
-              <Button
-                size="mid"
-                onClick={() => startAddGuardian()}
-                marginBottom={{ base: '20px', md: '0px' }}
-                width={{ base: '100%', md: 'auto' }}
-              >
-                <Box marginRight="6px">
-                  <PlusIcon color="white" />
-                </Box>
-                Add Guardian
-              </Button>
+              {!!guardianList.length && (
+                <Button
+                  size="mid"
+                  onClick={() => startAddGuardian()}
+                  marginBottom={{ base: '20px', md: '0px' }}
+                  width={{ base: '100%', md: 'auto' }}
+                >
+                  <Box marginRight="6px">
+                    <PlusIcon color="white" />
+                  </Box>
+                  Add Guardian
+                </Button>
+              )}
             </Box>
           </Box>
           {!guardianList.length && (
@@ -414,14 +416,14 @@ export default function EditGuardian({
                         <RemoveIcon />
                       </Box>
                       {/* <Box
-                        fontFamily="Nunito"
-                        fontWeight="700"
-                        fontSize="16px"
-                        marginBottom="10px"
-                        color="white"
-                      >
-                        🎉 Bravo!
-                      </Box> */}
+                          fontFamily="Nunito"
+                          fontWeight="700"
+                          fontSize="16px"
+                          marginBottom="10px"
+                          color="white"
+                          >
+                          🎉 Bravo!
+                          </Box> */}
                       <Box fontFamily="Nunito" fontWeight="400" fontSize="12px" color="white">
                         You’ve added{' '}
                         <Box as="span" fontWeight="bold">
@@ -463,8 +465,8 @@ export default function EditGuardian({
                         <RemoveIcon />
                       </Box>
                       {/* <Box fontFamily="Nunito" fontWeight="700" fontSize="16px" marginBottom="10px" color="white">
-                        👍🏻 Awesome!
-                      </Box> */}
+                          👍🏻 Awesome!
+                          </Box> */}
                       <Box fontFamily="Nunito" fontWeight="400" fontSize="12px" color="white">
                         You’ve added{' '}
                         <Box as="span" fontWeight="bold">
@@ -549,11 +551,11 @@ export default function EditGuardian({
                             </MenuItem>
                           )}
                           {!!(guardianList.length || 0) &&
-                            getNumberArray(guardianList.length || 0).map((i: any) => (
-                              <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
-                                {i}
-                              </MenuItem>
-                            ))}
+                           getNumberArray(guardianList.length || 0).map((i: any) => (
+                             <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
+                               {i}
+                             </MenuItem>
+                          ))}
                         </MenuList>
                       </Menu>
                     </Box>
@@ -580,7 +582,7 @@ export default function EditGuardian({
                     >
                       <Box
                         boxShadow={
-                          '0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)'
+                        '0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)'
                         }
                         width="20px"
                         height="20px"
@@ -599,20 +601,33 @@ export default function EditGuardian({
         <Button size="mid" type="white" padding="0 20px" marginRight="16px" onClick={cancelEditGuardian}>
           Cancel
         </Button>
-        <Button
-          size="mid"
-          onClick={
+        {!!guardianList.length && (
+          <Button
+            size="mid"
+            onClick={
             keepPrivate
-              ? () => {
-                  openBackupGuardianModal(onBackupFinished);
-                }
-              : () => next()
-          }
-          isLoading={isCreating}
-          disabled={isCreating || !guardianList.length}
-        >
-          Continue
-        </Button>
+            ? () => {
+              openBackupGuardianModal(onBackupFinished);
+            }
+                  : () => next()
+            }
+            isLoading={isCreating}
+            disabled={isCreating || !guardianList.length}
+          >
+            Continue
+          </Button>
+        )}
+        {!guardianList.length && (
+          <Button
+            size="mid"
+            onClick={() => startAddGuardian()}
+          >
+            <Box marginRight="6px">
+              <PlusIcon color="white" />
+            </Box>
+            Add Guardian
+          </Button>
+        )}
       </Box>
     </Fragment>
   );
