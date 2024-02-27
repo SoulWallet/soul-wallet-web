@@ -33,6 +33,7 @@ import { useSignerStore } from '@/store/signer';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import useTools from '@/hooks/useTools';
 import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
+import useWagmi from '@/hooks/useWagmi'
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
   return (
@@ -66,9 +67,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { checkActivated, ethersProvider, showConnectWallet } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prechecked, setPrechecked] = useState(false);
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
-  const { address, isConnected } = useAccount();
   const { getSelectedKeyType, eoas } = useSignerStore();
   const [totalMsgValue, setTotalMsgValue] = useState('');
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
@@ -92,7 +90,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
   const selectedTokenPrice = selectedToken.tokenPrice;
   const [showMore, setShowMore] = useState(false);
-  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
+  const { connectEOA, isConnected, isConnectOpen, openConnect, closeConnect } = useWagmi()
 
   const checkSponser = async (userOp: UserOperation) => {
     try {
@@ -109,23 +107,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       setUseSponsor(false);
     }
   };
-
-  const connectEOA = useCallback(async (connector: any) => {
-    try {
-      await disconnectAsync()
-      const { accounts } = await connectAsync({ connector });
-      setIsConnectOpen(false)
-    } catch (error: any) {
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-    }
-  }, [])
-
-  const connectWallet = useCallback(async () => {
-    setIsConnectOpen(true)
-  }, [])
 
   const clearState = () => {
     setPromiseInfo({});
@@ -571,7 +552,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             py="4"
             fontWeight={'800'}
             mx="auto"
-            onClick={connectWallet}
+            onClick={openConnect}
           >
             Connect Wallet
           </Button>
@@ -592,7 +573,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           </Button>
         )}
       </Box>
-      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={closeConnect} />
     </Box>
   );
 }

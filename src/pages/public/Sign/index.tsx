@@ -34,6 +34,7 @@ import { L1KeyStore } from '@soulwallet/sdk';
 import { useEthersSigner } from '@/hooks/useEthersSigner';
 import { useChainStore } from '@/store/chain';
 import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
+import useWagmi from '@/hooks/useWagmi'
 
 const validateSigner = (recoveryRecord: any, address: any) => {
   if (!recoveryRecord) return;
@@ -70,32 +71,25 @@ export const SignHeader = ({ url }: { url?: string }) => {
 export default function Sign() {
   const { recoverId } = useParams();
   const [recoveryRecord, setRecoveryRecord] = useState<any>();
-  const { address, isConnected, isConnecting, chainId: connectedChainId } = useAccount();
   const [signing, setSigning] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [isSigned, setIsSigned] = useState<any>(false);
   const toast = useToast();
   const { switchChain } = useSwitchChain();
   const ethersSigner = useEthersSigner();
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
-  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
+  const {
+    connectEOA,
+    isConnected,
+    isConnectOpen,
+    openConnect,
+    closeConnect,
+    address,
+    isConnecting,
+    chainId: connectedChainId
+  } = useWagmi()
 
   const isValidSigner = validateSigner(recoveryRecord, address);
   console.log('recoverId', recoveryRecord, isSigned);
-
-  const connectEOA = useCallback(async (connector: any) => {
-    try {
-      await disconnectAsync()
-      const { accounts } = await connectAsync({ connector });
-      setIsConnectOpen(false)
-    } catch (error: any) {
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-    }
-  }, [])
 
   const loadRecord = async (recoverId: any) => {
     try {
@@ -119,12 +113,6 @@ export default function Sign() {
       return () => clearInterval(interval);
     }
   }, [recoverId]);
-
-  const connectWallet = useCallback(() => {
-    // await disconnectAsync()
-    // await connectAsync({ connector: metaMask() });
-    setIsConnectOpen(true)
-  }, []);
 
   const sign = useCallback(async () => {
     try {
@@ -385,7 +373,7 @@ export default function Sign() {
                   justifyContent="center"
                   marginTop="30px"
                 >
-                  <Button width="100%" type="black" color="white" marginBottom="18px" onClick={connectWallet} size="xl">
+                  <Button width="100%" type="black" color="white" marginBottom="18px" onClick={openConnect} size="xl">
                     Connect another wallet
                   </Button>
                 </Box>
@@ -393,7 +381,7 @@ export default function Sign() {
             </Box>
           </RoundContainer>
         </Box>
-        <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
+        <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={closeConnect} />
       </Flex>
     );
   }
@@ -498,7 +486,7 @@ export default function Sign() {
                     type="black"
                     color="white"
                     marginBottom="18px"
-                    onClick={connectWallet}
+                    onClick={openConnect}
                     disabled={isConnecting}
                     size="xl"
                   >
@@ -510,7 +498,7 @@ export default function Sign() {
           </Box>
         </RoundContainer>
       </Box>
-      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={closeConnect} />
     </Flex>
   );
 }

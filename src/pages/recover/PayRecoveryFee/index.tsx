@@ -19,6 +19,7 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { paymentContractConfig } from '@/contracts/contracts';
 import { metaMask } from 'wagmi/connectors'
 import useWalletContext from '@/context/hooks/useWalletContext';
+import useWagmi from '@/hooks/useWagmi'
 import StepProgress from '../StepProgress'
 import ConnectWalletModal from '../ConnectWalletModal'
 
@@ -26,7 +27,6 @@ export default function PayRecoveryFee({ next }: any) {
   const { showConnectWallet } = useWalletContext();
   const { recoverInfo } = useTempStore()
   const { recoveryRecordID, recoveryRecord  } = recoverInfo
-  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
   const { estimatedFee } = recoveryRecord
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
@@ -35,9 +35,15 @@ export default function PayRecoveryFee({ next }: any) {
   const { doCopy } = useTools();
   const toast = useToast();
   const { switchChain } = useSwitchChain();
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
-  const { isConnected, isConnecting, chainId : connectedChainId, } = useAccount()
+  const {
+    connectEOA,
+    isConnected,
+    isConnectOpen,
+    openConnect,
+    closeConnect,
+    isConnecting,
+    chainId : connectedChainId
+  } = useWagmi()
   const { writeContract: pay } = useWriteContract();
 
   const mainnetChainId = Number(import.meta.env.VITE_MAINNET_CHAIN_ID);
@@ -51,19 +57,6 @@ export default function PayRecoveryFee({ next }: any) {
       console.error(err);
     }
   };
-
-  const connectEOA = useCallback(async (connector: any) => {
-    try {
-      await disconnectAsync()
-      const { accounts } = await connectAsync({ connector });
-      setIsConnectOpen(false)
-    } catch (error: any) {
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-    }
-  }, [])
 
   const doPay = useCallback(async () => {
     try {
@@ -112,10 +105,6 @@ export default function PayRecoveryFee({ next }: any) {
       console.log('error', error.message)
     }
   }, [recoveryRecordID, estimatedFee])
-
-  const connectWallet = useCallback(async () => {
-    setIsConnectOpen(true)
-  }, [])
 
   useEffect(() => {
     generateQR(payUrl);
@@ -231,7 +220,7 @@ export default function PayRecoveryFee({ next }: any) {
                   type="black"
                   color="white"
                   marginBottom="18px"
-                  onClick={connectWallet}
+                  onClick={openConnect}
                   size="xl"
                   skipSignCheck
                   disabled={isConnecting}
@@ -255,7 +244,7 @@ export default function PayRecoveryFee({ next }: any) {
           </Box>
         </RoundContainer>
         <StepProgress activeIndex={3} />
-        <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
+        <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={closeConnect} />
       </Box>
     </Flex>
   )

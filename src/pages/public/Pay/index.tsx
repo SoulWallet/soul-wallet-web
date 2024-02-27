@@ -20,6 +20,7 @@ import { metaMask } from 'wagmi/connectors'
 import SuccessIcon from '@/components/Icons/Success'
 import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
 import BN from 'bignumber.js';
+import useWagmi from '@/hooks/useWagmi'
 
 export default function Pay() {
   const { recoverId } = useParams()
@@ -33,29 +34,22 @@ export default function Pay() {
   const toast = useToast();
   const { switchChain } = useSwitchChain();
   const recoveryRecordID = '';
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
-  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
-  const { address, isConnected, isConnecting, chainId : connectedChainId, } = useAccount()
+  const {
+    connectEOA,
+    isConnected,
+    isConnectOpen,
+    openConnect,
+    closeConnect,
+    address,
+    isConnecting,
+    chainId : connectedChainId
+  } = useWagmi()
   const { writeContract: pay, data: payHash } = useWriteContract();
   const result = useWaitForTransactionReceipt({
     hash: payHash,
   });
 
   const mainnetChainId = Number(import.meta.env.VITE_MAINNET_CHAIN_ID);
-
-  const connectEOA = useCallback(async (connector: any) => {
-    try {
-      await disconnectAsync()
-      const { accounts } = await connectAsync({ connector });
-      setIsConnectOpen(false)
-    } catch (error: any) {
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-    }
-  }, [])
 
   const doPay = useCallback(async () => {
     try {
@@ -142,10 +136,6 @@ export default function Pay() {
       return () => clearInterval(interval)
     }
   }, [recoverId])
-
-  const connectWallet = useCallback(async () => {
-    setIsConnectOpen(true)
-  }, [])
 
   if (!loaded) {
     return (
@@ -423,7 +413,7 @@ export default function Pay() {
                     type="black"
                     color="white"
                     marginBottom="18px"
-                    onClick={connectWallet}
+                    onClick={openConnect}
                     size="xl"
                     skipSignCheck
                     disabled={isConnecting}
@@ -436,7 +426,7 @@ export default function Pay() {
           </Box>
         </RoundContainer>
       </Box>
-      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={closeConnect} />
     </Flex>
   );
 }

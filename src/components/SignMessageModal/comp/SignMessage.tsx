@@ -13,6 +13,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useSignerStore } from '@/store/signer';
 import { SignkeyType } from '@soulwallet/sdk';
 import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
+import useWagmi from '@/hooks/useWagmi'
 
 const getHash = (message: string) => {
   return ethers.hashMessage(message);
@@ -28,34 +29,13 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
   const toast = useToast();
   const { signTypedDataAsync, signTypedData } = useSignTypedData();
   const { signRawHash, signWithPasskey } = useWallet();
-  const { isConnected } = useAccount();
   const { getSelectedKeyType } = useSignerStore();
   const { showConnectWallet } = useWalletContext();
   const { checkValidSigner } = useTools();
   const [isActivated, setIsActivated] = useState(false);
   const [targetChainId, setTargetChainId] = useState<undefined | number>();
-  const { chainId } = useAccount();
   const { switchChain } = useSwitchChain();
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect();
-  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
-
-  const connectEOA = useCallback(async (connector: any) => {
-    try {
-      await disconnectAsync()
-      const { accounts } = await connectAsync({ connector });
-      setIsConnectOpen(false)
-    } catch (error: any) {
-      toast({
-        title: error.message,
-        status: 'error',
-      });
-    }
-  }, [])
-
-  const connectWallet = useCallback(async () => {
-    setIsConnectOpen(true)
-  }, [])
+  const { connectEOA, isConnected, isConnectOpen, openConnect, closeConnect, chainId } = useWagmi()
 
   const onConfirm = async () => {
     if (!checkValidSigner()) {
@@ -167,7 +147,7 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
           mt="6"
           mx="auto"
           display={'block'}
-          onClick={connectWallet}
+          onClick={openConnect}
         >
           Connect Wallet
         </Button>
@@ -199,7 +179,7 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
           Confirm
         </Button>
       )}
-      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={closeConnect} />
     </Box>
   );
 }
