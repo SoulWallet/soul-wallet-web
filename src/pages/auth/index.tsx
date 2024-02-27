@@ -45,7 +45,6 @@ export default function Auth() {
   const [isSelectAccountOpen, setIsSelectAccountOpen] = useState(false);
   const [isImportAccountOpen, setIsImportAccountOpen] = useState(false);
   const { connect, connectAsync } = useConnect();
-  const { listOwner } = useWalletContract();
   const { disconnectAsync } = useDisconnect();
   const { createInfo, updateCreateInfo, loginInfo, updateLoginInfo, getLoginInfo } = useTempStore();
   const account = useAccount();
