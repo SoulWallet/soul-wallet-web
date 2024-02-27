@@ -12,8 +12,9 @@ import { ICredentialItem, useSignerStore } from '@/store/signer';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import useWalletContract from '@/hooks/useWalletContract';
 import { isAddress, isAddressable } from 'ethers';
+import useTools from '@/hooks/useTools';
 export default function Pooling() {
-  const { ethersProvider } = useWalletContext();
+  const { ethersProvider, checkActivated } = useWalletContext();
   const { selectedAddress } = useAddressStore();
   const { eoas, credentials, signerId, addCredential, addEoa } = useSignerStore();
   const { fetchHistory } = useHistoryStore();
@@ -46,6 +47,9 @@ export default function Pooling() {
    * Compare signers locally and on the contract
    */
   const compareSigner = async () => {
+    if (!(await checkActivated())) {
+      return;
+    }
     const owners = await listOwner();
     const ownersList = Object.values(owners);
 
