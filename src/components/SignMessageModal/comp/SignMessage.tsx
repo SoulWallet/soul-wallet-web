@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Flex, Box, Text, Image } from '@chakra-ui/react';
+import { useEffect, useState, useCallback } from 'react';
+import { Flex, Box, Text, Image, useToast } from '@chakra-ui/react';
 import Button from '../../Button';
-import { useAccount, useSignTypedData, useSwitchChain } from 'wagmi';
+import { useAccount, useSignTypedData, useSwitchChain, useConnect, useDisconnect } from 'wagmi';
 import useWallet from '@/hooks/useWallet';
 import IconZoom from '@/assets/icons/zoom.svg';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
@@ -12,6 +12,7 @@ import useTools from '@/hooks/useTools';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { useSignerStore } from '@/store/signer';
 import { SignkeyType } from '@soulwallet/sdk';
+import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
 
 const getHash = (message: string) => {
   return ethers.hashMessage(message);
@@ -24,6 +25,7 @@ const getTypedHash = (typedData: any) => {
 };
 
 export default function SignMessage({ messageToSign, onSign, signType, signTitle }: any) {
+  const toast = useToast();
   const { signTypedDataAsync, signTypedData } = useSignTypedData();
   const { signRawHash, signWithPasskey } = useWallet();
   const { isConnected } = useAccount();
@@ -34,6 +36,26 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
   const [targetChainId, setTargetChainId] = useState<undefined | number>();
   const { chainId } = useAccount();
   const { switchChain } = useSwitchChain();
+  const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
+
+  const connectEOA = useCallback(async (connector: any) => {
+    try {
+      await disconnectAsync()
+      const { accounts } = await connectAsync({ connector });
+      setIsConnectOpen(false)
+    } catch (error: any) {
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }, [])
+
+  const connectWallet = useCallback(async () => {
+    setIsConnectOpen(true)
+  }, [])
 
   const onConfirm = async () => {
     if (!checkValidSigner()) {
@@ -91,10 +113,10 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
         </Text>
       )}
       {/* {origin && (
-        <Text fontWeight={'600'} mt="1">
+          <Text fontWeight={'600'} mt="1">
           {origin}
-        </Text>
-      )} */}
+          </Text>
+          )} */}
       <Flex flexDir={'column'} gap="6" mt={{ base: 4, lg: 9 }}>
         <Box bg="#f9f9f9" color="#818181" fontSize={'14px'} p="4" rounded="20px" overflowY={'auto'}>
           <Flex align={'center'} gap="1" mb="4">
@@ -107,8 +129,8 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
             <pre>
               <code>
                 {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
-                  ? JSON.stringify(messageToSign, null, 2)
-                  : messageToSign}
+                ? JSON.stringify(messageToSign, null, 2)
+                : messageToSign}
               </code>
             </pre>
           </Box>
@@ -124,11 +146,11 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
             </Flex>
           </InfoItem>
           {/* <InfoItem>
-            <Text>From</Text>
-            <Text>
+              <Text>From</Text>
+              <Text>
               {getAddressName(selectedAddressItem.address)}({toShortAddress(selectedAddressItem.address)})
-            </Text>
-          </InfoItem> */}
+              </Text>
+              </InfoItem> */}
         </InfoWrap>
       </Flex>
       {shouldDisable && (
@@ -145,7 +167,7 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
           mt="6"
           mx="auto"
           display={'block'}
-          onClick={() => showConnectWallet()}
+          onClick={connectWallet}
         >
           Connect Wallet
         </Button>
@@ -177,6 +199,7 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
           Confirm
         </Button>
       )}
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
     </Box>
   );
 }

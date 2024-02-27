@@ -6,7 +6,7 @@ import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import BN from 'bignumber.js';
 import { toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import IconArrowDown from '@/assets/icons/arrow-down.svg';
 import SignerSelect from '@/components/SignerSelect';
 import IconQuestion from '@/assets/icons/question.svg';
@@ -30,8 +30,9 @@ import { bundlerErrMapping } from '@/config';
 import DropdownSelect from '@/components/DropdownSelect';
 import AddressIcon from '@/components/AddressIcon';
 import { useSignerStore } from '@/store/signer';
-import { useAccount } from 'wagmi';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import useTools from '@/hooks/useTools';
+import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
   return (
@@ -65,6 +66,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { checkActivated, ethersProvider, showConnectWallet } = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prechecked, setPrechecked] = useState(false);
+  const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
   const { address, isConnected } = useAccount();
   const { getSelectedKeyType, eoas } = useSignerStore();
   const [totalMsgValue, setTotalMsgValue] = useState('');
@@ -89,6 +92,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
   const selectedTokenPrice = selectedToken.tokenPrice;
   const [showMore, setShowMore] = useState(false);
+  const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
 
   const checkSponser = async (userOp: UserOperation) => {
     try {
@@ -105,6 +109,23 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       setUseSponsor(false);
     }
   };
+
+  const connectEOA = useCallback(async (connector: any) => {
+    try {
+      await disconnectAsync()
+      const { accounts } = await connectAsync({ connector });
+      setIsConnectOpen(false)
+    } catch (error: any) {
+      toast({
+        title: error.message,
+        status: 'error',
+      });
+    }
+  }, [])
+
+  const connectWallet = useCallback(async () => {
+    setIsConnectOpen(true)
+  }, [])
 
   const clearState = () => {
     setPromiseInfo({});
@@ -309,15 +330,15 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           {decodedData && (
             <Flex flexDir={'column'} align={'center'} fontSize={'20px'} fontWeight={'800'}>
               {decodedData.length > 0
-                ? decodedData.map((item: any, index: number) => (
-                    <Tooltip key={index} label={item.to ? `To: ${item.to}` : null}>
-                      <Text my="1" textTransform="capitalize" key={index}>
-                        {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
-                        {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
-                      </Text>
-                    </Tooltip>
-                  ))
-                : 'Send transaction'}
+                                  ? decodedData.map((item: any, index: number) => (
+                                    <Tooltip key={index} label={item.to ? `To: ${item.to}` : null}>
+                                      <Text my="1" textTransform="capitalize" key={index}>
+                                        {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
+                                        {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
+                                      </Text>
+                                    </Tooltip>
+                                  ))
+                                  : 'Send transaction'}
             </Flex>
           )}
           {totalMsgValue && Number(totalMsgValue) > 0 && (
@@ -359,35 +380,35 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         {/** Only show when interact with dapp */}
 
         {/* <Box textAlign={'center'} mb="9">
-          <Tooltip
+            <Tooltip
             color="brand.green"
             bg="#EFFFEE"
             label={
-              <Flex gap="2" align={'center'}>
-                <Image src={IconChecked} w="8" />
-                <Text color="brand.green" fontSize={'14px'} fontWeight={'600'}>
-                  Low risk: This dapp is listed by 3 and more communities.
-                </Text>
-              </Flex>
-            }
-          >
-            <Flex
-              cursor={'default'}
-              gap="6px"
-              align={'center'}
-              bg="#EFFFEE"
-              py="1"
-              px="2"
-              rounded="full"
-              display={'inline-flex'}
-            >
-              <Image src={IconChecked} w="4" />
-              <Text color="brand.green" fontSize={'14px'} fontWeight={'600'}>
-                Low risk
-              </Text>
+            <Flex gap="2" align={'center'}>
+            <Image src={IconChecked} w="8" />
+            <Text color="brand.green" fontSize={'14px'} fontWeight={'600'}>
+            Low risk: This dapp is listed by 3 and more communities.
+            </Text>
             </Flex>
-          </Tooltip>
-        </Box> */}
+            }
+            >
+            <Flex
+            cursor={'default'}
+            gap="6px"
+            align={'center'}
+            bg="#EFFFEE"
+            py="1"
+            px="2"
+            rounded="full"
+            display={'inline-flex'}
+            >
+            <Image src={IconChecked} w="4" />
+            <Text color="brand.green" fontSize={'14px'} fontWeight={'600'}>
+            Low risk
+            </Text>
+            </Flex>
+            </Tooltip>
+            </Box> */}
 
         {/* <Box mt="4" mb="4" h="1px" bg="rgba(0, 0, 0, 0.10)" /> */}
 
@@ -482,24 +503,24 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
               </InfoItem>
             )}
             {/* <InfoItem color="#000" fontWeight="600">
-              <Text>Total</Text>
-              {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
-              {totalMsgValue && Number(totalMsgValue) && !useSponsor && requiredAmount ? ' + ' : ''}
-              {!useSponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
-              {!useSponsor &&
-              requiredAmount &&
-              decodedData &&
-              decodedData.length > 0 &&
-              decodedData.filter((item: any) => item.sendErc20Amount).length > 0
+                <Text>Total</Text>
+                {totalMsgValue && Number(totalMsgValue) ? `${totalMsgValue} ETH` : ''}
+                {totalMsgValue && Number(totalMsgValue) && !useSponsor && requiredAmount ? ' + ' : ''}
+                {!useSponsor && requiredAmount ? `${BN(requiredAmount).toFixed(6) || '0'} ${payTokenSymbol}` : ''}
+                {!useSponsor &&
+                requiredAmount &&
+                decodedData &&
+                decodedData.length > 0 &&
+                decodedData.filter((item: any) => item.sendErc20Amount).length > 0
                 ? ' + '
                 : ''}
-              {decodedData &&
+                {decodedData &&
                 decodedData.length > 0 &&
                 decodedData
-                  .filter((item: any) => item.sendErc20Amount)
-                  .map((item: any) => item.sendErc20Amount)
-                  .join(' + ')}
-            </InfoItem> */}
+                .filter((item: any) => item.sendErc20Amount)
+                .map((item: any) => item.sendErc20Amount)
+                .join(' + ')}
+                </InfoItem> */}
             {hintText && (
               <InfoItem>
                 <Text color="#f00">{hintText}</Text>
@@ -514,34 +535,34 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         </Flex>
 
         {/* {decodedData && decodedData.length > 1 && (
-          <>
+            <>
             <InfoWrap color="#646464" fontSize="12px" gap="3">
-              {decodedData.map((item: any, idx: number) => (
-                <InfoItem key={idx}>
-                  <Text>
-                    {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}{' '}
-                    {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
-                  </Text>
-                  {item.to && (
-                    <Flex align={'center'} gap="1">
-                      <Text>{toShortAddress(item.to)}</Text>
-                      <Image src={IconCopy} onClick={() => doCopy(item.to)} cursor={'pointer'} opacity={0.5} />
-                    </Flex>
-                  )}
-                </InfoItem>
-              ))}
+            {decodedData.map((item: any, idx: number) => (
+            <InfoItem key={idx}>
+            <Text>
+            {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}{' '}
+            {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
+            </Text>
+            {item.to && (
+            <Flex align={'center'} gap="1">
+            <Text>{toShortAddress(item.to)}</Text>
+            <Image src={IconCopy} onClick={() => doCopy(item.to)} cursor={'pointer'} opacity={0.5} />
+            </Flex>
+            )}
+            </InfoItem>
+            ))}
             </InfoWrap>
             <Divider borderColor={'#d7d7d7'} mb="3" />
-          </>
-        )} */}
+            </>
+            )} */}
       </Flex>
       <Box mt="10">
         {/* {!balanceEnough && (!sponsor || !useSponsor) && (
-          <Text mb="2" color="danger" textAlign={'center'}>
+            <Text mb="2" color="danger" textAlign={'center'}>
             Balance not enough
-          </Text>
-        )} */}
-        {getSelectedKeyType() === SignkeyType.EOA && !isConnected ? (
+            </Text>
+            )} */}
+        {(getSelectedKeyType() === SignkeyType.EOA && !isConnected) ? (
           <Button
             w="320px"
             display={'flex'}
@@ -550,7 +571,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             py="4"
             fontWeight={'800'}
             mx="auto"
-            onClick={() => showConnectWallet()}
+            onClick={connectWallet}
           >
             Connect Wallet
           </Button>
@@ -571,6 +592,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           </Button>
         )}
       </Box>
+      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={() => setIsConnectOpen(false)} />
     </Box>
   );
 }
