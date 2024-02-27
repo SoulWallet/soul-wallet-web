@@ -110,7 +110,7 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
             </Text>
           </Flex>
         )}
-        <InfoWrap w="100%" mx="auto" fontSize="14px" borderTop="1px solid rgba(0, 0, 0, 0.1)" paddingTop="20px">
+        <InfoWrap w="100%" mx="auto" fontSize="14px" borderTop="1px solid rgba(0, 0, 0, 0.1)" paddingTop="30px" marginTop="10px">
           <InfoItem>
             <LabelItem label="Network" tooltip={`Select any network with enough funds to cover the guardian editing fee.`} />
             <Flex gap="2" fontWeight={'500'}>
@@ -123,8 +123,8 @@ export default function ConfirmPayment({ onSuccess, fee }: any) {
         fontSize={'20px'}
         py="4"
         fontWeight={'800'}
-        mt="6"
-        w="100%"
+        mt="8"
+        w="320px"
         mx="auto"
         display={'block'}
         onClick={onConfirm}

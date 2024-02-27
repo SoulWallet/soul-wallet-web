@@ -274,7 +274,7 @@ const GuardianInput = ({
           fontFamily: 'Nunito'
         }}
         _rightContainerStyles={{
-          width: { base: 'calc(100%)', 'md': 'calc(100% - 240px)' },
+          width: { base: 'calc(100%)', 'md': 'calc(100%)' },
           zIndex: 0
         }}
         rightAutoFocus={true}
@@ -291,6 +291,7 @@ const GuardianInput = ({
         _leftContainerStyles={{
           width: { base: '100%', 'md': '240px' },
           marginBottom: { base: '20px', 'md': '0' },
+          display: 'none'
         }}
         _leftInputStyles={{
           fontWeight: 600,
@@ -465,8 +466,8 @@ export default function Edit({
       </Box>
       <Box marginTop="30px" display="flex" justifyContent="flex-end">
         <Box>
-          {canGoBack && <Button type="white" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>}
-          <Button onClick={handleConfirm} disabled={disabled} loading={loading} size="xl">Confirm</Button>
+          <Button type="white" size="xl" padding="0 14px" marginRight="16px" onClick={handleBack}>Back</Button>
+          <Button onClick={handleConfirm} disabled={disabled} loading={loading} size="xl">Next</Button>
         </Box>
       </Box>
     </Fragment>

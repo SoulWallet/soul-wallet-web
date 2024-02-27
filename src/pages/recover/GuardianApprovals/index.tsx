@@ -27,7 +27,7 @@ import { useSettingStore } from '@/store/setting';
 import { SignHeader } from '@/pages/public/Sign';
 
 export default function AddSigner({ next, back }: any) {
-  const { recoverInfo, updateRecoverInfo } = useTempStore()
+  const { recoverInfo, updateRecoverInfo, getRecoverInfo } = useTempStore()
   const { recoveryRecordID, guardianDetails, recoveryRecord, signers } = recoverInfo
   const hasGuardians = !!guardianDetails
   const hasRecord = recoveryRecord && recoveryRecordID
@@ -61,6 +61,7 @@ export default function AddSigner({ next, back }: any) {
     });
 
     setIsAddGuardianOpen(false)
+    handleNext()
   }, [])
 
   const openScan = (address: string) => {
@@ -107,6 +108,7 @@ export default function AddSigner({ next, back }: any) {
       const keystore = chainConfig.contracts.l1Keystore;
       const initialKeys = signers.map((signer: any) => signer.signerId)
       const newOwners = L1KeyStore.initialKeysToAddress(initialKeys);
+      const recoverInfo = getRecoverInfo()
       const slot = recoverInfo.slot
       const slotInitInfo = recoverInfo.slotInitInfo
       const guardianDetails = recoverInfo.guardianDetails
@@ -140,7 +142,7 @@ export default function AddSigner({ next, back }: any) {
         status: 'error',
       });
     }
-  }, [recoverInfo])
+  }, [])
 
   const signatures = hasRecord ? (guardianDetails.guardians || []).map((item: any) => {
     const isValid = (guardianSignatures || []).filter((sig: any) => sig.guardian === item && sig.valid).length === 1;
@@ -274,6 +276,9 @@ export default function AddSigner({ next, back }: any) {
           isOpen={isAddGuardianOpen}
           onClose={() => setIsAddGuardianOpen(false)}
           onConfirm={onAddGuardianConfirm}
+          setIsEditGuardianOpen={setIsAddGuardianOpen}
+        // onBack={() => setIsAddGuardianOpen(false)}
+          canGoBack={true}
         />
       </Box>
     )

@@ -279,7 +279,11 @@ export default function Guardian() {
     let activeGuardianHash
 
     if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
-      activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+      if (!!Number(activeGuardianInfo.pendingGuardianHash)) {
+        activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+      } else {
+        activeGuardianHash = activeGuardianInfo.activeGuardianHash
+      }
     } else {
       activeGuardianHash = activeGuardianInfo.activeGuardianHash
     }
@@ -291,11 +295,11 @@ export default function Guardian() {
     if (!data) {
       console.log('No guardians found!')
       guardianStore.updateGuardiansInfo({
-        /* guardianDetails: {
-         *   guardians: [],
-         *   threshold: 0,
-         * },
-         * guardianNames: [], */
+        guardianDetails: {
+          guardians: [],
+          threshold: 0,
+        },
+        guardianNames: [],
         keepPrivate: true
       })
     } else {
