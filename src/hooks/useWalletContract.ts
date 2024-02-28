@@ -10,7 +10,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 
 export default function useWalletContract() {
   const { selectedChainItem, selectedAddressItem } = useConfig();
-  const { ethersProvider } = useWalletContext();
+  const { ethersProvider, checkActivated } = useWalletContext();
 
   const publicClient = useMemo(() => {
     if (!selectedChainItem || !selectedAddressItem) return null;
@@ -18,7 +18,7 @@ export default function useWalletContract() {
   }, [selectedChainItem?.chainId, selectedAddressItem?.address]);
 
   const listOwner = async () => {
-    if (!publicClient) return;
+    if (!publicClient || !checkActivated()) return;
     return await publicClient.listOwner();
   };
 

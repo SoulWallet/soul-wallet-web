@@ -243,23 +243,33 @@ export const toShortAddress = (address: string, firstSlice: number = 5, lastSlic
 
 export const trimPrefix = (address: any) => {
   if (address && address.indexOf(':') !== -1) {
-    return address.split(':')[1]
+    return address.split(':')[1];
   }
 
-  return address
+  return address;
+};
+
+// format currency especially for big number
+export function formatCurrency(num: number) {
+  if (num >= 1000 && num < 1000000) {
+    return (num / 1000).toFixed(2).replace(/\.00$/, '') + 'K';
+  } else if (num >= 1000000 && num < 1000000000) {
+    return (num / 1000000).toFixed(2).replace(/\.00$/, '') + 'M';
+  } else if (num >= 1000000000) {
+    return (num / 1000000000).toFixed(2).replace(/\.00$/, '') + 'B';
+  } else {
+    return num.toString();
+  }
 }
 
-export const numToFixed = (num: any, precision: number) => {
-  const bn = BN(num);
-  let str = bn.toFixed(precision);
-  if (str.indexOf('.') > 0) {
-    str = str.replace(/0+$/, '');
-    if (str[str.length - 1] === '.') {
-      str = str.substring(0, str.length - 1);
-    }
+export function toFixed(num: number | string | undefined, maxDecimalPlaces: number) {
+  if (!num) {
+    return 0;
   }
-  return str;
-};
+  let fixedStr = Number(num).toFixed(maxDecimalPlaces);
+  let trimmedStr = fixedStr.replace(/(\.\d*?[1-9])0+$/, '$1').replace(/\.$/, '');
+  return new BN(trimmedStr).toFormat();
+}
 
 export const getNetwork = (chainId: number) => {
   const name = chainIdMapping[chainId as keyof typeof chainIdMapping] || '';

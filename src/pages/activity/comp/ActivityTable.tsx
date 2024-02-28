@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Divider, Image, Link } from '@chakra-ui/react';
 import BN from 'bignumber.js';
-import { numToFixed } from '@/lib/tools';
+import { toFixed } from '@/lib/tools';
 import { toShortAddress, getIconMapping } from '@/lib/tools';
 import { IActivityItem } from '@/pages/dashboard/comp/Activity/comp/ActivityItem';
 import { fetchHistoryApi } from '@/store/history';
@@ -15,10 +15,16 @@ import IconEth from '@/assets/tokens/eth.svg';
 import EmptyHint from '@/components/EmptyHint';
 import ActivityEmpty from '@/assets/icons/activity-empty.svg';
 import { useChainStore } from '@/store/chain';
+import { useBalanceStore } from '@/store/balance';
 
 const ActivityItem = ({ item }: any) => {
   const { chainConfig } = useConfig();
   const { scanUrl } = chainConfig;
+
+  const { tokenBalance } = useBalanceStore();
+
+  const ethPrice = tokenBalance.filter((item: any) => item.symbol === 'ETH')[0]?.tokenPrice || 0;
+
   return (
     <Flex
       // flexDir={{ base: 'column', md: 'row' }}
@@ -57,9 +63,9 @@ const ActivityItem = ({ item }: any) => {
           <Image src={IconEth} w={{ base: 4, lg: 8 }} />
           <Box>
             <Text color="brand.black" fontSize={{ base: '14px', lg: '18px' }} fontWeight={'800'}>
-              -{numToFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH
+              -{toFixed(BN(item.actualGasCost).shiftedBy(-18).toString(), 6)} ETH
             </Text>
-            <Text color="#898989">$141.00</Text>
+            <Text color="#898989">${toFixed(BN(item.actualGasCost).shiftedBy(-18).times(ethPrice).toString(), 2)}</Text>
           </Box>
         </Flex>
       ) : (

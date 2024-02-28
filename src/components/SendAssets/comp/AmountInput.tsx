@@ -7,6 +7,7 @@ import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
 import IconChevronRight from '@/assets/icons/chevron-right.svg';
 import { useAddressStore } from '@/store/address';
 import useConfig from '@/hooks/useConfig';
+import { toFixed } from '@/lib/tools';
 
 export default function AmountInput({ sendToken, label, onTokenChange, amount, onBlur, onChange }: any) {
   const { tokenBalance, fetchTokenBalance } = useBalanceStore();
@@ -56,7 +57,7 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
                 <TokenLine
                   icon={selectedToken.logoURI}
                   symbol={selectedToken.symbol}
-                  memo={`Available: ${selectedToken.tokenBalanceFormatted || '0'}`}
+                  memo={`Available: ${toFixed(selectedToken.tokenBalanceFormatted, 6)}`}
                   rightElement={<Image src={IconChevronRight} w="5" transform={isOpen ? 'rotate(90deg)' : ''} />}
                 />
               </MenuButton>
@@ -66,7 +67,7 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
                     <TokenLine
                       icon={item.logoURI}
                       symbol={item.symbol}
-                      memo={item.tokenBalanceFormatted}
+                      memo={toFixed(item.tokenBalanceFormatted, 6)}
                       onClick={() => onTokenChange(item.contractAddress)}
                     />
                   </MenuItem>

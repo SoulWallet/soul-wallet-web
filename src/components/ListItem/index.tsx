@@ -1,3 +1,4 @@
+import { toFixed } from '@/lib/tools';
 import { Flex, Text, Tooltip, Box } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import BN from 'bignumber.js';
@@ -81,7 +82,7 @@ export default function ListItem({
             animate={{ width: `${percent}%` }}
           />
         </Box>
-        <Text fontSize={'12px'}>{percent}%</Text>
+        <Text fontSize={'12px'}>{toFixed(percent, 2)}%</Text>
       </Flex>
     </Flex>
   );

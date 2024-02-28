@@ -15,6 +15,7 @@ import { useAddressStore } from '@/store/address';
 import AvatarWithName from '@/components/AvatarWithName';
 import useTools from '@/hooks/useTools';
 import { useBalanceStore } from '@/store/balance';
+import { toFixed } from '@/lib/tools';
 
 export default function WalletCard() {
   const { showSend, showReceive } = useWalletContext();
@@ -81,7 +82,7 @@ export default function WalletCard() {
           $
         </Text>
         <Text fontWeight={'800'} fontSize={{ base: '52px', lg: '72px' }} lineHeight={'1'}>
-          {totalUsdValue}
+          {toFixed(totalUsdValue, 2)}
         </Text>
       </Flex>
       <Flex gap="6" align={'center'}>

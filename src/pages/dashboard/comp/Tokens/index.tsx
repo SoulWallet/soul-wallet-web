@@ -12,6 +12,7 @@ import SkipModal from '@/components/SkipModal';
 import ReceiveCode from '@/components/ReceiveCode';
 import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
+import { toFixed } from '@/lib/tools';
 
 const SetGuardianHint = ({ onShowSkip }: { onShowSkip: () => void }) => {
   return (
@@ -20,7 +21,7 @@ const SetGuardianHint = ({ onShowSkip }: { onShowSkip: () => void }) => {
       justify={'center'}
       backdropFilter={'blur(12px)'}
       pos="absolute"
-      pt={{base: "40px", xl: "80px", "2xl" :"100px"}}
+      pt={{ base: '40px', xl: '80px', '2xl': '100px' }}
       pb="100px"
       top="0"
       right={'0'}
@@ -67,7 +68,8 @@ const DepositHint = () => {
   return (
     <Box>
       <Text fontWeight={'600'} lineHeight={1.5} textAlign={'center'} mb="4">
-        You don't have any tokens in your wallet yet,<br/> deposit tokens into the following address to experience Soul wallet.
+        You don't have any tokens in your wallet yet,
+        <br /> deposit tokens into the following address to experience Soul wallet.
       </Text>
       <ReceiveCode address={selectedAddress} imgWidth="100px" showFullAddress={true} mb="6" />
     </Box>
@@ -97,12 +99,12 @@ const TokenBalanceTable = ({ tokenBalance, showSendAssets }: any) => {
             key={idx}
             idx={idx}
             icon={item.logoURI}
-            tokenPrice={item.tokenPrice}
-            usdValue={item.usdValue}
+            tokenPrice={toFixed(item.tokenPrice, 2)}
+            usdValue={toFixed(item.usdValue || 0, 2)}
             totalUsdValue={totalUsdValue}
             title={item.name || 'Unknown'}
             lineColor={lineColors[idx] || 'brand.gray'}
-            amount={item.tokenBalanceFormatted}
+            amount={toFixed(item.tokenBalanceFormatted, 6) }
             onClick={() => showSendAssets(item.contractAddress)}
           />
         </React.Fragment>
@@ -125,7 +127,12 @@ export default function Tokens() {
   const isTokenBalanceEmpty = tokenBalance.every((item) => !Number(item.tokenBalance));
 
   return (
-    <HomeCard title={'Assets'} pos="relative" external={checkInitialized() ? <ExternalLink title="View more" to="/asset" /> : null} h="100%">
+    <HomeCard
+      title={'Assets'}
+      pos="relative"
+      external={checkInitialized() ? <ExternalLink title="View more" to="/asset" /> : null}
+      h="100%"
+    >
       {(!slotInfo.initialGuardianHash || isSkipOpen) && <SetGuardianHint onShowSkip={() => setIsSkipOpen(true)} />}
       {isTokenBalanceEmpty ? (
         <DepositHint />

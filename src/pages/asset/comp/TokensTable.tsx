@@ -24,6 +24,7 @@ import { ITokenBalanceItem, useBalanceStore } from '@/store/balance';
 import useConfig from '@/hooks/useConfig';
 import EmptyHint from '@/components/EmptyHint';
 import AssetEmpty from '@/assets/icons/asset-empty.svg';
+import { toFixed } from '@/lib/tools';
 export default function TokensTable() {
   const { showSend } = useWalletContext();
   const { fetchTokenBalance, tokenBalance } = useBalanceStore();
@@ -94,9 +95,9 @@ export default function TokensTable() {
                   </Td> */}
                     <Td w={'25%'} textAlign={'left'}>
                       <Text mb="1" fontWeight={'800'}>
-                        {item.tokenBalanceFormatted}
+                        {toFixed(item.tokenBalanceFormatted, 6)}
                       </Text>
-                      <Text fontWeight={'400'}>${item.usdValue}</Text>
+                      <Text fontWeight={'400'}>${toFixed(item.usdValue, 2)}</Text>
                     </Td>
                     <Td w={'25%'} textAlign={'center'}>
                       <Box
@@ -127,7 +128,7 @@ export default function TokensTable() {
                     </Button> */}
                     </Td>
                     <Td w={'25%'} textAlign={'right'} fontWeight={'800'}>
-                      0.0000
+                      {toFixed(item.tokenPrice, 2)}
                     </Td>
                   </Tr>
                 );

@@ -4,7 +4,7 @@ import IconCopy from '@/assets/copy.svg';
 import Button from '../../Button';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import BN from 'bignumber.js';
-import { toShortAddress } from '@/lib/tools';
+import { toFixed, toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
 import { useState, useEffect, useCallback } from 'react';
 import IconArrowDown from '@/assets/icons/arrow-down.svg';
@@ -32,8 +32,8 @@ import AddressIcon from '@/components/AddressIcon';
 import { useSignerStore } from '@/store/signer';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import useTools from '@/hooks/useTools';
-import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
-import useWagmi from '@/hooks/useWagmi'
+import ConnectWalletModal from '@/pages/recover/ConnectWalletModal';
+import useWagmi from '@/hooks/useWagmi';
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
   return (
@@ -90,7 +90,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
   const selectedTokenPrice = selectedToken.tokenPrice;
   const [showMore, setShowMore] = useState(false);
-  const { connectEOA, isConnected, isConnectOpen, openConnect, closeConnect } = useWagmi()
+  const { connectEOA, isConnected, isConnectOpen, openConnect, closeConnect } = useWagmi();
 
   const checkSponser = async (userOp: UserOperation) => {
     try {
@@ -311,25 +311,25 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           {decodedData && (
             <Flex flexDir={'column'} align={'center'} fontSize={'20px'} fontWeight={'800'}>
               {decodedData.length > 0
-                                  ? decodedData.map((item: any, index: number) => (
-                                    <Tooltip key={index} label={item.to ? `To: ${item.to}` : null}>
-                                      <Text my="1" textTransform="capitalize" key={index}>
-                                        {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
-                                        {item.sendErc20Amount && ` ${item.sendErc20Amount}`}
-                                      </Text>
-                                    </Tooltip>
-                                  ))
-                                  : 'Send transaction'}
+                ? decodedData.map((item: any, index: number) => (
+                    <Tooltip key={index} label={item.to ? `To: ${item.to}` : null}>
+                      <Text my="1" textTransform="capitalize" key={index}>
+                        {item.functionName ? item.functionName : item.method ? item.method.name : 'Unknown'}
+                        {item.sendErc20Amount && ` ${toFixed(item.sendErc20Amount, 6)}`}
+                      </Text>
+                    </Tooltip>
+                  ))
+                : 'Send transaction'}
             </Flex>
           )}
           {totalMsgValue && Number(totalMsgValue) > 0 && (
             <>
               <Text mt="7" fontSize={{ base: '20px', md: '24px', lg: '30px' }} mb="3" fontWeight={'700'}>
-                {totalMsgValue} ETH
+                {toFixed(totalMsgValue, 6)} ETH
               </Text>
               {totalMsgValue && selectedTokenPrice && (
                 <Text fontWeight={'600'} mb="4">
-                  ≈${BN(totalMsgValue).times(selectedTokenPrice).toFormat()}
+                  ≈${toFixed(BN(totalMsgValue).times(selectedTokenPrice).toString(), 2)}
                 </Text>
               )}
             </>
@@ -453,7 +453,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
                 {requiredAmount ? (
                   <>
                     <Text fontSize={'14px'} fontWeight={'600'}>
-                      {BN(requiredAmount).isEqualTo(0) ? '0' : BN(requiredAmount).toFormat(6)}
+                      {toFixed(requiredAmount, 6)}
                     </Text>
                     <GasSelect
                       gasToken={payToken}
@@ -543,7 +543,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
             Balance not enough
             </Text>
             )} */}
-        {(getSelectedKeyType() === SignkeyType.EOA && !isConnected) ? (
+        {getSelectedKeyType() === SignkeyType.EOA && !isConnected ? (
           <Button
             w="320px"
             display={'flex'}
