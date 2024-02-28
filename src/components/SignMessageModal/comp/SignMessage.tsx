@@ -3,17 +3,18 @@ import { Flex, Box, Text, Image, useToast } from '@chakra-ui/react';
 import Button from '../../Button';
 import { useAccount, useSignTypedData, useSwitchChain, useConnect, useDisconnect } from 'wagmi';
 import useWallet from '@/hooks/useWallet';
+import { motion } from 'framer-motion';
 import IconZoom from '@/assets/icons/zoom.svg';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { TypedDataEncoder, ethers } from 'ethers';
 import SignerSelect from '@/components/SignerSelect';
 import { LabelItem } from '@/components/SignTransactionModal/comp/SignTransaction';
 import useTools from '@/hooks/useTools';
-import useWalletContext from '@/context/hooks/useWalletContext';
+import IconChevron from '@/assets/icons/chevron-down-gray.svg';
 import { useSignerStore } from '@/store/signer';
 import { SignkeyType } from '@soulwallet/sdk';
-import ConnectWalletModal from '@/pages/recover/ConnectWalletModal'
-import useWagmi from '@/hooks/useWagmi'
+import ConnectWalletModal from '@/pages/recover/ConnectWalletModal';
+import useWagmi from '@/hooks/useWagmi';
 
 const getHash = (message: string) => {
   return ethers.hashMessage(message);
@@ -25,17 +26,65 @@ const getTypedHash = (typedData: any) => {
   return TypedDataEncoder.hash(typedData.domain, typedData.types, typedData.value || typedData.message);
 };
 
-export default function SignMessage({ messageToSign, onSign, signType, signTitle }: any) {
-  const toast = useToast();
+const GuardianInfo = ({ guardiansInfo }: any) => {
+  if (!guardiansInfo) {
+    return null;
+  }
+  const guardianList = guardiansInfo.guardianDetails.guardians;
+  return (
+    <Box>
+      <Text mb="2" fontSize="20px" fontWeight="800" textAlign={'center'}>
+        Confirm Guardian Change
+      </Text>
+      <Text fontSize={'14px'} textAlign={'center'} fontWeight={'500'} mb="18px">
+        Per your settings,
+        <Text mx="1" as="span" fontWeight={'700'}>
+          {guardiansInfo.guardianDetails.threshold}
+        </Text>
+        of the
+        <Text mx="1" as="span" fontWeight={'700'}>
+          {guardianList.length}
+        </Text>
+        {guardianList.length > 1 ? `guardians'` : `guardian's`} approve is required for recovery.
+      </Text>
+      <Flex
+        mb="18px"
+        py="6"
+        px="10"
+        flexDir={'column'}
+        fontSize={'14px'}
+        gap="24px"
+        rounded={'20px'}
+        p="8"
+        bg="#f9f9f9"
+      >
+        {guardianList.map((address: string, index: number) => {
+          return (
+            <Box key={index}>
+              <Text fontWeight={'800'} mb="6px">
+                Guardian {index + 1}
+                {guardiansInfo.guardianNames[index] ? `: ${guardiansInfo.guardianNames[index]}` : ''}
+              </Text>
+              <Text fontWeight={'500'}>{address}</Text>
+            </Box>
+          );
+        })}
+      </Flex>
+      <Box bg="#DCDCDC" h="1px" mb="20px" />
+    </Box>
+  );
+};
+
+export default function SignMessage({ messageToSign, onSign, signType, guardiansInfo }: any) {
   const { signTypedDataAsync, signTypedData } = useSignTypedData();
   const { signRawHash, signWithPasskey } = useWallet();
   const { getSelectedKeyType } = useSignerStore();
-  const { showConnectWallet } = useWalletContext();
   const { checkValidSigner } = useTools();
+  const [showMore, setShowMore] = useState(guardiansInfo ? false : true);
   const [isActivated, setIsActivated] = useState(false);
   const [targetChainId, setTargetChainId] = useState<undefined | number>();
   const { switchChain } = useSwitchChain();
-  const { connectEOA, isConnected, isConnectOpen, openConnect, closeConnect, chainId } = useWagmi()
+  const { connectEOA, isConnected, isConnectOpen, openConnect, closeConnect, chainId } = useWagmi();
 
   const onConfirm = async () => {
     if (!checkValidSigner()) {
@@ -87,33 +136,42 @@ export default function SignMessage({ messageToSign, onSign, signType, signTitle
 
   return (
     <Box pb={{ base: 6, lg: 0 }}>
-      {signTitle && (
-        <Text fontSize="20px" fontWeight="800" textAlign={'center'}>
-          {signTitle}
-        </Text>
-      )}
-      {/* {origin && (
-          <Text fontWeight={'600'} mt="1">
-          {origin}
-          </Text>
-          )} */}
-      <Flex flexDir={'column'} gap="6" mt={{ base: 4, lg: 9 }}>
-        <Box bg="#f9f9f9" color="#818181" fontSize={'14px'} p="4" rounded="20px" overflowY={'auto'}>
-          <Flex align={'center'} gap="1" mb="4">
-            <Image src={IconZoom} w="20px" h="20px" />
-            <Text fontWeight={'800'} color="#000">
-              Message details
-            </Text>
+      <GuardianInfo guardiansInfo={guardiansInfo} />
+      <Flex flexDir={'column'} gap="6">
+        <Box>
+          <Flex align={'center'} justify={'space-between'} mb="4">
+            <Flex align={'center'} gap="1">
+              <Image src={IconZoom} w="20px" h="20px" />
+              <Text fontWeight={'800'} color="#000">
+                Message details
+              </Text>
+            </Flex>
+            {guardiansInfo && (
+              <Flex cursor={'pointer'} onClick={() => setShowMore((prev) => !prev)}>
+                <Text fontSize={'14px'} color="#818181">
+                  Show {showMore ? 'less' : 'more'}
+                </Text>
+                <Image
+                  src={IconChevron}
+                  as={motion.img}
+                  animate={{ transform: showMore ? 'rotate(-180deg)' : 'rotate(0deg)' }}
+                />
+              </Flex>
+            )}
           </Flex>
-          <Box maxH="160px" overflowY={'auto'}>
-            <pre>
-              <code>
-                {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
-                ? JSON.stringify(messageToSign, null, 2)
-                : messageToSign}
-              </code>
-            </pre>
-          </Box>
+          {showMore && (
+            <Box bg="#f9f9f9" color="#818181" fontSize={'14px'} p="4" rounded="20px" overflowY={'auto'}>
+              <Box maxH="160px" overflowY={'auto'}>
+                <pre>
+                  <code>
+                    {signType === 'typedData' || signType === 'passkey' || signType === 'eoa'
+                      ? JSON.stringify(messageToSign, null, 2)
+                      : messageToSign}
+                  </code>
+                </pre>
+              </Box>
+            </Box>
+          )}
         </Box>
         <InfoWrap fontSize="14px">
           <InfoItem>

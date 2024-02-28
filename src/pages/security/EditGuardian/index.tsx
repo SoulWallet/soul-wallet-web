@@ -1,7 +1,7 @@
 import { useState, useCallback, Fragment, useEffect } from 'react';
 import RoundSection from '@/components/new/RoundSection';
 import GuardianCard from '@/components/new/GuardianCard';
-import { Box, Image, Menu, MenuList, MenuButton, MenuItem, useToast, Flex, } from '@chakra-ui/react';
+import { Box, Image, Menu, MenuList, MenuButton, MenuItem, useToast, Flex } from '@chakra-ui/react';
 import Button from '@/components/Button';
 import PlusIcon from '@/components/Icons/Plus';
 import HistoryIcon from '@/components/Icons/History';
@@ -67,7 +67,7 @@ export default function EditGuardian({
   startAddGuardian,
   startEditSingleGuardian,
   startRemoveGuardian,
-  waitForPendingGuardian
+  waitForPendingGuardian,
 }: any) {
   const { getAddressName, saveAddressName } = useSettingStore();
   const { getEditingGuardiansInfo, updateEditingGuardiansInfo, clearCreateInfo } = useTempStore();
@@ -241,7 +241,7 @@ export default function EditGuardian({
           rawKeys = new ethers.AbiCoder().encode(['bytes32[]'], [currentKeys]);
         }
 
-        const { keySignature } = await getReplaceGuardianInfo(newGuardianHash);
+        const { keySignature } = await getReplaceGuardianInfo(newGuardianHash, guardiansInfo);
 
         const functionName = `setGuardian(bytes32,bytes32,uint256,bytes32,bytes,bytes)`;
         const parameters = [
@@ -275,7 +275,7 @@ export default function EditGuardian({
 
         setIsCreating(false);
         cancelEditGuardian();
-        await waitForPendingGuardian(newGuardianHash)
+        await waitForPendingGuardian(newGuardianHash);
       } catch (error: any) {
         setIsCreating(false);
 
@@ -334,7 +334,7 @@ export default function EditGuardian({
                   <Box marginRight="2px">
                     <HistoryIcon />
                   </Box>
-                  backup guardians
+                  Backup guardians
                 </Button>
               )}
               {!!guardianList.length && (
@@ -551,11 +551,11 @@ export default function EditGuardian({
                             </MenuItem>
                           )}
                           {!!(guardianList.length || 0) &&
-                           getNumberArray(guardianList.length || 0).map((i: any) => (
-                             <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
-                               {i}
-                             </MenuItem>
-                          ))}
+                            getNumberArray(guardianList.length || 0).map((i: any) => (
+                              <MenuItem key={nanoid(4)} onClick={selectAmount(i)}>
+                                {i}
+                              </MenuItem>
+                            ))}
                         </MenuList>
                       </Menu>
                     </Box>
@@ -582,7 +582,7 @@ export default function EditGuardian({
                     >
                       <Box
                         boxShadow={
-                        '0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)'
+                          '0px 2.036px 0.679px 0px rgba(0, 0, 0, 0.06), 0px 2.036px 5.429px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0.679px rgba(0, 0, 0, 0.04)'
                         }
                         width="20px"
                         height="20px"
@@ -605,11 +605,11 @@ export default function EditGuardian({
           <Button
             size="mid"
             onClick={
-            keepPrivate
-            ? () => {
-              openBackupGuardianModal(onBackupFinished);
-            }
-                  : () => next()
+              keepPrivate
+                ? () => {
+                    openBackupGuardianModal(onBackupFinished);
+                  }
+                : () => next()
             }
             isLoading={isCreating}
             disabled={isCreating || !guardianList.length}
@@ -618,10 +618,7 @@ export default function EditGuardian({
           </Button>
         )}
         {!guardianList.length && (
-          <Button
-            size="mid"
-            onClick={() => startAddGuardian()}
-          >
+          <Button size="mid" onClick={() => startAddGuardian()}>
             <Box marginRight="6px">
               <PlusIcon color="white" />
             </Box>

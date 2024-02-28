@@ -6,19 +6,19 @@ import TxModal from '../TxModal';
 const SignMessageModal = (_: unknown, ref: Ref<any>) => {
   const [visible, setVisible] = useState(false);
   const [origin, setOrigin] = useState('');
-  const [signTitle, setSignTitle] = useState('');
   const [signType, setSignType] = useState('');
   const [promiseInfo, setPromiseInfo] = useState<any>({});
+  const [guardiansInfo, setGuardiansInfo] = useState();
   const [messageToSign, setMessageToSign] = useState('');
   const toast = useToast();
 
   useImperativeHandle(ref, () => ({
-    async show(message: string, _signType: string, _signTitle: string) {
+    async show(message: string, _signType: string, _guardiansInfo: any) {
       setVisible(true);
       // setOrigin(origin);
       setMessageToSign(message);
       setSignType(_signType);
-      setSignTitle(_signTitle);
+      setGuardiansInfo(_guardiansInfo);
       return new Promise((resolve, reject) => {
         setPromiseInfo({
           resolve,
@@ -47,10 +47,10 @@ const SignMessageModal = (_: unknown, ref: Ref<any>) => {
       <TxModal visible={visible} onClose={onClose} title="Confirm Message">
         <SignMessage
           messageToSign={messageToSign}
-          signTitle={signTitle}
           signType={signType}
           onSign={onSign}
           origin={origin}
+          guardiansInfo={guardiansInfo}
         />
         {/* <Text
           color="danger"

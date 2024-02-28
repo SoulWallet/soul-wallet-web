@@ -110,7 +110,7 @@ export default function useKeystore() {
     }
   };
 
-  const getReplaceGuardianInfo = async (newGuardianHash: string) => {
+  const getReplaceGuardianInfo = async (newGuardianHash: string, guardiansInfo?: any) => {
     const slotInfo = getSlotInfo();
     const slot = slotInfo.slot;
     const ret = await keystore.getTypedData(KeyStoreTypedDataType.TYPE_HASH_SET_GUARDIAN, slot, newGuardianHash);
@@ -140,7 +140,7 @@ export default function useKeystore() {
 
     const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
 
-    const signature = await showSignMessage({ domain, types, message, primaryType }, signType, 'Confirm Guardian Change');
+    const signature = await showSignMessage({ domain, types, message, primaryType }, signType, guardiansInfo );
 
     const keySignature = await packKeystoreSignature(signature);
 

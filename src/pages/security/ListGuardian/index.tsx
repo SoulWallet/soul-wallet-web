@@ -71,7 +71,7 @@ export default function ListGuardian({
                   width={{ base: '100%', md: 'auto' }}
                 >
                   <Box marginRight="2px"><HistoryIcon /></Box>
-                  backup guardians
+                  Backup guardians
                 </Button>
               )}
             </Box>
