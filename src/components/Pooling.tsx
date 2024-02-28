@@ -52,7 +52,8 @@ export default function Pooling() {
     }
     const owners = await listOwner();
     const ownersList = Object.values(owners);
-
+    
+    console.log('O list', ownersList)
     if (owners.length > eoas.length + credentials.length) {
       // optimize store
       ownersList.forEach((item: any) => {

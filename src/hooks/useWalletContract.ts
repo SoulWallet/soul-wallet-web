@@ -22,5 +22,11 @@ export default function useWalletContract() {
     return await publicClient.listOwner();
   };
 
-  return { listOwner };
+  const listOwnerByAddress = async (rpc: string, address: string) => {
+    const provider = new ethers.JsonRpcProvider(rpc);
+    const client = new ethers.Contract(address, ABI_SoulWallet, provider);
+    return await client.listOwner();
+  };
+
+  return { listOwner, listOwnerByAddress };
 }

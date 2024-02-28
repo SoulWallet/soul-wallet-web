@@ -328,10 +328,7 @@ export default function useWallet() {
     if (credentialsInStore.length) setCredentials(credentialsInStore);
     if (eoasInStore.length) setEoas(eoasInStore.map((signer: any) => signer.signerId));
     // set mainnet if no selected chainId
-    // if (!selectedChainId) {
     setSelectedChainId(import.meta.env.VITE_MAINNET_CHAIN_ID);
-
-    // }
 
     updateGuardiansInfo({
       guardianDetails: recoverInfo.guardianDetails,
@@ -351,6 +348,25 @@ export default function useWallet() {
     });
 
     setFinishedSteps(res.data.finishedSteps);
+
+    // set new signerIds and remove old ones
+    const credentialIds = credentialsInStore.map((item: any) => item.id);
+    const eoaIds = eoasInStore.map((item: any) => item.address);
+
+    const chainIdAddress = addressList.reduce((obj: any, item: any) => {
+      return {
+        ...obj,
+        [item.chainIdHex]: item.address,
+      };
+    }, {});
+
+    const newSignerIds = [...credentialIds, ...eoaIds].filter((item) => item);
+    // set new signerIdAddress
+    newSignerIds.forEach((item) => {
+      setSignerIdAddress(item, chainIdAddress);
+    });
+
+    // IMPORTANT TODO, to be tested and remove old ones
   };
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {

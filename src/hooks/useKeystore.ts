@@ -7,6 +7,7 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { defaultGuardianSafePeriod } from '@/config';
 import { useSignerStore } from '@/store/signer';
 import { useVerifyTypedData } from 'wagmi';
+import { ABI_Keystore } from '@/contracts/abis';
 
 export default function useKeystore() {
   const { chainConfig } = useConfig();
@@ -20,6 +21,20 @@ export default function useKeystore() {
   const keystore = useMemo(() => {
     return new L1KeyStore(chainConfig.l1Provider, chainConfig.contracts.l1Keystore);
   }, [chainConfig.l1Provider, chainConfig.contracts.l1Keystore]);
+
+  const publicClient = useMemo(() => {
+    const provider = new ethers.JsonRpcProvider(chainConfig.l1Provider);
+    return new ethers.Contract(import.meta.env.VITE_KeyStore, ABI_Keystore, provider);
+  }, []);
+
+  const rawOwnersBySlot = async (_slot: string) => {
+    if (!_slot) {
+      return [];
+    }
+    const owners = await publicClient.rawOwnersBySlot(_slot);
+    console.log('owners keystore', owners);
+    return owners;
+  }
 
   /**
    * Calculate guardian hash
@@ -140,7 +155,7 @@ export default function useKeystore() {
 
     const signType = getSelectedKeyType() === SignkeyType.EOA ? 'eoa' : 'passkey';
 
-    const signature = await showSignMessage({ domain, types, message, primaryType }, signType, guardiansInfo );
+    const signature = await showSignMessage({ domain, types, message, primaryType }, signType, guardiansInfo);
 
     const keySignature = await packKeystoreSignature(signature);
 
@@ -195,6 +210,7 @@ export default function useKeystore() {
     keystore,
     calcGuardianHash,
     getSlot,
+    rawOwnersBySlot,
     getKeyStoreInfo,
     getActiveGuardianHash,
     getReplaceGuardianInfo,

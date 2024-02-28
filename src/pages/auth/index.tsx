@@ -59,9 +59,10 @@ export default function Auth() {
   const toast = useToast();
   const { navigate } = useBrowser();
   const { setCredentials, setEoas } = useSignerStore();
-  const { getActiveGuardianHash } = useKeystore();
+  const { getActiveGuardianHash, rawOwnersBySlot } = useKeystore();
+  const { listOwnerByAddress } = useWalletContract();
   const { updateGuardiansInfo } = useGuardianStore();
-  const signerIdAddress = getSignerIdAddress()
+  const signerIdAddress = getSignerIdAddress();
   const activeSignerId = loginInfo.signerId;
   const activeLoginAccounts = signerIdAddress[loginInfo.signerId];
   console.log('signerIdAddress', activeSignerId, activeLoginAccounts, signerIdAddress);
@@ -110,14 +111,17 @@ export default function Auth() {
     setIsSelectAccountOpen(true);
   }, []);
 
-  const connectEOA = useCallback(async (connector: any) => {
-    setIsConnectAtive(true);
-    if(address){
-      await disconnectAsync();
-    }
-    await connectAsync({ connector });
-    setActiveConnector(connector);
-  }, [address]);
+  const connectEOA = useCallback(
+    async (connector: any) => {
+      setIsConnectAtive(true);
+      if (address) {
+        await disconnectAsync();
+      }
+      await connectAsync({ connector });
+      setActiveConnector(connector);
+    },
+    [address],
+  );
 
   const updateWalletName = useCallback((name: any) => {
     updateCreateInfo({
@@ -179,30 +183,27 @@ export default function Auth() {
     }
   }, []);
 
-  const startLoginWithEOA = useCallback(
-    async (connector: any) => {
-      await disconnectAsync();
-      const result = await connectAsync({ connector });
-      const address = result.accounts && result.accounts[0]
-      console.log('startLoginWithEOA', address, result)
-      setLoginMethod('eoa');
-      updateLoginInfo({
-        signerId: address,
-        method: 'eoa',
-        eoaAddress: address,
-      });
-      closeLogin();
+  const startLoginWithEOA = useCallback(async (connector: any) => {
+    await disconnectAsync();
+    const result = await connectAsync({ connector });
+    const address = result.accounts && result.accounts[0];
+    console.log('startLoginWithEOA', address, result);
+    setLoginMethod('eoa');
+    updateLoginInfo({
+      signerId: address,
+      method: 'eoa',
+      eoaAddress: address,
+    });
+    closeLogin();
 
-      const signerIdAddress = getSignerIdAddress();
+    const signerIdAddress = getSignerIdAddress();
 
-      if (signerIdAddress[address as any]) {
-        openSelectAccount();
-      } else {
-        setStepType('importAccount');
-      }
-    },
-    [],
-  );
+    if (signerIdAddress[address as any]) {
+      openSelectAccount();
+    } else {
+      setStepType('importAccount');
+    }
+  }, []);
 
   const startImportAccount = useCallback(() => {
     setIsSelectAccountOpen(false);
@@ -217,45 +218,81 @@ export default function Auth() {
       })
     ).data;
 
+    // GET signer list from L1 keystore
+    // ABI_KeyStore
+    // const res = await rawOwnersBySlot(slotInfo.slot);
+    // console.log('rawOwnersBySlot', res);
+    // TO BE REPLACED
+    const owners: string[] = Object.values(
+      await listOwnerByAddress(`https://sepolia.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`, address),
+    );
+    // IMPORTANT TODO, should switch chain
+
+    const loginInfo = getLoginInfo();
+    console.log('login info ', loginInfo, slotInfo);
+    // const initialKeys = slotInfo.initialKeys;
+    // compare if this is correct
+    if (loginInfo.method === 'eoa') {
+      const valid = owners.some((item: string) => item === `0x${'0'.repeat(24)}${loginInfo.eoaAddress.slice(2)}`);
+      if (valid) {
+        setEoas([loginInfo.eoaAddress]);
+      } else {
+        toast({
+          title: 'Wallet address and signer mismatch',
+          status: 'error',
+        });
+        setIsImporting(false);
+        return;
+      }
+    } else {
+      const valid = owners.some((item: string) => item === loginInfo.credential.publicKey);
+      if (valid) {
+        setCredentials([loginInfo.credential]);
+      } else {
+        toast({
+          title: 'Wallet address and signer mismatch',
+          status: 'error',
+        });
+        setIsImporting(false);
+        return;
+      }
+    }
+
     retrieveSlotInfo(slotInfo);
 
     const addresses = await calcWalletAddressAllChains(0);
     console.log('addresses', addresses);
     setAddressList(addresses);
 
-    const activeGuardianInfo = await getActiveGuardianHash(slotInfo.slotInitInfo)
-    let activeGuardianHash
+    const activeGuardianInfo = await getActiveGuardianHash(slotInfo.slotInitInfo);
+    let activeGuardianHash;
 
-    if (activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash && activeGuardianInfo.guardianActivateAt && activeGuardianInfo.guardianActivateAt * 1000 < Date.now()) {
-      activeGuardianHash = activeGuardianInfo.pendingGuardianHash
+    if (
+      activeGuardianInfo.pendingGuardianHash !== activeGuardianInfo.activeGuardianHash &&
+      activeGuardianInfo.guardianActivateAt &&
+      activeGuardianInfo.guardianActivateAt * 1000 < Date.now()
+    ) {
+      activeGuardianHash = activeGuardianInfo.pendingGuardianHash;
     } else {
-      activeGuardianHash = activeGuardianInfo.activeGuardianHash
+      activeGuardianHash = activeGuardianInfo.activeGuardianHash;
     }
 
     const res2 = await api.guardian.getGuardianDetails({ guardianHash: activeGuardianHash });
     const data = res2.data;
 
     if (!data) {
-      console.log('No guardians found!')
+      console.log('No guardians found!');
     } else {
       const guardianDetails = data.guardianDetails;
       const guardianNames = data.guardianNames;
 
       updateGuardiansInfo({
         guardianDetails,
-        guardianNames
-      })
+        guardianNames,
+      });
     }
 
-    const loginInfo = getLoginInfo();
-
-    if (loginInfo.method === 'eoa') {
-      setEoas([loginInfo.eoaAddress]);
-    } else {
-      setCredentials([loginInfo.credential]);
-    }
-
-    console.log('loginInfo', loginInfo);
+    // console.log('loginInfo', loginInfo);
     setIsImporting(false);
     toast({
       title: 'Logged in',
@@ -301,7 +338,7 @@ export default function Auth() {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        height={{ base: 'auto', 'md': 'calc(100vh - 58px)' }}
+        height={{ base: 'auto', md: 'calc(100vh - 58px)' }}
         flexDirection="column"
         width="100%"
       >
@@ -313,11 +350,16 @@ export default function Auth() {
           flexDirection={{ base: 'column', md: 'row' }}
           background="#FFFFFF"
         >
-          <Box width={{ base: '100%', md: '50%' }} height="100%" p={{base: "32px", lg: "60px"}} pt={{base: "40px", lg: "100px"}}>
-            <Heading marginBottom={{base: "24px", lg: "40px"}} fontSize={{base: "28px",md: "32px", lg: "40px"}}>
+          <Box
+            width={{ base: '100%', md: '50%' }}
+            height="100%"
+            p={{ base: '32px', lg: '60px' }}
+            pt={{ base: '40px', lg: '100px' }}
+          >
+            <Heading marginBottom={{ base: '24px', lg: '40px' }} fontSize={{ base: '28px', md: '32px', lg: '40px' }}>
               Social recovery wallet for Ethereum
             </Heading>
-            <Box marginBottom={{base: "50px", lg: "90px"}}>
+            <Box marginBottom={{ base: '50px', lg: '90px' }}>
               <Box marginBottom="18px" height="20px" display="flex">
                 <Box marginRight="14px">
                   <PasskeyIcon />
@@ -380,10 +422,7 @@ export default function Auth() {
             </Box>
           </Box>
         </RoundContainer>
-        <Box
-          marginTop="40px"
-          textAlign="center"
-        >
+        <Box marginTop="40px" textAlign="center">
           <TextBody fontWeight="600" color="#818181" fontSize="16px">
             If you have any questions, reach out to us at{' '}
             <Box as="a" href="mailto:support@soulwallet.io" color="#2D5AF6" textDecoration="underline">
