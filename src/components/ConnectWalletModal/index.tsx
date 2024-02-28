@@ -22,7 +22,6 @@ const ConnectWalletModal = (_: unknown, ref: Ref<any>) => {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const { connectors, connectAsync } = useConnect();
-  // const { disconnectAsync } = useDisconnect();
   const { isConnected } = useAccount()
   const toast = useToast();
 

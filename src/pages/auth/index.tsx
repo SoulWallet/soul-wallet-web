@@ -148,13 +148,15 @@ export default function Auth() {
   }, []);
 
   const disconnectEOA = useCallback(async () => {
-    await disconnectAsync();
+    if(!isConnected){
+      await disconnectAsync();
+    }
     setIsConnectAtive(false);
     updateCreateInfo({
       eoaAddress: [],
     });
     // closeRegister()
-  }, []);
+  }, [isConnected]);
 
   const startLoginWithPasskey = useCallback(async () => {
     try {
@@ -184,7 +186,9 @@ export default function Auth() {
   }, []);
 
   const startLoginWithEOA = useCallback(async (connector: any) => {
-    await disconnectAsync();
+    if(isConnected){
+      await disconnectAsync();
+    }
     const result = await connectAsync({ connector });
     const address = result.accounts && result.accounts[0];
     console.log('startLoginWithEOA', address, result);
@@ -223,9 +227,16 @@ export default function Auth() {
     // const res = await rawOwnersBySlot(slotInfo.slot);
     // console.log('rawOwnersBySlot', res);
     // TO BE REPLACED
-    const owners: string[] = Object.values(
-      await listOwnerByAddress(`https://sepolia.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`, address),
-    );
+    let owners: string[] = [];
+    try {
+      owners = Object.values(
+        await listOwnerByAddress(`https://sepolia.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`, address),
+      );
+    } catch (err) {
+      console.log('kkkk')
+      owners = slotInfo.initialKeys;
+    }
+
     // IMPORTANT TODO, should switch chain
 
     const loginInfo = getLoginInfo();
@@ -233,7 +244,7 @@ export default function Auth() {
     // const initialKeys = slotInfo.initialKeys;
     // compare if this is correct
     if (loginInfo.method === 'eoa') {
-      const valid = owners.some((item: string) => item === `0x${'0'.repeat(24)}${loginInfo.eoaAddress.slice(2)}`);
+      const valid = owners.some((item: string) => item.toLowerCase() === `0x${'0'.repeat(24)}${loginInfo.eoaAddress.toLowerCase().slice(2)}`);
       if (valid) {
         setEoas([loginInfo.eoaAddress]);
       } else {
@@ -245,7 +256,7 @@ export default function Auth() {
         return;
       }
     } else {
-      const valid = owners.some((item: string) => item === loginInfo.credential.publicKey);
+      const valid = owners.some((item: string) => item.toLowerCase() === loginInfo.credential.publicKey.toLowerCase());
       if (valid) {
         setCredentials([loginInfo.credential]);
       } else {

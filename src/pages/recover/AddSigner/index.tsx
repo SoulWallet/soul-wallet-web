@@ -21,7 +21,7 @@ import EOASignerIcon from '@/components/Icons/EOASigner'
 import usePassKey from '@/hooks/usePasskey';
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
-import { useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import useConfig from '@/hooks/useConfig';
 import api from '@/lib/api';
 import { L1KeyStore } from '@soulwallet/sdk';
@@ -36,6 +36,7 @@ export default function AddSigner({ next, back }: any) {
   const [isConfirming, setIsConfirming] = useState<any>(false)
   const [isConnectOpen, setIsConnectOpen] = useState<any>(false)
   const toast = useToast();
+  const { isConnected } = useAccount();
   const { connectAsync } = useConnect()
   const { disconnectAsync } = useDisconnect()
   const { register } = usePassKey()
@@ -64,7 +65,9 @@ export default function AddSigner({ next, back }: any) {
 
   const addEOA = useCallback(async (connector: any) => {
     try {
-      await disconnectAsync()
+      if(isConnected){
+        await disconnectAsync()
+      }
       const { accounts } = await connectAsync({ connector });
       const eoa = accounts[0]
       setSigners([...signers, { type: 'eoa', signerId: eoa }])

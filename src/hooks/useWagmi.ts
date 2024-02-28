@@ -11,7 +11,9 @@ export default function useWagmi() {
 
   const connectEOA = useCallback(async (connector: any) => {
     try {
-      await disconnectAsync()
+      if (isConnected) {
+        await disconnectAsync()
+      }
       const { accounts } = await connectAsync({ connector });
       console.log('connected accounts', accounts)
       setIsConnectOpen(false)

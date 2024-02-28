@@ -365,8 +365,6 @@ export default function useWallet() {
     newSignerIds.forEach((item) => {
       setSignerIdAddress(item, chainIdAddress);
     });
-
-    // IMPORTANT TODO, to be tested and remove old ones
   };
 
   const checkRecoverStatus = async (recoveryRecordID: string) => {

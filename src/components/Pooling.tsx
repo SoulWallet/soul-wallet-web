@@ -61,7 +61,7 @@ export default function Pooling() {
         if (parseInt(prefixString) === 0) {
           // is eoa
           const addressToAdd = `0x${item.slice(-40)}`;
-          if (!eoas.includes(addressToAdd)) {
+          if (!eoas.map((item:string) => item.toLowerCase()).includes(addressToAdd.toLowerCase())) {
             addEoa(addressToAdd);
           }
         } else {
