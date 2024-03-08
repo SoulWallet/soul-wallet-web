@@ -77,15 +77,19 @@ export const WalletContextProvider = ({ children }: any) => {
   }, [selectedChainItem]);
 
   useEffect(() => {
-    const recoveryRecordID = recoverInfo.recoveryRecordID;
+    const { recoverInfo } = useTempStore.getState();
 
-    if (!recoveryRecordID) {
-      return;
-    }
+    console.log('set interval recover info', recoverInfo);
 
-    checkRecoverStatus(recoveryRecordID);
+    // const recoveryRecordID = recoverInfo.recoveryRecordID;
 
-    const interval = setInterval(() => checkRecoverStatus(recoveryRecordID), 5000);
+    // if (!recoveryRecordID) {
+    //   return;
+    // }
+
+    checkRecoverStatus(recoverInfo);
+
+    const interval = setInterval(() => checkRecoverStatus(recoverInfo), 5000);
 
     return () => {
       clearInterval(interval);

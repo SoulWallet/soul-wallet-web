@@ -313,37 +313,34 @@ export default function useWallet() {
   };
 
   // will be executed only once after recover process finished
-  const boostAfterRecovered = async () => {
+  const boostAfterRecovered = async (_recoverInfo: any) => {
     retrieveSlotInfo({
-      ...recoverInfo,
-      initialKeys: recoverInfo.initialKeysAddress,
+      ..._recoverInfo,
+      initialKeys: _recoverInfo.initialKeysAddress,
     });
-    const addressList = recoverInfo.recoveryRecord.addresses.map((item: any) => ({
+    const addressList = _recoverInfo.recoveryRecord.addresses.map((item: any) => ({
       address: item.address,
       chainIdHex: item.chain_id,
     }));
+    console.log('yoooo', addressList);
     setAddressList(addressList);
-    const credentialsInStore = recoverInfo.signers.filter((signer: any) => signer.type === 'passkey');
-    const eoasInStore = recoverInfo.signers.filter((signer: any) => signer.type === 'eoa');
+    const credentialsInStore = _recoverInfo.signers.filter((signer: any) => signer.type === 'passkey');
+    const eoasInStore = _recoverInfo.signers.filter((signer: any) => signer.type === 'eoa');
     if (credentialsInStore.length) setCredentials(credentialsInStore);
     if (eoasInStore.length) setEoas(eoasInStore.map((signer: any) => signer.signerId));
     // set mainnet if no selected chainId
     setSelectedChainId(import.meta.env.VITE_MAINNET_CHAIN_ID);
 
     updateGuardiansInfo({
-      guardianDetails: recoverInfo.guardianDetails,
-      guardianHash: recoverInfo.guardianHash,
-      guardianNames: recoverInfo.guardianNames,
-      keystore: recoverInfo.keystore,
-      slot: recoverInfo.slot,
-    });
-
-    updateRecoverInfo({
-      enabled: true,
+      guardianDetails: _recoverInfo.guardianDetails,
+      guardianHash: _recoverInfo.guardianHash,
+      guardianNames: _recoverInfo.guardianNames,
+      keystore: _recoverInfo.keystore,
+      slot: _recoverInfo.slot,
     });
 
     const res = await api.operation.finishStep({
-      slot: recoverInfo.slot,
+      slot: _recoverInfo.slot,
       steps: [5],
     });
 
@@ -365,13 +362,14 @@ export default function useWallet() {
     newSignerIds.forEach((item) => {
       setSignerIdAddress(item, chainIdAddress);
     });
+
+    updateRecoverInfo({
+      enabled: true,
+    });
   };
 
-  const checkRecoverStatus = async (recoveryRecordID: string) => {
-    // const slotInfo = getSlotInfo()
-    // const slot = slotInfo.slot
-    // const recoveryRecordID = getRecoverRecordId(slot)
-
+  const checkRecoverStatus = async (_recoverInfo: any) => {
+    const { recoveryRecordID } = _recoverInfo;
     if (!recoveryRecordID) {
       return;
     }
@@ -380,20 +378,11 @@ export default function useWallet() {
     updateRecoverInfo({
       recoveryRecord: res,
     });
-    // const { addressList } = useAddressStore.getState();
-    // if (addressList.length === 0) {
-    //   // for (let [index, item] of Object.entries(res.addresses)) {
-    //   //   addAddressItem({
-    //   //     address: item as any,
-    //   //     activatedChains: [],
-    // //   });
-    //   // }
-    // }
 
     // check if should replace key
     if (res.status >= 3) {
-      if (!recoverInfo.enabled) {
-        await boostAfterRecovered();
+      if (!_recoverInfo.enabled) {
+        await boostAfterRecovered(_recoverInfo);
       }
     }
 
