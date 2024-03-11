@@ -13,6 +13,7 @@ import Guardian from '@/pages/security/Guardian';
 import Pay from '@/pages/public/Pay';
 import Sign from '@/pages/public/Sign';
 import Auth from '@/pages/auth';
+import Create from '@/pages/create'
 import DashboardLayout from './components/Layouts/DashboardLayout';
 
 export const router = createBrowserRouter([
@@ -54,6 +55,11 @@ export const router = createBrowserRouter([
         path: '/auth',
         element: <PublicWrapper />,
         children: [{ path: '', element: <Auth /> }],
+      },
+      {
+        path: '/create',
+        element: <PublicWrapper />,
+        children: [{ path: '', element: <Create /> }],
       },
     ],
   },

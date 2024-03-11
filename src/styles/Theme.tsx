@@ -60,7 +60,7 @@ const theme = extendTheme({
     body: `'Nunito', sans-serif`,
   },
   colors: {
-    appBg: '#F7F7F7',
+    appBg: 'white',
     danger: '#E83D26',
     brand: {
       red: '#FF2E79',
