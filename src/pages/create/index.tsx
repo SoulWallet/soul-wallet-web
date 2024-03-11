@@ -5,6 +5,7 @@ import InputInviteCode from './InputInviteCode'
 import SetupEmail from './SetupEmail'
 import SetupUsername from './SetupUsername'
 import SetupPasskey from './SetupPasskey'
+import CreateSuccess from './CreateSuccess'
 
 export default function Create() {
   const [step, setStep] = useState(0)
@@ -42,6 +43,10 @@ export default function Create() {
     } else if (step == 3) {
       return (
         <SetupPasskey onNext={onNext} />
+      )
+    } else if (step == 4) {
+      return (
+        <CreateSuccess onNext={onNext} />
       )
     }
   }
