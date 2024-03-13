@@ -4,7 +4,7 @@ import useQuery from './useQuery';
 import { ABI_SoulWallet } from '@soulwallet/abi';
 import { useGuardianStore } from '@/store/guardian';
 import { useSlotStore } from '@/store/slot';
-import { addPaymasterAndData } from '@/lib/tools';
+import { addPaymasterData } from '@/lib/tools';
 import { erc20Abi, verifyMessage } from 'viem';
 import { L1KeyStore, SignkeyType, UserOperation } from '@soulwallet/sdk';
 import { executeTransaction } from '@/lib/tx';
@@ -240,9 +240,8 @@ export default function useWallet() {
   const signAndSend = async (userOp: UserOperation, payToken?: string) => {
     const selectedKeyType = getSelectedKeyType();
     // checkpaymaster
-    if (payToken && payToken !== ethers.ZeroAddress && userOp.paymasterAndData === '0x') {
-      const paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
-      userOp.paymasterAndData = paymasterAndData;
+    if (payToken && payToken !== ethers.ZeroAddress && userOp.paymasterData === '0x') {
+      userOp.paymasterData = addPaymasterData(payToken, chainConfig.contracts.paymaster);
     }
 
     const validAfter = Math.floor(Date.now() / 1000);
@@ -402,7 +401,7 @@ export default function useWallet() {
 
   return {
     createWallet,
-    addPaymasterAndData,
+    addPaymasterData,
     getActivateOp,
     getSetGuardianCalldata,
     signAndSend,

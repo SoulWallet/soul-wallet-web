@@ -129,7 +129,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       setSigning(true);
       let userOp: any;
       if (sponsor && useSponsor && sponsor.paymasterAndData) {
-        userOp = { ...activeOperation, paymasterAndData: sponsor.paymasterAndData };
+        userOp = { ...activeOperation, paymasterData: sponsor.paymasterAndData };
       } else {
         userOp = activeOperation;
       }

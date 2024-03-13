@@ -108,17 +108,17 @@ export const formatIPFS = (url: string) => {
   }
 };
 
-export const addPaymasterAndData = (payToken: string, paymaster: string) => {
+export const addPaymasterData = (payToken: string, paymaster: string) => {
   if (payToken === ethers.ZeroAddress) {
     return '0x';
   }
 
   // TODO, consider decimals
-  const paymasterAndData = `${paymaster}${new ethers.AbiCoder()
+  const paymasterData = `${paymaster}${new ethers.AbiCoder()
     .encode(['address', 'uint256'], [payToken, ethers.parseEther('1000')])
     .slice(2)}`;
 
-  return paymasterAndData;
+  return paymasterData;
 };
 
 export const checkShouldInject = (origin: string) => {
@@ -211,7 +211,7 @@ export const printUserOp = (userOp: any) => {
         preVerificationGas: to10(userOp.preVerificationGas),
         maxFeePerGas: to10(userOp.maxFeePerGas),
         maxPriorityFeePerGas: to10(userOp.maxPriorityFeePerGas),
-        paymasterAndData: userOp.paymasterAndData,
+        paymasterData: userOp.paymasterData,
         signature: userOp.signature,
       },
     ]),
