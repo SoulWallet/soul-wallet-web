@@ -14,6 +14,7 @@ import Pay from '@/pages/public/Pay';
 import Sign from '@/pages/public/Sign';
 import Auth from '@/pages/auth';
 import Create from '@/pages/create'
+import Landing from '@/pages/landing'
 import DashboardLayout from './components/Layouts/DashboardLayout';
 
 export const router = createBrowserRouter([
@@ -60,6 +61,11 @@ export const router = createBrowserRouter([
         path: '/create',
         element: <PublicWrapper />,
         children: [{ path: '', element: <Create /> }],
+      },
+      {
+        path: '/landing',
+        element: <PublicWrapper />,
+        children: [{ path: '', element: <Landing /> }],
       },
     ],
   },

@@ -1,7 +1,8 @@
 import { Box, Text } from '@chakra-ui/react';
 import BackIcon from '@/components/Icons/mobile/Back'
+import Logo from '@/components/Icons/mobile/Logo'
 
-export default function Header({ title, onBack, showBackButton }: any) {
+export default function Header({ title, onBack, showBackButton, showLogo, ...props }: any) {
   return (
     <Box
       height="44px"
@@ -11,7 +12,18 @@ export default function Header({ title, onBack, showBackButton }: any) {
       marginTop="18px"
       background="white"
       position="relative"
+      {...props}
     >
+      {showLogo && (
+        <Box
+          position="absolute"
+          left="20px"
+          top="calc(50% - 16px)"
+          cursor="pointer"
+        >
+          <Logo />
+        </Box>
+      )}
       {showBackButton && (
         <Box
           position="absolute"
