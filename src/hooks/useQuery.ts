@@ -6,7 +6,7 @@ import useWalletContext from '../context/hooks/useWalletContext';
 import BN from 'bignumber.js';
 import { ethers } from 'ethers';
 import useSdk from './useSdk';
-import { addPaymasterAndData, printUserOp } from '@/lib/tools';
+import { addPaymasterData, printUserOp } from '@/lib/tools';
 import useConfig from './useConfig';
 import { useSignerStore } from '@/store/signer';
 import { useBalanceStore } from '@/store/balance';
@@ -89,7 +89,7 @@ export default function useQuery() {
     }
 
     if (payToken && payToken !== ethers.ZeroAddress) {
-      userOp.paymasterAndData = addPaymasterAndData(payToken, chainConfig.contracts.paymaster);
+      userOp.paymasterData = addPaymasterData(payToken, chainConfig.contracts.paymaster);
     }
 
     console.log('Estimate UserOP:')

@@ -93,15 +93,17 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { connectEOA, isConnected, isConnectOpen, openConnect, closeConnect } = useWagmi();
 
   const checkSponser = async (userOp: UserOperation) => {
+    // IMPORTANT TODO, simulate signature
+    userOp.signature = '0xaf2a5bcc4c10b5289946daaa87caa467f3abadcc0000006201000065f2af9f000065f2bdaf0000000000000000000000000000000000000000a1da5b66f8c211583e706136bee9ab6f1ff43878b885620a8a16b0af5d52cf2c29ffdaf22944306a12f06fdcc41f11ff0f964160ce1f35140d039000301c345d1b';
     try {
       const res = await api.sponsor.check(
         selectedChainId,
         chainConfig.contracts.entryPoint,
         UserOpUtils.userOperationFromJSON(UserOpUtils.userOperationToJSON(userOp)),
       );
-      if (res.data.sponsorInfos && res.data.sponsorInfos.length > 0) {
+      if (res.data && res.data.paymasterData) {
         // TODO, check >1 sponsor
-        setSponsor(res.data.sponsorInfos[0]);
+        setSponsor(res.data);
       }
     } catch (err) {
       setUseSponsor(false);
@@ -128,8 +130,8 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       }
       setSigning(true);
       let userOp: any;
-      if (sponsor && useSponsor && sponsor.paymasterAndData) {
-        userOp = { ...activeOperation, paymasterAndData: sponsor.paymasterAndData };
+      if (sponsor && useSponsor && sponsor.paymasterData) {
+        userOp = { ...activeOperation, paymasterData: sponsor.paymasterData };
       } else {
         userOp = activeOperation;
       }
