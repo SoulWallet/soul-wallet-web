@@ -116,11 +116,13 @@ export const useBalanceStore = create<IBalanceStore>()(
         let totalUsdValue = BN('0');
         const tokenList = res.data.map((item: ITokenBalanceItem) => {
           let formattedItem = formatTokenBalance(item);
-          const tokenPrice = targetedItem.prices.filter((price: any) => price.tokenAddress === item.contractAddress)[0];
-          if (tokenPrice) {
-            item.tokenPrice = tokenPrice.priceUSD;
-            item.usdValue = BN(tokenPrice.priceUSD).times(item.tokenBalanceFormatted).toFixed(2);
-            totalUsdValue = totalUsdValue.plus(item.usdValue);
+          if(targetedItem){
+            const tokenPrice = targetedItem.prices.filter((price: any) => price.tokenAddress === item.contractAddress)[0];
+            if (tokenPrice) {
+              item.tokenPrice = tokenPrice.priceUSD;
+              item.usdValue = BN(tokenPrice.priceUSD).times(item.tokenBalanceFormatted).toFixed(2);
+              totalUsdValue = totalUsdValue.plus(item.usdValue);
+            }
           }
           return formattedItem;
         });

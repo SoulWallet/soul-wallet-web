@@ -11,7 +11,7 @@ specifiers:
   '@safe-global/safe-apps-sdk': ^8.1.0
   '@soulwallet/abi': ^0.3.0
   '@soulwallet/decoder': ^0.3.0
-  '@soulwallet/sdk': ^0.3.0
+  '@soulwallet/sdk': ^0.3.2
   '@tanstack/react-query': ^5.17.9
   '@types/node': 20.6.2
   '@types/qrcode': ^1.5.2
@@ -55,7 +55,7 @@ dependencies:
   '@safe-global/safe-apps-sdk': 8.1.0_typescript@5.4.2
   '@soulwallet/abi': 0.3.0
   '@soulwallet/decoder': 0.3.0
-  '@soulwallet/sdk': 0.3.0
+  '@soulwallet/sdk': 0.3.2
   '@tanstack/react-query': 5.27.5_react@18.2.0
   '@types/node': 20.6.2
   '@types/react': 18.2.21
@@ -2092,6 +2092,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.5
+      napi-wasm: 1.1.0
     dev: false
     bundledDependencies:
       - napi-wasm
@@ -2287,8 +2288,8 @@ packages:
     resolution: {integrity: sha512-ggaCj+ySvndHEE7LojzGktqDzcW1exp3xaprWwly1T4+HjzD7PCuPC6hb22sBdDFdkVTn1nK/1TkKEiSw5fnIw==}
     dev: false
 
-  /@soulwallet/sdk/0.3.0:
-    resolution: {integrity: sha512-y8B4i7ELXIDyVHXI38iPARAL7dhDjW3DKtGyUwU6tM3Y3JJuHCaXdX76gkeMTNJ7MMgx+K3FoPWDhtkV+552Tg==}
+  /@soulwallet/sdk/0.3.2:
+    resolution: {integrity: sha512-UyXds7HoTzVhVQDDq3Vh5+ruOo7v0a0DUclyqqN5GKv88nNHxQfNJjCEW4b8mB+NycZ7ka5vNNaQX+VBp6+KrQ==}
     dependencies:
       '@soulwallet/abi': 0.3.0
       '@soulwallet/result': 0.2.0
@@ -5063,6 +5064,10 @@ packages:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /napi-wasm/1.1.0:
+    resolution: {integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==}
+    dev: false
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}

@@ -12,9 +12,10 @@ import IconGithubActivated from '@/assets/socials/github-activated.svg';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
-import ArbConfig from './chains/arb-sepolia';
+// import ArbConfig from './chains/arb-sepolia';
+import BaseConfig from './chains/base-sepolia';
 // import OpConfig from './chains/op-sepolia';
-import BaseConfig from './chains/sepolia';
+import SepoliaConfig from './chains/sepolia';
 
 export const chainIdMapping = {
   1: 'ETH Mainnet',
@@ -121,6 +122,7 @@ export default {
   chainList: [
     // ArbConfig,
     // OpConfig,
+    // SepoliaConfig,
     BaseConfig,
   ],
 };

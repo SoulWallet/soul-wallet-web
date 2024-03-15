@@ -244,8 +244,10 @@ export default function useWallet() {
       userOp.paymasterData = addPaymasterData(payToken, chainConfig.contracts.paymaster);
     }
 
-    const validAfter = Math.floor(Date.now() / 1000);
+    const validAfter = Math.floor(Date.now() / 1000 - 300);
     const validUntil = validAfter + 3600;
+    // const validAfter = '0';
+    // const validUntil = '0';
 
     const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
 

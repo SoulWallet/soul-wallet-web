@@ -113,7 +113,7 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
 
   const selectedToken = getTokenBalance(sendToken);
 
-  const selectedTokenBalance = BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed();
+  const selectedTokenBalance =selectedToken ? BN(selectedToken.tokenBalance).shiftedBy(-selectedToken.decimals).toFixed() : 0;
 
   const { sendErc20, sendEth } = useTransaction();
 

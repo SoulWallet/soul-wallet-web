@@ -332,7 +332,7 @@ export const decodeCalldata = async (
 
   const decoded: any[] = decodeRet.OK;
 
-  if (userOp.initCode !== '0x') {
+  if (userOp.factory !== null && userOp.factory.length === 42 && userOp.factory !== ethers.ZeroAddress) {
     decoded.unshift({
       functionName: 'Create Wallet',
     });
