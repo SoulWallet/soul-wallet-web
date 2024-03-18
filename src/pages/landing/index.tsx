@@ -21,10 +21,10 @@ export default function Landing() {
         background="transparent"
       />
       <Box width="100%" padding="30px" display="flex" alignItems="center" flexDirection="column">
-        <Box fontFamily="Nunito" fontSize="48px" fontWeight="700" textAlign="center">
+        <Box fontFamily="Nunito" fontSize="48px" fontWeight="700" textAlign="center" lineHeight="56px">
           Save for Every Human
         </Box>
-        <Box fontFamily="Nunito" fontSize="16px" fontWeight="500" textAlign="center">
+        <Box fontFamily="Nunito" fontSize="16px" fontWeight="500" textAlign="center" marginTop="14px">
           Security first. Completely controlled by yourself and your trusted networks
         </Box>
         <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Create free account</Button>

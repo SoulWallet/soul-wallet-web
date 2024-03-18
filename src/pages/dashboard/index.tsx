@@ -14,10 +14,10 @@ export default function Dashboard() {
       background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
     >
       <Box width="100%" padding="30px" display="flex" alignItems="center" flexDirection="column">
-        <Box fontFamily="Nunito" fontSize="36px" fontWeight="700" textAlign="center">
+        <Box fontFamily="Nunito" fontSize="36px" fontWeight="700" textAlign="center" lineHeight="56px">
           Deposit, save and earn
         </Box>
-        <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center">
+        <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
           Deposit to your Soul Wallet account, get <Box fontWeight="700">auto-saved</Box> into the best interest rate pool and start earning today!
         </Box>
         <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Deposit USDC</Button>
