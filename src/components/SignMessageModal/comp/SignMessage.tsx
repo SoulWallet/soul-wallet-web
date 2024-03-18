@@ -13,7 +13,6 @@ import useTools from '@/hooks/useTools';
 import IconChevron from '@/assets/icons/chevron-down-gray.svg';
 import { useSignerStore } from '@/store/signer';
 import { SignkeyType } from '@soulwallet/sdk';
-import ConnectWalletModal from '@/pages/recover/ConnectWalletModal';
 import useWagmi from '@/hooks/useWagmi';
 
 const getHash = (message: string) => {
@@ -237,7 +236,6 @@ export default function SignMessage({ messageToSign, onSign, signType, guardians
           Confirm
         </Button>
       )}
-      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={closeConnect} />
     </Box>
   );
 }

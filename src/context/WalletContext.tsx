@@ -52,8 +52,6 @@ export const WalletContext = createContext<IWalletContext>({
 export const WalletContextProvider = ({ children }: any) => {
   console.log('Render WalletContext');
   const { selectedChainItem } = useConfig();
-  const { checkRecoverStatus } = useWallet();
-  const { recoverInfo } = useTempStore();
   const { selectedChainId } = useChainStore();
   const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
   const signTransactionModal = useRef<any>();
@@ -76,25 +74,6 @@ export const WalletContextProvider = ({ children }: any) => {
     return new ethers.JsonRpcProvider(selectedChainItem.provider);
   }, [selectedChainItem]);
 
-  // useEffect(() => {
-  //   const { recoverInfo } = useTempStore.getState();
-
-  //   console.log('set interval recover info', recoverInfo);
-
-  //   // const recoveryRecordID = recoverInfo.recoveryRecordID;
-
-  //   // if (!recoveryRecordID) {
-  //   //   return;
-  //   // }
-
-  //   checkRecoverStatus(recoverInfo);
-
-  //   const interval = setInterval(() => checkRecoverStatus(recoverInfo), 5000);
-
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, [recoverInfo.recoveryRecordID]);
 
   const checkActivated = async () => {
     const res = getIsActivated(selectedAddress, selectedChainId);

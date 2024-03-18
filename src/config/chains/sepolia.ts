@@ -4,7 +4,6 @@
 
 import IconEthFaded from '@/assets/chains/eth-faded.svg';
 import IconEthSquare from '@/assets/chains/eth-square.svg';
-import { keystoreContracts } from './common';
 
 const chainId = 11155111
 
@@ -34,7 +33,6 @@ export default {
     '0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8',
   ],
   contracts: {
-    ...keystoreContracts,
     soulWalletFactory: import.meta.env.VITE_SoulwalletFactory,
     defaultCallbackHandler: import.meta.env.VITE_DefaultCallbackHandler,
     entryPoint: import.meta.env.VITE_EntryPoint,

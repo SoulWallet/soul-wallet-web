@@ -1,13 +1,11 @@
 import api from '@/lib/api';
 import QRCode from 'qrcode';
-import { GuardianItem } from '@/lib/type';
 import { useToast } from '@chakra-ui/react';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import useBrowser from './useBrowser';
 import { SignkeyType } from '@soulwallet/sdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
-import { useGuardianStore } from '@/store/guardian';
 import { useBalanceStore } from '@/store/balance';
 import { useHistoryStore } from '@/store/history';
 import { useChainStore } from '@/store/chain';
@@ -22,7 +20,6 @@ export default function useTools() {
   const { clearSigners, getSelectedKeyType, eoas } = useSignerStore();
   const { clearAddresses } = useAddressStore();
   const { address } = useAccount();
-  const { clearGuardianInfo } = useGuardianStore();
   const { clearBalance } = useBalanceStore();
   const { clearHistory } = useHistoryStore();
   const { clearChainStore } = useChainStore();
@@ -59,16 +56,6 @@ export default function useTools() {
     }
   };
 
-  const checkInitialized = (showHintModal = false) => {
-    if (!slotInfo.initialGuardianHash) {
-      if (showHintModal) {
-        showSetGuardianHintModal();
-      }
-      return false;
-    }
-    return true;
-  };
-
   const getWalletName = () => {
     return getAddressName(slotInfo.slot);
   };
@@ -82,7 +69,6 @@ export default function useTools() {
     clearBalance();
     clearChainStore();
     clearSigners();
-    clearGuardianInfo();
     clearHistory();
     clearSlotStore();
     clearTempStore();
@@ -111,19 +97,6 @@ export default function useTools() {
     }
   };
 
-  const formatGuardianFile = (walletAddress: string, guardiansList: GuardianItem[] = []) => {
-    // remove id
-    const guardians = guardiansList.map((item) => {
-      return {
-        address: item.address,
-        name: item.name,
-      };
-    });
-    return {
-      walletAddress: walletAddress,
-      guardians,
-    };
-  };
 
   const generateJsonName = (name: string) => {
     const date = new Date();
@@ -192,7 +165,6 @@ export default function useTools() {
     verifyAddressFormat,
     downloadJsonFile,
     emailJsonFile,
-    formatGuardianFile,
     getJsonFromFile,
     generateQrCode,
     generateJsonName,
@@ -201,6 +173,5 @@ export default function useTools() {
     goGuideAction,
     getWalletName,
     setWalletName,
-    checkInitialized,
   };
 }

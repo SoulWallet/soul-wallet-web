@@ -32,7 +32,6 @@ import AddressIcon from '@/components/AddressIcon';
 import { useSignerStore } from '@/store/signer';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import useTools from '@/hooks/useTools';
-import ConnectWalletModal from '@/pages/recover/ConnectWalletModal';
 import useWagmi from '@/hooks/useWagmi';
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
@@ -575,7 +574,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
           </Button>
         )}
       </Box>
-      <ConnectWalletModal isOpen={isConnectOpen} connectEOA={connectEOA} onClose={closeConnect} />
     </Box>
   );
 }

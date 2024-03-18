@@ -5,8 +5,6 @@
 import IconOpFaded from '@/assets/chains/op-faded.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 
-import { keystoreContracts } from './common';
-
 const chainId = 11155420;
 
 export default {
@@ -32,7 +30,6 @@ export default {
   paymasterTokens: [
   ],
   contracts: {
-    ...keystoreContracts,
     soulWalletFactory: import.meta.env.VITE_SoulwalletFactory,
     defaultCallbackHandler: import.meta.env.VITE_DefaultCallbackHandler,
     entryPoint: import.meta.env.VITE_EntryPoint,
