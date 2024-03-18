@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import WalletWrapper from './wrapper/WalletWrapper';
 import PublicWrapper from './wrapper/PublicWrapper';
-import Dashboard from '@/pages/dashboard';
+import Dashboard from '@/pages/dashboard2';
 import Recover from '@/pages/recover';
 import Popup from '@/pages/popup';
 import Apps from '@/pages/apps';
@@ -15,7 +15,7 @@ import Sign from '@/pages/public/Sign';
 import Auth from '@/pages/auth';
 import Create from '@/pages/create'
 import Landing from '@/pages/landing'
-import DashboardLayout from './components/Layouts/DashboardLayout';
+import AppContainer from './components/mobile/AppContainer';
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <DashboardLayout />,
+        element: <AppContainer />,
         children: [
           { path: 'dashboard', element: <Dashboard /> },
 

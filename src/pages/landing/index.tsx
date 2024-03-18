@@ -28,7 +28,16 @@ export default function Landing() {
           Security first. Completely controlled by yourself and your trusted networks
         </Box>
         <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Create free account</Button>
-        <Button size="xl" type="text" minWidth="283px" marginTop="10px" color="black">Sign in</Button>
+        <Button
+          size="xl"
+          type="text"
+          minWidth="283px"
+          marginTop="10px"
+          color="black"
+          marginBottom="20px"
+        >
+          Sign in
+        </Button>
         <Box
           width="100%"
           background="white"

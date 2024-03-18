@@ -9,7 +9,6 @@ export default function Header({ title, onBack, showBackButton, showLogo, ...pro
       display="flex"
       alignItems="center"
       justifyContent="center"
-      marginTop="18px"
       background="white"
       position="relative"
       {...props}

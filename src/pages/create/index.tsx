@@ -57,6 +57,7 @@ export default function Create() {
         title="Create account"
         showBackButton
         onBack={onPrev}
+        marginTop="18px"
       />
       {renderStep()}
     </Box>
