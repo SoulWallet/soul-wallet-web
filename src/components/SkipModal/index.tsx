@@ -25,7 +25,7 @@ export default function SkipModal({ isOpen, onClose }: any) {
       initialGuardianSafePeriod: defaultGuardianSafePeriod,
     };
     updateCreateInfo(noGuardian);
-    await createWallet(noGuardian);
+    // await createWallet(noGuardian);
     setCreating(false);
 
     onClose();

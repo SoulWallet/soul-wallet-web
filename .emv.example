@@ -7,7 +7,6 @@ VITE_Payment=
 VITE_KeyStore=
 VITE_KeyStoreModuleProxy=
 VITE_SoulwalletFactory=
-VITE_SecurityControlModule=
 VITE_DefaultCallbackHandler=
 VITE_Paymaster=
 VITE_SoulWalletDefaultValidator=

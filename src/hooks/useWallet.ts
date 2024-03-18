@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { MaxUint256, ZeroHash, ethers } from 'ethers';
 import useSdk from './useSdk';
 import useQuery from './useQuery';
 import { ABI_SoulWallet } from '@soulwallet/abi';
@@ -8,6 +8,7 @@ import { addPaymasterData } from '@/lib/tools';
 import { erc20Abi, verifyMessage } from 'viem';
 import { L1KeyStore, SignkeyType, UserOperation } from '@soulwallet/sdk';
 import { executeTransaction } from '@/lib/tx';
+import { UserOpUtils } from '@soulwallet/sdk';
 import BN from 'bignumber.js';
 import useConfig from './useConfig';
 import api from '@/lib/api';
@@ -21,104 +22,97 @@ import useWalletContext from '@/context/hooks/useWalletContext';
 import { useTempStore } from '@/store/temp';
 import { useSettingStore } from '@/store/setting';
 import { getWalletAddress } from '@/pages/recover/RecoverProgress';
+import { defaultGuardianSafePeriod } from '@/config';
+import { sponsorMockSignature } from '@/config/constants';
 
 export default function useWallet() {
-  const { signByPasskey } = usePasskey();
+  const { signByPasskey, register } = usePasskey();
   const { set1559Fee } = useQuery();
   const { chainConfig } = useConfig();
   const { ethersProvider } = useWalletContext();
   const { signMessageAsync } = useSignMessage();
   const { updateGuardiansInfo } = useGuardianStore();
   const { slotInfo, setSlotInfo, getSlotInfo } = useSlotStore();
-  const { updateChainItem, setSelectedChainId } = useChainStore();
+  const { selectedChainId, setSelectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useSignerStore();
-  const { soulWallet, calcWalletAddressAllChains } = useSdk();
-  const { selectedAddress, setAddressList, updateAddressItem } = useAddressStore();
+  const { soulWallet, calcWalletAddress } = useSdk();
+  const { selectedAddress, setAddressList, updateAddressItem, setSelectedAddress } = useAddressStore();
   const { getSelectedKeyType, setEoas } = useSignerStore();
   const { setSignerIdAddress, setFinishedSteps, saveAddressName, getRecoverRecordId } = useSettingStore();
   const { clearCreateInfo, recoverInfo, setRecoverInfo, updateRecoverInfo, clearTempStore } = useTempStore();
 
-  const createWallet = async ({
-    initialGuardianHash,
-    initialGuardianSafePeriod,
-  }: {
-    initialGuardianHash: string;
-    initialGuardianSafePeriod: number;
-  }) => {
-    // retrieve info from temp store
-    const { credentials = [], eoaAddress = [] } = useTempStore.getState().createInfo;
-    const keystore = chainConfig.contracts.l1Keystore;
+  const createWallet = async (walletName: string, invitationCode: string) => {
+    const createIndex = 0;
+    const noGuardian = {
+      initialGuardianHash: ethers.ZeroHash,
+      initialGuardianSafePeriod: defaultGuardianSafePeriod,
+    };
 
-    const credentialKeys = credentials.map((item: any) => item.publicKey);
-    const credentialIds = credentials.map((item: any) => item.id);
+    // step 0: register passkey
+    const credential = await register(walletName);
+    console.log('res', credential);
+    // step 1: calculate address
+    const initialKeys = [credential.publicKey as string];
 
-    const initialKeys = [...credentialKeys, ...eoaAddress].filter((item) => item);
+    const address = (
+      await soulWallet.calcWalletAddress(
+        createIndex,
+        initialKeys,
+        noGuardian.initialGuardianHash,
+        Number(noGuardian.initialGuardianSafePeriod),
+        selectedChainId,
+      )
+    ).OK;
 
-    const initialSignerIds = [...credentialIds, ...eoaAddress].filter((item) => item);
+    setSelectedAddress(address);
 
-    const initialKeysAddress = L1KeyStore.initialKeysToAddress(initialKeys);
-    const initialKeyHash = L1KeyStore.getKeyHash(initialKeysAddress);
-
-    const slot = L1KeyStore.getSlot(initialKeyHash, initialGuardianHash, initialGuardianSafePeriod);
-
-    // save slot info to api
-    await api.guardian.backupSlot({
-      keystore,
-      slot,
-      slotInitInfo: {
-        initialKeyHash,
-        initialGuardianHash,
-        initialGuardianSafePeriod: toHex(initialGuardianSafePeriod),
-      },
-      initialKeys: initialKeysAddress,
-    });
-
-    setSlotInfo({
+    const createSlotInfo = {
       initialKeys,
-      initialKeyHash,
-      initialKeysAddress,
-      slot,
-      initialGuardianHash,
-      initialGuardianSafePeriod: toHex(initialGuardianSafePeriod),
+      initialGuardianHash: noGuardian.initialGuardianHash,
+      initialGuardianSafePeriod: toHex(noGuardian.initialGuardianSafePeriod),
+    };
+    // save slot info to api
+    await api.account.create({
+      address,
+      chainID: selectedChainId,
+      name: walletName,
+      initInfo: {
+        index: createIndex,
+        ...createSlotInfo,
+      },
+      invitationCode,
     });
 
-    const { walletName } = useTempStore.getState().createInfo;
-    console.log('walletName', slot, walletName);
-    if (walletName && slot) saveAddressName(slot, walletName);
+    setSlotInfo(createSlotInfo);
 
-    console.log('after public backup slot');
+    setCredentials([credential as any]);
+    // step 2: get User op
+    let userOp = await getActivateOp(createIndex, createSlotInfo, chainConfig.paymasterTokens[0]);
+    userOp.signature = sponsorMockSignature;
+    userOp.paymasterData =
+      '0x0000000000000000000000000000000000000000000000000000000065f7e81e0000000000000000000000000000000000000000000000000000000000000000c8c1e4b029a76fc92119914dd1d9e6cf3a610b53c9913b1448ddfffb8c2af7cd18ad1ae71e18f98c9baf33a8468aca9cc4d9b0e92803b8cb7e22bd596d406b811c';
 
-    const addresses = await calcWalletAddressAllChains(0);
-
-    setAddressList(addresses);
-
-    // save signer id to address mapping
-    const chainIdAddress = addresses.reduce((obj, item) => {
-      return {
-        ...obj,
-        [item.chainIdHex]: item.address,
-      };
-    }, {});
-
-    initialSignerIds.forEach((item) => {
-      setSignerIdAddress(item, chainIdAddress);
-    });
-
-    if (credentials.length > 0) {
-      setCredentials(credentials);
-    }
-    if (eoaAddress && eoaAddress.length > 0) {
-      setEoas(eoaAddress);
-    }
-
-    // clearTempStore();
-
-    clearCreateInfo();
+    try {
+      const res = await api.sponsor.check(
+        selectedChainId,
+        chainConfig.contracts.entryPoint,
+        UserOpUtils.userOperationFromJSON(UserOpUtils.userOperationToJSON(userOp)),
+      );
+      if (res.data && res.data.paymasterData) {
+        console.log('sponsor info 1', res.data);
+        userOp = {
+          ...userOp,
+          ...res.data,
+          // paymasterData: res.data.paymasterData,
+        };
+        const receipt = await signAndSend(userOp);
+        console.log('receipt is', receipt);
+      }
+    } catch (err) {}
   };
 
-  const getActivateOp = async (index: number, payToken: string, extraTxs: any = []) => {
-    console.log('extraTxs', extraTxs);
-    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = slotInfo;
+  const getActivateOp = async (index: number, _slotInfo: any, payToken: string) => {
+    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = _slotInfo;
     const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(
       index,
       initialKeys,
@@ -136,45 +130,25 @@ export default function useWallet() {
     // approve paymaster to spend ERC-20
     const soulAbi = new ethers.Interface(ABI_SoulWallet);
     const erc20Interface = new ethers.Interface(erc20Abi);
-    const approveTos = chainConfig.paymasterTokens;
+    // approve defi contract to spend token
+    const approveTos = [import.meta.env.VITE_TOKEN_USDC];
     const approveCalldata = erc20Interface.encodeFunctionData('approve', [
-      chainConfig.contracts.paymaster,
-      ethers.parseEther('1000'),
+      import.meta.env.VITE_AaveUsdcSaveAutomationSepolia,
+      MaxUint256,
     ]);
 
     const approveCalldatas = [...new Array(approveTos.length)].map(() => approveCalldata);
 
-    const finalTos = [...approveTos, ...extraTxs.map((tx: any) => tx.to)];
+    const finalValues = [...new Array(approveTos.length).fill('0x0')];
 
-    const finalCalldatas = [...approveCalldatas, ...extraTxs.map((tx: any) => tx.data)];
-
-    const finalValues = [...new Array(approveTos.length).fill('0x0'), ...extraTxs.map((tx: any) => tx.value || '0x0')];
-
-    const executions: string[][] = finalTos.map((to, index) => [to, finalValues[index], finalCalldatas[index]]);
+    const executions: string[][] = approveTos.map((to, index) => [to, finalValues[index], approveCalldatas[index]]);
 
     userOp.callData = soulAbi.encodeFunctionData('executeBatch((address,uint256,bytes)[])', [executions]);
 
-    userOp = await set1559Fee(userOp, payToken);
+    userOp = await set1559Fee(userOp, payToken, SignkeyType.P256);
 
-    let callGasLimit = BN(approveTos.length * 50000);
-
-    for (let i = 0; i < extraTxs.length; i++) {
-      // get gas from tx or onchain
-      const gas = BN(extraTxs[i].gas).isGreaterThan(0)
-        ? BN(extraTxs[i].gas)
-        : await ethersProvider.estimateGas(extraTxs[i]);
-      callGasLimit = callGasLimit.plus(gas);
-    }
-
-    console.log('estimate callGaslimit', callGasLimit);
-
-    userOp.callGasLimit = `0x${
-      BN(callGasLimit).isGreaterThan(finalTos.length * 50000)
-        ? callGasLimit.toString(16)
-        : Number(finalTos.length * 50000).toString(16)
-    }`;
-    userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
-    userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
+    userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(75000).toString(16)}`;
+    userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(100000).toString(16)}`;
 
     return userOp;
   };

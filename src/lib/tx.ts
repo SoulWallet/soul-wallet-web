@@ -14,8 +14,6 @@ export const initSoulWallet = (chainConfig: any) => {
     chainConfig.contracts.soulWalletFactory,
     chainConfig.contracts.defaultValidator,
     chainConfig.contracts.defaultCallbackHandler,
-    // chainConfig.contracts.keyStoreModuleProxy,
-    // chainConfig.contracts.securityControlModule,
   );
 };
 

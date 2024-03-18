@@ -76,25 +76,25 @@ export const WalletContextProvider = ({ children }: any) => {
     return new ethers.JsonRpcProvider(selectedChainItem.provider);
   }, [selectedChainItem]);
 
-  useEffect(() => {
-    const { recoverInfo } = useTempStore.getState();
+  // useEffect(() => {
+  //   const { recoverInfo } = useTempStore.getState();
 
-    console.log('set interval recover info', recoverInfo);
+  //   console.log('set interval recover info', recoverInfo);
 
-    // const recoveryRecordID = recoverInfo.recoveryRecordID;
+  //   // const recoveryRecordID = recoverInfo.recoveryRecordID;
 
-    // if (!recoveryRecordID) {
-    //   return;
-    // }
+  //   // if (!recoveryRecordID) {
+  //   //   return;
+  //   // }
 
-    checkRecoverStatus(recoverInfo);
+  //   checkRecoverStatus(recoverInfo);
 
-    const interval = setInterval(() => checkRecoverStatus(recoverInfo), 5000);
+  //   const interval = setInterval(() => checkRecoverStatus(recoverInfo), 5000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [recoverInfo.recoveryRecordID]);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [recoverInfo.recoveryRecordID]);
 
   const checkActivated = async () => {
     const res = getIsActivated(selectedAddress, selectedChainId);

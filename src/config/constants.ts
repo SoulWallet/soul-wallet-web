@@ -49,3 +49,5 @@ export const sidebarLinks = [
 
 
 export const passkeyTooltipText = "A passkey is a FIDO credential stored on your computer or phone, and it is used to unlock your online accounts. The passkey makes signing in more secure."
+
+export const sponsorMockSignature = '0xaf2a5bcc4c10b5289946daaa87caa467f3abadcc0000006201000065f2af9f000065f2bdaf0000000000000000000000000000000000000000a1da5b66f8c211583e706136bee9ab6f1ff43878b885620a8a16b0af5d52cf2c29ffdaf22944306a12f06fdcc41f11ff0f964160ce1f35140d039000301c345d1b'

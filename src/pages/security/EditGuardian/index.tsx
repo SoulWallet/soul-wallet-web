@@ -163,11 +163,11 @@ export default function EditGuardian({
 
         if (!keepPrivate) await api.guardian.backupGuardians(guardiansInfo);
 
-        const initialGuardianSafePeriod = defaultGuardianSafePeriod;
-        await createWallet({
-          initialGuardianHash: newGuardianHash,
-          initialGuardianSafePeriod,
-        });
+        // const initialGuardianSafePeriod = defaultGuardianSafePeriod;
+        // await createWallet({
+        //   initialGuardianHash: newGuardianHash,
+        //   initialGuardianSafePeriod,
+        // });
 
         // guardianStore()
         console.log('keepPrivate', keepPrivate);

@@ -14,10 +14,10 @@ export default function WagmiContext({ children }: { children: ReactNode }) {
       [optimismSepolia.id]: http(),
     },
     connectors: [
-      injected(),
-      walletConnect({
-        projectId: import.meta.env.VITE_WALLETCONNECT_ID,
-      }),
+      // injected(),
+      // walletConnect({
+      //   projectId: import.meta.env.VITE_WALLETCONNECT_ID,
+      // }),
     ],
   });
 

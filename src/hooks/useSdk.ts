@@ -18,8 +18,6 @@ export default function useSdk() {
       selectedChainItem.contracts.soulWalletFactory,
       selectedChainItem.contracts.defaultValidator,
       selectedChainItem.contracts.defaultCallbackHandler,
-      // selectedChainItem.contracts.keyStoreModuleProxy,
-      // selectedChainItem.contracts.securityControlModule,
     );
   }, [selectedChainId]);
 

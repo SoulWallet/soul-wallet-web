@@ -35,7 +35,6 @@ export default {
     ...keystoreContracts,
     soulWalletFactory: import.meta.env.VITE_SoulwalletFactory,
     defaultCallbackHandler: import.meta.env.VITE_DefaultCallbackHandler,
-    securityControlModule: import.meta.env.VITE_SecurityControlModule,
     entryPoint: import.meta.env.VITE_EntryPoint,
     paymaster: import.meta.env.VITE_Paymaster,
     defaultValidator: import.meta.env.VITE_SoulWalletDefaultValidator,

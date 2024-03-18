@@ -17,12 +17,12 @@ export default function useQuery() {
   const { chainConfig } = useConfig();
   const { getSelectedKeyType } = useSignerStore();
 
-  const getEthPrice = async () => {
-    // get price from coingecko
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
-    console.log('res', await res.json());
-    return await res.json();
-  };
+  // const getEthPrice = async () => {
+  //   // get price from coingecko
+  //   const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+  //   console.log('res', await res.json());
+  //   return await res.json();
+  // };
 
   const getGasPrice = async () => {
     // if it's in the fixed price list, set fixed
@@ -76,33 +76,38 @@ export default function useQuery() {
       };
     }
   };
-  const set1559Fee = async (userOp: any, payToken: string) => {
-    const selectedKeyType = getSelectedKeyType();
 
-    console.log('selectedkeytype,', selectedKeyType)
+  const set1559Fee = async (userOp: any, payToken: string, _selectedKeyType?: number) => {
+    const selectedKeyType = _selectedKeyType || getSelectedKeyType();
+
+    console.log('selectedkeytype,', selectedKeyType);
 
     // set 1559 fee
-    if (!userOp.maxFeePerGas || !userOp.maxPriorityFeePerGas) {
-      const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
-      userOp.maxFeePerGas = maxFeePerGas;
-      userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
-    }
+    // if (!userOp.maxFeePerGas || !userOp.maxPriorityFeePerGas) {
+    const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
+    userOp.maxFeePerGas = maxFeePerGas;
+    userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
+    // }
 
     if (payToken && payToken !== ethers.ZeroAddress) {
       userOp.paymasterData = addPaymasterData(payToken, chainConfig.contracts.paymaster);
     }
 
-    console.log('Estimate UserOP:')
+    console.log('Estimate UserOP:');
     printUserOp(userOp);
 
     // get gas limit
-    const gasLimit = await soulWallet.estimateUserOperationGas(chainConfig.contracts.defaultValidator, userOp, selectedKeyType);
+    const gasLimit = await soulWallet.estimateUserOperationGas(
+      chainConfig.contracts.defaultValidator,
+      userOp,
+      selectedKeyType,
+    );
 
     if (gasLimit.isErr()) {
       throw new Error(gasLimit.ERR.message);
     }
 
-    return userOp;
+    return userOp
   };
 
   // const getWalletType = async (address: string) => {

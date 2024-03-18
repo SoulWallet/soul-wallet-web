@@ -4,8 +4,6 @@ import checker from 'vite-plugin-checker';
 import path from 'path';
 import removeConsole from "vite-plugin-remove-console";
 
-console.log('B is', process.env.VITE_BRANCH);
-
 // https://vitejs.dev/config/
 export default defineConfig({
   server:{
