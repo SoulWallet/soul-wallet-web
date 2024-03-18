@@ -6,9 +6,6 @@ import { SignkeyType } from '@soulwallet/sdk';
 export interface ISignerStore {
   signerId: string;
   setSignerId: (signerId: string) => void;
-  eoas: string[];
-  addEoa: (eoa: string) => void;
-  setEoas: (eoas: string[]) => void;
   credentials: ICredentialItem[];
   getSelectedKeyType: () => SignkeyType;
   getSelectedCredential: () => void;
@@ -38,30 +35,12 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
       signerId,
     });
   },
-  eoas: [],
-  addEoa: (eoa: string) => {
-    set((state) => {
-      state.eoas.push(eoa);
-    });
-  },
-  setEoas: (eoas: string[]) => {
-    console.log('setEOAs', eoas);
-    set((state) => {
-      if (eoas.length > 0) {
-        state.eoas = eoas;
-        state.signerId = eoas[0];
-      }
-    });
-  },
+
   credentials: [],
   getSelectedKeyType: () => {
-    if (get().eoas.includes(get().signerId)) {
-      return SignkeyType.EOA;
-    } else {
-      const index = getIndexByCredentialId(get().credentials, get().signerId);
-      const algorithm = get().credentials[index].algorithm;
-      return algorithm === 'ES256' ? SignkeyType.P256 : SignkeyType.RS256;
-    }
+    const index = getIndexByCredentialId(get().credentials, get().signerId);
+    const algorithm = get().credentials[index].algorithm;
+    return algorithm === 'ES256' ? SignkeyType.P256 : SignkeyType.RS256;
   },
   addCredential: (credential: ICredentialItem) => {
     set((state) => {
@@ -78,7 +57,6 @@ const createCredentialSlice = immer<ISignerStore>((set, get) => ({
   clearSigners: () => {
     set((state) => {
       state.credentials = [];
-      state.eoas = [];
       state.signerId = '';
     });
   },

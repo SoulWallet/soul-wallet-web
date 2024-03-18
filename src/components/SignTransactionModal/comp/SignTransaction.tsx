@@ -1,14 +1,12 @@
 import { Flex, Box, Text, useToast, Image, Divider, Tooltip, useMediaQuery, usePanGesture } from '@chakra-ui/react';
 import GasSelect from '../../SendAssets/comp/GasSelect';
-import IconCopy from '@/assets/copy.svg';
 import Button from '../../Button';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import BN from 'bignumber.js';
 import { toFixed, toShortAddress } from '@/lib/tools';
 import useConfig from '@/hooks/useConfig';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import IconArrowDown from '@/assets/icons/arrow-down.svg';
-import SignerSelect from '@/components/SignerSelect';
 import IconQuestion from '@/assets/icons/question.svg';
 import useQuery from '@/hooks/useQuery';
 import { decodeCalldata } from '@/lib/tools';
@@ -30,8 +28,6 @@ import { bundlerErrMapping } from '@/config';
 import DropdownSelect from '@/components/DropdownSelect';
 import AddressIcon from '@/components/AddressIcon';
 import { useSignerStore } from '@/store/signer';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import useTools from '@/hooks/useTools';
 import useWagmi from '@/hooks/useWagmi';
 
 export const LabelItem = ({ label, tooltip, chainName }: { label: string; tooltip?: string; chainName?: string }) => {
@@ -61,12 +57,11 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [promiseInfo, setPromiseInfo] = useState<any>({});
   const [decodedData, setDecodedData] = useState<any>({});
   const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
-  const { checkValidSigner } = useTools();
   const [signing, setSigning] = useState<boolean>(false);
-  const { checkActivated, ethersProvider, showConnectWallet } = useWalletContext();
+  const { checkActivated, ethersProvider} = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prechecked, setPrechecked] = useState(false);
-  const { getSelectedKeyType, eoas } = useSignerStore();
+  const { getSelectedKeyType } = useSignerStore();
   const [totalMsgValue, setTotalMsgValue] = useState('');
   const [payToken, setPayToken] = useState(ethers.ZeroAddress);
   const [payTokenSymbol, setPayTokenSymbol] = useState('');
@@ -124,9 +119,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const onConfirm = async () => {
     try {
-      if (!checkValidSigner()) {
-        return;
-      }
       setSigning(true);
       let userOp: any;
       if (sponsor && useSponsor && sponsor.paymasterData) {
@@ -435,15 +427,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
         <Flex flexDir={'column'} gap="3">
           <InfoWrap fontSize="14px">
-            <InfoItem>
-              <LabelItem
-                label="Signer"
-                tooltip={`A transaction signer is responsible for authorizing blockchain transactions, ensuring security and validity before they're processed on the network.`}
-              />
-              <Flex gap="2" fontWeight={'500'}>
-                <SignerSelect onChange={onSignerChange} />
-              </Flex>
-            </InfoItem>
             <InfoItem>
               <LabelItem
                 label="Gas"

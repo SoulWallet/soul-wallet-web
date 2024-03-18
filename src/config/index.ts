@@ -89,8 +89,6 @@ export const bundlerErrMapping: { [key: string]: string } = {
 
 export const ensContractAddress = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 
-export const supportedEoas = ['injected', 'walletConnect'];
-
 export default {
   homepage: 'https://www.soulwallet.io',
   faviconUrl: 'https://www.google.com/s2/favicons?domain=',

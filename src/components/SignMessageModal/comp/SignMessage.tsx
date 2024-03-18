@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 import IconZoom from '@/assets/icons/zoom.svg';
 import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { TypedDataEncoder, ethers } from 'ethers';
-import SignerSelect from '@/components/SignerSelect';
 import { LabelItem } from '@/components/SignTransactionModal/comp/SignTransaction';
 import useTools from '@/hooks/useTools';
 import IconChevron from '@/assets/icons/chevron-down-gray.svg';
@@ -78,7 +77,6 @@ export default function SignMessage({ messageToSign, onSign, signType, guardians
   const { signTypedDataAsync, signTypedData } = useSignTypedData();
   const { signRawHash, signWithPasskey } = useWallet();
   const { getSelectedKeyType } = useSignerStore();
-  const { checkValidSigner } = useTools();
   const [showMore, setShowMore] = useState(guardiansInfo ? false : true);
   const [isActivated, setIsActivated] = useState(false);
   const [targetChainId, setTargetChainId] = useState<undefined | number>();
@@ -86,9 +84,6 @@ export default function SignMessage({ messageToSign, onSign, signType, guardians
   const { connectEOA, isConnected, isConnectOpen, openConnect, closeConnect, chainId } = useWagmi();
 
   const onConfirm = async () => {
-    if (!checkValidSigner()) {
-      return;
-    }
     try {
       let signHash;
       let signature;
@@ -172,23 +167,6 @@ export default function SignMessage({ messageToSign, onSign, signType, guardians
             </Box>
           )}
         </Box>
-        <InfoWrap fontSize="14px">
-          <InfoItem>
-            <LabelItem
-              label="Signer"
-              tooltip={`A transaction signer is responsible for authorizing blockchain transactions, ensuring security and validity before they're processed on the network.`}
-            />
-            <Flex gap="2" fontWeight={'500'}>
-              <SignerSelect />
-            </Flex>
-          </InfoItem>
-          {/* <InfoItem>
-              <Text>From</Text>
-              <Text>
-              {getAddressName(selectedAddressItem.address)}({toShortAddress(selectedAddressItem.address)})
-              </Text>
-              </InfoItem> */}
-        </InfoWrap>
       </Flex>
       {shouldDisable && (
         <Text color="red" mt="4">

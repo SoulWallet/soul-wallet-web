@@ -30,7 +30,6 @@ export default function useWallet() {
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet, calcWalletAddress } = useSdk();
   const { selectedAddress, setAddressList, updateAddressItem, setSelectedAddress } = useAddressStore();
-  const { getSelectedKeyType, setEoas } = useSignerStore();
 
   const createWallet = async (walletName: string, invitationCode: string) => {
     const createIndex = 0;
@@ -81,12 +80,16 @@ export default function useWallet() {
     let userOp = await getActivateOp(createIndex, createSlotInfo, chainConfig.paymasterTokens[0]);
     userOp.signature = sponsorMockSignature;
 
+    userOp.paymaster = '0x9d0021A869f1Ed3a661Ffe8C9B41Ec6244261d98';
+    userOp.paymasterData =
+      '0x0000000000000000000000000000000000000000000000000000000065f7e81e0000000000000000000000000000000000000000000000000000000000000000c8c1e4b029a76fc92119914dd1d9e6cf3a610b53c9913b1448ddfffb8c2af7cd18ad1ae71e18f98c9baf33a8468aca9cc4d9b0e92803b8cb7e22bd596d406b811c';
+
     try {
-      const res = await api.sponsor.check(selectedChainId, chainConfig.contracts.entryPoint, {
-        ...UserOpUtils.userOperationFromJSON(UserOpUtils.userOperationToJSON(userOp)),
-        paymasterData:
-          '0x0000000000000000000000000000000000000000000000000000000065f7e81e0000000000000000000000000000000000000000000000000000000000000000c8c1e4b029a76fc92119914dd1d9e6cf3a610b53c9913b1448ddfffb8c2af7cd18ad1ae71e18f98c9baf33a8468aca9cc4d9b0e92803b8cb7e22bd596d406b811c',
-      });
+      const res = await api.sponsor.check(
+        selectedChainId,
+        chainConfig.contracts.entryPoint,
+        UserOpUtils.userOperationFromJSON(UserOpUtils.userOperationToJSON(userOp)),
+      );
       if (res.data && res.data.paymasterData) {
         console.log('sponsor info 1', res.data);
         userOp = {

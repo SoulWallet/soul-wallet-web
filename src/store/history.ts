@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import scanApi from '@/lib/scanApi';
 import { decodeCalldata } from '@/lib/tools';
-import { ActivityStatusEn } from '@/pages/dashboard/comp/Activity/comp/ActivityItem';
 
 export interface IHistoryStore {
   historyList: any[];
@@ -23,13 +22,10 @@ export const fetchHistoryApi = async (address: string, chainId: string[], ethers
       .map((item: any) => item.functionName || (item.method && item.method.name))
       .join(', ');
 
-    const status = item.success ? ActivityStatusEn.Success : ActivityStatusEn.Error;
-
     res.data.ops[i] = {
       ...res.data.ops[i],
       functionName,
       to: callDataDecodes[0].to,
-      status,
     };
   }
 

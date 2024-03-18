@@ -23,10 +23,10 @@ export default function FindRoute({ children }: { children: ReactNode }) {
     const storageVersion = storage.getItem('storeVersion');
 
     const allowBypass =
-      location.pathname.includes('recover') ||
       location.pathname.includes('create') ||
       location.pathname.includes('landing') ||
-      location.pathname.includes('auth') || true;
+      location.pathname.includes('auth') ||
+      true;
 
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
@@ -35,8 +35,6 @@ export default function FindRoute({ children }: { children: ReactNode }) {
     }
 
     if (
-      // !createInfo.eoaAddress &&
-      // !(createInfo.credentials?.length > 0) &&
       !doneAuth &&
       !selectedAddress &&
       !allowBypass
@@ -46,9 +44,7 @@ export default function FindRoute({ children }: { children: ReactNode }) {
         search: location.search,
       });
     } else {
-      // navigate({
-      //   pathname: '/dashboard',
-      // });
+    
     }
     // if (addressList.length && selectedAddress)
   };

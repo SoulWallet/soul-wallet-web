@@ -3,50 +3,33 @@ import { ethers } from 'ethers';
 import SignTransactionModal from '@/components/SignTransactionModal';
 import ConfirmPaymentModal from '@/components/ConfirmPaymentModal';
 import SignMessageModal from '@/components/SignMessageModal';
-import ClaimAssetsModal from '@/components/ClaimAssetsModal';
 import LogoutModal from '@/components/LogoutModal';
-import TestGuideModal from '@/components/TestGuideModal';
-import FeedbackModal from '@/components/FeedbackModal';
 import SendModal from '@/components/SendModal';
 import ReceiveModal from '@/components/ReceiveModal';
-import SetGuardianHintModal from '@/components/SetGuardianHintModal';
-import ConnectWalletModal from '@/components/ConnectWalletModal';
 import useConfig from '@/hooks/useConfig';
-import { useTempStore } from '@/store/temp';
 import { useChainStore } from '@/store/chain';
 import { useAddressStore } from '@/store/address';
-import useWallet from '@/hooks/useWallet';
 
 interface IWalletContext {
   ethersProvider: any;
   showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
-  showConnectWallet: () => Promise<void>;
   showConfirmPayment: (fee: any, origin?: string, sendTo?: string) => Promise<void>;
-  showClaimAssets: () => Promise<void>;
-  showTestGuide: () => Promise<void>;
   showSignMessage: (messageToSign: any, signType?: string, guardianInfo?: any) => Promise<any>;
   showReceive: () => Promise<void>;
   showSend: (tokenAddress?: string, transferType?: string) => Promise<void>;
-  showFeedback: () => Promise<void>;
   showLogout: (_redirectUrl?: string) => Promise<void>;
-  showSetGuardianHintModal: () => Promise<void>;
   checkActivated: () => Promise<boolean | undefined>;
 }
 
 export const WalletContext = createContext<IWalletContext>({
   ethersProvider: new ethers.JsonRpcProvider(),
   showSignTransaction: async () => {},
-  showConnectWallet: async () => {},
   showConfirmPayment: async () => {},
   showSignMessage: async () => {},
   showReceive: async () => {},
   showSend: async () => {},
-  showClaimAssets: async () => {},
-  showFeedback: async () => {},
   showLogout: async (_redirectUrl?: any) => {},
-  showTestGuide: async () => {},
   checkActivated: async () => false,
-  showSetGuardianHintModal: async () => {},
 });
 
 export const WalletContextProvider = ({ children }: any) => {
@@ -55,16 +38,11 @@ export const WalletContextProvider = ({ children }: any) => {
   const { selectedChainId } = useChainStore();
   const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
   const signTransactionModal = useRef<any>();
-  const connectWalletModal = useRef<any>();
   const confirmPaymentModal = useRef<any>();
   const signMessageModal = useRef<any>();
   const receiveModal = useRef<any>();
   const sendModal = useRef<any>();
-  const claimAssetsModal = useRef<any>();
   const logoutModal = useRef<any>();
-  const testGuideModal = useRef<any>();
-  const feedbackModal = useRef<any>();
-  const setGuardianHintModal = useRef<any>();
 
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
@@ -93,10 +71,6 @@ export const WalletContextProvider = ({ children }: any) => {
     return await signTransactionModal.current.show(txns, origin, sendTo);
   };
 
-  const showConnectWallet = async () => {
-    return await connectWalletModal.current.show();
-  };
-
   const showConfirmPayment = async (fee: any, origin?: string, sendTo?: string) => {
     return await confirmPaymentModal.current.show(fee, origin, sendTo);
   };
@@ -115,25 +89,11 @@ export const WalletContextProvider = ({ children }: any) => {
     return await sendModal.current.show(tokenAddress, transferType);
   };
 
-  const showClaimAssets = async () => {
-    return await claimAssetsModal.current.show();
-  };
-
-  const showTestGuide = async () => {
-    return await testGuideModal.current.show();
-  };
-
-  const showFeedback = async () => {
-    return await feedbackModal.current.show();
-  };
-
   const showLogout = async (_redirectUrl: any) => {
     return await logoutModal.current.show(_redirectUrl);
   };
 
-  const showSetGuardianHintModal = async () => {
-    return await setGuardianHintModal.current.show();
-  };
+
 
   // if address on chain is not activated, check again
   useEffect(() => {
@@ -148,17 +108,12 @@ export const WalletContextProvider = ({ children }: any) => {
       value={{
         ethersProvider,
         showSignTransaction,
-        showConnectWallet,
         showSignMessage,
         showConfirmPayment,
         showReceive,
         showSend,
-        showClaimAssets,
         showLogout,
-        showTestGuide,
-        showFeedback,
         checkActivated,
-        showSetGuardianHintModal,
       }}
     >
       {children}
@@ -166,14 +121,9 @@ export const WalletContextProvider = ({ children }: any) => {
       <SignTransactionModal ref={signTransactionModal} />
       <ConfirmPaymentModal ref={confirmPaymentModal} />
       <SignMessageModal ref={signMessageModal} />
-      <ClaimAssetsModal ref={claimAssetsModal} />
       <ReceiveModal ref={receiveModal} />
       <SendModal ref={sendModal} />
-      <TestGuideModal ref={testGuideModal} />
-      <FeedbackModal ref={feedbackModal} />
-      <SetGuardianHintModal ref={setGuardianHintModal} />
       <LogoutModal ref={logoutModal} />
-      {/* <ConnectWalletModal ref={connectWalletModal} /> */}
     </WalletContext.Provider>
   );
 };

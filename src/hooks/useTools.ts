@@ -3,58 +3,23 @@ import QRCode from 'qrcode';
 import { useToast } from '@chakra-ui/react';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
-import useBrowser from './useBrowser';
-import { SignkeyType } from '@soulwallet/sdk';
-import useWalletContext from '@/context/hooks/useWalletContext';
 import { useBalanceStore } from '@/store/balance';
 import { useHistoryStore } from '@/store/history';
 import { useChainStore } from '@/store/chain';
 import { useSlotStore } from '@/store/slot';
 import { useSettingStore } from '@/store/setting';
 import { useTempStore } from '@/store/temp';
-import { useAccount } from 'wagmi';
 
 export default function useTools() {
   const toast = useToast();
-  const { showSetGuardianHintModal, showLogout } = useWalletContext();
-  const { clearSigners, getSelectedKeyType, eoas } = useSignerStore();
+  const { clearSigners } = useSignerStore();
   const { clearAddresses } = useAddressStore();
-  const { address } = useAccount();
   const { clearBalance } = useBalanceStore();
   const { clearHistory } = useHistoryStore();
   const { clearChainStore } = useChainStore();
   const { clearSlotStore, slotInfo } = useSlotStore();
   const { clearTempStore } = useTempStore();
   const { getAddressName, saveAddressName } = useSettingStore();
-  const { showClaimAssets, showSend } = useWalletContext();
-  const { navigate } = useBrowser();
-
-  const checkValidSigner = () => {
-    // check eoa
-    if (getSelectedKeyType() === SignkeyType.EOA) {
-      if (!address) {
-        toast({
-          title: 'Please connect your wallet first.',
-          status: 'error',
-          duration: 5000,
-        });
-        return false;
-      }
-      if (eoas.some((item: string) => item.toLowerCase() === address?.toLowerCase())) {
-        return true;
-      } else {
-        toast({
-          title: 'The signer address you connected is not listed in the wallet signer list.',
-          status: 'error',
-          duration: 5000,
-        });
-        return false;
-      }
-    } else {
-      // check passkey
-      return true;
-    }
-  };
 
   const getWalletName = () => {
     return getAddressName(slotInfo.slot);
@@ -73,30 +38,6 @@ export default function useTools() {
     clearSlotStore();
     clearTempStore();
   };
-
-  const goGuideAction = (id: number) => {
-    switch (id) {
-      case 0:
-        showClaimAssets();
-        break;
-      case 1:
-        showSend();
-        break;
-      case 2:
-        navigate('/security/guardian');
-        break;
-      case 3:
-        navigate(`/apps?appUrl=${encodeURIComponent('https://app.uniswap.org')}`);
-        break;
-      case 4:
-        navigate(`/apps?appUrl=${encodeURIComponent('https://staging.aave.com')}`);
-        break;
-      case 5:
-        showLogout('/recover');
-        break;
-    }
-  };
-
 
   const generateJsonName = (name: string) => {
     const date = new Date();
@@ -161,7 +102,6 @@ export default function useTools() {
   };
 
   return {
-    checkValidSigner,
     verifyAddressFormat,
     downloadJsonFile,
     emailJsonFile,
@@ -170,7 +110,6 @@ export default function useTools() {
     generateJsonName,
     doCopy,
     clearLogData,
-    goGuideAction,
     getWalletName,
     setWalletName,
   };
