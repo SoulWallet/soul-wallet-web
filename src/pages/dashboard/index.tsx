@@ -11,11 +11,11 @@ import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import { useBalanceStore } from '@/store/balance';
+import useWallet from '@/hooks/useWallet';
 
 export default function Dashboard() {
   const [hasBalance, setHasBalance] = useState(true)
-  const { selectedAddress } = useAddressStore();
-  const { selectedChainId } = useChainStore();
+  const { withdrawAssets } = useWallet();
   const { totalUsdValue, tokenBalance, getTokenBalance } = useBalanceStore();
   const [apy, setApy] = useState(0);
 
@@ -42,9 +42,14 @@ export default function Dashboard() {
     getApy();
   }, [])
 
+  const doWithdraw = async () => {
+    withdrawAssets('0.001', '0x80eDfd33BdD76573bDEF5Cdb37e579657476a4A5')
+  }
+
   if (hasBalance) {
     return (
       <Box padding="30px">
+        <Button onClick={()=> doWithdraw()}>Withdraw</Button>
         <Box>
           <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
           <Box
