@@ -23,7 +23,8 @@ export default function FindRoute({ children }: { children: ReactNode }) {
     const allowBypass =
       location.pathname.includes('create') ||
       location.pathname.includes('landing') ||
-      location.pathname.includes('auth')
+      location.pathname.includes('auth') ||
+      location.pathname.includes('deposit')
 
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
@@ -39,7 +40,7 @@ export default function FindRoute({ children }: { children: ReactNode }) {
         search: location.search,
       });
     } else {
-    
+
     }
     // if (addressList.length && selectedAddress)
   };

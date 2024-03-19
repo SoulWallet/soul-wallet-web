@@ -3,8 +3,9 @@ import WalletWrapper from './wrapper/WalletWrapper';
 import PublicWrapper from './wrapper/PublicWrapper';
 import Dashboard from '@/pages/dashboard';
 import Create from '@/pages/create';
+import Deposit from '@/pages/deposit';
 import Landing from '@/pages/landing';
-import TestPage from '@/pages/test-page';
+// import TestPage from '@/pages/test-page';
 import AppContainer from './components/mobile/AppContainer';
 
 export const router = createBrowserRouter([
@@ -16,7 +17,7 @@ export const router = createBrowserRouter([
         path: '/',
         element: <AppContainer />,
         children: [
-          { path: 'test-page', element: <TestPage /> },
+          // { path: 'test-page', element: <TestPage /> },
           { path: 'dashboard', element: <Dashboard /> },
           {
             path: '/',
@@ -28,6 +29,11 @@ export const router = createBrowserRouter([
         path: '/create',
         element: <PublicWrapper />,
         children: [{ path: '', element: <Create /> }],
+      },
+      {
+        path: '/deposit',
+        element: <PublicWrapper />,
+        children: [{ path: '', element: <Deposit /> }],
       },
       {
         path: '/landing',
