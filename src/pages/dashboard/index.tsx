@@ -17,22 +17,29 @@ export default function Dashboard() {
   const { selectedAddress } = useAddressStore();
   const { selectedChainId } = useChainStore();
   const { totalUsdValue, tokenBalance, getTokenBalance } = useBalanceStore();
+  const [apy, setApy] = useState(0);
 
+  const getApy = async () => {
+    const res = await api.aave.apy({
+      reserveId: '0x833589fcd6edb6e08f4c7c32d4f71b54bda029130xe20fCBdBfFC4Dd138cE8b2E6FBb6CB49777ad64D8453',
+      // from: Math.floor((Date.now() - 1000 * 60 * 60 * 24 * 7)/ 1000),
+      resolutionInHours: 6,
+    })
 
-  const checkBalance = async () => {
-    const res = await api.token.balance({
-      chainID: selectedChainId,
-      address: selectedAddress,
-    });
-    console.log('balance', res)
-    // const balance = await api.wallet.getBalance();
-    // setHasBalance(balance > 0);
+    const latest7Days = res.data.slice(326);
+
+    const totalApy = latest7Days.reduce((acc: number, cur: any) => {
+      return acc + cur.liquidityRate_avg;
+    } , 0);
+
+    const avgApy = totalApy / latest7Days.length;
+    setApy(avgApy)
   }
 
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
 
   useEffect(()=>{
-    checkBalance();
+    getApy();
   }, [])
 
   if (hasBalance) {
@@ -144,7 +151,7 @@ export default function Dashboard() {
               </Box>
               <Box display="flex" alignItems="center">
                 <Box display="flex" flexDirection="column" alignItems="flex-end">
-                  <Box fontSize="18px" fontWeight="700">10.21%</Box>
+                  <Box fontSize="18px" fontWeight="700">{(apy * 100).toFixed(2)}%</Box>
                   <Box fontSize="14px" fontWeight="400" textAlign="right">7day average APY</Box>
                 </Box>
                 <Box marginLeft="10px">
