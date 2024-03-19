@@ -10,14 +10,12 @@ import storage from '@/lib/storage';
 import { useLocation } from 'react-router-dom';
 import { storeVersion } from '@/config';
 import useTools from '@/hooks/useTools';
-import { useTempStore } from '@/store/temp';
 
 export default function FindRoute({ children }: { children: ReactNode }) {
   const { navigate } = useBrowser();
   const location = useLocation();
   const { addressList, selectedAddress } = useAddressStore();
   const { clearLogData } = useTools();
-  const { createInfo, doneAuth } = useTempStore();
 
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
@@ -25,22 +23,19 @@ export default function FindRoute({ children }: { children: ReactNode }) {
     const allowBypass =
       location.pathname.includes('create') ||
       location.pathname.includes('landing') ||
-      location.pathname.includes('auth') ||
-      true;
+      location.pathname.includes('auth')
 
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
       clearLogData();
-      navigate('/auth', { replace: true });
     }
 
     if (
-      !doneAuth &&
       !selectedAddress &&
       !allowBypass
     ) {
       navigate({
-        pathname: '/auth',
+        pathname: '/landing',
         search: location.search,
       });
     } else {

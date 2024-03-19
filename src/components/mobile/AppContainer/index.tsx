@@ -3,8 +3,11 @@ import { headerHeight } from '@/config';
 import { Outlet } from 'react-router-dom';
 import ProfileIcon from '@/components/Icons/mobile/Profile'
 import MenuIcon from '@/components/Icons/mobile/Menu'
+import { useAddressStore } from '@/store/address';
+import { toShortAddress } from '@/lib/tools';
 
 export function Header({ username, address, ...props }: any) {
+  const { selectedAddress } = useAddressStore();
   return (
     <Box
       height="44px"
@@ -19,7 +22,7 @@ export function Header({ username, address, ...props }: any) {
       <Box background="white" display="flex" alignItems="center" justifyContent="center" height="36px" borderRadius="36px" paddingRight="10px" paddingLeft="6px">
         <Box marginRight="4px"><ProfileIcon /></Box>
         <Box fontSize="16px" fontWeight="800" marginRight="4px">Username1</Box>
-        <Box fontSize="16px" fontWeight="400">{`(0x213…2jkq1)`}</Box>
+        <Box fontSize="16px" fontWeight="400">{`(${toShortAddress(selectedAddress)})`}</Box>
       </Box>
       <Box fontSize="18px" fontWeight="700" color="black" lineHeight="24px">
         <Box background="white" height="36px" width="36px" borderRadius="36px" display="flex" alignItems="center" justifyContent="center">

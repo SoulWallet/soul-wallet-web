@@ -6,7 +6,7 @@ import { ethers } from 'ethers';
 import BN from 'bignumber.js';
 import { erc20Abi } from 'viem'
 import { useAddressStore } from '@/store/address';
-import { Transaction } from '@soulwallet/sdk';
+import { SignkeyType, Transaction } from '@soulwallet/sdk';
 import useQuery from './useQuery';
 import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
@@ -15,7 +15,7 @@ import { ABI_ReceivePayment } from '@soulwallet/abi';
 export default function useTransaction() {
   const { showSignTransaction } = useWalletContext();
   const { soulWallet } = useSdk();
-  const { set1559Fee, getGasPrice } = useQuery();
+  const { estimateGasFee, getGasPrice } = useQuery();
   const { selectedAddress } = useAddressStore();
 
 
@@ -55,11 +55,10 @@ export default function useTransaction() {
     return showSignTransaction([tx], '', to);
   };
 
-  const getUserOp: any = async (txns: any, payToken: string) => {
+  const getUserOp: any = async (txns: any) => {
     try {
       const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
 
-      // todo, add noncekey and noncevalue
       const userOpRet = await soulWallet.fromTransaction(maxFeePerGas, maxPriorityFeePerGas, selectedAddress, txns);
 
       if (userOpRet.isErr()) {
@@ -67,10 +66,9 @@ export default function useTransaction() {
       }
 
       let userOp = userOpRet.OK;
-      userOp = await set1559Fee(userOp, payToken);
-
-      userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
-      userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
+      userOp = await estimateGasFee(userOp, SignkeyType.P256, true);
+      // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
+      // userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
 
       return userOp;
     } catch (err:any) {

@@ -7,9 +7,33 @@ import WithdrawIcon from '@/components/Icons/mobile/Withdraw'
 import MoreIcon from '@/components/Icons/mobile/More'
 import USDCIcon from '@/assets/tokens/usdc.png'
 import config from '@/config';
+import api from '@/lib/api';
+import { useAddressStore } from '@/store/address';
+import { useChainStore } from '@/store/chain';
+import { useBalanceStore } from '@/store/balance';
 
 export default function Dashboard() {
   const [hasBalance, setHasBalance] = useState(true)
+  const { selectedAddress } = useAddressStore();
+  const { selectedChainId } = useChainStore();
+  const { totalUsdValue, tokenBalance, getTokenBalance } = useBalanceStore();
+
+
+  const checkBalance = async () => {
+    const res = await api.token.balance({
+      chainID: selectedChainId,
+      address: selectedAddress,
+    });
+    console.log('balance', res)
+    // const balance = await api.wallet.getBalance();
+    // setHasBalance(balance > 0);
+  }
+
+  const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
+
+  useEffect(()=>{
+    checkBalance();
+  }, [])
 
   if (hasBalance) {
     return (
@@ -36,9 +60,9 @@ export default function Dashboard() {
                   fontSize="72px"
                   fontWeight="800"
                 >
-                  1,221
+                  {totalUsdValue.split('.')[0]}
                 </Box>
-                <Box
+                {Number(totalUsdValue) > 0 && <Box
                   fontFamily="Nunito"
                   fontSize="24px"
                   fontWeight="800"
@@ -46,12 +70,15 @@ export default function Dashboard() {
                   marginLeft="10px"
                   color="#939393"
                 >
-                  .32
+                  .{totalUsdValue.split('.')[1]}
+                </Box> }
+              </Box>
+              {
+                pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
+                  Deposit in progress, est complete in <Box color="#497EE6" as="span">1 min</Box>
                 </Box>
-              </Box>
-              <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
-                Deposit in progress, est complete in <Box color="#497EE6" as="span">1 min</Box>
-              </Box>
+              }
+            
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-around">
               <Box

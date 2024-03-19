@@ -47,7 +47,7 @@ export interface IBalanceStore {
   nftBalance: INftBalanceItem[];
   clearBalance: () => void;
   getTokenBalance: (tokenAddress: string) => any;
-  fetchTokenBalance: (address: string, chainId: string, paymasterTokens: string[]) => void;
+  fetchTokenBalance: (address: string, chainId: string) => void;
   getNftBalance: (tokenAddress: string) => any;
   fetchNftBalance: (address: string, chainId: number) => void;
 }
@@ -97,36 +97,23 @@ export const useBalanceStore = create<IBalanceStore>()(
         set({ tokenBalance: [defaultEthBalance], nftBalance: [], totalUsdValue: '0' });
       },
 
-      fetchTokenBalance: async (address: string, chainId: string, paymasterTokens: string[]) => {
+      fetchTokenBalance: async (address: string, chainId: string) => {
         if (!address || !chainId) {
           return;
         }
 
-        const res = await api.balance.token({
-          walletAddress: address,
-          chains: [
-            {
-              chainID: chainId,
-              reservedTokenAddresses: paymasterTokens,
-            },
-          ],
+        const res = await api.token.balance({
+          address,
+          chainID: chainId,
         });
-        const resPrice = await api.price.token({});
-        const targetedItem = resPrice.data.filter((item: any) => item.chainID === chainId)[0];
+        // const resPrice = await api.price.token({});
+        // const targetedItem = resPrice.data.filter((item: any) => item.chainID === chainId)[0];
         let totalUsdValue = BN('0');
-        const tokenList = res.data.map((item: ITokenBalanceItem) => {
+        const tokenList = res.data.balances.map((item: ITokenBalanceItem) => {
           let formattedItem = formatTokenBalance(item);
-          if(targetedItem){
-            const tokenPrice = targetedItem.prices.filter((price: any) => price.tokenAddress === item.contractAddress)[0];
-            if (tokenPrice) {
-              item.tokenPrice = tokenPrice.priceUSD;
-              item.usdValue = BN(tokenPrice.priceUSD).times(item.tokenBalanceFormatted).toFixed(2);
-              totalUsdValue = totalUsdValue.plus(item.usdValue);
-            }
-          }
+          totalUsdValue = totalUsdValue.plus(item.tokenBalanceFormatted);
           return formattedItem;
         });
-
         // format balance list here
         set({ tokenBalance: tokenList, totalUsdValue: totalUsdValue.toFixed(2) });
       },

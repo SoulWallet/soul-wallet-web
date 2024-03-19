@@ -8,26 +8,26 @@ import { erc20Abi, verifyMessage } from 'viem';
 import { SignkeyType, UserOperation } from '@soulwallet/sdk';
 import { executeTransaction } from '@/lib/tx';
 import { UserOpUtils } from '@soulwallet/sdk';
-import BN from 'bignumber.js';
 import useConfig from './useConfig';
 import api from '@/lib/api';
 import usePasskey from './usePasskey';
 import { toHex } from '@/lib/tools';
-import { useSignMessage } from 'wagmi';
 import { useSignerStore } from '@/store/signer';
 import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import { defaultGuardianSafePeriod } from '@/config';
-import { mockPaymasterData, sponsorMockSignature } from '@/config/constants';
+import { aaveUsdcPoolAbi } from '@/contracts/abis';
+import useTransaction from './useTransaction';
 
 export default function useWallet() {
   const { signByPasskey, register, authenticate } = usePasskey();
-  const { set1559Fee } = useQuery();
+  const { estimateGasFee } = useQuery();
   const { chainConfig } = useConfig();
-  const { slotInfo, setSlotInfo, getSlotInfo } = useSlotStore();
-  const { selectedChainId, setSelectedChainId } = useChainStore();
+  const { setSlotInfo } = useSlotStore();
+  const { selectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet } = useSdk();
+  const { getUserOp } = useTransaction();
   const { selectedAddress, setSelectedAddress } = useAddressStore();
 
   const createWallet = async (credential: any, walletName: string, invitationCode: string) => {
@@ -74,29 +74,15 @@ export default function useWallet() {
     setCredentials([credential as any]);
     // step 2: get User op
     let userOp = await getActivateOp(createIndex, createSlotInfo, chainConfig.paymasterTokens[0]);
-    userOp.signature = sponsorMockSignature;
+    
+    signAndSend(userOp);
 
-    userOp.paymaster = import.meta.env.VITE_PAYMASTER;
-    userOp.paymasterData = mockPaymasterData;
-
-    try {
-      const res = await api.sponsor.check(
-        selectedChainId,
-        chainConfig.contracts.entryPoint,
-        UserOpUtils.userOperationFromJSON(UserOpUtils.userOperationToJSON(userOp)),
-      );
-      if (res.data && res.data.paymasterData) {
-        console.log('sponsor info 1', res.data);
-        userOp = {
-          ...userOp,
-          ...res.data,
-          // paymasterData: res.data.paymasterData,
-        };
-        const receipt = await signAndSend(userOp);
-        console.log('receipt is', receipt);
-      }
-    } catch (err) {}
   };
+
+  const withdrawAssets = async (amount: string, to: string) => {
+    const userOp = await getWithdrawOp(amount, to);
+    signAndSend(userOp);
+  }
 
   const loginWallet = async () => {
     const { credential } = await authenticate();
@@ -107,14 +93,27 @@ export default function useWallet() {
     console.log('account info', res);
   };
 
+  const getWithdrawOp = async (amount: string, to: string) => {
+    const aaveUsdcPool = new ethers.Interface(aaveUsdcPoolAbi);
+
+    const withdrawCalldata = aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [import.meta.env.VITE_TOKEN_USDC , ethers.parseUnits(amount, 6), to]);
+
+    const tx = {
+      from: selectedAddress,
+      to: import.meta.env.VITE_AAVE_USDC_POOL,
+      data: withdrawCalldata,
+    };
+
+    return await getUserOp([tx])
+  }
+
   const getActivateOp = async (index: number, _slotInfo: any, payToken: string) => {
-    const { initialKeys, initialGuardianHash, initialGuardianSafePeriod } = _slotInfo;
+    const { initialKeys, initialGuardianHash } = _slotInfo;
     const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(
       index,
       initialKeys,
       initialGuardianHash,
       '0x',
-      initialGuardianSafePeriod,
     );
 
     if (userOpRet.isErr()) {
@@ -141,10 +140,7 @@ export default function useWallet() {
 
     userOp.callData = soulAbi.encodeFunctionData('executeBatch((address,uint256,bytes)[])', [executions]);
 
-    userOp = await set1559Fee(userOp, payToken, SignkeyType.P256);
-
-    userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(75000).toString(16)}`;
-    userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(100000).toString(16)}`;
+    userOp = await estimateGasFee(userOp, SignkeyType.P256);
 
     return userOp;
   };
@@ -180,10 +176,19 @@ export default function useWallet() {
     return packedSignatureRet.OK;
   };
 
-  const signAndSend = async (userOp: UserOperation, payToken?: string) => {
-    // checkpaymaster
-    if (payToken && payToken !== ethers.ZeroAddress && userOp.paymasterData === '0x') {
-      userOp.paymasterData = addPaymasterData(payToken, chainConfig.contracts.paymaster);
+  const signAndSend = async (userOp: UserOperation) => {
+    userOp.signature = (await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, SignkeyType.P256)).OK;
+
+    const res = await api.sponsor.check(
+      selectedChainId,
+      chainConfig.contracts.entryPoint,
+      JSON.parse(UserOpUtils.userOperationToJSON(userOp)),
+    );
+    if (res.data && res.data.paymasterData) {
+      userOp = {
+        ...userOp,
+        ...res.data,
+      };
     }
 
     const validAfter = Math.floor(Date.now() / 1000 - 300);
@@ -219,6 +224,7 @@ export default function useWallet() {
   return {
     loginWallet,
     createWallet,
+    withdrawAssets,
     addPaymasterData,
     getActivateOp,
     signAndSend,

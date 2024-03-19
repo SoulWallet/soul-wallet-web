@@ -16,10 +16,17 @@ export default function useTools() {
   const { clearAddresses } = useAddressStore();
   const { clearBalance } = useBalanceStore();
   const { clearHistory } = useHistoryStore();
-  const { clearChainStore } = useChainStore();
+  const { clearChainStore, selectedChainId } = useChainStore();
   const { clearSlotStore, slotInfo } = useSlotStore();
   const { clearTempStore } = useTempStore();
   const { getAddressName, saveAddressName } = useSettingStore();
+
+  const getInterest =async() => {
+    const res  = await api.token.interest({
+      chainID: selectedChainId,
+      // address: 
+    })
+  }
 
   const getWalletName = () => {
     return getAddressName(slotInfo.slot);

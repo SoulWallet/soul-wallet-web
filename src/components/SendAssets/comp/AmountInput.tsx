@@ -35,11 +35,11 @@ export default function AmountInput({ sendToken, label, onTokenChange, amount, o
   };
 
   useEffect(() => {
-    const { chainIdHex, paymasterTokens } = selectedChainItem;
-    if (!selectedAddress || !chainIdHex || !paymasterTokens) {
+    const { chainIdHex } = selectedChainItem;
+    if (!selectedAddress || !chainIdHex ) {
       return;
     }
-    fetchTokenBalance(selectedAddress, chainIdHex, paymasterTokens);
+    fetchTokenBalance(selectedAddress, chainIdHex);
   }, [selectedAddress, selectedChainItem]);
 
   const unselectedTokens = tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress !== sendToken);

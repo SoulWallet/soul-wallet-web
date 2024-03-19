@@ -77,21 +77,16 @@ export default function useQuery() {
     }
   };
 
-  const set1559Fee = async (userOp: any, payToken: string, _selectedKeyType?: number) => {
+  const estimateGasFee = async (userOp: any, _selectedKeyType: number, bypassGetFee = false) => {
     const selectedKeyType = _selectedKeyType || getSelectedKeyType();
 
     console.log('selectedkeytype,', selectedKeyType);
 
-    // set 1559 fee
-    // if (!userOp.maxFeePerGas || !userOp.maxPriorityFeePerGas) {
-    const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
-    userOp.maxFeePerGas = maxFeePerGas;
-    userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
-    // }
-
-    if (payToken && payToken !== ethers.ZeroAddress) {
-      userOp.paymasterData = addPaymasterData(payToken, chainConfig.contracts.paymaster);
-    }
+      if(!bypassGetFee){
+        const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
+        userOp.maxFeePerGas = maxFeePerGas;
+        userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
+      }
 
     console.log('Estimate UserOP:');
     printUserOp(userOp);
@@ -113,6 +108,6 @@ export default function useQuery() {
   return {
     getGasPrice,
     getPrefund,
-    set1559Fee,
+    estimateGasFee,
   };
 }

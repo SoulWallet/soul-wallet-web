@@ -85,6 +85,12 @@ const operation = {
     }),
 };
 
+const token = {
+  interest: (params: any) => axio.post('/token/interest',params),
+  balance: (params: any) => axio.post('/token/balance',params),
+  history: (params: any) => axio.post('/token/history',params),
+}
+
 export default {
   balance,
   recovery,
@@ -95,4 +101,5 @@ export default {
   operation,
   backup,
   price,
+  token,
 };

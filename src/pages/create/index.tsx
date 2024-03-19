@@ -42,7 +42,7 @@ export default function Create() {
   }
 
   const onCreateWallet = async () => {
-    await createWallet(credential, username, invitationCode || 'HIQ-LAY-M6J');
+    await createWallet(credential, username, '12Y-1QE-3L8' || invitationCode);
     navigate('/dashboard')
   }
 

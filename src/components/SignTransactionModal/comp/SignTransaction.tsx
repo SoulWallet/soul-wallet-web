@@ -127,7 +127,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
         userOp = activeOperation;
       }
 
-      const receipt = await signAndSend(userOp, payToken);
+      const receipt = await signAndSend(userOp);
 
       // IMPORTANT TODO, get these params from receipt
       // if first tx is completed, then it's activated
