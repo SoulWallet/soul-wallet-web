@@ -91,6 +91,10 @@ const token = {
   history: (params: any) => axio.post('/token/history',params),
 }
 
+const aave = {
+  apy: (params: any) => axios.get('https://aave-api-v2.aave.com/data/rates-history', { params }),
+}
+
 export default {
   balance,
   recovery,
@@ -102,4 +106,5 @@ export default {
   backup,
   price,
   token,
+  aave,
 };

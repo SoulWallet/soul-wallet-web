@@ -95,16 +95,22 @@ export default function useWallet() {
 
   const getWithdrawOp = async (amount: string, to: string) => {
     const aaveUsdcPool = new ethers.Interface(aaveUsdcPoolAbi);
+    const erc20 = new ethers.Interface(erc20Abi);
 
-    const withdrawCalldata = aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [import.meta.env.VITE_TOKEN_USDC , ethers.parseUnits(amount, 6), to]);
-
-    const tx = {
+    const withdrawTx = {
       from: selectedAddress,
       to: import.meta.env.VITE_AAVE_USDC_POOL,
-      data: withdrawCalldata,
+      data: aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [import.meta.env.VITE_TOKEN_USDC , ethers.parseUnits(amount, 6), selectedAddress])
     };
 
-    return await getUserOp([tx])
+    // TODO, transfer all amount
+    const transferOutTx = {
+      from: selectedAddress,
+      to: import.meta.env.VITE_TOKEN_USDC,
+      data: erc20.encodeFunctionData('transfer', [to, ethers.parseUnits(amount, 6)]),
+    }
+
+    return await getUserOp([withdrawTx, transferOutTx])
   }
 
   const getActivateOp = async (index: number, _slotInfo: any, payToken: string) => {
