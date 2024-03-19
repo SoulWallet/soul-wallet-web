@@ -1,12 +1,18 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Image, Flex, Link } from '@chakra-ui/react';
+import { Box, Image, Flex } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
 import USDCIcon from '@/assets/tokens/usdc.png'
 import config from '@/config';
+import useWallet from '@/hooks/useWallet';
 
 export default function Landing() {
+  const { loginWallet  } = useWallet();
+  const doSignIn = async () => {
+    const res = await loginWallet();
+    console.log('login result', res);
+  }
   return (
     <Box
       width="100%"
@@ -27,7 +33,9 @@ export default function Landing() {
         <Box fontFamily="Nunito" fontSize="16px" fontWeight="500" textAlign="center">
           Security first. Completely controlled by yourself and your trusted networks
         </Box>
-        <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Create free account</Button>
+        <Link to="/create">
+          <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Create free account</Button>
+        </Link>
         <Button
           size="xl"
           type="text"
@@ -35,6 +43,7 @@ export default function Landing() {
           marginTop="10px"
           color="black"
           marginBottom="20px"
+          onClick={doSignIn}
         >
           Sign in
         </Button>
@@ -290,15 +299,14 @@ export default function Landing() {
           <Box>Version: Alpha 0.0.1</Box>
           <Flex gap="4" justify="center" align="center" mt="10px">
             {config.socials.map((item, idx) => (
-              <Link
+              <a
                 href={item.link}
                 target="_blank"
                 key={idx}
-
               >
                 <Image w="6" h="6" src={item.icon} className="icon" />
                 <Image w="6" h="6" src={item.iconActivated} display="none" className="icon-activated" />
-              </Link>
+              </a>
             ))}
           </Flex>
         </Box>

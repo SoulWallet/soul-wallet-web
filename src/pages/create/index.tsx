@@ -6,10 +6,19 @@ import SetupEmail from './SetupEmail'
 import SetupUsername from './SetupUsername'
 import SetupPasskey from './SetupPasskey'
 import CreateSuccess from './CreateSuccess'
+import useWallet from '@/hooks/useWallet';
+import usePasskey from '@/hooks/usePasskey';
+import { useNavigate } from 'react-router-dom';
 
 export default function Create() {
+  const { createWallet } = useWallet();
+  const { register } = usePasskey();
+  const navigate = useNavigate();
   const [step, setStep] = useState(0)
-
+  const [invitationCode, setInvitationCode] = useState('')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [credential, setCredential] = useState<any>({})
   const onPrev = useCallback(() => {
     console.log('prev')
 
@@ -27,26 +36,36 @@ export default function Create() {
     console.log('skip')
   }, [])
 
+  const onCreatePasskey = async() => {
+    setCredential(await register(username));
+    setStep(4)
+  }
+
+  const onCreateWallet = async () => {
+    await createWallet(credential, username, invitationCode || 'HIQ-LAY-M6J');
+    navigate('/dashboard')
+  }
+
   const renderStep = () => {
     if (step == 0) {
       return (
-        <InputInviteCode onNext={onNext} onSkip={onSkip} />
+        <InputInviteCode value={invitationCode} onChange={setInvitationCode} onNext={onNext} onSkip={onSkip} />
       )
     } else if (step == 1) {
       return (
-        <SetupUsername onNext={onNext} onSkip={onSkip} />
+        <SetupUsername value={username} onChange={setUsername} onNext={onNext} onSkip={onSkip} />
       )
     } else if (step == 2) {
       return (
-        <SetupEmail onNext={onNext} onSkip={onSkip} />
+        <SetupEmail onNext={onNext} onSkip={onNext} />
       )
     } else if (step == 3) {
       return (
-        <SetupPasskey onNext={onNext} />
+        <SetupPasskey onNext={onCreatePasskey} />
       )
     } else if (step == 4) {
       return (
-        <CreateSuccess onNext={onNext} />
+        <CreateSuccess onNext={onCreateWallet} />
       )
     }
   }

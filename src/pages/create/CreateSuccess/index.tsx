@@ -3,7 +3,7 @@ import { Box, Input } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import FadeId from '@/components/Icons/mobile/FaceId'
 
-export default function CreateSuccess({ onNext, onSkip }: any) {
+export default function CreateSuccess({ onNext }: any) {
   return (
     <Box width="100%" height="100%" padding="30px" paddingTop="138px" display="flex" alignItems="center" justifyContent="center" flexDirection="column">
       <Box width="120px" height="120px" background="#D9D9D9" borderRadius="120px" marginBottom="30px">
@@ -21,7 +21,7 @@ export default function CreateSuccess({ onNext, onSkip }: any) {
           Thanks for setting up your Soul Wallet account. Start saving from now on!
         </Box>
       </Box>
-      <Button size="xl" type="blue" minWidth="195px">💰 Start saving</Button>
+      <Button onClick={onNext} size="xl" type="blue" minWidth="195px">💰 Start saving</Button>
     </Box>
   );
 }

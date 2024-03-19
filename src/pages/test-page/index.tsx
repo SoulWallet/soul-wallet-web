@@ -5,8 +5,10 @@ import { Box } from '@chakra-ui/react';
 
 export default function TestPage() {
   const { createWallet } = useWallet();
+  const { register } = usePasskey();
   const doCreateAndActivate = async () => {
-    const res = await createWallet('Wallet', 'HIQ-LAY-M6J');
+    const credential = await register('Wallet');
+    const res = await createWallet(credential, 'Wallet', 'HIQ-LAY-M6J');
     console.log('create result', res);
   };
   return (
