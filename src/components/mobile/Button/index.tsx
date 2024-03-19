@@ -97,6 +97,16 @@ const buttonStyles = {
       opacity: '0.4'
     },
   },
+  lightBlue: {
+    color: 'white',
+    bg: '#F2F5FB',
+    boxShadow: '0px 4px 20px 0px #223C9C33',
+    _hover: { bg: '#F2F5FB' },
+    _disabled: {
+      cursor: 'not-allowed',
+      opacity: '0.4'
+    },
+  },
   text: {
     color: '#497EE6',
     bg: 'transparent',
