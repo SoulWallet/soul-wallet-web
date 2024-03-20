@@ -51,8 +51,8 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          marginTop={isAllChecked ? '20px' : '122px'}
-          marginBottom={isAllChecked ? '20px' : '95px'}
+          marginTop={isAllChecked ? '33px' : '122px'}
+          marginBottom={isAllChecked ? '37px' : '95px'}
           transition="0.6s all ease"
         >
           <Box
@@ -83,7 +83,10 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             <Image width="100%" src={!checked3 ? AAVEGreyIcon : AAVEIcon} className="icon" />
           </Box>
         </Box>
-        <Box>
+        <Box
+          filter={!isAllChecked ? 'none' : 'grayscale(1)'}
+          pointerEvents={!isAllChecked ? 'all' : 'none'}
+        >
           <Box>
             <Box marginBottom="4px">
               <Checkbox defaultChecked={false} onChange={(e) => setChecked1(e.target.checked)}>
