@@ -12,7 +12,7 @@ import useTools from '@/hooks/useTools';
 import { headerHeight } from '@/config';
 
 export default function Header() {
-  const {showLogout} = useWalletContext();
+  // const {showLogout} = useWalletContext();
 
   return (
     <Flex
@@ -31,7 +31,7 @@ export default function Header() {
         <AccountSelectFull />
         {/* <ChainSelect /> */}
         <Flex
-          onClick={() => showLogout()}
+          // onClick={() => showLogout()}
           cursor={'pointer'}
           align={'center'}
           justify={'center'}

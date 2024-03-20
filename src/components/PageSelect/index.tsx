@@ -24,7 +24,7 @@ const getPageIcon = (type: string) => {
 };
 
 export default function PageSelect() {
-const {showLogout} = useWalletContext();
+// const {showLogout} = useWalletContext();
 const { navigate } = useBrowser();
   return (
     <Menu>
@@ -48,7 +48,7 @@ const { navigate } = useBrowser();
               return (
                 <MenuItem
                   key={item}
-                  onClick={() => (item === 'logout' ? showLogout() : navigate(`/${item}`))}
+                  // onClick={() => (item === 'logout' ? showLogout() : navigate(`/${item}`))}
                   width="60px"
                   height="60px"
                   borderRadius="16px"

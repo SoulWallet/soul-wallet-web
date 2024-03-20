@@ -10,7 +10,7 @@ import useConfig from '@/hooks/useConfig';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 export default function Pooling() {
-  const { ethersProvider, checkActivated } = useWalletContext();
+  const { ethersProvider } = useWalletContext();
   const { selectedAddress } = useAddressStore();
   const { fetchHistory } = useHistoryStore();
   const { selectedChainItem } = useConfig();

@@ -58,7 +58,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [decodedData, setDecodedData] = useState<any>({});
   const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
   const [signing, setSigning] = useState<boolean>(false);
-  const { checkActivated, ethersProvider} = useWalletContext();
+  const { ethersProvider} = useWalletContext();
   const { getTokenBalance } = useBalanceStore();
   const [prechecked, setPrechecked] = useState(false);
   const { getSelectedKeyType } = useSignerStore();
@@ -131,9 +131,9 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
       // IMPORTANT TODO, get these params from receipt
       // if first tx is completed, then it's activated
-      if (!checkActivated()) {
-        toggleActivatedChain(userOp.sender, selectedChainId);
-      }
+      /* if (!checkActivated()) {
+       *   toggleActivatedChain(userOp.sender, selectedChainId);
+       * } */
 
       toast({
         title: 'Transaction success.',
@@ -193,7 +193,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
   const getFinalUserOp = async (txns: any, payTokenAddress: string) => {
     try {
-      const isActivated = await checkActivated();
+      const isActivated = true // await checkActivated();
       console.log('is Activated?', isActivated);
       if (isActivated) {
         // if activated, get userOp directly
