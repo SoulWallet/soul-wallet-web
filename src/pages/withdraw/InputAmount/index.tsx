@@ -15,7 +15,7 @@ export default function InputAmount({ onPrev, onChange, onNext }: any) {
         marginTop="18px"
       />
       <Box padding="30px" minHeight="100vh">
-        <Box>
+        <Box marginTop="128px">
           <Input
           // onChange={e => onChange(e.target.value)}
             fontSize="100px"

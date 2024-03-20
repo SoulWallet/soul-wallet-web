@@ -18,16 +18,32 @@ export default function Review({ onPrev, onChange, onNext }: any) {
       <Box padding="30px" minHeight="100vh">
         <Box borderBottom="1px solid rgba(0, 0, 0, 0.10)">
           <Box fontSize="16px" fontWeight="400" marginBottom="12px" color="#818181">Amount</Box>
-          <Box
-            fontSize="80px"
-            padding="0"
-            fontWeight="700"
-            placeholder="0.00"
-            borderRadius="0"
-            border="none"
-            outline="none"
-          >
-            180
+          <Box display="flex" alignItems="flex-end">
+            <Box
+              fontSize="80px"
+              padding="0"
+              fontWeight="700"
+              placeholder="0.00"
+              borderRadius="0"
+              border="none"
+              outline="none"
+            >
+              180
+            </Box>
+            <Box
+              fontSize="30px"
+              padding="0"
+              fontWeight="700"
+              placeholder="0.00"
+              borderRadius="0"
+              border="none"
+              outline="none"
+              marginLeft="6px"
+              color="rgba(0, 0, 0, 0.3)"
+              marginBottom="26px"
+            >
+              USDC
+            </Box>
           </Box>
         </Box>
         <Box marginTop="30px">
@@ -40,8 +56,11 @@ export default function Review({ onPrev, onChange, onNext }: any) {
             borderRadius="0"
             border="none"
             outline="none"
+            display="flex"
           >
-            AAVE protocol <Box as="span" fontWeight="400">(0x3c9……37bad)</Box>
+            <Box width="24px" height="24px" borderRadius="24px" background="#d9d9d9" marginRight="8px" />
+            <Box marginRight="8px">AAVE protocol</Box>
+            <Box as="span" fontWeight="400">(0x3c9……37bad)</Box>
           </Box>
         </Box>
         <Box marginTop="30px">
