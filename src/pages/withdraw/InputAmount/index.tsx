@@ -2,9 +2,12 @@ import React from 'react';
 import { Box, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import Header from '@/components/mobile/Header'
+import { useBalanceStore } from '@/store/balance';
 
-export default function InputAmount({ onPrev, onChange, onNext }: any) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
+  const { getTokenBalance } = useBalanceStore();
+
+  const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
 
   return (
     <Box width="100%" height="100%">
@@ -17,13 +20,14 @@ export default function InputAmount({ onPrev, onChange, onNext }: any) {
       <Box padding="30px" minHeight="100vh">
         <Box marginTop="128px">
           <Input
-          // onChange={e => onChange(e.target.value)}
+            value={value}
+            onChange={e => onChange(e.target.value)}
             fontSize="100px"
             lineHeight="100%"
             height="110px"
             padding="0"
             fontWeight="700"
-            placeholder="0.00"
+            placeholder="0"
             borderRadius="0"
             border="none"
             outline="none"
@@ -41,7 +45,7 @@ export default function InputAmount({ onPrev, onChange, onNext }: any) {
             fontWeight="600"
             fontSize="14px"
           >
-            Available: 180 USDC
+            Available: {ausdcBalance} USDC
           </Box>
           <Box
             background="rgba(225, 220, 252, 0.80)"
@@ -51,6 +55,7 @@ export default function InputAmount({ onPrev, onChange, onNext }: any) {
             padding="2px 12px"
             fontWeight="800"
             marginLeft="10px"
+            onClick={()=> onChange(ausdcBalance)}
           >
             MAX
           </Box>

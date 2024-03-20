@@ -165,7 +165,7 @@ export default function Dashboard() {
                 </Box>
                 <Box display="flex" alignItems="center">
                   <Box display="flex" flexDirection="column" alignItems="flex-end">
-                    <Box fontSize="18px" fontWeight="700">{(apy * 100).toFixed(2)}%</Box>
+                    <Box fontSize="18px" fontWeight="700">{apy ? (apy * 100).toFixed(2) : '...'}%</Box>
                     <Box fontSize="14px" fontWeight="400" textAlign="right">7day average APY</Box>
                   </Box>
                   <Box marginLeft="10px">

@@ -7,7 +7,6 @@ export default function Receive() {
 
   return (
     <Box mx="auto">
-      <ReceiveCode address={selectedAddress} imgWidth="160px" showFullAddress={true} />
     </Box>
   );
 }

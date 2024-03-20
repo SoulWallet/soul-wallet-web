@@ -3,8 +3,9 @@ import { Box, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseB
 import Button from '@/components/mobile/Button'
 import Header from '@/components/mobile/Header'
 import ArrowRightIcon from '@/components/Icons/mobile/ArrowRight'
+import { toShortAddress } from '@/lib/tools';
 
-export default function Review({ onPrev, onChange, onNext }: any) {
+export default function Review({ onPrev, value, sendTo, onSetSendTo, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -28,7 +29,7 @@ export default function Review({ onPrev, onChange, onNext }: any) {
               border="none"
               outline="none"
             >
-              180
+              {value}
             </Box>
             <Box
               fontSize="30px"
@@ -60,7 +61,7 @@ export default function Review({ onPrev, onChange, onNext }: any) {
           >
             <Box width="24px" height="24px" borderRadius="24px" background="#d9d9d9" marginRight="8px" />
             <Box marginRight="8px">AAVE protocol</Box>
-            <Box as="span" fontWeight="400">(0x3c9……37bad)</Box>
+            <Box as="span" fontWeight="400">({toShortAddress(import.meta.env.VITE_AAVE_USDC_POOL)})</Box>
           </Box>
         </Box>
         <Box marginTop="30px">
@@ -122,18 +123,16 @@ export default function Review({ onPrev, onChange, onNext }: any) {
           overflow="auto"
           mb="0"
           marginTop="50vh"
-
         >
           <ModalHeader fontSize="18px" fontWeight="800">
-            Deposit to
+            Send to
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Box>
-
-            </Box>
             <Box borderBottom="1px solid rgba(73, 126, 180, 0.2)">
               <Input
+                value={sendTo}
+                onChange={e=> onSetSendTo(e.target.value)}
                 fontSize="15px"
                 lineHeight="100%"
                 padding="0"

@@ -10,7 +10,6 @@ import useConfig from '@/hooks/useConfig';
 import { useChainStore } from '@/store/chain';
 import useWalletContext from '@/context/hooks/useWalletContext';
 export default function Pooling() {
-  const { ethersProvider } = useWalletContext();
   const { selectedAddress } = useAddressStore();
   const { fetchHistory } = useHistoryStore();
   const { selectedChainItem } = useConfig();
@@ -24,12 +23,12 @@ export default function Pooling() {
       return;
     }
 
-    fetchTokenBalance(selectedAddress, chainIdHex);
-    // fetchHistory(selectedAddress, [selectedChainId], ethersProvider);
+    fetchTokenBalance(selectedAddress, selectedChainId);
+    fetchHistory(selectedAddress, selectedChainId);
 
     const interval = setInterval(() => {
-      fetchTokenBalance(selectedAddress, chainIdHex);
-      // fetchHistory(selectedAddress, [selectedChainId], ethersProvider);
+      fetchTokenBalance(selectedAddress, selectedChainId);
+      fetchHistory(selectedAddress, selectedChainId);
     }, 8000);
 
     return () => {
