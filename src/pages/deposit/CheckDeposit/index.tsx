@@ -19,8 +19,13 @@ import NextIcon from '@/components/Icons/mobile/Next';
 import useWallet from '@/hooks/useWallet';
 import usePasskey from '@/hooks/usePasskey';
 import { useNavigate } from 'react-router-dom';
-import USDCIcon from '@/assets/mobile/usdc.png';
-import USDCGreyIcon from '@/assets/mobile/usdc_grey.png';
+import USDCIcon from '@/assets/mobile/usdc.png'
+import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
+import USDCGrey from '@/assets/mobile/usdc.png'
+import ARBGreyIcon from '@/assets/mobile/arb_grey.png'
+import ARBIcon from '@/assets/mobile/arb.png'
+import AAVEGreyIcon from '@/assets/mobile/aave_grey.png'
+import AAVEIcon from '@/assets/mobile/aave.png'
 import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
 import ReceiveCode from '@/components/ReceiveCode';
@@ -57,7 +62,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             marginRight="6px"
             transition="0.6s all ease"
           >
-            <Image src={USDCGreyIcon} className="icon" />
+            <Image width="100%" src={!checked1 ? USDCGreyIcon : USDCIcon} className="icon" />
           </Box>
           <Box
             width={isAllChecked ? '40px' : '72px'}
@@ -66,7 +71,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             marginRight="6px"
             transition="0.6s all ease"
           >
-            <Image src={USDCGreyIcon} className="icon" />
+            <Image width="100%" src={!checked2 ? ARBGreyIcon : ARBIcon} className="icon" />
           </Box>
           <Box
             width={isAllChecked ? '40px' : '72px'}
@@ -75,7 +80,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             marginRight="6px"
             transition="0.6s all ease"
           >
-            <Image src={USDCGreyIcon} className="icon" />
+            <Image width="100%" src={!checked3 ? AAVEGreyIcon : AAVEIcon} className="icon" />
           </Box>
         </Box>
         <Box>
