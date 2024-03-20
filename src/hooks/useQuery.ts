@@ -90,17 +90,16 @@ export default function useQuery() {
 
     console.log('Estimate UserOP:');
     printUserOp(userOp);
-
     // get gas limit
-    const gasLimit = await soulWallet.estimateUserOperationGas(
-      chainConfig.contracts.defaultValidator,
-      userOp,
-      selectedKeyType,
-    );
+    // const gasLimit = await soulWallet.estimateUserOperationGas(
+    //   chainConfig.contracts.defaultValidator,
+    //   userOp,
+    //   selectedKeyType,
+    // );
 
-    if (gasLimit.isErr()) {
-      throw new Error(gasLimit.ERR.message);
-    }
+    // if (gasLimit.isErr()) {
+    //   throw new Error(gasLimit.ERR.message);
+    // }
 
     return userOp
   };
