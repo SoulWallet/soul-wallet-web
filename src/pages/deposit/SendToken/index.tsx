@@ -25,7 +25,13 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px">
           Send USDC token
         </Box>
-        <Box fontSize="14px" fontWeight="500" marginTop="18px" textAlign="center">
+        <Box
+          fontSize="14px"
+          fontWeight="500"
+          marginTop="18px"
+          textAlign="center"
+          minHeight="80px"
+        >
           Enter an amount of USDC token you would like to save and earn interest. USDC is the only token we support for now. Sending other tokens may cause lost.
         </Box>
         <Box

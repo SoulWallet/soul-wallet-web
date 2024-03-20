@@ -25,8 +25,13 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px">
           Make a transfer
         </Box>
-        <Box fontSize="14px" fontWeight="500" marginTop="18px" textAlign="center">
-          Find the “Send” or “Transfer button” in your wallet or exchange account. And paste the address you copied from last step.
+        <Box
+          fontSize="14px"
+          fontWeight="500"
+          marginTop="18px"
+          textAlign="center"
+        >
+          {`Find the “Send” or “Transfer button” in your wallet or exchange account. And paste the address you copied from last step.`}
         </Box>
         <Box
           width="100%"

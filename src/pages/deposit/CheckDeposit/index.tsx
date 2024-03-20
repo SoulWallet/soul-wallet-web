@@ -25,7 +25,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
         onBack={onPrev}
         marginTop="18px"
       />
-      <Box padding="30px">
+      <Box padding="30px" marginBottom="144px">
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px">
           Prior to deposit, please verify
         </Box>
@@ -116,17 +116,26 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             </Box>
           </Box>
         </Box>
-        <Box opacity={isAllChecked ? 1 : 0} pointerEvents={isAllChecked ? 'all' : 'none'} width="100%" marginTop="auto" marginBottom="60px">
-          <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">
-            <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="black" />
-            <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-            <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-            <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-          </Box>
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <Box fontWeight="700" fontSize="18px" cursor="pointer" onClick={onNext}>What’s next</Box>
-            <Box><NextIcon /></Box>
-          </Box>
+      </Box>
+      <Box
+        position="fixed"
+        bottom="0"
+        opacity={isAllChecked ? 1 : 0}
+        pointerEvents={isAllChecked ? 'all' : 'none'}
+        width="100%"
+        paddingTop="20px"
+        paddingBottom="60px"
+        background="white"
+      >
+        <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">
+          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="black" />
+          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
+          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
+          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
+        </Box>
+        <Box display="flex" alignItems="center" justifyContent="center">
+          <Box fontWeight="700" fontSize="18px" cursor="pointer" onClick={onNext}>What’s next</Box>
+          <Box><NextIcon /></Box>
         </Box>
       </Box>
       <Modal

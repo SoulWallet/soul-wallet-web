@@ -25,7 +25,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px">
           Select Arbitrum network
         </Box>
-        <Box fontSize="14px" fontWeight="500" marginTop="18px" textAlign="center">
+        <Box fontSize="14px" fontWeight="500" marginTop="18px" textAlign="center" minHeight="80px">
           Please note that the network is Arbitrum. Selecting other network means your assets will be lost.
         </Box>
         <Box
