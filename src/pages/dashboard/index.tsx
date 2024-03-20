@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Image, Flex, Link, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
@@ -15,9 +16,8 @@ import { useBalanceStore } from '@/store/balance';
 import useWallet from '@/hooks/useWallet';
 
 export default function Dashboard() {
-  const [hasBalance, setHasBalance] = useState(true)
   const { withdrawAssets } = useWallet();
-  const { totalUsdValue, tokenBalance, getTokenBalance } = useBalanceStore();
+  const { totalUsdValue, getTokenBalance } = useBalanceStore();
   const [apy, setApy] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -47,6 +47,8 @@ export default function Dashboard() {
   const doWithdraw = async () => {
     withdrawAssets('0.001', '0x80eDfd33BdD76573bDEF5Cdb37e579657476a4A5')
   }
+
+  const hasBalance = Number(totalUsdValue) > 0;
 
   if (hasBalance) {
     return (
@@ -97,53 +99,56 @@ export default function Dashboard() {
 
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-around">
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                  padding="30px 10px"
-                  width="34%"
-                >
-                  <Box width="100%">
-                    <Button width="100%" size="xl" type="lightBlue" minWidth="100px" boxShadow="none">
-                      <WithdrawIcon />
-                    </Button>
-                  </Box>
+                <Link to="/withdraw" style={{width: "34%"}}>
                   <Box
-                    fontFamily="Nunito"
-                    fontWeight="600"
-                    fontSize="14px"
-                    color="black"
-                    marginTop="8px"
-                    textAlign="center"
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    padding="30px 10px"
                   >
-                    Withdraw
+                    <Box width="100%">
+                      <Button width="100%" size="xl" type="lightBlue" minWidth="100px" boxShadow="none">
+                        <WithdrawIcon />
+                      </Button>
+                    </Box>
+                    <Box
+                      fontFamily="Nunito"
+                      fontWeight="600"
+                      fontSize="14px"
+                      color="black"
+                      marginTop="8px"
+                      textAlign="center"
+                    >
+                      Withdraw
+                    </Box>
                   </Box>
-                </Box>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                  padding="30px 10px"
-                  width="calc(66% - 20px)"
-                >
-                  <Box width="100%">
-                    <Button width="100%" size="xl" type="blue">
-                      $
-                    </Button>
-                  </Box>
+                </Link>
+                <Link to="/deposit" style={{ width: "calc(66% - 20px)"}}>
                   <Box
-                    fontFamily="Nunito"
-                    fontWeight="600"
-                    fontSize="14px"
-                    color="black"
-                    marginTop="8px"
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    padding="30px 10px"
+                    // width=""
                   >
-                    Deposit USDC
+                    <Box width="100%">
+                      <Button width="100%" size="xl" type="blue">
+                        $
+                      </Button>
+                    </Box>
+                      <Box
+                        fontFamily="Nunito"
+                        fontWeight="600"
+                        fontSize="14px"
+                        color="black"
+                        marginTop="8px"
+                      >
+                        Deposit USDC
+                      </Box>
                   </Box>
-                </Box>
+                </Link>
               </Box>
             </Box>
             <Box width="100%" marginTop="24px">
@@ -283,7 +288,9 @@ export default function Dashboard() {
         <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
           Deposit to your Soul Wallet account, get <Box fontWeight="700">auto-saved</Box> into the best interest rate pool and start earning today!
         </Box>
-        <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Deposit USDC</Button>
+        <Link to="/deposit">
+          <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Deposit USDC</Button>
+        </Link>
         <Button
           size="xl"
           type="text"

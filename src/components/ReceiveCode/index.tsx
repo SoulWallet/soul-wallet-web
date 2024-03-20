@@ -50,7 +50,7 @@ export default function ReceiveCode({ address, showFullAddress, imgWidth = '90px
           {address.slice(-20)} */}
         </Text>
       </Flex>
-      <Button type="white" py="10px" px="15px" border="1px solid #e0e0e0" display={'block'} mx="auto" onClick={() => doCopy(`${chainConfig.addressPrefix}${address}`)} mb="14px">
+      <Button type="white" py="10px" px="15px" border="1px solid #e0e0e0" display={'block'} mx="auto" onClick={() => doCopy(address)} mb="14px">
         Copy address
       </Button>
       <Flex flexDir={{base: 'column', md: 'row'}} display="inline-flex" align={'center'} py={{base: 2, lg: 1}} px="3" rounded={'12px'} bg="rgba(98, 126, 234, 0.10)">

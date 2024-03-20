@@ -9,9 +9,13 @@ import usePasskey from '@/hooks/usePasskey';
 import { useNavigate } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc.png'
 import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
+import { useAddressStore } from '@/store/address';
+import useTools from '@/hooks/useTools';
 
 export default function CheckDeposit({ onPrev, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { selectedAddress } = useAddressStore();
+  const { doCopy } = useTools();
   const [checked1, setChecked1] = useState(false)
   const [checked2, setChecked2] = useState(false)
   const [checked3, setChecked3] = useState(false)
@@ -104,10 +108,10 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             marginTop="30px"
             marginBottom="40px"
           >
-            <Box fontWeight="700" background="#F1F1F1" borderRadius="12px" padding="15px 16px">0xcea21s19hjka28379xsd2xxasd1212111</Box>
+            <Box fontWeight="700" background="#F1F1F1" borderRadius="12px" padding="15px 16px">{selectedAddress}</Box>
             <Box width="100%" display="flex" alignItems="center" justifyContent="space-between" marginTop="17px">
               <Box width="calc(100% - 50px)">
-                <Button size="xl" type="blue" width="100%">Copy address</Button>
+                <Button size="xl" type="blue" width="100%" onClick={()=> doCopy(selectedAddress)}>Copy address</Button>
               </Box>
               <Box cursor="pointer" onClick={onOpen}><ScanIcon /></Box>
             </Box>
