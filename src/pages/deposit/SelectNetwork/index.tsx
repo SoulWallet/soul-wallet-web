@@ -9,6 +9,7 @@ import usePasskey from '@/hooks/usePasskey';
 import { useNavigate } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc.png'
 import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
+import ARBIcon from '@/assets/mobile/arb.png'
 
 export default function MakeTransfer({ onPrev, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -56,7 +57,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
               alignItems="center"
               justifyContent="center"
             >
-              <Image width="61px" src={USDCGreyIcon} className="icon" />
+              <Image width="61px" src={ARBIcon} className="icon" />
             </Box>
             <Box
               fontWeight="700"

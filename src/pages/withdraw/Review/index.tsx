@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Box, Image, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import Header from '@/components/mobile/Header'
 import ArrowRightIcon from '@/components/Icons/mobile/ArrowRight'
+import AAVEIcon from '@/assets/mobile/aave.png'
 
 export default function Review({ onPrev, onChange, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -58,7 +59,9 @@ export default function Review({ onPrev, onChange, onNext }: any) {
             outline="none"
             display="flex"
           >
-            <Box width="24px" height="24px" borderRadius="24px" background="#d9d9d9" marginRight="8px" />
+            <Box width="24px" height="24px" borderRadius="24px" background="#d9d9d9" marginRight="8px">
+              <Image src={AAVEIcon} width="100%" />
+            </Box>
             <Box marginRight="8px">AAVE protocol</Box>
             <Box as="span" fontWeight="400">(0x3c9……37bad)</Box>
           </Box>

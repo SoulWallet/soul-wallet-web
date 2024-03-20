@@ -9,6 +9,10 @@ import usePasskey from '@/hooks/usePasskey';
 import { useNavigate } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc.png'
 import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
+import MetamaskIcon from '@/assets/mobile/metamask.png'
+import OKEXIcon from '@/assets/mobile/okex.png'
+import CoinbaseIcon from '@/assets/mobile/coinbase.png'
+import BinanceIcon from '@/assets/mobile/binance.png'
 
 export default function MakeTransfer({ onPrev, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -53,7 +57,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
             alignItems="center"
             justifyContent="center"
           >
-            <Image width="30px" src={USDCGreyIcon} className="icon" />
+            <Image width="30px" src={MetamaskIcon} className="icon" />
           </Box>
           <Box
             width="48px"
@@ -67,7 +71,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
             alignItems="center"
             justifyContent="center"
           >
-            <Image width="30px" src={USDCGreyIcon} className="icon" />
+            <Image width="30px" src={OKEXIcon} className="icon" />
           </Box>
           <Box
             width="48px"
@@ -81,7 +85,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
             alignItems="center"
             justifyContent="center"
           >
-            <Image width="30px" src={USDCGreyIcon} className="icon" />
+            <Image width="30px" src={CoinbaseIcon} className="icon" />
           </Box>
           <Box
             width="48px"
@@ -95,7 +99,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
             alignItems="center"
             justifyContent="center"
           >
-            <Image width="30px" src={USDCGreyIcon} className="icon" />
+            <Image width="30px" src={BinanceIcon} className="icon" />
           </Box>
           <Box
             width="48px"
