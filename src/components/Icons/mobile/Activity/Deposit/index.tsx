@@ -1,0 +1,13 @@
+const Deposit = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#F0F3FF"/>
+      <path d="M23 17.3333V9C23 8.44772 22.5523 8 22 8H10C9.44772 8 9 8.44772 9 9V23C9 23.5523 9.44772 24 10 24H22C22.5523 24 23 23.5523 23 23V21.3333" stroke="#5B606D" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M12 13L20 13" stroke="#5B606D" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"/>
+      <path d="M12 16H16" stroke="#5B606D" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"/>
+      <path d="M19 16L20 16" stroke="#5B606D" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"/>
+    </svg>
+  );
+};
+
+export default Deposit;

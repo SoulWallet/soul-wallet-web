@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Image, Flex, Link } from '@chakra-ui/react';
+import { Box, Image, Flex, Link, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
 import WithdrawIcon from '@/components/Icons/mobile/Withdraw'
 import MoreIcon from '@/components/Icons/mobile/More'
 import USDCIcon from '@/assets/tokens/usdc.png'
+import ActivityDepositIcon from '@/components/Icons/mobile/Activity/Deposit'
 import config from '@/config';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
@@ -18,6 +19,7 @@ export default function Dashboard() {
   const { withdrawAssets } = useWallet();
   const { totalUsdValue, tokenBalance, getTokenBalance } = useBalanceStore();
   const [apy, setApy] = useState(0);
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const getApy = async () => {
     const res = await api.aave.apy({
@@ -48,120 +50,217 @@ export default function Dashboard() {
 
   if (hasBalance) {
     return (
-      <Box padding="30px">
-        <Box>
-          <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
-          <Box
-            width="100%"
-            background="white"
-            borderRadius="24px"
-            boxShadow="0px 8px 60px 0px rgba(44, 53, 131, 0.12)"
-            border="1px solid #EAECF0"
-          >
+      <Box>
+        <Box padding="30px">
+          <Box>
+            <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
             <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              padding="48px 10px 0"
-              mb="6"
+              width="100%"
+              background="white"
+              borderRadius="24px"
+              boxShadow="0px 8px 60px 0px rgba(44, 53, 131, 0.12)"
+              border="1px solid #EAECF0"
             >
-              <Box display="flex" alignItems="center">
-                <Box
-                  fontFamily="Nunito"
-                  fontSize="72px"
-                  lineHeight={"1"}
-                  fontWeight="800"
-                >
-                  {totalUsdValue.split('.')[0]}
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                padding="48px 10px 0"
+                mb="6"
+              >
+                <Box display="flex" alignItems="center">
+                  <Box
+                    fontFamily="Nunito"
+                    fontSize="72px"
+                    lineHeight={"1"}
+                    fontWeight="800"
+                  >
+                    {totalUsdValue.split('.')[0]}
+                  </Box>
+                  {Number(totalUsdValue) > 0 && <Box
+                                                  fontFamily="Nunito"
+                                                  fontSize="36px"
+                                                  lineHeight={"1"}
+                                                  fontWeight="800"
+                                                  marginTop="24px"
+                    // marginLeft="10px"
+                                                  color="#939393"
+                                                >
+                    .{totalUsdValue.split('.')[1]}
+                  </Box> }
                 </Box>
-                {Number(totalUsdValue) > 0 && <Box
-                  fontFamily="Nunito"
-                  fontSize="36px"
-                  lineHeight={"1"}
-                  fontWeight="800"
-                  marginTop="24px"
-                  // marginLeft="10px"
-                  color="#939393"
-                >
-                  .{totalUsdValue.split('.')[1]}
-                </Box> }
+                {
+                  pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
+                    Deposit in progress, est complete in <Box color="#497EE6" as="span">1 min</Box>
+                  </Box>
+                }
+
               </Box>
-              {
-                pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
-                  Deposit in progress, est complete in <Box color="#497EE6" as="span">1 min</Box>
+              <Box display="flex" alignItems="center" justifyContent="space-around">
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  padding="30px 10px"
+                  width="34%"
+                >
+                  <Box width="100%">
+                    <Button width="100%" size="xl" type="lightBlue" minWidth="100px" boxShadow="none">
+                      <WithdrawIcon />
+                    </Button>
+                  </Box>
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="600"
+                    fontSize="14px"
+                    color="black"
+                    marginTop="8px"
+                    textAlign="center"
+                  >
+                    Withdraw
+                  </Box>
                 </Box>
-              }
-            
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  padding="30px 10px"
+                  width="calc(66% - 20px)"
+                >
+                  <Box width="100%">
+                    <Button width="100%" size="xl" type="blue">
+                      $
+                    </Button>
+                  </Box>
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="600"
+                    fontSize="14px"
+                    color="black"
+                    marginTop="8px"
+                  >
+                    Deposit USDC
+                  </Box>
+                </Box>
+              </Box>
             </Box>
-            <Box display="flex" alignItems="center" justifyContent="space-around">
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                padding="30px 10px"
-                width="34%"
-              >
-                <Box width="100%">
-                  <Button width="100%" size="xl" type="lightBlue" minWidth="100px" boxShadow="none">
-                    <WithdrawIcon />
-                  </Button>
+            <Box width="100%" marginTop="24px">
+              <Box fontSize="18px" fontWeight="700" marginBottom="12px">Earn from</Box>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Box display="flex" alignItems="center">
+                  <Box marginRight="8px">
+                    <Image src={USDCIcon} />
+                  </Box>
+                  <Box>
+                    <Box fontSize="18px" fontWeight="700">USDC on AAVE</Box>
+                    <Box fontSize="14px" fontWeight="400">Arbitrum network</Box>
+                  </Box>
                 </Box>
-                <Box
-                  fontFamily="Nunito"
-                  fontWeight="600"
-                  fontSize="14px"
-                  color="black"
-                  marginTop="8px"
-                  textAlign="center"
-                >
-                  Withdraw
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                padding="30px 10px"
-                width="calc(66% - 20px)"
-              >
-                <Box width="100%">
-                  <Button width="100%" size="xl" type="blue">
-                    $
-                  </Button>
-                </Box>
-                <Box
-                  fontFamily="Nunito"
-                  fontWeight="600"
-                  fontSize="14px"
-                  color="black"
-                  marginTop="8px"
-                >
-                  Deposit USDC
+                <Box display="flex" alignItems="center">
+                  <Box display="flex" flexDirection="column" alignItems="flex-end">
+                    <Box fontSize="18px" fontWeight="700">{(apy * 100).toFixed(2)}%</Box>
+                    <Box fontSize="14px" fontWeight="400" textAlign="right">7day average APY</Box>
+                  </Box>
+                  <Box marginLeft="10px">
+                    <MoreIcon />
+                  </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
-          <Box width="100%" marginTop="24px">
-            <Box fontSize="18px" fontWeight="700" marginBottom="12px">Earn from</Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-              <Box display="flex" alignItems="center">
-                <Box marginRight="8px">
-                  <Image src={USDCIcon} />
+        </Box>
+        <Box
+          position="fixed"
+          height="300px"
+          bottom="0"
+          width="100%"
+          background="white"
+          borderRadius="20px 20px 0 0"
+        >
+          <Box padding="30px" position="relative">
+            <Box
+              position="absolute"
+              height="20px"
+              top="0"
+              left="0"
+              width="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Box
+                width="30px"
+                height="4px"
+                borderRadius="4px"
+                background="#CCCDD4"
+              />
+            </Box>
+            <Box fontSize="18px" fontWeight="700">Recent activity</Box>
+            <Box width="100%">
+              <Box
+                marginTop="36px"
+                display="flex"
+                alignItems="center"
+
+              >
+                <Box marginRight="12px">
+                  <ActivityDepositIcon />
                 </Box>
                 <Box>
-                  <Box fontSize="18px" fontWeight="700">USDC on AAVE</Box>
-                  <Box fontSize="14px" fontWeight="400">Arbitrum network</Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Box fontSize="14px" fontWeight="800">Deposit</Box>
+                    <Box
+                      fontSize="12px"
+                      background="#F1F1F1"
+                      color="rgba(0, 0, 0, 0.60)"
+                      padding="0 8px"
+                      borderRadius="4px"
+                      marginLeft="8px"
+                    >
+                      Pending
+                    </Box>
+                  </Box>
+                  <Box fontSize="12px">2024/3/11 11:21:23</Box>
+                </Box>
+                <Box marginLeft="auto">
+                  <Box fontSize="14px" fontWeight="700">+ 1,221.32 USDC</Box>
                 </Box>
               </Box>
-              <Box display="flex" alignItems="center">
-                <Box display="flex" flexDirection="column" alignItems="flex-end">
-                  <Box fontSize="18px" fontWeight="700">{(apy * 100).toFixed(2)}%</Box>
-                  <Box fontSize="14px" fontWeight="400" textAlign="right">7day average APY</Box>
+              <Box
+                marginTop="36px"
+                display="flex"
+                alignItems="center"
+
+              >
+                <Box marginRight="12px">
+                  <ActivityDepositIcon />
                 </Box>
-                <Box marginLeft="10px">
-                  <MoreIcon />
+                <Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Box fontSize="14px" fontWeight="800">Deposit</Box>
+                    <Box
+                      fontSize="12px"
+                      background="#F1F1F1"
+                      color="rgba(0, 0, 0, 0.60)"
+                      padding="0 8px"
+                      borderRadius="4px"
+                      marginLeft="8px"
+                    >
+                      Pending
+                    </Box>
+                  </Box>
+                  <Box fontSize="12px">2024/3/11 11:21:23</Box>
+                </Box>
+                <Box marginLeft="auto">
+                  <Box fontSize="14px" fontWeight="700">+ 1,221.32 USDC</Box>
                 </Box>
               </Box>
             </Box>
@@ -192,6 +291,7 @@ export default function Dashboard() {
           marginTop="10px"
           color="black"
           marginBottom="20px"
+          onClick={onOpen}
         >
           What’s auto-saving
         </Button>
@@ -324,6 +424,53 @@ export default function Dashboard() {
           </Box>
         </Box>
       </Box>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        motionPreset="slideInBottom"
+        blockScrollOnMount={true}
+      >
+        <ModalOverlay />
+        <ModalContent
+          borderRadius="20px 20px 0 0"
+          maxW="100vw"
+          height="50vh"
+          overflow="auto"
+          mb="0"
+          marginTop="50vh"
+
+        >
+          <ModalCloseButton />
+          <ModalBody
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            width="100%"
+          >
+            <Box
+              background="#D9D9D9"
+              height="120px"
+              width="120px"
+              borderRadius="120px"
+              marginBottom="30px"
+            />
+            <Box fontSize="24px" fontWeight="700" marginBottom="14px">
+              Auto-saving
+            </Box>
+            <Box
+              fontSize="16px"
+              textAlign="center"
+              marginBottom="40px"
+            >
+              Each deposit to the Soul Wallet account will be auto saved into AAVE protocol to earn interest. You can withdraw anytime with a flexible term for your assets.
+            </Box>
+            <Box width="100%">
+              <Button size="xl" type="blue" width="100%" onClick={onClose}>Got it</Button>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
