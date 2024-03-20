@@ -43,63 +43,56 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
           alignItems="center"
           justifyContent="center"
           marginTop="62px"
+          gap="6"
           transition="0.6s all ease"
         >
           <Box
             width="48px"
             height="48px"
             borderRadius="12px"
-            marginLeft="6px"
-            marginRight="6px"
             transition="0.6s all ease"
             border="1px solid rgba(0, 0, 0, 0.10)"
             display="flex"
             alignItems="center"
             justifyContent="center"
           >
-            <Image width="30px" src={MetamaskIcon} className="icon" />
+            <Image width="32px" src={MetamaskIcon} className="icon" />
           </Box>
           <Box
             width="48px"
             height="48px"
             borderRadius="12px"
-            marginLeft="6px"
-            marginRight="6px"
             transition="0.6s all ease"
             border="1px solid rgba(0, 0, 0, 0.10)"
             display="flex"
             alignItems="center"
             justifyContent="center"
           >
-            <Image width="30px" src={OKEXIcon} className="icon" />
+            <Image width="32px" src={OKEXIcon} className="icon" />
           </Box>
           <Box
             width="48px"
             height="48px"
             borderRadius="12px"
-            marginLeft="6px"
-            marginRight="6px"
             transition="0.6s all ease"
             border="1px solid rgba(0, 0, 0, 0.10)"
             display="flex"
             alignItems="center"
             justifyContent="center"
           >
-            <Image width="30px" src={CoinbaseIcon} className="icon" />
+            <Image width="32px" src={CoinbaseIcon} className="icon" />
           </Box>
           <Box
             width="48px"
             height="48px"
             borderRadius="12px"
-            marginLeft="6px"
-            marginRight="6px"
             transition="0.6s all ease"
             border="1px solid rgba(0, 0, 0, 0.10)"
             display="flex"
             alignItems="center"
             justifyContent="center"
           >
-            <Image width="30px" src={BinanceIcon} className="icon" />
+            <Image width="32px" src={BinanceIcon} className="icon" />
           </Box>
           <Box
             width="48px"

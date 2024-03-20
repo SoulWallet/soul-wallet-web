@@ -14,12 +14,13 @@ import { useAddressStore } from '@/store/address';
 import { useChainStore } from '@/store/chain';
 import { useBalanceStore } from '@/store/balance';
 import useWallet from '@/hooks/useWallet';
+import { useHistoryStore } from '@/store/history';
 
 export default function Dashboard() {
-  const { withdrawAssets } = useWallet();
   const { totalUsdValue, getTokenBalance } = useBalanceStore();
   const [apy, setApy] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { historyList } = useHistoryStore();
 
   const getApy = async () => {
     const res = await api.aave.apy({
@@ -43,10 +44,6 @@ export default function Dashboard() {
   useEffect(()=>{
     getApy();
   }, [])
-
-  const doWithdraw = async () => {
-    withdrawAssets('0.001', '0x80eDfd33BdD76573bDEF5Cdb37e579657476a4A5')
-  }
 
   const hasBalance = Number(totalUsdValue) > 0;
 
@@ -176,7 +173,7 @@ export default function Dashboard() {
             </Box>
           </Box>
         </Box>
-        <Box
+        {historyList && historyList.length > 0 &&  <Box
           position="fixed"
           height="300px"
           bottom="0"
@@ -204,7 +201,7 @@ export default function Dashboard() {
             </Box>
             <Box fontSize="18px" fontWeight="700">Recent activity</Box>
             <Box width="100%">
-              <Box
+              {historyList.slice(0, 2).map(item =>   <Box
                 marginTop="36px"
                 display="flex"
                 alignItems="center"
@@ -218,8 +215,8 @@ export default function Dashboard() {
                     display="flex"
                     alignItems="center"
                   >
-                    <Box fontSize="14px" fontWeight="800">Deposit</Box>
-                    <Box
+                    <Box fontSize="14px" fontWeight="800">{item.action}</Box>
+                    {/* <Box
                       fontSize="12px"
                       background="#F1F1F1"
                       color="rgba(0, 0, 0, 0.60)"
@@ -228,49 +225,17 @@ export default function Dashboard() {
                       marginLeft="8px"
                     >
                       Pending
-                    </Box>
+                    </Box> */}
                   </Box>
-                  <Box fontSize="12px">2024/3/11 11:21:23</Box>
+                  <Box fontSize="12px">{item.blockTimestamp}</Box>
                 </Box>
                 <Box marginLeft="auto">
                   <Box fontSize="14px" fontWeight="700">+ 1,221.32 USDC</Box>
                 </Box>
-              </Box>
-              <Box
-                marginTop="36px"
-                display="flex"
-                alignItems="center"
-
-              >
-                <Box marginRight="12px">
-                  <ActivityDepositIcon />
-                </Box>
-                <Box>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <Box fontSize="14px" fontWeight="800">Deposit</Box>
-                    <Box
-                      fontSize="12px"
-                      background="#F1F1F1"
-                      color="rgba(0, 0, 0, 0.60)"
-                      padding="0 8px"
-                      borderRadius="4px"
-                      marginLeft="8px"
-                    >
-                      Pending
-                    </Box>
-                  </Box>
-                  <Box fontSize="12px">2024/3/11 11:21:23</Box>
-                </Box>
-                <Box marginLeft="auto">
-                  <Box fontSize="14px" fontWeight="700">+ 1,221.32 USDC</Box>
-                </Box>
-              </Box>
+              </Box>)}
             </Box>
           </Box>
-        </Box>
+        </Box>}
       </Box>
     )
   }

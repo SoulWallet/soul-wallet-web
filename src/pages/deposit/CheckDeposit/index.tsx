@@ -44,7 +44,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
       <Header title="Deposit" showBackButton onBack={onPrev} marginTop="18px" />
       <Box padding="30px" marginBottom="144px">
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="63">
-          Prior to deposit, please verify
+          Prior to deposit,<br/> please verify
         </Box>
         <Box
           width="100%"
@@ -83,7 +83,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             <Image width="100%" src={!checked3 ? AAVEGreyIcon : AAVEIcon} className="icon" />
           </Box>
         </Box>
-        <Box>
+        <Box color="#000">
           <Box>
             <Box marginBottom="4px">
               <Checkbox defaultChecked={false} onChange={(e) => setChecked1(e.target.checked)}>
@@ -120,7 +120,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             </Box>
             <Box width="100%" display="flex" alignItems="center" justifyContent="space-between" marginTop="17px">
               <Box width="calc(100% - 50px)">
-                <Button size="xl" type="blue" width="100%" onClick={() => doCopy(selectedAddress)}>
+                <Button size="xl" type="blue" width="100%" height="42px" onClick={() => doCopy(selectedAddress)}>
                   Copy address
                 </Button>
               </Box>

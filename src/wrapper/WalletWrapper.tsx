@@ -10,7 +10,7 @@ export default function Wrapper() {
     <CommonWrapper>
       <FindRoute>
         <WalletContextProvider>
-          <Box maxW={"430px"} mx="auto">
+          <Box maxW={"430px"} pos={"relative"} color="#000" mx="auto">
             <Outlet />
           </Box>
           <Pooling />

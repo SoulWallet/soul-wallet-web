@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Image, Checkbox, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, Link } from '@chakra-ui/react';
+import { Box, Image, Checkbox, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
+import { Link } from 'react-router-dom';
 import Button from '@/components/mobile/Button'
 import ScanIcon from '@/components/Icons/mobile/Scan'
 import NextIcon from '@/components/Icons/mobile/Next'
@@ -83,7 +84,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
           <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="black" />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
-          <Link>
+          <Link to="/dashboard">
             <Box fontWeight="700" fontSize="18px" cursor="pointer">I’ve done with all these steps!</Box>
           </Link>
         </Box>

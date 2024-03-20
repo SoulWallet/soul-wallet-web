@@ -9,9 +9,23 @@ export interface IHistoryStore {
 }
 
 export const fetchHistoryApi = async (address: string, chainId: string) => {
-  const res = await api.token.history({address, chainID: chainId});
+  const res = await api.token.history({ address, chainID: chainId });
 
-  console.log('history', res)
+  res.data.history.forEach((historyItem: any) => {
+    historyItem.tokenSymbol = [
+      String(import.meta.env.VITE_TOKEN_AUSDC).toLowerCase(),
+      String(import.meta.env.VITE_TOKEN_USDC).toLowerCase(),
+    ].includes(historyItem.item.tokenAddress.toLowerCase())
+      ? 'USDC'
+      : 'Unknown';
+    if (historyItem.type === 'ERC20_TRANSFER') {
+      if (historyItem.item.from !== address && historyItem.item.to === address) {
+        historyItem.action = 'Deposit';
+      } else if (historyItem.item.from === address && historyItem.item.to !== address) {
+        historyItem.action = 'Withdraw';
+      }
+    }
+  });
 
   // IMPORTANT TODO, cache decode result
   // for (let i = 0; i < res.data.ops.length; i++) {
@@ -30,7 +44,9 @@ export const fetchHistoryApi = async (address: string, chainId: string) => {
   //   };
   // }
 
-  return res;
+  console.log('history', res.data.history);
+
+  return res.data.history;
 };
 
 export const useHistoryStore = create<IHistoryStore>()(
@@ -38,14 +54,14 @@ export const useHistoryStore = create<IHistoryStore>()(
     (set, get) => ({
       historyList: [],
       fetchHistory: async (address: string, chainId: string) => {
-        const res = await fetchHistoryApi(address, chainId);
-        set({ historyList: res.data });
+        const res: any = await fetchHistoryApi(address, chainId);
+        set({ historyList: res });
       },
       clearHistory: () => {
         set({
-          historyList: []
-        })
-      }
+          historyList: [],
+        });
+      },
     }),
     {
       name: 'history-storage',
