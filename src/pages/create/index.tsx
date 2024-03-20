@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import InputInviteCode from './InputInviteCode'
-import SetupEmail from './SetupEmail'
+// import SetupEmail from './SetupEmail'
 import SetupUsername from './SetupUsername'
 import SetupPasskey from './SetupPasskey'
 import CreateSuccess from './CreateSuccess'
@@ -17,7 +17,6 @@ export default function Create() {
   const [step, setStep] = useState(0)
   const [invitationCode, setInvitationCode] = useState('')
   const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
   const [credential, setCredential] = useState<any>({})
   const onPrev = useCallback(() => {
     console.log('prev')
@@ -55,15 +54,12 @@ export default function Create() {
       return (
         <SetupUsername value={username} onChange={setUsername} onNext={onNext} onSkip={onSkip} />
       )
-    } else if (step == 2) {
-      return (
-        <SetupEmail onNext={onNext} onSkip={onNext} />
-      )
-    } else if (step == 3) {
+    } 
+    else if (step == 2) {
       return (
         <SetupPasskey onNext={onCreatePasskey} />
       )
-    } else if (step == 4) {
+    } else if (step == 3) {
       return (
         <CreateSuccess onNext={onCreateWallet} />
       )

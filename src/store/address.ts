@@ -10,6 +10,8 @@ export interface IAddressItem {
 }
 
 export interface IAddressStore {
+  walletName: string;
+  setWalletName: (walletName: string) => void;
   selectedAddress: string;
   addressList: IAddressItem[];
   setSelectedAddress: (address: string) => void;
@@ -32,11 +34,17 @@ export const getIndexByAddress = (addressList: IAddressItem[], address: string) 
 
 const createAddressSlice = immer<IAddressStore>((set, get) => ({
   selectedAddress: '',
+  walletName: '',
+  setWalletName: (walletName: string) =>
+    set({
+      walletName,
+    }),
   addressList: [],
   getSelectedAddressItem: () => {
     const index = getIndexByAddress(get().addressList, get().selectedAddress);
     return get().addressList[index];
   },
+
   setSelectedAddress: (address: string) =>
     set({
       selectedAddress: address,

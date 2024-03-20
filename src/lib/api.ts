@@ -28,7 +28,7 @@ const notification = {
 
 const account = {
   create: (params: any) => axio.post('/account/create', params),
-  get: (params: any) => axio.get('/account/get', { params }),
+  list: (params: any) => axio.post('/account/list', params),
   add: (params: any) => axio.post('/add-account', params),
   update: (params: any) => axio.post('/update-account', params),
   verifyEmail: (params: any) => axio.post('/verify-email', params),

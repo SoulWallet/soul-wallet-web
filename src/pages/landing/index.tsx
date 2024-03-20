@@ -1,5 +1,5 @@
 import { Box, Image, Flex } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
@@ -9,9 +9,10 @@ import useWallet from '@/hooks/useWallet';
 
 export default function Landing() {
   const { loginWallet  } = useWallet();
+  const navigate = useNavigate();
   const doSignIn = async () => {
-    const res = await loginWallet();
-    console.log('login result', res);
+    await loginWallet();
+    navigate('/dashboard');
   }
   return (
     <Box

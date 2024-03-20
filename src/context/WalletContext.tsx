@@ -17,8 +17,6 @@ interface IWalletContext {
   showSignMessage: (messageToSign: any, signType?: string, guardianInfo?: any) => Promise<any>;
   showReceive: () => Promise<void>;
   showSend: (tokenAddress?: string, transferType?: string) => Promise<void>;
-  showLogout: (_redirectUrl?: string) => Promise<void>;
-  checkActivated: () => Promise<boolean | undefined>;
 }
 
 export const WalletContext = createContext<IWalletContext>({
@@ -28,21 +26,16 @@ export const WalletContext = createContext<IWalletContext>({
   showSignMessage: async () => {},
   showReceive: async () => {},
   showSend: async () => {},
-  showLogout: async (_redirectUrl?: any) => {},
-  checkActivated: async () => false,
 });
 
 export const WalletContextProvider = ({ children }: any) => {
   console.log('Render WalletContext');
   const { selectedChainItem } = useConfig();
-  const { selectedChainId } = useChainStore();
-  const { selectedAddress, getIsActivated, toggleActivatedChain } = useAddressStore();
   const signTransactionModal = useRef<any>();
   const confirmPaymentModal = useRef<any>();
   const signMessageModal = useRef<any>();
   const receiveModal = useRef<any>();
   const sendModal = useRef<any>();
-  const logoutModal = useRef<any>();
 
   const ethersProvider = useMemo(() => {
     console.log('trigger ethers provider');
@@ -52,20 +45,6 @@ export const WalletContextProvider = ({ children }: any) => {
     return new ethers.JsonRpcProvider(selectedChainItem.provider);
   }, [selectedChainItem]);
 
-
-  const checkActivated = async () => {
-    const res = getIsActivated(selectedAddress, selectedChainId);
-    if (!res) {
-      const contractCode = await ethersProvider.getCode(selectedAddress);
-      console.log('check code result', contractCode);
-      // is already activated
-      if (contractCode !== '0x') {
-        toggleActivatedChain(selectedAddress, selectedChainId, true);
-        return true;
-      }
-    }
-    return res;
-  };
 
   const showSignTransaction = async (txns: any, origin?: string, sendTo?: string) => {
     return await signTransactionModal.current.show(txns, origin, sendTo);
@@ -89,20 +68,6 @@ export const WalletContextProvider = ({ children }: any) => {
     return await sendModal.current.show(tokenAddress, transferType);
   };
 
-  const showLogout = async (_redirectUrl: any) => {
-    return await logoutModal.current.show(_redirectUrl);
-  };
-
-
-
-  // if address on chain is not activated, check again
-  useEffect(() => {
-    if (!selectedAddress || !selectedChainId) {
-      return;
-    }
-    checkActivated();
-  }, [selectedAddress, selectedChainId]);
-
   return (
     <WalletContext.Provider
       value={{
@@ -112,8 +77,6 @@ export const WalletContextProvider = ({ children }: any) => {
         showConfirmPayment,
         showReceive,
         showSend,
-        showLogout,
-        checkActivated,
       }}
     >
       {children}
@@ -123,7 +86,6 @@ export const WalletContextProvider = ({ children }: any) => {
       <SignMessageModal ref={signMessageModal} />
       <ReceiveModal ref={receiveModal} />
       <SendModal ref={sendModal} />
-      <LogoutModal ref={logoutModal} />
     </WalletContext.Provider>
   );
 };

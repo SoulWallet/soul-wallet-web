@@ -20,15 +20,16 @@ import { aaveUsdcPoolAbi } from '@/contracts/abis';
 import useTransaction from './useTransaction';
 
 export default function useWallet() {
-  const { signByPasskey, register, authenticate } = usePasskey();
+  const { signByPasskey, authenticate } = usePasskey();
   const { estimateGasFee } = useQuery();
   const { chainConfig } = useConfig();
   const { setSlotInfo } = useSlotStore();
-  const { selectedChainId } = useChainStore();
+  const { selectedChainId, setSelectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential } = useSignerStore();
   const { soulWallet } = useSdk();
   const { getUserOp } = useTransaction();
-  const { selectedAddress, setSelectedAddress } = useAddressStore();
+
+  const { selectedAddress, setSelectedAddress, setWalletName } = useAddressStore();
 
   const createWallet = async (credential: any, walletName: string, invitationCode: string) => {
     const createIndex = 0;
@@ -51,6 +52,7 @@ export default function useWallet() {
     ).OK;
 
     setSelectedAddress(address);
+    setWalletName(walletName);
 
     const createSlotInfo = {
       initialKeys,
@@ -74,23 +76,28 @@ export default function useWallet() {
     setCredentials([credential as any]);
     // step 2: get User op
     let userOp = await getActivateOp(createIndex, createSlotInfo, chainConfig.paymasterTokens[0]);
-    
-    signAndSend(userOp);
-
+    await signAndSend(userOp);
   };
 
   const withdrawAssets = async (amount: string, to: string) => {
     const userOp = await getWithdrawOp(amount, to);
-    signAndSend(userOp);
+    await signAndSend(userOp);
   }
 
   const loginWallet = async () => {
     const { credential } = await authenticate();
-    const res = await api.account.get({
+    const res = await api.account.list({
       ownerKey: credential.publicKey,
     });
 
-    console.log('account info', res);
+    // consider first item only for now
+    const item = res.data[0];
+
+    setCredentials([credential as any])
+    setWalletName(item.name);
+    setSelectedAddress(item.address);
+    setSelectedChainId(item.chainID);
+    setSlotInfo(item.initInfo);
   };
 
   const getWithdrawOp = async (amount: string, to: string) => {
