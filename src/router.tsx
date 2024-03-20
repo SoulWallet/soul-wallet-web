@@ -4,6 +4,7 @@ import PublicWrapper from './wrapper/PublicWrapper';
 import Dashboard from '@/pages/dashboard';
 import Create from '@/pages/create';
 import Deposit from '@/pages/deposit';
+import Withdraw from '@/pages/withdraw';
 import Landing from '@/pages/landing';
 import AppContainer from './components/mobile/AppContainer';
 
@@ -32,6 +33,11 @@ export const router = createBrowserRouter([
         path: '/deposit',
         element: <PublicWrapper />,
         children: [{ path: '', element: <Deposit /> }],
+      },
+      {
+        path: '/withdraw',
+        element: <PublicWrapper />,
+        children: [{ path: '', element: <Withdraw /> }],
       },
       {
         path: '/landing',
