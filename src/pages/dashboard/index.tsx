@@ -49,7 +49,6 @@ export default function Dashboard() {
   if (hasBalance) {
     return (
       <Box padding="30px">
-        <Button onClick={()=> doWithdraw()}>Withdraw</Button>
         <Box>
           <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
           <Box
@@ -60,26 +59,28 @@ export default function Dashboard() {
             border="1px solid #EAECF0"
           >
             <Box
-              borderBottom="1px solid rgba(0, 0, 0, 0.1)"
               display="flex"
               flexDirection="column"
               alignItems="center"
-              padding="50px 10px"
+              padding="48px 10px 0"
+              mb="6"
             >
-              <Box display="flex" alignItems="center" marginTop="16px">
+              <Box display="flex" alignItems="center">
                 <Box
                   fontFamily="Nunito"
                   fontSize="72px"
+                  lineHeight={"1"}
                   fontWeight="800"
                 >
                   {totalUsdValue.split('.')[0]}
                 </Box>
                 {Number(totalUsdValue) > 0 && <Box
                   fontFamily="Nunito"
-                  fontSize="24px"
+                  fontSize="36px"
+                  lineHeight={"1"}
                   fontWeight="800"
                   marginTop="24px"
-                  marginLeft="10px"
+                  // marginLeft="10px"
                   color="#939393"
                 >
                   .{totalUsdValue.split('.')[1]}
