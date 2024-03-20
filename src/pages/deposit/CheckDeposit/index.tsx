@@ -30,7 +30,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
         marginTop="18px"
       />
       <Box padding="30px" marginBottom="144px">
-        <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px">
+        <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="63">
           Prior to deposit, please verify
         </Box>
         <Box
@@ -43,8 +43,8 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
           transition="0.6s all ease"
         >
           <Box
-            width={isAllChecked ? '40px' : '61px'}
-            height={isAllChecked ? '40px' : '61px'}
+            width={isAllChecked ? '40px' : '72px'}
+            height={isAllChecked ? '40px' : '72px'}
             marginLeft="6px"
             marginRight="6px"
             transition="0.6s all ease"
@@ -52,8 +52,8 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             <Image src={USDCGreyIcon} className="icon" />
           </Box>
           <Box
-            width={isAllChecked ? '40px' : '61px'}
-            height={isAllChecked ? '40px' : '61px'}
+            width={isAllChecked ? '40px' : '72px'}
+            height={isAllChecked ? '40px' : '72px'}
             marginLeft="6px"
             marginRight="6px"
             transition="0.6s all ease"
@@ -61,8 +61,8 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             <Image src={USDCGreyIcon} className="icon" />
           </Box>
           <Box
-            width={isAllChecked ? '40px' : '61px'}
-            height={isAllChecked ? '40px' : '61px'}
+            width={isAllChecked ? '40px' : '72px'}
+            height={isAllChecked ? '40px' : '72px'}
             marginLeft="6px"
             marginRight="6px"
             transition="0.6s all ease"
