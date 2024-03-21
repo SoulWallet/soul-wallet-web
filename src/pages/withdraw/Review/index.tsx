@@ -78,7 +78,8 @@ export default function Review({ onPrev, value, sendTo, onSetSendTo, onNext }: a
             border="none"
             outline="none"
           >
-            Free <Box as="span" textDecoration="line-through" color="rgba(0, 0, 0, 0.60)">$2.063</Box>
+            Free
+             {/* <Box as="span" textDecoration="line-through" color="rgba(0, 0, 0, 0.60)">$2.063</Box> */}
           </Box>
           <Box color="#0CB700" fontSize="14px">This fee is sponsored by Soul Wallet Labs</Box>
         </Box>

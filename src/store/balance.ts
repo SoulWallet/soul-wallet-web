@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import IconDefaultToken from '@/assets/tokens/default.svg';
 import IconEth from '@/assets/tokens/eth.svg';
 import BN from 'bignumber.js';
-import { formatIPFS } from '@/lib/tools';
+import { usdcArbPoolReserveId } from '@/config/constants';
 
 export interface ITokenBalanceItem {
   chainID: string;
@@ -19,13 +19,6 @@ export interface ITokenBalanceItem {
   tokenPrice: string;
   usdValue?: string;
   type?: number;
-}
-
-export interface INftBalanceItem {
-  address: string;
-  tokenId: string;
-  balance: number;
-  icon: string;
 }
 
 const defaultEthBalance: ITokenBalanceItem = {
@@ -42,14 +35,16 @@ const defaultEthBalance: ITokenBalanceItem = {
 };
 
 export interface IBalanceStore {
+  sevenDayApy: string;
+  fetchApy: () => void;
+  oneDayInterest: string;
+  totalInterest: string;
+  fetchInterest: (address: string, chainID: string) => void;
   totalUsdValue: string;
   tokenBalance: ITokenBalanceItem[];
-  nftBalance: INftBalanceItem[];
   clearBalance: () => void;
   getTokenBalance: (tokenAddress: string) => any;
   fetchTokenBalance: (address: string, chainId: string) => void;
-  getNftBalance: (tokenAddress: string) => any;
-  fetchNftBalance: (address: string, chainId: number) => void;
 }
 
 export interface priceMapping {
@@ -72,31 +67,45 @@ export const formatTokenBalance = (item: ITokenBalanceItem) => {
   return item;
 };
 
-const formatNftBalance = (item: any) => {
-  const ipfsUrl = item.rawMetadata.image;
-
-  return {
-    logoURI: formatIPFS(ipfsUrl),
-    title: item.title,
-    tokenId: item.tokenId,
-    balance: item.balance,
-    tokenType: item.tokenType,
-  };
-};
-
 export const useBalanceStore = create<IBalanceStore>()(
   persist(
     (set, get) => ({
       totalUsdValue: '0',
+      apy: '0',
+      sevenDayApy: '0',
+      oneDayInterest: '0',
+      totalInterest: '0',
+      fetchApy: async () => {
+        const res = await api.aave.apy({
+          reserveId: usdcArbPoolReserveId,
+          resolutionInHours: 6,
+        });
+
+        const latest7Days = res.data.slice(326);
+
+        const totalApy = latest7Days.reduce((acc: number, cur: any) => {
+          return acc + cur.liquidityRate_avg;
+        }, 0);
+
+        set({ sevenDayApy: (totalApy / latest7Days.length * 100).toFixed(2) });
+      },
+      fetchInterest: async (address, chainID) => {
+        const res = await api.token.interest({
+          chainID,
+          address,
+        });
+
+        console.log('interest is', res);
+        set({ oneDayInterest: res.data.oneDayInterest, totalInterest: res.data.totalInterest });
+      },
       tokenBalance: [defaultEthBalance],
       nftBalance: [],
       getTokenBalance: (tokenAddress: string) => {
         return get().tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress === tokenAddress)[0];
       },
       clearBalance: () => {
-        set({ tokenBalance: [defaultEthBalance], nftBalance: [], totalUsdValue: '0' });
+        set({ tokenBalance: [defaultEthBalance], totalUsdValue: '0' });
       },
-
       fetchTokenBalance: async (address: string, chainId: string) => {
         if (!address || !chainId) {
           return;
@@ -116,19 +125,6 @@ export const useBalanceStore = create<IBalanceStore>()(
         });
         // format balance list here
         set({ tokenBalance: tokenList, totalUsdValue: totalUsdValue.toFixed(2) });
-      },
-      getNftBalance: (tokenAddress: string) => {
-        return get().nftBalance.filter((item: INftBalanceItem) => item.address === tokenAddress)[0];
-      },
-      fetchNftBalance: async (address: string, chainId: number) => {
-        const res = await api.balance.nft({
-          walletAddress: address,
-          chainId: chainId,
-        });
-
-        const nftList = res.data.ownedNfts.map((item: any) => formatNftBalance(item));
-
-        set({ nftBalance: nftList });
       },
     }),
     {

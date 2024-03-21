@@ -15,37 +15,18 @@ import { useChainStore } from '@/store/chain';
 import { useBalanceStore } from '@/store/balance';
 import useWallet from '@/hooks/useWallet';
 import { useHistoryStore } from '@/store/history';
+import { usdcArbPoolReserveId } from '@/config/constants';
 
 export default function Dashboard() {
-  const { totalUsdValue, getTokenBalance } = useBalanceStore();
-  const [apy, setApy] = useState(0);
+  const { totalUsdValue, getTokenBalance, sevenDayApy } = useBalanceStore();
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { historyList } = useHistoryStore();
 
-  const getApy = async () => {
-    const res = await api.aave.apy({
-      reserveId: '0x833589fcd6edb6e08f4c7c32d4f71b54bda029130xe20fCBdBfFC4Dd138cE8b2E6FBb6CB49777ad64D8453',
-      // from: Math.floor((Date.now() - 1000 * 60 * 60 * 24 * 7)/ 1000),
-      resolutionInHours: 6,
-    })
-
-    const latest7Days = res.data.slice(326);
-
-    const totalApy = latest7Days.reduce((acc: number, cur: any) => {
-      return acc + cur.liquidityRate_avg;
-    } , 0);
-
-    const avgApy = totalApy / latest7Days.length;
-    setApy(avgApy)
-  }
-
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
 
-  useEffect(()=>{
-    getApy();
-  }, [])
-
   const hasBalance = Number(totalUsdValue) > 0;
+
+  console.log('totalUsdValue', totalUsdValue)
 
   if (hasBalance) {
     return (
@@ -162,7 +143,7 @@ export default function Dashboard() {
                 </Box>
                 <Box display="flex" alignItems="center">
                   <Box display="flex" flexDirection="column" alignItems="flex-end">
-                    <Box fontSize="18px" fontWeight="700">{apy ? (apy * 100).toFixed(2) : '...'}%</Box>
+                    <Box fontSize="18px" fontWeight="700">{sevenDayApy}%</Box>
                     <Box fontSize="14px" fontWeight="400" textAlign="right">7day average APY</Box>
                   </Box>
                   <Box marginLeft="10px">
@@ -227,10 +208,10 @@ export default function Dashboard() {
                       Pending
                     </Box> */}
                   </Box>
-                  <Box fontSize="12px">{item.blockTimestamp}</Box>
+                  <Box fontSize="12px">{item.dateFormatted}</Box>
                 </Box>
                 <Box marginLeft="auto">
-                  <Box fontSize="14px" fontWeight="700">+ 1,221.32 USDC</Box>
+                  <Box fontSize="14px" fontWeight="700">{item.amountFormatted} USDC</Box>
                 </Box>
               </Box>)}
             </Box>
@@ -248,7 +229,7 @@ export default function Dashboard() {
     >
       <Box width="100%" padding="30px" display="flex" alignItems="center" flexDirection="column">
         <Box fontFamily="Nunito" fontSize="36px" fontWeight="700" textAlign="center" lineHeight="56px">
-          Deposit, save and earn
+          Deposit and earn
         </Box>
         <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
           Deposit to your Soul Wallet account, get <Box fontWeight="700">auto-saved</Box> into the best interest rate pool and start earning today!

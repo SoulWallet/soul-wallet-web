@@ -1,8 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, useToast } from '@chakra-ui/react';
-import Header from '@/components/mobile/Header'
+import { useToast } from '@chakra-ui/react';
 import useWallet from '@/hooks/useWallet';
-import usePasskey from '@/hooks/usePasskey';
 import { useNavigate } from 'react-router-dom';
 import InputAmount from './InputAmount'
 import Review from './Review'
