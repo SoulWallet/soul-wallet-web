@@ -6,8 +6,8 @@ import { useBalanceStore } from '@/store/balance';
 
 export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
   const { getTokenBalance } = useBalanceStore();
-
   const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
+  const disabled = !value
 
   return (
     <Box width="100%" height="100%">
@@ -64,7 +64,7 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
           marginTop="200px"
           width="100%"
         >
-          <Button size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
+          <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
         </Box>
       </Box>
     </Box>

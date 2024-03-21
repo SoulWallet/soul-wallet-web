@@ -4,6 +4,7 @@ import Button from '@/components/mobile/Button'
 
 export default function InputInviteCode({value, onChange, onNext}: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const disabled = !value
 
   return (
     <Box width="100%" height="100%" padding="30px" paddingTop="138px">
@@ -20,7 +21,7 @@ export default function InputInviteCode({value, onChange, onNext}: any) {
         <Box marginTop="10px" width="100%" height="1px" background="rgba(73, 126, 130, 0.2)" />
         <Box fontSize="14px" lineHeight="24px" fontWeight="600" marginTop="8px" onClick={onOpen}>What if I don’t have one?</Box>
       </Box>
-      <Button size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
+      <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
       <Modal
         isOpen={isOpen}
         onClose={onClose}

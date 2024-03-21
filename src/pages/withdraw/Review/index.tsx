@@ -8,6 +8,7 @@ import AAVEIcon from '@/assets/mobile/aave.png'
 
 export default function Review({ onPrev, value, sendTo, onSetSendTo, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const disabled = !sendTo
 
   return (
     <Box width="100%" height="100%">
@@ -79,7 +80,7 @@ export default function Review({ onPrev, value, sendTo, onSetSendTo, onNext }: a
             outline="none"
           >
             Free
-             {/* <Box as="span" textDecoration="line-through" color="rgba(0, 0, 0, 0.60)">$2.063</Box> */}
+            {/* <Box as="span" textDecoration="line-through" color="rgba(0, 0, 0, 0.60)">$2.063</Box> */}
           </Box>
           <Box color="#0CB700" fontSize="14px">This fee is sponsored by Soul Wallet Labs</Box>
         </Box>
@@ -110,7 +111,7 @@ export default function Review({ onPrev, value, sendTo, onSetSendTo, onNext }: a
           marginTop="100px"
           width="100%"
         >
-          <Button size="xl" type="blue" width="100%" onClick={onNext}>Confirm</Button>
+          <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Confirm</Button>
         </Box>
       </Box>
       <Modal
@@ -158,7 +159,7 @@ export default function Review({ onPrev, value, sendTo, onSetSendTo, onNext }: a
               Confirm deposit address is on <Box as="span" fontWeight="700">Arbitrum</Box>; deposit to other networks could result in lost assets.
             </Box>
             <Box marginTop="14px">
-              <Button size="xl" type="blue" width="100%" onClick={onNext}>Confirm</Button>
+              <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Confirm</Button>
             </Box>
           </ModalBody>
         </ModalContent>
