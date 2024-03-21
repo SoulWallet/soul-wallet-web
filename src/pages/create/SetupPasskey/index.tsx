@@ -3,7 +3,7 @@ import { Box, Input } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import FadeId from '@/components/Icons/mobile/FaceId'
 
-export default function SepupPasskey({ onNext, onSkip }: any) {
+export default function SepupPasskey({ addingPasskey, onNext, onSkip }: any) {
   return (
     <Box width="100%" height="100%" padding="30px" paddingTop="138px" display="flex" alignItems="center" justifyContent="center" flexDirection="column">
       <Box marginBottom="74px">
@@ -22,7 +22,7 @@ export default function SepupPasskey({ onNext, onSkip }: any) {
           Passkeys are like passwords but better. They’re better because they aren’t created insecurely by humans and because they use public key cryptography to create much more secure experiences.
         </Box>
       </Box>
-      <Button size="xl" type="blue" onClick={onNext} minWidth="195px">Continue</Button>
+      <Button disabled={!!addingPasskey} size="xl" type="blue" onClick={onNext} minWidth="195px">Continue</Button>
     </Box>
   );
 }
