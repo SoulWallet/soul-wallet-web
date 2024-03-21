@@ -2,9 +2,11 @@ import React from 'react';
 import { Box, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 
-export default function InputInviteCode({value, onChange, onNext}: any) {
+export default function InputInviteCode({value, onChange, codeStatus, onNext}: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const disabled = !value
+  const disabled = !value || codeStatus !== 0
+
+  console.log('code status', codeStatus);
 
   return (
     <Box width="100%" height="100%" padding="30px" paddingTop="138px">
@@ -17,9 +19,19 @@ export default function InputInviteCode({value, onChange, onNext}: any) {
         Invite code
       </Box>
       <Box width="100%" marginBottom="50px">
-        <Input value={value} onChange={e => onChange(e.target.value)} fontSize="32px" lineHeight="24px" padding="0" fontWeight="700" placeholder="Enter or paste here" borderRadius="0" border="none" outline="none" _focusVisible={{ border: 'none', boxShadow: 'none' }} />
+        <Input value={value} spellCheck={false} onChange={e => onChange(e.target.value)} fontSize="32px" lineHeight="24px" padding="0" fontWeight="700" placeholder="Enter or paste here" borderRadius="0" border="none" outline="none" _focusVisible={{ border: 'none', boxShadow: 'none' }} />
         <Box marginTop="10px" width="100%" height="1px" background="rgba(73, 126, 130, 0.2)" />
-        <Box fontSize="14px" lineHeight="24px" fontWeight="600" marginTop="8px" onClick={onOpen}>What if I don’t have one?</Box>
+        {codeStatus === 0 && (
+          <Box fontSize="14px" lineHeight="24px" fontWeight="600" marginTop="8px" minHeight="24px" color="#0CB700">
+            Looks great! Let’s go
+          </Box>
+        )}
+        {(codeStatus === 1 || codeStatus === 2) && (
+          <Box fontSize="14px" lineHeight="24px" fontWeight="700" marginTop="8px" minHeight="24px" color="#E83D26">
+            {codeStatus === 1 ? 'This code has been expired or used. Please try another.' : 'Invalid code, please try another'}
+          </Box>
+        )}
+        {codeStatus === -1 && <Box fontSize="14px" lineHeight="24px" fontWeight="600" marginTop="8px" onClick={onOpen}>What if I don’t have one?</Box>}
       </Box>
       <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
       <Modal

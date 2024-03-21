@@ -104,4 +104,5 @@ export default {
   price,
   token,
   aave,
+  invitation,
 };
