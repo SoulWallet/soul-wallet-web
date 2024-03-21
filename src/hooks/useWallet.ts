@@ -138,7 +138,7 @@ export default function useWallet() {
         to: import.meta.env.VITE_AAVE_USDC_POOL,
         data: aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [
           import.meta.env.VITE_TOKEN_USDC,
-          ethers.parseUnits(withdrawAmount, 6),
+          ethers.parseUnits(String(withdrawAmount), 6),
           selectedAddress,
         ]),
       });
@@ -147,7 +147,7 @@ export default function useWallet() {
     txs.push({
       from: selectedAddress,
       to: import.meta.env.VITE_TOKEN_USDC,
-      data: erc20.encodeFunctionData('transfer', [to, ethers.parseUnits(amount, 6)]),
+      data: erc20.encodeFunctionData('transfer', [to, ethers.parseUnits(String(amount), 6)]),
     });
 
     return await getUserOp(txs);
