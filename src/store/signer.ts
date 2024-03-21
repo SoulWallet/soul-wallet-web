@@ -5,11 +5,11 @@ import { SignkeyType } from '@soulwallet/sdk';
 
 export interface ISignerStore {
   signerId: string;
+  selectedKeyType: SignkeyType;
   setSignerId: (signerId: string) => void;
   credentials: ICredentialItem[];
   getSelectedKeyType: () => SignkeyType;
   getSelectedCredential: () => void;
-  addCredential: (credential: ICredentialItem) => void;
   setCredentials: (credentials: ICredentialItem[]) => void;
   changeCredentialName: (credentialId: string, name: string) => void;
   clearSigners: () => void;
@@ -30,28 +30,24 @@ export const getIndexByCredentialId = (credentials: ICredentialItem[], id: strin
 const createCredentialSlice = immer<ISignerStore>((set, get) => ({
   // eoa address, credential id
   signerId: '',
+  selectedKeyType: SignkeyType.P256,
   setSignerId: (signerId: string) => {
     set({
       signerId,
     });
   },
-
   credentials: [],
   getSelectedKeyType: () => {
     const index = getIndexByCredentialId(get().credentials, get().signerId);
     const algorithm = get().credentials[index].algorithm;
     return algorithm === 'ES256' ? SignkeyType.P256 : SignkeyType.RS256;
   },
-  addCredential: (credential: ICredentialItem) => {
-    set((state) => {
-      state.credentials.push(credential);
-    });
-  },
   setCredentials: (credentials: ICredentialItem[]) => {
     set((state) => {
       state.credentials = credentials;
       // set the first one as default
       state.signerId = credentials[0].id;
+      state.selectedKeyType = credentials[0].algorithm === 'ES256' ? SignkeyType.P256 : SignkeyType.RS256;
     });
   },
   clearSigners: () => {

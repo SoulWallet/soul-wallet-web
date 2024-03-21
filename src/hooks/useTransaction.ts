@@ -11,12 +11,14 @@ import useQuery from './useQuery';
 import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { ABI_ReceivePayment } from '@soulwallet/abi';
+import { useSignerStore } from '@/store/signer';
 
 export default function useTransaction() {
   const { showSignTransaction } = useWalletContext();
   const { soulWallet } = useSdk();
   const { estimateGasFee, getGasPrice } = useQuery();
   const { selectedAddress } = useAddressStore();
+  const { selectedKeyType } = useSignerStore();
 
 
   const payTask = async (contractAddress: string, amount: string, paymentId: string) => {
@@ -66,7 +68,7 @@ export default function useTransaction() {
       }
 
       let userOp = userOpRet.OK;
-      userOp = await estimateGasFee(userOp, SignkeyType.P256, true);
+      // userOp = await estimateGasFee(userOp, true);
       // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
       // userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
 

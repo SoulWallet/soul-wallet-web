@@ -1,9 +1,8 @@
-import React from 'react';
 import { Box, Input } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 
-export default function SepupUsername({ value, onChange, onNext }: any) {
-  const disabled = !value
+export default function SepupUsername({ value, onChange, onNext, nameStatus }: any) {
+  const disabled = !value || nameStatus !== 0;
 
   return (
     <Box width="100%" height="100%" padding="30px" paddingTop="138px">

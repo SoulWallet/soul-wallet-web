@@ -9,6 +9,7 @@ import CreateSuccess from './CreateSuccess'
 import useWallet from '@/hooks/useWallet';
 import usePasskey from '@/hooks/usePasskey';
 import { useNavigate } from 'react-router-dom';
+import api from '@/lib/api';
 
 export default function Create() {
   const { createWallet } = useWallet();
@@ -20,9 +21,8 @@ export default function Create() {
   const [invitationCode, setInvitationCode] = useState('')
   const [username, setUsername] = useState('')
   const [credential, setCredential] = useState<any>({})
+  const [nameStatus, setNameStatus] = useState(-1)
   const onPrev = useCallback(() => {
-    console.log('prev')
-
     if (step > 1) {
       setStep(step - 1)
     }
@@ -60,6 +60,18 @@ export default function Create() {
     }
   }
 
+  const checkUsername = async() => {
+    const res:any = api.account.nameStatus({
+      name: username,
+    });
+    console.log('name status', res);
+    setNameStatus(res.data);
+  }
+
+  useEffect(()=>{
+    checkUsername();
+  }, [username])
+
   const renderStep = () => {
     if (step == 0) {
       return (
@@ -67,7 +79,7 @@ export default function Create() {
       )
     } else if (step == 1) {
       return (
-        <SetupUsername value={username} onChange={setUsername} onNext={onNext} onSkip={onSkip} />
+        <SetupUsername nameStatus={nameStatus} value={username} onChange={setUsername} onNext={onNext} onSkip={onSkip} />
       )
     }
     else if (step == 2) {

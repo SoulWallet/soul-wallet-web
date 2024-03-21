@@ -77,31 +77,16 @@ export default function useQuery() {
     }
   };
 
-  const estimateGasFee = async (userOp: any, _selectedKeyType: number, bypassGetFee = false) => {
-    const selectedKeyType = _selectedKeyType || getSelectedKeyType();
-
-    console.log('selectedkeytype,', selectedKeyType);
-
-      if(!bypassGetFee){
-        const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
-        userOp.maxFeePerGas = maxFeePerGas;
-        userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
-      }
+  const estimateGasFee = async (userOp: any, bypassGetFee = false) => {
+    if (!bypassGetFee) {
+      const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
+      userOp.maxFeePerGas = maxFeePerGas;
+      userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
+    }
 
     console.log('Estimate UserOP:');
     printUserOp(userOp);
-    // get gas limit
-    // const gasLimit = await soulWallet.estimateUserOperationGas(
-    //   chainConfig.contracts.defaultValidator,
-    //   userOp,
-    //   selectedKeyType,
-    // );
-
-    // if (gasLimit.isErr()) {
-    //   throw new Error(gasLimit.ERR.message);
-    // }
-
-    return userOp
+    return userOp;
   };
 
   return {
