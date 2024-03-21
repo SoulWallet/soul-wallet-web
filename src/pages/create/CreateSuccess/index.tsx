@@ -2,8 +2,49 @@ import React from 'react';
 import { Box, Input } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import FadeId from '@/components/Icons/mobile/FaceId'
+import Loading from '@/components/Icons/mobile/Loading'
+import { css, keyframes } from '@emotion/react'
 
-export default function CreateSuccess({ onNext }: any) {
+const spin = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
+
+export default function CreateSuccess({ creating, onNext }: any) {
+  if (creating) {
+    return (
+      <Box
+        position="fixed"
+        top="0"
+        width="100vw"
+        height="100vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
+      >
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+          <Box
+            css={css`
+              animation: ${spin} 1s linear infinite;
+            `}
+          >
+            <Loading />
+          </Box>
+          <Box
+            marginTop="80px"
+            fontWeight="700"
+            fontSize="18px"
+            lineHeight="14px"
+            marginBottom="14px"
+          >
+            钱包激活中
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Box width="100%" height="100%" padding="30px" paddingTop="138px" display="flex" alignItems="center" justifyContent="center" flexDirection="column">
       <Box width="120px" height="120px" background="#D9D9D9" borderRadius="120px" marginBottom="30px">

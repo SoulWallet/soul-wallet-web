@@ -15,6 +15,7 @@ export default function Create() {
   const { register } = usePasskey();
   const navigate = useNavigate();
   const [step, setStep] = useState(0)
+  const [creating, setCreating] = useState(false)
   const [invitationCode, setInvitationCode] = useState('')
   const [username, setUsername] = useState('')
   const [credential, setCredential] = useState<any>({})
@@ -37,12 +38,20 @@ export default function Create() {
 
   const onCreatePasskey = async() => {
     setCredential(await register(username));
-    setStep(4)
+    setStep(3)
   }
 
   const onCreateWallet = async () => {
-    await createWallet(credential, username, '12Y-1QE-3L8' || invitationCode);
-    navigate('/dashboard')
+    try {
+      console.log('onCreateWallet')
+      setCreating(true)
+      await createWallet(credential, username, '12Y-1QE-3L8' || invitationCode);
+      // setCreating(false)
+      navigate('/dashboard')
+    } catch (error: any) {
+      setCreating(false)
+      console.error('onCreateWallet failed', error)
+    }
   }
 
   const renderStep = () => {
@@ -54,14 +63,14 @@ export default function Create() {
       return (
         <SetupUsername value={username} onChange={setUsername} onNext={onNext} onSkip={onSkip} />
       )
-    } 
+    }
     else if (step == 2) {
       return (
         <SetupPasskey onNext={onCreatePasskey} />
       )
     } else if (step == 3) {
       return (
-        <CreateSuccess onNext={onCreateWallet} />
+        <CreateSuccess creating={creating} onNext={onCreateWallet} />
       )
     }
   }
