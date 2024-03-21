@@ -69,7 +69,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
           </Box>
         </Box>
       </Box>
-      <Box position="fixed" bottom="0" width="100%" marginTop="auto" marginBottom="60px">
+      <Box position="fixed" bottom="0" left="0" width="100%" marginTop="auto" marginBottom="60px">
         <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">
           <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
           <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
