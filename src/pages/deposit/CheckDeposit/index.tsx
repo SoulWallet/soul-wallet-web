@@ -16,6 +16,8 @@ import Header from '@/components/mobile/Header';
 import Button from '@/components/mobile/Button';
 import ScanIcon from '@/components/Icons/mobile/Scan';
 import NextIcon from '@/components/Icons/mobile/Next';
+import CheckedIcon from '@/components/Icons/mobile/Checked';
+import UncheckedIcon from '@/components/Icons/mobile/Unchecked';
 import useWallet from '@/hooks/useWallet';
 import usePasskey from '@/hooks/usePasskey';
 import { useNavigate } from 'react-router-dom';
@@ -84,25 +86,34 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
           </Box>
         </Box>
         <Box
-          filter={!isAllChecked ? 'none' : 'grayscale(1)'}
+          color={!isAllChecked ? 'black' : 'rgba(0, 0, 0, 0.42)'}
           pointerEvents={!isAllChecked ? 'all' : 'none'}
         >
           <Box>
-            <Box marginBottom="4px">
-              <Checkbox defaultChecked={false} onChange={(e) => setChecked1(e.target.checked)}>
-                I'm gonna send USDC, not other assets
-              </Checkbox>
+            <Box marginBottom="4px" lineHeight="20px" marginBottom="18px">
+              <Box display="flex" alignItems="center" onClick={(e) => setChecked1(!checked1)}>
+                <Box marginRight="12px">
+                  {checked1 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
+                </Box>
+                <Box>I'm gonna send USDC, not other assets</Box>
+              </Box>
             </Box>
           </Box>
-          <Box marginBottom="4px">
-            <Checkbox defaultChecked={false} alignItems="flex-start" onChange={(e) => setChecked2(e.target.checked)}>
-              The network is Arbitrum, not any other chain
-            </Checkbox>
+          <Box marginBottom="4px" lineHeight="20px" marginBottom="18px">
+            <Box display="flex" alignItems="center" onClick={(e) => setChecked2(!checked2)}>
+              <Box marginRight="12px">
+                {checked2 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
+              </Box>
+              <Box>The network is Arbitrum, not any other chain</Box>
+            </Box>
           </Box>
-          <Box marginBottom="4px">
-            <Checkbox defaultChecked={false} alignItems="flex-start" onChange={(e) => setChecked3(e.target.checked)}>
-              After deposit, my fund will auto-saved into AAVE protocol
-            </Checkbox>
+          <Box marginBottom="4px" lineHeight="20px" marginBottom="18px">
+            <Box display="flex" alignItems="center" onClick={(e) => setChecked3(!checked3)}>
+              <Box marginRight="12px">
+                {checked3 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
+              </Box>
+              <Box>After deposit, my fund will auto-saved into AAVE protocol</Box>
+            </Box>
           </Box>
         </Box>
         <Box

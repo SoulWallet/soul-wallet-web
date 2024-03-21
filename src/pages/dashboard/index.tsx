@@ -6,6 +6,7 @@ import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
 import WithdrawIcon from '@/components/Icons/mobile/Withdraw'
 import MoreIcon from '@/components/Icons/mobile/More'
+import QuestionIcon from '@/components/Icons/mobile/Question'
 import USDCIcon from '@/assets/tokens/usdc.png'
 import ActivityDepositIcon from '@/components/Icons/mobile/Activity/Deposit'
 import config from '@/config';
@@ -246,7 +247,7 @@ export default function Dashboard() {
           marginBottom="20px"
           onClick={onOpen}
         >
-          What’s auto-saving
+          What’s auto-saving <Box display="flex" alignItems="center" justifyContent="center" width="14px" height="14px" border="1px solid black" borderRadius="14px"><QuestionIcon /></Box>
         </Button>
         <Box
           width="100%"

@@ -4,10 +4,23 @@ import Button from '@/components/mobile/Button'
 import Header from '@/components/mobile/Header'
 import { useBalanceStore } from '@/store/balance';
 
+const getFontSize = (value: any) => {
+  const length = value ? String(value).length : 0
+
+  if (length > 9) {
+    return '40px'
+  } else if (length > 5) {
+    return '60px'
+  }
+
+  return '100px'
+}
+
 export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
   const { getTokenBalance } = useBalanceStore();
-
   const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
+  const disabled = !value
+  const fontSize = getFontSize(value)
 
   return (
     <Box width="100%" height="100%">
@@ -22,7 +35,7 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
           <Input
             value={value}
             onChange={e => onChange(e.target.value)}
-            fontSize="100px"
+            fontSize={fontSize}
             lineHeight="100%"
             height="110px"
             padding="0"
@@ -64,7 +77,7 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
           marginTop="200px"
           width="100%"
         >
-          <Button size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
+          <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
         </Box>
       </Box>
     </Box>
