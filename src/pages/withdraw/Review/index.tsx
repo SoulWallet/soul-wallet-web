@@ -100,7 +100,7 @@ export default function Review({ onPrev, value, sendTo, onSetSendTo, onNext }: a
           Confirm deposit address is on <Box as="span" fontWeight="700">Arbitrum</Box>; deposit to other networks could result in lost assets.
         </Box>
         <Box
-          marginTop="387px"
+          marginTop="40px"
           width="100%"
         >
           <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Confirm</Button>
