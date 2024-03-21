@@ -6,9 +6,11 @@ import CheckIcon from '@/components/Icons/mobile/Check'
 import USDCIcon from '@/assets/tokens/usdc.png'
 import config from '@/config';
 import useWallet from '@/hooks/useWallet';
+import { useBalanceStore } from '@/store/balance';
 
 export default function Landing() {
   const { loginWallet  } = useWallet();
+  const { sevenDayApy } = useBalanceStore();
   const navigate = useNavigate();
   const doSignIn = async () => {
     await loginWallet();
@@ -104,7 +106,7 @@ export default function Landing() {
                 fontSize="72px"
                 fontWeight="800"
               >
-                12.16
+                {sevenDayApy}
               </Box>
               <Box
                 fontFamily="Nunito"
@@ -213,7 +215,7 @@ export default function Landing() {
                 Higher APY rate
               </Box>
               <Box fontSize="14px" fontWeight="400">
-                For USDC, onchain earn has a upto 12.16% APY, which is higher than most CEX.
+                For USDC, onchain earn has a upto {sevenDayApy}% APY, which is higher than most CEX.
               </Box>
             </Box>
           </Box>

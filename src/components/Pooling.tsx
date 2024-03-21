@@ -13,10 +13,13 @@ export default function Pooling() {
   const { selectedChainId } = useChainStore();
   const { fetchTokenBalance, fetchApy, fetchInterest } = useBalanceStore();
 
-  const getPoolingInfo = () => {
+  const getUserInfo = () => {
     fetchTokenBalance(selectedAddress, selectedChainId);
     fetchHistory(selectedAddress, selectedChainId);
     fetchInterest(selectedAddress, selectedChainId);
+  };
+
+  const getCommonInfo = () => {
     fetchApy();
   };
 
@@ -24,15 +27,25 @@ export default function Pooling() {
     if (!selectedAddress || !selectedChainId) {
       return;
     }
-    getPoolingInfo();
+    getUserInfo();
     const interval = setInterval(() => {
-      getPoolingInfo();
+      getUserInfo();
     }, 4000);
 
     return () => {
       clearInterval(interval);
     };
   }, [selectedAddress, selectedChainId]);
+
+  useEffect(() => {
+    getCommonInfo();
+    const interval = setInterval(() => {
+      getCommonInfo();
+    }, 6000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return <></>;
 }
