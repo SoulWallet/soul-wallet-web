@@ -3,6 +3,7 @@ import Button from '@/components/mobile/Button'
 import Header from '@/components/mobile/Header'
 import BN from 'bignumber.js'
 import { useBalanceStore } from '@/store/balance';
+import { toFixed } from '@/lib/tools';
 
 const getFontSize = (value: any) => {
   const length = value ? String(value).length : 0
@@ -16,12 +17,14 @@ const getFontSize = (value: any) => {
   return '100px'
 }
 
-export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
-  const { getTokenBalance, totalUsdValue, } = useBalanceStore();
-  // const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
-  // const usdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)?.tokenBalanceFormatted;
-  const disabled = !value
-  const fontSize = getFontSize(value)
+export default function InputAmount({ onPrev, onNext,
+
+withdrawAmount, onWithdrawAmountChange, sendTo, onSendToChange 
+
+}: any) {
+  const { totalUsdValue, } = useBalanceStore();
+  const disabled = !withdrawAmount || withdrawAmount <= 0 || withdrawAmount > totalUsdValue || !sendTo
+  // const fontSize = getFontSize(value)
 
   return (
     <Box width="100%" height="100%">
@@ -31,7 +34,7 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
         onBack={onPrev}
         marginTop="18px"
       />
-      <Box padding="30px" minHeight="100vh">
+      <Box padding="30px" minHeight="calc(100vh - 62px)">
         <Box marginTop="46px">
           <Box
             fontSize="24px"
@@ -46,8 +49,8 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
             alignItems="center"
           >
             <Input
-              value={value}
-              onChange={e => onChange(e.target.value)}
+              value={withdrawAmount}
+              onChange={e => onWithdrawAmountChange(e.target.value)}
               fontSize="32px"
               lineHeight="100%"
               padding="0"
@@ -91,17 +94,18 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
             fontWeight="600"
             fontSize="14px"
           >
-            Available: {totalUsdValue} USDC
+            Available: {toFixed(totalUsdValue, 2)} USDC
           </Box>
           <Box
             background="rgba(225, 220, 252, 0.80)"
             color="#6A52EF"
+            spellCheck={false}
             fontSize="14px"
             borderRadius="48px"
             padding="2px 12px"
             fontWeight="800"
             marginLeft="10px"
-            onClick={()=> onChange(totalUsdValue)}
+            onClick={()=> onWithdrawAmountChange(Number(totalUsdValue))}
           >
             MAX
           </Box>
@@ -120,8 +124,9 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
             alignItems="center"
           >
             <Input
-              value={''}
-              onChange={() => {}}
+              value={sendTo}
+              spellCheck={false}
+              onChange={e => onSendToChange(e.target.value)}
               fontSize="18px"
               lineHeight="100%"
               padding="0"

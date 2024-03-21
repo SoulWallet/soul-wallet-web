@@ -120,6 +120,7 @@ export default function AppContainer() {
                   padding="3px 8px"
                   fontSize="12px"
                   fontWeight="400"
+                  rounded="4px"
                 >
                   Coming soon
                 </Box>

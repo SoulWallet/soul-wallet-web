@@ -53,8 +53,7 @@ export default function Create() {
       console.log('onCreateWallet')
       setCreating(true)
       await createWallet(credential, username, invitationCode);
-      // setCreating(false)
-      navigate('/dashboard')
+      navigate('/intro')
     } catch (error: any) {
       setCreating(false)
       console.error('onCreateWallet failed', error)
