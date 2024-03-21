@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, Flex, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Link as RLink, useNavigate } from 'react-router-dom';
+import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, Link, Flex, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
@@ -87,8 +87,8 @@ export default function Intro() {
         <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
           Deposit to your Soul Wallet account, get <Text as="span" fontWeight="700">auto-saved</Text> into the best interest rate pool and start earning today!
         </Box>
-        <Link to="/deposit">
-          <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Deposit USDC</Button>
+        <Link as={RLink} to="/deposit" mt="50px">
+          <Button size="xl" type="blue" minWidth="283px">Deposit USDC</Button>
         </Link>
         <Button
           size="xl"
@@ -350,6 +350,7 @@ export default function Intro() {
               width="120px"
               borderRadius="120px"
               marginBottom="30px"
+              mt="24px"
             />
             <Box fontSize="24px" fontWeight="700" marginBottom="14px">
               Auto-saving
@@ -357,9 +358,10 @@ export default function Intro() {
             <Box
               fontSize="16px"
               textAlign="center"
-              marginBottom="40px"
+              marginBottom="28px"
             >
-              Each deposit to the Soul Wallet account will be auto saved into AAVE protocol to earn interest. You can withdraw anytime with a flexible term for your assets.
+              Your assets will be auto saved into AAVE protocol. 
+              You can transfer anytime after deposited.
             </Box>
             <Box width="100%">
               <Button size="xl" type="blue" width="100%" onClick={onClose}>Got it</Button>

@@ -3,21 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, Flex, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
-import CheckIcon from '@/components/Icons/mobile/Check'
-import WithdrawIcon from '@/components/Icons/mobile/Withdraw'
 import MoreIcon from '@/components/Icons/mobile/More'
-import QuestionIcon from '@/components/Icons/mobile/Question'
 import USDCIcon from '@/assets/tokens/usdc.png'
 import ActivityDepositIcon from '@/components/Icons/mobile/Activity/Deposit'
 import ActivityTransferIcon from '@/components/Icons/mobile/Activity/Transfer'
-import config from '@/config';
-import api from '@/lib/api';
-import { useAddressStore } from '@/store/address';
-import { useChainStore } from '@/store/chain';
 import { useBalanceStore } from '@/store/balance';
-import useWallet from '@/hooks/useWallet';
 import { useHistoryStore } from '@/store/history';
-import { usdcArbPoolReserveId } from '@/config/constants';
 
 const getFontSize = (value: any) => {
   const length = value ? String(value).length : 0
@@ -181,7 +172,7 @@ export default function Dashboard() {
           </Box>
           <Box width="100%" marginTop="24px">
             <Box fontSize="18px" fontWeight="700" marginBottom="12px">Earn from</Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Box as={Link} to="/details" display="flex" justifyContent="space-between" alignItems="center">
               <Box display="flex" alignItems="center">
                 <Box marginRight="8px">
                   <Image src={USDCIcon} />

@@ -1,28 +1,20 @@
 import { useState, useCallback } from 'react';
-import { Box, Image } from '@chakra-ui/react';
+import { Box, Image, Link } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
+import { Link as Rlink } from 'react-router-dom';
 import DetailsIMG from '@/components/Icons/mobile/Details'
 import TabIcon from '@/components/Icons/mobile/Tab'
 import { useNavigate } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc_lg.png'
+import { aaveLink } from '@/config';
+import { useBalanceStore } from '@/store/balance';
 
-export default function Deposit() {
+export default function Details() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0)
-  const [checked1, setChecked1] = useState(false)
-  const [checked2, setChecked2] = useState(false)
-  const [checked3, setChecked3] = useState(false)
-  const onPrev = useCallback(() => {
-    console.log('prev')
-
-    if (step > 0) {
-      setStep(step - 1)
-    }else{
-      navigate('/intro')
-    }
-  }, [step])
-
+  const goBack = () => {
+    navigate('/dashboard')
+  }
   return (
     <Box height="100%">
       <Box
@@ -33,13 +25,20 @@ export default function Deposit() {
         <Header
           title=""
           showBackButton
-          onBack={onPrev}
+          onBack={goBack}
           background="#F5F6FA"
           marginTop="0"
         />
       </Box>
       <Box
         background="#F5F6FA"
+        w="100%"
+        // sx={{
+        //   '& > svg':{
+        //     width: "100%",
+        //     objectFit: "contain",
+        //   }
+        // }}
       >
         <DetailsIMG />
       </Box>
@@ -168,15 +167,17 @@ export default function Deposit() {
             >
               Aave is a decentralized non-custodial liquidity protocol where users can participate as depositors or borrowers. Aave Protocol has been audited and secured.
             </Box>
-            <Box
-              width="100%"
-              marginTop="18px"
-              fontSize="14px"
-              display="flex"
-            >
-              <Box marginRight="4px">Website</Box>
-              <TabIcon />
-            </Box>
+            <Link href={aaveLink} target='_blank' textAlign={'left'} w="100%">
+              <Box
+                width="100%"
+                marginTop="18px"
+                fontSize="14px"
+                display="flex"
+              >
+                <Box marginRight="4px">Website</Box>
+                <TabIcon />
+              </Box>
+            </Link>
           </Box>
 
           <Box
@@ -237,13 +238,15 @@ export default function Deposit() {
           >
             Does the APY data accurate?
           </Box>
-          <Box
-            marginTop="50px"
-            marginBottom="10px"
-            width="100%"
-          >
-            <Button size="xl" type="blue" width="100%">Deposit to save</Button>
-          </Box>
+          <Link as={Rlink} to="/deposit" style={{ width: "100%" }}>
+            <Box
+              marginTop="50px"
+              marginBottom="10px"
+              width="100%"
+            >
+              <Button size="xl" type="blue" width="100%">Deposit to save</Button>
+            </Box>
+          </Link>
         </Box>
       </Box>
     </Box>

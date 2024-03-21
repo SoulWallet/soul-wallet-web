@@ -6,12 +6,11 @@ import SettingIcon from '@/components/Icons/mobile/Setting'
 import TelegramIcon from '@/components/Icons/mobile/Telegram'
 import MenuIcon from '@/components/Icons/mobile/Menu'
 import { useAddressStore } from '@/store/address';
-import { toShortAddress } from '@/lib/tools';
 import Button from '@/components/mobile/Button'
 import useWallet from '@/hooks/useWallet';
 
-export function Header({ openMenu, username, address, ...props }: any) {
-  const { selectedAddress, walletName } = useAddressStore();
+export function Header({ openMenu, username, ...props }: any) {
+  const { walletName } = useAddressStore();
   return (
     <Box
       height="44px"
@@ -56,7 +55,7 @@ export default function AppContainer() {
         openMenu={onOpen}
       />
       <Flex
-        minH={`calc(100vh)`}
+        minH={`calc(100vh - 64px)`}
         flexDir={{ base: 'column', lg: 'row' }}
         gap={{ base: 6, md: 8, lg: '50px' }}
       >
