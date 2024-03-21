@@ -15,13 +15,6 @@ axio.interceptors.response.use((res: any) => {
   return res.data;
 });
 
-const recovery = {
-  create: (params: any) => axio.post(`/recovery-record`, params),
-  get: (opHash: string) => axio.get(`/recovery-record/${opHash}`),
-  getOp: (opHash: string) => axio.get(`/recovery-record/guardian/${opHash}`),
-  sig: (params: any) => axio.post(`/recovery-record/guardian/${params.opHash}`),
-};
-
 const notification = {
   backup: (params: any) => axio.post('/notification/backup-guardians', params),
 };
@@ -29,6 +22,7 @@ const notification = {
 const account = {
   create: (params: any) => axio.post('/account/create', params),
   list: (params: any) => axio.post('/account/list', params),
+  nameStatus: (params: any) => axio.post('/account/name-status', params),
   add: (params: any) => axio.post('/add-account', params),
   update: (params: any) => axio.post('/update-account', params),
   verifyEmail: (params: any) => axio.post('/verify-email', params),

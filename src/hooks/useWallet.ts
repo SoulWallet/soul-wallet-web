@@ -25,7 +25,7 @@ export default function useWallet() {
   const { chainConfig } = useConfig();
   const { setSlotInfo } = useSlotStore();
   const { selectedChainId, setSelectedChainId } = useChainStore();
-  const { setCredentials, getSelectedCredential } = useSignerStore();
+  const { setCredentials, getSelectedCredential, selectedKeyType } = useSignerStore();
   const { soulWallet } = useSdk();
   const { getUserOp } = useTransaction();
 
@@ -153,7 +153,7 @@ export default function useWallet() {
 
     userOp.callData = soulAbi.encodeFunctionData('executeBatch((address,uint256,bytes)[])', [executions]);
 
-    userOp = await estimateGasFee(userOp, SignkeyType.P256);
+    userOp = await estimateGasFee(userOp);
 
     return userOp;
   };
@@ -190,7 +190,7 @@ export default function useWallet() {
   };
 
   const signAndSend = async (userOp: UserOperation) => {
-    userOp.signature = (await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, SignkeyType.P256)).OK;
+    userOp.signature = (await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, selectedKeyType)).OK;
 
     const res = await api.sponsor.check(
       selectedChainId,

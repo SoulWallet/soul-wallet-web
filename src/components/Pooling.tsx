@@ -30,7 +30,7 @@ export default function Pooling() {
     getUserInfo();
     const interval = setInterval(() => {
       getUserInfo();
-    }, 4000);
+    }, 6000);
 
     return () => {
       clearInterval(interval);
