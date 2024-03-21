@@ -18,6 +18,8 @@ import { useChainStore } from '@/store/chain';
 import { defaultGuardianSafePeriod } from '@/config';
 import { aaveUsdcPoolAbi } from '@/contracts/abis';
 import useTransaction from './useTransaction';
+import useTools from './useTools';
+import useBrowser from './useBrowser';
 
 export default function useWallet() {
   const { signByPasskey, authenticate } = usePasskey();
@@ -28,7 +30,8 @@ export default function useWallet() {
   const { setCredentials, getSelectedCredential, selectedKeyType } = useSignerStore();
   const { soulWallet } = useSdk();
   const { getUserOp } = useTransaction();
-
+  const { navigate } = useBrowser();
+  const { clearLogData } = useTools();
   const { selectedAddress, setSelectedAddress, setWalletName } = useAddressStore();
 
   const createWallet = async (credential: any, walletName: string, invitationCode: string) => {
@@ -99,6 +102,11 @@ export default function useWallet() {
     setSelectedChainId(item.chainID);
     setSlotInfo(item.initInfo);
   };
+
+  const logoutWallet = async () => {
+    clearLogData();
+    navigate('/landing')
+  }
 
   const getWithdrawOp = async (amount: string, to: string) => {
     const aaveUsdcPool = new ethers.Interface(aaveUsdcPoolAbi);
@@ -243,6 +251,6 @@ export default function useWallet() {
     signAndSend,
     signRawHash,
     signWithPasskey,
-  
+    logoutWallet,
   };
 }

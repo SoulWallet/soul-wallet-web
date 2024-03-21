@@ -87,16 +87,17 @@ export const useBalanceStore = create<IBalanceStore>()(
           return acc + cur.liquidityRate_avg;
         }, 0);
 
-        set({ sevenDayApy: (totalApy / latest7Days.length * 100).toFixed(2) });
+        set({ sevenDayApy: ((totalApy / latest7Days.length) * 100).toFixed(2) });
       },
       fetchInterest: async (address, chainID) => {
         const res = await api.token.interest({
           chainID,
           address,
+          // 24 hours before
+          startTime: Math.floor(Date.now() / 1000) - 24 * 60 * 60,
         });
 
-        console.log('interest is', res);
-        set({ oneDayInterest: res.data.oneDayInterest, totalInterest: res.data.totalInterest });
+        set({ oneDayInterest: res.data.interest });
       },
       tokenBalance: [defaultEthBalance],
       nftBalance: [],

@@ -89,6 +89,8 @@ export const bundlerErrMapping: { [key: string]: string } = {
 
 export const ensContractAddress = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 
+export const tgLink = 'https://t.me/+XFUHusXFdTYyODQ9'
+
 export default {
   homepage: 'https://www.soulwallet.io',
   faviconUrl: 'https://www.google.com/s2/favicons?domain=',
@@ -101,7 +103,7 @@ export default {
     {
       icon: IconTelegram,
       iconActivated: IconTelegramActivated,
-      link: 'https://t.me/+XFUHusXFdTYyODQ9',
+      link: tgLink,
     },
     {
       icon: IconGithub,

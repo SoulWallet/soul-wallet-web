@@ -18,6 +18,8 @@ const usdTokenList = [ausdcAddress, usdcAddress].map((item) => item.toLowerCase(
 export const fetchHistoryApi = async (address: string, chainId: string) => {
   const res = await api.token.history({ address, chainID: chainId });
 
+  const addressLowercase = address.toLowerCase();
+
   res.data.history
     // filter txs
     .filter(
@@ -30,10 +32,10 @@ export const fetchHistoryApi = async (address: string, chainId: string) => {
       historyItem.amount = toFixed(BN(historyItem.item.value).shiftedBy(-6).toString(), 2);
       historyItem.tokenSymbol = 'USDC';
       historyItem.dateFormatted = new Date(historyItem.item.blockTimestamp * 1000).toLocaleString();
-      if (historyItem.item.from !== address && historyItem.item.to === address) {
+      if (historyItem.item.from !== addressLowercase && historyItem.item.to === addressLowercase) {
         historyItem.action = 'Deposit';
         historyItem.amountFormatted = `+ ${historyItem.amount}`;
-      } else if (historyItem.item.from === address && historyItem.item.to !== address) {
+      } else if (historyItem.item.from === addressLowercase && historyItem.item.to !== addressLowercase) {
         historyItem.action = 'Transfer';
         historyItem.amountFormatted = `- ${historyItem.amount}`;
       }

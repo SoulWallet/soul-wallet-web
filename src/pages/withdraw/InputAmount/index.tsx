@@ -24,7 +24,7 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
   return (
     <Box width="100%" height="100%">
       <Header
-        title="Withdraw USDC"
+        title="Transfer"
         showBackButton
         onBack={onPrev}
         marginTop="18px"

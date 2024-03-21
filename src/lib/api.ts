@@ -79,6 +79,10 @@ const operation = {
     }),
 };
 
+const invitation = {
+  codeStatus: (params: any) => axio.post('/invitation/code-status', params),
+}
+
 const token = {
   interest: (params: any) => axio.post('/token/interest',params),
   balance: (params: any) => axio.post('/token/balance',params),
@@ -91,7 +95,6 @@ const aave = {
 
 export default {
   balance,
-  recovery,
   account,
   notification,
   guardian,
