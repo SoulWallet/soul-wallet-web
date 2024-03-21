@@ -91,7 +91,6 @@ const aave = {
 
 export default {
   balance,
-  recovery,
   account,
   notification,
   guardian,

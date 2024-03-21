@@ -24,33 +24,65 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
   return (
     <Box width="100%" height="100%">
       <Header
-        title="Withdraw USDC"
+        title="Transfer"
         showBackButton
         onBack={onPrev}
         marginTop="18px"
       />
       <Box padding="30px" minHeight="100vh">
-        <Box marginTop="128px">
-          <Input
-            value={value}
-            onChange={e => onChange(e.target.value)}
-            fontSize={fontSize}
-            lineHeight="100%"
-            height="110px"
-            padding="0"
+        <Box marginTop="46px">
+          <Box
+            fontSize="24px"
             fontWeight="700"
-            placeholder="0"
-            borderRadius="0"
-            border="none"
-            outline="none"
-            textAlign="center"
-            _focusVisible={{ border: 'none', boxShadow: 'none' }}
-          />
+          >
+            Amount
+          </Box>
+          <Box
+            borderBottom="1px solid rgba(73, 126, 130, 0.2)"
+            padding="10px 0"
+            display="flex"
+            alignItems="center"
+          >
+            <Input
+              value={value}
+              onChange={e => onChange(e.target.value)}
+              fontSize="32px"
+              lineHeight="100%"
+              padding="0"
+              fontWeight="700"
+              placeholder="0"
+              borderRadius="0"
+              border="none"
+              outline="none"
+              _focusVisible={{ border: 'none', boxShadow: 'none' }}
+            />
+            <Box
+              fontSize="32px"
+              fontWeight="700"
+              color="rgba(0, 0, 0, 0.2)"
+            >
+              USDC
+            </Box>
+          </Box>
         </Box>
+        {/* <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-start"
+            marginTop="5px"
+            >
+            <Box
+            fontWeight="700"
+            fontSize="14px"
+            color="#E83D26"
+            >
+            Exceed the available balance
+            </Box>
+            </Box> */}
         <Box
           display="flex"
           alignItems="center"
-          justifyContent="center"
+          justifyContent="flex-start"
           marginTop="5px"
         >
           <Box
@@ -72,8 +104,50 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
             MAX
           </Box>
         </Box>
+        <Box marginTop="60px">
+          <Box
+            fontSize="24px"
+            fontWeight="700"
+          >
+            To
+          </Box>
+          <Box
+            borderBottom="1px solid rgba(73, 126, 130, 0.2)"
+            padding="10px 0"
+            display="flex"
+            alignItems="center"
+          >
+            <Input
+              value={''}
+              onChange={() => {}}
+              fontSize="18px"
+              lineHeight="100%"
+              padding="0"
+              fontWeight="700"
+              placeholder="Enter wallet address or ENS"
+              borderRadius="0"
+              border="none"
+              outline="none"
+              _focusVisible={{ border: 'none', boxShadow: 'none' }}
+            />
+          </Box>
+        </Box>
+        {/* <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-start"
+            marginTop="5px"
+            >
+            <Box
+            fontWeight="700"
+            fontSize="14px"
+            color="#E83D26"
+            >
+            Please enter a valid Arbitrum address
+            </Box>
+            </Box> */}
         <Box
-          marginTop="200px"
+          marginTop="40px"
           width="100%"
         >
           <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>

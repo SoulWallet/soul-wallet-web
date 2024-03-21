@@ -48,9 +48,5 @@ export default function Withdraw() {
     return (
       <Review value={withdrawAmount} onPrev={onPrev} sendTo={sendTo} onSetSendTo={setSendTo} onNext={onWithdraw} />
     )
-  } else if (step == 2) {
-    return (
-      <WithdrawSuccess sendTo={sendTo} value={withdrawAmount} />
-    )
   }
 }
