@@ -19,7 +19,7 @@ export default function Deposit() {
     if (step > 0) {
       setStep(step - 1)
     }else{
-      navigate('/dashboard')
+      navigate('/intro')
     }
   }, [step])
 
