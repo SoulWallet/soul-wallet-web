@@ -304,7 +304,7 @@ export default function Dashboard() {
                 fontSize="72px"
                 fontWeight="800"
               >
-                12.16
+               {sevenDayApy}
               </Box>
               <Box
                 fontFamily="Nunito"
