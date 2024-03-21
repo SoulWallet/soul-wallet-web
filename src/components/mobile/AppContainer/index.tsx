@@ -1,12 +1,15 @@
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import { headerHeight } from '@/config';
 import { Outlet } from 'react-router-dom';
 import ProfileIcon from '@/components/Icons/mobile/Profile'
+import SettingIcon from '@/components/Icons/mobile/Setting'
+import TelegramIcon from '@/components/Icons/mobile/Telegram'
 import MenuIcon from '@/components/Icons/mobile/Menu'
 import { useAddressStore } from '@/store/address';
 import { toShortAddress } from '@/lib/tools';
+import Button from '@/components/mobile/Button'
 
-export function Header({ username, address, ...props }: any) {
+export function Header({ openMenu, username, address, ...props }: any) {
   const { selectedAddress, walletName } = useAddressStore();
   return (
     <Box
@@ -25,7 +28,7 @@ export function Header({ username, address, ...props }: any) {
         {/* <Box fontSize="16px" fontWeight="400">{`(${toShortAddress(selectedAddress)})`}</Box> */}
       </Box>
       <Box fontSize="18px" fontWeight="700" color="black" lineHeight="24px">
-        <Box background="white" height="36px" width="36px" borderRadius="36px" display="flex" alignItems="center" justifyContent="center">
+        <Box background="white" height="36px" width="36px" borderRadius="36px" display="flex" alignItems="center" justifyContent="center" onClick={openMenu}>
           <MenuIcon />
         </Box>
       </Box>
@@ -34,6 +37,8 @@ export function Header({ username, address, ...props }: any) {
 }
 
 export default function AppContainer() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <Box background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)">
       <Header
@@ -42,6 +47,7 @@ export default function AppContainer() {
         paddingBottom="10px"
         height="64px"
         background="transparent"
+        openMenu={onOpen}
       />
       <Flex
         minH={`calc(100vh)`}
@@ -52,6 +58,103 @@ export default function AppContainer() {
           <Outlet />
         </Box>
       </Flex>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        motionPreset="slideInBottom"
+        blockScrollOnMount={true}
+      >
+        <ModalOverlay />
+        <ModalContent
+          borderRadius="20px 20px 0 0"
+          maxW="100vw"
+          height="220px"
+          overflow="auto"
+          mb="0"
+          marginTop="calc(100vh - 220px)"
+
+        >
+          <ModalCloseButton />
+          <ModalBody
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="flex-start"
+            width="100%"
+            paddingTop="44px"
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              width="100%"
+              gap="10px"
+              marginTop="10px"
+            >
+              <Box
+                width="100%"
+                fontSize="16px"
+                fontWeight="700"
+                height="32px"
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-start"
+              >
+                <Box
+                  marginRight="12px"
+                  height="32px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <SettingIcon />
+                </Box>
+                <Box>Recovery Setting</Box>
+                <Box
+                  marginLeft="auto"
+                  background="#F2F2F2"
+                  padding="3px 8px"
+                  fontSize="12px"
+                  fontWeight="400"
+                >
+                  Coming soon
+                </Box>
+              </Box>
+              <Box
+                width="100%"
+                fontSize="16px"
+                fontWeight="700"
+                height="32px"
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-start"
+              >
+                <Box
+                  marginRight="12px"
+                  height="32px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <TelegramIcon />
+                </Box>
+                <Box>Join Telegram group</Box>
+              </Box>
+            </Box>
+            <Box width="100%" marginTop="20px">
+              <Button
+                size="xl"
+                type="light"
+                width="100%"
+                background="#F2F2F2"
+                color="#E83D26"
+              >
+                Logout
+              </Button>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
