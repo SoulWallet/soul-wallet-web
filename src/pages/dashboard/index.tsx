@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, Flex, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
@@ -20,6 +20,7 @@ import { useHistoryStore } from '@/store/history';
 import { usdcArbPoolReserveId } from '@/config/constants';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const { totalUsdValue, getTokenBalance, sevenDayApy } = useBalanceStore();
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { historyList } = useHistoryStore();
@@ -230,7 +231,7 @@ export default function Dashboard() {
           Deposit and earn
         </Box>
         <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
-        Deposit to your Soul Wallet account, get <Text as="span" fontWeight="700">auto-saved</Text> into the best interest rate pool and start earning today!
+          Deposit to your Soul Wallet account, get <Text as="span" fontWeight="700">auto-saved</Text> into the best interest rate pool and start earning today!
         </Box>
         <Link to="/deposit">
           <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Deposit USDC</Button>
@@ -252,6 +253,7 @@ export default function Dashboard() {
           borderRadius="24px"
           boxShadow="0px 8px 60px 0px rgba(44, 53, 131, 0.12)"
           border="1px solid #EAECF0"
+          onClick={() => navigate('/details')}
         >
           <Box
             borderBottom="1px solid rgba(0, 0, 0, 0.1)"
@@ -302,7 +304,7 @@ export default function Dashboard() {
                 fontSize="72px"
                 fontWeight="800"
               >
-               {sevenDayApy}
+                {sevenDayApy}
               </Box>
               <Box
                 fontFamily="Nunito"

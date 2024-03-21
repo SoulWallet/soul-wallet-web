@@ -26,7 +26,8 @@ export default function FindRoute({ children }: { children: ReactNode }) {
       location.pathname.includes('auth') ||
       location.pathname.includes('deposit') ||
       location.pathname.includes('withdraw') ||
-      location.pathname.includes('dashboard')
+      location.pathname.includes('dashboard') ||
+      location.pathname.includes('details')
 
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
