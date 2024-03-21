@@ -21,7 +21,8 @@ export default function Create() {
   const [invitationCode, setInvitationCode] = useState('')
   const [username, setUsername] = useState('')
   const [credential, setCredential] = useState<any>({})
-  const [nameStatus, setNameStatus] = useState(-1)
+  const [nameStatus, setNameStatus] = useState(-1);
+  const [codeStatus, setCodeStatus] = useState(-1);
   const onPrev = useCallback(() => {
     if (step > 1) {
       setStep(step - 1)
@@ -51,7 +52,7 @@ export default function Create() {
     try {
       console.log('onCreateWallet')
       setCreating(true)
-      await createWallet(credential, username, '12Y-1QE-3L8' || invitationCode);
+      await createWallet(credential, username, invitationCode);
       // setCreating(false)
       navigate('/dashboard')
     } catch (error: any) {
@@ -61,21 +62,39 @@ export default function Create() {
   }
 
   const checkUsername = async() => {
-    const res:any = api.account.nameStatus({
+    const res:any = await api.account.nameStatus({
       name: username,
     });
     console.log('name status', res);
-    setNameStatus(res.data);
+    setNameStatus(res.data.status);
+  }
+
+  const checkInviteCode = async() => {
+    const res:any = await api.invitation.codeStatus({
+      code: invitationCode,
+    });
+    console.log('invite code status', res);
+    setCodeStatus(res.data.status);
   }
 
   useEffect(()=>{
+    if(!username){
+      return
+    }
     checkUsername();
   }, [username])
+
+  useEffect(()=>{
+    if(!invitationCode){
+      return
+    }
+    checkInviteCode();
+  }, [invitationCode])
 
   const renderStep = () => {
     if (step == 0) {
       return (
-        <InputInviteCode value={invitationCode} onChange={setInvitationCode} onNext={onNext} onSkip={onSkip} />
+        <InputInviteCode value={invitationCode} onChange={setInvitationCode} codeStatus={codeStatus} onNext={onNext} onSkip={onSkip} />
       )
     } else if (step == 1) {
       return (

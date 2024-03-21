@@ -57,7 +57,7 @@ const getFontBottomMargin = (value: any) => {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { totalUsdValue, getTokenBalance, sevenDayApy } = useBalanceStore();
+  const { totalUsdValue, getTokenBalance, sevenDayApy, oneDayInterest, } = useBalanceStore();
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { historyList } = useHistoryStore();
 
@@ -120,7 +120,7 @@ export default function Dashboard() {
                   marginBottom="16px"
                   marginTop="4px"
                 >
-                  + $12.39 today
+                  + ${oneDayInterest} today
                 </Box>
                 {
                   pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
@@ -213,7 +213,7 @@ export default function Dashboard() {
             </Box>
             <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
             <Flex gap="36px" flexDir="column" width="100%">
-              {historyList.slice(0, 2).map(item =>   <Box
+              {historyList.slice(0, 3).map(item =>   <Box
                                                        display="flex"
                                                        alignItems="center"
                                                      >

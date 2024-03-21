@@ -1,6 +1,7 @@
 import { Box, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import Header from '@/components/mobile/Header'
+import BN from 'bignumber.js'
 import { useBalanceStore } from '@/store/balance';
 
 const getFontSize = (value: any) => {
@@ -16,8 +17,9 @@ const getFontSize = (value: any) => {
 }
 
 export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
-  const { getTokenBalance } = useBalanceStore();
-  const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
+  const { getTokenBalance, totalUsdValue, } = useBalanceStore();
+  // const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
+  // const usdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)?.tokenBalanceFormatted;
   const disabled = !value
   const fontSize = getFontSize(value)
 
@@ -89,7 +91,7 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
             fontWeight="600"
             fontSize="14px"
           >
-            Available: {ausdcBalance} USDC
+            Available: {totalUsdValue} USDC
           </Box>
           <Box
             background="rgba(225, 220, 252, 0.80)"
@@ -99,7 +101,7 @@ export default function InputAmount({ onPrev, onChange, value, onNext }: any) {
             padding="2px 12px"
             fontWeight="800"
             marginLeft="10px"
-            onClick={()=> onChange(ausdcBalance)}
+            onClick={()=> onChange(totalUsdValue)}
           >
             MAX
           </Box>

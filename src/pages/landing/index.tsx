@@ -485,7 +485,7 @@ export default function Landing() {
           </Box>
         </Box>
         <Box marginTop="40px" textAlign="center">
-          <Box>Version: Alpha 0.0.1</Box>
+          <Box color="#7a787e">Version: Alpha 0.0.1</Box>
           <Flex gap="4" justify="center" align="center" mt="10px">
             {config.socials.map((item, idx) => (
               <a

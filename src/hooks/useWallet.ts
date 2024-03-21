@@ -18,6 +18,11 @@ import { useChainStore } from '@/store/chain';
 import { defaultGuardianSafePeriod } from '@/config';
 import { aaveUsdcPoolAbi } from '@/contracts/abis';
 import useTransaction from './useTransaction';
+import useTools from './useTools';
+import BN from 'bignumber.js';
+import useBrowser from './useBrowser';
+import { useBalanceStore } from '@/store/balance';
+import { useToast } from '@chakra-ui/react';
 
 export default function useWallet() {
   const { signByPasskey, authenticate } = usePasskey();
@@ -28,7 +33,10 @@ export default function useWallet() {
   const { setCredentials, getSelectedCredential, selectedKeyType } = useSignerStore();
   const { soulWallet } = useSdk();
   const { getUserOp } = useTransaction();
-
+  const { navigate } = useBrowser();
+  const toast = useToast();
+  const { getTokenBalance } = useBalanceStore();
+  const { clearLogData } = useTools();
   const { selectedAddress, setSelectedAddress, setWalletName } = useAddressStore();
 
   const createWallet = async (credential: any, walletName: string, invitationCode: string) => {
@@ -37,7 +45,7 @@ export default function useWallet() {
       initialGuardianHash: ethers.ZeroHash,
       initialGuardianSafePeriod: defaultGuardianSafePeriod,
     };
- 
+
     // step 1: calculate address
     const initialKeys = [credential.publicKey as string];
 
@@ -82,7 +90,7 @@ export default function useWallet() {
   const withdrawAssets = async (amount: string, to: string) => {
     const userOp = await getWithdrawOp(amount, to);
     await signAndSend(userOp);
-  }
+  };
 
   const loginWallet = async () => {
     const { credential } = await authenticate();
@@ -93,41 +101,61 @@ export default function useWallet() {
     // consider first item only for now
     const item = res.data[0];
 
-    setCredentials([credential as any])
+    setCredentials([credential as any]);
     setWalletName(item.name);
     setSelectedAddress(item.address);
     setSelectedChainId(item.chainID);
     setSlotInfo(item.initInfo);
   };
 
+  const logoutWallet = async () => {
+    clearLogData();
+    navigate('/landing');
+  };
+
   const getWithdrawOp = async (amount: string, to: string) => {
     const aaveUsdcPool = new ethers.Interface(aaveUsdcPoolAbi);
     const erc20 = new ethers.Interface(erc20Abi);
 
-    const withdrawTx = {
-      from: selectedAddress,
-      to: import.meta.env.VITE_AAVE_USDC_POOL,
-      data: aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [import.meta.env.VITE_TOKEN_USDC , ethers.parseUnits(amount, 6), selectedAddress])
-    };
+    const usdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)?.tokenBalanceFormatted;
+    const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
 
-    // TODO, transfer all amount
-    const transferOutTx = {
+    let txs = [];
+
+    if (BN(amount).isGreaterThan(BN(usdcBalance).plus(ausdcBalance))) {
+      toast({
+        title: 'Insufficient balance',
+        status: 'error',
+      });
+      return;
+    }
+
+    const withdrawAmount = amount > ausdcBalance ? ausdcBalance : amount;
+
+    if (withdrawAmount > 0) {
+      txs.push({
+        from: selectedAddress,
+        to: import.meta.env.VITE_AAVE_USDC_POOL,
+        data: aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [
+          import.meta.env.VITE_TOKEN_USDC,
+          ethers.parseUnits(withdrawAmount, 6),
+          selectedAddress,
+        ]),
+      });
+    }
+
+    txs.push({
       from: selectedAddress,
       to: import.meta.env.VITE_TOKEN_USDC,
       data: erc20.encodeFunctionData('transfer', [to, ethers.parseUnits(amount, 6)]),
-    }
+    });
 
-    return await getUserOp([withdrawTx, transferOutTx])
-  }
+    return await getUserOp(txs);
+  };
 
   const getActivateOp = async (index: number, _slotInfo: any, payToken: string) => {
     const { initialKeys, initialGuardianHash } = _slotInfo;
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(
-      index,
-      initialKeys,
-      initialGuardianHash,
-      '0x',
-    );
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash, '0x');
 
     if (userOpRet.isErr()) {
       throw new Error(userOpRet.ERR.message);
@@ -190,7 +218,9 @@ export default function useWallet() {
   };
 
   const signAndSend = async (userOp: UserOperation) => {
-    userOp.signature = (await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, selectedKeyType)).OK;
+    userOp.signature = (
+      await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, selectedKeyType)
+    ).OK;
 
     const res = await api.sponsor.check(
       selectedChainId,
@@ -243,6 +273,6 @@ export default function useWallet() {
     signAndSend,
     signRawHash,
     signWithPasskey,
-  
+    logoutWallet,
   };
 }

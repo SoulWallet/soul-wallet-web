@@ -1,5 +1,5 @@
 import { Flex, Box, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
-import { headerHeight } from '@/config';
+import { headerHeight, tgLink } from '@/config';
 import { Outlet } from 'react-router-dom';
 import ProfileIcon from '@/components/Icons/mobile/Profile'
 import SettingIcon from '@/components/Icons/mobile/Setting'
@@ -8,6 +8,7 @@ import MenuIcon from '@/components/Icons/mobile/Menu'
 import { useAddressStore } from '@/store/address';
 import { toShortAddress } from '@/lib/tools';
 import Button from '@/components/mobile/Button'
+import useWallet from '@/hooks/useWallet';
 
 export function Header({ openMenu, username, address, ...props }: any) {
   const { selectedAddress, walletName } = useAddressStore();
@@ -38,6 +39,11 @@ export function Header({ openMenu, username, address, ...props }: any) {
 
 export default function AppContainer() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { logoutWallet } = useWallet();
+
+  const doLogout = async () => {
+    logoutWallet();
+  }
 
   return (
     <Box background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)">
@@ -68,11 +74,10 @@ export default function AppContainer() {
         <ModalContent
           borderRadius="20px 20px 0 0"
           maxW="100vw"
-          height="220px"
+          height="250px"
           overflow="auto"
           mb="0"
-          marginTop="calc(100vh - 220px)"
-
+          marginTop="calc(100vh - 250px)"
         >
           <ModalCloseButton />
           <ModalBody
@@ -81,21 +86,20 @@ export default function AppContainer() {
             alignItems="center"
             justifyContent="flex-start"
             width="100%"
-            paddingTop="44px"
+            paddingTop="34px"
           >
             <Box
               display="flex"
               flexDirection="column"
               alignItems="center"
               width="100%"
-              gap="10px"
               marginTop="10px"
             >
               <Box
                 width="100%"
                 fontSize="16px"
                 fontWeight="700"
-                height="32px"
+                py="10px"
                 display="flex"
                 alignItems="center"
                 justifyContent="flex-start"
@@ -120,34 +124,36 @@ export default function AppContainer() {
                   Coming soon
                 </Box>
               </Box>
-              <Box
-                width="100%"
-                fontSize="16px"
-                fontWeight="700"
-                height="32px"
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-start"
-              >
+              <a target='_blank' href={tgLink} style={{width: "100%"}}>
                 <Box
-                  marginRight="12px"
-                  height="32px"
+                  width="100%"
+                  fontSize="16px"
+                  fontWeight="700"
+                  py="10px"
                   display="flex"
                   alignItems="center"
-                  justifyContent="center"
+                  justifyContent="flex-start"
                 >
-                  <TelegramIcon />
+                  <Box
+                    marginRight="12px"
+                    height="32px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <TelegramIcon />
+                  </Box>
+                  <Box>Join Telegram group</Box>
                 </Box>
-                <Box>Join Telegram group</Box>
-              </Box>
+              </a>
             </Box>
             <Box width="100%" marginTop="20px">
               <Button
                 size="xl"
-                type="light"
                 width="100%"
                 background="#F2F2F2"
                 color="#E83D26"
+                onClick={doLogout}
               >
                 Logout
               </Button>
