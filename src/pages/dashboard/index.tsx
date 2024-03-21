@@ -71,64 +71,64 @@ export default function Dashboard() {
   const smFontSize = getSmallFontSize(valueRight)
   const fontBottomMargin = getFontBottomMargin(valueLeft)
 
-  if (hasBalance || true) {
-    return (
-      <Box>
-        <Box padding="30px">
-          <Box>
-            <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
+  return (
+    <Box>
+      <Box padding="30px">
+        <Box>
+          <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
+          <Box
+            width="100%"
+            background="white"
+            borderRadius="24px"
+            boxShadow="0px 8px 60px 0px rgba(44, 53, 131, 0.12)"
+            border="1px solid #EAECF0"
+            padding="28px 24px"
+          >
             <Box
-              width="100%"
-              background="white"
-              borderRadius="24px"
-              boxShadow="0px 8px 60px 0px rgba(44, 53, 131, 0.12)"
-              border="1px solid #EAECF0"
-              padding="28px 24px"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              paddingTop="16px"
             >
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                paddingTop="16px"
-              >
-                <Box display="flex" alignItems="center">
-                  <Box fontSize="24px" fontWeight="700" marginRight="2px">$</Box>
-                  <Box
-                    fontFamily="Nunito"
-                    fontSize={fontSize}
-                    lineHeight={"1"}
-                    fontWeight="800"
-                  >
-                    {valueLeft}
-                  </Box>
-                  {Number(totalUsdValue) > 0 && <Box
-                                                  fontFamily="Nunito"
-                                                  fontSize={smFontSize}
-                                                  lineHeight={"1"}
-                                                  fontWeight="800"
-                                                  marginTop={fontBottomMargin}
-                    // marginLeft="10px"
-                                                  color="#939393"
-                                                >
-                    .{valueRight}
-                  </Box> }
-                </Box>
+              <Box display="flex" alignItems="center">
+                <Box fontSize="24px" fontWeight="700" marginRight="2px">$</Box>
                 <Box
-                  color="#0CB700"
-                  fontSize="16px"
-                  fontWeight="600"
-                  marginBottom="16px"
-                  marginTop="4px"
+                  fontFamily="Nunito"
+                  fontSize={fontSize}
+                  lineHeight={"1"}
+                  fontWeight="800"
                 >
-                  + ${oneDayInterest} today
+                  {valueLeft}
                 </Box>
-                {
-                  pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
-                    Deposit in progress, est complete in <Box color="#497EE6" as="span">1 min</Box>
-                  </Box>
-                }
-
+                {Number(totalUsdValue) > 0 && <Box
+                                                fontFamily="Nunito"
+                                                fontSize={smFontSize}
+                                                lineHeight={"1"}
+                                                fontWeight="800"
+                                                marginTop={fontBottomMargin}
+                  // marginLeft="10px"
+                                                color="#939393"
+                                              >
+                  .{valueRight}
+                </Box> }
               </Box>
+              <Box
+                color="#0CB700"
+                fontSize="16px"
+                fontWeight="600"
+                marginBottom="16px"
+                marginTop="4px"
+              >
+                + ${oneDayInterest} today
+              </Box>
+              {
+                pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
+                  Deposit in progress, est complete in <Box color="#497EE6" as="span">1 min</Box>
+                </Box>
+              }
+
+            </Box>
+            {hasBalance && (
               <Box display="flex" alignItems="center" justifyContent="center" gap="14px">
                 <Link to="/withdraw" style={{ width: "34%" }}>
                   <Box
@@ -159,301 +159,112 @@ export default function Dashboard() {
                   </Box>
                 </Link>
               </Box>
-            </Box>
-            <Box width="100%" marginTop="24px">
-              <Box fontSize="18px" fontWeight="700" marginBottom="12px">Earn from</Box>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Box display="flex" alignItems="center">
-                  <Box marginRight="8px">
-                    <Image src={USDCIcon} />
-                  </Box>
-                  <Box>
-                    <Box fontSize="18px" fontWeight="700">USDC on AAVE</Box>
-                    <Box fontSize="14px" fontWeight="400">Arbitrum network</Box>
-                  </Box>
-                </Box>
-                <Box display="flex" alignItems="center">
-                  <Box display="flex" flexDirection="column" alignItems="flex-end">
-                    <Box fontSize="18px" fontWeight="700">{sevenDayApy}%</Box>
-                    <Box fontSize="14px" fontWeight="400" textAlign="right">7day average APY</Box>
-                  </Box>
-                  <Box marginLeft="10px">
-                    <MoreIcon />
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-        {historyList && historyList.length > 0 &&  <Box
-                                                     position="fixed"
-                                                     height="300px"
-                                                     bottom="0"
-                                                     width="100%"
-                                                     background="white"
-                                                     borderRadius="20px 20px 0 0"
-                                                   >
-          <Box padding="30px" position="relative">
-            <Box
-              position="absolute"
-              height="20px"
-              top="0"
-              left="0"
-              width="100%"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Box
-                width="30px"
-                height="4px"
-                borderRadius="4px"
-                background="#CCCDD4"
-              />
-            </Box>
-            <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
-            <Flex gap="36px" flexDir="column" width="100%">
-              {historyList.slice(0, 3).map(item =>   <Box
-                                                       display="flex"
-                                                       alignItems="center"
-                                                     >
-                <Box marginRight="12px">
-                  {item.action === 'Deposit' ? <ActivityDepositIcon /> :  <ActivityTransferIcon />}
-                </Box>
-                <Box>
+            )}
+            {!hasBalance && (
+              <Box display="flex" alignItems="center" justifyContent="center" gap="14px">
+                <Link to="/deposit" style={{ width: "100%"}}>
                   <Box
                     display="flex"
+                    flexDirection="column"
                     alignItems="center"
+                    justifyContent="center"
                   >
-                    <Box fontSize="14px" fontWeight="800">{item.action}</Box>
-                    {/* <Box
-                        fontSize="12px"
-                        background="#F1F1F1"
-                        color="rgba(0, 0, 0, 0.60)"
-                        padding="0 8px"
-                        borderRadius="4px"
-                        marginLeft="8px"
-                        >
-                        Pending
-                        </Box> */}
+                    <Box width="100%">
+                      <Button width="100%" size="xl" type="blue">
+                        Deposit USDC
+                      </Button>
+                    </Box>
                   </Box>
-                  <Box fontSize="12px">{item.dateFormatted}</Box>
-                </Box>
-                <Box marginLeft="auto">
-                  <Box fontSize="14px" fontWeight="700">{item.amountFormatted} USDC</Box>
-                </Box>
-              </Box>)}
-            </Flex>
-          </Box>
-        </Box>}
-      </Box>
-    )
-  }
-
-  return (
-    <Box
-      width="100%"
-      height="100%"
-      background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
-    >
-      <Box width="100%" padding="30px" display="flex" alignItems="center" flexDirection="column">
-        <Box fontFamily="Nunito" fontSize="36px" fontWeight="700" textAlign="center" lineHeight="56px">
-          Deposit and earn
-        </Box>
-        <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
-          Deposit to your Soul Wallet account, get <Text as="span" fontWeight="700">auto-saved</Text> into the best interest rate pool and start earning today!
-        </Box>
-        <Link to="/deposit">
-          <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Deposit USDC</Button>
-        </Link>
-        <Button
-          size="xl"
-          type="text"
-          minWidth="283px"
-          marginTop="10px"
-          color="black"
-          marginBottom="20px"
-          onClick={onOpen}
-        >
-          What’s auto-saving <Box display="flex" alignItems="center" justifyContent="center" width="14px" height="14px" border="1px solid black" borderRadius="14px"><QuestionIcon /></Box>
-        </Button>
-        <Box
-          width="100%"
-          background="white"
-          borderRadius="24px"
-          boxShadow="0px 8px 60px 0px rgba(44, 53, 131, 0.12)"
-          border="1px solid #EAECF0"
-          onClick={() => navigate('/details')}
-        >
-          <Box
-            borderBottom="1px solid rgba(0, 0, 0, 0.1)"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            padding="50px 10px"
-          >
-            <Box display="flex" alignItems="center">
-              <Box>
-                <Image src={USDCIcon} />
+                </Link>
               </Box>
-              <Box marginLeft="10px">
-                <Box
-                  fontFamily="Nunito"
-                  fontSize="24px"
-                  fontWeight="700"
-                  lineHeight="30px"
-                >
-                  Earn USDC
+            )}
+          </Box>
+          <Box width="100%" marginTop="24px">
+            <Box fontSize="18px" fontWeight="700" marginBottom="12px">Earn from</Box>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Box display="flex" alignItems="center">
+                <Box marginRight="8px">
+                  <Image src={USDCIcon} />
                 </Box>
+                <Box>
+                  <Box fontSize="18px" fontWeight="700">USDC on AAVE</Box>
+                  <Box fontSize="14px" fontWeight="400">Arbitrum network</Box>
+                </Box>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <Box display="flex" flexDirection="column" alignItems="flex-end">
+                  <Box fontSize="18px" fontWeight="700">{sevenDayApy}%</Box>
+                  <Box fontSize="14px" fontWeight="400" textAlign="right">7day average APY</Box>
+                </Box>
+                <Box marginLeft="10px">
+                  <MoreIcon />
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+      {historyList && historyList.length > 0 &&  <Box
+                                                   position="fixed"
+                                                   height="300px"
+                                                   bottom="0"
+                                                   width="100%"
+                                                   background="white"
+                                                   borderRadius="20px 20px 0 0"
+                                                 >
+        <Box padding="30px" position="relative">
+          <Box
+            position="absolute"
+            height="20px"
+            top="0"
+            left="0"
+            width="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box
+              width="30px"
+              height="4px"
+              borderRadius="4px"
+              background="#CCCDD4"
+            />
+          </Box>
+          <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
+          <Flex gap="36px" flexDir="column" width="100%">
+            {historyList.slice(0, 3).map(item =>   <Box
+                                                     display="flex"
+                                                     alignItems="center"
+                                                   >
+              <Box marginRight="12px">
+                {item.action === 'Deposit' ? <ActivityDepositIcon /> :  <ActivityTransferIcon />}
+              </Box>
+              <Box>
                 <Box
                   display="flex"
                   alignItems="center"
                 >
-                  <Box
-                    fontFamily="Nunito"
-                    fontSize="14px"
-                    fontWeight="700"
-                    lineHeight="18px"
-                  >
-                    on AAVE |
-                  </Box>
-                  <Box
-                    fontSize="14px"
-                    fontWeight="400"
-                    marginLeft="4px"
-                    lineHeight="18px"
-                  >
-                    Arbitrum
-                  </Box>
+                  <Box fontSize="14px" fontWeight="800">{item.action}</Box>
+                  {/* <Box
+                      fontSize="12px"
+                      background="#F1F1F1"
+                      color="rgba(0, 0, 0, 0.60)"
+                      padding="0 8px"
+                      borderRadius="4px"
+                      marginLeft="8px"
+                      >
+                      Pending
+                      </Box> */}
                 </Box>
+                <Box fontSize="12px">{item.dateFormatted}</Box>
               </Box>
-            </Box>
-            <Box display="flex" alignItems="center" marginTop="16px">
-              <Box
-                fontFamily="Nunito"
-                fontSize="72px"
-                fontWeight="800"
-              >
-                {sevenDayApy}
+              <Box marginLeft="auto">
+                <Box fontSize="14px" fontWeight="700">{item.amountFormatted} USDC</Box>
               </Box>
-              <Box
-                fontFamily="Nunito"
-                fontSize="24px"
-                fontWeight="800"
-                marginTop="24px"
-                marginLeft="10px"
-              >
-                %
-              </Box>
-            </Box>
-            <Box fontFamily="Nunito" fontSize="18px" fontWeight="600">
-              7D Average APY
-            </Box>
-          </Box>
-          <Box display="flex">
-            <Box
-              width="50%"
-              borderRight="1px solid rgba(0, 0, 0, 0.1)"
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-              padding="30px 10px"
-            >
-              <Box
-                fontFamily="Nunito"
-                fontWeight="600"
-                fontSize="18px"
-                textAlign="center"
-              >
-                Max 10% APY
-              </Box>
-              <Box
-                fontFamily="Nunito"
-                fontWeight="600"
-                fontSize="14px"
-                color="rgba(0, 0, 0, 0.5)"
-                marginTop="8px"
-                textAlign="center"
-              >
-                On Exchange
-              </Box>
-            </Box>
-            <Box
-              width="50%"
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-              padding="30px 10px"
-            >
-              <Box
-                fontFamily="Nunito"
-                fontWeight="600"
-                fontSize="18px"
-              >
-                Max 5.01% APY
-              </Box>
-              <Box
-                fontFamily="Nunito"
-                fontWeight="600"
-                fontSize="14px"
-                color="rgba(0, 0, 0, 0.5)"
-                marginTop="8px"
-              >
-                On U.S. Treasury
-              </Box>
-            </Box>
-          </Box>
+            </Box>)}
+          </Flex>
         </Box>
-      </Box>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        motionPreset="slideInBottom"
-        blockScrollOnMount={true}
-      >
-        <ModalOverlay />
-        <ModalContent
-          borderRadius="20px 20px 0 0"
-          maxW="100vw"
-          height="50vh"
-          overflow="auto"
-          mb="0"
-          marginTop="50vh"
-
-        >
-          <ModalCloseButton />
-          <ModalBody
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            width="100%"
-          >
-            <Box
-              background="#D9D9D9"
-              height="120px"
-              width="120px"
-              borderRadius="120px"
-              marginBottom="30px"
-            />
-            <Box fontSize="24px" fontWeight="700" marginBottom="14px">
-              Auto-saving
-            </Box>
-            <Box
-              fontSize="16px"
-              textAlign="center"
-              marginBottom="40px"
-            >
-              Each deposit to the Soul Wallet account will be auto saved into AAVE protocol to earn interest. You can withdraw anytime with a flexible term for your assets.
-            </Box>
-            <Box width="100%">
-              <Button size="xl" type="blue" width="100%" onClick={onClose}>Got it</Button>
-            </Box>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      </Box>}
     </Box>
-  );
+  )
 }

@@ -6,6 +6,7 @@ import Create from '@/pages/create';
 import Deposit from '@/pages/deposit';
 import Withdraw from '@/pages/withdraw';
 import Landing from '@/pages/landing';
+import Intro from '@/pages/intro';
 import DashboardDetails from '@/pages/dashboard/Details';
 import AppContainer from './components/mobile/AppContainer';
 
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
         element: <AppContainer />,
         children: [
           { path: 'dashboard', element: <Dashboard /> },
+          { path: 'intro', element: <Intro /> },
           {
             path: '/',
             element: <Navigate to="/dashboard" replace />,
@@ -50,6 +52,7 @@ export const router = createBrowserRouter([
         element: <PublicWrapper />,
         children: [{ path: '', element: <Landing /> }],
       },
+
     ],
   },
 ]);
