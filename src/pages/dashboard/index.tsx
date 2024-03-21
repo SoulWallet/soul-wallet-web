@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, Flex, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
@@ -9,6 +9,7 @@ import MoreIcon from '@/components/Icons/mobile/More'
 import QuestionIcon from '@/components/Icons/mobile/Question'
 import USDCIcon from '@/assets/tokens/usdc.png'
 import ActivityDepositIcon from '@/components/Icons/mobile/Activity/Deposit'
+import ActivityTransferIcon from '@/components/Icons/mobile/Activity/Transfer'
 import config from '@/config';
 import api from '@/lib/api';
 import { useAddressStore } from '@/store/address';
@@ -26,8 +27,6 @@ export default function Dashboard() {
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
 
   const hasBalance = Number(totalUsdValue) > 0;
-
-  console.log('totalUsdValue', totalUsdValue)
 
   if (hasBalance) {
     return (
@@ -181,16 +180,14 @@ export default function Dashboard() {
                 background="#CCCDD4"
               />
             </Box>
-            <Box fontSize="18px" fontWeight="700">Recent activity</Box>
-            <Box width="100%">
+            <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
+            <Flex gap="36px" flexDir="column" width="100%">
               {historyList.slice(0, 2).map(item =>   <Box
-                marginTop="36px"
                 display="flex"
                 alignItems="center"
-
               >
                 <Box marginRight="12px">
-                  <ActivityDepositIcon />
+                  {item.action === 'Deposit' ? <ActivityDepositIcon /> :  <ActivityTransferIcon />}
                 </Box>
                 <Box>
                   <Box
@@ -215,7 +212,7 @@ export default function Dashboard() {
                   <Box fontSize="14px" fontWeight="700">{item.amountFormatted} USDC</Box>
                 </Box>
               </Box>)}
-            </Box>
+            </Flex>
           </Box>
         </Box>}
       </Box>
@@ -233,7 +230,7 @@ export default function Dashboard() {
           Deposit and earn
         </Box>
         <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
-          Deposit to your Soul Wallet account, get <Box fontWeight="700">auto-saved</Box> into the best interest rate pool and start earning today!
+        Deposit to your Soul Wallet account, get <Text as="span" fontWeight="700">auto-saved</Text> into the best interest rate pool and start earning today!
         </Box>
         <Link to="/deposit">
           <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Deposit USDC</Button>

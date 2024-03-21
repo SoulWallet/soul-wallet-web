@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
+  Text,
   ModalBody,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -90,7 +91,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
           pointerEvents={!isAllChecked ? 'all' : 'none'}
         >
           <Box>
-            <Box marginBottom="4px" lineHeight="20px" marginBottom="18px">
+            <Box lineHeight="20px" marginBottom="18px">
               <Box display="flex" alignItems="center" onClick={(e) => setChecked1(!checked1)}>
                 <Box marginRight="12px">
                   {checked1 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
@@ -99,7 +100,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
               </Box>
             </Box>
           </Box>
-          <Box marginBottom="4px" lineHeight="20px" marginBottom="18px">
+          <Box lineHeight="20px" marginBottom="18px">
             <Box display="flex" alignItems="center" onClick={(e) => setChecked2(!checked2)}>
               <Box marginRight="12px">
                 {checked2 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
@@ -107,7 +108,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
               <Box>The network is Arbitrum, not any other chain</Box>
             </Box>
           </Box>
-          <Box marginBottom="4px" lineHeight="20px" marginBottom="18px">
+          <Box lineHeight="20px" marginBottom="18px">
             <Box display="flex" alignItems="center" onClick={(e) => setChecked3(!checked3)}>
               <Box marginRight="12px">
                 {checked3 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
@@ -142,8 +143,8 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
                 <ScanIcon />
               </Box>
             </Box>
-            <Box fontSize="12px" fontWeight="700" color="#5E5E5E" marginTop="26px">
-              This is your Soul Wallet address on Arbitrum network to transfer assets directly into your account and
+            <Box fontSize="12px" fontWeight="500" color="#5E5E5E" marginTop="26px">
+              This is your Soul Wallet address on <Text as="span" fontWeight="700">Arbitrum</Text> network to transfer assets directly into your account and
               save into protocol. You can always copy it on homepage.
             </Box>
           </Box>

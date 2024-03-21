@@ -19,10 +19,10 @@ export function Header({ username, address, ...props }: any) {
       position="relative"
       {...props}
     >
-      <Box background="white" display="flex" alignItems="center" justifyContent="center" height="36px" borderRadius="36px" paddingRight="10px" paddingLeft="6px">
+      <Box display="flex" alignItems="center" justifyContent="center" height="36px">
         <Box marginRight="4px"><ProfileIcon /></Box>
-        <Box fontSize="16px" fontWeight="800" marginRight="4px">{walletName}</Box>
-        <Box fontSize="16px" fontWeight="400">{`(${toShortAddress(selectedAddress)})`}</Box>
+        <Box fontSize="16px" lineHeight={"20px"} fontWeight="800" marginRight="4px">{walletName}</Box>
+        {/* <Box fontSize="16px" fontWeight="400">{`(${toShortAddress(selectedAddress)})`}</Box> */}
       </Box>
       <Box fontSize="18px" fontWeight="700" color="black" lineHeight="24px">
         <Box background="white" height="36px" width="36px" borderRadius="36px" display="flex" alignItems="center" justifyContent="center">

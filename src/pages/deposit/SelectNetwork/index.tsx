@@ -48,8 +48,8 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
             height="172px"
           >
             <Box
-              width="61px"
-              height="61px"
+              width="72px"
+              height="72px"
               borderRadius="12px"
               marginLeft="6px"
               marginRight="6px"
@@ -57,7 +57,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
               alignItems="center"
               justifyContent="center"
             >
-              <Image width="61px" src={ARBIcon} className="icon" />
+              <Image width="72px" height="72px" src={ARBIcon} className="icon" />
             </Box>
             <Box
               fontWeight="700"

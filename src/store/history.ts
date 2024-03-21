@@ -48,7 +48,6 @@ export const useHistoryStore = create<IHistoryStore>()(
       historyList: [],
       fetchHistory: async (address: string, chainId: string) => {
         const res: any = await fetchHistoryApi(address, chainId);
-        console.log('history', res);
         set({ historyList: res });
       },
       clearHistory: () => {
