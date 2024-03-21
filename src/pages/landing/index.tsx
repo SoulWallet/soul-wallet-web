@@ -3,10 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
+import IntroItem1Icon from '@/components/Icons/mobile/Intro/Item1'
+import IntroItem2Icon from '@/components/Icons/mobile/Intro/Item2'
+import IntroItem3Icon from '@/components/Icons/mobile/Intro/Item3'
 import USDCIcon from '@/assets/tokens/usdc.png'
 import config from '@/config';
 import useWallet from '@/hooks/useWallet';
 import { useBalanceStore } from '@/store/balance';
+import treasuryIcon from '@/assets/mobile/treasury.png'
+import CoinbaseIcon from '@/assets/mobile/coinbase.png'
+import AAVEIcon from '@/assets/mobile/aave.png'
 
 export default function Landing() {
   const { loginWallet  } = useWallet();
@@ -31,7 +37,7 @@ export default function Landing() {
       />
       <Box width="100%" padding="30px" display="flex" alignItems="center" flexDirection="column">
         <Box fontFamily="Nunito" fontSize="48px" fontWeight="700" textAlign="center" lineHeight="56px">
-          Save for Every Human
+          Save for<br /> Every Human
         </Box>
         <Box fontFamily="Nunito" fontSize="16px" fontWeight="500" textAlign="center" marginTop="14px">
           Security first. Completely controlled by yourself and your trusted networks
@@ -58,11 +64,11 @@ export default function Landing() {
           border="1px solid #EAECF0"
         >
           <Box
-            borderBottom="1px solid rgba(0, 0, 0, 0.1)"
             display="flex"
             flexDirection="column"
             alignItems="center"
             padding="50px 10px"
+            paddingBottom="6px"
           >
             <Box display="flex" alignItems="center">
               <Box>
@@ -124,56 +130,146 @@ export default function Landing() {
           </Box>
           <Box display="flex">
             <Box
-              width="50%"
-              borderRight="1px solid rgba(0, 0, 0, 0.1)"
+              width="33.33%"
               display="flex"
-              flexDirection="column"
-              alignItems="center"
+              alignItems="flex-end"
               justifyContent="center"
-              padding="30px 10px"
             >
               <Box
-                fontFamily="Nunito"
-                fontWeight="600"
-                fontSize="18px"
-                textAlign="center"
+                width="40px"
+                height="59px"
+                borderRadius="12px 12px 0 0"
+                background="linear-gradient(180deg, rgba(73, 126, 230, 0.60) 0%, rgba(73, 126, 230, 0.10) 100%)"
+                display="flex"
+                alignItems="flex-start"
+                paddingTop="6px"
+                justifyContent="center"
               >
-                Max 10% APY
-              </Box>
-              <Box
-                fontFamily="Nunito"
-                fontWeight="600"
-                fontSize="14px"
-                color="rgba(0, 0, 0, 0.5)"
-                marginTop="8px"
-                textAlign="center"
-              >
-                On Exchange
+                <Image width="28px" height="28px" src={CoinbaseIcon} className="icon" />
               </Box>
             </Box>
             <Box
-              width="50%"
+              width="33.33%"
+              display="flex"
+              alignItems="flex-end"
+              justifyContent="center"
+            >
+              <Box
+                width="40px"
+                height="59px"
+                borderRadius="12px 12px 0 0"
+                background="linear-gradient(180deg, rgba(252, 209, 22, 0.60) 0%, rgba(252, 209, 22, 0.10) 100%)"
+                display="flex"
+                alignItems="flex-start"
+                paddingTop="6px"
+                justifyContent="center"
+              >
+                <Image width="28px" height="28px" src={treasuryIcon} className="icon" />
+              </Box>
+            </Box>
+            <Box
+              width="33.33%"
+              display="flex"
+              alignItems="flex-end"
+              justifyContent="center"
+            >
+              <Box
+                width="40px"
+                height="132px"
+                borderRadius="12px 12px 0 0"
+                background="linear-gradient(180deg, rgba(70, 167, 191, 0.60) 0%, rgba(176, 84, 160, 0.10) 100%)"
+                display="flex"
+                alignItems="flex-start"
+                paddingTop="6px"
+                justifyContent="center"
+              >
+                <Image width="28px" height="28px" src={AAVEIcon} className="icon" />
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            display="flex"
+            borderTop="1px solid rgba(0, 0, 0, 0.1)"
+          >
+            <Box
+              width="33.33%"
               display="flex"
               flexDirection="column"
               alignItems="center"
               justifyContent="center"
-              padding="30px 10px"
+              padding="18px 10px"
             >
               <Box
                 fontFamily="Nunito"
                 fontWeight="600"
-                fontSize="18px"
+                fontSize="14px"
+                textAlign="center"
               >
-                Max 5.01% APY
+                5.01% APY
               </Box>
               <Box
                 fontFamily="Nunito"
                 fontWeight="600"
-                fontSize="14px"
+                fontSize="12px"
                 color="rgba(0, 0, 0, 0.5)"
-                marginTop="8px"
+                marginTop="5px"
+                textAlign="center"
               >
-                On U.S. Treasury
+                Coinbase
+              </Box>
+            </Box>
+            <Box
+              width="33.33%"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              padding="18px 10px"
+            >
+              <Box
+                fontFamily="Nunito"
+                fontWeight="600"
+                fontSize="14px"
+                textAlign="center"
+              >
+                5.03% APY
+              </Box>
+              <Box
+                fontFamily="Nunito"
+                fontWeight="600"
+                fontSize="12px"
+                color="rgba(0, 0, 0, 0.5)"
+                marginTop="5px"
+                textAlign="center"
+              >
+                U.S. Treasury bill
+              </Box>
+            </Box>
+            <Box
+              width="33.33%"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              padding="18px 10px"
+            >
+              <Box
+                fontFamily="Nunito"
+                fontWeight="600"
+                fontSize="14px"
+                textAlign="center"
+              >
+                12.16% APY
+              </Box>
+              <Box
+                fontFamily="Nunito"
+                fontWeight="600"
+                fontSize="12px"
+                color="rgba(0, 0, 0, 0.5)"
+                marginTop="5px"
+                textAlign="center"
+              >
+                USDC on AAVE
               </Box>
             </Box>
           </Box>
@@ -208,7 +304,7 @@ export default function Landing() {
         >
           <Box display="flex" padding="24px" borderBottom="1px solid rgba(0, 0, 0, 0.1)">
             <Box width="30px" height="30px" display="flex" alignItems="center" justifyContent="center" marginRight="10px">
-              <CheckIcon />
+              <IntroItem1Icon />
             </Box>
             <Box>
               <Box fontSize="18px" fontWeight="700">
@@ -222,7 +318,7 @@ export default function Landing() {
 
           <Box display="flex" padding="24px" borderBottom="1px solid rgba(0, 0, 0, 0.1)">
             <Box width="30px" height="30px" display="flex" alignItems="center" justifyContent="center" marginRight="10px">
-              <CheckIcon />
+              <IntroItem2Icon />
             </Box>
             <Box>
               <Box fontSize="18px" fontWeight="700">
@@ -230,6 +326,20 @@ export default function Landing() {
               </Box>
               <Box fontSize="14px" fontWeight="400">
                 Self custody wallet with fully decentralized service.
+              </Box>
+            </Box>
+          </Box>
+
+          <Box display="flex" padding="24px" borderBottom="1px solid rgba(0, 0, 0, 0.1)">
+            <Box width="30px" height="30px" display="flex" alignItems="center" justifyContent="center" marginRight="10px">
+              <IntroItem3Icon />
+            </Box>
+            <Box>
+              <Box fontSize="18px" fontWeight="700">
+                Simple and free
+              </Box>
+              <Box fontSize="14px" fontWeight="400">
+                Instant deposit and redeem. No management fees.
               </Box>
             </Box>
           </Box>
@@ -276,7 +386,7 @@ export default function Landing() {
             fontSize="24px"
             fontWeight="700"
           >
-            Why Ethereum Layer2
+            About Arbitrum Network
           </Box>
         </Box>
 
@@ -288,9 +398,85 @@ export default function Landing() {
           border="1px solid #EAECF0"
         >
           <Box display="flex" padding="24px" borderBottom="1px solid rgba(0, 0, 0, 0.1)">
-            <Box>
-              <Box fontSize="18px" fontWeight="700">
-                Arbitrum Network
+            <Box width="100%">
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                width="100%"
+                marginBottom="14px"
+              >
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="700"
+                    fontSize="18px"
+                    textAlign="center"
+                  >
+                    $3.297b
+                  </Box>
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="400"
+                    fontSize="12px"
+                    marginTop="5px"
+                    textAlign="center"
+                  >
+                    TVL
+                  </Box>
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="700"
+                    fontSize="18px"
+                    textAlign="center"
+                  >
+                    4th
+                  </Box>
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="400"
+                    fontSize="12px"
+                    marginTop="5px"
+                    textAlign="center"
+                  >
+                    Ranking
+                  </Box>
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="700"
+                    fontSize="18px"
+                    textAlign="center"
+                  >
+                    49.17%
+                  </Box>
+                  <Box
+                    fontFamily="Nunito"
+                    fontWeight="400"
+                    fontSize="12px"
+                    marginTop="5px"
+                    textAlign="center"
+                  >
+                    L2 Market share
+                  </Box>
+                </Box>
               </Box>
               <Box fontSize="14px" fontWeight="400">
                 Arbitrum is a Ethereum scaling solution which provides a safe and low cost way for every human to access DeFi on the most decentralized network.
