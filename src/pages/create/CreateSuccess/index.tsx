@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Input } from '@chakra-ui/react';
+import { Box, Input, Image } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import FadeId from '@/components/Icons/mobile/FaceId'
-import Loading from '@/components/Icons/mobile/Loading'
+// import Loading from '@/components/Icons/mobile/Loading'
+import LoadingIcon from '@/assets/mobile/loading.gif'
 import { css, keyframes } from '@emotion/react'
 
 const spin = keyframes`
@@ -24,21 +25,17 @@ export default function CreateSuccess({ creating, onNext }: any) {
         background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
       >
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-          <Box
-            css={css`
-              animation: ${spin} 1s linear infinite;
-            `}
-          >
-            <Loading />
+          <Box>
+            <Image width="80px" height="60px" src={LoadingIcon} />
           </Box>
           <Box
-            marginTop="80px"
-            fontWeight="700"
+            marginTop="18px"
+            fontWeight="400"
             fontSize="18px"
             lineHeight="14px"
             marginBottom="14px"
           >
-            钱包激活中
+            Setting up wallet...
           </Box>
         </Box>
       </Box>
