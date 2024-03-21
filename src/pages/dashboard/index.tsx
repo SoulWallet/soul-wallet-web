@@ -19,6 +19,42 @@ import useWallet from '@/hooks/useWallet';
 import { useHistoryStore } from '@/store/history';
 import { usdcArbPoolReserveId } from '@/config/constants';
 
+const getFontSize = (value: any) => {
+  const length = value ? String(value).length : 0
+
+  if (length > 9) {
+    return '40px'
+  } else if (length > 5) {
+    return '50px'
+  }
+
+  return '72px'
+}
+
+const getSmallFontSize = (value: any) => {
+  const length = value ? String(value).length : 0
+
+  if (length > 9) {
+    return '30px'
+  } else if (length > 5) {
+    return '50px'
+  }
+
+  return '36px'
+}
+
+const getFontBottomMargin = (value: any) => {
+  const length = value ? String(value).length : 0
+
+  if (length > 9) {
+    return '0px'
+  } else if (length > 5) {
+    return '10px'
+  }
+
+  return '26px'
+}
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const { totalUsdValue, getTokenBalance, sevenDayApy } = useBalanceStore();
@@ -26,10 +62,16 @@ export default function Dashboard() {
   const { historyList } = useHistoryStore();
 
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
-
   const hasBalance = Number(totalUsdValue) > 0;
 
-  if (hasBalance) {
+  const valueLeft = totalUsdValue.split('.')[0]
+  const valueRight = totalUsdValue.split('.')[1]
+
+  const fontSize = getFontSize(valueLeft)
+  const smFontSize = getSmallFontSize(valueRight)
+  const fontBottomMargin = getFontBottomMargin(valueLeft)
+
+  if (hasBalance || true) {
     return (
       <Box>
         <Box padding="30px">
@@ -41,34 +83,44 @@ export default function Dashboard() {
               borderRadius="24px"
               boxShadow="0px 8px 60px 0px rgba(44, 53, 131, 0.12)"
               border="1px solid #EAECF0"
+              padding="28px 24px"
             >
               <Box
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                padding="48px 10px 0"
-                mb="6"
+                paddingTop="16px"
               >
                 <Box display="flex" alignItems="center">
+                  <Box fontSize="24px" fontWeight="700" marginRight="2px">$</Box>
                   <Box
                     fontFamily="Nunito"
-                    fontSize="72px"
+                    fontSize={fontSize}
                     lineHeight={"1"}
                     fontWeight="800"
                   >
-                    {totalUsdValue.split('.')[0]}
+                    {valueLeft}
                   </Box>
                   {Number(totalUsdValue) > 0 && <Box
                                                   fontFamily="Nunito"
-                                                  fontSize="36px"
+                                                  fontSize={smFontSize}
                                                   lineHeight={"1"}
                                                   fontWeight="800"
-                                                  marginTop="24px"
+                                                  marginTop={fontBottomMargin}
                     // marginLeft="10px"
                                                   color="#939393"
                                                 >
-                    .{totalUsdValue.split('.')[1]}
+                    .{valueRight}
                   </Box> }
+                </Box>
+                <Box
+                  color="#0CB700"
+                  fontSize="16px"
+                  fontWeight="600"
+                  marginBottom="16px"
+                  marginTop="4px"
+                >
+                  + $12.39 today
                 </Box>
                 {
                   pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
@@ -77,55 +129,33 @@ export default function Dashboard() {
                 }
 
               </Box>
-              <Box display="flex" alignItems="center" justifyContent="space-around">
-                <Link to="/withdraw" style={{width: "34%"}}>
+              <Box display="flex" alignItems="center" justifyContent="center" gap="14px">
+                <Link to="/withdraw" style={{ width: "34%" }}>
                   <Box
                     display="flex"
                     flexDirection="column"
                     alignItems="center"
                     justifyContent="center"
-                    padding="30px 10px"
                   >
                     <Box width="100%">
-                      <Button width="100%" size="xl" type="lightBlue" minWidth="100px" boxShadow="none">
-                        <WithdrawIcon />
+                      <Button width="100%" size="xl" type="lightBlue" minWidth="100px" boxShadow="none" color="#497EE6">
+                        Transfer
                       </Button>
-                    </Box>
-                    <Box
-                      fontFamily="Nunito"
-                      fontWeight="600"
-                      fontSize="14px"
-                      color="black"
-                      marginTop="8px"
-                      textAlign="center"
-                    >
-                      Withdraw
                     </Box>
                   </Box>
                 </Link>
-                <Link to="/deposit" style={{ width: "calc(66% - 20px)"}}>
+                <Link to="/deposit" style={{ width: "calc(66% - 14px)"}}>
                   <Box
                     display="flex"
                     flexDirection="column"
                     alignItems="center"
                     justifyContent="center"
-                    padding="30px 10px"
-                    // width=""
                   >
                     <Box width="100%">
                       <Button width="100%" size="xl" type="blue">
-                        $
+                        Deposit USDC
                       </Button>
                     </Box>
-                      <Box
-                        fontFamily="Nunito"
-                        fontWeight="600"
-                        fontSize="14px"
-                        color="black"
-                        marginTop="8px"
-                      >
-                        Deposit USDC
-                      </Box>
                   </Box>
                 </Link>
               </Box>
@@ -156,13 +186,13 @@ export default function Dashboard() {
           </Box>
         </Box>
         {historyList && historyList.length > 0 &&  <Box
-          position="fixed"
-          height="300px"
-          bottom="0"
-          width="100%"
-          background="white"
-          borderRadius="20px 20px 0 0"
-        >
+                                                     position="fixed"
+                                                     height="300px"
+                                                     bottom="0"
+                                                     width="100%"
+                                                     background="white"
+                                                     borderRadius="20px 20px 0 0"
+                                                   >
           <Box padding="30px" position="relative">
             <Box
               position="absolute"
@@ -184,9 +214,9 @@ export default function Dashboard() {
             <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
             <Flex gap="36px" flexDir="column" width="100%">
               {historyList.slice(0, 2).map(item =>   <Box
-                display="flex"
-                alignItems="center"
-              >
+                                                       display="flex"
+                                                       alignItems="center"
+                                                     >
                 <Box marginRight="12px">
                   {item.action === 'Deposit' ? <ActivityDepositIcon /> :  <ActivityTransferIcon />}
                 </Box>
@@ -197,15 +227,15 @@ export default function Dashboard() {
                   >
                     <Box fontSize="14px" fontWeight="800">{item.action}</Box>
                     {/* <Box
-                      fontSize="12px"
-                      background="#F1F1F1"
-                      color="rgba(0, 0, 0, 0.60)"
-                      padding="0 8px"
-                      borderRadius="4px"
-                      marginLeft="8px"
-                    >
-                      Pending
-                    </Box> */}
+                        fontSize="12px"
+                        background="#F1F1F1"
+                        color="rgba(0, 0, 0, 0.60)"
+                        padding="0 8px"
+                        borderRadius="4px"
+                        marginLeft="8px"
+                        >
+                        Pending
+                        </Box> */}
                   </Box>
                   <Box fontSize="12px">{item.dateFormatted}</Box>
                 </Box>
