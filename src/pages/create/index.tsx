@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import InputInviteCode from './InputInviteCode'
 // import SetupEmail from './SetupEmail'
@@ -24,6 +24,7 @@ export default function Create() {
   const [nameStatus, setNameStatus] = useState(-1);
   const [codeStatus, setCodeStatus] = useState(-1);
   const [timer, setTimer] = useState<any>();
+  const toast = useToast();
 
   const debounce = (fn: Function, delay: number) => {
     clearTimeout(timer);
@@ -53,6 +54,11 @@ export default function Create() {
       setCredential(await register(username));
       setStep(3)
     } catch (error: any) {
+      toast({
+        title: 'Failed to create passkey',
+        description: error.message,
+        status: 'error',
+      })
       setAddingPasskey(false)
     }
   }
