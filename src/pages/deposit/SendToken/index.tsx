@@ -1,20 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Image, Checkbox, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
-import Header from '@/components/mobile/Header'
+import { Box, Image } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import Button from '@/components/mobile/Button'
-import ScanIcon from '@/components/Icons/mobile/Scan'
-import NextIcon from '@/components/Icons/mobile/Next'
-import useWallet from '@/hooks/useWallet';
-import usePasskey from '@/hooks/usePasskey';
-import { useNavigate } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc.png'
-import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
-import AAVEIcon from '@/assets/mobile/aave.png'
 
 export default function MakeTransfer({ onPrev, onNext }: any) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
   return (
     <Box width="100%" height="100%" position="relative">
       <Box padding="30px" paddingBottom="144px">
@@ -35,7 +23,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          marginTop="93px"
+          marginTop="64px"
         >
           <Box
             background="#F1F1F1"

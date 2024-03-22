@@ -40,7 +40,7 @@ export default function Deposit() {
         onBack={onPrev}
         marginTop="18px"
       />
-      <FadeSwitch width="100%" key={step}>
+      <FadeSwitch key={step}>
         {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
         {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
         {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
