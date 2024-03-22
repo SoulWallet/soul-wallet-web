@@ -8,9 +8,10 @@ import MenuIcon from '@/components/Icons/mobile/Menu'
 import { useAddressStore } from '@/store/address';
 import Button from '@/components/mobile/Button'
 import useWallet from '@/hooks/useWallet';
+import AddressIcon from '@/components/AddressIcon';
 
 export function Header({ openMenu, username, ...props }: any) {
-  const { walletName } = useAddressStore();
+  const { walletName, selectedAddress } = useAddressStore();
   return (
     <Box
       height="44px"
@@ -23,7 +24,10 @@ export function Header({ openMenu, username, ...props }: any) {
       {...props}
     >
       <Box display="flex" alignItems="center" justifyContent="center" height="36px">
-        <Box marginRight="4px"><ProfileIcon /></Box>
+        <Box marginRight="4px">
+          <AddressIcon address={selectedAddress} width={24} />
+          {/* <ProfileIcon /> */}
+          </Box>
         <Box fontSize="16px" lineHeight={"20px"} fontWeight="800" marginRight="4px">{walletName}</Box>
         {/* <Box fontSize="16px" fontWeight="400">{`(${toShortAddress(selectedAddress)})`}</Box> */}
       </Box>

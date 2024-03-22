@@ -7,6 +7,7 @@ import MakeTransfer from './MakeTransfer'
 import SelectNetwork from './SelectNetwork'
 import SendToken from './SendToken'
 import { motion } from 'framer-motion';
+import FadeSwitch from '@/components/FadeSwitch';
 
 export default function Deposit() {
   const navigate = useNavigate();
@@ -31,32 +32,20 @@ export default function Deposit() {
 
   const isAllChecked = checked1 && checked2 && checked3
 
-  if (step == 0) {
-    return (
-      <CheckDeposit onPrev={onPrev} onNext={onNext} />
-    );
-  } else if (step == 1) {
-    return (
-      <MakeTransfer onPrev={onPrev} onNext={onNext} />
-    );
-  } else if (step == 2) {
-    return (
-      <SelectNetwork onPrev={onPrev} onNext={onNext} />
-    );
-  } else if (step == 3) {
-    return (
-      <SendToken onPrev={onPrev} onNext={onNext} />
-    );
-  }
-
-  return (
-    <Box width="100%" height="100%">
-      <Header
-        title="Deposit"
-        showBackButton
-        onBack={onPrev}
-        marginTop="18px"
-      />
-    </Box>
-  );
+  return <>
+    {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
+    {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
+    {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
+    {step === 3 && <SendToken onPrev={onPrev} onNext={onNext} />}
+  </>
+  // return (
+  //   <Box width="100%" height="100%">
+  //     <Header
+  //       title="Deposit"
+  //       showBackButton
+  //       onBack={onPrev}
+  //       marginTop="18px"
+  //     />
+  //   </Box>
+  // );
 }

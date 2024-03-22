@@ -1,7 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, Flex, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
-import Header from '@/components/mobile/Header'
+import { Box, Image, Flex, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import MoreIcon from '@/components/Icons/mobile/More'
 import USDCIcon from '@/assets/tokens/usdc.png'
@@ -9,7 +7,6 @@ import ActivityDepositIcon from '@/components/Icons/mobile/Activity/Deposit'
 import ActivityTransferIcon from '@/components/Icons/mobile/Activity/Transfer'
 import { useBalanceStore } from '@/store/balance';
 import { useHistoryStore } from '@/store/history';
-import { motion } from 'framer-motion';
 
 const getFontSize = (value: any) => {
   const length = value ? String(value).length : 0
@@ -224,7 +221,7 @@ export default function Dashboard() {
           </Box>
           <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
           <Flex gap="36px" flexDir="column" width="100%">
-            {historyList.slice(0, 3).map(item =>   <Box
+            {historyList.slice(0, 2).map(item =>   <Box
                                                      display="flex"
                                                      alignItems="center"
                                                    >

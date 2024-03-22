@@ -5,6 +5,7 @@ import Pooling from '../components/Pooling';
 import CommonWrapper from './CommonWrapper';
 import { Box } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import FadeSwitch from '@/components/FadeSwitch';
 
 export default function Wrapper() {
   const location = useLocation();
@@ -14,14 +15,16 @@ export default function Wrapper() {
         <WalletContextProvider>
           <AnimatePresence>
             <Box maxW={'430px'} pos={'relative'} color="#000" mx="auto">
-              <motion.div
+              <FadeSwitch key={location.pathname}>
+                <Outlet />
+              </FadeSwitch>
+              {/* <motion.div
                 key={location.pathname}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-              >
-                <Outlet />
-              </motion.div>
+              > */}
+              {/* </motion.div> */}
             </Box>
           </AnimatePresence>
           <Pooling />
