@@ -10,7 +10,9 @@ export default function CommonWrapper({ children }: { children: ReactNode }) {
     <ChakraProvider theme={Theme} toastOptions={{ defaultOptions: { duration: 1300, position: 'top-right' } }}>
       <Fonts />
       <EnvCheck>
-        <WagmiContext>{children}</WagmiContext>
+        {/* <WagmiContext> */}
+          {children}
+          {/* </WagmiContext> */}
       </EnvCheck>
     </ChakraProvider>
   );

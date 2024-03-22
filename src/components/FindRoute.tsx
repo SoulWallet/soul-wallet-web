@@ -20,31 +20,19 @@ export default function FindRoute({ children }: { children: ReactNode }) {
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
 
-    const allowBypass =
-      location.pathname.includes('create') ||
-      location.pathname.includes('landing') ||
-      location.pathname.includes('auth') ||
-      location.pathname.includes('deposit') ||
-      location.pathname.includes('withdraw') ||
-      location.pathname.includes('dashboard') ||
-      location.pathname.includes('details') ||
-      location.pathname.includes('intro')
+    const allowBypass = location.pathname.includes('create') || location.pathname.includes('landing');
 
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
       clearLogData();
     }
 
-    if (
-      !selectedAddress &&
-      !allowBypass
-    ) {
+    if (!selectedAddress && !allowBypass) {
       navigate({
         pathname: '/landing',
         search: location.search,
       });
     } else {
-
     }
     // if (addressList.length && selectedAddress)
   };
