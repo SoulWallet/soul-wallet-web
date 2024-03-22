@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { Box, Image, Flex, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
@@ -53,6 +53,7 @@ export default function Dashboard() {
   const [modalMargin, setModalMargin] = useState(494)
   const [modalHeight, setModalHeight] = useState(window.innerHeight - 494)
   const [modalPosition, setModalPosition] = useState('bottom')
+  const [isMoving, setIsMoving] = useState(false)
 
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
   const hasBalance = Number(totalUsdValue) > 0;
@@ -64,18 +65,56 @@ export default function Dashboard() {
   const smFontSize = getSmallFontSize(valueRight)
   const fontBottomMargin = getFontBottomMargin(valueLeft)
 
+  const [touchStart, setTouchStart] = useState(null);
+
+  const handleTouchStart = (e) => {
+    // Get the initial touch position
+    setTouchStart(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!touchStart) {
+      // If there's no start position, exit the function
+      return;
+    }
+    // Get the current touch position
+    const currentTouch = e.touches[0].clientY;
+
+    // Compare the start and end positions
+    if (touchStart > currentTouch) {
+      // If the start position is greater, the user is moving up
+      console.log('Moving up');
+      changeModalPosition()
+    } else if (touchStart < currentTouch) {
+      // If the start position is less, the user is moving down
+      console.log('Moving down');
+      changeModalPosition()
+    }
+
+    // Optional: Update the start position to create a continuous event
+    // setTouchStart(currentTouch);
+  };
+
   const changeModalPosition = useCallback(() => {
     console.log('changeModalPosition')
-    if (modalPosition === 'bottom') {
-      setModalMargin(64)
-      setModalHeight(window.innerHeight - 64)
-      setModalPosition('top')
-    } else {
-      setModalMargin(494)
-      setModalHeight(window.innerHeight - 494)
-      setModalPosition('bottom')
+    if (!isMoving) {
+      setIsMoving(true)
+
+      if (modalPosition === 'bottom') {
+        setModalMargin(64)
+        setModalHeight(window.innerHeight - 64)
+        setModalPosition('top')
+      } else {
+        setModalMargin(494)
+        setModalHeight(window.innerHeight - 494)
+        setModalPosition('bottom')
+      }
+
+      setTimeout(() => {
+        setIsMoving(false)
+      }, 600)
     }
-  }, [modalPosition])
+  }, [modalPosition, isMoving])
 
   return (
     <Box>
@@ -233,7 +272,13 @@ export default function Dashboard() {
             overflowY="scroll"
             pointerEvents="all"
           >
-            <Box padding="30px" position="relative">
+            <Box
+              padding="30px"
+              position="relative"
+              height="100%"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+            >
               <Box
                 position="absolute"
                 height="20px"
@@ -243,7 +288,7 @@ export default function Dashboard() {
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                onClick={changeModalPosition}
+                // onClick={changeModalPosition}
               >
                 <Box
                   width="30px"
