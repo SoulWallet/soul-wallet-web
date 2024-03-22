@@ -68,7 +68,7 @@ export default function useWallet() {
       initialGuardianSafePeriod: toHex(noGuardian.initialGuardianSafePeriod),
     };
     // save slot info to api
-    await api.account.create({
+    const res:any = await api.account.create({
       address,
       chainID: selectedChainId,
       name: walletName,
@@ -78,6 +78,15 @@ export default function useWallet() {
       },
       invitationCode,
     });
+
+    if(res.code !== 200){
+      toast({
+        title: 'Create wallet failed',
+        description: res.msg,
+        status: 'error',
+      })
+      throw new Error('Create wallet failed');
+    }
 
     setSlotInfo(createSlotInfo);
 
@@ -231,11 +240,21 @@ export default function useWallet() {
       await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, selectedKeyType)
     ).OK;
 
-    const res = await api.sponsor.check(
+    const res:any = await api.sponsor.check(
       selectedChainId,
       chainConfig.contracts.entryPoint,
       JSON.parse(UserOpUtils.userOperationToJSON(userOp)),
     );
+
+    if(res.code !== 200){
+      toast({
+        title: 'Sponsor check failed',
+        description: res.msg,
+        status: 'error',
+      })
+      throw new Error('Sponsor check failed');
+    }
+
     if (res.data && res.data.paymasterData) {
       userOp = {
         ...userOp,

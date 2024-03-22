@@ -12,6 +12,7 @@ export default function SepupUsername({ value, onChange, onNext, nameStatus }: a
       <Box width="100%" marginBottom="50px">
         <Input
           value={value}
+          spellCheck={false}
           onChange={(e) => onChange(e.target.value)}
           fontSize="32px"
           lineHeight="24px"
