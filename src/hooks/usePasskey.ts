@@ -153,23 +153,11 @@ export default function usePasskey() {
     }
     let challenge = base64Tobase64url(btoa(String.fromCharCode(...byteArray)));
 
-    try{
-      await client.authenticate([
-        credential.id
-      ], challenge, {
-        userVerification: 'required',
-        authenticatorType: 'both',
-      });
-    }catch(e:any){
-      alert(1)
-      alert(e.message)
-    }
-
     console.log('Authenticating with credential id', credential.id);
     let authentication = await client.authenticate([
       credential.id
     ], challenge, {
-      userVerification: 'required',
+      // userVerification: 'required',
       authenticatorType: 'both',
     });
 
