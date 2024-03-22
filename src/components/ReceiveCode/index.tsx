@@ -4,14 +4,17 @@ import { Image, BoxProps } from '@chakra-ui/react';
 
 interface IReceiveCode extends BoxProps {
   address: string;
+  onSet: (qrcode: string) => void;
 }
 
-export default function ReceiveCode({ address }: IReceiveCode) {
+export default function ReceiveCode({ address, onSet }: IReceiveCode) {
   const [imgSrc, setImgSrc] = useState<string>('');
   const { generateQrCode } = useTools();
   const generateQR = async (text: string) => {
     try {
-      setImgSrc(await generateQrCode(text));
+      const qrImg = await generateQrCode(text);
+      setImgSrc(qrImg);
+      onSet(qrImg);
     } catch (err) {
       console.error(err);
     }
