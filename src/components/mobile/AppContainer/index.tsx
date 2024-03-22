@@ -83,6 +83,7 @@ export default function AppContainer() {
           mb="0"
           marginTop={`${marginHeight}px`}
         >
+          <Box tabIndex={0} />
           <ModalCloseButton />
           <ModalBody
             display="flex"
