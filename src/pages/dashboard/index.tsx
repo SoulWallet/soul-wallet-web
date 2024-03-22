@@ -68,36 +68,24 @@ export default function Dashboard() {
   const [touchStart, setTouchStart] = useState(null);
 
   const handleTouchStart = (e) => {
-    // Get the initial touch position
     setTouchStart(e.touches[0].clientY);
   };
 
   const handleTouchMove = (e) => {
     if (!touchStart) {
-      // If there's no start position, exit the function
       return;
     }
-    // Get the current touch position
     const currentTouch = e.touches[0].clientY;
 
-    // Compare the start and end positions
     if (touchStart > currentTouch) {
-      // If the start position is greater, the user is moving up
-      console.log('Moving up');
-      changeModalPosition()
+      changeModalPosition('top')
     } else if (touchStart < currentTouch) {
-      // If the start position is less, the user is moving down
-      console.log('Moving down');
-      changeModalPosition()
+      changeModalPosition('bottom')
     }
-
-    // Optional: Update the start position to create a continuous event
-    // setTouchStart(currentTouch);
   };
 
-  const changeModalPosition = useCallback(() => {
-    console.log('changeModalPosition')
-    if (!isMoving) {
+  const changeModalPosition = useCallback((intentPosition) => {
+    if (!isMoving && intentPosition !== modalPosition) {
       setIsMoving(true)
 
       if (modalPosition === 'bottom') {
