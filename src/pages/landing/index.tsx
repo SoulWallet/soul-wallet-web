@@ -43,7 +43,7 @@ export default function Landing() {
           Security first. Completely controlled by yourself and your trusted networks
         </Box>
         <Link to="/create">
-          <Button size="xl" type="blue" minWidth="283px" marginTop="50px">1Create free account</Button>
+          <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Create free account</Button>
         </Link>
         <Button
           size="xl"

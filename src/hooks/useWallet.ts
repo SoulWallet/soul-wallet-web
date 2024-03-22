@@ -67,6 +67,7 @@ export default function useWallet() {
       initialGuardianHash: noGuardian.initialGuardianHash,
       initialGuardianSafePeriod: toHex(noGuardian.initialGuardianSafePeriod),
     };
+    alert(1)
     // save slot info to api
     const res:any = await api.account.create({
       address,
@@ -78,6 +79,7 @@ export default function useWallet() {
       },
       invitationCode,
     });
+    alert(2)
 
     if(res.code !== 200){
       toast({
@@ -87,12 +89,17 @@ export default function useWallet() {
       })
       throw new Error('Create wallet failed');
     }
+    alert(3)
 
     setSlotInfo(createSlotInfo);
 
     setCredentials([credential as any]);
+    alert(4)
+
     // step 2: get User op
     let userOp = await getActivateOp(createIndex, createSlotInfo, chainConfig.paymasterTokens[0]);
+    alert(5)
+
     await signAndSend(userOp);
   };
 
