@@ -67,11 +67,11 @@ export default function Dashboard() {
 
   const [startPosition, setStartPosition] = useState(null);
 
-  const handleStart = (position) => {
+  const handleStart = (position: any) => {
     setStartPosition(position);
   };
 
-  const handleMove = (currentPosition) => {
+  const handleMove = (currentPosition: any) => {
     if (startPosition == null) return;
 
     if (startPosition > currentPosition + 20) {
@@ -83,26 +83,26 @@ export default function Dashboard() {
     }
   };
 
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: any) => {
     handleStart(e.touches[0].clientY);
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: any) => {
     handleMove(e.touches[0].clientY);
   };
 
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e: any) => {
     handleStart(e.clientY);
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: any) => {
     // Only track movement when the mouse button is pressed
     if (e.buttons === 1) {
       handleMove(e.clientY);
     }
   };
 
-  const changeModalPosition = useCallback((intentPosition) => {
+  const changeModalPosition = useCallback((intentPosition: any) => {
     if (!isMoving && intentPosition !== modalPosition) {
       setIsMoving(true)
 
@@ -260,7 +260,7 @@ export default function Dashboard() {
       {historyList && historyList.length > 0 && (
         <Box
           position="fixed"
-          height={modalHeight}
+          // height={modalHeight}
           top="0"
           left="0"
           width="100%"
@@ -277,6 +277,7 @@ export default function Dashboard() {
             height="100%"
             overflowY="scroll"
             pointerEvents="all"
+            // height={modalHeight}
           >
             <Box
               padding="30px"
