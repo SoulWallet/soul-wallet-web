@@ -46,7 +46,6 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
 
   return (
     <Box width="100%" height="100%" position="relative">
-      <Header title="Deposit" showBackButton onBack={onPrev} marginTop="18px" />
       <Box padding="30px" marginBottom={isAllChecked ? '144px' : '0px'}>
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="63">
           Prior to deposit,<br/> please verify
