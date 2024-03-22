@@ -32,20 +32,20 @@ export default function Deposit() {
 
   const isAllChecked = checked1 && checked2 && checked3
 
-  return <FadeSwitch key={step}>
-    {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
-    {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
-    {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
-    {step === 3 && <SendToken onPrev={onPrev} onNext={onNext} />}
-  </FadeSwitch>
-  // return (
-  //   <Box width="100%" height="100%">
-  //     <Header
-  //       title="Deposit"
-  //       showBackButton
-  //       onBack={onPrev}
-  //       marginTop="18px"
-  //     />
-  //   </Box>
-  // );
+  return (
+    <Box width="100%" height="100%">
+      <Header
+        title="Deposit"
+        showBackButton
+        onBack={onPrev}
+        marginTop="18px"
+      />
+      <FadeSwitch width="100%" key={step}>
+        {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
+        {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
+        {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
+        {step === 3 && <SendToken onPrev={onPrev} onNext={onNext} />}
+      </FadeSwitch>
+    </Box>
+  );
 }
