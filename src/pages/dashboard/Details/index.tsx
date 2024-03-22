@@ -11,10 +11,16 @@ import { aaveLink } from '@/config';
 import { useBalanceStore } from '@/store/balance';
 
 export default function Details() {
+  const [showInfo1, setShowInfo1] = useState(false)
+  const [showInfo2, setShowInfo2] = useState(false)
+  const [showInfo3, setShowInfo3] = useState(false)
+  const [showInfo4, setShowInfo4] = useState(false)
+
   const navigate = useNavigate();
   const goBack = () => {
     navigate('/dashboard')
   }
+
   return (
     <Box height="100%">
       <Box
@@ -33,12 +39,6 @@ export default function Details() {
       <Box
         background="#F5F6FA"
         w="100%"
-        // sx={{
-        //   '& > svg':{
-        //     width: "100%",
-        //     objectFit: "contain",
-        //   }
-        // }}
       >
         <DetailsIMG />
       </Box>
@@ -196,48 +196,96 @@ export default function Details() {
             >
               FAQs
             </Box>
+          </Box>
+          <Box
+            width="100%"
+            paddingBottom="30px"
+            onClick={() => setShowInfo1(!showInfo1)}
+          >
             <Box
               fontSize="16px"
               fontWeight="700"
               width="100%"
-              marginBottom="18px"
             >
               Where does yield come from?
             </Box>
-            <Box
-              fontSize="14px"
-            >
-              One of the key features that an ERC4337-based project can offer is paying gas fees on behalf of users through Bundlers and letting Paymaster reimburse the consumed fees to Bundler when the transaction succeeds.
-            </Box>
+            {!!showInfo1 && (
+              <Box
+                fontSize="14px"
+                marginTop="18px"
+              >
+                One of the key features that an ERC4337-based project can offer is paying gas fees on behalf of users through Bundlers and letting Paymaster reimburse the consumed fees to Bundler when the transaction succeeds.
+              </Box>
+            )}
           </Box>
 
           <Box
-            borderTop="1px solid rgba(0, 0, 0, 0.1)"
-            padding="30px 0"
-            fontSize="16px"
-            fontWeight="700"
             width="100%"
+            padding="30px 0"
+            borderTop="1px solid rgba(0, 0, 0, 0.1)"
+            onClick={() => setShowInfo2(!showInfo2)}
           >
-            Does Soul Wallet charge?
+            <Box
+              fontSize="16px"
+              fontWeight="700"
+              width="100%"
+            >
+              Does Soul Wallet charge?
+            </Box>
+            {!!showInfo2 && (
+              <Box
+                fontSize="14px"
+                marginTop="18px"
+              >
+                One of the key features that an ERC4337-based project can offer is paying gas fees on behalf of users through Bundlers and letting Paymaster reimburse the consumed fees to Bundler when the transaction succeeds.
+              </Box>
+            )}
           </Box>
           <Box
-            borderTop="1px solid rgba(0, 0, 0, 0.1)"
-            padding="30px 0"
-            fontSize="16px"
-            fontWeight="700"
             width="100%"
+            padding="30px 0"
+            borderTop="1px solid rgba(0, 0, 0, 0.1)"
+            onClick={() => setShowInfo3(!showInfo3)}
           >
-            Any waiting period for deposit and withdraw?
+            <Box
+              fontSize="16px"
+              fontWeight="700"
+              width="100%"
+            >
+              Any waiting period for deposit and withdraw?
+            </Box>
+            {!!showInfo3 && (
+              <Box
+                fontSize="14px"
+                marginTop="18px"
+              >
+                One of the key features that an ERC4337-based project can offer is paying gas fees on behalf of users through Bundlers and letting Paymaster reimburse the consumed fees to Bundler when the transaction succeeds.
+              </Box>
+            )}
           </Box>
           <Box
-            borderTop="1px solid rgba(0, 0, 0, 0.1)"
-            padding="30px 0"
-            fontSize="16px"
-            fontWeight="700"
             width="100%"
+            padding="30px 0"
+            borderTop="1px solid rgba(0, 0, 0, 0.1)"
+            onClick={() => setShowInfo4(!showInfo4)}
           >
-            Does the APY data accurate?
+            <Box
+              fontSize="16px"
+              fontWeight="700"
+              width="100%"
+            >
+              Does the APY data accurate?
+            </Box>
+            {!!showInfo4 && (
+              <Box
+                fontSize="14px"
+                marginTop="18px"
+              >
+                One of the key features that an ERC4337-based project can offer is paying gas fees on behalf of users through Bundlers and letting Paymaster reimburse the consumed fees to Bundler when the transaction succeeds.
+              </Box>
+            )}
           </Box>
+
           <Link as={Rlink} to="/deposit" style={{ width: "100%" }}>
             <Box
               marginTop="50px"

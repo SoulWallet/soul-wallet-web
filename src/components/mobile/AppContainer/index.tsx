@@ -160,6 +160,7 @@ export default function AppContainer() {
                 background="#F2F2F2"
                 color="#E83D26"
                 onClick={doLogout}
+                _hover={{ background: '#F2F2F2' }}
               >
                 Logout
               </Button>

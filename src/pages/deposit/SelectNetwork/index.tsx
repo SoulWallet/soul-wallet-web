@@ -22,7 +22,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
         onBack={onPrev}
         marginTop="18px"
       />
-      <Box padding="30px">
+      <Box padding="30px" paddingBottom="144px">
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="63">
           Select Arbitrum network
         </Box>
@@ -69,7 +69,15 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
           </Box>
         </Box>
       </Box>
-      <Box position="fixed" bottom="0" left="0" width="100%" marginTop="auto" marginBottom="60px">
+      <Box
+        position="fixed"
+        bottom="0"
+        left="0"
+        width="100%"
+        background="white"
+        paddingTop="20px"
+        paddingBottom="60px"
+      >
         <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">
           <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
           <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
