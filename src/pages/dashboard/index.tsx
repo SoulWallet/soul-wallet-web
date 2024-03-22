@@ -65,22 +65,40 @@ export default function Dashboard() {
   const smFontSize = getSmallFontSize(valueRight)
   const fontBottomMargin = getFontBottomMargin(valueLeft)
 
-  const [touchStart, setTouchStart] = useState(null);
+  const [startPosition, setStartPosition] = useState(null);
+
+  const handleStart = (position) => {
+    setStartPosition(position);
+  };
+
+  const handleMove = (currentPosition) => {
+    if (startPosition == null) return;
+
+    if (startPosition > currentPosition + 20) {
+      console.log('Moving up');
+      changeModalPosition('top')
+    } else if (startPosition < currentPosition - 20) {
+      console.log('Moving down');
+      changeModalPosition('bottom')
+    }
+  };
 
   const handleTouchStart = (e) => {
-    setTouchStart(e.touches[0].clientY);
+    handleStart(e.touches[0].clientY);
   };
 
   const handleTouchMove = (e) => {
-    if (!touchStart) {
-      return;
-    }
-    const currentTouch = e.touches[0].clientY;
+    handleMove(e.touches[0].clientY);
+  };
 
-    if (touchStart > currentTouch + 20) {
-      changeModalPosition('top')
-    } else if (touchStart < currentTouch - 20) {
-      changeModalPosition('bottom')
+  const handleMouseDown = (e) => {
+    handleStart(e.clientY);
+  };
+
+  const handleMouseMove = (e) => {
+    // Only track movement when the mouse button is pressed
+    if (e.buttons === 1) {
+      handleMove(e.clientY);
     }
   };
 
@@ -266,6 +284,8 @@ export default function Dashboard() {
               height="100%"
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
             >
               <Box
                 position="absolute"
