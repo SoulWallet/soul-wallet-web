@@ -156,10 +156,7 @@ export default function usePasskey() {
     console.log('Authenticating with credential id', credential.id);
     let authentication = await client.authenticate([
       credential.id
-    ], challenge, {
-      // userVerification: 'required',
-      authenticatorType: 'both',
-    });
+    ], challenge);
 
     const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
     const clientData = atob(base64urlTobase64(authentication.clientData));
