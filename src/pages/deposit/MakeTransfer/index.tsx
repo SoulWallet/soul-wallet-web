@@ -117,7 +117,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
         width="100%"
         background="white"
         paddingTop="20px"
-        paddingBottom="60px"
+        paddingBottom="36px"
       >
         <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">
           <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />

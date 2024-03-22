@@ -160,7 +160,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
         pointerEvents={isAllChecked ? 'all' : 'none'}
         width="100%"
         paddingTop="20px"
-        paddingBottom="60px"
+        paddingBottom="36px"
         background="white"
       >
         <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">

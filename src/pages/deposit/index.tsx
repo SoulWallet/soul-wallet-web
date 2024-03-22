@@ -32,12 +32,12 @@ export default function Deposit() {
 
   const isAllChecked = checked1 && checked2 && checked3
 
-  return <>
+  return <FadeSwitch key={step}>
     {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
     {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
     {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
     {step === 3 && <SendToken onPrev={onPrev} onNext={onNext} />}
-  </>
+  </FadeSwitch>
   // return (
   //   <Box width="100%" height="100%">
   //     <Header

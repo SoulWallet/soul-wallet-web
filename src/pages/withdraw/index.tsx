@@ -4,7 +4,8 @@ import useWallet from '@/hooks/useWallet';
 import { useNavigate } from 'react-router-dom';
 import InputAmount from './InputAmount';
 import Review from './Review';
-import WithdrawSuccess from './WithdrawSuccess';
+// import WithdrawSuccess from './WithdrawSuccess';
+import FadeSwitch from '@/components/FadeSwitch';
 
 export default function Withdraw() {
   const navigate = useNavigate();
@@ -45,27 +46,22 @@ export default function Withdraw() {
     setStep(step + 1);
   }, [step]);
 
-  if (step == 0) {
-    return (
-      <InputAmount
-        withdrawAmount={withdrawAmount}
-        onWithdrawAmountChange={setWithdrawAmount}
-        sendTo={sendTo}
-        onSendToChange={setSendTo}
-        onPrev={onPrev}
-        onNext={onNext}
-      />
-    );
-  } else if (step == 1) {
-    return (
-      <Review
-        isTransfering={isTransfering}
-        isCompleted={isCompleted}
-        withdrawAmount={withdrawAmount}
-        onPrev={onPrev}
-        sendTo={sendTo}
-        onWithdraw={onWithdraw}
-      />
-    );
-  }
+  return <FadeSwitch key={step}>
+    {step === 0 && <InputAmount
+      withdrawAmount={withdrawAmount}
+      onWithdrawAmountChange={setWithdrawAmount}
+      sendTo={sendTo}
+      onSendToChange={setSendTo}
+      onPrev={onPrev}
+      onNext={onNext}
+    />}
+    {step === 1 && <Review
+      isTransfering={isTransfering}
+      isCompleted={isCompleted}
+      withdrawAmount={withdrawAmount}
+      onPrev={onPrev}
+      sendTo={sendTo}
+      onWithdraw={onWithdraw}
+    />}
+  </FadeSwitch>
 }
