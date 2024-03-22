@@ -44,6 +44,7 @@ export default function AppContainer() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { logoutWallet } = useWallet();
   const innerHeight = window.innerHeight
+  const contentHeight = innerHeight - 64
   const marginHeight = innerHeight - 250
 
   const doLogout = async () => {
@@ -61,7 +62,7 @@ export default function AppContainer() {
         openMenu={onOpen}
       />
       <Flex
-        minH={`calc(100vh - 64px)`}
+        h={contentHeight}
         flexDir={{ base: 'column', lg: 'row' }}
         gap={{ base: 6, md: 8, lg: '50px' }}
       >

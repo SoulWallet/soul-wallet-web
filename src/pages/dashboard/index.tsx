@@ -122,6 +122,8 @@ export default function Dashboard() {
     }
   }, [modalPosition, isMoving])
 
+  const finalHistoryList = modalPosition === 'top' ? historyList : historyList.slice(0, 2)
+
   return (
     <Box>
       <Box padding="30px">
@@ -257,7 +259,7 @@ export default function Dashboard() {
           </Box>
         </Box>
       </Box>
-      {historyList && historyList.length > 0 && (
+      {finalHistoryList && finalHistoryList.length > 0 && (
         <Box
           position="fixed"
           // height={modalHeight}
@@ -308,7 +310,7 @@ export default function Dashboard() {
               </Box>
               <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
               <Flex gap="36px" flexDir="column" width="100%">
-                {historyList.slice(0, 2).map(item => (
+                {finalHistoryList.map(item => (
                   <Box
                     display="flex"
                     alignItems="center"

@@ -120,6 +120,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
         </Box>
         <Box
           opacity={isAllChecked ? 1 : 0}
+          height={isAllChecked ? 'fit-content' : '0px'}
           pointerEvents={isAllChecked ? 'all' : 'none'}
           transition="0.6s all ease"
           marginBottom="auto"
@@ -159,7 +160,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
         pointerEvents={isAllChecked ? 'all' : 'none'}
         width="100%"
         paddingTop="20px"
-        paddingBottom="60px"
+        paddingBottom="36px"
         background="white"
       >
         <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">
