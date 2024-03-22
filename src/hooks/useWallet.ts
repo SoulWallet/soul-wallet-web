@@ -210,8 +210,6 @@ export default function useWallet() {
     const selectedCredential: any = getSelectedCredential();
     alert(JSON.stringify(selectedCredential));
     const signatureData: any = await signByPasskey(selectedCredential, packedHash);
-    alert(2);
-
     console.log('packUserOp256Signature params:', signatureData, validationData);
     const packedSignatureRet =
       selectedCredential.algorithm === 'ES256'

@@ -147,20 +147,18 @@ export default function usePasskey() {
 
   const signByPasskey = async (credential: any, userOpHash: string) => {
     const userOpHashForBytes = userOpHash.startsWith('0x') ? userOpHash.substr(2) : userOpHash;
-    alert('a')
     var byteArray = new Uint8Array(32);
     for (var i = 0; i < 64; i += 2) {
       byteArray[i / 2] = parseInt(userOpHashForBytes.substr(i, 2), 16);
     }
     let challenge = base64Tobase64url(btoa(String.fromCharCode(...byteArray)));
-    alert('b')
-
+    alert(String(credential.id))
+    alert(challenge);
     console.log('Authenticating with credential id', credential.id);
     let authentication = await client.authenticate([credential.id], challenge, {
       userVerification: 'required',
-      authenticatorType: 'both',
+      // authenticatorType: 'both',
     });
-    alert('c')
 
     const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
     const clientData = atob(base64urlTobase64(authentication.clientData));
@@ -170,10 +168,8 @@ export default function usePasskey() {
     console.log('decoded clientData', clientData, clientDataSuffix);
     const signature = base64urlTobase64(authentication.signature);
     console.log(`signature: ${signature}`);
-    alert('d')
 
     if (credential.algorithm === 'ES256') {
-    alert('e')
 
       const { r, s } = decodeDER(signature);
 
@@ -186,8 +182,6 @@ export default function usePasskey() {
         clientDataSuffix,
       };
     } else if (credential.algorithm === 'RS256') {
-    alert('f')
-
       return {
         messageHash: userOpHash,
         publicKey: credential.publicKey,
