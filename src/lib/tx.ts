@@ -22,9 +22,11 @@ export const initBundler = (bundlerUrl: string) => {
 };
 
 export const executeTransaction = async (userOp: any, chainConfig: any) => {
+  alert('a')
   if (!soulWallet || currentChainId !== chainConfig.chainId) {
     initSoulWallet(chainConfig);
   }
+  alert('b')
 
   if (currentBundlerUrl !== chainConfig.bundlerUrl) {
     initBundler(chainConfig.bundlerUrl);
@@ -32,6 +34,7 @@ export const executeTransaction = async (userOp: any, chainConfig: any) => {
 
   printUserOp(userOp);
   return new Promise(async (resolve, reject) => {
+    alert('c')
     const ret = await soulWallet.sendUserOperation(userOp);
 
     if (ret.isErr()) {

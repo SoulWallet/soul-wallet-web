@@ -68,7 +68,7 @@ export default function useWallet() {
       initialGuardianSafePeriod: toHex(noGuardian.initialGuardianSafePeriod),
     };
     // save slot info to api
-    const res:any = await api.account.create({
+    const res: any = await api.account.create({
       address,
       chainID: selectedChainId,
       name: walletName,
@@ -79,12 +79,12 @@ export default function useWallet() {
       invitationCode,
     });
 
-    if(res.code !== 200){
+    if (res.code !== 200) {
       toast({
         title: 'Create wallet failed',
         description: res.msg,
         status: 'error',
-      })
+      });
       throw new Error('Create wallet failed');
     }
 
@@ -207,8 +207,10 @@ export default function useWallet() {
   };
 
   const getPasskeySignature = async (packedHash: string, validationData: string) => {
+    alert(1);
     const selectedCredential: any = getSelectedCredential();
     const signatureData: any = await signByPasskey(selectedCredential, packedHash);
+    alert(2);
 
     console.log('packUserOp256Signature params:', signatureData, validationData);
     const packedSignatureRet =
@@ -225,6 +227,7 @@ export default function useWallet() {
               validationData,
             )
           : null;
+    alert(3);
 
     if (!packedSignatureRet) {
       throw new Error('algorithm not supported');
@@ -233,6 +236,7 @@ export default function useWallet() {
     if (packedSignatureRet.isErr()) {
       throw new Error(packedSignatureRet.ERR.message);
     }
+    alert(5);
 
     return packedSignatureRet.OK;
   };
@@ -242,20 +246,20 @@ export default function useWallet() {
       await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, selectedKeyType)
     ).OK;
 
-    const res:any = await api.sponsor.check(
+    const res: any = await api.sponsor.check(
       selectedChainId,
       chainConfig.contracts.entryPoint,
       JSON.parse(UserOpUtils.userOperationToJSON(userOp)),
     );
 
-    alert(res.code)
+    alert(res.code);
 
-    if(res.code !== 200){
+    if (res.code !== 200) {
       toast({
         title: 'Sponsor check failed',
         description: res.msg,
         status: 'error',
-      })
+      });
       throw new Error('Sponsor check failed');
     }
 
@@ -266,22 +270,15 @@ export default function useWallet() {
       };
     }
 
-    alert(1)
-
     const validAfter = Math.floor(Date.now() / 1000 - 300);
     const validUntil = validAfter + 3600;
 
     const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
 
-    alert(2)
-
-
     if (packedUserOpHashRet.isErr()) {
       throw new Error(packedUserOpHashRet.ERR.message);
     }
     const packedUserOpHash = packedUserOpHashRet.OK;
-
-    alert(3)
 
     userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
 
