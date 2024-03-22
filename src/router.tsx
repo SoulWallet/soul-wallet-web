@@ -20,6 +20,10 @@ export const router = createBrowserRouter([
         children: [
           { path: 'dashboard', element: <Dashboard /> },
           { path: 'intro', element: <Intro /> },
+          {
+            path: '/',
+            element: <Navigate to="/dashboard" replace />,
+          },
         ],
       },
       {
@@ -41,10 +45,6 @@ export const router = createBrowserRouter([
       {
         path: '/landing',
         element: <Landing />,
-      },
-      {
-        path: '/',
-        element: <Navigate to="/dashboard" replace />,
       },
     ],
   },
