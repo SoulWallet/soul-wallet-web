@@ -8,6 +8,7 @@ import {
   arrayBufferToHex,
 } from '@/lib/tools';
 import { useTempStore } from '@/store/temp';
+import { useToast } from '@chakra-ui/react';
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
 import { AsnParser } from '@peculiar/asn1-schema';
@@ -24,7 +25,7 @@ const base64Tobase64url = (base64: string) => {
 };
 
 export default function usePasskey() {
-  const { createInfo } = useTempStore();
+  const toast = useToast();
   const decodeDER = (signature: string) => {
     const derSignature = base64ToBuffer(signature);
     const parsedSignature = AsnParser.parse(derSignature, ECDSASigValue);
@@ -124,13 +125,22 @@ export default function usePasskey() {
     };
 
     // backup credential info
-    await api.backup.publicBackupCredentialId({
+    const res:any = await api.backup.publicBackupCredentialId({
       credentialID: credentialKey.id,
       data: JSON.stringify({
         publicKey: credentialKey.publicKey,
         algorithm: credentialKey.algorithm,
       }),
     });
+
+    if(res.code !== 200){
+      toast({
+        title: 'Failed to backup credential',
+        description: res.msg,
+        status: 'error',
+      })
+      throw new Error('Failed to backup credential');
+    }
 
     return credentialKey;
   };
