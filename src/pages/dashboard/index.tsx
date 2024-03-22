@@ -237,17 +237,17 @@ export default function Dashboard() {
             <Box as={Link} to="/details" display="flex" justifyContent="space-between" alignItems="center">
               <Box display="flex" alignItems="center">
                 <Box marginRight="8px">
-                  <Image src={USDCIcon} />
+                  <Image src={USDCIcon} w="8" h="8" />
                 </Box>
                 <Box>
-                  <Box fontSize="18px" fontWeight="700">USDC on AAVE</Box>
-                  <Box fontSize="14px" fontWeight="400">Arbitrum network</Box>
+                  <Box fontSize="18px" lineHeight={"23px"} fontWeight="700">USDC on AAVE</Box>
+                  <Box fontSize="14px" lineHeight={"1"} fontWeight="400">Arbitrum network</Box>
                 </Box>
               </Box>
               <Box display="flex" alignItems="center">
                 <Box display="flex" flexDirection="column" alignItems="flex-end">
-                  <Box fontSize="18px" fontWeight="700">{sevenDayApy}%</Box>
-                  <Box fontSize="14px" fontWeight="400" textAlign="right">7day average APY</Box>
+                  <Box fontSize="18px" lineHeight={"23px"} fontWeight="700">{sevenDayApy}%</Box>
+                  <Box fontSize="14px" lineHeight={"1"} fontWeight="400" textAlign="right">7day average APY</Box>
                 </Box>
                 <Box marginLeft="10px">
                   <MoreIcon />
