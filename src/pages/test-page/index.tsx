@@ -8,8 +8,8 @@ export default function TestPage() {
 
   const doCreate = async () => {
     try {
-      const credential = await register('wallet');
-      await createWallet(credential, 'wallet', 'TF7-AVF-2PA');
+      const credential = await register('tttttz');
+      await createWallet(credential, 'tttttzf', 'BNX-V2S-31Q');
       alert('success')
     } catch (e: any) {
       alert('error');
