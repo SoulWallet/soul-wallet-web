@@ -24,8 +24,6 @@ const ChainAvatar = ({ avatar }: any) => (
 export default function ConnectDapp({ onSwitch, targetChainId }: any) {
   const { selectedAddressItem } = useConfig();
   const { selectedChainId, setSelectedChainId } = useChainStore();
-  const { addressList, setSelectedAddress } = useAddressStore();
-  const { getAddressName } = useSettingStore();
   const { address } = selectedAddressItem;
   const [errorType, setErrorType] = useState(0);
   const { navigate } = useBrowser();
@@ -82,7 +80,6 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
       </Box>
       <InfoWrap>
         <InfoItem>
-          <Text>{getAddressName(address)}:</Text>
           <Text>
             <Menu placement="bottom-end">
               <MenuButton>

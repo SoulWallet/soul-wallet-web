@@ -70,8 +70,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const [activeOperation, setActiveOperation] = useState<UserOperation>();
   const [sponsor, setSponsor] = useState<any>(null);
   const { selectedChainId } = useChainStore();
-  const { toggleActivatedChain, selectedAddress } = useAddressStore();
-  const { setFinishedSteps } = useSettingStore();
+  const { selectedAddress } = useAddressStore();
   const { slotInfo } = useSlotStore();
   const [useSponsor, setUseSponsor] = useState(true);
   const { getPrefund } = useQuery();
@@ -129,12 +128,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
 
       const receipt = await signAndSend(userOp);
 
-      // IMPORTANT TODO, get these params from receipt
-      // if first tx is completed, then it's activated
-      /* if (!checkActivated()) {
-       *   toggleActivatedChain(userOp.sender, selectedChainId);
-       * } */
-
       toast({
         title: 'Transaction success.',
         status: 'success',
@@ -166,17 +159,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
     }
     if (safeUrl.includes('staging.aave.com')) {
       steps = [4];
-    }
-
-    if (steps.length > 0) {
-      if (slotInfo.slot) {
-        const res = await api.operation.finishStep({
-          slot: slotInfo.slot,
-          steps,
-        });
-
-        setFinishedSteps(res.data.finishedSteps);
-      }
     }
   };
 

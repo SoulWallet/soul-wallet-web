@@ -16,25 +16,9 @@ export default function useTools() {
   const { clearAddresses } = useAddressStore();
   const { clearBalance } = useBalanceStore();
   const { clearHistory } = useHistoryStore();
-  const { clearChainStore, selectedChainId } = useChainStore();
-  const { clearSlotStore, slotInfo } = useSlotStore();
+  const { clearChainStore } = useChainStore();
+  const { clearSlotStore } = useSlotStore();
   const { clearTempStore } = useTempStore();
-  const { getAddressName, saveAddressName } = useSettingStore();
-
-  const getInterest =async() => {
-    const res  = await api.token.interest({
-      chainID: selectedChainId,
-      // address: 
-    })
-  }
-
-  const getWalletName = () => {
-    return getAddressName(slotInfo.slot);
-  };
-
-  const setWalletName = (name: string) => {
-    saveAddressName(slotInfo.slot, name);
-  };
 
   const clearLogData = () => {
     clearAddresses();
@@ -117,7 +101,5 @@ export default function useTools() {
     generateJsonName,
     doCopy,
     clearLogData,
-    getWalletName,
-    setWalletName,
   };
 }
