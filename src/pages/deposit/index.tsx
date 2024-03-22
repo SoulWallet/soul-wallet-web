@@ -6,6 +6,7 @@ import CheckDeposit from './CheckDeposit'
 import MakeTransfer from './MakeTransfer'
 import SelectNetwork from './SelectNetwork'
 import SendToken from './SendToken'
+import { motion } from 'framer-motion';
 
 export default function Deposit() {
   const navigate = useNavigate();
