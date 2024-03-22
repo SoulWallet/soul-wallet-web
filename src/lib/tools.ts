@@ -17,13 +17,30 @@ import WalletConnectIcon from '@/assets/wallets/wallet-connect.png';
 import InjectedIcon from '@/assets/wallets/injected.svg';
 import UnknownIcon from '@/assets/wallets/unknown.svg';
 
-export const shareFile = (file: any) => {
-  const fileToShare = new File([file], "receive-qrcode.png", { type: "image/png" });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    alert('can share');
+export const dataURItoBlob = (dataURI: string) => {
+  // Split the dataURI into parts
+  const parts = dataURI.split(';base64,');
+  if (parts.length !== 2) {
+    throw new Error('Invalid dataURI format');
+  }
+
+  const contentType = parts[0].split(':')[1];
+  const decodedData = window.atob(parts[1]);
+  const buffer = new ArrayBuffer(decodedData.length);
+  const view = new Uint8Array(buffer);
+
+  for (let i = 0; i < decodedData.length; i++) {
+    view[i] = decodedData.charCodeAt(i);
+  }
+
+  return new Blob([buffer], { type: contentType });
+};
+
+export const shareFile = (file: string) => {
+  const fileBlob = dataURItoBlob(file);
+  const fileToShare = new File([fileBlob], 'receive-qrcode.png', { type: fileBlob.type });
+  if (navigator.canShare && navigator.canShare({ files: [fileToShare] })) {
     navigator.share({ files: [fileToShare], title: 'Receive code' });
-  }else{
-    alert('cannot share');
   }
 };
 
