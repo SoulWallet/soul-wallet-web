@@ -145,18 +145,27 @@ export default function usePasskey() {
     return credentialKey;
   };
 
-  const signByPasskey = async (credential: any, userOpHash: string) => {
+  const signByPasskey = async (credential: any, _userOpHash: string) => {
+    // const userOpHashForBytes = userOpHash.startsWith('0x') ? userOpHash.substr(2) : userOpHash;
+    // var byteArray = new Uint8Array(32);
+    // for (var i = 0; i < 64; i += 2) {
+    //   byteArray[i / 2] = parseInt(userOpHashForBytes.substr(i, 2), 16);
+    // }
+    // let challenge = base64Tobase64url(btoa(String.fromCharCode(...byteArray)));
+    const userOpHash = ethers.ZeroHash;
     const userOpHashForBytes = userOpHash.startsWith('0x') ? userOpHash.substr(2) : userOpHash;
+
     var byteArray = new Uint8Array(32);
     for (var i = 0; i < 64; i += 2) {
       byteArray[i / 2] = parseInt(userOpHashForBytes.substr(i, 2), 16);
     }
     let challenge = base64Tobase64url(btoa(String.fromCharCode(...byteArray)));
-    alert(String(credential.id))
-    alert(challenge);
+
+
+
     console.log('Authenticating with credential id', credential.id);
     let authentication = await client.authenticate([
-      // credential.id
+      credential.id
     ], challenge, {
       userVerification: 'required',
       // authenticatorType: 'both',
