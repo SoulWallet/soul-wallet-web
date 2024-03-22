@@ -22,37 +22,31 @@ export const router = createBrowserRouter([
           { path: 'dashboard', element: <Dashboard /> },
           { path: 'intro', element: <Intro /> },
           {
+            path: '/details',
+            element: <DashboardDetails />,
+          },
+          {
+            path: '/create',
+            element: <Create />,
+          },
+          {
+            path: '/deposit',
+            element: <Deposit />,
+          },
+          {
+            path: '/withdraw',
+            element: <Withdraw />,
+          },
+          {
+            path: '/landing',
+            element: <Landing />,
+          },
+          {
             path: '/',
             element: <Navigate to="/dashboard" replace />,
           },
         ],
       },
-      {
-        path: '/details',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <DashboardDetails /> }],
-      },
-      {
-        path: '/create',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <Create /> }],
-      },
-      {
-        path: '/deposit',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <Deposit /> }],
-      },
-      {
-        path: '/withdraw',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <Withdraw /> }],
-      },
-      {
-        path: '/landing',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <Landing /> }],
-      },
-
     ],
   },
 ]);
