@@ -70,6 +70,11 @@ export default function Create() {
       await createWallet(credential, username, invitationCode);
       navigate('/intro')
     } catch (error: any) {
+      toast({
+        title: 'Failed to create wallet',
+        description: error.message,
+        status: 'error',
+      })
       setCreating(false)
       console.error('onCreateWallet failed', error)
     }
