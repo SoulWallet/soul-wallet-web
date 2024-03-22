@@ -207,8 +207,8 @@ export default function useWallet() {
   };
 
   const getPasskeySignature = async (packedHash: string, validationData: string) => {
-    alert(1);
     const selectedCredential: any = getSelectedCredential();
+    alert(JSON.stringify(selectedCredential));
     const signatureData: any = await signByPasskey(selectedCredential, packedHash);
     alert(2);
 
@@ -227,7 +227,6 @@ export default function useWallet() {
               validationData,
             )
           : null;
-    alert(3);
 
     if (!packedSignatureRet) {
       throw new Error('algorithm not supported');
@@ -236,7 +235,6 @@ export default function useWallet() {
     if (packedSignatureRet.isErr()) {
       throw new Error(packedSignatureRet.ERR.message);
     }
-    alert(5);
 
     return packedSignatureRet.OK;
   };
@@ -251,8 +249,6 @@ export default function useWallet() {
       chainConfig.contracts.entryPoint,
       JSON.parse(UserOpUtils.userOperationToJSON(userOp)),
     );
-
-    alert(res.code);
 
     if (res.code !== 200) {
       toast({
