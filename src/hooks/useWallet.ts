@@ -98,6 +98,15 @@ export default function useWallet() {
       ownerKey: credential.publicKey,
     });
 
+    if (!res || !res.data || !res.data.length) {
+      toast({
+        title: 'No account found',
+        description: 'Please sign in with another passkey or create free account',
+        status: 'error',
+      });
+      return;
+    }
+
     // consider first item only for now
     const item = res.data[0];
 

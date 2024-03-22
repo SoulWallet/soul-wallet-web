@@ -46,9 +46,7 @@ const getFontBottomMargin = (value: any) => {
 }
 
 export default function Dashboard() {
-  const navigate = useNavigate();
   const { totalUsdValue, getTokenBalance, sevenDayApy, oneDayInterest, } = useBalanceStore();
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const { historyList } = useHistoryStore();
   const [modalMargin, setModalMargin] = useState(494)
   const [modalHeight, setModalHeight] = useState(window.innerHeight - 494)

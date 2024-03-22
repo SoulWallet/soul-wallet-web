@@ -35,10 +35,16 @@ export default function Withdraw() {
       return;
     }
 
-    setIsTransfering(true);
-    await withdrawAssets(withdrawAmount, sendTo);
-    setIsTransfering(false);
-    setIsCompleted(true);
+    try{
+      setIsTransfering(true);
+      await withdrawAssets(withdrawAmount, sendTo);
+      setIsTransfering(false);
+      setIsCompleted(true);
+    }catch(e){
+      console.log('cauth error', e);
+      setIsTransfering(false);
+      setIsCompleted(false);
+    }
   };
 
   const onNext = useCallback(() => {
