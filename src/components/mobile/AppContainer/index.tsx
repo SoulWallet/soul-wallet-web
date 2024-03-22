@@ -39,6 +39,8 @@ export function Header({ openMenu, username, ...props }: any) {
 export default function AppContainer() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { logoutWallet } = useWallet();
+  const innerHeight = window.innerHeight
+  const marginHeight = innerHeight - 250
 
   const doLogout = async () => {
     logoutWallet();
@@ -76,7 +78,7 @@ export default function AppContainer() {
           height="250px"
           overflow="auto"
           mb="0"
-          marginTop="calc(100vh - 250px)"
+          marginTop={`${marginHeight}px`}
         >
           <ModalCloseButton />
           <ModalBody

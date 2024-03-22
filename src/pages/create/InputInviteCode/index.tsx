@@ -7,6 +7,9 @@ export default function InputInviteCode({value, onChange, codeStatus, onNext}: a
   const disabled = !value || codeStatus !== 0
 
   console.log('code status', codeStatus);
+  const innerHeight = window.innerHeight
+  const marginHeight = innerHeight - 428
+  console.log('innerHeight', innerHeight)
 
   return (
     <Box width="100%" height="100%" padding="30px" paddingTop="138px">
@@ -40,15 +43,14 @@ export default function InputInviteCode({value, onChange, codeStatus, onNext}: a
         motionPreset="slideInBottom"
         blockScrollOnMount={true}
       >
-        <ModalOverlay />
+        <ModalOverlay height="100vh" />
         <ModalContent
           borderRadius="20px 20px 0 0"
           maxW="100vw"
-          height="50vh"
+          height="428px"
           overflow="auto"
           mb="0"
-          marginTop="50vh"
-
+          marginTop={`${marginHeight}px`}
         >
           <ModalCloseButton />
           <ModalBody

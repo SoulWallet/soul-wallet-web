@@ -74,6 +74,9 @@ export default function Intro() {
   const smFontSize = getSmallFontSize(valueRight)
   const fontBottomMargin = getFontBottomMargin(valueLeft)
 
+  const innerHeight = window.innerHeight
+  const marginHeight = innerHeight - 428
+
   return (
     <Box
       width="100%"
@@ -330,10 +333,10 @@ export default function Intro() {
         <ModalContent
           borderRadius="20px 20px 0 0"
           maxW="100vw"
-          height="50vh"
+          height="428px"
           overflow="auto"
           mb="0"
-          marginTop="50vh"
+          marginTop={`${marginHeight}px`}
 
         >
           <ModalCloseButton />
@@ -352,7 +355,7 @@ export default function Intro() {
               marginBottom="30px"
               mt="24px"
             />
-            <Box fontSize="24px" fontWeight="700" marginBottom="14px">
+            <Box fontSize="24px" width="100%" textAlign="center" fontWeight="700" marginBottom="14px">
               Auto-saving
             </Box>
             <Box
@@ -360,7 +363,7 @@ export default function Intro() {
               textAlign="center"
               marginBottom="28px"
             >
-              Your assets will be auto saved into AAVE protocol. 
+              Your assets will be auto saved into AAVE protocol.
               You can transfer anytime after deposited.
             </Box>
             <Box width="100%">
