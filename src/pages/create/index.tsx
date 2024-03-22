@@ -23,6 +23,13 @@ export default function Create() {
   const [credential, setCredential] = useState<any>({})
   const [nameStatus, setNameStatus] = useState(-1);
   const [codeStatus, setCodeStatus] = useState(-1);
+  const [timer, setTimer] = useState<any>();
+
+  const debounce = (fn: Function, delay: number) => {
+    clearTimeout(timer);
+    setTimer(setTimeout(fn, delay))
+  }
+
   const onPrev = useCallback(() => {
     if (step > 1) {
       setStep(step - 1)
@@ -82,14 +89,14 @@ export default function Create() {
     if(!username){
       return
     }
-    checkUsername();
+    debounce(checkUsername, 1000)
   }, [username])
 
   useEffect(()=>{
     if(!invitationCode){
       return
     }
-    checkInviteCode();
+    debounce(checkInviteCode, 1000);
   }, [invitationCode])
 
   const renderStep = () => {

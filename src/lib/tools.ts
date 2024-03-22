@@ -20,7 +20,10 @@ import UnknownIcon from '@/assets/wallets/unknown.svg';
 export const shareFile = (file: any) => {
   const fileToShare = new File([file], "receive-qrcode.png", { type: "image/png" });
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    alert('can share');
     navigator.share({ files: [fileToShare], title: 'Receive code' });
+  }else{
+    alert('cannot share');
   }
 };
 
