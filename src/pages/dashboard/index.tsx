@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { Box, Image, Flex, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
@@ -49,6 +50,9 @@ export default function Dashboard() {
   const { totalUsdValue, getTokenBalance, sevenDayApy, oneDayInterest, } = useBalanceStore();
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { historyList } = useHistoryStore();
+  const [modalMargin, setModalMargin] = useState(494)
+  const [modalHeight, setModalHeight] = useState(window.innerHeight - 494)
+  const [modalPosition, setModalPosition] = useState('bottom')
 
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
   const hasBalance = Number(totalUsdValue) > 0;
@@ -59,6 +63,19 @@ export default function Dashboard() {
   const fontSize = getFontSize(valueLeft)
   const smFontSize = getSmallFontSize(valueRight)
   const fontBottomMargin = getFontBottomMargin(valueLeft)
+
+  const changeModalPosition = useCallback(() => {
+    console.log('changeModalPosition')
+    if (modalPosition === 'bottom') {
+      setModalMargin(64)
+      setModalHeight(window.innerHeight - 64)
+      setModalPosition('top')
+    } else {
+      setModalMargin(494)
+      setModalHeight(window.innerHeight - 494)
+      setModalPosition('bottom')
+    }
+  }, [modalPosition])
 
   return (
     <Box>
@@ -89,17 +106,19 @@ export default function Dashboard() {
                 >
                   {valueLeft}
                 </Box>
-                {Number(totalUsdValue) > 0 && <Box
-                                                fontFamily="Nunito"
-                                                fontSize={smFontSize}
-                                                lineHeight={"1"}
-                                                fontWeight="800"
-                                                marginTop={fontBottomMargin}
-                  // marginLeft="10px"
-                                                color="#939393"
-                                              >
-                  .{valueRight}
-                </Box> }
+                {Number(totalUsdValue) > 0 && (
+                  <Box
+                    fontFamily="Nunito"
+                    fontSize={smFontSize}
+                    lineHeight={"1"}
+                    fontWeight="800"
+                    marginTop={fontBottomMargin}
+                    // marginLeft="10px"
+                    color="#939393"
+                  >
+                    .{valueRight}
+                  </Box>
+                )}
               </Box>
               <Box
                 color="#0CB700"
@@ -193,67 +212,85 @@ export default function Dashboard() {
           </Box>
         </Box>
       </Box>
-      {historyList && historyList.length > 0 &&  <Box
-                                                   position="fixed"
-                                                   height="300px"
-                                                   bottom="0"
-                                                   width="100%"
-                                                   background="white"
-                                                   borderRadius="20px 20px 0 0"
-                                                 >
-        <Box padding="30px" position="relative">
+      {historyList && historyList.length > 0 && (
+        <Box
+          position="fixed"
+          height={modalHeight}
+          top="0"
+          left="0"
+          width="100%"
+          height="100vh"
+          pointerEvents="none"
+          paddingTop={`${modalMargin}px`}
+          transition="0.6s all ease"
+        >
           <Box
-            position="absolute"
-            height="20px"
-            top="0"
-            left="0"
-            width="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
+            maxWidth="430px"
+            margin="0 auto"
+            background="white"
+            borderRadius="20px 20px 0 0"
+            height="100%"
+            overflowY="scroll"
+            pointerEvents="all"
           >
-            <Box
-              width="30px"
-              height="4px"
-              borderRadius="4px"
-              background="#CCCDD4"
-            />
-          </Box>
-          <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
-          <Flex gap="36px" flexDir="column" width="100%">
-            {historyList.slice(0, 2).map(item =>   <Box
-                                                     display="flex"
-                                                     alignItems="center"
-                                                   >
-              <Box marginRight="12px">
-                {item.action === 'Deposit' ? <ActivityDepositIcon /> :  <ActivityTransferIcon />}
-              </Box>
-              <Box>
+            <Box padding="30px" position="relative">
+              <Box
+                position="absolute"
+                height="20px"
+                top="0"
+                left="0"
+                width="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                onClick={changeModalPosition}
+              >
                 <Box
-                  display="flex"
-                  alignItems="center"
-                >
-                  <Box fontSize="14px" fontWeight="800">{item.action}</Box>
-                  {/* <Box
-                      fontSize="12px"
-                      background="#F1F1F1"
-                      color="rgba(0, 0, 0, 0.60)"
-                      padding="0 8px"
-                      borderRadius="4px"
-                      marginLeft="8px"
+                  width="30px"
+                  height="4px"
+                  borderRadius="4px"
+                  background="#CCCDD4"
+                />
+              </Box>
+              <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
+              <Flex gap="36px" flexDir="column" width="100%">
+                {historyList.slice(0, 2).map(item => (
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Box marginRight="12px">
+                      {item.action === 'Deposit' ? <ActivityDepositIcon /> :  <ActivityTransferIcon />}
+                    </Box>
+                    <Box>
+                      <Box
+                        display="flex"
+                        alignItems="center"
                       >
-                      Pending
-                      </Box> */}
-                </Box>
-                <Box fontSize="12px">{item.dateFormatted}</Box>
-              </Box>
-              <Box marginLeft="auto">
-                <Box fontSize="14px" fontWeight="700">{item.amountFormatted} USDC</Box>
-              </Box>
-            </Box>)}
-          </Flex>
+                        <Box fontSize="14px" fontWeight="800">{item.action}</Box>
+                        {/* <Box
+                            fontSize="12px"
+                            background="#F1F1F1"
+                            color="rgba(0, 0, 0, 0.60)"
+                            padding="0 8px"
+                            borderRadius="4px"
+                            marginLeft="8px"
+                            >
+                            Pending
+                            </Box> */}
+                      </Box>
+                      <Box fontSize="12px">{item.dateFormatted}</Box>
+                    </Box>
+                    <Box marginLeft="auto">
+                      <Box fontSize="14px" fontWeight="700">{item.amountFormatted} USDC</Box>
+                    </Box>
+                  </Box>
+                ))}
+              </Flex>
+            </Box>
+          </Box>
         </Box>
-      </Box>}
+      )}
     </Box>
   )
 }
