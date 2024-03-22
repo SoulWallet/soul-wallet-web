@@ -15,6 +15,9 @@ export default function Deposit() {
   const [checked1, setChecked1] = useState(false)
   const [checked2, setChecked2] = useState(false)
   const [checked3, setChecked3] = useState(false)
+  const innerHeight = window.innerHeight
+  const contentHeight = innerHeight - 64
+
   const onPrev = useCallback(() => {
     console.log('prev')
 
@@ -33,7 +36,7 @@ export default function Deposit() {
   const isAllChecked = checked1 && checked2 && checked3
 
   return (
-    <Box width="100%" height="100%">
+    <Box width="100%" height={innerHeight}>
       <Header
         title="Deposit"
         showBackButton
