@@ -32,10 +32,12 @@ import AAVEIcon from '@/assets/mobile/aave.png'
 import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
 import ReceiveCode from '@/components/ReceiveCode';
+import { shareFile } from '@/lib/tools';
 
 export default function CheckDeposit({ onPrev, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { selectedAddress } = useAddressStore();
+  const [qrcodeSrc, setQrcodeSrc] = useState('');
   const { doCopy } = useTools();
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
@@ -182,10 +184,10 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
           {/* <ModalCloseButton /> */}
           <ModalBody>
             <Box marginBottom="24px">
-              <ReceiveCode address={selectedAddress}  />
+              <ReceiveCode address={selectedAddress} onSet={setQrcodeSrc}  />
             </Box>
-            <Box>
-              <Button size="xl" type="blue" width="224px">
+            <Box textAlign={'center'}>
+              <Button size="xl" type="blue" width="224px" onClick={()=> shareFile(qrcodeSrc)}>
                 Share
               </Button>
             </Box>

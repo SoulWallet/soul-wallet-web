@@ -9,6 +9,7 @@ import ActivityDepositIcon from '@/components/Icons/mobile/Activity/Deposit'
 import ActivityTransferIcon from '@/components/Icons/mobile/Activity/Transfer'
 import { useBalanceStore } from '@/store/balance';
 import { useHistoryStore } from '@/store/history';
+import { motion } from 'framer-motion';
 
 const getFontSize = (value: any) => {
   const length = value ? String(value).length : 0

@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import WalletWrapper from './wrapper/WalletWrapper';
-import PublicWrapper from './wrapper/PublicWrapper';
 import Dashboard from '@/pages/dashboard';
 import Create from '@/pages/create';
 import Deposit from '@/pages/deposit';
@@ -21,38 +20,32 @@ export const router = createBrowserRouter([
         children: [
           { path: 'dashboard', element: <Dashboard /> },
           { path: 'intro', element: <Intro /> },
-          {
-            path: '/',
-            element: <Navigate to="/dashboard" replace />,
-          },
         ],
       },
       {
         path: '/details',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <DashboardDetails /> }],
+        element: <DashboardDetails />,
       },
       {
         path: '/create',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <Create /> }],
+        element: <Create />,
       },
       {
         path: '/deposit',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <Deposit /> }],
+        element: <Deposit />,
       },
       {
         path: '/withdraw',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <Withdraw /> }],
+        element: <Withdraw />,
       },
       {
         path: '/landing',
-        element: <PublicWrapper />,
-        children: [{ path: '', element: <Landing /> }],
+        element: <Landing />,
       },
-
+      {
+        path: '/',
+        element: <Navigate to="/dashboard" replace />,
+      },
     ],
   },
 ]);

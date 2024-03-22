@@ -11,13 +11,18 @@ import IconSend from '@/assets/activities/send.svg';
 import IconMint from '@/assets/activities/mint.svg';
 import IconApprove from '@/assets/activities/approve.svg';
 import IconTrade from '@/assets/activities/trade.svg';
-// import IconReceive from '@/assets/activities/receive.svg';
 import IconContract from '@/assets/activities/contract.svg';
-
 import MetamaskIcon from '@/assets/wallets/metamask.png';
 import WalletConnectIcon from '@/assets/wallets/wallet-connect.png';
 import InjectedIcon from '@/assets/wallets/injected.svg';
 import UnknownIcon from '@/assets/wallets/unknown.svg';
+
+export const shareFile = (file: any) => {
+  const fileToShare = new File([file], "receive-qrcode.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [fileToShare], title: 'Receive code' });
+  }
+};
 
 export const getWalletIcon = (walletId: string) => {
   switch (walletId) {

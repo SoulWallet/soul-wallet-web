@@ -1,19 +1,10 @@
 import { Box, Flex, Image, Button, Text } from '@chakra-ui/react';
-import ChainSelect from '../ChainSelect';
-import PageSelect from '../PageSelect';
 import IconLogo from '@/assets/logo-all-v3.svg';
-import IconGuide from '@/assets/icons/guide.svg';
 import IconExit from '@/assets/icons/exit.svg';
 import { Link } from 'react-router-dom';
-import { AccountSelectFull } from '../AccountSelect';
-import useWalletContext from '@/context/hooks/useWalletContext';
-import useBrowser from '@/hooks/useBrowser';
-import useTools from '@/hooks/useTools';
 import { headerHeight } from '@/config';
 
 export default function Header() {
-  // const {showLogout} = useWalletContext();
-
   return (
     <Flex
       as="header"
@@ -28,8 +19,6 @@ export default function Header() {
         <Image src={IconLogo} h={{base: "24px", sm: "32px", md: "44px"}} />
       </Link>
       <Flex gap="2" align={'center'}>
-        <AccountSelectFull />
-        {/* <ChainSelect /> */}
         <Flex
           // onClick={() => showLogout()}
           cursor={'pointer'}

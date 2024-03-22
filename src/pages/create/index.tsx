@@ -26,6 +26,8 @@ export default function Create() {
   const onPrev = useCallback(() => {
     if (step > 1) {
       setStep(step - 1)
+    }else{
+      navigate('/landing')
     }
   }, [step])
 

@@ -32,7 +32,6 @@ const ErrorHint = ({ label }: { label: string }) => {
 export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
   const [amount, setAmount] = useState<string>('');
   const { getTokenBalance } = useBalanceStore();
-  const { setFinishedSteps } = useSettingStore();
   const [sendToken, setSendToken] = useState(tokenAddress);
   const [receiverAddress, setReceiverAddress] = useState<string>('');
   const { slotInfo } = useSlotStore();
@@ -129,16 +128,6 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
     } else {
       await sendErc20(sendToken, trimedAddress, amount, selectedToken.decimals);
     }
-
-    if (slotInfo.slot) {
-      const res = await api.operation.finishStep({
-        slot: slotInfo.slot,
-        steps: [1],
-      });
-
-      setFinishedSteps(res.data.finishedSteps);
-    }
-
     resetState();
 
     onSent();
