@@ -155,7 +155,9 @@ export default function usePasskey() {
     alert(String(credential.id))
     alert(challenge);
     console.log('Authenticating with credential id', credential.id);
-    let authentication = await client.authenticate([credential.id], challenge, {
+    let authentication = await client.authenticate([
+      // credential.id
+    ], challenge, {
       userVerification: 'required',
       // authenticatorType: 'both',
     });
