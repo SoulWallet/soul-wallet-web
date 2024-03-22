@@ -20,7 +20,7 @@ export default function FindRoute({ children }: { children: ReactNode }) {
   const findRoute = async () => {
     const storageVersion = storage.getItem('storeVersion');
 
-    const allowBypass = location.pathname.includes('create') || location.pathname.includes('landing');
+    const allowBypass = location.pathname.includes('create') || location.pathname.includes('landing') || location.pathname.includes('test');
 
     if (storeVersion !== storageVersion) {
       storage.setItem('storeVersion', storeVersion);
