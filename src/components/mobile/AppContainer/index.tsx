@@ -23,12 +23,10 @@ export function Header({ openMenu, username, ...props }: any) {
       position="relative"
       {...props}
     >
-      <Box display="flex" alignItems="center" justifyContent="center" height="36px">
-        <Box marginRight="4px">
+      <Box display="flex" gap="2" alignItems="center" justifyContent="center">
           <AddressIcon address={selectedAddress} width={24} />
           {/* <ProfileIcon /> */}
-          </Box>
-        <Box fontSize="16px" lineHeight={"20px"} fontWeight="800" marginRight="4px">{walletName}</Box>
+        <Box fontSize="16px" lineHeight={"20px"} fontWeight="800">{walletName}</Box>
         {/* <Box fontSize="16px" fontWeight="400">{`(${toShortAddress(selectedAddress)})`}</Box> */}
       </Box>
       <Box fontSize="18px" fontWeight="700" color="black" lineHeight="24px">
