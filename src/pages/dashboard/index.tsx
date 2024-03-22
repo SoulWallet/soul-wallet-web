@@ -77,9 +77,9 @@ export default function Dashboard() {
     }
     const currentTouch = e.touches[0].clientY;
 
-    if (touchStart > currentTouch) {
+    if (touchStart > currentTouch + 20) {
       changeModalPosition('top')
-    } else if (touchStart < currentTouch) {
+    } else if (touchStart < currentTouch - 20) {
       changeModalPosition('bottom')
     }
   };
