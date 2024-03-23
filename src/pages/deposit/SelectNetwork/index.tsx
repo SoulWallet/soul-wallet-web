@@ -17,7 +17,7 @@ export default function MakeTransfer({ onPrev, onNext }: any) {
   return (
     <Box width="100%" height="100%" position="relative">
       <Box padding="30px" paddingBottom="144px">
-        <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="63">
+        <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="20px">
           Select Arbitrum network
         </Box>
         <Box fontSize="14px" fontWeight="500" marginTop="18px" textAlign="center" minHeight="80px">
