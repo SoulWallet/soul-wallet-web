@@ -10,11 +10,13 @@ import USDCIcon from '@/assets/mobile/usdc.png'
 import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
 import ARBIcon from '@/assets/mobile/arb.png'
 
-export default function MakeTransfer({ onPrev, onNext }: any) {
+export default function SelectNetwork({ onPrev, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const innerHeight = window.innerHeight
+  const contentHeight = innerHeight - 64
 
   return (
-    <Box width="100%" height="100%" position="relative">
+    <Box width="100%" height={contentHeight} position="relative" overflowY="scroll">
       <Box padding="30px" paddingBottom="144px">
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="20px">
           Select Arbitrum network

@@ -59,8 +59,8 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          marginTop={isAllChecked ? '33px' : '122px'}
-          marginBottom={isAllChecked ? '37px' : '95px'}
+          marginTop={isAllChecked ? '33px' : '75px'}
+          marginBottom={isAllChecked ? '37px' : '55px'}
           transition="0.6s all ease"
         >
           <Box
