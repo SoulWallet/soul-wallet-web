@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link as RLink, useNavigate } from 'react-router-dom';
 import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, Link, Flex, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
-import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import CheckIcon from '@/components/Icons/mobile/Check'
 import WithdrawIcon from '@/components/Icons/mobile/Withdraw'

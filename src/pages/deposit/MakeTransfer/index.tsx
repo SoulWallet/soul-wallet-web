@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Box, Image, Checkbox, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
-import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
 import ScanIcon from '@/components/Icons/mobile/Scan'
 import NextIcon from '@/components/Icons/mobile/Next'

@@ -32,7 +32,6 @@ export default function Landing() {
         showLogo
         title=""
         height="60px"
-        marginTop="0"
         background="transparent"
       />
       <Box width="100%" padding="30px" display="flex" alignItems="center" flexDirection="column">

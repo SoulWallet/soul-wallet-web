@@ -38,7 +38,7 @@ export default function Review({ onPrev, withdrawAmount, sendTo, isTransfering, 
 
   return (
     <Box width="100%" height="100%">
-      <Header title="Review" showBackButton onBack={onPrev} marginTop="18px" />
+      <Header title="Review" showBackButton onBack={onPrev} />
       <Box padding="30px" minHeight="calc(100vh - 62px)">
         {isTransfering && (
           <Box

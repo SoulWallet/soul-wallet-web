@@ -25,7 +25,6 @@ export default function Details() {
     <Box height="100%">
       <Box
         background="#F5F6FA"
-        paddingTop="18px"
         width="100%"
       >
         <Header
@@ -33,7 +32,6 @@ export default function Details() {
           showBackButton
           onBack={goBack}
           background="#F5F6FA"
-          marginTop="0"
         />
       </Box>
       <Box

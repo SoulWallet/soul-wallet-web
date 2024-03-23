@@ -5,20 +5,22 @@ import Logo from '@/components/Icons/mobile/Logo'
 export default function Header({ title, onBack, showBackButton, showLogo, ...props }: any) {
   return (
     <Box
-      height="44px"
+      height="62px"
       display="flex"
       alignItems="center"
       justifyContent="center"
       background="white"
       position="relative"
+      paddingTop="18px"
       {...props}
     >
       {showLogo && (
         <Box
           position="absolute"
           left="20px"
-          top="calc(50% - 16px)"
+          top="0px"
           cursor="pointer"
+          paddingTop="18px"
         >
           <Logo />
         </Box>
@@ -27,9 +29,14 @@ export default function Header({ title, onBack, showBackButton, showLogo, ...pro
         <Box
           position="absolute"
           left="20px"
-          top="calc(50% - 16px)"
+          top="0px"
           cursor="pointer"
+          paddingTop="18px"
           onClick={onBack}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
         >
           <BackIcon />
         </Box>

@@ -32,7 +32,6 @@ withdrawAmount, onWithdrawAmountChange, sendTo, onSendToChange
         title="Transfer"
         showBackButton
         onBack={onPrev}
-        marginTop="18px"
       />
       <Box padding="30px" minHeight="calc(100vh - 62px)">
         <Box marginTop="46px">

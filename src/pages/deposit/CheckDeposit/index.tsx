@@ -13,7 +13,6 @@ import {
   ModalBody,
   useDisclosure,
 } from '@chakra-ui/react';
-import Header from '@/components/mobile/Header';
 import Button from '@/components/mobile/Button';
 import ScanIcon from '@/components/Icons/mobile/Scan';
 import NextIcon from '@/components/Icons/mobile/Next';
@@ -43,10 +42,15 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
   const [checked2, setChecked2] = useState(false);
   const [checked3, setChecked3] = useState(false);
   const isAllChecked = checked1 && checked2 && checked3;
+  const innerHeight = window.innerHeight
+  const contentHeight = innerHeight - 64
 
   return (
-    <Box width="100%" height="100%" position="relative">
-      <Box padding="30px" marginBottom={isAllChecked ? '120px' : '0px'}>
+    <Box width="100%" height={contentHeight} position="relative" overflowY={isAllChecked ? 'auto' : 'hidden'}>
+      <Box
+        padding="30px"
+        marginBottom={isAllChecked ? '120px' : '0px'}
+      >
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="20px">
           Prior to deposit,<br/> please verify
         </Box>
