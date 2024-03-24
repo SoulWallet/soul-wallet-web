@@ -7,7 +7,6 @@ import {
   parseBase64url,
   arrayBufferToHex,
 } from '@/lib/tools';
-import { useTempStore } from '@/store/temp';
 import { useToast } from '@chakra-ui/react';
 import { client, server } from '@passwordless-id/webauthn';
 import { ECDSASigValue } from '@peculiar/asn1-ecc';
