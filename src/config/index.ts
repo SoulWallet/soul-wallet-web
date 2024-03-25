@@ -91,7 +91,7 @@ export const ensContractAddress = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 
 export const tgLink = 'https://t.me/+XFUHusXFdTYyODQ9'
 
-export const aaveLink = 'https://app.aave.com';
+export const aaveLink = 'https://aave.com';
 
 export default {
   homepage: 'https://www.soulwallet.io',
