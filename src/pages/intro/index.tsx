@@ -1,22 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
 import { Link as RLink, useNavigate } from 'react-router-dom';
-import { Box, Image, Modal, ModalOverlay, ModalContent, ModalHeader, Link, Flex, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Box, Image, Modal, ModalOverlay, ModalContent, Link, Text, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
-import CheckIcon from '@/components/Icons/mobile/Check'
-import WithdrawIcon from '@/components/Icons/mobile/Withdraw'
-import MoreIcon from '@/components/Icons/mobile/More'
 import QuestionIcon from '@/components/Icons/mobile/Question'
 import USDCIcon from '@/assets/tokens/usdc.png'
-import ActivityDepositIcon from '@/components/Icons/mobile/Activity/Deposit'
-import ActivityTransferIcon from '@/components/Icons/mobile/Activity/Transfer'
-import config from '@/config';
-import api from '@/lib/api';
-import { useAddressStore } from '@/store/address';
-import { useChainStore } from '@/store/chain';
 import { useBalanceStore } from '@/store/balance';
-import useWallet from '@/hooks/useWallet';
 import { useHistoryStore } from '@/store/history';
-import { usdcArbPoolReserveId } from '@/config/constants';
 import treasuryIcon from '@/assets/mobile/treasury.png'
 import CoinbaseIcon from '@/assets/mobile/coinbase.png'
 import AAVEIcon from '@/assets/mobile/aave.png'
@@ -58,20 +46,8 @@ const getFontBottomMargin = (value: any) => {
 }
 
 export default function Intro() {
-  const navigate = useNavigate();
-  const { totalUsdValue, getTokenBalance, sevenDayApy, oneDayInterest, } = useBalanceStore();
+  const { sevenDayApy,} = useBalanceStore();
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { historyList } = useHistoryStore();
-
-  const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
-  const hasBalance = Number(totalUsdValue) > 0;
-
-  const valueLeft = totalUsdValue.split('.')[0]
-  const valueRight = totalUsdValue.split('.')[1]
-
-  const fontSize = getFontSize(valueLeft)
-  const smFontSize = getSmallFontSize(valueRight)
-  const fontBottomMargin = getFontBottomMargin(valueLeft)
 
   const innerHeight = window.innerHeight
   const marginHeight = innerHeight - 428

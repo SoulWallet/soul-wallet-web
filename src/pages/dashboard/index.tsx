@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import { Box, Image, Flex, useDisclosure } from '@chakra-ui/react';
+import { useState, useCallback } from 'react'
+import { Link } from 'react-router-dom';
+import { Box, Image, Flex } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import MoreIcon from '@/components/Icons/mobile/More'
 import USDCIcon from '@/assets/tokens/usdc.png'

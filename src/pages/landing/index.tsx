@@ -2,7 +2,6 @@ import { Box, Image, Flex } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
-import CheckIcon from '@/components/Icons/mobile/Check'
 import IntroItem1Icon from '@/components/Icons/mobile/Intro/Item1'
 import IntroItem2Icon from '@/components/Icons/mobile/Intro/Item2'
 import IntroItem3Icon from '@/components/Icons/mobile/Intro/Item3'

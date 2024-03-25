@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Box, Input, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 
 export default function InputInviteCode({value, onChange, codeStatus, onNext}: any) {

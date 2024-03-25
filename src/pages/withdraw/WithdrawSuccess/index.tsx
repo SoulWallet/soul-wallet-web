@@ -1,6 +1,5 @@
 import { Box, Input } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
-import FadeId from '@/components/Icons/mobile/FaceId'
 import { Link } from 'react-router-dom';
 
 export default function WithdrawSuccess({ sendTo, value }: any) {

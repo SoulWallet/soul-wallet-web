@@ -6,7 +6,6 @@ import CheckDeposit from './CheckDeposit'
 import MakeTransfer from './MakeTransfer'
 import SelectNetwork from './SelectNetwork'
 import SendToken from './SendToken'
-import { motion } from 'framer-motion';
 import FadeSwitch from '@/components/FadeSwitch';
 
 export default function Deposit() {
@@ -45,7 +44,7 @@ export default function Deposit() {
         {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
         {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
         {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
-        {step === 3 && <SendToken onPrev={onPrev} onNext={onNext} />}
+        {step === 3 && <SendToken />}
       </FadeSwitch>
     </Box>
   );

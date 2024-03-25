@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Box, Image, Link } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import Button from '@/components/mobile/Button'
@@ -8,7 +8,6 @@ import TabIcon from '@/components/Icons/mobile/Tab'
 import { useNavigate } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc_lg.png'
 import { aaveLink } from '@/config';
-import { useBalanceStore } from '@/store/balance';
 
 export default function Details() {
   const [showInfo1, setShowInfo1] = useState(false)

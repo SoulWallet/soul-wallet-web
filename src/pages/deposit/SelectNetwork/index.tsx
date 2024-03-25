@@ -1,17 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Box, Image, Checkbox, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
-import Button from '@/components/mobile/Button'
-import ScanIcon from '@/components/Icons/mobile/Scan'
+import { Box, Image, useDisclosure } from '@chakra-ui/react';
 import NextIcon from '@/components/Icons/mobile/Next'
-import useWallet from '@/hooks/useWallet';
-import usePasskey from '@/hooks/usePasskey';
-import { useNavigate } from 'react-router-dom';
-import USDCIcon from '@/assets/mobile/usdc.png'
-import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
 import ARBIcon from '@/assets/mobile/arb.png'
 
-export default function SelectNetwork({ onPrev, onNext }: any) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+export default function SelectNetwork({ onNext }: any) {
   const innerHeight = window.innerHeight
   const contentHeight = innerHeight - 64
 

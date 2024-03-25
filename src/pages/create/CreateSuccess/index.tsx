@@ -1,15 +1,7 @@
-import React from 'react';
 import { Box, Input, Image } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
-import FadeId from '@/components/Icons/mobile/FaceId'
-// import Loading from '@/components/Icons/mobile/Loading'
 import LoadingIcon from '@/assets/mobile/loading.gif'
 import { css, keyframes } from '@emotion/react'
-
-const spin = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
 
 export default function CreateSuccess({ creating, onNext }: any) {
   if (creating) {

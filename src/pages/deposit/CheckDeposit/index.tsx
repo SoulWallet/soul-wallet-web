@@ -18,12 +18,8 @@ import ScanIcon from '@/components/Icons/mobile/Scan';
 import NextIcon from '@/components/Icons/mobile/Next';
 import CheckedIcon from '@/components/Icons/mobile/Checked';
 import UncheckedIcon from '@/components/Icons/mobile/Unchecked';
-import useWallet from '@/hooks/useWallet';
-import usePasskey from '@/hooks/usePasskey';
-import { useNavigate } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc.png'
 import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
-import USDCGrey from '@/assets/mobile/usdc.png'
 import ARBGreyIcon from '@/assets/mobile/arb_grey.png'
 import ARBIcon from '@/assets/mobile/arb.png'
 import AAVEGreyIcon from '@/assets/mobile/aave_grey.png'

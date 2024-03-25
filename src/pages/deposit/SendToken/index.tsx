@@ -2,7 +2,7 @@ import { Box, Image } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc.png'
 
-export default function SelectToken({ onPrev, onNext }: any) {
+export default function SelectToken() {
   const innerHeight = window.innerHeight
   const contentHeight = innerHeight - 64
 

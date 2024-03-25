@@ -3,39 +3,9 @@ import Button from '@/components/mobile/Button';
 import Header from '@/components/mobile/Header';
 import CompletedIcon from '@/components/Icons/mobile/Completed';
 import { Link } from 'react-router-dom';
-import { toShortAddress } from '@/lib/tools';
-import AAVEIcon from '@/assets/mobile/aave.png';
 import LoadingIcon from '@/assets/mobile/loading.gif';
 
-const getFontSize = (value: any) => {
-  const length = value ? String(value).length : 0;
-
-  if (length > 9) {
-    return '30px';
-  } else if (length > 5) {
-    return '50px';
-  }
-
-  return '80px';
-};
-
-const getFontBottomMargin = (value: any) => {
-  const length = value ? String(value).length : 0;
-
-  if (length > 9) {
-    return '0px';
-  } else if (length > 5) {
-    return '10px';
-  }
-
-  return '26px';
-};
-
 export default function Review({ onPrev, withdrawAmount, sendTo, isTransfering, isCompleted, onWithdraw }: any) {
-  // const disabled = !sendTo
-  // const fontSize = getFontSize(withdrawAmount)
-  // const fontBottomMargin = getFontBottomMargin(withdrawAmount)
-
   return (
     <Box width="100%" height="100%">
       <Header title="Review" showBackButton onBack={onPrev} />

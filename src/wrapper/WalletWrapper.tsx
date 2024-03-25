@@ -4,7 +4,7 @@ import FindRoute from '@/components/FindRoute';
 import Pooling from '../components/Pooling';
 import CommonWrapper from './CommonWrapper';
 import { Box } from '@chakra-ui/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import FadeSwitch from '@/components/FadeSwitch';
 
 export default function Wrapper() {
@@ -18,13 +18,6 @@ export default function Wrapper() {
               <FadeSwitch key={location.pathname}>
                 <Outlet />
               </FadeSwitch>
-              {/* <motion.div
-                key={location.pathname}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              > */}
-              {/* </motion.div> */}
             </Box>
           </AnimatePresence>
           <Pooling />

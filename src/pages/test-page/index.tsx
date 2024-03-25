@@ -8,9 +8,9 @@ export default function TestPage() {
 
   const doCreate1 = async () => {
     try {
-      const credential = await register('Test');
+      // const credential = await register('Test');
       // normal challenge
-      await client.authenticate([credential.id], 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+      await client.authenticate([], 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
       alert('success');
     } catch (e: any) {
       alert('error');

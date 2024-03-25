@@ -1,10 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useToast } from '@chakra-ui/react';
 import useWallet from '@/hooks/useWallet';
 import { useNavigate } from 'react-router-dom';
 import InputAmount from './InputAmount';
 import Review from './Review';
-// import WithdrawSuccess from './WithdrawSuccess';
 import FadeSwitch from '@/components/FadeSwitch';
 
 export default function Withdraw() {

@@ -1,30 +1,15 @@
-import { Box, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Box, Input } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
 import Header from '@/components/mobile/Header'
-import BN from 'bignumber.js'
 import { useBalanceStore } from '@/store/balance';
 import { toFixed } from '@/lib/tools';
 
-const getFontSize = (value: any) => {
-  const length = value ? String(value).length : 0
-
-  if (length > 9) {
-    return '40px'
-  } else if (length > 5) {
-    return '60px'
-  }
-
-  return '100px'
-}
 
 export default function InputAmount({ onPrev, onNext,
-
 withdrawAmount, onWithdrawAmountChange, sendTo, onSendToChange 
-
 }: any) {
   const { totalUsdValue, } = useBalanceStore();
   const disabled = !withdrawAmount || withdrawAmount <= 0 || withdrawAmount > totalUsdValue || !sendTo
-  // const fontSize = getFontSize(value)
 
   return (
     <Box width="100%" height="100%">

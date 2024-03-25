@@ -19,8 +19,6 @@ export interface IAddressStore {
   clearAddresses: () => void;
   addAddressItem: (addressItem: IAddressItem) => void;
   updateAddressItem: (address: string, addressItem: Partial<IAddressItem>) => void;
-  deleteAddress: (address: string) => void;
-  getIsActivated: (address: string, chainId: string) => boolean | undefined;
   getSelectedAddressItem: () => IAddressItem;
   clearAddressList: () => void;
 }
@@ -75,17 +73,6 @@ const createAddressSlice = immer<IAddressStore>((set, get) => ({
         ...addressItem,
       };
       state.addressList[index] = itemToSet;
-    });
-  },
-  getIsActivated: (address) => {
-    const index = getIndexByAddress(get().addressList, address);
-    const addressInfo = get().addressList[index];
-    return addressInfo && addressInfo.activated;
-  },
-  deleteAddress: (address: string) => {
-    set((state: IAddressStore) => {
-      const index = getIndexByAddress(state.addressList, address);
-      state.addressList.splice(index, 1);
     });
   },
   clearAddressList: () => {
