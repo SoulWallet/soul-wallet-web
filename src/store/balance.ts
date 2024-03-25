@@ -102,7 +102,7 @@ export const useBalanceStore = create<IBalanceStore>()(
       tokenBalance: [defaultEthBalance],
       nftBalance: [],
       getTokenBalance: (tokenAddress: string) => {
-        return get().tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress === tokenAddress)[0];
+        return get().tokenBalance.filter((item: ITokenBalanceItem) => item.contractAddress.toLowerCase() === tokenAddress.toLowerCase())[0];
       },
       clearBalance: () => {
         set({ tokenBalance: [defaultEthBalance], totalUsdValue: '0' });
@@ -125,7 +125,7 @@ export const useBalanceStore = create<IBalanceStore>()(
           return formattedItem;
         });
         // format balance list here
-        set({ tokenBalance: tokenList, totalUsdValue: totalUsdValue.toFixed(2) });
+        set({ tokenBalance: tokenList, totalUsdValue: totalUsdValue.toString() });
       },
     }),
     {

@@ -78,7 +78,7 @@ withdrawAmount, onWithdrawAmountChange, sendTo, onSendToChange
             fontWeight="600"
             fontSize="14px"
           >
-            Available: {toFixed(totalUsdValue, 2)} USDC
+            Available: {toFixed(totalUsdValue, 4)} USDC
           </Box>
           <Box
             background="rgba(225, 220, 252, 0.80)"

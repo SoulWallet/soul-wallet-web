@@ -150,7 +150,7 @@ export default function useWallet() {
       return;
     }
 
-    const withdrawAmount = amount > ausdcBalance ? ausdcBalance : amount;
+    const withdrawAmount = BN(amount).isGreaterThan(ausdcBalance) ? ausdcBalance : amount;
 
     if (withdrawAmount > 0) {
       txs.push({
