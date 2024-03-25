@@ -110,14 +110,24 @@ export default function Create() {
     debounce(checkInviteCode, 1000);
   }, [invitationCode])
 
+  const onInviteCodeChange = (val: string) => {
+    setCodeStatus(-1);
+    setInvitationCode(val);
+  }
+
+  const onUsernameChange = (val: string) => {
+    setNameStatus(-1);
+    setUsername(val);
+  }
+
   const renderStep = () => {
     if (step == 0) {
       return (
-        <InputInviteCode value={invitationCode} onChange={setInvitationCode} codeStatus={codeStatus} onNext={onNext} onSkip={onSkip} />
+        <InputInviteCode value={invitationCode} onChange={onInviteCodeChange} codeStatus={codeStatus} onNext={onNext} onSkip={onSkip} />
       )
     } else if (step == 1) {
       return (
-        <SetupUsername nameStatus={nameStatus} value={username} onChange={setUsername} onNext={onNext} onSkip={onSkip} />
+        <SetupUsername nameStatus={nameStatus} value={username} onChange={onUsernameChange} onNext={onNext} onSkip={onSkip} />
       )
     }
     else if (step == 2) {
