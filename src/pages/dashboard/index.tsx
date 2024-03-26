@@ -50,6 +50,7 @@ export default function Dashboard() {
   const { historyList } = useHistoryStore();
   const [modalMargin, setModalMargin] = useState(494)
   const [modalHeight, setModalHeight] = useState(window.innerHeight - 494)
+  const [showFullHistory, setShowFullHistory] = useState(false);
   const [modalPosition, setModalPosition] = useState('bottom')
   const [isMoving, setIsMoving] = useState(false)
 
@@ -75,9 +76,15 @@ export default function Dashboard() {
     if (startPosition > currentPosition + 20) {
       console.log('Moving up');
       changeModalPosition('top')
+      setTimeout(()=>{
+        setShowFullHistory(true);
+      }, 600)
     } else if (startPosition < currentPosition - 20) {
       console.log('Moving down');
       changeModalPosition('bottom')
+      setTimeout(()=>{
+        setShowFullHistory(false);
+      }, 600)
     }
   };
 
@@ -120,7 +127,8 @@ export default function Dashboard() {
     }
   }, [modalPosition, isMoving])
 
-  const finalHistoryList = modalPosition === 'top' ? historyList : historyList.slice(0, 2)
+  const finalHistoryList = showFullHistory ? historyList : historyList.slice(0, 2)
+  // const finalHistoryList = historyList
 
   return (
     <Box>

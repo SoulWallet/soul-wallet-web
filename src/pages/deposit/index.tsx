@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +46,7 @@ export default function Deposit() {
         onBack={onPrev}
       />
       <FadeSwitch key={step}>
-        {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
+        {step === 0 && <CheckDeposit onPrev={onPrev} onNext={onNext} />}
         {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
         {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
         {step === 3 && <SendToken onFinish={onFinish} />}
