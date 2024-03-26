@@ -11,11 +11,9 @@ export interface IHistoryStore {
   clearHistory: () => void;
 }
 
-const aavePoolAddress = import.meta.env.VITE_AAVE_USDC_POOL;
 const ausdcAddress = import.meta.env.VITE_TOKEN_AUSDC;
 const usdcAddress = import.meta.env.VITE_TOKEN_USDC;
 const autoSaveAddress = import.meta.env.VITE_AaveUsdcSaveAutomationSepolia;
-const usdTokenList = [ausdcAddress, usdcAddress].map((item) => item.toLowerCase());
 
 export const fetchHistoryApi = async (address: string, chainId: string) => {
   const res = await api.token.history({ address, chainID: chainId });
@@ -27,25 +25,34 @@ export const fetchHistoryApi = async (address: string, chainId: string) => {
     .filter(
       (historyItem: any) =>
         historyItem.type === 'ERC20_TRANSFER' &&
-        historyItem.item.from !== aavePoolAddress.toLowerCase() &&
+        historyItem.item.tokenAddress === usdcAddress.toLowerCase() &&
         historyItem.item.from !== ausdcAddress.toLowerCase() &&
-        historyItem.item.from !== zeroAddress &&
-        historyItem.item.to !== zeroAddress &&
-        historyItem.item.to !== autoSaveAddress.toLowerCase() &&
-        usdTokenList.includes(historyItem.item.tokenAddress.toLowerCase()),
+        historyItem.item.to !== autoSaveAddress.toLowerCase(),
     )
-    .map((historyItem: any) => {
+    .flatMap((historyItem: any) => {
       historyItem.amount = toFixed(BN(historyItem.item.value).shiftedBy(-6).toString(), 2);
       historyItem.tokenSymbol = 'USDC';
       historyItem.dateFormatted = new Date(historyItem.item.blockTimestamp * 1000).toLocaleString();
-      if (historyItem.item.from !== addressLowercase && historyItem.item.to === addressLowercase) {
+      if (historyItem.item.from === addressLowercase && historyItem.item.to === addressLowercase) {
+        return [
+          {
+            action: 'Deposit',
+            amountFormatted: `+ ${historyItem.amount}`,
+          },
+          {
+            action: 'Transfer',
+            amountFormatted: `+ ${historyItem.amount}`,
+          },
+        ];
+      } else if (historyItem.item.to === addressLowercase) {
         historyItem.action = 'Deposit';
         historyItem.amountFormatted = `+ ${historyItem.amount}`;
-      } else if (historyItem.item.from === addressLowercase && historyItem.item.to !== addressLowercase) {
+        return [historyItem];
+      } else if (historyItem.item.from === addressLowercase) {
         historyItem.action = 'Transfer';
         historyItem.amountFormatted = `- ${historyItem.amount}`;
+        return [historyItem];
       }
-      return historyItem;
     })
     .filter((historyItem: any) => historyItem.action);
 
