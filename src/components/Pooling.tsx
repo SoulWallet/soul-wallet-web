@@ -7,11 +7,13 @@ import { useAddressStore } from '@/store/address';
 import { useHistoryStore } from '@/store/history';
 import { useBalanceStore } from '@/store/balance';
 import { useChainStore } from '@/store/chain';
+import useWalletContext from '@/context/hooks/useWalletContext';
 export default function Pooling() {
+  const { ethersProvider } = useWalletContext();
   const { selectedAddress } = useAddressStore();
   const { fetchHistory } = useHistoryStore();
   const { selectedChainId } = useChainStore();
-  const { fetchTokenBalance, fetchApy, fetchInterest } = useBalanceStore();
+  const { fetchTokenBalance, fetchApy, fetchInterest, fetchFeeData, } = useBalanceStore();
 
   const getUserInfo = () => {
     fetchTokenBalance(selectedAddress, selectedChainId);
@@ -21,6 +23,7 @@ export default function Pooling() {
 
   const getCommonInfo = () => {
     fetchApy();
+    fetchFeeData(ethersProvider);
   };
 
   useEffect(() => {

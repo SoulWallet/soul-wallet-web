@@ -35,6 +35,9 @@ const defaultEthBalance: ITokenBalanceItem = {
 };
 
 export interface IBalanceStore {
+  maxFeePerGas: string;
+  maxPriorityFeePerGas: string;
+  fetchFeeData: (provider: any) => void;
   sevenDayApy: string;
   fetchApy: () => void;
   oneDayInterest: string;
@@ -70,11 +73,20 @@ export const formatTokenBalance = (item: ITokenBalanceItem) => {
 export const useBalanceStore = create<IBalanceStore>()(
   persist(
     (set, get) => ({
+      maxFeePerGas: "0x",
+      maxPriorityFeePerGas: "0x",
       totalUsdValue: '0',
       apy: '0',
       sevenDayApy: '0',
       oneDayInterest: '0',
       totalInterest: '0',
+      fetchFeeData: async (provider) => {
+        const feeData = await provider.getFeeData();
+        set({
+          maxFeePerGas: `0x${feeData.maxFeePerGas?.toString(16)}`,
+          maxPriorityFeePerGas: `0x${feeData.maxPriorityFeePerGas?.toString(16)}`,
+        })
+      },
       fetchApy: async () => {
         const res = await api.aave.apy({
           reserveId: usdcArbPoolReserveId,

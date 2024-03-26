@@ -11,15 +11,13 @@ import useQuery from './useQuery';
 import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { ABI_ReceivePayment } from '@soulwallet/abi';
-import { useSignerStore } from '@/store/signer';
+import { useBalanceStore } from '@/store/balance';
 
 export default function useTransaction() {
   const { showSignTransaction } = useWalletContext();
   const { soulWallet } = useSdk();
-  const { estimateGasFee, getGasPrice } = useQuery();
   const { selectedAddress } = useAddressStore();
-  const { selectedKeyType } = useSignerStore();
-
+  const {maxFeePerGas, maxPriorityFeePerGas} = useBalanceStore();
 
   const payTask = async (contractAddress: string, amount: string, paymentId: string) => {
     const soulAbi = new ethers.Interface(ABI_ReceivePayment);
@@ -59,8 +57,6 @@ export default function useTransaction() {
 
   const getUserOp: any = async (txns: any) => {
     try {
-      const { maxFeePerGas, maxPriorityFeePerGas } = await getGasPrice();
-
       const userOpRet = await soulWallet.fromTransaction(maxFeePerGas, maxPriorityFeePerGas, selectedAddress, txns);
 
       if (userOpRet.isErr()) {
@@ -68,10 +64,7 @@ export default function useTransaction() {
       }
 
       let userOp = userOpRet.OK;
-      // userOp = await estimateGasFee(userOp, true);
-      // userOp.preVerificationGas = `0x${BN(userOp.preVerificationGas.toString()).plus(15000).toString(16)}`;
-      // userOp.verificationGasLimit = `0x${BN(userOp.verificationGasLimit.toString()).plus(30000).toString(16)}`;
-
+   
       return userOp;
     } catch (err:any) {
       throw new Error(err.message);

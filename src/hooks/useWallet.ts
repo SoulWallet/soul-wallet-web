@@ -26,7 +26,6 @@ import { useToast } from '@chakra-ui/react';
 
 export default function useWallet() {
   const { signByPasskey, authenticate } = usePasskey();
-  const { estimateGasFee } = useQuery();
   const { chainConfig } = useConfig();
   const { setSlotInfo } = useSlotStore();
   const { selectedChainId, setSelectedChainId } = useChainStore();
@@ -35,7 +34,7 @@ export default function useWallet() {
   const { getUserOp } = useTransaction();
   const { navigate } = useBrowser();
   const toast = useToast();
-  const { getTokenBalance } = useBalanceStore();
+  const { getTokenBalance, maxFeePerGas, maxPriorityFeePerGas } = useBalanceStore();
   const { clearLogData } = useTools();
   const { selectedAddress, setSelectedAddress, setWalletName } = useAddressStore();
 
@@ -46,9 +45,15 @@ export default function useWallet() {
       initialGuardianSafePeriod: defaultGuardianSafePeriod,
     };
 
-    // step 1: calculate address
     const initialKeys = [credential.publicKey as string];
 
+    const createSlotInfo = {
+      initialKeys,
+      initialGuardianHash: noGuardian.initialGuardianHash,
+      initialGuardianSafePeriod: toHex(noGuardian.initialGuardianSafePeriod),
+    };
+
+    // do time consuming jobs
     const address = (
       await soulWallet.calcWalletAddress(
         createIndex,
@@ -61,13 +66,6 @@ export default function useWallet() {
 
     setSelectedAddress(address);
     setWalletName(walletName);
-
-    const createSlotInfo = {
-      initialKeys,
-      initialGuardianHash: noGuardian.initialGuardianHash,
-      initialGuardianSafePeriod: toHex(noGuardian.initialGuardianSafePeriod),
-    };
-    // save slot info to api
     const res: any = await api.account.create({
       address,
       chainID: selectedChainId,
@@ -78,7 +76,6 @@ export default function useWallet() {
       },
       invitationCode,
     });
-
     if (res.code !== 200) {
       toast({
         title: 'Create wallet failed',
@@ -201,7 +198,8 @@ export default function useWallet() {
 
     userOp.callData = soulAbi.encodeFunctionData('executeBatch((address,uint256,bytes)[])', [executions]);
 
-    userOp = await estimateGasFee(userOp);
+    userOp.maxFeePerGas = maxFeePerGas;
+    userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
 
     return userOp;
   };

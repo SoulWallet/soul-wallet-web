@@ -260,7 +260,7 @@ export default function InputAmount({
           </Box>
 
         </Box>
-        <Box pos={"absolute"}>
+        <Box pos={"absolute"} w="330px">
           {sendTo && !isAddress(sendTo) && <Box
                                              display="flex"
                                              alignItems="center"
@@ -276,9 +276,7 @@ export default function InputAmount({
             </Box>
           </Box>
           }
-        </Box>
-
-        <Box
+           <Box
           padding="10px"
           borderRadius="12px"
           background="rgba(252, 151, 0, 0.10)"
@@ -287,9 +285,10 @@ export default function InputAmount({
           fontWeight="400"
         >
           Confirm deposit address is on <Box as="span" fontWeight="700">Arbitrum</Box>; deposit to other networks could result in lost assets.
+          </Box>
         </Box>
         <Box
-          marginTop="102px"
+          marginTop="120px"
           width="100%"
         >
           <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
