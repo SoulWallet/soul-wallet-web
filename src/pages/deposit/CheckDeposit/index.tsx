@@ -31,7 +31,7 @@ import { shareFile } from '@/lib/tools';
 import { useSettingStore } from '@/store/setting';
 import { useHistoryStore } from '@/store/history';
 
-export default function CheckDeposit({ onPrev, onNext }: any) {
+export default function CheckDeposit({ onPrev, onNext, setIsPaginationActive }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { historyList } = useHistoryStore();
   const { selectedAddress } = useAddressStore();
@@ -52,6 +52,14 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
       setChecked3(true)
     }
   }, [historyList])
+
+  useEffect(() => {
+    if (checked1 && checked2 && checked3) {
+      setIsPaginationActive(true)
+    } else {
+      setIsPaginationActive(false)
+    }
+  }, [checked1, checked2, checked3])
 
   return (
     <Box width="100%" height={contentHeight} position="relative" overflowY={isAllChecked ? 'auto' : 'hidden'}>
@@ -161,32 +169,6 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
               This is your Soul Wallet address on <Text as="span" fontWeight="700">Arbitrum</Text> network to transfer assets directly into your account and
               save into protocol. You can always copy it on homepage.
             </Box>
-          </Box>
-        </Box>
-      </Box>
-      <Box
-        position="fixed"
-        left="0"
-        bottom="0"
-        opacity={isAllChecked ? 1 : 0}
-        pointerEvents={isAllChecked ? 'all' : 'none'}
-        width="100%"
-        paddingTop="20px"
-        paddingBottom="36px"
-        background="white"
-      >
-        <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">
-          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="black" />
-          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-        </Box>
-        <Box display="flex" alignItems="center" justifyContent="center">
-          <Box fontWeight="700" fontSize="18px" cursor="pointer" onClick={onNext}>
-            What’s next
-          </Box>
-          <Box>
-            <NextIcon />
           </Box>
         </Box>
       </Box>

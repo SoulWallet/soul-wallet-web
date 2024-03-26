@@ -6,8 +6,15 @@ import CoinbaseIcon from '@/assets/mobile/coinbase.png'
 import BinanceIcon from '@/assets/mobile/binance.png'
 
 export default function MakeTransfer({ onNext }: any) {
+  const innerHeight = window.innerHeight
+  const contentHeight = innerHeight - 64 - 120
+
   return (
-    <Box width="100%" height="100%" position="relative">
+    <Box
+      width="100%"
+      height={contentHeight}
+      position="relative"
+    >
       <Box padding="30px">
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="20px">
           Make a transfer
@@ -91,26 +98,6 @@ export default function MakeTransfer({ onNext }: any) {
           >
             {`...`}
           </Box>
-        </Box>
-      </Box>
-      <Box
-        position="fixed"
-        bottom="0"
-        left="0"
-        width="100%"
-        background="white"
-        paddingTop="20px"
-        paddingBottom="36px"
-      >
-        <Box display="flex" alignItems="center" justifyContent="center" marginBottom="24px">
-          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="black" />
-          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-          <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="#D9D9D9" />
-        </Box>
-        <Box display="flex" alignItems="center" justifyContent="center">
-          <Box fontWeight="700" fontSize="18px" cursor="pointer" onClick={onNext}>What’s next</Box>
-          <Box><NextIcon /></Box>
         </Box>
       </Box>
     </Box>
