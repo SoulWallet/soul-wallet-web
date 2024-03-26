@@ -23,7 +23,7 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
     const interval = setInterval(() => {
       prepareAction();
     }, 15000);
-    return clearInterval(interval);
+    return () => clearInterval(interval);
   }, []);
 
   const onWithdraw = async () => {

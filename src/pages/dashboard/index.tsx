@@ -182,7 +182,7 @@ export default function Dashboard() {
                 >
                   {valueLeft}
                 </Box>
-                {Number(totalUsdValue) > 0 && (
+                {Number(valueRight) > 0 && (
                   <Box
                     fontFamily="Nunito"
                     fontSize={smFontSize}

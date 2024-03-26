@@ -24,7 +24,7 @@ export default function InputInviteCode({value, onChange, codeStatus, checking, 
       <Box width="100%" marginBottom="74px">
         <Input value={value} spellCheck={false} onChange={e => onChange(e.target.value)} fontSize="32px" lineHeight="24px" padding="0" fontWeight="700" placeholder="Enter or paste here" borderRadius="0" border="none" outline="none" _focusVisible={{ border: 'none', boxShadow: 'none' }} />
         <Box marginTop="10px" width="100%" height="1px" background="rgba(73, 126, 130, 0.2)" />
-        <Box mt="1" h="24px" overflow={"hidden"}>
+        <Box mt="1" h="32px" overflow={"hidden"}>
           {checking ? <InputLoading /> : <>
             {codeStatus === -1 && <Box fontSize="14px" lineHeight="24px" fontWeight="600" onClick={onOpen}>What if I don’t have one?</Box>}
             {codeStatus === 0 && (

@@ -26,7 +26,7 @@ export default function SepupUsername({ value, onChange, onNext, checking, nameS
           _focusVisible={{ border: 'none', boxShadow: 'none' }}
         />
         <Box marginTop="10px" width="100%" height="1px" background="rgba(73, 126, 130, 0.2)" />
-        <Box mt="1" h="24px" overflow={'hidden'}>
+        <Box mt="1" h="32px" overflow={'hidden'}>
           {checking ? (
             <InputLoading />
           ) : (

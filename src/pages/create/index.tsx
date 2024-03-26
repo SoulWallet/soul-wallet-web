@@ -51,6 +51,7 @@ export default function Create() {
       setAddingPasskey(true)
       setCredential(await register(username));
       setStep(3)
+      setAddingPasskey(false);
     } catch (error: any) {
       toast({
         title: 'Failed to create passkey',

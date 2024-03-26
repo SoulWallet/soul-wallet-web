@@ -24,6 +24,12 @@ import useBrowser from './useBrowser';
 import { useBalanceStore } from '@/store/balance';
 import { useToast } from '@chakra-ui/react';
 
+const noGuardian = {
+  initialGuardianHash: ethers.ZeroHash,
+  initialGuardianSafePeriod: defaultGuardianSafePeriod,
+};
+
+
 export default function useWallet() {
   const { signByPasskey, authenticate } = usePasskey();
   const { chainConfig } = useConfig();
@@ -68,7 +74,6 @@ export default function useWallet() {
   };
 
   const getWithdrawOp = async (amount: string, to: string) => {
-    
     const aaveUsdcPool = new ethers.Interface(aaveUsdcPoolAbi);
     const erc20 = new ethers.Interface(erc20Abi);
 
@@ -108,13 +113,9 @@ export default function useWallet() {
     return await getUserOp(txs);
   };
 
-  const getActivateOp = async (credential: any, walletName: string, invitationCode: string) => {
+  const initWallet = async (credential: any, walletName: string, invitationCode: string) => {
     const createIndex = 0;
-    const noGuardian = {
-      initialGuardianHash: ethers.ZeroHash,
-      initialGuardianSafePeriod: defaultGuardianSafePeriod,
-    };
-
+  
     const initialKeys = [credential.publicKey as string];
 
     const createSlotInfo = {
@@ -159,7 +160,14 @@ export default function useWallet() {
 
     setCredentials([credential as any]);
 
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(createIndex, initialKeys, noGuardian.initialGuardianHash, '0x');
+    return {
+      initialKeys,
+    }
+  }
+
+  const getActivateOp = async (_initialKeys: any) => {
+    const createIndex = 0;
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(createIndex, _initialKeys, noGuardian.initialGuardianHash, '0x');
 
     if (userOpRet.isErr()) {
       throw new Error(userOpRet.ERR.message);
@@ -333,5 +341,6 @@ export default function useWallet() {
     signWithPasskey,
     logoutWallet,
     getSponsor,
+    initWallet,
   };
 }

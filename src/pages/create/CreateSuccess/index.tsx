@@ -1,29 +1,37 @@
 import { Box, Input, Image, useToast } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button';
 import LoadingIcon from '@/assets/mobile/loading.gif';
-import { css, keyframes } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 import useWallet from '@/hooks/useWallet';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateSuccess({ credential, username, invitationCode }: any) {
-  const { getActivateOp, signAndSend } = useWallet();
+  const { getActivateOp, signAndSend, initWallet } = useWallet();
   const userOpRef = useRef<any>();
+  const initialKeysRef = useRef<any>();
   const navigate = useNavigate();
   const toast = useToast();
   const [creating, setCreating] = useState(false);
 
   const prepareAction = async () => {
-    const _userOp = await getActivateOp(credential, username, invitationCode);
-    userOpRef.current = _userOp;
+    if (!initialKeysRef.current) {
+      const { initialKeys: _initialKeys } = await initWallet(credential, username, invitationCode);
+      initialKeysRef.current = _initialKeys;
+      const _userOp = await getActivateOp(_initialKeys);
+      userOpRef.current = _userOp;
+    } else {
+      const _userOp = await getActivateOp(initialKeysRef.current);
+      userOpRef.current = _userOp;
+    }
   };
 
   useEffect(() => {
     prepareAction();
     const interval = setInterval(() => {
+      console.log('Prepare action');
       prepareAction();
     }, 15000);
-    return clearInterval(interval);
+    return () => clearInterval(interval);
   }, []);
 
   const onCreate = async () => {
