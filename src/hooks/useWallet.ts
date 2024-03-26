@@ -241,17 +241,29 @@ export default function useWallet() {
       await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, selectedKeyType)
     ).OK;
 
-    const res: any = await api.sponsor.check(
-      selectedChainId,
-      chainConfig.contracts.entryPoint,
-      JSON.parse(UserOpUtils.userOperationToJSON(userOp)),
-    );
+    let res: any;
 
-    if (res.code !== 200) {
+    try {
+      res = await api.sponsor.check(
+        selectedChainId,
+        chainConfig.contracts.entryPoint,
+        JSON.parse(UserOpUtils.userOperationToJSON(userOp)),
+      );
+
+      if (res.code !== 200) {
+        toast({
+          title: 'Sponsor check failed',
+          description: res.msg,
+          status: 'error',
+        });
+        throw new Error('Sponsor check failed');
+      }
+    } catch (e: any) {
       toast({
         title: 'Sponsor check failed',
-        description: res.msg,
+        description: e.response.data.data.message,
         status: 'error',
+        duration: 5000,
       });
       throw new Error('Sponsor check failed');
     }
