@@ -9,9 +9,17 @@ import { persist } from 'zustand/middleware';
 export interface ISettingStore {
   ignoreWebauthnOverride: boolean;
   setIgnoreWebauthnOverride: (val: boolean) => void;
+  isDepositAllChecked: boolean;
+  setIsDepositAllChecked: (val: boolean) => void;
 }
 
 const createSettingSlice = immer<ISettingStore>((set, get) => ({
+  isDepositAllChecked: false,
+  setIsDepositAllChecked: (val: boolean) => {
+    set({
+      isDepositAllChecked: val,
+    });
+  },
   ignoreWebauthnOverride: false,
   setIgnoreWebauthnOverride: (val: boolean) => {
     set({

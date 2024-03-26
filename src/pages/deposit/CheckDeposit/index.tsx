@@ -28,6 +28,7 @@ import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
 import ReceiveCode from '@/components/ReceiveCode';
 import { shareFile } from '@/lib/tools';
+import { useSettingStore } from '@/store/setting';
 
 export default function CheckDeposit({ onPrev, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,9 +38,26 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [checked3, setChecked3] = useState(false);
-  const isAllChecked = checked1 && checked2 && checked3;
+  const { isDepositAllChecked, setIsDepositAllChecked } = useSettingStore();
+  const isAllChecked = (checked1 && checked2 && checked3) || isDepositAllChecked;
   const innerHeight = window.innerHeight
   const contentHeight = innerHeight - 64
+
+  const setChecked = useCallback((i: any) => {
+    if (i === 1) {
+      setChecked1(!checked1)
+    } else if (i === 2) {
+      setChecked2(!checked2)
+    } else if (i === 3) {
+      setChecked3(!checked3)
+    }
+  }, [checked1, checked2, checked3])
+
+  useEffect(() => {
+    if (checked1 && checked2 && checked3) {
+      setIsDepositAllChecked(true)
+    }
+  }, [checked1, checked2, checked3])
 
   return (
     <Box width="100%" height={contentHeight} position="relative" overflowY={isAllChecked ? 'auto' : 'hidden'}>
@@ -93,26 +111,26 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
         >
           <Box>
             <Box lineHeight="20px" marginBottom="18px">
-              <Box display="flex" alignItems="center" onClick={(e) => setChecked1(!checked1)}>
+              <Box display="flex" alignItems="center" onClick={(e) => setChecked(1)}>
                 <Box marginRight="12px">
-                  {checked1 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
+                  {(checked1 || isAllChecked) ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
                 </Box>
                 <Box>I'm gonna send USDC, not other assets</Box>
               </Box>
             </Box>
           </Box>
           <Box lineHeight="20px" marginBottom="18px">
-            <Box display="flex" alignItems="center" onClick={(e) => setChecked2(!checked2)}>
+            <Box display="flex" alignItems="center" onClick={(e) => setChecked(2)}>
               <Box marginRight="12px">
-                {checked2 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
+                {(checked2 || isAllChecked) ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
               </Box>
               <Box>The network is Arbitrum, not any other chain</Box>
             </Box>
           </Box>
           <Box lineHeight="20px" marginBottom="18px">
-            <Box display="flex" alignItems="center" onClick={(e) => setChecked3(!checked3)}>
+            <Box display="flex" alignItems="center" onClick={(e) => setChecked(3)}>
               <Box marginRight="12px">
-                {checked3 ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
+                {(checked3 || isAllChecked) ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
               </Box>
               <Box>After deposit, my fund will auto-saved into AAVE protocol</Box>
             </Box>
