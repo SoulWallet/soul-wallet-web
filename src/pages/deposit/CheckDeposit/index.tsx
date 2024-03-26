@@ -105,7 +105,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
         >
           <Box>
             <Box lineHeight="20px" marginBottom="18px">
-              <Box display="flex" alignItems="center" onClick={(e) => setChecked(1)}>
+              <Box display="flex" alignItems="center" onClick={(e) => setChecked1(!checked1)}>
                 <Box marginRight="12px">
                   {(checked1 || isAllChecked) ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
                 </Box>
@@ -114,7 +114,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             </Box>
           </Box>
           <Box lineHeight="20px" marginBottom="18px">
-            <Box display="flex" alignItems="center" onClick={(e) => setChecked(2)}>
+            <Box display="flex" alignItems="center" onClick={(e) => setChecked2(!checked2)}>
               <Box marginRight="12px">
                 {(checked2 || isAllChecked) ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
               </Box>
@@ -122,7 +122,7 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
             </Box>
           </Box>
           <Box lineHeight="20px" marginBottom="18px">
-            <Box display="flex" alignItems="center" onClick={(e) => setChecked(3)}>
+            <Box display="flex" alignItems="center" onClick={(e) => setChecked3(!checked3)}>
               <Box marginRight="12px">
                 {(checked3 || isAllChecked) ? <CheckedIcon isAllChecked={isAllChecked} /> : <UncheckedIcon />}
               </Box>
