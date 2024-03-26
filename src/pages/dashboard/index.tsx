@@ -42,7 +42,7 @@ const getFontBottomMargin = (value: any) => {
     return '10px'
   }
 
-  return '26px'
+  return '20px'
 }
 
 export default function Dashboard() {
@@ -132,7 +132,10 @@ export default function Dashboard() {
 
   return (
     <Box>
-      <Box padding="30px">
+      <Box padding={{
+        xs: '20px',
+        sm: '30px'
+      }}>
         <Box>
           <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
           <Box
@@ -190,35 +193,51 @@ export default function Dashboard() {
 
             </Box>
             {hasBalance && (
-              <Box display="flex" alignItems="center" justifyContent="center" gap="14px">
-                <Link to="/withdraw" style={{ width: "34%" }}>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                gap="14px"
+                flexDirection={{ xs: 'column', sm: 'row' }}
+              >
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  width={{ xs: '100%', sm: '34%' }}
+                >
+                  <Link to="/withdraw" style={{ width: "100%" }}>
                     <Box width="100%">
-                      <Button width="100%" size="xl" type="lightBlue" minWidth="100px" boxShadow="none" color="#497EE6">
+                      <Button
+                        width="100%"
+                        size="xl"
+                        type="lightBlue"
+                        minWidth="100px"
+                        boxShadow="none"
+                        color="#497EE6"
+                        minWidth="auto"
+                      >
                         Transfer
                       </Button>
                     </Box>
-                  </Box>
-                </Link>
-                <Link to="/deposit" style={{ width: "calc(66% - 14px)"}}>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
+                  </Link>
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  width={{ xs: '100%', sm: 'calc(66% - 14px)' }}
+                >
+                  <Link to="/deposit" style={{ width: "100%"}}>
                     <Box width="100%">
-                      <Button width="100%" size="xl" type="blue">
+                      <Button width="100%" size="xl" type="blue" minWidth="auto">
                         Deposit USDC
                       </Button>
                     </Box>
-                  </Box>
-                </Link>
+                  </Link>
+                </Box>
               </Box>
             )}
             {!hasBalance && (
@@ -245,7 +264,7 @@ export default function Dashboard() {
             <Box as={Link} to="/details" display="flex" justifyContent="space-between" alignItems="center">
               <Box display="flex" alignItems="center">
                 <Box marginRight="8px">
-                  <Image src={USDCIcon} w="8" h="8" />
+                  <Image src={USDCIcon} minW="8" w="8" h="8" />
                 </Box>
                 <Box>
                   <Box fontSize="18px" lineHeight={"23px"} fontWeight="700">USDC on AAVE</Box>
