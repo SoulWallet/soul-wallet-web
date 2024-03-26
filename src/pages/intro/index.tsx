@@ -306,13 +306,21 @@ export default function Intro() {
       >
         <ModalOverlay />
         <ModalContent
-          borderRadius="20px 20px 0 0"
-          maxW="100vw"
+          borderRadius={{
+            sm: '20px 20px 0 0',
+            md: '20px',
+          }}
+          maxW={{
+            sm: '100vw',
+            md: '430px'
+          }}
+          marginTop={{
+            sm: `${marginHeight}px`,
+            md: 'calc(50vh - 214px)'
+          }}
           height="428px"
           overflow="auto"
           mb="0"
-          marginTop={`${marginHeight}px`}
-
         >
           <ModalCloseButton />
           <ModalBody

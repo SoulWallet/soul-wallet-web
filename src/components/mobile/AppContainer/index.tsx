@@ -76,12 +76,21 @@ export default function AppContainer() {
       >
         <ModalOverlay />
         <ModalContent
-          borderRadius="20px 20px 0 0"
-          maxW="100vw"
+          borderRadius={{
+            sm: '20px 20px 0 0',
+            md: '20px',
+          }}
+          maxW={{
+            sm: '100vw',
+            md: '430px'
+          }}
+          marginTop={{
+            sm: `${marginHeight}px`,
+            md: 'calc(50vh - 125px)'
+          }}
+          mb="0"
           height="250px"
           overflow="auto"
-          mb="0"
-          marginTop={`${marginHeight}px`}
         >
           <Box tabIndex={0} />
           <ModalCloseButton />
