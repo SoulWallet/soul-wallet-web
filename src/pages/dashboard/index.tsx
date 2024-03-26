@@ -114,7 +114,7 @@ export default function Dashboard() {
   };
 
   const getContentHeight = () => {
-    const elem = contentRef.current
+    const elem: any = contentRef.current
 
     if (elem) {
       return elem.clientHeight + 64 + 60 - 6
@@ -156,7 +156,7 @@ export default function Dashboard() {
         xs: '20px',
         sm: '30px'
       }}>
-        <Box ref={contentRef}>
+        <Box ref={(v: any) => { contentRef.current = v }}>
           <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
           <Box
             width="100%"
@@ -233,7 +233,7 @@ export default function Dashboard() {
                         width="100%"
                         size="xl"
                         type="lightBlue"
-                        minWidth="100px"
+                        // minWidth="100px"
                         boxShadow="none"
                         color="#497EE6"
                         minWidth="auto"
@@ -321,7 +321,6 @@ export default function Dashboard() {
             margin="0 auto"
             background="white"
             borderRadius="20px 20px 0 0"
-            height="100%"
             overflowY="scroll"
             pointerEvents="all"
             height={modalHeight}
