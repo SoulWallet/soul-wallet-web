@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import { useNavigate } from 'react-router-dom';
@@ -13,9 +13,6 @@ export default function Deposit() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0)
   const { historyList } = useHistoryStore();
-  const [checked1, setChecked1] = useState(false)
-  const [checked2, setChecked2] = useState(false)
-  const [checked3, setChecked3] = useState(false)
   const innerHeight = window.innerHeight
 
   const onFinish = () => {
@@ -41,8 +38,6 @@ export default function Deposit() {
     setStep(step + 1)
   }, [step])
 
-  const isAllChecked = checked1 && checked2 && checked3
-
   return (
     <Box width="100%" height={innerHeight} overflow="hidden">
       <Header
@@ -51,7 +46,7 @@ export default function Deposit() {
         onBack={onPrev}
       />
       <FadeSwitch key={step}>
-        {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
+        {step === 0 && <CheckDeposit onPrev={onPrev} onNext={onNext} />}
         {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
         {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
         {step === 3 && <SendToken onFinish={onFinish} />}

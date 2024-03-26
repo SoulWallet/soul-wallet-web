@@ -28,9 +28,11 @@ import { useAddressStore } from '@/store/address';
 import useTools from '@/hooks/useTools';
 import ReceiveCode from '@/components/ReceiveCode';
 import { shareFile } from '@/lib/tools';
+import { useHistoryStore } from '@/store/history';
 
 export default function CheckDeposit({ onPrev, onNext }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { historyList } = useHistoryStore();
   const { selectedAddress } = useAddressStore();
   const [qrcodeSrc, setQrcodeSrc] = useState('');
   const { doCopy } = useTools();
@@ -40,6 +42,14 @@ export default function CheckDeposit({ onPrev, onNext }: any) {
   const isAllChecked = checked1 && checked2 && checked3;
   const innerHeight = window.innerHeight
   const contentHeight = innerHeight - 64
+
+  useEffect(()=>{
+    if(historyList.filter(item => item.action === 'Deposit').length > 3){
+      setChecked1(true)
+      setChecked2(true)
+      setChecked3(true)
+    }
+  }, [historyList])
 
   return (
     <Box width="100%" height={contentHeight} position="relative" overflowY={isAllChecked ? 'auto' : 'hidden'}>
