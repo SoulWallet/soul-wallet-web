@@ -7,7 +7,17 @@ export default function SelectNetwork({ onNext }: any) {
   const contentHeight = innerHeight - 64
 
   return (
-    <Box width="100%" height={contentHeight} position="relative">
+    <Box
+      width="100%"
+      height={contentHeight}
+      position="relative"
+      overflow="auto"
+      sx={{
+        '&::-webkit-scrollbar': {
+          display: 'none'
+        }
+      }}
+    >
       <Box padding="30px" paddingBottom="144px">
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="20px">
           Select Arbitrum network
