@@ -7,14 +7,24 @@ import MakeTransfer from './MakeTransfer'
 import SelectNetwork from './SelectNetwork'
 import SendToken from './SendToken'
 import FadeSwitch from '@/components/FadeSwitch';
+import { useHistoryStore } from '@/store/history';
 
 export default function Deposit() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0)
+  const { historyList } = useHistoryStore();
   const [checked1, setChecked1] = useState(false)
   const [checked2, setChecked2] = useState(false)
   const [checked3, setChecked3] = useState(false)
   const innerHeight = window.innerHeight
+
+  const onFinish = () => {
+    if(historyList.length){
+      navigate('/dashboard')
+    }else{
+      navigate('/intro')
+    }
+  }
 
   const onPrev = useCallback(() => {
     console.log('prev')
@@ -22,7 +32,7 @@ export default function Deposit() {
     if (step > 0) {
       setStep(step - 1)
     }else{
-      navigate('/dashboard')
+     onFinish()
     }
   }, [step])
 
@@ -44,7 +54,7 @@ export default function Deposit() {
         {step === 0 &&  <CheckDeposit onPrev={onPrev} onNext={onNext} />}
         {step === 1 && <MakeTransfer onPrev={onPrev} onNext={onNext} />}
         {step === 2 && <SelectNetwork onPrev={onPrev} onNext={onNext} />}
-        {step === 3 && <SendToken />}
+        {step === 3 && <SendToken onFinish={onFinish} />}
       </FadeSwitch>
     </Box>
   );

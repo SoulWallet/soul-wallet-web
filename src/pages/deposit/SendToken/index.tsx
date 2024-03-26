@@ -2,7 +2,9 @@ import { Box, Image } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import USDCIcon from '@/assets/mobile/usdc.png'
 
-export default function SelectToken() {
+export default function SelectToken({
+  onFinish,
+}: any) {
   const innerHeight = window.innerHeight
   const contentHeight = innerHeight - 64
 
@@ -77,9 +79,7 @@ export default function SelectToken() {
           <Box width="8px" height="8px" marginLeft="4px" marginRight="4px" borderRadius="8px" background="black" />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
-          <Link to="/dashboard">
-            <Box fontWeight="700" fontSize="18px" cursor="pointer">I’ve done with all these steps!</Box>
-          </Link>
+          <Box onClick={onFinish} fontWeight="700" fontSize="18px" cursor="pointer">I’ve done with all these steps!</Box>
         </Box>
       </Box>
     </Box>
