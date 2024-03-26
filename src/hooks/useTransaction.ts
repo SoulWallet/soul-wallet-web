@@ -6,19 +6,11 @@ import { ethers } from 'ethers';
 import BN from 'bignumber.js';
 import { erc20Abi } from 'viem';
 import { useAddressStore } from '@/store/address';
-import { SignkeyType, Transaction } from '@soulwallet/sdk';
-import useQuery from './useQuery';
-import useSdk from '@/hooks/useSdk';
-import useWalletContext from '@/context/hooks/useWalletContext';
+import { Transaction } from '@soulwallet/sdk';
 import { ABI_ReceivePayment } from '@soulwallet/abi';
-import { useBalanceStore } from '@/store/balance';
-import useWallet from './useWallet';
 
 export default function useTransaction() {
-  const { getSponsor } = useWallet();
-  const { soulWallet } = useSdk();
   const { selectedAddress } = useAddressStore();
-  const { maxFeePerGas, maxPriorityFeePerGas } = useBalanceStore();
 
   const payTask = async (contractAddress: string, amount: string, paymentId: string) => {
     const soulAbi = new ethers.Interface(ABI_ReceivePayment);

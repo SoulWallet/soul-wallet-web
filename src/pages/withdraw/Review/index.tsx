@@ -20,6 +20,10 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
 
   useEffect(() => {
     prepareAction();
+    const interval = setInterval(() => {
+      prepareAction();
+    }, 15000);
+    return clearInterval(interval);
   }, []);
 
   const onWithdraw = async () => {

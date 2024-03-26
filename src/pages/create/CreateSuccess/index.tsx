@@ -20,6 +20,10 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
 
   useEffect(() => {
     prepareAction();
+    const interval = setInterval(() => {
+      prepareAction();
+    }, 15000);
+    return clearInterval(interval);
   }, []);
 
   const onCreate = async () => {
