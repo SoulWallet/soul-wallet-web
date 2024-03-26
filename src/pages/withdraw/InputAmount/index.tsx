@@ -11,6 +11,14 @@ withdrawAmount, onWithdrawAmountChange, sendTo, onSendToChange
   const { totalUsdValue, } = useBalanceStore();
   const disabled = !withdrawAmount || withdrawAmount <= 0 || withdrawAmount > totalUsdValue || !sendTo
 
+  const onAmountChange = (val: string) => {
+    onWithdrawAmountChange(val)
+  }
+
+  const onAddressChange = (val: string) => {
+    onSendToChange(val);
+  }
+
   return (
     <Box width="100%" height="100%">
       <Header
@@ -34,7 +42,7 @@ withdrawAmount, onWithdrawAmountChange, sendTo, onSendToChange
           >
             <Input
               value={withdrawAmount}
-              onChange={e => onWithdrawAmountChange(e.target.value)}
+              onChange={e => onAmountChange(e.target.value)}
               fontSize="32px"
               lineHeight="100%"
               padding="0"
@@ -110,7 +118,7 @@ withdrawAmount, onWithdrawAmountChange, sendTo, onSendToChange
             <Input
               value={sendTo}
               spellCheck={false}
-              onChange={e => onSendToChange(e.target.value)}
+              onChange={e => onAddressChange(e.target.value)}
               fontSize="18px"
               lineHeight="100%"
               padding="0"

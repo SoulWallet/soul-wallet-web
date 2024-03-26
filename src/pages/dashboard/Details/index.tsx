@@ -49,7 +49,7 @@ export default function Details() {
           alignItems="center"
         >
           <Box>
-            <Image width="80px" src={USDCIcon} />
+            <Image width="80px" height="80px" src={USDCIcon} />
           </Box>
           <Box
             fontSize="36px"

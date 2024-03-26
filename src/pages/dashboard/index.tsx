@@ -172,7 +172,7 @@ export default function Dashboard() {
                 marginBottom="16px"
                 marginTop="4px"
               >
-                + ${oneDayInterest} today
+                + ${oneDayInterest} earned  today
               </Box>
               {
                 pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">

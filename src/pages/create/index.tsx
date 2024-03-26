@@ -22,7 +22,9 @@ export default function Create() {
   const [username, setUsername] = useState('')
   const [credential, setCredential] = useState<any>({})
   const [nameStatus, setNameStatus] = useState(-1);
+  const [checkingNameStatus, setCheckingNameStatus] = useState(false)
   const [codeStatus, setCodeStatus] = useState(-1);
+  const [checkingCodeStatus, setCheckingCodeStatus] = useState(false)
   const [timer, setTimer] = useState<any>();
   const toast = useToast();
 
@@ -85,6 +87,7 @@ export default function Create() {
       name: username,
     });
     console.log('name status', res);
+    setCheckingNameStatus(false);
     setNameStatus(res.data.status);
   }
 
@@ -93,20 +96,27 @@ export default function Create() {
       code: invitationCode,
     });
     console.log('invite code status', res);
+    setCheckingCodeStatus(false);
     setCodeStatus(res.data.status);
   }
 
   useEffect(()=>{
     if(!username){
+      setCheckingNameStatus(false)
+      setNameStatus(-1)
       return
     }
+    setCheckingNameStatus(true);
     debounce(checkUsername, 1000)
   }, [username])
 
   useEffect(()=>{
     if(!invitationCode){
+      setCheckingCodeStatus(false)
+      setCodeStatus(-1)
       return
     }
+    setCheckingCodeStatus(true);
     debounce(checkInviteCode, 1000);
   }, [invitationCode])
 
@@ -123,11 +133,11 @@ export default function Create() {
   const renderStep = () => {
     if (step == 0) {
       return (
-        <InputInviteCode value={invitationCode} onChange={onInviteCodeChange} codeStatus={codeStatus} onNext={onNext} onSkip={onSkip} />
+        <InputInviteCode checking={checkingCodeStatus} value={invitationCode} onChange={onInviteCodeChange} codeStatus={codeStatus} onNext={onNext} onSkip={onSkip} />
       )
     } else if (step == 1) {
       return (
-        <SetupUsername nameStatus={nameStatus} value={username} onChange={onUsernameChange} onNext={onNext} onSkip={onSkip} />
+        <SetupUsername checking={checkingNameStatus} nameStatus={nameStatus} value={username} onChange={onUsernameChange} onNext={onNext} onSkip={onSkip} />
       )
     }
     else if (step == 2) {

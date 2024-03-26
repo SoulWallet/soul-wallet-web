@@ -14,3 +14,13 @@ wcm-modal {
 .chakra-alert[data-status="error"] {
     background-color: #E83D26;
 }
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

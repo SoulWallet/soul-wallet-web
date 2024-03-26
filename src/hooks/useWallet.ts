@@ -93,7 +93,7 @@ export default function useWallet() {
     setCredentials([credential as any]);
 
     // step 2: get User op
-    let userOp = await getActivateOp(createIndex, createSlotInfo, chainConfig.paymasterTokens[0]);
+    let userOp = await getActivateOp(createIndex, createSlotInfo);
 
     await signAndSend(userOp);
   };
@@ -150,15 +150,15 @@ export default function useWallet() {
       return;
     }
 
-    const withdrawAmount = BN(amount).isGreaterThan(ausdcBalance) ? ausdcBalance : amount;
+    const withdrawAmount = BN(amount).minus(usdcBalance);
 
-    if (withdrawAmount > 0) {
+    if (withdrawAmount.isGreaterThan(0)) {
       txs.push({
         from: selectedAddress,
         to: import.meta.env.VITE_AAVE_USDC_POOL,
         data: aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [
           import.meta.env.VITE_TOKEN_USDC,
-          ethers.parseUnits(String(withdrawAmount), 6),
+          ethers.parseUnits(withdrawAmount.toString(), 6),
           selectedAddress,
         ]),
       });
@@ -173,7 +173,7 @@ export default function useWallet() {
     return await getUserOp(txs);
   };
 
-  const getActivateOp = async (index: number, _slotInfo: any, payToken: string) => {
+  const getActivateOp = async (index: number, _slotInfo: any) => {
     const { initialKeys, initialGuardianHash } = _slotInfo;
     const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash, '0x');
 
