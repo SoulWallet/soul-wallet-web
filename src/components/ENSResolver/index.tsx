@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Box, Image, Menu, MenuList, MenuItem } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import IconLoading from '@/assets/loading.svg';
@@ -100,40 +100,12 @@ const ENSResolver = ({
   getActiveENSNameRef,
   _styles,
 }: any) => {
-  const [timer, setTimer] = useState<any>();
-
   const resolveName = async (ensName: any) => {
     const resolveNameMainnet = async (ensName: any) => {
       setActiveENSNameRef(ensName)
       setIsENSLoading(true)
       setResolvedAddress('')
       const ethersProvider = new ethers.JsonRpcProvider(`https://mainnet.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`);
-      const address = await ethersProvider.resolveName(ensName);
-      let isSuccess = false
-      const isExpired = await isENSExpiration(ensName, ethersProvider);
-      console.log('address', address, isExpired)
-
-      if (getActiveENSNameRef() === ensName) {
-        if (address && !isExpired) {
-          setResolvedAddress(address)
-          isSuccess = true
-        } else {
-          setResolvedAddress('')
-          setSearchAddress('')
-          isSuccess = false
-        }
-
-        setIsENSLoading(false)
-      }
-
-      return isSuccess ? address : null
-    }
-
-    const resolveNameBase = async (ensName: any) => {
-      setActiveENSNameRef(ensName)
-      setIsENSLoading(true)
-      setResolvedAddress('')
-      const ethersProvider = new ethers.JsonRpcProvider(`https://base-sepolia-rpc.publicnode.com`);
       const address = await ethersProvider.resolveName(ensName);
       let isSuccess = false
       const isExpired = await isENSExpiration(ensName, ethersProvider);
@@ -168,15 +140,9 @@ const ENSResolver = ({
     }
   }
 
-  console.log('timer', timer)
-  const debounce = (fn: Function, delay: number) => {
-    clearTimeout(timer);
-    setTimer(setTimeout(fn, delay))
-  }
-
   useEffect(() => {
     if (searchAddress) {
-      debounce(() => resolveName(searchAddress), 1000)
+      resolveName(searchAddress)
     }
   }, [searchAddress])
 
@@ -212,7 +178,7 @@ const ENSResolver = ({
         {() => (
           <Box maxWidth="100%" overflow="auto">
             <MenuList background="white" maxWidth="100%" boxShadow="0px 0px 20px 0px rgba(0, 0, 0, 0.2)">
-              <MenuItem maxWidth="100%" position="relative" onClick={(!isENSLoading && searchAddress) ? (() => submitENSName(searchAddress)) : (() => {})}>
+              <MenuItem maxWidth="100%" position="relative" onClick={(!isENSLoading && searchAddress) ? (() => submitENSName(searchAddress)) : (() => {})} cursor={(!isENSLoading && searchAddress) ? 'pointer' : 'not-allowed'}>
                 {!!searchAddress && (
                   <Box
                     as="span"
