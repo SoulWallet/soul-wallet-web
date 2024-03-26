@@ -9,8 +9,8 @@ export default function CreateSuccess({ creating, onNext }: any) {
       <Box
         position="fixed"
         top="0"
-        left="0"
-        width="100vw"
+        left="calc(50% - 215px)"
+        width="430px"
         height="100vh"
         display="flex"
         alignItems="center"
