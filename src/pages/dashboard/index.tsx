@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { Box, Image, Flex } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button'
@@ -53,6 +53,7 @@ export default function Dashboard() {
   const [showFullHistory, setShowFullHistory] = useState(false);
   const [modalPosition, setModalPosition] = useState('bottom')
   const [isMoving, setIsMoving] = useState(false)
+  const contentRef = useRef()
 
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
   const hasBalance = Number(totalUsdValue) > 0;
@@ -65,6 +66,11 @@ export default function Dashboard() {
   const fontBottomMargin = getFontBottomMargin(valueLeft)
 
   const [startPosition, setStartPosition] = useState(null);
+
+  useEffect(() => {
+    getContentHeight()
+    console.log('contentRef', contentRef)
+  }, [])
 
   const handleStart = (position: any) => {
     setStartPosition(position);
@@ -107,6 +113,16 @@ export default function Dashboard() {
     }
   };
 
+  const getContentHeight = () => {
+    const elem = contentRef.current
+
+    if (elem) {
+      return elem.clientHeight + 64 + 60 - 6
+    }
+
+    return 494
+  }
+
   const changeModalPosition = useCallback((intentPosition: any) => {
     if (!isMoving && intentPosition !== modalPosition) {
       setIsMoving(true)
@@ -116,9 +132,13 @@ export default function Dashboard() {
         setModalHeight(window.innerHeight - 64)
         setModalPosition('top')
       } else {
-        setModalMargin(494)
-        setModalHeight(window.innerHeight - 494)
+        const height = getContentHeight()
+        setModalMargin(height)
         setModalPosition('bottom')
+
+        setTimeout(() => {
+          setModalHeight(window.innerHeight - height)
+        }, 620)
       }
 
       setTimeout(() => {
@@ -136,7 +156,7 @@ export default function Dashboard() {
         xs: '20px',
         sm: '30px'
       }}>
-        <Box>
+        <Box ref={contentRef}>
           <Box fontSize="18px" fontWeight="700" lineHeight="24px" marginBottom="14px">My Balance</Box>
           <Box
             width="100%"
@@ -304,37 +324,57 @@ export default function Dashboard() {
             height="100%"
             overflowY="scroll"
             pointerEvents="all"
-            // height={modalHeight}
+            height={modalHeight}
           >
             <Box
-              padding="30px"
+              paddingTop="90px"
               position="relative"
               height="100%"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
+              overflow="hidden"
+              // onTouchStart={handleTouchStart}
+              // onTouchMove={handleTouchMove}
+              // onMouseDown={handleMouseDown}
+              // onMouseMove={handleMouseMove}
             >
               <Box
                 position="absolute"
-                height="20px"
+                height="80px"
                 top="0"
                 left="0"
                 width="100%"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                // onClick={changeModalPosition}
+                flexDirection="column"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
               >
                 <Box
-                  width="30px"
-                  height="4px"
-                  borderRadius="4px"
-                  background="#CCCDD4"
-                />
+                  height="20px"
+                  width="100%"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Box
+                    width="30px"
+                    height="4px"
+                    borderRadius="4px"
+                    background="#CCCDD4"
+                  />
+                </Box>
+                <Box
+                  width="100%"
+                  fontSize="18px"
+                  fontWeight="700"
+                  padding="10px 30px"
+                >
+                  Recent activity
+                </Box>
               </Box>
-              <Box fontSize="18px" fontWeight="700" mb="32px">Recent activity</Box>
-              <Flex gap="36px" flexDir="column" width="100%">
+              <Flex gap="36px" padding="0 30px" flexDir="column" width="100%" overflow="auto" maxHeight={`${modalHeight - 80 - 20}px`}>
                 {finalHistoryList.map(item => (
                   <Box
                     display="flex"
