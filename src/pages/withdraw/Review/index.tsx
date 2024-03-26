@@ -10,8 +10,8 @@ import useWallet from '@/hooks/useWallet';
 export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
   const { getWithdrawOp, signAndSend } = useWallet();
   const userOpRef = useRef();
-  const [isTransfering, setIsTransfering] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const isCompletedRef = useRef(false);
+  const isTransferingRef = useRef(false);
 
   const prepareAction = async () => {
     const _userOp = await getWithdrawOp(withdrawAmount, sendTo);
@@ -21,22 +21,25 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
   useEffect(() => {
     prepareAction();
     const interval = setInterval(() => {
+      if(isTransferingRef.current || isCompletedRef.current){
+        return
+      }
       prepareAction();
     }, 15000);
     return () => clearInterval(interval);
   }, []);
 
   const onWithdraw = async () => {
-    setIsTransfering(true);
+    isTransferingRef.current = true;
     console.log('on withdraw', userOpRef)
     if (userOpRef.current) {
       try {
         await signAndSend(userOpRef.current);
-        setIsTransfering(false);
-        setIsCompleted(true);
+        isTransferingRef.current = false;
+        isCompletedRef.current = true;
       } catch (e) {
-        setIsTransfering(false);
-        setIsCompleted(false);
+        isTransferingRef.current = false;
+        isCompletedRef.current = false;
       }
     } else {
       setTimeout(() => {
@@ -49,7 +52,7 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
     <Box width="100%" height="100%">
       <Header title="Review" showBackButton onBack={onPrev} />
       <Box padding="30px" minHeight="calc(100vh - 62px)">
-        {isTransfering && (
+        {isTransferingRef.current && (
           <Box
             fontSize="32px"
             fontWeight="700"
@@ -67,7 +70,7 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
             <Box>Transfer in progress</Box>
           </Box>
         )}
-        {isCompleted && (
+        {isCompletedRef.current && (
           <Box
             fontSize="32px"
             fontWeight="700"
@@ -85,7 +88,7 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
             <Box>Transfer completed</Box>
           </Box>
         )}
-        {!isCompleted && !isTransfering && (
+        {!isCompletedRef.current && !isTransferingRef.current && (
           <Box
             fontSize="32px"
             fontWeight="700"
@@ -128,19 +131,19 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
         </Box>
 
         <Box marginTop="40px" width="100%">
-          {isTransfering && (
+          {isTransferingRef.current && (
             <Button size="xl" type="blue" width="100%" isDisabled>
               Transferring
             </Button>
           )}
 
-          {!isTransfering && !isCompleted && (
+          {!isTransferingRef.current && !isCompletedRef.current && (
             <Button size="xl" type="blue" width="100%" onClick={onWithdraw}>
               Confirm
             </Button>
           )}
 
-          {isCompleted && (
+          {isCompletedRef.current && (
             <Link to="/dashboard">
               <Button size="xl" type="blue" width="100%">
                 Confirm

@@ -9,9 +9,9 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
   const { getActivateOp, signAndSend, initWallet } = useWallet();
   const userOpRef = useRef<any>();
   const initialKeysRef = useRef<any>();
+  const creatingRef = useRef(false);
   const navigate = useNavigate();
   const toast = useToast();
-  const [creating, setCreating] = useState(false);
 
   const prepareAction = async () => {
     if (!initialKeysRef.current) {
@@ -27,8 +27,11 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
 
   useEffect(() => {
     prepareAction();
+   
     const interval = setInterval(() => {
-      console.log('Prepare action');
+      if(creatingRef.current){
+        return
+      }
       prepareAction();
     }, 15000);
     return () => clearInterval(interval);
@@ -38,7 +41,7 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
     if (userOpRef.current) {
       try {
         console.log('onCreateWallet');
-        setCreating(true);
+        creatingRef.current = true;
         await signAndSend(userOpRef.current);
         navigate('/intro');
       } catch (error: any) {
@@ -47,7 +50,7 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
           description: error.message,
           status: 'error',
         });
-        setCreating(false);
+        creatingRef.current = false;
       }
     } else {
       setTimeout(() => {
@@ -56,7 +59,7 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
     }
   };
 
-  if (creating) {
+  if (creatingRef.current) {
     return (
       <Box
         position="fixed"
