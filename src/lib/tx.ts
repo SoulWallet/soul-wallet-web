@@ -33,7 +33,6 @@ export const executeTransaction = async (userOp: any, chainConfig: any) => {
   printUserOp(userOp);
   return new Promise(async (resolve, reject) => {
     const ret = await soulWallet.sendUserOperation(userOp);
-
     if (ret.isErr()) {
       const errMsg = ret.ERR.message;
       // notify('Bundler Error', errMsg);

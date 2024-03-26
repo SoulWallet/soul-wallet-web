@@ -287,7 +287,16 @@ export default function useWallet() {
 
     userOp.signature = await getPasskeySignature(packedUserOpHash.packedUserOpHash, packedUserOpHash.validationData);
 
-    return await executeTransaction(userOp, chainConfig);
+    try {
+      return await executeTransaction(userOp, chainConfig);
+    } catch (err) {
+      toast({
+        title: 'Transaction failed',
+        status: 'error',
+        description: String(err),
+      });
+      throw new Error(String(err));
+    }
   };
 
   const signRawHash = async (hash: string) => {
