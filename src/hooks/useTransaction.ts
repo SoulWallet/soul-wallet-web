@@ -15,7 +15,6 @@ import { useBalanceStore } from '@/store/balance';
 import useWallet from './useWallet';
 
 export default function useTransaction() {
-  const { showSignTransaction } = useWalletContext();
   const { getSponsor } = useWallet();
   const { soulWallet } = useSdk();
   const { selectedAddress } = useAddressStore();
@@ -30,7 +29,7 @@ export default function useTransaction() {
       value: BN(amount).toString(),
     };
 
-    return showSignTransaction([tx], '', '');
+    // return showSignTransaction([tx], '', '');
   };
 
   const sendEth = async (to: string, amount: string) => {
@@ -41,7 +40,7 @@ export default function useTransaction() {
       value: amountInWei,
       data: '0x',
     };
-    return await showSignTransaction([tx], '', to);
+    // return await showSignTransaction([tx], '', to);
   };
 
   const sendErc20 = async (tokenAddress: string, to: string, amount: string, decimals: number) => {
@@ -53,10 +52,8 @@ export default function useTransaction() {
       to: tokenAddress,
       data: callData,
     };
-    return showSignTransaction([tx], '', to);
+    // return showSignTransaction([tx], '', to);
   };
-
-
 
   return {
     sendErc20,

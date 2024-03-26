@@ -37,7 +37,78 @@ export default function useWallet() {
   const { clearLogData } = useTools();
   const { selectedAddress, setSelectedAddress, setWalletName } = useAddressStore();
 
-  const createWallet = async (credential: any, walletName: string, invitationCode: string) => {
+  const loginWallet = async () => {
+    const { credential } = await authenticate();
+    const res = await api.account.list({
+      ownerKey: credential.publicKey,
+    });
+
+    if (!res || !res.data || !res.data.length) {
+      toast({
+        title: 'No account found',
+        description: 'Please sign in with another passkey or create free account',
+        status: 'error',
+      });
+      return;
+    }
+
+    // consider first item only for now
+    const item = res.data[0];
+
+    setCredentials([credential as any]);
+    setWalletName(item.name);
+    setSelectedAddress(item.address);
+    setSelectedChainId(item.chainID);
+    setSlotInfo(item.initInfo);
+  };
+
+  const logoutWallet = async () => {
+    clearLogData();
+    navigate('/landing');
+  };
+
+  const getWithdrawOp = async (amount: string, to: string) => {
+    
+    const aaveUsdcPool = new ethers.Interface(aaveUsdcPoolAbi);
+    const erc20 = new ethers.Interface(erc20Abi);
+
+    const usdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)?.tokenBalanceFormatted;
+    const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
+
+    let txs = [];
+
+    if (BN(amount).isGreaterThan(BN(usdcBalance).plus(ausdcBalance))) {
+      toast({
+        title: 'Insufficient balance',
+        status: 'error',
+      });
+      return;
+    }
+
+    const withdrawAmount = BN(amount).minus(usdcBalance);
+
+    if (withdrawAmount.isGreaterThan(0)) {
+      txs.push({
+        from: selectedAddress,
+        to: import.meta.env.VITE_AAVE_USDC_POOL,
+        data: aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [
+          import.meta.env.VITE_TOKEN_USDC,
+          ethers.parseUnits(withdrawAmount.toString(), 6),
+          selectedAddress,
+        ]),
+      });
+    }
+
+    txs.push({
+      from: selectedAddress,
+      to: import.meta.env.VITE_TOKEN_USDC,
+      data: erc20.encodeFunctionData('transfer', [to, ethers.parseUnits(String(amount), 6)]),
+    });
+
+    return await getUserOp(txs);
+  };
+
+  const getActivateOp = async (credential: any, walletName: string, invitationCode: string) => {
     const createIndex = 0;
     const noGuardian = {
       initialGuardianHash: ethers.ZeroHash,
@@ -88,85 +159,7 @@ export default function useWallet() {
 
     setCredentials([credential as any]);
 
-    // step 2: get User op
-    let userOp = await getActivateOp(createIndex, createSlotInfo);
-
-    await signAndSend(userOp);
-  };
-
-  const loginWallet = async () => {
-    const { credential } = await authenticate();
-    const res = await api.account.list({
-      ownerKey: credential.publicKey,
-    });
-
-    if (!res || !res.data || !res.data.length) {
-      toast({
-        title: 'No account found',
-        description: 'Please sign in with another passkey or create free account',
-        status: 'error',
-      });
-      return;
-    }
-
-    // consider first item only for now
-    const item = res.data[0];
-
-    setCredentials([credential as any]);
-    setWalletName(item.name);
-    setSelectedAddress(item.address);
-    setSelectedChainId(item.chainID);
-    setSlotInfo(item.initInfo);
-  };
-
-  const logoutWallet = async () => {
-    clearLogData();
-    navigate('/landing');
-  };
-
-  const getWithdrawOp = async (amount: string, to: string) => {
-    const aaveUsdcPool = new ethers.Interface(aaveUsdcPoolAbi);
-    const erc20 = new ethers.Interface(erc20Abi);
-
-    const usdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)?.tokenBalanceFormatted;
-    const ausdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_AUSDC)?.tokenBalanceFormatted;
-
-    let txs = [];
-
-    if (BN(amount).isGreaterThan(BN(usdcBalance).plus(ausdcBalance))) {
-      toast({
-        title: 'Insufficient balance',
-        status: 'error',
-      });
-      return;
-    }
-
-    const withdrawAmount = BN(amount).minus(usdcBalance);
-
-    if (withdrawAmount.isGreaterThan(0)) {
-      txs.push({
-        from: selectedAddress,
-        to: import.meta.env.VITE_AAVE_USDC_POOL,
-        data: aaveUsdcPool.encodeFunctionData('withdraw(address,uint256,address)', [
-          import.meta.env.VITE_TOKEN_USDC,
-          ethers.parseUnits(withdrawAmount.toString(), 6),
-          selectedAddress,
-        ]),
-      });
-    }
-
-    txs.push({
-      from: selectedAddress,
-      to: import.meta.env.VITE_TOKEN_USDC,
-      data: erc20.encodeFunctionData('transfer', [to, ethers.parseUnits(String(amount), 6)]),
-    });
-
-    return await getUserOp(txs);
-  };
-
-  const getActivateOp = async (index: number, _slotInfo: any) => {
-    const { initialKeys, initialGuardianHash } = _slotInfo;
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(index, initialKeys, initialGuardianHash, '0x');
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(createIndex, initialKeys, noGuardian.initialGuardianHash, '0x');
 
     if (userOpRet.isErr()) {
       throw new Error(userOpRet.ERR.message);
@@ -332,7 +325,6 @@ export default function useWallet() {
 
   return {
     loginWallet,
-    createWallet,
     getWithdrawOp,
     addPaymasterData,
     getActivateOp,

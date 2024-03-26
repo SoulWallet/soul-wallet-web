@@ -6,7 +6,6 @@ import Button from './Button';
 import useConfig from '@/hooks/useConfig';
 import IconChevronRight from '@/assets/icons/chevron-right-red.svg';
 import IconCheckmark from '@/assets/icons/checkmark.svg';
-import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { useChainStore } from '@/store/chain';
 import { useAddressStore } from '@/store/address';
 import { toShortAddress, getChainInfo } from '@/lib/tools';
@@ -78,52 +77,7 @@ export default function ConnectDapp({ onSwitch, targetChainId }: any) {
           .
         </Text>
       </Box>
-      <InfoWrap>
-        <InfoItem>
-          <Text>
-            <Menu placement="bottom-end">
-              <MenuButton>
-                <Flex align={'center'}>
-                  <Text color="brand.red" fontWeight={'500'}>
-                    {toShortAddress(address)}
-                  </Text>
-                  <Image src={IconChevronRight} />
-                </Flex>
-              </MenuButton>
-              <MenuList maxW={'280px'} pt="4" pb="3" px="4">
-                <Text fontWeight={'800'} lineHeight={'1.25'} mb="3" color="#000">
-                  Select an activated account on this network to continue
-                </Text>
-                {/* {addressList.map((item) => (
-                  <MenuItem key={item.address} px="0" py="3" borderTop={'1px solid #e6e6e6'}>
-                    {item.activatedChains.includes(targetChainId) ? (
-                      <Flex
-                        align={'center'}
-                        w="100%"
-                        justify={'space-between'}
-                        onClick={() => setSelectedAddress(item.address)}
-                      >
-                        <Flex gap="3" align="center">
-                          <Text fontWeight={'800'}>{getAddressName(item.address)}</Text>
-                          <Text fontSize={'12px'} color="#898989">
-                            {toShortAddress(item.address)}
-                          </Text>
-                        </Flex>
-                        {item.address === selectedAddressItem.address && <Image src={IconCheckmark} />}
-                      </Flex>
-                    ) : (
-                      <Flex gap="3" align="center" color="#cececf" w="100%" h="100%">
-                        <Text fontWeight={'800'}>{getAddressName(item.address)}</Text>
-                        <Text fontSize={'12px'}>{toShortAddress(item.address)}</Text>
-                      </Flex>
-                    )}
-                  </MenuItem>
-                ))} */}
-              </MenuList>
-            </Menu>
-          </Text>
-        </InfoItem>
-      </InfoWrap>
+      
       <Button w="100%" fontSize={'20px'} py="4" fontWeight={'800'} mt="6" onClick={onConfirm}>
         Switch network
       </Button>

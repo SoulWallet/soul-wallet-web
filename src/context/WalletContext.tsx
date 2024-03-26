@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, useRef, useMemo } from 'react';
 import { ethers } from 'ethers';
-import SignTransactionModal from '@/components/SignTransactionModal';
 import SignMessageModal from '@/components/SignMessageModal';
 import SendModal from '@/components/SendModal';
 import ReceiveModal from '@/components/ReceiveModal';
@@ -8,7 +7,6 @@ import useConfig from '@/hooks/useConfig';
 
 interface IWalletContext {
   ethersProvider: any;
-  showSignTransaction: (txns: any, origin?: string, sendTo?: string) => Promise<void>;
   showSignMessage: (messageToSign: any, signType?: string, guardianInfo?: any) => Promise<any>;
   showReceive: () => Promise<void>;
   showSend: (tokenAddress?: string, transferType?: string) => Promise<void>;
@@ -16,7 +14,6 @@ interface IWalletContext {
 
 export const WalletContext = createContext<IWalletContext>({
   ethersProvider: new ethers.JsonRpcProvider(),
-  showSignTransaction: async () => {},
   showSignMessage: async () => {},
   showReceive: async () => {},
   showSend: async () => {},
@@ -61,7 +58,6 @@ export const WalletContextProvider = ({ children }: any) => {
     <WalletContext.Provider
       value={{
         ethersProvider,
-        showSignTransaction,
         showSignMessage,
         showReceive,
         showSend,
@@ -69,7 +65,6 @@ export const WalletContextProvider = ({ children }: any) => {
     >
       {children}
       {/** todo, move to another component **/}
-      <SignTransactionModal ref={signTransactionModal} />
       <SignMessageModal ref={signMessageModal} />
       <ReceiveModal ref={receiveModal} />
       <SendModal ref={sendModal} />

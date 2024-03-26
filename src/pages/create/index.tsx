@@ -2,21 +2,17 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Box, useToast } from '@chakra-ui/react';
 import Header from '@/components/mobile/Header'
 import InputInviteCode from './InputInviteCode'
-// import SetupEmail from './SetupEmail'
 import SetupUsername from './SetupUsername'
 import SetupPasskey from './SetupPasskey'
 import CreateSuccess from './CreateSuccess'
-import useWallet from '@/hooks/useWallet';
 import usePasskey from '@/hooks/usePasskey';
 import { useNavigate } from 'react-router-dom';
 import api from '@/lib/api';
 
 export default function Create() {
-  const { createWallet } = useWallet();
   const { register } = usePasskey();
   const navigate = useNavigate();
   const [step, setStep] = useState(0)
-  const [creating, setCreating] = useState(false)
   const [addingPasskey, setAddingPasskey] = useState(false)
   const [invitationCode, setInvitationCode] = useState('')
   const [username, setUsername] = useState('')
@@ -62,23 +58,6 @@ export default function Create() {
         status: 'error',
       })
       setAddingPasskey(false)
-    }
-  }
-
-  const onCreateWallet = async () => {
-    try {
-      console.log('onCreateWallet')
-      setCreating(true)
-      await createWallet(credential, username, invitationCode);
-      navigate('/intro')
-    } catch (error: any) {
-      toast({
-        title: 'Failed to create wallet',
-        description: error.message,
-        status: 'error',
-      })
-      setCreating(false)
-      console.error('onCreateWallet failed', error)
     }
   }
 
@@ -146,7 +125,7 @@ export default function Create() {
       )
     } else if (step == 3) {
       return (
-        <CreateSuccess creating={creating} onNext={onCreateWallet} />
+        <CreateSuccess credential={credential} username={username} invitationCode={invitationCode} />
       )
     }
   }

@@ -1,9 +1,49 @@
-import { Box, Input, Image } from '@chakra-ui/react';
-import Button from '@/components/mobile/Button'
-import LoadingIcon from '@/assets/mobile/loading.gif'
-import { css, keyframes } from '@emotion/react'
+import { Box, Input, Image, useToast } from '@chakra-ui/react';
+import Button from '@/components/mobile/Button';
+import LoadingIcon from '@/assets/mobile/loading.gif';
+import { css, keyframes } from '@emotion/react';
+import { useEffect, useRef, useState } from 'react';
+import useWallet from '@/hooks/useWallet';
+import { useNavigate } from 'react-router-dom';
 
-export default function CreateSuccess({ creating, onNext }: any) {
+export default function CreateSuccess({ credential, username, invitationCode }: any) {
+  const { getActivateOp, signAndSend } = useWallet();
+  const userOpRef = useRef<any>();
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [creating, setCreating] = useState(false);
+
+  const prepareAction = async () => {
+    const _userOp = await getActivateOp(credential, username, invitationCode);
+    userOpRef.current = _userOp;
+  };
+
+  useEffect(() => {
+    prepareAction();
+  }, []);
+
+  const onCreate = async () => {
+    if (userOpRef.current) {
+      try {
+        console.log('onCreateWallet');
+        setCreating(true);
+        await signAndSend(userOpRef.current);
+        navigate('/intro');
+      } catch (error: any) {
+        toast({
+          title: 'Failed to create wallet',
+          description: error.message,
+          status: 'error',
+        });
+        setCreating(false);
+      }
+    } else {
+      setTimeout(() => {
+        onCreate();
+      }, 1000);
+    }
+  };
+
   if (creating) {
     return (
       <Box
@@ -21,13 +61,7 @@ export default function CreateSuccess({ creating, onNext }: any) {
           <Box>
             <Image width="80px" height="60px" src={LoadingIcon} />
           </Box>
-          <Box
-            marginTop="18px"
-            fontWeight="400"
-            fontSize="18px"
-            lineHeight="14px"
-            marginBottom="14px"
-          >
+          <Box marginTop="18px" fontWeight="400" fontSize="18px" lineHeight="14px" marginBottom="14px">
             Setting up wallet...
           </Box>
         </Box>
@@ -36,15 +70,18 @@ export default function CreateSuccess({ creating, onNext }: any) {
   }
 
   return (
-    <Box width="100%" height="100%" padding="30px" paddingTop="138px" display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-      <Box width="120px" height="120px" background="#D9D9D9" borderRadius="120px" marginBottom="30px">
-      </Box>
-      <Box
-        fontWeight="700"
-        fontSize="24px"
-        lineHeight="14px"
-        marginBottom="14px"
-      >
+    <Box
+      width="100%"
+      height="100%"
+      padding="30px"
+      paddingTop="138px"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      flexDirection="column"
+    >
+      <Box width="120px" height="120px" background="#D9D9D9" borderRadius="120px" marginBottom="30px"></Box>
+      <Box fontWeight="700" fontSize="24px" lineHeight="14px" marginBottom="14px">
         Your account is ready
       </Box>
       <Box width="100%" marginBottom="50px">
@@ -52,7 +89,9 @@ export default function CreateSuccess({ creating, onNext }: any) {
           Thanks for setting up your Soul Wallet account. Start saving from now on!
         </Box>
       </Box>
-      <Button onClick={onNext} size="xl" type="blue" minWidth="195px">💰 Start saving</Button>
+      <Button onClick={onCreate} size="xl" type="blue" minWidth="195px">
+        💰 Start saving
+      </Button>
     </Box>
   );
 }

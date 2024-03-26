@@ -13,13 +13,13 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
   const [isTransfering, setIsTransfering] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const prepareWithdraw = async () => {
+  const prepareAction = async () => {
     const _userOp = await getWithdrawOp(withdrawAmount, sendTo);
     userOpRef.current = _userOp;
   };
 
   useEffect(() => {
-    prepareWithdraw();
+    prepareAction();
   }, []);
 
   const onWithdraw = async () => {

@@ -5,10 +5,7 @@ import { useAccount, useSignTypedData, useSwitchChain, useConnect, useDisconnect
 import useWallet from '@/hooks/useWallet';
 import { motion } from 'framer-motion';
 import IconZoom from '@/assets/icons/zoom.svg';
-import { InfoWrap, InfoItem } from '@/components/SignTransactionModal';
 import { TypedDataEncoder, ethers } from 'ethers';
-import { LabelItem } from '@/components/SignTransactionModal/comp/SignTransaction';
-import useTools from '@/hooks/useTools';
 import IconChevron from '@/assets/icons/chevron-down-gray.svg';
 import { useSignerStore } from '@/store/signer';
 import { SignkeyType } from '@soulwallet/sdk';
