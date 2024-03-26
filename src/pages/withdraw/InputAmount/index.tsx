@@ -279,6 +279,16 @@ export default function InputAmount({
         </Box>
 
         <Box
+          padding="10px"
+          borderRadius="12px"
+          background="rgba(252, 151, 0, 0.10)"
+          marginTop="12px"
+          fontSize="14px"
+          fontWeight="400"
+        >
+          Confirm deposit address is on <Box as="span" fontWeight="700">Arbitrum</Box>; deposit to other networks could result in lost assets.
+        </Box>
+        <Box
           marginTop="102px"
           width="100%"
         >
