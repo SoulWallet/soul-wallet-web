@@ -4,7 +4,7 @@
 
 import { ethers } from 'ethers';
 import BN from 'bignumber.js';
-import { erc20Abi } from 'viem'
+import { erc20Abi } from 'viem';
 import { useAddressStore } from '@/store/address';
 import { SignkeyType, Transaction } from '@soulwallet/sdk';
 import useQuery from './useQuery';
@@ -12,12 +12,14 @@ import useSdk from '@/hooks/useSdk';
 import useWalletContext from '@/context/hooks/useWalletContext';
 import { ABI_ReceivePayment } from '@soulwallet/abi';
 import { useBalanceStore } from '@/store/balance';
+import useWallet from './useWallet';
 
 export default function useTransaction() {
   const { showSignTransaction } = useWalletContext();
+  const { getSponsor } = useWallet();
   const { soulWallet } = useSdk();
   const { selectedAddress } = useAddressStore();
-  const {maxFeePerGas, maxPriorityFeePerGas} = useBalanceStore();
+  const { maxFeePerGas, maxPriorityFeePerGas } = useBalanceStore();
 
   const payTask = async (contractAddress: string, amount: string, paymentId: string) => {
     const soulAbi = new ethers.Interface(ABI_ReceivePayment);
@@ -25,14 +27,13 @@ export default function useTransaction() {
     const tx: Transaction = {
       to: contractAddress,
       data: callData,
-      value: BN(amount).toString()
+      value: BN(amount).toString(),
     };
 
     return showSignTransaction([tx], '', '');
   };
 
   const sendEth = async (to: string, amount: string) => {
-
     const amountInWei = new BN(amount).shiftedBy(18).toString();
     const tx = {
       from: selectedAddress,
@@ -55,26 +56,11 @@ export default function useTransaction() {
     return showSignTransaction([tx], '', to);
   };
 
-  const getUserOp: any = async (txns: any) => {
-    try {
-      const userOpRet = await soulWallet.fromTransaction(maxFeePerGas, maxPriorityFeePerGas, selectedAddress, txns);
 
-      if (userOpRet.isErr()) {
-        throw new Error(userOpRet.ERR.message);
-      }
-
-      let userOp = userOpRet.OK;
-   
-      return userOp;
-    } catch (err:any) {
-      throw new Error(err.message);
-    }
-  };
 
   return {
     sendErc20,
     sendEth,
-    getUserOp,
     payTask,
   };
 }

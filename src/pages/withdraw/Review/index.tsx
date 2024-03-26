@@ -4,8 +4,43 @@ import Header from '@/components/mobile/Header';
 import CompletedIcon from '@/components/Icons/mobile/Completed';
 import { Link } from 'react-router-dom';
 import LoadingIcon from '@/assets/mobile/loading.gif';
+import { useEffect, useRef, useState } from 'react';
+import useWallet from '@/hooks/useWallet';
 
-export default function Review({ onPrev, withdrawAmount, sendTo, isTransfering, isCompleted, onWithdraw }: any) {
+export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
+  const { getWithdrawOp, signAndSend } = useWallet();
+  const userOpRef = useRef();
+  const [isTransfering, setIsTransfering] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  const prepareWithdraw = async () => {
+    const _userOp = await getWithdrawOp(withdrawAmount, sendTo);
+    userOpRef.current = _userOp;
+  };
+
+  useEffect(() => {
+    prepareWithdraw();
+  }, []);
+
+  const onWithdraw = async () => {
+    setIsTransfering(true);
+    console.log('on withdraw', userOpRef)
+    if (userOpRef.current) {
+      try {
+        await signAndSend(userOpRef.current);
+        setIsTransfering(false);
+        setIsCompleted(true);
+      } catch (e) {
+        setIsTransfering(false);
+        setIsCompleted(false);
+      }
+    } else {
+      setTimeout(() => {
+        onWithdraw();
+      }, 1000);
+    }
+  };
+
   return (
     <Box width="100%" height="100%">
       <Header title="Review" showBackButton onBack={onPrev} />

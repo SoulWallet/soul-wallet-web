@@ -31,7 +31,6 @@ export default function useWallet() {
   const { selectedChainId, setSelectedChainId } = useChainStore();
   const { setCredentials, getSelectedCredential, selectedKeyType } = useSignerStore();
   const { soulWallet } = useSdk();
-  const { getUserOp } = useTransaction();
   const { navigate } = useBrowser();
   const toast = useToast();
   const { getTokenBalance, maxFeePerGas, maxPriorityFeePerGas } = useBalanceStore();
@@ -92,11 +91,6 @@ export default function useWallet() {
     // step 2: get User op
     let userOp = await getActivateOp(createIndex, createSlotInfo);
 
-    await signAndSend(userOp);
-  };
-
-  const withdrawAssets = async (amount: string, to: string) => {
-    const userOp = await getWithdrawOp(amount, to);
     await signAndSend(userOp);
   };
 
@@ -201,7 +195,27 @@ export default function useWallet() {
     userOp.maxFeePerGas = maxFeePerGas;
     userOp.maxPriorityFeePerGas = maxPriorityFeePerGas;
 
+    userOp = await getSponsor(userOp);
+
     return userOp;
+  };
+
+  const getUserOp: any = async (txns: any) => {
+    try {
+      const userOpRet = await soulWallet.fromTransaction(maxFeePerGas, maxPriorityFeePerGas, selectedAddress, txns);
+
+      if (userOpRet.isErr()) {
+        throw new Error(userOpRet.ERR.message);
+      }
+
+      let userOp = userOpRet.OK;
+
+      userOp = await getSponsor(userOp);
+
+      return userOp;
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
   };
 
   const getPasskeySignature = async (packedHash: string, validationData: string) => {
@@ -234,7 +248,7 @@ export default function useWallet() {
     return packedSignatureRet.OK;
   };
 
-  const signAndSend = async (userOp: UserOperation) => {
+  const getSponsor = async (userOp: UserOperation) => {
     userOp.signature = (
       await soulWallet.getSemiValidSignature(import.meta.env.VITE_SoulWalletDefaultValidator, userOp, selectedKeyType)
     ).OK;
@@ -273,6 +287,10 @@ export default function useWallet() {
       };
     }
 
+    return userOp;
+  }
+
+  const signAndSend = async (userOp: UserOperation) => {
     const validAfter = Math.floor(Date.now() / 1000 - 300);
     const validUntil = validAfter + 3600;
 
@@ -315,12 +333,13 @@ export default function useWallet() {
   return {
     loginWallet,
     createWallet,
-    withdrawAssets,
+    getWithdrawOp,
     addPaymasterData,
     getActivateOp,
     signAndSend,
     signRawHash,
     signWithPasskey,
     logoutWallet,
+    getSponsor,
   };
 }

@@ -76,7 +76,6 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
   const { getPrefund } = useQuery();
   const { chainConfig, selectedAddressItem, selectedChainItem } = useConfig();
   const { signAndSend, getActivateOp } = useWallet();
-  const { getUserOp } = useTransaction();
   const [userOpFormatted, setUserOpFormatted] = useState('');
   const selectedToken = getTokenBalance(payToken);
   const [hintText, setHintText] = useState('');
@@ -179,7 +178,7 @@ export default function SignTransaction({ onSuccess, txns, sendToAddress }: any)
       console.log('is Activated?', isActivated);
       if (isActivated) {
         // if activated, get userOp directly
-        return await getUserOp(txns, payTokenAddress);
+        // return await getUserOp(txns, payTokenAddress);
       } else {
         // if not activated, prepend activate txns
         // return await getActivateOp(0, payToken);
