@@ -40,10 +40,9 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
   const onCreate = async () => {
     if (userOpRef.current) {
       try {
-        console.log('onCreateWallet');
         creatingRef.current = true;
         await signAndSend(userOpRef.current);
-        navigate('/intro');
+        navigate('/dashboard');
       } catch (error: any) {
         toast({
           title: 'Failed to create wallet',
