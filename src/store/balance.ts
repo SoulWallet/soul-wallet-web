@@ -5,7 +5,6 @@ import { ethers } from 'ethers';
 import IconDefaultToken from '@/assets/tokens/default.svg';
 import IconEth from '@/assets/tokens/eth.svg';
 import BN from 'bignumber.js';
-import { usdcArbPoolReserveId } from '@/config/constants';
 
 export interface ITokenBalanceItem {
   chainID: string;
@@ -89,7 +88,7 @@ export const useBalanceStore = create<IBalanceStore>()(
       },
       fetchApy: async () => {
         const res = await api.aave.apy({
-          reserveId: usdcArbPoolReserveId,
+          reserveId: import.meta.env.VITE_AAVE_RESERVE_ID,
           resolutionInHours: 6,
         });
 
