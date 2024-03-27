@@ -1,8 +1,8 @@
 {
   "short_name": "Soul Wallet",
   "name": "Soul Wallet PWA",
-  "theme_color": "#EEF2FB",
-  "background_color": "#EEF2FB",
+  "theme_color": "#F5F6FA",
+  "background_color": "#F5F6FA",
   "icons": [
     {
       "src": "/icon.png",
