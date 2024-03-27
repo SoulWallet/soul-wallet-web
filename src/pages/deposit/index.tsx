@@ -55,7 +55,7 @@ const Pagination = ({ isActive, count, activeIndex, onNext, onFinish }: any) => 
         )}
         {activeIndex === 3 && (
           <Box display="flex" alignItems="center" justifyContent="center">
-            <Box onClick={() => navigate('dashboard')} fontWeight="700" fontSize="18px" cursor="pointer">I’ve done with all these steps!</Box>
+            <Box onClick={() => navigate('/dashboard')} fontWeight="700" fontSize="18px" cursor="pointer">I’ve done with all these steps!</Box>
           </Box>
         )}
         <Box>
