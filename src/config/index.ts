@@ -13,9 +13,10 @@ import IconEthSquare from '@/assets/chains/eth-square.svg';
 import IconOpSquare from '@/assets/chains/op-square.svg';
 import IconArbSquare from '@/assets/chains/arb-square.svg';
 // import ArbConfig from './chains/arb-sepolia';
-import BaseConfig from './chains/base-sepolia';
+import BaseSepoliaConfig from './chains/base-sepolia';
+import OpConfig from './chains/op';
 // import OpConfig from './chains/op-sepolia';
-import SepoliaConfig from './chains/sepolia';
+// import SepoliaConfig from './chains/sepolia';
 
 export const chainIdMapping = {
   1: 'ETH Mainnet',
@@ -30,6 +31,11 @@ export const chainIdMapping = {
   11155420: 'Optimism Sepolia',
   421614: 'Arbitrum Sepolia',
   421613: 'Arbitrum Goerli',
+};
+
+export const chainIdConfigs: any = {
+  10: OpConfig,
+  84532: BaseSepoliaConfig,
 };
 
 // get all chainId mapping, especially for switch chain.
@@ -89,7 +95,7 @@ export const bundlerErrMapping: { [key: string]: string } = {
 
 export const ensContractAddress = '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85';
 
-export const tgLink = 'https://t.me/+XFUHusXFdTYyODQ9'
+export const tgLink = 'https://t.me/+XFUHusXFdTYyODQ9';
 
 export const aaveLink = 'https://aave.com';
 
@@ -112,19 +118,8 @@ export default {
       iconActivated: IconGithubActivated,
       link: 'https://github.com/SoulWallet',
     },
-    // {
-    //   icon: IconLinkedin,
-    //   iconActivated: IconLinkedinActivated,
-    //   link: 'https://www.linkedin.com/company/soul-wallet/',
-    // },
   ],
   magicValue: '0x1626ba7e',
   backendURL: `${import.meta.env.VITE_BACKEND_URL}/appapi`,
-  soulScanURL: `${import.meta.env.VITE_SCAN_URL}/opapi`,
-  chainList: [
-    // ArbConfig,
-    // OpConfig,
-    // SepoliaConfig,
-    BaseConfig,
-  ],
+  chainList: [chainIdConfigs[String(import.meta.env.VITE_CHAIN_ID)]],
 };

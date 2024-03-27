@@ -133,35 +133,6 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
     onSent();
   };
 
-  const checkReceivAddress = () => {
-    if (isENSOpen) {
-      return;
-    }
-    let trimedAddress = receiverAddress ? receiverAddress.trim() : '';
-
-    if (trimedAddress.includes(':')) {
-      const chainPrefix = `${trimedAddress.split(':')[0]}:`;
-      if (chainPrefix !== chainConfig.addressPrefix) {
-        setErrors({
-          ...errors,
-          receiverAddress: 'Please select the correct network',
-        });
-        return;
-      } else {
-        trimedAddress = trimedAddress.split(':')[1];
-      }
-    }
-
-    if (!trimedAddress || !ethers.isAddress(trimedAddress)) {
-      setErrors({
-        receiverAddress: 'Invalid address',
-      });
-      return;
-    }
-
-    setErrors(({ receiverAddress, ...rest }: any) => rest);
-  };
-
   useEffect(() => {
     if (!amount) {
       return;
@@ -206,7 +177,6 @@ export default function SendAssets({ tokenAddress = '', onSent }: ISendAssets) {
             onFocus={(e: any) => inputOnFocus(e.target.value)}
             setInputRef={setInputRef}
             onEnter={confirmAddress}
-            onBlur={checkReceivAddress}
           />
           <ENSResolver
             _styles={{

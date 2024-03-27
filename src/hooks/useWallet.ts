@@ -196,7 +196,7 @@ export default function useWallet() {
     // approve defi contract to spend token
     const approveTos = [import.meta.env.VITE_TOKEN_USDC];
     const approveCalldata = erc20Interface.encodeFunctionData('approve', [
-      import.meta.env.VITE_AaveUsdcSaveAutomationSepolia,
+      import.meta.env.VITE_AaveUsdcSaveAutomation,
       MaxUint256,
     ]);
 

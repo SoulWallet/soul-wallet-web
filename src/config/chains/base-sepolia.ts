@@ -11,8 +11,6 @@ export default {
   icon: IconArbSquare,
   iconFaded: IconArbFaded,
   iconSquare: IconArbSquare,
-  cardBg: 'radial-gradient(52.03% 100.00% at 100.00% 100.00%, #73DDFF 0%, #E2FC89 100%)',
-  cardBgUnactivated: 'radial-gradient(52.03% 100.00% at 100.00% 100.00%, #73DDFF 0%, #D7D7D7 100%)',
   provider: `https://base-sepolia-rpc.publicnode.com`,
   scanUrl: 'https://base-sepolia.blockscout.com',
   scanName: 'Arbiscan',
@@ -24,15 +22,10 @@ export default {
   defaultMaxPriorityFee: '0',
   chainName: 'Base Sepolia',
   chainToken: 'ETH',
-  addressPrefix: 'basesep:',
-  support1559: true,
-  paymasterTokens: [
-  ],
   contracts: {
     soulWalletFactory: import.meta.env.VITE_SoulwalletFactory,
     defaultCallbackHandler: import.meta.env.VITE_DefaultCallbackHandler,
     entryPoint: import.meta.env.VITE_EntryPoint,
-    paymaster: import.meta.env.VITE_Paymaster,
     defaultValidator: import.meta.env.VITE_SoulWalletDefaultValidator,
   },
 };

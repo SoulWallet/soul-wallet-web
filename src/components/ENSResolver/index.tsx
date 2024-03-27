@@ -73,7 +73,7 @@ export const isENSAddress = (address: string) => {
 export const extractENSAddress = (address: any) => {
   if (!address) return
 
-  if (ethers.isAddress(address)|| config.chainList.some(item => address.startsWith(item.addressPrefix))) {
+  if (ethers.isAddress(address)) {
     return null
   } else if (isENSAddress(address)) {
     return address

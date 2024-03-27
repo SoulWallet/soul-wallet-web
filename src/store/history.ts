@@ -13,7 +13,7 @@ export interface IHistoryStore {
 
 const ausdcAddress = import.meta.env.VITE_TOKEN_AUSDC;
 const usdcAddress = import.meta.env.VITE_TOKEN_USDC;
-const autoSaveAddress = import.meta.env.VITE_AaveUsdcSaveAutomationSepolia;
+const autoSaveAddress = import.meta.env.VITE_AaveUsdcSaveAutomation;
 
 export const fetchHistoryApi = async (address: string, chainId: string) => {
   const res = await api.token.history({ address, chainID: chainId });
