@@ -42,7 +42,7 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
       try {
         creatingRef.current = true;
         await signAndSend(userOpRef.current);
-        navigate('/dashboard');
+        navigate('/intro');
       } catch (error: any) {
         toast({
           title: 'Failed to create wallet',

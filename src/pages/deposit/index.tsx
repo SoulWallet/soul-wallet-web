@@ -28,6 +28,7 @@ import 'swiper/css/pagination';
 // import { Pagination } from 'swiper/modules';
 
 const Pagination = ({ isActive, count, activeIndex, onNext, onFinish }: any) => {
+  const navigate = useNavigate();
   return (
     <Box
       position="fixed"
@@ -54,7 +55,7 @@ const Pagination = ({ isActive, count, activeIndex, onNext, onFinish }: any) => 
         )}
         {activeIndex === 3 && (
           <Box display="flex" alignItems="center" justifyContent="center">
-            <Box onClick={onFinish} fontWeight="700" fontSize="18px" cursor="pointer">I’ve done with all these steps!</Box>
+            <Box onClick={() => navigate('dashboard')} fontWeight="700" fontSize="18px" cursor="pointer">I’ve done with all these steps!</Box>
           </Box>
         )}
         <Box>
