@@ -41,7 +41,7 @@ export const fetchHistoryApi = async (address: string, chainId: string) => {
           },
           {
             action: 'Transfer',
-            amountFormatted: `+ ${historyItem.amount}`,
+            amountFormatted: `- ${historyItem.amount}`,
           },
         ];
       } else if (historyItem.item.to === addressLowercase) {
