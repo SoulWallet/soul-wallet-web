@@ -29,7 +29,6 @@ const noGuardian = {
   initialGuardianSafePeriod: defaultGuardianSafePeriod,
 };
 
-
 export default function useWallet() {
   const { signByPasskey, authenticate } = usePasskey();
   const { chainConfig } = useConfig();
@@ -45,27 +44,38 @@ export default function useWallet() {
 
   const loginWallet = async () => {
     const { credential } = await authenticate();
-    const res = await api.account.list({
-      ownerKey: credential.publicKey,
-    });
-
-    if (!res || !res.data || !res.data.length) {
-      toast({
-        title: 'No account found',
-        description: 'Please sign in with another passkey or create free account',
-        status: 'error',
+    try {
+      const res: any = await api.account.list({
+        ownerKey: credential.publicKey,
       });
-      return;
+
+      if (!res || !res.data || !res.data.length || res.code !== 200) {
+        toast({
+          title: 'Failed to login',
+          description: res.msg,
+          status: 'error',
+          duration: 5000,
+        });
+        throw new Error('Failed to login');
+      }
+
+      // consider first item only for now
+      const item = res.data[0];
+
+      setCredentials([credential as any]);
+      setWalletName(item.name);
+      setSelectedAddress(item.address);
+      setSelectedChainId(item.chainID);
+      setSlotInfo(item.initInfo);
+    } catch (e: any) {
+      toast({
+        title: 'Failed to login',
+        description: e.response.data.data.message,
+        status: 'error',
+        duration: 5000,
+      });
+      throw new Error('Failed to login');
     }
-
-    // consider first item only for now
-    const item = res.data[0];
-
-    setCredentials([credential as any]);
-    setWalletName(item.name);
-    setSelectedAddress(item.address);
-    setSelectedChainId(item.chainID);
-    setSlotInfo(item.initInfo);
   };
 
   const logoutWallet = async () => {
@@ -115,7 +125,7 @@ export default function useWallet() {
 
   const initWallet = async (credential: any, walletName: string, invitationCode: string) => {
     const createIndex = 0;
-  
+
     const initialKeys = [credential.publicKey as string];
 
     const createSlotInfo = {
@@ -162,12 +172,17 @@ export default function useWallet() {
 
     return {
       initialKeys,
-    }
-  }
+    };
+  };
 
   const getActivateOp = async (_initialKeys: any) => {
     const createIndex = 0;
-    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(createIndex, _initialKeys, noGuardian.initialGuardianHash, '0x');
+    const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(
+      createIndex,
+      _initialKeys,
+      noGuardian.initialGuardianHash,
+      '0x',
+    );
 
     if (userOpRet.isErr()) {
       throw new Error(userOpRet.ERR.message);
@@ -289,7 +304,7 @@ export default function useWallet() {
     }
 
     return userOp;
-  }
+  };
 
   const signAndSend = async (userOp: UserOperation) => {
     const validAfter = Math.floor(Date.now() / 1000 - 300);

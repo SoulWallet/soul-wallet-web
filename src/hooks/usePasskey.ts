@@ -68,7 +68,7 @@ export default function usePasskey() {
     return WebAuthN.publicKeyToKeyhash({
       x: `0x${Qx.toString(16).padStart(64, '0')}`,
       y: `0x${Qy.toString(16).padStart(64, '0')}`,
-    })
+    });
   };
 
   const getRS256Coordinates = async (credentialPublicKey: string) => {
@@ -93,7 +93,7 @@ export default function usePasskey() {
     return WebAuthN.publicKeyToKeyhash({
       e: arrayBufferToHex(parseBase64url(jwk.e)),
       n: arrayBufferToHex(parseBase64url(jwk.n)),
-    })
+    });
   };
 
   const getPublicKey = async (credential: any) => {
@@ -104,7 +104,7 @@ export default function usePasskey() {
     }
   };
 
-  const register = async (walletName:string = 'Wallet') => {
+  const register = async (walletName: string = 'Wallet') => {
     const randomChallenge = btoa('1234567890');
     // const finalCredentialName = `${credentialName}_${getCurrentTimeFormatted()}`;
     const finalCredentialName = `${walletName}_${getCurrentTimeFormatted()}`;
@@ -124,7 +124,7 @@ export default function usePasskey() {
     };
 
     // backup credential info
-    const res:any = await api.backup.publicBackupCredentialId({
+    const res: any = await api.backup.publicBackupCredentialId({
       credentialID: credentialKey.id,
       data: JSON.stringify({
         publicKey: credentialKey.publicKey,
@@ -132,12 +132,12 @@ export default function usePasskey() {
       }),
     });
 
-    if(res.code !== 200){
+    if (res.code !== 200) {
       toast({
         title: 'Failed to backup credential',
         description: res.msg,
         status: 'error',
-      })
+      });
       throw new Error('Failed to backup credential');
     }
 
@@ -153,9 +153,7 @@ export default function usePasskey() {
     let challenge = base64Tobase64url(btoa(String.fromCharCode(...byteArray)));
 
     console.log('Authenticating with credential id', credential.id);
-    let authentication = await client.authenticate([
-      credential.id
-    ], challenge);
+    let authentication = await client.authenticate([credential.id], challenge);
 
     const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
     const clientData = atob(base64urlTobase64(authentication.clientData));
@@ -167,7 +165,6 @@ export default function usePasskey() {
     console.log(`signature: ${signature}`);
 
     if (credential.algorithm === 'ES256') {
-
       const { r, s } = decodeDER(signature);
 
       return {
@@ -204,7 +201,7 @@ export default function usePasskey() {
       userVerification: 'required',
     });
     // authentication method will return credentialId, but not id.
-    const credentialId = authentication.credentialId
+    const credentialId = authentication.credentialId;
     console.log('Authenticated', authentication);
     // const authenticatorData = `0x${base64ToBigInt(base64urlTobase64(authentication.authenticatorData)).toString(16)}`;
     const clientData = atob(base64urlTobase64(authentication.clientData));
@@ -215,15 +212,20 @@ export default function usePasskey() {
     const signature = base64urlTobase64(authentication.signature);
     console.log(`signature: ${signature}`);
 
-    const credentialInfo = JSON.parse(
-      (
-        await api.backup.credential({
-      
-          credentialID: credentialId,
-        })
-      ).data.data,
-    );
+    const res: any = await api.backup.credential({
+      credentialID: credentialId,
+    });
 
+    if (res.code !== 200) {
+      toast({
+        title: 'Failed to get credential',
+        description: res.msg,
+        status: 'error',
+        duration: 3000,
+      });
+      throw new Error('Failed to get credential');
+    }
+    const credentialInfo = JSON.parse(res.data.data);
     return {
       credential: {
         ...authentication,
