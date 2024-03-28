@@ -47,7 +47,7 @@ export default function AppContainer() {
   const { isModalOpen, openModal, closeModal, activeModal } = useNavigation()
   const { logoutWallet } = useWallet();
   const innerHeight = window.innerHeight
-  const contentHeight = innerHeight - 62
+  const contentHeight = innerHeight - 64
   const marginHeight = innerHeight - 250
   console.log('isModalOpen', isModalOpen)
 
@@ -115,7 +115,7 @@ export default function AppContainer() {
             zIndex="2"
             borderRadius={{
               sm: '20px 20px 0 0',
-              md: '20px',
+              // md: '20px',
             }}
             maxW={{
               sm: '100vw',
@@ -123,12 +123,12 @@ export default function AppContainer() {
             }}
             marginTop={{
               sm: `62px`,
-              md: 'calc(50vh - 125px)'
+              // md: 'calc(50vh - 125px)'
             }}
             mb="0"
             height={{
               sm: contentHeight,
-              md: '250px'
+              // md: '250px'
             }}
             overflow="auto"
           >

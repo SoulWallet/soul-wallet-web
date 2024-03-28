@@ -135,7 +135,7 @@ export default function Dashboard() {
     const elem: any = contentRef.current
 
     if (elem) {
-      return elem.clientHeight + 64 + 60 - 6
+      return elem.clientHeight + 62 + 60 - 6
     }
 
     return 494
