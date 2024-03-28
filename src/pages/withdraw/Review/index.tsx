@@ -9,13 +9,19 @@ import useWallet from '@/hooks/useWallet';
 
 export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
   const { getWithdrawOp, signAndSend } = useWallet();
+  const [executing, setExecuting] = useState(false);
   const userOpRef = useRef();
   const isCompletedRef = useRef(false);
   const isTransferingRef = useRef(false);
 
   const prepareAction = async () => {
-    const _userOp = await getWithdrawOp(withdrawAmount, sendTo);
-    userOpRef.current = _userOp;
+    try{
+      const _userOp = await getWithdrawOp(withdrawAmount, sendTo);
+      userOpRef.current = _userOp;
+    }catch(e){
+      setExecuting(false);
+      isTransferingRef.current = false;
+    }
   };
 
   useEffect(() => {
@@ -30,6 +36,10 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
   }, []);
 
   const onWithdraw = async () => {
+    if(executing){
+      return
+    }
+    setExecuting(true);
     isTransferingRef.current = true;
     console.log('on withdraw', userOpRef)
     if (userOpRef.current) {
@@ -38,6 +48,7 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
         isTransferingRef.current = false;
         isCompletedRef.current = true;
       } catch (e) {
+        setExecuting(false);
         isTransferingRef.current = false;
         isCompletedRef.current = false;
       }

@@ -13,7 +13,7 @@ export default function Withdraw() {
   const onPrev = useCallback(() => {
     console.log('prev', step);
     if (step > 0) {
-      setStep(step - 1);
+      setStep(prev => prev - 1);
     } else {
       // navigate('/dashboard');
       navigate(-1)

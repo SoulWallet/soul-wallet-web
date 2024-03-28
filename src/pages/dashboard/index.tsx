@@ -9,6 +9,7 @@ import ActivityTransferIcon from '@/components/Icons/mobile/Activity/Transfer'
 import { useBalanceStore } from '@/store/balance';
 import { useHistoryStore } from '@/store/history';
 import BN from 'bignumber.js'
+import { toFixed } from '@/lib/tools';
 
 const getFontSize = (value: any) => {
   const length = value ? String(value).length : 0
@@ -183,7 +184,7 @@ export default function Dashboard() {
                 >
                   {valueLeft}
                 </Box>
-                {Number(valueRight) > 0 && (
+                {Number(toFixed(valueRight.slice(0,3), 3, false)) > 0 && (
                   <Box
                     fontFamily="Nunito"
                     fontSize={smFontSize}
@@ -193,7 +194,7 @@ export default function Dashboard() {
                     // marginLeft="10px"
                     color="#939393"
                   >
-                    .{valueRight}
+                    .{toFixed(valueRight.slice(0,3), 3, false)}
                   </Box>
                 )}
               </Box>

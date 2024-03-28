@@ -287,13 +287,13 @@ export function formatCurrency(num: number) {
   }
 }
 
-export function toFixed(num: number | string | undefined, maxDecimalPlaces: number) {
+export function toFixed(num: number | string | undefined, maxDecimalPlaces: number, needFormat: boolean = true) {
   if (!num) {
     return '0';
   }
   let fixedStr = Number(num).toFixed(maxDecimalPlaces);
   let trimmedStr = fixedStr.replace(/(\.\d*?[1-9])0+$/, '$1').replace(/\.$/, '');
-  return new BN(trimmedStr).toFormat();
+  return needFormat ? new BN(trimmedStr).toFormat(): new BN(trimmedStr).toString();
 }
 
 export const getNetwork = (chainId: number) => {

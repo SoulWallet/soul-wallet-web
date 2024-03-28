@@ -186,7 +186,7 @@ export default function InputAmount({
               fontWeight="600"
               fontSize="14px"
             >
-              Available: {toFixed(totalUsdValue, 4)} USDC
+              Available: {toFixed(totalUsdValue, 3)} USDC
             </Box>
             <Box
               background="rgba(225, 220, 252, 0.80)"
