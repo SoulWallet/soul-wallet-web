@@ -22,7 +22,6 @@ export default function Pooling() {
   };
 
   const getCommonInfo = () => {
-    fetchApy();
     fetchFeeData(ethersProvider);
   };
 
@@ -45,6 +44,16 @@ export default function Pooling() {
     const interval = setInterval(() => {
       getCommonInfo();
     }, 20000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchApy();
+    const interval = setInterval(() => {
+     fetchApy();
+    }, 60 * 60 * 1000);
     return () => {
       clearInterval(interval);
     };

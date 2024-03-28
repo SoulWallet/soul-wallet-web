@@ -8,6 +8,7 @@ import ActivityDepositIcon from '@/components/Icons/mobile/Activity/Deposit'
 import ActivityTransferIcon from '@/components/Icons/mobile/Activity/Transfer'
 import { useBalanceStore } from '@/store/balance';
 import { useHistoryStore } from '@/store/history';
+import BN from 'bignumber.js'
 
 const getFontSize = (value: any) => {
   const length = value ? String(value).length : 0
@@ -56,7 +57,7 @@ export default function Dashboard() {
   const contentRef = useRef()
 
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
-  const hasBalance = Number(totalUsdValue) > 0;
+  const hasBalance = BN(totalUsdValue).isGreaterThan(0);
 
   const valueLeft = totalUsdValue.split('.')[0]
   const valueRight = totalUsdValue.split('.')[1]
@@ -206,7 +207,7 @@ export default function Dashboard() {
                 + ${oneDayInterest} earned  today
               </Box>
               {
-                pendingUsdcBalance > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
+                Number(pendingUsdcBalance) > 0 && <Box color="rgba(0, 0, 0, 0.60)" fontSize="14px">
                   Deposit in progress, est complete in <Box color="#497EE6" as="span">1 min</Box>
                 </Box>
               }

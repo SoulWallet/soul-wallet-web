@@ -102,7 +102,7 @@ export default function InputAmount({
     setIsENSOpen(false);
   };
 
-  const disabled = !withdrawAmount || withdrawAmount <= 0 || withdrawAmount > totalUsdValue || !sendTo || BN(withdrawAmount).isGreaterThan(totalUsdValue) || BN(withdrawAmount).isNaN() || !isAddress(sendTo);
+  const disabled = !withdrawAmount || withdrawAmount <= 0 || !sendTo || BN(withdrawAmount).isGreaterThan(totalUsdValue) || BN(withdrawAmount).isNaN() || !isAddress(sendTo);
 
   return (
     <Box width="100%" height="100%">

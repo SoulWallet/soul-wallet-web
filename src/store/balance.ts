@@ -90,7 +90,6 @@ export const useBalanceStore = create<IBalanceStore>()(
         const res = await api.aave.apy({
           reserveId: import.meta.env.VITE_AAVE_RESERVE_ID,
           resolutionInHours: 6,
-          // seven days ago
           from: Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60,
         });
 
