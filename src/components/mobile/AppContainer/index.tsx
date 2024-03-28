@@ -44,7 +44,7 @@ export default function AppContainer() {
   const { isModalOpen, openModal, closeModal, activeModal } = useNavigation()
   const { logoutWallet } = useWallet();
   const innerHeight = window.innerHeight
-  const contentHeight = innerHeight - 64
+  const contentHeight = innerHeight - 56
   const marginHeight = innerHeight - 250
   console.log('isModalOpen', isModalOpen)
 
@@ -55,7 +55,7 @@ export default function AppContainer() {
   const getContentStyles = (isOpen: any) => {
     if (isOpen) {
       return {
-        'transform': 'perspective(1500px) translateZ(-150px)',
+        'transform': 'perspective(1300px) translateZ(-80px)',
         'transform-style': 'preserve-3d',
         'border-radius': '20px'
       }
@@ -91,7 +91,7 @@ export default function AppContainer() {
           openMenu={() => openModal('settings')}
         />
         <Flex
-          h={contentHeight}
+          h={innerHeight - 64}
           flexDir={{ base: 'column', lg: 'row' }}
           gap={{ base: 6, md: 8, lg: '50px' }}
           overflow="auto"
@@ -107,7 +107,7 @@ export default function AppContainer() {
           motionPreset="slideInBottom"
           blockScrollOnMount={true}
         >
-          <ModalOverlay />
+          <ModalOverlay zIndex="999" />
           <ModalContent
             zIndex="2"
             borderRadius={{
@@ -119,12 +119,12 @@ export default function AppContainer() {
               md: '430px'
             }}
             marginTop={{
-              sm: `62px`,
+              sm: `40px`,
               // md: 'calc(50vh - 125px)'
             }}
             mb="0"
             height={{
-              sm: contentHeight,
+              sm: innerHeight - 40,
               // md: '250px'
             }}
             overflow="auto"
