@@ -84,6 +84,21 @@ export const extractENSAddress = (address: any) => {
   }
 }
 
+function debounce(func: any, wait: any) {
+  let timeout: any;
+
+  return function executedFunction(...args: any) {
+    const later = () => {
+      clearTimeout(timeout);
+      console.log('later')
+      func(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 const ENSResolver = ({
   isENSOpen,
   setIsENSOpen,
@@ -142,7 +157,11 @@ const ENSResolver = ({
 
   useEffect(() => {
     if (searchAddress) {
-      resolveName(searchAddress)
+      setIsENSLoading(true)
+
+      debounce(() => {
+        resolveName(searchAddress)
+      }, 1000)()
     }
   }, [searchAddress])
 

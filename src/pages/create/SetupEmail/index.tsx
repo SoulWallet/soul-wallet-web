@@ -13,7 +13,7 @@ export default function SepupEmail({ onNext, onSkip }: any) {
         Set up email
       </Box>
       <Box width="100%" marginBottom="50px">
-        <Input fontSize="32px" lineHeight="24px" padding="0" fontWeight="700" placeholder="Enter or paste here" borderRadius="0" border="none" outline="none" _focusVisible={{ border: 'none', boxShadow: 'none' }} />
+        <Input height="40px" fontSize="32px" lineHeight="24px" padding="0" fontWeight="700" placeholder="Enter or paste here" borderRadius="0" border="none" outline="none" _focusVisible={{ border: 'none', boxShadow: 'none' }} />
         <Box marginTop="10px" width="100%" height="1px" background="rgba(73, 126, 130, 0.2)" />
         <Box fontSize="14px" lineHeight="24px" fontWeight="600" marginTop="8px">Why I need to set up email?</Box>
       </Box>

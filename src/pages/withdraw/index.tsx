@@ -15,7 +15,8 @@ export default function Withdraw() {
     if (step > 0) {
       setStep(step - 1);
     } else {
-      navigate('/dashboard');
+      // navigate('/dashboard');
+      navigate(-1)
     }
   }, [step]);
 
