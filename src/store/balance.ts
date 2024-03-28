@@ -103,11 +103,12 @@ export const useBalanceStore = create<IBalanceStore>()(
         set({ sevenDayApy: ((totalApy / latest7Days.length) * 100).toFixed(2) });
       },
       fetchInterest: async (address, chainID) => {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
         const res = await api.token.interest({
           chainID,
           address,
-          // 24 hours before
-          startTime: Math.floor(Date.now() / 1000) - 24 * 60 * 60,
+          startTime: Math.floor(date.getTime() / 1000)
         });
 
         set({ oneDayInterest: res.data.interest });
