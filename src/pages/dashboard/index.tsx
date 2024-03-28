@@ -12,6 +12,8 @@ import BN from 'bignumber.js'
 import { toFixed } from '@/lib/tools';
 import { useScroll, useMotionValueEvent } from "framer-motion"
 import HistoryIcon from '@/components/Icons/mobile/History'
+import useNavigation from '@/hooks/useNavigation'
+import { useOutletContext } from "react-router-dom"
 
 const getFontSize = (value: any) => {
   const length = value ? String(value).length : 0
@@ -57,6 +59,8 @@ export default function Dashboard() {
   const [showFullHistory, setShowFullHistory] = useState(false);
   const [modalPosition, setModalPosition] = useState('bottom')
   const [isMoving, setIsMoving] = useState(false)
+  // const { openModal } = useNavigation()
+  const [openModal] = useOutletContext<any>()
   const contentRef = useRef()
 
   const pendingUsdcBalance = getTokenBalance(import.meta.env.VITE_TOKEN_USDC)
@@ -83,6 +87,11 @@ export default function Dashboard() {
 
   const handleStart = (position: any) => {
     setStartPosition(position);
+  };
+
+  const openActivity = () => {
+    console.log('openActivity')
+    openModal('activity')
   };
 
   const handleMove = (currentPosition: any) => {
@@ -163,7 +172,6 @@ export default function Dashboard() {
     <Box>
       <Box
         padding={{ xs: '20px', sm: '30px' }}
-        paddingTop={{ xs: '10px', sm: '10px' }}
       >
         <Box ref={(v: any) => { contentRef.current = v }}>
           <Box
@@ -299,13 +307,13 @@ export default function Dashboard() {
             paddingTop="50px"
           >
             <Box fontSize="18px" fontWeight="700" marginBottom="12px">Earn</Box>
-            <Box as={Link} to="/details" display="flex" justifyContent="space-between" alignItems="center">
+            <Box onClick={() => openModal('details')} display="flex" justifyContent="space-between" alignItems="center">
               <Box display="flex" alignItems="center">
                 <Box marginRight="8px">
                   <Image src={USDCIcon} minW="8" w="8" h="8" />
                 </Box>
                 <Box>
-                  <Box fontSize="18px" lineHeight={"23px"} fontWeight="700">USDC on AAVE</Box>
+                  <Box fontSize="18px" lineHeight={"23px"} fontWeight="700">USDC</Box>
                 </Box>
               </Box>
               <Box display="flex" alignItems="center">
@@ -341,7 +349,7 @@ export default function Dashboard() {
                   justifyContent="space-between"
                 >
                   <Box>Activity</Box>
-                  <Box><HistoryIcon /></Box>
+                  <Box onClick={() => openActivity()}><HistoryIcon /></Box>
                 </Box>
               </Box>
               <Flex gap="36px" padding="0" flexDir="column" width="100%" overflow="auto" maxHeight={`${40 * 4 + 36 * 3}px`}>

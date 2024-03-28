@@ -10,6 +10,10 @@ import { useAddressStore } from '@/store/address';
 import Button from '@/components/mobile/Button'
 import useWallet from '@/hooks/useWallet';
 import AddressIcon from '@/components/AddressIcon';
+import useNavigation from '@/hooks/useNavigation'
+import Settings from '@/pages/settings'
+import Activity from '@/pages/activity'
+import Details from '@/pages/dashboard/Details'
 
 export function Header({ openMenu, username, ...props }: any) {
   const { walletName, selectedAddress } = useAddressStore();
@@ -40,146 +44,108 @@ export function Header({ openMenu, username, ...props }: any) {
 }
 
 export default function AppContainer() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isModalOpen, openModal, closeModal, activeModal } = useNavigation()
   const { logoutWallet } = useWallet();
   const innerHeight = window.innerHeight
-  const contentHeight = innerHeight - 64
+  const contentHeight = innerHeight - 62
   const marginHeight = innerHeight - 250
+  console.log('isModalOpen', isModalOpen)
 
   const doLogout = async () => {
     logoutWallet();
   }
 
+  const getContentStyles = (isOpen: any) => {
+    if (isOpen) {
+      return {
+        'transform': 'perspective(1500px) translateZ(-150px)',
+        'transform-style': 'preserve-3d',
+        'border-radius': '20px'
+      }
+    }
+
+    return {}
+  }
+
+  const renderModal = (name: any) => {
+    if (name === 'settings') {
+      return <Settings />
+    } else if (name === 'activity') {
+      return <Activity />
+    } else if (name === 'details') {
+      return <Details />
+    }
+  }
+
   return (
-    <Box height="innerHeight" background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)">
-      <Header
-        showLogo
-        paddingTop="10px"
-        paddingBottom="10px"
-        height="64px"
-        background="transparent"
-        openMenu={onOpen}
-      />
-      <Flex
-        h={contentHeight}
-        flexDir={{ base: 'column', lg: 'row' }}
-        gap={{ base: 6, md: 8, lg: '50px' }}
-        overflow="auto"
-        paddingTop="0"
+    <Box background="black">
+      <Box
+        height={innerHeight}
+        background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
+        transition="all 0.2s ease"
+        sx={getContentStyles(isModalOpen)}
       >
-        <Box w="100%">
-          <Outlet />
-        </Box>
-      </Flex>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        motionPreset="slideInBottom"
-        blockScrollOnMount={true}
-      >
-        <ModalOverlay />
-        <ModalContent
-          borderRadius={{
-            sm: '20px 20px 0 0',
-            md: '20px',
-          }}
-          maxW={{
-            sm: '100vw',
-            md: '430px'
-          }}
-          marginTop={{
-            sm: `${marginHeight}px`,
-            md: 'calc(50vh - 125px)'
-          }}
-          mb="0"
-          height="250px"
+        <Header
+          showLogo
+          paddingTop="10px"
+          paddingBottom="10px"
+          height="64px"
+          background="transparent"
+          openMenu={() => openModal('settings')}
+        />
+        <Flex
+          h={contentHeight}
+          flexDir={{ base: 'column', lg: 'row' }}
+          gap={{ base: 6, md: 8, lg: '50px' }}
           overflow="auto"
+          paddingTop="0"
         >
-          <Box tabIndex={0} />
-          <ModalCloseButton />
-          <ModalBody
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="flex-start"
-            width="100%"
-            paddingTop="34px"
+          <Box w="100%">
+            <Outlet context={[openModal]} />
+          </Box>
+        </Flex>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          motionPreset="slideInBottom"
+          blockScrollOnMount={true}
+        >
+          <ModalOverlay />
+          <ModalContent
+            zIndex="2"
+            borderRadius={{
+              sm: '20px 20px 0 0',
+              md: '20px',
+            }}
+            maxW={{
+              sm: '100vw',
+              md: '430px'
+            }}
+            marginTop={{
+              sm: `62px`,
+              md: 'calc(50vh - 125px)'
+            }}
+            mb="0"
+            height={{
+              sm: contentHeight,
+              md: '250px'
+            }}
+            overflow="auto"
           >
-            <Box
+            <Box tabIndex={0} />
+            <ModalCloseButton />
+            <ModalBody
               display="flex"
               flexDirection="column"
               alignItems="center"
+              justifyContent="flex-start"
               width="100%"
-              marginTop="10px"
             >
-              <Box
-                width="100%"
-                fontSize="16px"
-                fontWeight="700"
-                py="10px"
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-start"
-              >
-                <Box
-                  marginRight="12px"
-                  height="32px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <SettingIcon />
-                </Box>
-                <Box>Recovery Setting</Box>
-                <Box
-                  marginLeft="auto"
-                  background="#F2F2F2"
-                  padding="3px 8px"
-                  fontSize="12px"
-                  fontWeight="400"
-                  rounded="4px"
-                >
-                  Coming soon
-                </Box>
-              </Box>
-              <a target='_blank' href={tgLink} style={{width: "100%"}}>
-                <Box
-                  width="100%"
-                  fontSize="16px"
-                  fontWeight="700"
-                  py="10px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                >
-                  <Box
-                    marginRight="12px"
-                    height="32px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <TelegramIcon />
-                  </Box>
-                  <Box>Join Telegram group</Box>
-                </Box>
-              </a>
-            </Box>
-            <Box width="100%" marginTop="20px">
-              <Button
-                size="xl"
-                width="100%"
-                background="#F2F2F2"
-                color="#E83D26"
-                onClick={doLogout}
-                _hover={{ background: '#F2F2F2' }}
-              >
-                Logout
-              </Button>
-            </Box>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+              {renderModal(activeModal)}
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </Box>
     </Box>
   );
 }

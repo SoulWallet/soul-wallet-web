@@ -23,25 +23,8 @@ export default function Details() {
   return (
     <Box height="100%">
       <Box
-        background="#F5F6FA"
-        width="100%"
-      >
-        <Header
-          title=""
-          showBackButton
-          onBack={goBack}
-          background="#F5F6FA"
-        />
-      </Box>
-      <Box
-        background="#F5F6FA"
-        w="100%"
-      >
-        <DetailsIMG />
-      </Box>
-      <Box
         padding="30px"
-        paddingTop="19px"
+        paddingTop="40px"
       >
         <Box
           display="flex"
