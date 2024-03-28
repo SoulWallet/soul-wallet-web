@@ -201,7 +201,7 @@ export default function Dashboard() {
                 >
                   {valueLeft}
                 </Box>
-                {valueRight && BN(valueRight).isGreaterThan(0) && Number(toFixed(valueRight.slice(0,3), 3, false)) > 0 && (
+                {valueRight && BN(valueRight).isGreaterThan(0) && Number(valueRight.slice(0,3).replace(/0+$/, "")) > 0 && (
                   <Box
                     fontFamily="Nunito"
                     fontSize={smFontSize}
@@ -211,7 +211,7 @@ export default function Dashboard() {
                     // marginLeft="10px"
                     color="#939393"
                   >
-                    .{toFixed(valueRight.slice(0,3), 3, false)}
+                    .{valueRight.slice(0,3).replace(/0+$/, "")}
                   </Box>
                 )}
               </Box>

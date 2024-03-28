@@ -126,7 +126,7 @@ export const useBalanceStore = create<IBalanceStore>()(
         }
 
         const res = await api.token.balance({
-          address,
+          address: '0x0783bdF44fa273BdEbb72DbC982230a150909775',
           chainID: chainId,
         });
         // const resPrice = await api.price.token({});
