@@ -178,7 +178,7 @@ export default function Dashboard() {
             width="100%"
             background="white"
             borderRadius="24px"
-            boxShadow="0px 8px 60px 0px rgba(44, 53, 131, 0.12)"
+            boxShadow="0px 4px 60px 0px rgba(44, 53, 131, 0.08)"
             border="1px solid #EAECF0"
             padding="24px"
             paddingBottom="42px"
@@ -190,6 +190,7 @@ export default function Dashboard() {
               display="flex"
               flexDirection="column"
               alignItems="flex-start"
+              // fontFamily={"Nunito"}
             >
               <Box display="flex" alignItems="center">
                 <Box fontSize="24px" fontWeight="700" marginRight="2px">$</Box>
@@ -302,6 +303,8 @@ export default function Dashboard() {
             width="100%"
             marginTop="-30px"
             boxShadow="0px 4px 60px 0px rgba(44, 53, 131, 0.08)"
+            border="1px solid #EAECF0"
+            bg="#f5f6fa"
             padding="22px"
             borderRadius="24px"
             paddingTop="50px"

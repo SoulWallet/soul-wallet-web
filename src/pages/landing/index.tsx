@@ -25,7 +25,8 @@ export default function Landing() {
     <Box
       width="100%"
       height="100%"
-      background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
+      fontFamily={"SF"}
+      background="linear-gradient(180deg, #FBFBFB 0%, #F0F0F0 100%)"
     >
       <Header
         showLogo

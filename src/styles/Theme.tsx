@@ -57,7 +57,7 @@ const tooltipTheme = defineStyleConfig({
 
 const theme = extendTheme({
   fonts: {
-    body: `'Nunito', sans-serif`,
+    body: `'SF', 'Nunito', sans-serif`,
   },
   colors: {
     appBg: 'white',

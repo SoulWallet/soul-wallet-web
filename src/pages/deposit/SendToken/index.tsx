@@ -48,8 +48,8 @@ export default function SelectToken({
             flexDirection="column"
             padding="30px"
             borderRadius="20px"
-            width="172px"
-            height="172px"
+            width="180px"
+            height="180px"
           >
             <Box
               width="72px"
