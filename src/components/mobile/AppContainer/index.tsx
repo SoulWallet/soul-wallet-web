@@ -58,7 +58,7 @@ export default function AppContainer() {
   const getContentStyles = (isOpen: any) => {
     if (isOpen) {
       return {
-        'transform': 'perspective(1500px) translateZ(-150px)',
+        'transform': 'perspective(1300px) translateZ(-80px)',
         'transform-style': 'preserve-3d',
         'border-radius': '20px'
       }
@@ -110,7 +110,7 @@ export default function AppContainer() {
           motionPreset="slideInBottom"
           blockScrollOnMount={true}
         >
-          <ModalOverlay />
+          <ModalOverlay zIndex="999" />
           <ModalContent
             zIndex="2"
             borderRadius={{
@@ -122,12 +122,12 @@ export default function AppContainer() {
               md: '430px'
             }}
             marginTop={{
-              sm: `56px`,
+              sm: `40px`,
               // md: 'calc(50vh - 125px)'
             }}
             mb="0"
             height={{
-              sm: contentHeight,
+              sm: innerHeight - 40,
               // md: '250px'
             }}
             overflow="auto"
