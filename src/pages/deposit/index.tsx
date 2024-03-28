@@ -89,7 +89,8 @@ export default function Deposit() {
       // setStep(step - 1)
       swiper.slidePrev()
     }else{
-      onFinish()
+      // onFinish()
+      navigate(-1)
     }
   }, [step, swiper])
 

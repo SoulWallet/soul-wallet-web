@@ -33,7 +33,8 @@ export default function Create() {
     if (step > 1) {
       setStep(step - 1)
     }else{
-      navigate('/landing')
+      // navigate('/landing')
+      navigate(-1)
     }
   }, [step])
 
