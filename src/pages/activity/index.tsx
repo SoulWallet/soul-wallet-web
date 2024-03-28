@@ -33,7 +33,7 @@ export default function Activity() {
       alignItems="center"
       justifyContent="flex-start"
       width="100%"
-      paddingTop="34px"
+      marginTop="34px"
       position="relative"
     >
       <Box
