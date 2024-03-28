@@ -106,18 +106,18 @@ export default {
     {
       icon: IconTwitter,
       iconActivated: IconTwitterActivated,
-      link: 'https://twitter.com/soulwallet_eth',
+      link: 'https://twitter.com/stabledotcash',
     },
-    {
-      icon: IconTelegram,
-      iconActivated: IconTelegramActivated,
-      link: tgLink,
-    },
-    {
-      icon: IconGithub,
-      iconActivated: IconGithubActivated,
-      link: 'https://github.com/SoulWallet',
-    },
+    // {
+    //   icon: IconTelegram,
+    //   iconActivated: IconTelegramActivated,
+    //   link: tgLink,
+    // },
+    // {
+    //   icon: IconGithub,
+    //   iconActivated: IconGithubActivated,
+    //   link: 'https://github.com/SoulWallet',
+    // },
   ],
   magicValue: '0x1626ba7e',
   backendURL: `${import.meta.env.VITE_BACKEND_URL}/appapi`,
