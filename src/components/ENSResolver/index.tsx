@@ -84,9 +84,9 @@ export const extractENSAddress = (address: any) => {
   }
 }
 
-function debounce(func: any, wait: any) {
-  let timeout: any;
+let timeout: any;
 
+function debounce(func: any, wait: any) {
   return function executedFunction(...args: any) {
     const later = () => {
       clearTimeout(timeout);

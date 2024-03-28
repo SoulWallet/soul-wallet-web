@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import ProfileIcon from '@/components/Icons/mobile/Profile'
 import SettingIcon from '@/components/Icons/mobile/Setting'
 import TelegramIcon from '@/components/Icons/mobile/Telegram'
+import UserIcon from '@/components/Icons/mobile/User'
 import MenuIcon from '@/components/Icons/mobile/Menu'
 import { useAddressStore } from '@/store/address';
 import Button from '@/components/mobile/Button'
@@ -18,20 +19,20 @@ export function Header({ openMenu, username, ...props }: any) {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      padding="0 20px"
+      padding="0 30px"
       background="white"
       position="relative"
       {...props}
     >
       <Box display="flex" gap="2" alignItems="center" justifyContent="center">
-          <AddressIcon address={selectedAddress} width={24} />
-          {/* <ProfileIcon /> */}
+        {/* <AddressIcon address={selectedAddress} width={24} /> */}
+        {/* <ProfileIcon /> */}
         <Box fontSize="16px" lineHeight={"20px"} fontWeight="800">{walletName}</Box>
         {/* <Box fontSize="16px" fontWeight="400">{`(${toShortAddress(selectedAddress)})`}</Box> */}
       </Box>
       <Box fontSize="18px" fontWeight="700" color="black" lineHeight="24px">
         <Box background="white" height="36px" width="36px" borderRadius="36px" display="flex" alignItems="center" justifyContent="center" onClick={openMenu}>
-          <MenuIcon />
+          <UserIcon />
         </Box>
       </Box>
     </Box>
@@ -50,7 +51,7 @@ export default function AppContainer() {
   }
 
   return (
-    <Box background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)">
+    <Box height="innerHeight" background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)">
       <Header
         showLogo
         paddingTop="10px"
@@ -63,6 +64,8 @@ export default function AppContainer() {
         h={contentHeight}
         flexDir={{ base: 'column', lg: 'row' }}
         gap={{ base: 6, md: 8, lg: '50px' }}
+        overflow="auto"
+        paddingTop="0"
       >
         <Box w="100%">
           <Outlet />
