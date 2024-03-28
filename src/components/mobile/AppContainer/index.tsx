@@ -58,7 +58,7 @@ export default function AppContainer() {
   const getContentStyles = (isOpen: any) => {
     if (isOpen) {
       return {
-        'transform': 'perspective(1500px) translateZ(-150px)',
+        'transform': 'perspective(1500px) translateZ(-120px)',
         'transform-style': 'preserve-3d',
         'border-radius': '20px'
       }
@@ -122,7 +122,7 @@ export default function AppContainer() {
               md: '430px'
             }}
             marginTop={{
-              sm: `62px`,
+              sm: `56px`,
               // md: 'calc(50vh - 125px)'
             }}
             mb="0"
