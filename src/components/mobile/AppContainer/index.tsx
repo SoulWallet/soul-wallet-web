@@ -94,7 +94,7 @@ export default function AppContainer() {
           openMenu={() => openModal('settings')}
         />
         <Flex
-          h={contentHeight}
+          h={innerHeight - 64}
           flexDir={{ base: 'column', lg: 'row' }}
           gap={{ base: 6, md: 8, lg: '50px' }}
           overflow="auto"
