@@ -47,7 +47,7 @@ export default function AppContainer() {
   const { isModalOpen, openModal, closeModal, activeModal } = useNavigation()
   const { logoutWallet } = useWallet();
   const innerHeight = window.innerHeight
-  const contentHeight = innerHeight - 64
+  const contentHeight = innerHeight - 56
   const marginHeight = innerHeight - 250
   console.log('isModalOpen', isModalOpen)
 
@@ -58,7 +58,7 @@ export default function AppContainer() {
   const getContentStyles = (isOpen: any) => {
     if (isOpen) {
       return {
-        'transform': 'perspective(1500px) translateZ(-120px)',
+        'transform': 'perspective(1500px) translateZ(-150px)',
         'transform-style': 'preserve-3d',
         'border-radius': '20px'
       }
