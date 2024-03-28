@@ -33,7 +33,7 @@ export default function GuardianCard({
           color="white"
           fontSize="10px"
           fontWeight="500"
-          fontFamily="Nunito"
+          
           padding="2px 8px"
           borderBottomLeftRadius="12px"
         >
@@ -41,7 +41,7 @@ export default function GuardianCard({
         </Box>
       )}
       <Box
-        fontFamily="Nunito"
+        
         fontWeight="700"
         fontSize="16px"
         marginBottom="10px"
@@ -49,7 +49,7 @@ export default function GuardianCard({
         {name}
       </Box>
       <Box
-        fontFamily="Nunito"
+        
         fontWeight="400"
         fontSize="12px"
         color="#868686"
@@ -57,7 +57,7 @@ export default function GuardianCard({
         {address}
       </Box>
       <Box
-        fontFamily="Nunito"
+        
         fontWeight="400"
         fontSize="12px"
         color="#868686"
@@ -70,7 +70,7 @@ export default function GuardianCard({
         alignItems="center"
       >
         <Box
-          fontFamily="Nunito"
+          
           fontWeight="500"
           fontSize="12px"
           color="black"

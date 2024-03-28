@@ -178,7 +178,7 @@ export default function Dashboard() {
             width="100%"
             background="white"
             borderRadius="24px"
-            boxShadow="0px 4px 60px 0px rgba(44, 53, 131, 0.08)"
+            boxShadow="0px 4px 30px 0px rgba(44, 53, 131, 0.08)"
             border="1px solid #EAECF0"
             padding="24px"
             paddingBottom="42px"
@@ -195,7 +195,7 @@ export default function Dashboard() {
               <Box display="flex" alignItems="center">
                 <Box fontSize="24px" fontWeight="700" marginRight="2px">$</Box>
                 <Box
-                  fontFamily="Nunito"
+                  
                   fontSize={fontSize}
                   lineHeight={"1"}
                   fontWeight="800"
@@ -204,7 +204,7 @@ export default function Dashboard() {
                 </Box>
                 {valueRight && BN(valueRight).isGreaterThan(0) && Number(valueRight.slice(0,3).replace(/0+$/, "")) > 0 && (
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontSize={smFontSize}
                     lineHeight={"1"}
                     fontWeight="800"
@@ -252,10 +252,7 @@ export default function Dashboard() {
                       <Button
                         width="100%"
                         size="xl"
-                        type="lightBlue"
-                        // minWidth="100px"
-                        boxShadow="none"
-                        color="#497EE6"
+                        type="grey" fontWeight="600"
                         minWidth="auto"
                       >
                         Transfer
@@ -272,7 +269,7 @@ export default function Dashboard() {
                 >
                   <Link to="/deposit" style={{ width: "100%"}}>
                     <Box width="100%">
-                      <Button width="100%" size="xl" type="blue" minWidth="auto">
+                      <Button width="100%" fontWeight="600" size="xl" type="black" minWidth="auto">
                         Deposit USDC
                       </Button>
                     </Box>
@@ -290,7 +287,7 @@ export default function Dashboard() {
                     justifyContent="center"
                   >
                     <Box width="100%">
-                      <Button width="100%" size="xl" type="blue">
+                      <Button width="100%" size="xl" type="black">
                         Deposit USDC
                       </Button>
                     </Box>
@@ -304,10 +301,10 @@ export default function Dashboard() {
             marginTop="-30px"
             boxShadow="0px 4px 60px 0px rgba(44, 53, 131, 0.08)"
             border="1px solid #EAECF0"
-            bg="#f5f6fa"
+            bg="#FAFAFA"
             padding="22px"
             borderRadius="24px"
-            paddingTop="50px"
+            paddingTop="44px"
           >
             <Box fontSize="18px" fontWeight="700" marginBottom="12px">Earn</Box>
             <Box onClick={() => openModal('details')} display="flex" justifyContent="space-between" alignItems="center">

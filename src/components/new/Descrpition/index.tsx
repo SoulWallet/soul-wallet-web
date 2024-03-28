@@ -24,7 +24,7 @@ const getStyles = (type: string = 'd1') => {
 export default function Description({ children, type, ...restProps }: any) {
   return (
     <Text
-      fontFamily="Nunito"
+      
       color="black"
       {...getStyles(type)}
       {...restProps}

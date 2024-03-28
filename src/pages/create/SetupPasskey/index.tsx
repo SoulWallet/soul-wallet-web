@@ -21,7 +21,7 @@ export default function SepupPasskey({ addingPasskey, onNext, onSkip }: any) {
           Passkeys are like passwords but better. They’re better because they aren’t created insecurely by humans and because they use public key cryptography to create much more secure experiences.
         </Box>
       </Box>
-      <Button disabled={!!addingPasskey} size="xl" type="blue" onClick={onNext} minWidth="195px">Continue</Button>
+      <Button disabled={!!addingPasskey} size="xl" type="black" onClick={onNext} minWidth="195px">Continue</Button>
     </Box>
   );
 }

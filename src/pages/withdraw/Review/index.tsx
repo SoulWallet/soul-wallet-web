@@ -143,20 +143,20 @@ export default function Review({ onPrev, withdrawAmount, sendTo }: any) {
 
         <Box marginTop="40px" width="100%">
           {isTransferingRef.current && (
-            <Button size="xl" type="blue" width="100%" isDisabled>
+            <Button size="xl" type="black" width="100%" isDisabled>
               Transferring
             </Button>
           )}
 
           {!isTransferingRef.current && !isCompletedRef.current && (
-            <Button size="xl" type="blue" width="100%" onClick={onWithdraw}>
+            <Button size="xl" type="black" width="100%" onClick={onWithdraw}>
               Confirm
             </Button>
           )}
 
           {isCompletedRef.current && (
             <Link to="/dashboard">
-              <Button size="xl" type="blue" width="100%">
+              <Button size="xl" type="black" width="100%">
                 Confirm
               </Button>
             </Link>

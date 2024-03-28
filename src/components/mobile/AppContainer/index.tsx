@@ -1,5 +1,4 @@
-import { Flex, Box, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
-import { headerHeight, tgLink } from '@/config';
+import { Flex, Box, Modal, ModalOverlay, ModalContent, ModalHeader, Image, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import ProfileIcon from '@/components/Icons/mobile/Profile'
 import SettingIcon from '@/components/Icons/mobile/Setting'
@@ -7,6 +6,7 @@ import TelegramIcon from '@/components/Icons/mobile/Telegram'
 import UserIcon from '@/components/Icons/mobile/User'
 import MenuIcon from '@/components/Icons/mobile/Menu'
 import { useAddressStore } from '@/store/address';
+import IconProfile from '@/assets/icons/profile.svg';
 import Button from '@/components/mobile/Button'
 import useWallet from '@/hooks/useWallet';
 import AddressIcon from '@/components/AddressIcon';
@@ -29,14 +29,11 @@ export function Header({ openMenu, username, ...props }: any) {
       {...props}
     >
       <Box display="flex" gap="2" alignItems="center" justifyContent="center">
-        {/* <AddressIcon address={selectedAddress} width={24} /> */}
-        {/* <ProfileIcon /> */}
         <Box fontSize="16px" lineHeight={"20px"} fontWeight="800">{walletName}</Box>
-        {/* <Box fontSize="16px" fontWeight="400">{`(${toShortAddress(selectedAddress)})`}</Box> */}
       </Box>
       <Box fontSize="18px" fontWeight="700" color="black" lineHeight="24px">
         <Box background="white" height="36px" width="36px" borderRadius="36px" display="flex" alignItems="center" justifyContent="center" onClick={openMenu}>
-          <UserIcon />
+          <Image src={IconProfile} />
         </Box>
       </Box>
     </Box>
@@ -81,7 +78,7 @@ export default function AppContainer() {
     <Box background="black">
       <Box
         height={innerHeight}
-        background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
+        background="linear-gradient(180deg, #FBFBFB 0%, #F0F0F0 100%)"
         transition="all 0.2s ease"
         sx={getContentStyles(isModalOpen)}
       >

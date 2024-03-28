@@ -22,7 +22,7 @@ const getStyles = (type: string = 't1') => {
 export default function Title({ children, type, ...restProps }: any) {
   return (
     <Text
-      fontFamily="Nunito"
+      
       color="black"
       {...getStyles(type)}
       {...restProps}

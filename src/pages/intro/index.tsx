@@ -56,17 +56,17 @@ export default function Intro() {
     <Box
       width="100%"
       height="100%"
-      background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
+      // background="linear-gradient(180deg, #FBFBFB 0%, #F0F0F0 100%)"
     >
       <Box width="100%" padding="30px" display="flex" alignItems="center" flexDirection="column">
-        <Box fontFamily="Nunito" fontSize="36px" fontWeight="700" textAlign="center" lineHeight="56px">
+        <Box  fontSize="36px" fontWeight="700" textAlign="center" lineHeight="56px">
           Deposit and earn
         </Box>
-        <Box fontFamily="Nunito" fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
+        <Box  fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
           Deposit to your Soul Wallet account, get <Text as="span" fontWeight="700">auto-saved</Text> into the best interest rate pool and start earning today!
         </Box>
         <Link as={RLink} to="/deposit" mt="50px">
-          <Button size="xl" type="blue" minWidth="283px">Deposit USDC</Button>
+          <Button size="xl" type="black" minWidth="283px">Deposit USDC</Button>
         </Link>
         <Button
           size="xl"
@@ -99,7 +99,7 @@ export default function Intro() {
               </Box>
               <Box marginLeft="10px">
                 <Box
-                  fontFamily="Nunito"
+                  
                   fontSize="24px"
                   fontWeight="700"
                   lineHeight="30px"
@@ -111,7 +111,7 @@ export default function Intro() {
                   alignItems="center"
                 >
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontSize="14px"
                     fontWeight="700"
                     lineHeight="18px"
@@ -131,14 +131,14 @@ export default function Intro() {
             </Box>
             <Box display="flex" alignItems="center" marginTop="16px">
               <Box
-                fontFamily="Nunito"
+                
                 fontSize="72px"
                 fontWeight="800"
               >
                 {sevenDayApy}
               </Box>
               <Box
-                fontFamily="Nunito"
+                
                 fontSize="24px"
                 fontWeight="800"
                 marginTop="24px"
@@ -147,7 +147,7 @@ export default function Intro() {
                 %
               </Box>
             </Box>
-            <Box fontFamily="Nunito" fontSize="18px" fontWeight="600">
+            <Box  fontSize="18px" fontWeight="600">
               7D Average APY
             </Box>
           </Box>
@@ -223,7 +223,7 @@ export default function Intro() {
               padding="18px 10px"
             >
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="14px"
                 textAlign="center"
@@ -231,7 +231,7 @@ export default function Intro() {
                 5.01% APY
               </Box>
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="12px"
                 color="rgba(0, 0, 0, 0.5)"
@@ -250,7 +250,7 @@ export default function Intro() {
               padding="18px 10px"
             >
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="14px"
                 textAlign="center"
@@ -258,7 +258,7 @@ export default function Intro() {
                 5.03% APY
               </Box>
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="12px"
                 color="rgba(0, 0, 0, 0.5)"
@@ -277,7 +277,7 @@ export default function Intro() {
               padding="18px 10px"
             >
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="14px"
                 textAlign="center"
@@ -285,7 +285,7 @@ export default function Intro() {
                 12.16% APY
               </Box>
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="12px"
                 color="rgba(0, 0, 0, 0.5)"
@@ -350,7 +350,7 @@ export default function Intro() {
               You can transfer anytime after deposited.
             </Box>
             <Box width="100%">
-              <Button size="xl" type="blue" width="100%" onClick={onClose}>Got it</Button>
+              <Button size="xl" type="black" width="100%" onClick={onClose}>Got it</Button>
             </Box>
           </ModalBody>
         </ModalContent>

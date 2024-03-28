@@ -26,7 +26,7 @@ export default function Landing() {
       width="100%"
       height="100%"
       fontFamily={"SF"}
-      background="linear-gradient(180deg, #FBFBFB 0%, #F0F0F0 100%)"
+      // background="linear-gradient(180deg, #FBFBFB 0%, #F0F0F0 100%)"
     >
       <Header
         showLogo
@@ -35,14 +35,14 @@ export default function Landing() {
         background="transparent"
       />
       <Box width="100%" padding="30px" display="flex" alignItems="center" flexDirection="column">
-        <Box fontFamily="Nunito" fontSize="48px" fontWeight="700" textAlign="center" lineHeight="56px">
+        <Box  fontSize="48px" fontWeight="700" textAlign="center" lineHeight="56px">
           Save for<br /> Every Human
         </Box>
-        <Box fontFamily="Nunito" fontSize="16px" fontWeight="500" textAlign="center" marginTop="14px">
+        <Box  fontSize="16px" fontWeight="500" textAlign="center" marginTop="14px">
           Security first. Completely controlled by yourself and your trusted networks
         </Box>
         <Link to="/create">
-          <Button size="xl" type="blue" minWidth="283px" marginTop="50px">Create free account</Button>
+          <Button size="xl" type="black" minWidth="283px" marginTop="50px">Create free account</Button>
         </Link>
         <Button
           size="xl"
@@ -75,7 +75,7 @@ export default function Landing() {
               </Box>
               <Box marginLeft="10px">
                 <Box
-                  fontFamily="Nunito"
+                  
                   fontSize="24px"
                   fontWeight="700"
                   lineHeight="30px"
@@ -87,7 +87,7 @@ export default function Landing() {
                   alignItems="center"
                 >
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontSize="14px"
                     fontWeight="700"
                     lineHeight="18px"
@@ -107,14 +107,14 @@ export default function Landing() {
             </Box>
             <Box display="flex" alignItems="center" marginTop="16px">
               <Box
-                fontFamily="Nunito"
+                
                 fontSize="72px"
                 fontWeight="800"
               >
                 {sevenDayApy}
               </Box>
               <Box
-                fontFamily="Nunito"
+                
                 fontSize="24px"
                 fontWeight="800"
                 marginTop="24px"
@@ -123,7 +123,7 @@ export default function Landing() {
                 %
               </Box>
             </Box>
-            <Box fontFamily="Nunito" fontSize="18px" fontWeight="600">
+            <Box  fontSize="18px" fontWeight="600">
               7D Average APY
             </Box>
           </Box>
@@ -199,7 +199,7 @@ export default function Landing() {
               padding="18px 10px"
             >
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="14px"
                 textAlign="center"
@@ -207,7 +207,7 @@ export default function Landing() {
                 5.01% APY
               </Box>
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="12px"
                 color="rgba(0, 0, 0, 0.5)"
@@ -226,7 +226,7 @@ export default function Landing() {
               padding="18px 10px"
             >
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="14px"
                 textAlign="center"
@@ -234,7 +234,7 @@ export default function Landing() {
                 5.03% APY
               </Box>
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="12px"
                 color="rgba(0, 0, 0, 0.5)"
@@ -253,7 +253,7 @@ export default function Landing() {
               padding="18px 10px"
             >
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="14px"
                 textAlign="center"
@@ -261,7 +261,7 @@ export default function Landing() {
                 12.16% APY
               </Box>
               <Box
-                fontFamily="Nunito"
+                
                 fontWeight="600"
                 fontSize="12px"
                 color="rgba(0, 0, 0, 0.5)"
@@ -411,7 +411,7 @@ export default function Landing() {
                   justifyContent="center"
                 >
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontWeight="700"
                     fontSize="18px"
                     textAlign="center"
@@ -419,7 +419,7 @@ export default function Landing() {
                     $8.317b
                   </Box>
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontWeight="400"
                     fontSize="12px"
                     marginTop="5px"
@@ -435,7 +435,7 @@ export default function Landing() {
                   justifyContent="center"
                 >
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontWeight="700"
                     fontSize="18px"
                     textAlign="center"
@@ -443,7 +443,7 @@ export default function Landing() {
                     2th
                   </Box>
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontWeight="400"
                     fontSize="12px"
                     marginTop="5px"
@@ -459,7 +459,7 @@ export default function Landing() {
                   justifyContent="center"
                 >
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontWeight="700"
                     fontSize="18px"
                     textAlign="center"
@@ -467,7 +467,7 @@ export default function Landing() {
                     21.28%
                   </Box>
                   <Box
-                    fontFamily="Nunito"
+                    
                     fontWeight="400"
                     fontSize="12px"
                     marginTop="5px"

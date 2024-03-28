@@ -14,7 +14,7 @@ export function SectionMenu({ children, ...restProps }: any) {
 export function SectionMenuItem({ children, isActive, ...restProps }: any) {
   return (
     <Box
-      fontFamily="Nunito"
+      
       fontWeight="800"
       fontSize="20px"
       marginRight="24px"

@@ -81,7 +81,7 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
         display="flex"
         alignItems="center"
         justifyContent="center"
-        background="linear-gradient(180deg, #F5F6FA 0%, #EEF2FB 100%)"
+        background="linear-gradient(180deg, #FBFBFB 0%, #F0F0F0 100%)"
       >
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
           <Box>
@@ -115,7 +115,7 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
           Thanks for setting up your Soul Wallet account. Start saving from now on!
         </Box>
       </Box>
-      <Button onClick={onCreate} size="xl" type="blue" minWidth="195px">
+      <Button onClick={onCreate} size="xl" type="black" minWidth="195px">
         💰 Start saving
       </Button>
     </Box>

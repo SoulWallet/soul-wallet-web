@@ -32,7 +32,7 @@ const getStyles = (type: string = 'h1') => {
 export default function Heading({ children, type, ...restProps }: any) {
   return (
     <Text
-      fontFamily="Nunito"
+      
       color="black"
       {...getStyles(type)}
       {...restProps}

@@ -17,7 +17,7 @@ export default function SepupEmail({ onNext, onSkip }: any) {
         <Box marginTop="10px" width="100%" height="1px" background="rgba(73, 126, 130, 0.2)" />
         <Box fontSize="14px" lineHeight="24px" fontWeight="600" marginTop="8px">Why I need to set up email?</Box>
       </Box>
-      <Button size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
+      <Button size="xl" type="black" width="100%" onClick={onNext}>Continue</Button>
       <Button size="xl" type="text" width="100%" marginTop="15px" onClick={onSkip}>Skip</Button>
     </Box>
   );

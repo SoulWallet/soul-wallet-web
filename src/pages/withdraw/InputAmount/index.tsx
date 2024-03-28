@@ -291,7 +291,7 @@ export default function InputAmount({
           marginTop="120px"
           width="100%"
         >
-          <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>Continue</Button>
+          <Button disabled={disabled} size="xl" type="black" width="100%" onClick={onNext}>Continue</Button>
         </Box>
       </Box>
     </Box>

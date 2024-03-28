@@ -35,7 +35,7 @@ export default function WithdrawSuccess({ sendTo, value }: any) {
         </Box>
       </Box>
       <Link to="/dashboard" style={{width: "100%"}}>
-        <Button size="xl" type="blue" width="100%">Done</Button>
+        <Button size="xl" type="black" width="100%">Done</Button>
       </Link>
       <Box color="rgba(0, 0, 0, 0.3)" fontSize="14px" marginTop="16px" textAlign="center">
         This transaction may takes a few minutes to complete.

@@ -27,7 +27,7 @@ export default function SignerCard({
           color="white"
           fontSize="10px"
           fontWeight="500"
-          fontFamily="Nunito"
+          
           padding="2px 8px"
           borderBottomLeftRadius="12px"
         >
@@ -35,7 +35,7 @@ export default function SignerCard({
         </Box>
       )}
       <Box
-        fontFamily="Nunito"
+        
         fontWeight="700"
         fontSize="16px"
         marginBottom="10px"
@@ -43,7 +43,7 @@ export default function SignerCard({
         {name}
       </Box>
       <Box
-        fontFamily="Nunito"
+        
         fontWeight="400"
         fontSize="12px"
         color="#868686"
@@ -51,7 +51,7 @@ export default function SignerCard({
         {address}
       </Box>
       <Box
-        fontFamily="Nunito"
+        
         fontWeight="400"
         fontSize="12px"
         color="#868686"

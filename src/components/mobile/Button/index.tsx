@@ -67,6 +67,12 @@ const buttonStyles = {
     _hover: { bg: '#eee' },
     _disabled: { cursor: 'not-allowed', color: '#B2B2B2', _hover: { bg: "#fff" } },
   },
+  grey: {
+    color: '#000',
+    bg: '#f2f2f2',
+    _hover: { bg: '#898989' },
+    _disabled: { cursor: 'not-allowed', bg: '#B2B2B2', _hover: { bg: '#B2B2B2' } },
+  },
   red: {
     color: '#fff',
     bg: 'brand.red',

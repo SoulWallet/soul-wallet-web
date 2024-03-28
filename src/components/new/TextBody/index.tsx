@@ -22,7 +22,7 @@ const getStyles = (type: string = 't1') => {
 export default function TextBody({ children, type, ...restProps }: {type?: string} & TextProps) {
   return (
     <Text
-      fontFamily="Nunito"
+      
       color="black"
       {...getStyles(type)}
       {...restProps}

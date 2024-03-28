@@ -156,7 +156,7 @@ export default function CheckDeposit({ onPrev, onNext, setIsPaginationActive }: 
             </Box>
             <Box width="100%" display="flex" alignItems="center" justifyContent="space-between" marginTop="17px">
               <Box width="calc(100% - 50px)">
-                <Button size="xl" type="blue" width="100%" height="42px" onClick={() => doCopy(selectedAddress)}>
+                <Button size="xl" type="black" width="100%" height="42px" onClick={() => doCopy(selectedAddress)}>
                   Copy address
                 </Button>
               </Box>
@@ -180,7 +180,7 @@ export default function CheckDeposit({ onPrev, onNext, setIsPaginationActive }: 
               <ReceiveCode address={selectedAddress} onSet={setQrcodeSrc}  />
             </Box>
             <Box textAlign={'center'}>
-              <Button size="xl" type="blue" width="224px" onClick={()=> shareFile(qrcodeSrc)}>
+              <Button size="xl" type="black" width="224px" onClick={()=> shareFile(qrcodeSrc)}>
                 Share
               </Button>
             </Box>

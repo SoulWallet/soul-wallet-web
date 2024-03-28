@@ -59,7 +59,7 @@ export default function SepupUsername({ value, onChange, onNext, checking, nameS
           )}
         </Box>
       </Box>
-      <Button disabled={disabled} size="xl" type="blue" width="100%" onClick={onNext}>
+      <Button disabled={disabled} size="xl" type="black" width="100%" onClick={onNext}>
         Continue
       </Button>
     </Box>

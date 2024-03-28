@@ -46,7 +46,7 @@ export default function Details() {
             alignItems="center"
           >
             <Box
-              fontFamily="Nunito"
+              
               fontSize="14px"
               fontWeight="700"
               lineHeight="17.5px"
@@ -77,14 +77,14 @@ export default function Details() {
             >
               <Box display="flex" alignItems="center" marginTop="16px">
                 <Box
-                  fontFamily="Nunito"
+                  
                   fontSize="30px"
                   fontWeight="800"
                 >
                   12.16
                 </Box>
                 <Box
-                  fontFamily="Nunito"
+                  
                   fontSize="16px"
                   fontWeight="700"
                   marginTop="10px"
@@ -93,7 +93,7 @@ export default function Details() {
                   %
                 </Box>
               </Box>
-              <Box fontFamily="Nunito" fontSize="12px" fontWeight="700">
+              <Box  fontSize="12px" fontWeight="700">
                 7D Average APY
               </Box>
             </Box>
@@ -106,14 +106,14 @@ export default function Details() {
             >
               <Box display="flex" alignItems="center" marginTop="16px">
                 <Box
-                  fontFamily="Nunito"
+                  
                   fontSize="30px"
                   fontWeight="800"
                 >
                   $825.6
                 </Box>
                 <Box
-                  fontFamily="Nunito"
+                  
                   fontSize="16px"
                   fontWeight="800"
                   marginTop="10px"
@@ -122,7 +122,7 @@ export default function Details() {
                   M
                 </Box>
               </Box>
-              <Box fontFamily="Nunito" fontSize="12px" fontWeight="700">
+              <Box  fontSize="12px" fontWeight="700">
                 TVL
               </Box>
             </Box>
@@ -272,7 +272,7 @@ export default function Details() {
               marginBottom="10px"
               width="100%"
             >
-              <Button size="xl" type="blue" width="100%">Deposit to save</Button>
+              <Button size="xl" type="black" width="100%">Deposit to save</Button>
             </Box>
           </Link>
         </Box>
