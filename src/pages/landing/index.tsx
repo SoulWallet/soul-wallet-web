@@ -348,7 +348,7 @@ export default function Landing() {
             fontSize="24px"
             fontWeight="700"
           >
-            How Soul Wallet earns
+            How Stable.cash earns
           </Box>
         </Box>
         <Box
@@ -375,7 +375,7 @@ export default function Landing() {
                 Earn the most with Auto-saving
               </Box>
               <Box fontSize="14px" fontWeight="400">
-                Soul Wallet empowers each account for a customized risk free feature, auto-saving. Each deposit to the Soul Wallet account will be auto saved into AAVE protocol to earn interest. You can withdraw anytime with a flexible term for your assets. Let auto-saving makes the most of your earnings.
+                Stable.cash empowers each account for a customized risk free feature, auto-saving. Each deposit to the Stable.cash account will be auto saved into AAVE protocol to earn interest. You can withdraw anytime with a flexible term for your assets. Let auto-saving makes the most of your earnings.
               </Box>
             </Box>
           </Box>

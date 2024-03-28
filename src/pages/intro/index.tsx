@@ -63,7 +63,7 @@ export default function Intro() {
           Deposit and earn
         </Box>
         <Box  fontSize="14px" fontWeight="500" textAlign="center" marginTop="14px">
-          Deposit to your Soul Wallet account, get <Text as="span" fontWeight="700">auto-saved</Text> into the best interest rate pool and start earning today!
+          Deposit to your Stable.cash account, get <Text as="span" fontWeight="700">auto-saved</Text> into the best interest rate pool and start earning today!
         </Box>
         <Link as={RLink} to="/deposit" mt="50px">
           <Button size="xl" type="black" minWidth="283px">Deposit USDC</Button>

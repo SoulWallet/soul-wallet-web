@@ -165,7 +165,7 @@ export default function CheckDeposit({ onPrev, onNext, setIsPaginationActive }: 
               </Box>
             </Box>
             <Box fontSize="12px" fontWeight="500" color="#5E5E5E" marginTop="26px">
-              This is your Soul Wallet address on <Text as="span" fontWeight="700">OP Mainnet</Text> to transfer assets directly into your account and
+              This is your Stable.cash address on <Text as="span" fontWeight="700">OP Mainnet</Text> to transfer assets directly into your account and
               save into protocol. You can always copy it on homepage.
             </Box>
           </Box>

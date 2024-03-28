@@ -112,7 +112,7 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
       </Box>
       <Box width="100%" marginBottom="50px">
         <Box fontSize="16px" lineHeight="24px" fontWeight="400" textAlign="center">
-          Thanks for setting up your Soul Wallet account. Start saving from now on!
+          Thanks for setting up your Stable.cash account. Start saving from now on!
         </Box>
       </Box>
       <Button onClick={onCreate} size="xl" type="black" minWidth="195px">

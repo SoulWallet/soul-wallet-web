@@ -92,7 +92,7 @@ export default function InputInviteCode({value, onChange, codeStatus, checking, 
               We are currently under internal testing. Please be patient and join our Telegram group. We’ll send out more invitations very soon. Thanks again for your patience.
             </Box>
             <Box width="100%">
-              <Button size="xl" type="black" width="100%">Follow Soul Wallet on X</Button>
+              <Button size="xl" type="black" width="100%">Follow Stable.cash on X</Button>
             </Box>
           </ModalBody>
         </ModalContent>

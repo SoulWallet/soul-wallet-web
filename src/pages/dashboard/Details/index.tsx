@@ -210,7 +210,7 @@ export default function Details() {
               fontWeight="700"
               width="100%"
             >
-              Does Soul Wallet charge?
+              Does Stable.cash charge?
             </Box>
             {!!showInfo2 && (
               <Box
