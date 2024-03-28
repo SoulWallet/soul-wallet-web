@@ -1,6 +1,6 @@
 import { Box, Image, useDisclosure } from '@chakra-ui/react';
 import NextIcon from '@/components/Icons/mobile/Next'
-import ARBIcon from '@/assets/mobile/arb.png'
+import OpIcon from '@/assets/mobile/op.png'
 
 export default function SelectNetwork({ onNext }: any) {
   const innerHeight = window.innerHeight
@@ -53,7 +53,7 @@ export default function SelectNetwork({ onNext }: any) {
               alignItems="center"
               justifyContent="center"
             >
-              <Image width="72px" height="72px" src={ARBIcon} className="icon" />
+              <Image width="72px" height="72px" src={OpIcon} className="icon" />
             </Box>
             <Box
               fontWeight="700"

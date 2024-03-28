@@ -15,13 +15,12 @@ import {
 } from '@chakra-ui/react';
 import Button from '@/components/mobile/Button';
 import ScanIcon from '@/components/Icons/mobile/Scan';
-import NextIcon from '@/components/Icons/mobile/Next';
 import CheckedIcon from '@/components/Icons/mobile/Checked';
 import UncheckedIcon from '@/components/Icons/mobile/Unchecked';
 import USDCIcon from '@/assets/mobile/usdc.png'
 import USDCGreyIcon from '@/assets/mobile/usdc_grey.png'
-import ARBGreyIcon from '@/assets/mobile/arb_grey.png'
-import ARBIcon from '@/assets/mobile/arb.png'
+import OpGreyIcon from '@/assets/mobile/op_grey.png'
+import OpIcon from '@/assets/mobile/op.png'
 import AAVEGreyIcon from '@/assets/mobile/aave_grey.png'
 import AAVEIcon from '@/assets/mobile/aave.png'
 import { useAddressStore } from '@/store/address';
@@ -95,7 +94,7 @@ export default function CheckDeposit({ onPrev, onNext, setIsPaginationActive }: 
             marginRight="6px"
             transition="0.6s all ease"
           >
-            <Image width="100%" src={!checked2 ? ARBGreyIcon : ARBIcon} className="icon" />
+            <Image width="100%" src={!checked2 ? OpGreyIcon : OpIcon} className="icon" />
           </Box>
           <Box
             width={isAllChecked ? '40px' : '72px'}
