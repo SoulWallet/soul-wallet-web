@@ -184,7 +184,7 @@ export default function Dashboard() {
                 >
                   {valueLeft}
                 </Box>
-                {Number(toFixed(valueRight.slice(0,3), 3, false)) > 0 && (
+                {valueRight && BN(valueRight).isGreaterThan(0) && Number(toFixed(valueRight.slice(0,3), 3, false)) > 0 && (
                   <Box
                     fontFamily="Nunito"
                     fontSize={smFontSize}
