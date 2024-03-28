@@ -284,7 +284,7 @@ export default function InputAmount({
           fontSize="14px"
           fontWeight="400"
         >
-          Confirm deposit address is on <Box as="span" fontWeight="700">Arbitrum</Box>; deposit to other networks could result in lost assets.
+          Confirm deposit address is on <Box as="span" fontWeight="700">OP Mainnet</Box>; deposit to other networks could result in lost assets.
           </Box>
         </Box>
         <Box

@@ -20,10 +20,10 @@ export default function SelectNetwork({ onNext }: any) {
     >
       <Box padding="30px" paddingBottom="144px">
         <Box width="100%" fontSize="30px" fontWeight="700" textAlign="center" lineHeight="36px" marginTop="20px">
-          Select Arbitrum network
+          Select OP Mainnet
         </Box>
         <Box fontSize="14px" fontWeight="500" marginTop="18px" textAlign="center" minHeight="80px">
-          Please note that the network is Arbitrum. Selecting other network means your assets will be lost.
+          Please note that the network is OP Mainnet. Selecting other network means your assets will be lost.
         </Box>
         <Box
           width="100%"
@@ -60,7 +60,7 @@ export default function SelectNetwork({ onNext }: any) {
               fontSize="20px"
               marginTop="20px"
             >
-              Arbitrum
+              OP Mainnet
             </Box>
           </Box>
         </Box>

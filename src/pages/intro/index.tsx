@@ -124,7 +124,7 @@ export default function Intro() {
                     marginLeft="4px"
                     lineHeight="18px"
                   >
-                    Arbitrum
+                    OP Mainnet
                   </Box>
                 </Box>
               </Box>

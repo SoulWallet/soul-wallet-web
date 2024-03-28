@@ -8,26 +8,32 @@ import { useNavigate } from 'react-router-dom';
 export default function CreateSuccess({ credential, username, invitationCode }: any) {
   const { getActivateOp, signAndSend, initWallet } = useWallet();
   const userOpRef = useRef<any>();
+  const [executing, setExecuting] = useState(false);
   const initialKeysRef = useRef<any>();
   const creatingRef = useRef(false);
   const navigate = useNavigate();
   const toast = useToast();
 
   const prepareAction = async () => {
-    if (!initialKeysRef.current) {
-      const { initialKeys: _initialKeys } = await initWallet(credential, username, invitationCode);
-      initialKeysRef.current = _initialKeys;
-      const _userOp = await getActivateOp(_initialKeys);
-      userOpRef.current = _userOp;
-    } else {
-      const _userOp = await getActivateOp(initialKeysRef.current);
-      userOpRef.current = _userOp;
+    try{
+      if (!initialKeysRef.current) {
+        const { initialKeys: _initialKeys } = await initWallet(credential, username, invitationCode);
+        initialKeysRef.current = _initialKeys;
+        const _userOp = await getActivateOp(_initialKeys);
+        userOpRef.current = _userOp;
+      } else {
+        const _userOp = await getActivateOp(initialKeysRef.current);
+        userOpRef.current = _userOp;
+      }
+    }catch(e){
+      creatingRef.current = false;
+      setExecuting(false);
     }
+   
   };
 
   useEffect(() => {
     prepareAction();
-   
     const interval = setInterval(() => {
       if(creatingRef.current){
         return
@@ -38,10 +44,15 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
   }, []);
 
   const onCreate = async () => {
+    if(executing){
+      return
+    }
+    setExecuting(true);
+    creatingRef.current = true;
     if (userOpRef.current) {
       try {
-        creatingRef.current = true;
         await signAndSend(userOpRef.current);
+        setExecuting(false);
         navigate('/intro');
       } catch (error: any) {
         toast({
@@ -50,6 +61,7 @@ export default function CreateSuccess({ credential, username, invitationCode }: 
           status: 'error',
         });
         creatingRef.current = false;
+        setExecuting(false);
       }
     } else {
       setTimeout(() => {

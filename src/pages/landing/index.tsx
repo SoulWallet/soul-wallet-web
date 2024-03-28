@@ -99,7 +99,7 @@ export default function Landing() {
                     marginLeft="4px"
                     lineHeight="18px"
                   >
-                    Arbitrum
+                    OP Mainnet
                   </Box>
                 </Box>
               </Box>
@@ -384,7 +384,7 @@ export default function Landing() {
             fontSize="24px"
             fontWeight="700"
           >
-            About Arbitrum Network
+            About OP Mainnet
           </Box>
         </Box>
 
@@ -415,7 +415,7 @@ export default function Landing() {
                     fontSize="18px"
                     textAlign="center"
                   >
-                    $3.297b
+                    $8.317b
                   </Box>
                   <Box
                     fontFamily="Nunito"
@@ -439,7 +439,7 @@ export default function Landing() {
                     fontSize="18px"
                     textAlign="center"
                   >
-                    4th
+                    2th
                   </Box>
                   <Box
                     fontFamily="Nunito"
@@ -463,7 +463,7 @@ export default function Landing() {
                     fontSize="18px"
                     textAlign="center"
                   >
-                    49.17%
+                    21.28%
                   </Box>
                   <Box
                     fontFamily="Nunito"
@@ -477,7 +477,7 @@ export default function Landing() {
                 </Box>
               </Box>
               <Box fontSize="14px" fontWeight="400">
-                Arbitrum is a Ethereum scaling solution which provides a safe and low cost way for every human to access DeFi on the most decentralized network.
+                OP Mainnet is an EVM-equivalent Optimistic Rollup. It aims to be fast, simple, and secure.
               </Box>
             </Box>
           </Box>

@@ -76,7 +76,7 @@ export default function Details() {
               marginLeft="4px"
               lineHeight="17.5px"
             >
-              Arbitrum
+              OP Mainnet
             </Box>
           </Box>
           <Box

@@ -289,7 +289,7 @@ export default function Dashboard() {
                 </Box>
                 <Box>
                   <Box fontSize="18px" lineHeight={"23px"} fontWeight="700">USDC on AAVE</Box>
-                  <Box fontSize="14px" lineHeight={"1"} fontWeight="400">Arbitrum network</Box>
+                  <Box fontSize="14px" lineHeight={"1"} fontWeight="400">OP Mainnet</Box>
                 </Box>
               </Box>
               <Box display="flex" alignItems="center">
